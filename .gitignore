@@ -1,0 +1,8 @@
+# Fișiere generate: nu intră în Git (pot fi mari și se recreează)
+lucru/
+date/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.pt

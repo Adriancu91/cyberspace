@@ -1,0 +1,52 @@
+# Configurare de PROBĂ: merge fără internet și fără placă video.
+# Prima comandă din seara asta. Durează câteva secunde.
+
+[platforma]
+nume = "proba"
+director_lucru = "lucru"
+buget_antrenare_secunde = 10   # cât antrenează fiecare experiment
+experimente = 8                # câte experimente rulează o comandă „ruleaza”
+prag_zgomot = 0.002            # câștig minim ca o schimbare să fie păstrată
+
+[paznic]
+timp_max_secunde = 120
+timp_test_secunde = 30
+temperatura_gpu_max = 85       # grade Celsius
+memorie_gpu_max_mb = 5500
+porturi_modificabile = ["model"]
+
+# Fiecare port: ce modul îl ocupă (pachet.fisier:Clasa) și cu ce setări.
+[porturi.model]
+modul = "module.model_ngram:ModelNgram"
+setari = { ordin = 1, netezire = 1.0 }
+
+[porturi.date]
+modul = "module.date_mostra:DateMostra"
+setari = { propozitii = 4000 }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+ordin = [1, 2, 3, 4, 5, 6]
+netezire = [0.01, 0.1, 0.5, 1.0, 2.0]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
