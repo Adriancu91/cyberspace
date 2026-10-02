@@ -1,7 +1,7 @@
 [project]
-name = "platforma-ai"
+name = "cyberspace"
 version = "0.1.0"
-description = "Platformă AI construită de la 0: nucleu mic + module înlocuibile + buclă de auto-îmbunătățire"
+description = "Platformă AI construită de la 0: nucleul Kronos + module înlocuibile + buclă de auto-îmbunătățire"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -10,10 +10,10 @@ teste = ["pytest>=8"]
 # PyTorch se instalează separat, cu comanda de pe pytorch.org (varianta CUDA). Vezi README.
 
 [project.scripts]
-platforma = "nucleu.cli:main"
+kronos = "kronos.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["nucleu*", "module*"]
+include = ["kronos*", "module*"]
 
 [tool.pytest.ini_options]
 testpaths = ["teste", "teste_contracte"]

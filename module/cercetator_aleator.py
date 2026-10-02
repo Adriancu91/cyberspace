@@ -15,7 +15,7 @@ import json
 import random
 from typing import Any
 
-from nucleu.contracte import Propunere
+from kronos.contracte import Propunere
 
 
 def _cheie(setari: dict[str, dict[str, Any]]) -> str:

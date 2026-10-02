@@ -1,11 +1,11 @@
 """Linia de comandă a platformei.
 
 Exemple:
-    python -m nucleu verifica --config config/proba.toml
-    python -m nucleu ruleaza  --config config/proba.toml --experimente 5
-    python -m nucleu jurnal   --config config/proba.toml
-    python -m nucleu scrie    --config config/proba.toml --inceput "the cat"
-    python -m nucleu opreste  --config config/proba.toml
+    python -m kronos verifica --config config/proba.toml
+    python -m kronos ruleaza  --config config/proba.toml --experimente 5
+    python -m kronos jurnal   --config config/proba.toml
+    python -m kronos scrie    --config config/proba.toml --inceput "the cat"
+    python -m kronos opreste  --config config/proba.toml
 """
 
 from __future__ import annotations
@@ -88,7 +88,7 @@ def cmd_scrie(args: argparse.Namespace) -> int:
         config.nume, examen.scor_principal, examen.mai_mic_e_mai_bun
     )
     if cel_mai_bun is None or "model_salvat" not in cel_mai_bun:
-        print("Nu există încă un model păstrat. Rulează întâi: python -m nucleu ruleaza --config ...")
+        print("Nu există încă un model păstrat. Rulează întâi: python -m kronos ruleaza --config ...")
         return 1
     model = registru.creeaza("model", config.porturi["model"]["modul"], cel_mai_bun["setari"].get("model", {})).instanta
     model.incarca(cel_mai_bun["model_salvat"])
@@ -101,15 +101,15 @@ def cmd_opreste(args: argparse.Namespace) -> int:
     config = citeste_config(args.config)
     paznic = Paznic(config.paznic, config.director_lucru)
     paznic.cere_oprire()
-    print(f"Am cerut oprirea. Experimentul în curs se termină, apoi platforma se oprește.\n"
-          f"Ca să poată porni din nou: python -m nucleu porneste --config {args.config}")
+    print(f"Am cerut oprirea. Experimentul în curs se termină, apoi Kronos se oprește.\n"
+          f"Ca să poată porni din nou: python -m kronos porneste --config {args.config}")
     return 0
 
 
 def cmd_porneste(args: argparse.Namespace) -> int:
     config = citeste_config(args.config)
     Paznic(config.paznic, config.director_lucru).anuleaza_oprire()
-    print("Butonul de oprire a fost resetat. Platforma poate rula din nou.")
+    print("Butonul de oprire a fost resetat. Kronos poate porni din nou.")
     return 0
 
 
@@ -123,7 +123,7 @@ def cmd_aproba_examen(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     _pregateste_consola()
-    parser = argparse.ArgumentParser(prog="platforma", description="Platforma AI: nucleu + module")
+    parser = argparse.ArgumentParser(prog="kronos", description="Cyberspace: Kronos (nucleul) + module")
     sub = parser.add_subparsers(dest="comanda", required=True)
 
     def adauga(nume: str, ajutor: str, functie) -> argparse.ArgumentParser:

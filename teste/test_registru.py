@@ -2,7 +2,7 @@
 
 import pytest
 
-from nucleu.registru import EroareModul, Registru
+from kronos.registru import EroareModul, Registru
 
 
 @pytest.mark.parametrize(

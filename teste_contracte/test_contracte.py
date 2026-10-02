@@ -12,8 +12,8 @@ import time
 
 import pytest
 
-from nucleu.contracte import CONTRACT_PENTRU_PORT, Propunere, RezultatRulare
-from nucleu.registru import Registru
+from kronos.contracte import CONTRACT_PENTRU_PORT, Propunere, RezultatRulare
+from kronos.registru import Registru
 
 ARE_TORCH = importlib.util.find_spec("torch") is not None
 GPT_MIC = {"n_straturi": 1, "n_capete": 2, "n_emb": 32, "context": 32, "lot": 8, "dispozitiv": "cpu"}

@@ -6,7 +6,7 @@ Nu depinde de felul în care modelul împarte textul, deci e corect
 să comparăm modele foarte diferite între ele.
 
 ATENȚIE: Paznicul memorează amprenta acestui fișier. Orice schimbare
-oprește experimentele până când omul o aprobă (python -m nucleu aproba-examen).
+oprește experimentele până când omul o aprobă (python -m kronos aproba-examen).
 """
 
 from __future__ import annotations

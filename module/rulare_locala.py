@@ -15,7 +15,7 @@ import time
 import traceback
 from typing import Any, Callable
 
-from nucleu.contracte import RezultatRulare
+from kronos.contracte import RezultatRulare
 
 
 def _torch_cuda():

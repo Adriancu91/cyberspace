@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from nucleu.cli import main as cli
-from nucleu.config import EroareConfig, citeste_config
-from nucleu.contracte import Propunere
-from nucleu.orchestrator import Orchestrator
+from kronos.cli import main as cli
+from kronos.config import EroareConfig, citeste_config
+from kronos.contracte import Propunere
+from kronos.orchestrator import Orchestrator
 
 RADACINA = Path(__file__).resolve().parent.parent
 
@@ -112,7 +112,7 @@ def test_pauza_de_racire_apoi_oprire(config, monkeypatch):
 
 
 def test_limita_de_memorie(config):
-    from nucleu.contracte import RezultatRulare
+    from kronos.contracte import RezultatRulare
 
     o = Orchestrator(config)
     motiv = o.paznic.verifica_consum(RezultatRulare(True, None, 1.0, memorie_gpu_max_mb=99999))

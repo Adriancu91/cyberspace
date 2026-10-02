@@ -46,7 +46,7 @@ class Paznic:
         return self.fisier_stop.exists()
 
     def cere_oprire(self) -> None:
-        self.fisier_stop.write_text("Șterge acest fișier ca platforma să poată porni din nou.\n")
+        self.fisier_stop.write_text("Șterge acest fișier ca Kronos să poată porni din nou.\n")
 
     def anuleaza_oprire(self) -> None:
         self.fisier_stop.unlink(missing_ok=True)
@@ -95,7 +95,7 @@ class Paznic:
         if amprente[nume] != actuala:
             return (
                 f"Examenul „{nume}” s-a schimbat de la ultima aprobare. "
-                "Dacă schimbarea e făcută de tine, rulează: python -m nucleu aproba-examen --config ..."
+                "Dacă schimbarea e făcută de tine, rulează: python -m kronos aproba-examen --config ..."
             )
         return None
 

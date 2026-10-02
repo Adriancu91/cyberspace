@@ -30,7 +30,7 @@ class InterfataConsola:
         if eveniment == "start":
             scor = detalii.get("cel_mai_bun_scor")
             self._scrie(
-                f"Pornesc „{detalii['configurare']}”: {detalii['experimente']} experimente. "
+                f"Kronos pornește „{detalii['configurare']}”: {detalii['experimente']} experimente. "
                 + (f"Cel mai bun scor de până acum: {scor:.4f}" if scor is not None else "Primul start.")
             )
             for port, m in detalii.get("module", {}).items():
