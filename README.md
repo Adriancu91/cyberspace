@@ -100,6 +100,12 @@ python -m pytest
 
 Trebuie să apară `PyTorch vede placa: NVIDIA GeForce RTX 3060 Laptop GPU` și toate testele `passed`.
 
+> **Dacă apare `WinError 4551` („An Application Control policy has blocked this file ... shm.dll”):**
+> e Smart App Control din Windows 11, care blochează fișierele nesemnate din PyTorch.
+> Se oprește din *Windows Security → App & browser control → Smart App Control settings → Off*
+> (din aprilie 2026 se poate reporni oricând din același loc, dar cât e pornit, PyTorch nu merge direct în Windows).
+> Varianta care îl păstrează pornit: rularea prin WSL2 (Linux în Windows).
+
 ### Pasul 8 — GPT-ul nostru pe placa video
 
 Un test scurt, 2 experimente (≈15 minute, 5 minute de antrenare fiecare):
