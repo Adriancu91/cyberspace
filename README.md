@@ -122,10 +122,18 @@ Dacă placa trece de 85°C, platforma face singură pauze de răcire.
 
 ### Pasul 9 — Salvarea în Git
 
+Proiectul are deja Git, cu primul commit făcut. O singură dată, spune-i lui Git cine ești:
+
 ```
-git init
+git config --global user.name "Numele tău"
+git config --global user.email "adresa ta de email"
+```
+
+Apoi, după fiecare pas reușit:
+
+```
 git add .
-git commit -m "Etapa N1: scheletul platformei"
+git commit -m "ce am făcut, pe scurt"
 ```
 
 ---
