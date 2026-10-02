@@ -64,9 +64,9 @@ def test_paznicul_refuza_schimbarea_examenului(config):
     o = Orchestrator(config)
     o.ruleaza(0)  # memorează amprenta examenului
     amprente_fisier = config.director_lucru / "amprente.json"
-    amprente = json.loads(amprente_fisier.read_text())
+    amprente = json.loads(amprente_fisier.read_text(encoding="utf-8"))
     amprente[next(iter(amprente))] = "amprenta-falsa"
-    amprente_fisier.write_text(json.dumps(amprente))
+    amprente_fisier.write_text(json.dumps(amprente), encoding="utf-8")
 
     fisa = o.experiment(Propunere("orice", {"model": {"ordin": 2}}))
     assert fisa["decizie"] == "anulat"

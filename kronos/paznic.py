@@ -46,7 +46,7 @@ class Paznic:
         return self.fisier_stop.exists()
 
     def cere_oprire(self) -> None:
-        self.fisier_stop.write_text("Șterge acest fișier ca Kronos să poată porni din nou.\n")
+        self.fisier_stop.write_text("Șterge acest fișier ca Kronos să poată porni din nou.\n", encoding="utf-8")
 
     def anuleaza_oprire(self) -> None:
         self.fisier_stop.unlink(missing_ok=True)
