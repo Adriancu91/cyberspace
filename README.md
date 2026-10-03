@@ -6,8 +6,8 @@ dă examen, păstrează doar ce e mai bun și notează totul în jurnal.
 
 Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 (modelul n-gram și GPT-ul nostru, care a rulat o noapte pe placa video: cel mai bun scor 2,1873).
-**Etapa M1 (memoria ierarhică)** e construită și testată. Prima comparație (la același timp de antrenare) arată că
-memoria, așa cum e acum, strică; comparația la același număr de pași e în curs. 92 de teste trec.
+**Etapa M1 (memoria ierarhică)** e construită și testată. Ambele comparații (la același timp și la același număr
+de pași) arată că memoria, așa cum e acum, strică: ajută la antrenare, dar e mai slabă la examen. 92 de teste trec.
 
 ---
 
@@ -207,8 +207,22 @@ Memoria a fost mai slabă la toate cele trei semințe. Face cu 15–29% mai puț
 învățat 196.000 de parametri în plus (617.248 față de 421.632). Atenție la zgomot: aceeași rețetă cu aceeași
 sămânță a dat 2,1873 azi-noapte și 2,1779 azi, deci diferențele sub ~0,01 nu înseamnă nimic.
 
-**La același număr de pași** (35.000 de pași pentru ambele variante): în curs. Arată dacă memoria strică doar
-pentru că e mai lentă sau și pentru că informația ei nu ajută.
+**La același număr de pași** (exact 35.000 de pași pentru ambele variante, pe aceleași date, în aceeași ordine):
+
+| Sămânța | Fără memorie | Cu memorie | Diferență | Secunde de antrenare (fără / cu) |
+| --- | --- | --- | --- | --- |
+| 1337 | **2,1990** | 2,2424 | −0,043 | 239 / 286 |
+| 2024 | **2,2055** | 2,2464 | −0,041 | 229 / 285 |
+| 7 | **2,1982** | 2,2218 | −0,024 | 245 / 281 |
+| media | **2,2009** | 2,2369 | −0,036 | |
+
+Memoria pierde și la număr egal de pași, deci nu doar viteza e de vină: cam 70% din diferența de la comparația
+la același timp (0,036 din 0,050) rămâne și când ambele variante fac aceiași pași. Un semn: la antrenare, varianta
+cu memorie greșește mai puțin la toate semințele (de ex. 1,755 față de 1,845 biți pe literă, măsurat pe ultimul lot),
+dar la examen e mai slabă. Arată a „tocire”: nivelurile adânci ale codului sunt aproape cât cuvântul însuși, iar
+modelul le folosește ca să rețină textul de antrenare. Idei de încercat: mai puține niveluri (2–4), cuvintele de
+legătură în bibliotecă. Detaliu minor: categoriile nevăzute la antrenare primesc o descriere neantrenată
+(0,7% din literele examenului; prea puțin ca să explice diferența, dar de reparat).
 
 ## Toate comenzile
 
