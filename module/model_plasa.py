@@ -90,10 +90,11 @@ class Plasa:
     """
 
     def __init__(self, noduri: list[str], legaturi: dict[tuple[str, str], dict[str, Any]] | None = None,
-                 experimente: int = 0) -> None:
+                 experimente: int = 0, prag_asociere: float = PRAG_ASOCIERE) -> None:
         self.noduri = list(noduri)
         self.legaturi: dict[tuple[str, str], dict[str, Any]] = legaturi or {}
         self.experimente = experimente
+        self.prag_asociere = prag_asociere  # plasa adaptivă (M3) cere 3×
 
     @classmethod
     def incarca(cls, cale: str | Path, noduri: list[str]) -> Plasa:
@@ -140,7 +141,7 @@ class Plasa:
                     and (de_la, la) not in self.legaturi
                     and abs(cereri[a][b]) >= PRAG_CERERE
                     and asociere is not None
-                    and asociere[a][b] >= PRAG_ASOCIERE
+                    and asociere[a][b] >= self.prag_asociere
                 ):
                     self.legaturi[(de_la, la)] = {
                         "tarie": TARIE_NASTERE, "stare": "proba", "nascuta_la": self.experimente, "sub_prag": 0

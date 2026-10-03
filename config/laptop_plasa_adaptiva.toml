@@ -1,0 +1,57 @@
+# Plasa adaptivă pe TinyStories (Etapa M3, pasul 2), pe placa video RTX 3060.
+# Cere, o singură dată: datele (python -m module.date_tinystories), tokenizerul
+# (python unelte/antreneaza_tokenizer.py) și biblioteca de sensuri (python unelte/construieste_biblioteca.py).
+# Comparația cu GPT-ul simplu și cu plasa veche (5 noduri):  python unelte/compara_plasa_adaptiva.py
+
+[platforma]
+nume = "plasa_adaptiva"
+director_lucru = "lucru"
+buget_antrenare_secunde = 300
+experimente = 12               # ~12 experimente pe oră
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 900
+timp_test_secunde = 240        # testul rapid face toată pregătirea (memoria pe tot textul de antrenare)
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_plasa_adaptiva:ModelPlasaAdaptiva"
+setari = { n_straturi = 2, n_capete = 4, n_emb = 128, context = 128, lot = 16, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", n_ascuns_nod = 64, noduri_libere = 6, cale_plasa = "lucru/plasa_adaptiva.json" }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories", megaocteti = 20.0 }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+n_ascuns_nod = [32, 64, 128]   # deocamdată doar mărimea nodurilor
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.memorie_ierarhica:MemorieIerarhica"
+setari = { cale = "date/biblioteca.json.gz", nivele = 12, fara_cuvinte_de_legatura = true, sens_dupa_context = true }

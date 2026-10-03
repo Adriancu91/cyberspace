@@ -33,6 +33,11 @@ MODULE = [
         "model", "module.model_plasa:ModelPlasa", {**GPT_MIC, "n_ascuns_nod": 16, "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
+    pytest.param(
+        "model", "module.model_plasa_adaptiva:ModelPlasaAdaptiva",
+        {**GPT_MIC, "n_ascuns_nod": 16, "cale_tokenizer": "__tokenizer_mic__", "cale_plasa": "__plasa_temporara__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
     ("date", "module.date_mostra:DateMostra", {"propozitii": 300}),
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
@@ -75,6 +80,8 @@ def _setari_reale(setari, tmp_path):
         setari["cale"] = biblioteca_mica(tmp_path)
     if setari.get("director") == "__director_temporar__":
         setari["director"] = str(tmp_path / "stocare")
+    if setari.get("cale_plasa") == "__plasa_temporara__":  # nu atinge plasa din lucru/
+        setari["cale_plasa"] = str(tmp_path / "plasa.json")
     return setari
 
 

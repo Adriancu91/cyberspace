@@ -399,6 +399,35 @@ propoziției și 71.632 ținute minte, c) 74.225. Primele 10 rafturi (procente d
 python unelte/masoara_rafturi.py --sens-dupa-context    # ~15 secunde; rezultatul și în lucru/rafturi_tinystories_context.json
 ```
 
+### Pasul 2: modelul adaptiv
+
+`module/model_plasa_adaptiva.py` (ModelPlasaAdaptiva, pe portul „model”), cu `config/laptop_plasa_adaptiva.toml`:
+
+- **Un nod pe raft:** câte un nod mic (64 de neuroni ascunși, ca în M2) pentru fiecare raft cu cel puțin 0,5% din
+  cuvintele cu sens (33 pe TinyStories), plus nodul „rar” pentru celelalte 11 rafturi: 34 de noduri. Rafturile se aleg
+  la primul experiment și nu se mai schimbă. Umplutura (44% din simboluri) rămâne pe trunchi, fără nod. Memoria are
+  pornite `sens_dupa_context` și `fara_cuvinte_de_legatura`.
+- **Rezerva de 6 noduri libere:** după fiecare examen se numără cuvintele primite de fiecare nod la antrenare (nimic din
+  textul de examen). Un nod cu peste 2× media primește un nod liber, care preia cam jumătate din cuvintele lui: cuvinte
+  întregi (Tim și Mom pe un nod, Lily și Tom pe celălalt); pe coduri n-ar merge, fiindcă toate numele au același cod.
+  Nodurile alocate nu se mută. Un nod liber se întoarce în rezervă după 3 examene la rând în care raftul lui a primit
+  mai puțin decât media. Alocările intră în jurnal și lucrează **de la experimentul următor**.
+- **Legăturile** urmează regulile din M2 (naștere, întărire, slăbire, uitare, tăiere), cu pragul de naștere **3×**
+  (cuvinte vecine, cu ordine, perechi văzute de cel puțin 100 de ori). Pe TinyStories, 18 perechi de noduri trec.
+- **Fiecare simbol calculează doar nodul lui și nodurile legate de el**: legăturile vii și perechile care se pot naște
+  (fără ele, un nod n-ar putea „cere” o legătură nouă). În medie, 1,9 noduri pe simbol din 34; restul nu se calculează.
+- Nodurile pornesc tăcute: la început, modelul e identic cu GPT-ul simplu (testul `test_la_inceput_e_identic_cu_gpt_ul`).
+
+**Costul**, cu aceeași rețetă (2 straturi, lot 16), 1.500 de pași pe placa video:
+
+| Model | Pași pe secundă | Memorie video |
+| --- | --- | --- |
+| GPT simplu | 143 | 344 MB |
+| plasa veche (5 noduri, toate calculate) | 99 | 345 MB |
+| plasa adaptivă (34 de noduri, doar cele necesare) | 98 | 349 MB |
+
+Memoria video rămâne mult sub limita de 5,5 GB, deci nodurile n-au trebuit micșorate.
+
 ## Toate comenzile
 
 ```

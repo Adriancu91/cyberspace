@@ -301,7 +301,8 @@ class ModelGPT:
         generator = torch.Generator(device="cpu").manual_seed(self.samanta)
 
         self.retea.train()
-        start = time.perf_counter() - pregatire
+        inceput_bucla = time.perf_counter()
+        start = inceput_bucla - pregatire
         pasi = 0
         pierdere = float("nan")
         while time.perf_counter() - start < buget_secunde and not (self.pasi_max and pasi >= self.pasi_max):
@@ -325,6 +326,7 @@ class ModelGPT:
             "pierdere_finala": pierdere,
             "parametri": sum(p.numel() for p in self.retea.parameters()),
             "dispozitiv": str(self.dispozitiv),
+            "secunde_bucla": round(time.perf_counter() - inceput_bucla, 2),  # doar pașii, fără pregătire
         }
         if self.pasi_max:
             statistici["pasi_max"] = self.pasi_max
