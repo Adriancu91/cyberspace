@@ -50,3 +50,6 @@ modul = "module.interfata_consola:InterfataConsola"
 
 [porturi.traducere]
 modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

@@ -6,6 +6,7 @@ Exemple:
     python -m kronos jurnal   --config config/proba.toml
     python -m kronos scrie    --config config/proba.toml --inceput "the cat"
     python -m kronos opreste  --config config/proba.toml
+    python -m kronos cauta horse --config config/laptop_gpt_memorie.toml
 """
 
 from __future__ import annotations
@@ -91,9 +92,32 @@ def cmd_scrie(args: argparse.Namespace) -> int:
         print("Nu există încă un model păstrat. Rulează întâi: python -m kronos ruleaza --config ...")
         return 1
     model = registru.creeaza("model", config.porturi["model"]["modul"], cel_mai_bun["setari"].get("model", {})).instanta
+    if hasattr(model, "conecteaza_memorie"):
+        model.conecteaza_memorie(
+            registru.creeaza("memorie", config.porturi["memorie"]["modul"], config.setari_port("memorie")).instanta
+        )
     model.incarca(cel_mai_bun["model_salvat"])
     print(f"Modelul din experimentul {cel_mai_bun['id']} (scor {cel_mai_bun['scoruri'][examen.scor_principal]:.4f}):\n")
     print(args.inceput + model.genereaza(args.inceput, args.lungime))
+    return 0
+
+
+def cmd_cauta(args: argparse.Namespace) -> int:
+    """Arată unde stă un cuvânt în memoria ierarhică."""
+    config = citeste_config(args.config)
+    memorie = Registru().creeaza("memorie", config.porturi["memorie"]["modul"], config.setari_port("memorie")).instanta
+    sensuri = memorie.cauta(args.cuvant)
+    if not sensuri:
+        print(f"„{args.cuvant}” nu e în memorie.")
+        return 0
+    cod = ".".join(str(x) for x in memorie.cod(args.cuvant))
+    print(f"„{args.cuvant}”: {len(sensuri)} sensuri în memorie. Modelul primește codul sensului 1: {cod}\n")
+    for nr, sens in enumerate(sensuri[: args.sensuri], start=1):
+        print(f"Sensul {nr}: {sens.get('parte_de_vorbire', '?')}, raftul {sens.get('raft', '?')}, cod {sens.get('cod', '?')}")
+        if sens.get("drum"):
+            print("   " + " > ".join(sens["drum"]))
+        for relatie in sens.get("relatii", [])[:6]:
+            print(f"   {relatie['tip']}: {relatie['catre']}")
     return 0
 
 
@@ -140,6 +164,9 @@ def main(argv: list[str] | None = None) -> int:
     p = adauga("scrie", "cel mai bun model continuă un text", cmd_scrie)
     p.add_argument("--inceput", default="the ")
     p.add_argument("--lungime", type=int, default=300)
+    p = adauga("cauta", "unde stă un cuvânt în memoria ierarhică", cmd_cauta)
+    p.add_argument("cuvant")
+    p.add_argument("--sensuri", type=int, default=3, help="câte sensuri să arate")
     adauga("opreste", "butonul de oprire", cmd_opreste)
     adauga("porneste", "resetează butonul de oprire", cmd_porneste)
     adauga("aproba-examen", "aprobă o schimbare făcută de tine în examen", cmd_aproba_examen)

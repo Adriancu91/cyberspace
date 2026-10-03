@@ -34,6 +34,7 @@ MODULE = [
     ("stocare", "module.stocare_disc:StocareDisc", {"director": "__director_temporar__"}),
     ("interfata", "module.interfata_consola:InterfataConsola", {"tacut": True}),
     ("traducere", "module.jucarii:TraducereIdentitate", {}),
+    ("memorie", "module.jucarii:MemorieGoala", {}),
 ]
 
 
@@ -135,6 +136,22 @@ def _traducere(t, tmp_path, _, nou):
     assert isinstance(t.traduce("hello", "en", "ro"), str)
 
 
+def _memorie(m, tmp_path, _, nou):
+    assert isinstance(m.nivele, int) and m.nivele >= 1
+    text = "The horse ran, the cat's tail; know'st thou?\nhorse"
+    coduri = m.caracteristici(text)
+    assert len(coduri) == len(text)  # un cod pentru fiecare literă
+    assert all(isinstance(c, tuple) and len(c) == m.nivele and all(isinstance(x, int) for x in c) for c in coduri)
+    for i in range(len(text) + 1):  # regula de aur: memoria nu dezvăluie viitorul
+        assert m.caracteristici(text[:i]) == coduri[:i], f"scurgere din viitor la poziția {i}"
+    cod = m.cod("horse")
+    assert isinstance(cod, tuple) and len(cod) == m.nivele
+    assert m.cod("HORSE") == cod
+    sensuri = m.cauta("horse")
+    assert isinstance(sensuri, list) and all(isinstance(s, dict) for s in sensuri)
+    assert isinstance(m.statistici(), dict)
+
+
 VERIFICARI = {
     "model": _model,
     "date": _date,
@@ -145,6 +162,7 @@ VERIFICARI = {
     "stocare": _stocare,
     "interfata": _interfata,
     "traducere": _traducere,
+    "memorie": _memorie,
 }
 
 

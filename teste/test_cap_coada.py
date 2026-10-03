@@ -95,6 +95,14 @@ def test_modelul_care_crapa_e_anulat(config):
     assert fisa["stari"][-2:] == ["anulat", "inregistrat"]
 
 
+def test_orchestratorul_da_memoria_modelului(config):
+    config.porturi["model"]["modul"] = "teste.module_spion:ModelSpion"
+    fisa = Orchestrator(config).experiment(Propunere("spion"))
+    assert fisa["decizie"] != "anulat", fisa.get("motiv")
+    assert fisa["statistici_antrenare"] == {"memorie_conectata": True, "nivele": 1}
+    assert fisa["module"]["memorie"]["nume"] == "memorie_goala"
+
+
 def test_butonul_de_oprire(config):
     o = Orchestrator(config)
     o.paznic.cere_oprire()
@@ -132,9 +140,11 @@ def test_comenzile_din_consola(config, capsys):
     assert cli(["ruleaza", "--config", cale, "--experimente", "2"]) == 0
     assert cli(["jurnal", "--config", cale]) == 0
     assert cli(["scrie", "--config", cale, "--inceput", "the cat", "--lungime", "40"]) == 0
+    assert cli(["cauta", "horse", "--config", cale]) == 0
     iesire = capsys.readouterr().out
     assert "Toate modulele sunt în regulă" in iesire
     assert "val_bpb" in iesire
+    assert "„horse” nu e în memorie" in iesire  # configurația de probă are MemorieGoala
     assert cli(["opreste", "--config", cale]) == 0
     assert cli(["porneste", "--config", cale]) == 0
     assert cli(["aproba-examen", "--config", cale]) == 0

@@ -44,6 +44,7 @@ class Orchestrator:
         self.rulare = self.registru.ia("rulare")
         self.stocare = self.registru.ia("stocare")
         self.interfata = self.registru.ia("interfata")
+        self.memorie = self.registru.ia("memorie")
 
         # Pornim de la cea mai bună rețetă păstrată (reluare de unde am rămas).
         self.setari_curente: dict[str, dict[str, Any]] = {
@@ -236,8 +237,14 @@ class Orchestrator:
         return self._inregistreaza(fisa, start, stare)
 
     def _fa(self, port: str, setari: dict[str, dict[str, Any]]) -> Any:
-        """Creează un modul nou (model sau date) cu setările date."""
-        return self.registru.creeaza(port, self.config.porturi[port]["modul"], setari.get(port, {})).instanta
+        """Creează un modul nou (model sau date) cu setările date.
+
+        Modulele care știu să folosească memoria (au `conecteaza_memorie`) o primesc imediat.
+        """
+        instanta = self.registru.creeaza(port, self.config.porturi[port]["modul"], setari.get(port, {})).instanta
+        if hasattr(instanta, "conecteaza_memorie"):
+            instanta.conecteaza_memorie(self.memorie)
+        return instanta
 
     def _inregistreaza(self, fisa: dict[str, Any], start: float, stare: Callable[[str], None]) -> dict[str, Any]:
         fisa["durata_totala_secunde"] = round(time.perf_counter() - start, 2)
