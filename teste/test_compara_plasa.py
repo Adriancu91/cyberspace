@@ -9,7 +9,7 @@ import pytest
 
 from teste.biblioteca_mica import biblioteca_mica
 from teste.tinystories_mic import scrie_surse
-from unelte.compara_plasa import main, verdict
+from unelte.compara_plasa import asteapta_racirea, main, verdict
 
 CONFIG = """
 [platforma]
@@ -74,28 +74,68 @@ def test_doua_runde_cu_plasa_pastrata(tmp_path, monkeypatch, capsys):
         biblioteca=Path(biblioteca_mica(tmp_path)).as_posix(),
     ), encoding="utf-8")
 
-    assert main(["--config", str(cale), "--seminte", "1", "2"]) == 0
+    assert main(["--config", str(cale), "--seminte", "1", "2", "--pasi", "3", "--racire", "0"]) == 0
 
     rezultat = json.loads(next((tmp_path / "lucru").glob("comparatie_plasa_*.json")).read_text(encoding="utf-8"))
-    assert len(rezultat["rezultate"]) == 8
-    cu = [r for r in rezultat["rezultate"] if r["plasa_pornita"]]
-    fara = [r for r in rezultat["rezultate"] if not r["plasa_pornita"]]
-    assert all(r["plasa"] is None for r in fara) and all(r["plasa"] is not None for r in cu)
-    for r in cu:  # câștigul primit de plasă = scor fără plasă − scor cu plasă, pe aceeași rundă și sămânță
-        pereche = next(f for f in fara if (f["samanta"], f["runda"]) == (r["samanta"], r["runda"]))
-        assert r["castig_primit"] == pytest.approx(pereche["scor"] - r["scor"])
-    for samanta in (1, 2):  # plasa e păstrată între rundele aceleiași semințe
-        r1, r2 = (next(r for r in cu if (r["samanta"], r["runda"]) == (samanta, k)) for k in (1, 2))
-        assert r1["plasa"]["experimente"] == 1 and r2["plasa"]["experimente"] == 2
+    serii = rezultat["serii"]
+    assert [s["samanta"] for s in serii] == [1, 2]
+    for s in serii:
+        rulari = [s[v][str(r)] for v in ("fara", "cu") for r in (1, 2)]  # JSON: cheile rundelor devin text
+        assert all(r["pasi"] == 3 for r in rulari)  # toate rulările se opresc exact la același număr de pași
+        assert s["fara"]["1"]["plasa"] is None and s["cu"]["1"]["plasa"] is not None
+        for runda in ("1", "2"):  # câștigul primit de plasă = scor fără plasă − scor cu plasă, aceeași rundă și sămânță
+            assert s["cu"][runda]["castig_primit"] == pytest.approx(s["fara"][runda]["scor"] - s["cu"][runda]["scor"])
+        assert s["cu"]["1"]["plasa"]["experimente"] == 1 and s["cu"]["2"]["plasa"]["experimente"] == 2  # aceeași plasă
+    # În 3 pași nu se poate naște nicio legătură: verdictul trebuie să refuze concluziile.
+    assert rezultat["verdict"].startswith("NECONCLUDENT: plasa goală la runda 2")
     assert len(list((tmp_path / "lucru" / "plase").glob("*.json"))) == 2  # o plasă pentru fiecare sămânță
 
     fise = [json.loads(rand) for rand in (tmp_path / "lucru" / "jurnal" / "experimente.jsonl").read_text(encoding="utf-8").splitlines()]
     assert len(fise) == 8 and len({f["linie"] for f in fise}) == 4  # o linie pentru fiecare rundă și sămânță
+    assert all(f["setari"]["model"]["pasi_max"] == 3 for f in fise)
     assert all("plasa" in f["dupa_examen"] for f in fise if f["setari"]["model"]["plasa"])  # starea plasei, în jurnal
-    assert "Verdict:" in capsys.readouterr().out
+    assert "Verdict: NECONCLUDENT" in capsys.readouterr().out
 
 
-@pytest.mark.parametrize("diferenta,inceput", [(-0.02, "Plasa a AJUTAT"), (0.02, "Plasa a ÎNCURCAT"), (0.001, "NEHOTĂRÂT")])
-def test_verdictul(diferenta, inceput):
-    assert verdict(diferenta, 0.005, 3).startswith(inceput)
-    assert "orientativ" in verdict(diferenta, 0.005, 2)
+def _serie(samanta, fara, cu, pasi=(100, 100, 100, 100), legaturi_r2=3):
+    return {
+        "samanta": samanta,
+        "fara": {1: {"scor": fara[0], "pasi": pasi[0]}, 2: {"scor": fara[1], "pasi": pasi[1]}},
+        "cu": {
+            1: {"scor": cu[0], "pasi": pasi[2], "legaturi_la_start": 0},
+            2: {"scor": cu[1], "pasi": pasi[3], "legaturi_la_start": legaturi_r2},
+        },
+    }
+
+
+@pytest.mark.parametrize(
+    "serii,inceput",
+    [
+        ([_serie(0, (1.0, 1.0), (1.0, 0.98), pasi=(100, 100, 100, 90))], "NECONCLUDENT: pași diferiți"),
+        ([_serie(0, (1.0, 1.0), (1.0, 0.98)), _serie(1, (1.0, 1.0), (1.0, 0.98), legaturi_r2=0)],
+         "NECONCLUDENT: plasa goală la runda 2"),
+        ([_serie(s, (1.0, 1.01), (1.0, 0.99)) for s in range(3)], "MARE (merge)"),
+        ([_serie(s, (1.0, 0.99), (1.0, 1.01)) for s in range(3)], "MARE, dar în rău"),
+        ([_serie(0, (1.0, 1.0), (1.0, 1.001)), _serie(1, (1.0, 1.0), (1.0, 0.998))], "MICĂ (noroc)"),
+        ([_serie(0, (1.0, 1.0), (1.0, 0.98)), _serie(1, (1.0, 1.0), (1.0, 1.04))], "NECONCLUDENT: efectul nu are"),
+    ],
+)
+def test_verdictul(serii, inceput):
+    assert verdict(serii, 100, 0.005).startswith(inceput)
+
+
+def test_pasii_altii_decat_cei_ceruti_sunt_neconcludenti():
+    assert verdict([_serie(0, (1.0, 1.0), (1.0, 0.98), pasi=(90, 90, 90, 90))], 100, 0.005).startswith(
+        "NECONCLUDENT: pași diferiți"
+    )
+
+
+def test_pauza_de_racire_asteapta_pana_la_tinta():
+    temperaturi = iter([80.0, 76.0, 69.0])
+    pauze = []
+    asteapta_racirea(lambda: next(temperaturi), 70, asteapta=pauze.append)
+    assert pauze == [10, 10]  # 80 → 76 → 69: două pauze
+    pauze.clear()
+    asteapta_racirea(lambda: 90.0, 0, asteapta=pauze.append)  # 0 = fără pauze
+    asteapta_racirea(lambda: None, 70, asteapta=pauze.append)  # temperatura necunoscută: nu aștept
+    assert pauze == []
