@@ -5,7 +5,8 @@ O buclă de experimente îl face să se îmbunătățească singur: propune o sc
 dă examen, păstrează doar ce e mai bun și notează totul în jurnal.
 
 Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
-(modelul n-gram și GPT-ul nostru). 44 de teste trec.
+(modelul n-gram și GPT-ul nostru, care a rulat o noapte pe placa video: cel mai bun scor 2,1873).
+**Etapa M1 (memoria ierarhică)** e construită și testată; comparația cu / fără memorie e în curs. 89 de teste trec.
 
 ---
 
@@ -155,7 +156,7 @@ git commit -m "ce am făcut, pe scurt"
 | `unelte/` | descărcarea datelor, verificarea mediului | noi |
 | `lucru/` | jurnalul experimentelor, modelele salvate (se creează singur) | nimeni de mână |
 
-Modulele de acum, pe cele 9 porturi:
+Modulele de acum, pe cele 10 porturi:
 
 | Port | Modul | Ce face |
 | --- | --- | --- |
@@ -166,7 +167,28 @@ Modulele de acum, pe cele 9 porturi:
 | rulare | `rulare_locala` | laptopul: limită de timp, măsoară memoria video |
 | stocare | `stocare_disc` | folderul `lucru/stocare` |
 | interfață | `interfata_consola` | mesajele din terminal |
+| memorie | `memorie_ierarhica` / `memorie_goala` | biblioteca de sensuri din WordNet (coduri, relații, plasă) / fără memorie |
 | profesor, traducere | module „de jucărie” | respectă contractul, devin reale în fazele următoare |
+
+## Memoria ierarhică (Etapa M1)
+
+O bibliotecă de sensuri construită din Open English WordNet 2024 (120.630 de sensuri, licență CC-BY 4.0).
+Fiecare sens are un cod pe niveluri, ca o cotă de bibliotecă: parte de vorbire → raft (ex. `noun.animal`)
+→ poziția fiecărui strămoș (entity > … > mammal > … > equine > horse). Memoria mai ține relațiile dintre
+sensuri (parte din, membru din, opus) și o „plasă” cu drumurile deja căutate și de câte ori au fost folosite.
+
+GPT-ul cu `memorie = true` primește, la fiecare literă, codul **ultimului cuvânt terminat**, niciodată
+al cuvântului în curs (ar fi trișat la examen; testul `test_memoria_nu_dezvaluie_viitorul` verifică).
+
+```
+python unelte/construieste_biblioteca.py                              # o singură dată (~13 MB, câteva secunde)
+python -m kronos cauta horse --config config/laptop_gpt_memorie.toml   # unde stă un cuvânt în memorie
+python unelte/compara_memorie.py                                      # cu / fără memorie, 3 semințe, ~35-45 min
+python -m kronos ruleaza --config config/laptop_gpt_memorie.toml --experimente 60   # bucla cu memorie
+```
+
+Limită cunoscută: WordNet nu are cuvintele de legătură (the, and, to, my, you), iar unele cuvinte vechi
+primesc un sens greșit („thou” = prescurtarea lui „thousand”). Pe Shakespeare, memoria găsește 69% din cuvinte.
 
 ## Toate comenzile
 
@@ -175,6 +197,7 @@ python -m kronos verifica      --config <fișier>   # se încarcă toate modulel
 python -m kronos ruleaza       --config <fișier> [--experimente N]
 python -m kronos jurnal        --config <fișier>
 python -m kronos scrie         --config <fișier> --inceput "text" [--lungime 300]
+python -m kronos cauta <cuvânt> --config <fișier>  # unde stă cuvântul în memoria ierarhică
 python -m kronos opreste       --config <fișier>
 python -m kronos porneste      --config <fișier>
 python -m kronos aproba-examen --config <fișier>   # doar după o schimbare făcută de tine în examen
