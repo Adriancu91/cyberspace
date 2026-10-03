@@ -16,6 +16,11 @@
 - `module/examen_bpb.py` = examenul. **Nu-l modifica fără aprobarea omului.** Paznicul blochează experimentele dacă se schimbă; după o schimbare aprobată: `python -m kronos aproba-examen --config ...`.
 - `lucru/` = jurnal, modele salvate, amprente. Nu șterge și nu edita de mână jurnalul.
 
+## Memoria ierarhică
+- Portul `memorie`: `module/memorie_ierarhica.py` (biblioteca din WordNet, `date/biblioteca.json.gz`, construită cu `unelte/construieste_biblioteca.py`).
+- Regula de aur: `caracteristici(text)` dă, pentru fiecare literă, codul ultimului cuvânt **terminat**. Niciodată cuvântul în curs (ar fi trișat la examen). Testul `test_memoria_nu_dezvaluie_viitorul` verifică.
+- Comparația cinstită cu/fără memorie: `python unelte/compara_memorie.py` (trece prin Kronos, intră în jurnal).
+
 ## Cum lucrezi
 - După fiecare schimbare: `python -m pytest`. Nu spune „gata” dacă testele nu trec.
 - Fă un commit Git după fiecare pas reușit, cu mesaj în română.

@@ -22,6 +22,12 @@ from .registru import EroareModul, Registru
 CARACTERE_TEST_RAPID = 500
 
 
+def conecteaza(modul: Any, memorie: Any) -> None:
+    """Dă memoria modulelor care știu s-o folosească (au metoda conecteaza_memorie)."""
+    if hasattr(modul, "conecteaza_memorie"):
+        modul.conecteaza_memorie(memorie)
+
+
 class Orchestrator:
     def __init__(
         self,
@@ -44,6 +50,7 @@ class Orchestrator:
         self.rulare = self.registru.ia("rulare")
         self.stocare = self.registru.ia("stocare")
         self.interfata = self.registru.ia("interfata")
+        self.memorie = self.registru.ia("memorie")
 
         # Pornim de la cea mai bună rețetă păstrată (reluare de unde am rămas).
         self.setari_curente: dict[str, dict[str, Any]] = {
@@ -237,10 +244,16 @@ class Orchestrator:
 
     def _fa(self, port: str, setari: dict[str, dict[str, Any]]) -> Any:
         """Creează un modul nou (model sau date) cu setările date."""
-        return self.registru.creeaza(port, self.config.porturi[port]["modul"], setari.get(port, {})).instanta
+        instanta = self.registru.creeaza(port, self.config.porturi[port]["modul"], setari.get(port, {})).instanta
+        conecteaza(instanta, self.memorie)
+        return instanta
 
     def _inregistreaza(self, fisa: dict[str, Any], start: float, stare: Callable[[str], None]) -> dict[str, Any]:
         fisa["durata_totala_secunde"] = round(time.perf_counter() - start, 2)
+        try:
+            fisa["memorie"] = self.memorie.statistici()
+        except Exception:  # noqa: BLE001 - statisticile nu au voie să strice înregistrarea
+            pass
         stare("inregistrat")
         self.jurnal.adauga(fisa)
         self.interfata.anunta(

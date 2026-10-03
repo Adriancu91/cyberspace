@@ -34,6 +34,8 @@ MODULE = [
     ("stocare", "module.stocare_disc:StocareDisc", {"director": "__director_temporar__"}),
     ("interfata", "module.interfata_consola:InterfataConsola", {"tacut": True}),
     ("traducere", "module.jucarii:TraducereIdentitate", {}),
+    ("memorie", "module.jucarii:MemorieGoala", {}),
+    ("memorie", "module.memorie_ierarhica:MemorieIerarhica", {"cale": "__biblioteca_temporara__"}),
 ]
 
 
@@ -48,6 +50,10 @@ def _setari_reale(setari, tmp_path):
         fisier = tmp_path / "text.txt"
         fisier.write_text("To be, or not to be, that is the question.\n" * 100, encoding="utf-8")
         setari["cale"] = str(fisier)
+    if setari.get("cale") == "__biblioteca_temporara__":
+        from teste.biblioteca_mica import scrie_biblioteca
+
+        setari["cale"] = scrie_biblioteca(tmp_path)
     if setari.get("director") == "__director_temporar__":
         setari["director"] = str(tmp_path / "stocare")
     return setari
@@ -135,6 +141,18 @@ def _traducere(t, tmp_path, _, nou):
     assert isinstance(t.traduce("hello", "en", "ro"), str)
 
 
+def _memorie(m, tmp_path, _, nou):
+    assert isinstance(m.nivele, int) and m.nivele >= 1
+    text = "the horse ran. "
+    coduri = m.caracteristici(text)
+    assert len(coduri) == len(text)
+    assert all(isinstance(c, tuple) and len(c) == m.nivele for c in coduri)
+    for i in range(1, len(text) + 1):  # fără viitor
+        assert m.caracteristici(text[:i]) == coduri[:i]
+    assert isinstance(m.cauta("horse"), list)
+    assert isinstance(m.statistici(), dict)
+
+
 VERIFICARI = {
     "model": _model,
     "date": _date,
@@ -145,6 +163,7 @@ VERIFICARI = {
     "stocare": _stocare,
     "interfata": _interfata,
     "traducere": _traducere,
+    "memorie": _memorie,
 }
 
 

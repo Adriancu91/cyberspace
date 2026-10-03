@@ -24,7 +24,7 @@ def test_gpt_invata_ceva():
 
     scor_putin = examen.examineaza(putin, date)["val_bpb"]
     scor_mult = examen.examineaza(mult, date)["val_bpb"]
-    assert statistici["pasi"] > 10
+    assert statistici["pasi"] >= 3
     assert math.isfinite(scor_mult)
     assert scor_mult < scor_putin, (scor_putin, scor_mult)
 

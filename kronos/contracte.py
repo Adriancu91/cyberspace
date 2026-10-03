@@ -26,6 +26,7 @@ PORTURI = (
     "stocare",
     "interfata",
     "traducere",
+    "memorie",
 )
 
 
@@ -141,6 +142,24 @@ class Traducere(Protocol):
     def traduce(self, text: str, din_limba: str, in_limba: str) -> str: ...
 
 
+@runtime_checkable
+class Memorie(Protocol):
+    """Memoria ierarhică: unde stă fiecare cuvânt în bibliotecă și ce legături are.
+
+    Modelele o primesc prin `conecteaza_memorie(memorie)`, dacă au această metodă.
+    """
+
+    nivele: int
+
+    def caracteristici(self, text: str) -> list[tuple[int, ...]]:
+        """Pentru fiecare literă: codul ultimului cuvânt TERMINAT până la ea (fără viitor)."""
+        ...
+
+    def cauta(self, cuvant: str) -> list[dict[str, Any]]: ...
+
+    def statistici(self) -> dict[str, Any]: ...
+
+
 CONTRACT_PENTRU_PORT: dict[str, type] = {
     "model": Model,
     "date": Date,
@@ -151,6 +170,7 @@ CONTRACT_PENTRU_PORT: dict[str, type] = {
     "stocare": Stocare,
     "interfata": Interfata,
     "traducere": Traducere,
+    "memorie": Memorie,
 }
 
 
