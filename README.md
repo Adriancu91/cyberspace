@@ -6,7 +6,8 @@ dă examen, păstrează doar ce e mai bun și notează totul în jurnal.
 
 Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 (modelul n-gram și GPT-ul nostru, care a rulat o noapte pe placa video: cel mai bun scor 2,1873).
-**Etapa M1 (memoria ierarhică)** e construită și testată; comparația cu / fără memorie e în curs. 89 de teste trec.
+**Etapa M1 (memoria ierarhică)** e construită și testată. Prima comparație (la același timp de antrenare) arată că
+memoria, așa cum e acum, strică; comparația la același număr de pași e în curs. 92 de teste trec.
 
 ---
 
@@ -183,12 +184,31 @@ al cuvântului în curs (ar fi trișat la examen; testul `test_memoria_nu_dezval
 ```
 python unelte/construieste_biblioteca.py                              # o singură dată (~13 MB, câteva secunde)
 python -m kronos cauta horse --config config/laptop_gpt_memorie.toml   # unde stă un cuvânt în memorie
-python unelte/compara_memorie.py                                      # cu / fără memorie, 3 semințe, ~35-45 min
+python unelte/compara_memorie.py                                      # cu / fără memorie, 3 semințe, la același timp
+python unelte/compara_memorie.py --pasi 35000                         # cu / fără memorie, la același număr de pași
 python -m kronos ruleaza --config config/laptop_gpt_memorie.toml --experimente 60   # bucla cu memorie
 ```
 
 Limită cunoscută: WordNet nu are cuvintele de legătură (the, and, to, my, you), iar unele cuvinte vechi
 primesc un sens greșit („thou” = prescurtarea lui „thousand”). Pe Shakespeare, memoria găsește 69% din cuvinte.
+
+### Rezultate (3 octombrie 2026)
+
+**La același timp** (5 minute de antrenare, rețeta câștigătoare: 2 straturi, lot 16, rata 0.0003; `val_bpb`, mai mic = mai bine):
+
+| Sămânța | Fără memorie | Cu memorie | Diferență | Pași (fără / cu) |
+| --- | --- | --- | --- | --- |
+| 1337 | **2,1779** | 2,2414 | −0,064 | 44.949 / 36.921 |
+| 2024 | **2,1856** | 2,2496 | −0,064 | 45.657 / 32.609 |
+| 7 | **2,1983** | 2,2218 | −0,024 | 42.825 / 37.182 |
+| media | **2,1873** | 2,2376 | −0,050 | |
+
+Memoria a fost mai slabă la toate cele trei semințe. Face cu 15–29% mai puțini pași în același timp și are de
+învățat 196.000 de parametri în plus (617.248 față de 421.632). Atenție la zgomot: aceeași rețetă cu aceeași
+sămânță a dat 2,1873 azi-noapte și 2,1779 azi, deci diferențele sub ~0,01 nu înseamnă nimic.
+
+**La același număr de pași** (35.000 de pași pentru ambele variante): în curs. Arată dacă memoria strică doar
+pentru că e mai lentă sau și pentru că informația ei nu ajută.
 
 ## Toate comenzile
 
