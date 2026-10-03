@@ -12,7 +12,9 @@ torch = pytest.importorskip("torch")
 from module.date_mostra import DateMostra  # noqa: E402
 from module.memorie_ierarhica import MemorieIerarhica  # noqa: E402
 from module.model_gpt import ModelGPT  # noqa: E402
-from module.model_plasa import NUME_NODURI, REZERVA, TARIE_NASTERE, ModelPlasa, Plasa, nod_pentru_raft  # noqa: E402
+from module.model_plasa import (  # noqa: E402
+    NUME_NODURI, PRAG_ASOCIERE, REZERVA, TARIE_NASTERE, ModelPlasa, Plasa, nod_pentru_raft,
+)
 from module.tokenizer_bpe import antreneaza_bpe  # noqa: E402
 from teste.biblioteca_mica import biblioteca_mica  # noqa: E402
 
@@ -123,17 +125,19 @@ def _plasa_cu(tarie: float, stare: str = "activa") -> Plasa:
     return Plasa(NUME_NODURI, {LEGATURA: {"tarie": tarie, "stare": stare, "nascuta_la": 1, "sub_prag": 0}})
 
 
-ASOCIATE = _matrice({LEGATURA: 3.2, ("actiuni", "fiinte"): 3.2, ("fiinte", "insusiri"): 2.9})
+ASOCIATE = _matrice(
+    {LEGATURA: PRAG_ASOCIERE + 0.1, ("actiuni", "fiinte"): PRAG_ASOCIERE + 0.1, ("fiinte", "insusiri"): PRAG_ASOCIERE - 0.1}
+)
 
 
-def test_se_naste_doar_cu_cerere_si_asociere_de_3_ori():
+def test_se_naste_doar_cu_cerere_si_asociere_peste_prag():
     plasa = Plasa(NUME_NODURI)
     cereri = _matrice({LEGATURA: 0.06, ("actiuni", "fiinte"): 0.04, ("fiinte", "insusiri"): 0.3})
     assert plasa.actualizeaza(cereri, NIMIC, castig=None, asociere=ASOCIATE)["nascute"] == 1
     assert plasa.legaturi[LEGATURA]["stare"] == "proba"
     assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(TARIE_NASTERE * 0.99)
     assert ("actiuni", "fiinte") not in plasa.legaturi  # asociere destulă, dar cererea (0,04) e sub prag
-    assert ("fiinte", "insusiri") not in plasa.legaturi  # cerere mare, dar asocierea (2,9) e sub 3
+    assert ("fiinte", "insusiri") not in plasa.legaturi  # cerere mare, dar asocierea e sub prag
 
 
 def test_fara_asociere_masurata_nu_se_naste_nimic():

@@ -58,7 +58,9 @@ def nod_pentru_raft(raft: str) -> int:
 VERSIUNE_PLASA = 1
 TARIE_NASTERE = 0.1  # o legătură nouă începe cu tăria 0,1, „în probă”
 PRAG_CERERE = 0.05  # un nod „cere” de la altul când ponderea învățată către el trece de 0,05
-PRAG_ASOCIERE = 3.0  # ...și se naște legătura doar dacă cele două noduri apar alături de 3× mai des decât întâmplător
+# ...și se naște legătura doar dacă un cuvânt al primului nod e urmat de unul al celuilalt de cel puțin 1,5× mai
+# des decât întâmplător. (Cerut inițial: 3×; pe TinyStories nicio pereche nu trece de 1,95, deci omul a ales 1,5×.)
+PRAG_ASOCIERE = 1.5
 PRAG_ACTIVA = 0.2  # o legătură iese din probă când trece de 0,2
 PRAG_DEFINITIVA = 0.9  # peste 0,9 devine definitivă: nu mai uită și nu mai e tăiată
 PRAG_TAIERE = 0.05  # sub 0,05...
@@ -79,7 +81,7 @@ class Plasa:
 
     Reguli:
     - naștere (tărie 0,1, în probă): un nod cere de la altul (ponderea învățată ≥ 0,05) ȘI cuvintele
-      celor două noduri stau alături (unul după altul) de cel puțin 3× mai des decât întâmplător;
+      celor două noduri stau alături (unul după altul) de cel puțin 1,5× mai des decât întâmplător;
     - întărire: câștig pozitiv la examen × cât a fost folosită legătura (folosirea singură nu ajunge);
     - slăbire: un câștig negativ înmulțește tăria cu până la 0,7 (după cât a fost folosită), fără s-o taie;
     - uitare 1% la fiecare experiment; peste 0,9 devine definitivă (nu mai uită, nu mai slăbește);
