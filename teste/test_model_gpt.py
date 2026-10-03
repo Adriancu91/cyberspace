@@ -83,6 +83,17 @@ def test_la_inceput_memoria_nu_schimba_nimic(tmp_path):
     assert cu.biti_pentru(text) == pytest.approx(fara.biti_pentru(text), rel=1e-6)
 
 
+def test_pasi_max_opreste_antrenarea_la_numarul_cerut(tmp_path):
+    date = DateMostra(propozitii=200)
+    assert ModelGPT(**MIC, pasi_max=7).antreneaza(date, 60.0)["pasi"] == 7
+    cu = ModelGPT(**MIC_MEMORIE, pasi_max=5)
+    cu.conecteaza_memorie(MemorieIerarhica(cale=biblioteca_mica(tmp_path), nivele=6))
+    statistici = cu.antreneaza(date, 60.0)
+    assert statistici["pasi"] == 5 and statistici["pasi_max"] == 5
+    with pytest.raises(ValueError, match="pasi_max"):
+        ModelGPT(pasi_max=-1)
+
+
 def test_memorie_fara_port_conectat_da_mesaj_clar():
     with pytest.raises(RuntimeError, match="memorie"):
         ModelGPT(**MIC_MEMORIE).antreneaza(DateMostra(propozitii=100), 1.0)

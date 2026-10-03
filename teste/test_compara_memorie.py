@@ -58,11 +58,21 @@ setari = {{ cale = "{biblioteca}", nivele = 6 }}
 """
 
 
-def test_comparatia_trece_prin_kronos(tmp_path, monkeypatch, capsys):
+def _pregateste(tmp_path, monkeypatch) -> Path:
     pytest.importorskip("torch")
     monkeypatch.chdir(tmp_path)
     cale = tmp_path / "comparatie.toml"
     cale.write_text(CONFIG.format(biblioteca=Path(biblioteca_mica(tmp_path)).as_posix()), encoding="utf-8")
+    return cale
+
+
+def _fise(tmp_path) -> list[dict]:
+    linii = (tmp_path / "lucru" / "jurnal" / "experimente.jsonl").read_text(encoding="utf-8").splitlines()
+    return [json.loads(rand) for rand in linii]
+
+
+def test_comparatia_trece_prin_kronos(tmp_path, monkeypatch, capsys):
+    cale = _pregateste(tmp_path, monkeypatch)
 
     assert main(["--config", str(cale), "--seminte", "1", "2"]) == 0
 
@@ -75,11 +85,37 @@ def test_comparatia_trece_prin_kronos(tmp_path, monkeypatch, capsys):
     assert "Rezultatul comparației" in iesire and "Verdict:" in iesire
 
     # Totul a trecut prin Kronos și a intrat în jurnal, pe o linie separată.
-    linii = (tmp_path / "lucru" / "jurnal" / "experimente.jsonl").read_text(encoding="utf-8").splitlines()
-    fise = [json.loads(rand) for rand in linii]
+    fise = _fise(tmp_path)
     assert len(fise) == 4 and {f["linie"] for f in fise} == {"test_memorie_comparatie"}
     assert [f["setari"]["model"]["memorie"] for f in fise] == [False, True, True, False]  # ordinea alternează
     assert all(f["setari"]["model"]["lot"] == 8 for f in fise)  # aceeași rețetă de fiecare dată
+    assert all("pasi_max" not in f["setari"]["model"] for f in fise)  # la același timp, fără limită de pași
+
+
+def test_comparatia_la_acelasi_numar_de_pasi(tmp_path, monkeypatch, capsys):
+    cale = _pregateste(tmp_path, monkeypatch)
+
+    assert main(["--config", str(cale), "--seminte", "1", "2", "--pasi", "3"]) == 0
+
+    rezultat = json.loads((tmp_path / "lucru" / "comparatie_memorie_pasi.json").read_text(encoding="utf-8"))
+    assert rezultat["mod"] == "pasi" and rezultat["pasi"] == 3
+    assert all(p[v]["pasi"] == 3 for p in rezultat["perechi"] for v in ("fara", "cu"))
+    assert "ATENȚIE" not in rezultat["verdict"]
+    assert "la același număr de pași: 3" in capsys.readouterr().out
+    fise = _fise(tmp_path)
+    assert len(fise) == 4 and {f["linie"] for f in fise} == {"test_memorie_comparatie_pasi"}
+    assert all(f["setari"]["model"]["pasi_max"] == 3 for f in fise)
+    assert not (tmp_path / "lucru" / "comparatie_memorie.json").exists()  # nu suprascrie comparația la același timp
+
+
+def test_avertizeaza_cand_pasii_nu_sunt_egali(tmp_path, monkeypatch):
+    cale = _pregateste(tmp_path, monkeypatch)
+
+    # Limita de siguranță (0,3 s) e prea mică pentru un milion de pași: comparația nu e la număr egal de pași.
+    assert main(["--config", str(cale), "--seminte", "1", "2", "--pasi", "1000000", "--buget", "0.3"]) == 0
+
+    rezultat = json.loads((tmp_path / "lucru" / "comparatie_memorie_pasi.json").read_text(encoding="utf-8"))
+    assert rezultat["verdict"].startswith("ATENȚIE")
 
 
 @pytest.mark.parametrize(

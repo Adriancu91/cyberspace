@@ -11,6 +11,8 @@ Setări pe care Cercetătorul le poate schimba:
 - memorie: dacă folosește memoria ierarhică (portul „memorie”)
 - adancime_memorie: câte niveluri din codul cuvântului folosește
 - n_emb_memorie: cât de bogat descrie categoria de pe fiecare nivel
+- pasi_max: dacă e mai mare ca 0, antrenarea se oprește după exact atâția pași
+  (pentru comparații la număr egal de pași); bugetul de timp rămâne limita de siguranță
 
 Cum folosește memoria: la fiecare literă primește, în plus, codul ultimului cuvânt
 terminat (de ex. „horse” → substantiv → noun.animal → ... → equine → horse). Fiecare
@@ -102,7 +104,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.2.0",
+        "versiune": "0.3.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -120,6 +122,7 @@ class ModelGPT:
         memorie: bool = False,
         adancime_memorie: int = 8,
         n_emb_memorie: int = 32,
+        pasi_max: int = 0,
         dispozitiv: str = "auto",
         samanta: int = 1337,
     ) -> None:
@@ -127,6 +130,9 @@ class ModelGPT:
             raise ValueError("n_emb trebuie să se împartă exact la n_capete")
         if min(n_straturi, n_capete, n_emb, context, lot, adancime_memorie, n_emb_memorie) < 1 or rata_invatare <= 0:
             raise ValueError("toate dimensiunile și rata_invatare trebuie să fie pozitive")
+        if pasi_max < 0:
+            raise ValueError("pasi_max trebuie să fie 0 (fără limită de pași) sau un număr pozitiv")
+        self.pasi_max = pasi_max
         self.setari = dict(
             n_straturi=n_straturi, n_capete=n_capete, n_emb=n_emb, context=context, dropout=dropout
         )
@@ -233,7 +239,7 @@ class ModelGPT:
         start = time.perf_counter() - pregatire
         pasi = 0
         pierdere = float("nan")
-        while time.perf_counter() - start < buget_secunde:
+        while time.perf_counter() - start < buget_secunde and not (self.pasi_max and pasi >= self.pasi_max):
             pozitii = torch.randint(len(date_t) - ctx - 1, (self.lot,), generator=generator)
             x = torch.stack([date_t[p : p + ctx] for p in pozitii])
             y = torch.stack([date_t[p + 1 : p + ctx + 1] for p in pozitii])
@@ -255,6 +261,8 @@ class ModelGPT:
             "parametri": sum(p.numel() for p in self.retea.parameters()),
             "dispozitiv": str(self.dispozitiv),
         }
+        if self.pasi_max:
+            statistici["pasi_max"] = self.pasi_max
         if self.retea.memorie is not None:
             statistici["parametri_memorie"] = sum(p.numel() for p in self.retea.memorie.parameters()) + (
                 self.retea.proiectie_memorie.weight.numel()
