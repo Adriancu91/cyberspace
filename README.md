@@ -9,7 +9,9 @@ Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 **Etapa M1 (memoria ierarhică)** e construită și testată. Comparațiile arată că memoria, așa cum e acum, nu ajută:
 cu 8 sau 4 niveluri strică, iar cu 2 niveluri nu schimbă nimic măsurabil.
 **Etapa M2, primul pas** e gata: TinyStories, tokenizerul nostru pe bucăți de cuvinte (4.096 simboluri) și GPT-ul
-pe litere sau pe bucăți. Pe bucăți de cuvinte, scorul pe TinyStories e 0,8822 (pe litere: 1,3174). 129 de teste trec.
+pe litere sau pe bucăți. Pe bucăți de cuvinte, scorul pe TinyStories e 0,8822 (pe litere: 1,3174).
+**Etapa M2, pasul 2 (plasa de noduri, versiunea minimă)** e construită și testată; primul test în două runde a ieșit
+neconcludent (vezi mai jos). 155 de teste trec.
 
 ---
 
@@ -271,6 +273,52 @@ swing and he was loving around with lots of fun. The sun was bright… Lily and 
 **Acoperirea bibliotecii de sensuri pe TinyStories:** 71,5% din cuvinte sunt găsite (Shakespeare: 69%). Textul de
 antrenare are 3,5 milioane de cuvinte, dar doar 9.846 de cuvinte diferite. Lipsesc tot cuvintele de legătură
 (the, and, to, they, she, with, you), numele (Tim) și separatorul dintre povești.
+
+## Etapa M2, pasul 2: plasa de noduri (versiunea minimă)
+
+`module/model_plasa.py` (ModelPlasa, pe portul „model”), pornind de la GPT-ul pe bucăți de cuvinte:
+
+- **Trunchiul comun** (straturile GPT-ului) și, deasupra, **5 noduri mici**: ființe (noun.animal, noun.person,
+  noun.plant), locuri și obiecte (noun.location, noun.artifact, noun.object), acțiuni (verb.\*), însușiri (adj.\*,
+  adv.\*) și rezervă (cuvinte negăsite, de legătură și rafturile nepuse în alt grup). Fiecare simbol merge la nodul
+  raftului ultimului cuvânt terminat (din memorie, fără viitor). Pe TinyStories: rezervă 58% din simboluri,
+  însușiri 16%, locuri și obiecte 9%, ființe 8%, acțiuni 8%.
+- **Nodul central** adună ieșirile nodurilor, ponderate. Nodurile pornesc „tăcute”: la început, modelul e identic
+  cu GPT-ul simplu.
+- **Plasa** (`plasa = true`): legături între noduri, cu tărie între 0 și 1, păstrate între experimente în
+  `lucru/plasa.json`. Un nod „cere” de la altul când ponderea învățată către el trece de 0,05; atunci se naște o
+  legătură cu tăria 0,1, în probă. După examen, fiecare legătură se întărește sau slăbește după **câștigul la examen**
+  × cât a fost folosită; uită 1% la fiecare experiment; peste 0,9 devine definitivă; sub 0,05 e tăiată. Legăturile
+  cu nodul central sunt fixe. Plasa nu vede niciodată textul de examen: primește câștigul doar ca număr, prin ușa
+  `dupa_examen` din Kronos (schimbare aprobată), iar starea ei intră în jurnal la fiecare experiment.
+- **Costul:** cu nodurile, modelul face ~97 de pași pe secundă (GPT-ul simplu: ~147).
+
+```
+python unelte/compara_plasa.py     # testul în două runde: fără / cu plasă, 2 semințe, ~45-50 de minute
+```
+
+### Primul test în două runde (3 octombrie 2026)
+
+Validarea împărțită în două jumătăți; pentru fiecare sămânță: fără plasă runda 1 și 2, apoi cu plasă runda 1 și 2
+(plasa păstrată între rundele ei). 5 minute de antrenare fiecare:
+
+| Varianta | Sămânța | Runda 1 | Runda 2 | Runda 2 − runda 1 | Pași (runda 1 / runda 2) |
+| --- | --- | --- | --- | --- | --- |
+| fără plasă | 1337 | 0,9236 | 0,9201 | −0,004 | 34.511 / 35.981 |
+| fără plasă | 2024 | 0,9092 | 0,9580 | +0,049 | 36.263 / 28.617 |
+| cu plasă | 1337 | 0,9762 | 0,9325 | −0,044 | 25.848 / 33.807 |
+| cu plasă | 2024 | 0,9477 | 0,9219 | −0,026 | 28.746 / 33.916 |
+
+Scriptul a scris „plasa a ajutat runda 2”, dar **testul e neconcludent**:
+- În runda 1, varianta cu plasă a pierdut la ambele semințe, deci câștigul primit a fost negativ și toate legăturile
+  născute (17, respectiv 20) au fost slăbite și tăiate. **Runda 2 cu plasă a pornit tot cu o plasă goală**, ca runda 1:
+  nu s-a păstrat nimic de folosit.
+- În aceleași 5 minute, numărul de pași a variat între 25.848 și 36.263 (placa s-a încins: 3 pauze de răcire), iar
+  scorul urmează aproape exact numărul de pași. Diferențele vin din viteză, nu din plasă; probabil și pierderea din
+  runda 1 (care a tăiat legăturile) vine tot de aici.
+
+Pasul următor propus: același test la **același număr de pași** (acolo antrenarea se repetă exact, cum s-a văzut la
+memorie), ca plasa să primească un câștig curat și ca rundele să se poată compara.
 
 ## Toate comenzile
 
