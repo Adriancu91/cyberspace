@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import math
 
 import pytest
@@ -11,7 +12,7 @@ torch = pytest.importorskip("torch")
 from module.date_mostra import DateMostra  # noqa: E402
 from module.memorie_ierarhica import MemorieIerarhica  # noqa: E402
 from module.model_gpt import ModelGPT  # noqa: E402
-from module.model_plasa import NUME_NODURI, REZERVA, ModelPlasa, nod_pentru_raft  # noqa: E402
+from module.model_plasa import NUME_NODURI, REZERVA, TARIE_NASTERE, ModelPlasa, Plasa, nod_pentru_raft  # noqa: E402
 from module.tokenizer_bpe import antreneaza_bpe  # noqa: E402
 from teste.biblioteca_mica import biblioteca_mica  # noqa: E402
 
@@ -100,3 +101,138 @@ def test_fara_memorie_totul_merge_la_rezerva(tokenizer_mic):
     statistici = model.antreneaza(DateMostra(propozitii=200), 0.5)
     assert statistici["noduri"]["rezerva"] == 1.0
     assert math.isfinite(model.biti_pentru("the cat."))
+
+
+# --- regulile plasei -------------------------------------------------------------------------
+
+LEGATURA = ("fiinte", "actiuni")
+
+
+def _matrice(valori: dict[tuple[str, str], float]) -> list[list[float]]:
+    m = [[0.0] * len(NUME_NODURI) for _ in NUME_NODURI]
+    for (a, b), v in valori.items():
+        m[NUME_NODURI.index(a)][NUME_NODURI.index(b)] = v
+    return m
+
+
+NIMIC = _matrice({})
+FOLOSITA = _matrice({LEGATURA: 0.1})  # legătura a fost folosită din plin
+
+
+def _plasa_cu(tarie: float, stare: str = "activa") -> Plasa:
+    return Plasa(NUME_NODURI, {LEGATURA: {"tarie": tarie, "stare": stare, "nascuta_la": 1}})
+
+
+def test_o_cerere_naste_o_legatura_in_proba():
+    plasa = Plasa(NUME_NODURI)
+    cereri = _matrice({LEGATURA: 0.06, ("actiuni", "fiinte"): 0.04})
+    assert plasa.actualizeaza(cereri, NIMIC, castig=None)["nascute"] == 1
+    assert plasa.legaturi[LEGATURA]["stare"] == "proba"
+    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(TARIE_NASTERE * 0.99)
+    assert ("actiuni", "fiinte") not in plasa.legaturi  # 0,04 e sub pragul de cerere
+
+
+def test_uitarea_e_1_la_suta_pe_experiment():
+    plasa = _plasa_cu(0.5)
+    plasa.actualizeaza(NIMIC, NIMIC, castig=None)
+    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(0.495)
+
+
+def test_intarirea_cere_si_castig_la_examen_si_folosire():
+    cu_amandoua = _plasa_cu(0.5)
+    assert cu_amandoua.actualizeaza(NIMIC, FOLOSITA, castig=0.02)["intarite"] == 1
+    assert cu_amandoua.legaturi[LEGATURA]["tarie"] == pytest.approx(0.7 * 0.99)
+    doar_folosita = _plasa_cu(0.5)
+    doar_folosita.actualizeaza(NIMIC, FOLOSITA, castig=None)  # folosirea singură nu ajunge
+    assert doar_folosita.legaturi[LEGATURA]["tarie"] == pytest.approx(0.495)
+    doar_castig = _plasa_cu(0.5)
+    doar_castig.actualizeaza(NIMIC, NIMIC, castig=0.02)  # nici câștigul fără folosire
+    assert doar_castig.legaturi[LEGATURA]["tarie"] == pytest.approx(0.495)
+
+
+def test_un_castig_negativ_slabeste():
+    plasa = _plasa_cu(0.5)
+    assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["slabite"] == 1
+    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(0.3 * 0.99)
+
+
+def test_peste_0_9_devine_definitiva_si_nu_mai_uita():
+    plasa = _plasa_cu(0.85)
+    assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=0.02)["devenite_definitive"] == 1
+    assert plasa.legaturi[LEGATURA]["stare"] == "definitiva"
+    tarie = plasa.legaturi[LEGATURA]["tarie"]
+    plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)
+    assert plasa.legaturi[LEGATURA]["tarie"] == tarie  # definitivă: nu mai uită și nu mai slăbește
+
+
+def test_sub_0_05_e_taiata():
+    plasa = _plasa_cu(TARIE_NASTERE, "proba")
+    assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["taiate"] == 1
+    assert not plasa.legaturi
+
+
+def test_iese_din_proba_cand_trece_de_0_2():
+    plasa = _plasa_cu(TARIE_NASTERE, "proba")
+    plasa.actualizeaza(NIMIC, FOLOSITA, castig=0.02)
+    assert plasa.legaturi[LEGATURA]["stare"] == "activa"
+
+
+def test_plasa_se_salveaza_fara_legaturile_cu_centrul(tmp_path):
+    plasa = _plasa_cu(0.5)
+    plasa.actualizeaza(NIMIC, NIMIC, castig=None)
+    plasa.salveaza(tmp_path / "plasa.json")
+    copie = Plasa.incarca(tmp_path / "plasa.json", NUME_NODURI)
+    assert copie.legaturi == plasa.legaturi and copie.experimente == 1
+    assert all("centru" not in pereche for pereche in copie.legaturi)
+    with pytest.raises(ValueError, match="alte noduri"):
+        Plasa.incarca(tmp_path / "plasa.json", ["unu", "doi"])
+
+
+# --- plasa în model ------------------------------------------------------------------------
+
+
+def test_plasa_supravietuieste_intre_experimente(tmp_path, memorie, tokenizer_mic):
+    cale = tmp_path / "plasa.json"
+    _plasa_cu(0.5).salveaza(cale)  # plasa lăsată de un experiment de dinainte
+    model = ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic, plasa=True, cale_plasa=str(cale))
+    model.conecteaza_memorie(memorie)
+    statistici = model.antreneaza(DateMostra(propozitii=300), 1.0)
+    assert statistici["plasa"]["legaturi_la_start"] == 1
+    a, b = NUME_NODURI.index("fiinte"), NUME_NODURI.index("actiuni")
+    assert model.retea.legaturi[a, b].item() == pytest.approx(0.5)  # legătura din fișier intră în rețea
+    rezultat = model.dupa_examen({"castig": 0.02})["plasa"]
+    for cheie in ("legaturi", "nascute", "intarite", "slabite", "taiate", "definitive", "in_proba", "experimente"):
+        assert cheie in rezultat
+    assert Plasa.incarca(cale, NUME_NODURI).experimente == 1  # starea nouă s-a păstrat în fișier
+
+
+def test_plasa_nu_vede_textul_de_examen(tmp_path, memorie, tokenizer_mic):
+    cale = tmp_path / "plasa.json"
+    model = ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic, plasa=True, cale_plasa=str(cale))
+    model.conecteaza_memorie(memorie)
+    model.antreneaza(DateMostra(propozitii=300), 1.0)
+    cereri, folosire = copy.deepcopy(model._cereri), copy.deepcopy(model._folosire)
+    model.biti_pentru("the cat ran to the horse. " * 20)
+    model.genereaza("the ", 30)
+    assert model._cereri == cereri and model._folosire == folosire  # examenul nu schimbă nimic în plasă
+    assert not cale.exists()  # plasa se scrie doar după examen, din câștig
+
+
+def test_fara_plasa_nu_invata_dupa_examen(memorie, tokenizer_mic):
+    model = ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic)
+    model.conecteaza_memorie(memorie)
+    model.antreneaza(DateMostra(propozitii=200), 0.5)
+    assert model.dupa_examen({"castig": 0.05}) is None
+
+
+def test_cu_plasa_se_salveaza_si_se_reincarca(tmp_path, memorie, tokenizer_mic):
+    cale = tmp_path / "plasa.json"
+    _plasa_cu(0.5).salveaza(cale)
+    model = ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic, plasa=True, cale_plasa=str(cale))
+    model.conecteaza_memorie(memorie)
+    model.antreneaza(DateMostra(propozitii=300), 1.0)
+    biti = model.biti_pentru("the cat sat.")
+    copie = ModelPlasa(dispozitiv="cpu", cale_tokenizer=tokenizer_mic)
+    copie.conecteaza_memorie(memorie)
+    copie.incarca(model.salveaza(str(tmp_path / "model")))
+    assert copie.cu_plasa and copie.biti_pentru("the cat sat.") == pytest.approx(biti, rel=1e-5)
