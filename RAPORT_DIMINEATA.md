@@ -1,19 +1,19 @@
 # Raport de dimineață
 
-Scris vineri seara, 2 octombrie 2026, în jurul orei 22:00, după ce ai plecat la culcare.
-Rularea de noapte a continuat singură după ce am scris raportul. Rezultatele finale le vezi cu comenzile din secțiunea 8.
+Scris vineri seara, 2 octombrie 2026, în jurul orei 22:00. **Actualizat sâmbătă, 3 octombrie, la 07:30, cu rezultatele finale ale nopții.**
 
 ---
 
 ## 1. Pe scurt
 
-- ✅ **PyTorch merge pe placa video** (RTX 3060, 6 GB).
-- ✅ **Toate cele 44 de teste trec.**
-- ✅ **Rularea de noapte a pornit la 21:51**: 90 de experimente cu GPT-ul nostru, fiecare cu 5 minute de antrenare.
-  Rulează ca proces separat, ascuns, și scrie totul în `lucru\noapte.log`.
-- 🏆 **Cel mai bun scor la ora raportului: 2,2090** (experimentul #22). Mai mic înseamnă mai bine.
-  Scorul de plecare al GPT-ului a fost 2,4347.
-- ⏰ **Estimare de final: între 05:30 și 08:30.** Depinde de câte pauze de răcire face placa.
+- ✅ **PyTorch merge pe placa video** (RTX 3060, 6 GB). Toate cele 44 de teste trec.
+- ✅ **Rularea de noapte a mers fără nicio eroare:** 0 experimente anulate și 0 opriri ale paznicului.
+- 🏁 **S-a oprit singură la 23:51**, după **21 de experimente din 90**. Cercetătorul **încercase deja toate variațiile**
+  din jurul celei mai bune rețete. Nu a fost o defecțiune (vezi secțiunea 7, punctul 5).
+- 🏆 **Cel mai bun scor: 2,1873** (experimentul #32). Mai mic înseamnă mai bine.
+  GPT-ul a pornit de la 2,4347. Cel mai bun model simplu (n-gram) ajunsese la 2,4211.
+- ⚠️ Estimarea mea de aseară pentru ora de final (05:30–08:30) a fost greșită. Nu știam că cercetătorul se oprește singur când rămâne fără variante.
+  Laptopul a stat pornit, dar fără să lucreze, de la 23:51 până dimineață.
 
 ---
 
@@ -41,10 +41,14 @@ Rularea de noapte a continuat singură după ce am scris raportul. Rezultatele f
 | 21:51:45 | Am pornit rularea de noapte: `python -m kronos ruleaza --config config/laptop_gpt.toml --experimente 90` | ✅ Pornită ca proces separat, prin Windows (WMI), ca să nu depindă de sesiunea Claude Code |
 | 21:52 | Am verificat placa | ✅ Lucrează: încărcare ~50%, consum ~88 W, 355 MB de memorie video |
 | 21:5x | Am adăugat în `README.md`, la Pasul 7, o notă despre Smart App Control | Ca să nu te mai încurce data viitoare |
-| 21:56 | Primul experiment de noapte (#24) s-a terminat | ✅ Rularea merge: `lucru\noapte.log` crește, iar procesul e activ. Placa avea 77°C, deci n-a fost nevoie de pauză. #24 a fost respins (vezi tabelul) |
-| ~21:58 | Commit Git cu README-ul și acest raport (fără folderul `lucru/`) | ✅ Apoi m-am oprit, cum ai cerut. Rularea continuă singură |
+| 21:56 | Primul experiment de noapte (#24) s-a terminat | ✅ Rularea mergea, iar procesul era activ |
+| ~21:58 | Commit Git cu README-ul și prima versiune a acestui raport (`85d82dc`) | ✅ Apoi m-am oprit, cum ai cerut |
+| 22:45 | **Experimentul #32 a găsit cel mai bun scor al nopții: 2,1873** | Rularea mergea singură |
+| 23:51 | **Rularea s-a oprit singură:** „am încercat toate variațiile din jurul celei mai bune rețete” | 21 de experimente, 2 păstrate, 0 erori |
+| 07:25 | Am verificat rezultatele, la cererea ta | Procesul nu mai rula, iar placa era în repaus (35°C) |
+| 07:30 | Am actualizat acest raport și am făcut commit | Fără să schimb configurarea, cum ai cerut |
 
-**Decizie:** înainte de commit n-am mai rulat testele. S-au schimbat doar două fișiere text (README și acest raport), iar codul a rămas cel testat la 21:50, cu 44 de teste trecute. În plus, testele ar fi folosit placa video în timpul unui experiment de noapte și i-ar fi încurcat măsurătorile.
+**Decizie, la commit-ul de aseară:** nu am mai rulat testele înainte de commit. S-au schimbat doar două fișiere text (README și acest raport), iar codul era cel testat la 21:50, cu 44 de teste trecute. În plus, testele ar fi folosit placa video în timpul unui experiment de noapte.
 
 ---
 
@@ -57,6 +61,7 @@ Scorul se numește **`val_bpb`**. Arată **cât de „surprins” e modelul** de
 - **PĂSTRAT** = schimbarea a făcut modelul mai bun, așa că devine noua rețetă de pornire.
 - **respins** = nu a fost mai bun, sau a fost mai bun cu mai puțin decât „pragul de zgomot” (0,005 la GPT).
   Diferențele atât de mici pot fi doar noroc.
+- **ANULAT** = experimentul a fost oprit de paznic, de exemplu pentru prea multă memorie video. **Nu a fost niciunul.**
 - Scorurile de la Pasul 5 (0,31) nu se pot compara cu cele de la Shakespeare. Acolo textul era generat și foarte ușor.
 
 ---
@@ -65,64 +70,96 @@ Scorul se numește **`val_bpb`**. Arată **cât de „surprins” e modelul** de
 
 ### GPT pe placa video (`python -m kronos jurnal --config config/laptop_gpt.toml`)
 
-Acestea sunt experimentele terminate la ora raportului. Cele de noapte se adaugă pe rând.
-
 | nr | decizie | scor | ce a încercat cercetătorul |
 | --- | --- | --- | --- |
 | 21 | păstrat | 2,4347 | punctul de plecare (setările din configurare) |
-| 22 | **păstrat** | **2,2090** | învață cu pași mai mici: rata de învățare 0,001 → 0,0003 |
-| 23 | respins | 2,2229 | model de două ori mai adânc: 4 → 8 straturi |
-| 24 | respins | 2,2269 | primul experiment de noapte: 4 → 6 straturi |
+| 22 | păstrat | 2,2090 | rata de învățare 0,001 → 0,0003 |
+| 23 | respins | 2,2229 | 4 → 8 straturi |
+| *Noaptea începe aici* | | | |
+| 24 | respins | 2,2269 | 4 → 6 straturi |
+| 25 | respins | 2,2320 | context 128 → 64 |
+| 26 | respins | 2,4025 | rata de învățare 0,0003 → 0,0006 |
+| 27 | respins | 2,3302 | lot 32 → 64 |
+| 28 | **păstrat** | **2,1973** | 4 → **2** straturi |
+| 29 | respins | 2,2236 | rata de învățare 0,0003 → 0,002 |
+| 30 | respins | 2,3571 | `n_emb` 128 → 256 |
+| 31 | respins | 2,2629 | rata de învățare 0,0003 → 0,001 |
+| 32 | **păstrat** | **2,1873** 🏆 | lot 32 → **16** |
+| 33 | respins | 2,2219 | context 128 → 64 |
+| 34 | respins | 2,2057 | 2 → 6 straturi |
+| 35 | respins | 2,1944 | 2 → 4 straturi |
+| 36 | respins | 2,2196 | `n_emb` 128 → 192 |
+| 37 | respins | 2,2244 | lot 16 → 64 |
+| 38 | respins | 2,2103 | context 128 → 256 |
+| 39 | respins | 2,2361 | `n_emb` 128 → 256 |
+| 40 | respins | 2,2028 | rata de învățare 0,0003 → 0,0006 |
+| 41 | respins | 2,4115 | `n_emb` 128 → 384 |
+| 42 | respins | 2,2252 | 2 → 8 straturi |
+| 43 | respins | 2,1881 | rata de învățare 0,0003 → 0,002 |
+| 44 | respins | 2,1983 | rata de învățare 0,0003 → 0,001 |
 
-Nici modelele mai adânci (6 sau 8 straturi) n-au ieșit mai bune în 5 minute. Probabil n-au apucat să învețe destul în timpul ăsta.
+**Numărătoarea:**
+
+| | Toate experimentele GPT (#21–#44) | Doar noaptea (#24–#44) |
+| --- | --- | --- |
+| Păstrate | 4 | 2 |
+| Respinse | 20 | 19 |
+| Anulate | 0 | 0 |
+
+**Ce am învățat din tabel:**
+- **În 5 minute, modelele mici câștigă.** Cu 2 straturi a fost mai bine decât cu 4, 6 sau 8. Modelele mari nu apucă să învețe destul în timpul ăsta.
+- **Loturile mici au ajutat.** Cu lotul 16, modelul a făcut **45.460 de pași** de învățare în 5 minute, aproape dublu față de lotul 32.
+- **Descrierile mai bogate ale literelor** (`n_emb` 192, 256, 384) au fost de fiecare dată mai rele.
+- #43 (2,1881) a fost foarte aproape de cel mai bun (2,1873), dar diferența era sub pragul de zgomot, deci a fost respins.
 
 ### Modelul simplu (n-gram), Pasul 6, ca reper
 
-Cel mai bun scor: **2,4211**. Modelul ghicește fiecare literă după ultimele 5 litere, cu „netezire” 2,0.
-**GPT-ul (2,2090) e deja mai bun decât el.**
+Cel mai bun scor: **2,4211**. **GPT-ul (2,1873) e clar mai bun.**
 
 ---
 
-## 5. Cea mai bună rețetă găsită până acum
+## 5. Cea mai bună rețetă găsită
 
-**GPT, experimentul #22, scor 2,2090**:
+**GPT, experimentul #32, scor 2,1873**:
 
 | Setare | Valoare | Ce înseamnă, pe scurt |
 | --- | --- | --- |
-| `n_straturi` | 4 | câte „etaje” de gândire are modelul |
+| `n_straturi` | **2** | câte „etaje” de gândire are modelul |
 | `n_capete` | 4 | la câte lucruri deodată poate fi atent |
 | `n_emb` | 128 | cât de bogat descrie fiecare literă |
 | `context` | 128 | câte litere din urmă vede când ghicește următoarea |
-| `lot` | 32 | câte bucăți de text învață deodată |
+| `lot` | **16** | câte bucăți de text învață deodată |
 | `rata_invatare` | 0,0003 | cât de mari sunt „pașii” de învățare (mai mic = mai prudent) |
 
-Modelul are aproximativ **818.000 de parametri**, adică „butoane” reglate la antrenare. În 5 minute a făcut
-**24.308 pași de învățare** și a folosit doar **138 MB** de memorie video.
+Modelul are aproximativ **422.000 de parametri**, adică „butoane” reglate la antrenare. E de două ori mai mic decât cel de aseară.
+În 5 minute a făcut **45.460 de pași de învățare** și a folosit doar **60 MB** de memorie video.
 
 ---
 
 ## 6. Text scris de cel mai bun model
 
-Generat la 21:41 cu `python -m kronos scrie --config config/laptop_gpt.toml --inceput "ROMEO:"`,
-cu modelul din experimentul #22. Nu l-am generat din nou în timpul nopții, ca să nu încurc antrenarea de pe placa video.
+Generat dimineață, la 07:2x, cu `python -m kronos scrie --config config/laptop_gpt.toml --inceput "ROMEO:"`, folosind modelul din experimentul #32:
 
 ```
 ROMEO:
-So he may, was not senced.
+Perhappy peasant out of you;
+And, you say, to this with he--
 
-DUCHESS OF YORK:
-Marry, by the grace; 'tis some name in that
-And be letters: partly than tah, that is yon,
-With well bear more of the realm; doth them by, to owe
-And beg the late templiyy regarements
-That we say there from they shall surrieve
-with me honour, how could Jo
+CAPULET:
+A most by insticommiss will see much take them
+away wishing tongued me to be lords?
+For that direct to the people
+To remove thee left be emboad;
+And I must strange.
+
+FRIAR LAURENCE:
+If thou shalt prefer at grinto the people
+Cour
 ```
 
-**Cum îl citești:** față de modelul simplu, are mai multe cuvinte reale și bucăți de frază care sună a Shakespeare
-(„Marry, by the grace; 'tis some name”). Folosește și un personaj real din piese, Ducesa de York.
-Încă inventează cuvinte („templiyy regarements”). Dacă rularea de noapte găsește un scor mai bun,
-textul de dimineață ar trebui să fie ceva mai bun.
+**Cum îl citești:** pornind de la „ROMEO:”, modelul a continuat cu **Capulet** și **Fratele Laurențiu**, personaje chiar din *Romeo și Julieta*.
+A învățat deci ce nume apar împreună. Are versuri scurte, punctuație și cuvinte vechi („thou shalt”), dar încă inventează cuvinte
+(„insticommiss”, „emboad”), iar frazele nu au sens. Pentru un model atât de mic, antrenat 5 minute, e normal.
 
 ---
 
@@ -131,35 +168,36 @@ textul de dimineață ar trebui să fie ceva mai bun.
 1. **Smart App Control e oprit.** Trebuie să rămână oprit cât timp folosim PyTorch direct în Windows. Antivirusul (Windows Defender) e în continuare pornit.
    *Propunere:* mai târziu, când trecem la WSL2 (Linux în Windows, oricum planificat în README), îl poți reporni.
 
-2. **Placa se încălzește până la ~87°C.** Paznicul a funcționat: peste 85°C face singur pauze de răcire de 2 minute.
-   Pauzele încetinesc rularea, iar o placă fierbinte face puțin mai puțini pași în cele 5 minute, deci scorurile au puțin mai mult „zgomot”.
+2. **Placa se încălzește până la 87°C.** Peste noapte, paznicul a făcut **7 pauze de răcire** de câte 2 minute,
+   la 22:06, 22:13, 22:21, 22:38, 23:15, 23:22 și 23:34. De fiecare dată placa avea 87°C, deci totul a funcționat cum trebuie.
    Paznicul verifică temperatura doar **între** experimente, nu și în timpul antrenării. Placa are însă propria protecție, care o încetinește singură.
-   *Propuneri:* modul **Turbo** al ventilatoarelor (**Fn + F5**) și, eventual, un suport de răcire pentru laptop.
+   *Propuneri:* modul **Turbo** al ventilatoarelor (**Fn + F5**) și, eventual, un suport de răcire.
    În planul proiectului (N2–N3) e deja trecută „temperatura în fișă”, adică notarea temperaturii la fiecare experiment.
 
 3. **`python -m pytest` se blochează la final** cu „Access is denied ... pytest-current”.
    **Testele trec toate**, iar blocarea apare abia după ele, la curățenie. Cauza e un fișier-legătură vechi, din **25 septembrie**,
    rămas în dosarul temporar al Windows (`C:\Users\XyZ\AppData\Local\Temp\pytest-of-XyZ\pytest-current`), de la o rulare care nu ține de proiectul nostru.
-   Nu l-am șters, pentru că regula ta pentru noapte a fost să nu șterg fișiere.
-   *Propunere:* spune-mi „șterge legătura veche de la pytest” și o fac eu. E un fișier temporar și nu afectează nimic altceva.
+   Nu l-am șters, pentru că regula pentru noapte a fost să nu șterg fișiere.
+   *Propunere:* spune-mi „șterge legătura veche de la pytest” și o fac eu.
 
-4. **Placa lucrează doar cam pe jumătate** (~50%). Modelul e mic, iar placa așteaptă după restul calculatorului.
-   Nu e o problemă, dar înseamnă că mai e loc de modele mai mari. Va fi treaba cercetătorului în etapele următoare.
+4. **Placa lucrează doar cam pe jumătate.** Memoria video a fost de cel mult **220 MB**, la #27, din 5.500 permiși. Încărcarea a fost de ~40–50%.
+   Modelul e mic, iar placa așteaptă după restul calculatorului. Deci mai e mult loc pentru modele mai mari.
 
-5. **Git nu știe încă numele tău.** Commit-urile se fac sub numele „Claude”, cum ai cerut.
+5. **Rularea s-a oprit după 21 de experimente, nu după 90.** Cercetătorul de acum („aleator”) schimbă câte **o singură setare**
+   pornind de la cea mai bună rețetă și alege doar din lista de valori scrisă în `config/laptop_gpt.toml`.
+   După 21 de încercări le epuizase pe toate, așa că s-a oprit singur. Asta e comportamentul corect al modulului, nu o defecțiune.
+   *Propunere pentru mai târziu, doar cu acordul tău:* lărgim lista de valori, de exemplu lot 8, rata de învățare 0,0002, 1 strat sau 3 straturi,
+   sau trecem la cercetătorul mai deștept din etapa N5. **N-am schimbat nimic acum**, cum ai cerut.
+
+6. **Git nu știe încă numele tău.** Commit-urile se fac sub numele „Claude”, cum ai cerut.
    Dacă vrei să apară numele tău: `git config --global user.name "Numele Tău"` și `git config --global user.email "adresa ta"`.
 
-6. **Riscuri pentru noapte, pe care nu le-am putut controla:**
-   - Dacă **închizi capacul**, laptopul poate adormi. Nu am putut citi setarea pentru capac.
-   - **Windows Update** poate reporni laptopul noaptea.
-   În ambele cazuri **nu se pierde nimic**: experimentele terminate rămân în jurnal, iar o rulare nouă pornește de la cea mai bună rețetă.
-
-7. **Setările de repaus.** Nu am notat valorile dinainte. Dacă vrei ca laptopul să adoarmă iar singur la priză,
-   de exemplu după 30 de minute: `powercfg /change standby-timeout-ac 30`.
+7. **Setările de repaus au rămas pe „niciodată”** la încărcător. Nu am notat valorile dinainte.
+   Dacă vrei ca laptopul să adoarmă iar singur la priză, de exemplu după 30 de minute: `powercfg /change standby-timeout-ac 30`.
 
 ---
 
-## 8. Cum vezi dimineața rezultatele finale
+## 8. Cum vezi singur rezultatele
 
 Deschide VS Code în folderul `cyberspace`, apoi un terminal (**Ctrl+`**) și rulează pe rând:
 
@@ -168,33 +206,25 @@ Deschide VS Code în folderul `cyberspace`, apoi un terminal (**Ctrl+`**) și ru
 .venv\Scripts\activate
 ```
 
-**b) Verifică dacă rularea s-a terminat.** Comanda arată ultimele 5 rânduri din jurnalul de noapte:
-```
-Get-Content lucru\noapte.log -Tail 5 -Encoding UTF8
-```
-- Dacă vezi **`Gata. Experimente: ...`**, rularea s-a terminat.
-- Dacă vezi un rând cu **`oprit`**, paznicul a oprit-o. Motivul e scris pe același rând, de exemplu „nu s-a răcit”.
-- Dacă ultimul rând e un experiment (`#...`) sau o pauză de răcire, **încă rulează**.
-
-**c) Tabelul cu toate experimentele GPT:**
+**b) Tabelul cu toate experimentele GPT:**
 ```
 python -m kronos jurnal --config config/laptop_gpt.toml
 ```
 
-**d) Textul scris de cel mai bun model:**
+**c) Textul scris de cel mai bun model:**
 ```
 python -m kronos scrie --config config/laptop_gpt.toml --inceput "ROMEO:"
 ```
 
-**e) Dacă rulează încă și vrei s-o oprești:**
+**d) Ultimele rânduri din jurnalul de noapte**, unde se vede de ce s-a oprit:
 ```
-python -m kronos opreste --config config/laptop_gpt.toml
-```
-Termină experimentul în curs, deci mai durează cel mult ~7 minute, apoi se oprește.
-**Înainte de următoarea rulare**, ridică semnalul de oprire:
-```
-python -m kronos porneste --config config/laptop_gpt.toml
+Get-Content lucru\noapte.log -Tail 5 -Encoding UTF8
 ```
 
-**Sau, cel mai simplu**, spune-i lui Claude Code:
-*„Citește RAPORT_DIMINEATA.md și lucru/noapte.log și spune-mi cum a mers noaptea.”*
+**e) O rulare nouă, mai târziu.** Cu lista de valori de acum, cercetătorul s-ar opri imediat, pentru că a încercat deja tot.
+Are sens doar după ce lărgim lista (punctul 5 din secțiunea 7):
+```
+python -m kronos ruleaza --config config/laptop_gpt.toml --experimente 90
+```
+Se oprește oricând cu **Ctrl+C**, sau dintr-un alt terminal cu `python -m kronos opreste --config config/laptop_gpt.toml`.
+După `opreste`, înainte de rularea următoare: `python -m kronos porneste --config config/laptop_gpt.toml`.
