@@ -165,7 +165,7 @@ Modulele de acum, pe cele 10 porturi:
 
 | Port | Modul | Ce face |
 | --- | --- | --- |
-| model | `model_ngram` / `model_gpt` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) |
+| model | `model_ngram` / `model_gpt` / `model_plasa` / `model_plasa_adaptiva` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) / GPT cu 5 noduri și plasă (M2) / GPT cu un nod pe raft și noduri libere (M3) |
 | date | `date_mostra` / `date_fisier` / `date_tinystories` | propoziții generate / un fișier text (Shakespeare) / povești TinyStories (~20 MB) |
 | examen | `examen_bpb` | val_bpb pe text nevăzut la antrenare |
 | cercetător | `cercetator_aleator` | schimbă câte o setare, pornind de la cea mai bună rețetă |
@@ -427,6 +427,47 @@ python unelte/masoara_rafturi.py --sens-dupa-context    # ~15 secunde; rezultatu
 | plasa adaptivă (34 de noduri, doar cele necesare) | 98 | 349 MB |
 
 Memoria video rămâne mult sub limita de 5,5 GB, deci nodurile n-au trebuit micșorate.
+
+### Pasul 3: comparația la 25.000 de pași (4 octombrie 2026)
+
+Prin Kronos, pentru fiecare sămânță (0, 1, 2), câte un experiment din fiecare variantă, pe toată validarea (o singură
+rundă), oprit la exact 25.000 de pași, cu aceeași rețetă (2 straturi, lot 16, rata 0,0003, bucăți de cuvinte). Cu
+aceeași sămânță, cele trei văd aceleași bucăți de text, în aceeași ordine. Între rulări: 30 de secunde de pauză și
+răcire până la 70°C. Toate cele 9 rulări au ajuns exact la 25.000 de pași, deci scorurile se pot compara.
+
+| Sămânța | GPT simplu | Plasa veche (5 noduri) | Plasa adaptivă | Adaptivă − simplu | Adaptivă − plasa veche | Pași/s: simplu / veche / adaptivă |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0,9818 | 0,9697 | **0,9670** | −0,0148 | −0,0026 | 146 / 118 / 98 |
+| 1 | 0,9770 | 0,9743 | **0,9704** | −0,0066 | −0,0039 | 145 / 116 / 102 |
+| 2 | **0,9761** | 0,9750 | 0,9774 | +0,0013 | +0,0025 | 145 / 98 / 102 |
+| media | 0,9783 | 0,9730 | **0,9716** | −0,0067 | −0,0014 | |
+
+- **Plasa adaptivă față de GPT-ul simplu: NECONCLUDENT.** În medie e mai bună cu 0,0067 (peste pragul de zgomot de
+  0,005), dar doar la 2 semințe din 3; la sămânța 2 e puțin mai slabă. O bună parte din avantaj vine de la sămânța 0,
+  la care GPT-ul simplu a ieșit cel mai slab.
+- **Plasa adaptivă față de plasa veche: MICĂ (noroc).** Diferența medie (−0,0014) e de 3,5 ori sub prag, iar semnul
+  diferă de la o sămânță la alta.
+- Plasa veche a fost mai bună decât GPT-ul simplu la toate cele 3 semințe (−0,0121, −0,0027, −0,0011), dar doar o dată
+  peste prag. De la o sămânță la alta, scorul aceleiași variante variază cu 0,005–0,010: cam cât pragul.
+- **Legături născute:** în plasa veche, 3 la fiecare sămânță (singurele permise: ființe → acțiuni, locuri/obiecte →
+  acțiuni, acțiuni → însușiri). În plasa adaptivă, 13, 11 și 12 din cele 18 perechi posibile (cererile învățate au
+  ajuns la 0,22; pragul e 0,05). La toate trei semințele: noun.person → verb.communication, noun.animal →
+  verb.communication, verb.communication → noun.communication, verb.motion → noun.location, noun.quantity →
+  noun.animal, adj.all → noun.possession, noun.attribute → noun.artifact, verb.competition → adv.all, verb.change →
+  noun.attribute, noun.body → noun.animal, noun.substance → noun.group.
+- **Noduri libere alocate:** 4 din 6, aceleași la fiecare sămânță (încărcarea vine din același text de antrenare):
+  pentru noun.person (preia tim, tom, girl...), adj.all (big, new, many...), noun.artifact (ball, house, box...) și
+  adv.all (very, too, back...), fiecare cu jumătate din cuvintele raftului.
+- **Important:** legăturile născute și nodurile alocate lucrează abia de la experimentul următor. În această rundă
+  unică, plasa adaptivă a lucrat cu 34 de noduri, fără ajutoare și fără legături, deci scorurile compară doar
+  împărțirea pe rafturi (34 de noduri față de 5), nu și adaptarea. Efectul ei se vede doar într-o a doua rundă.
+- **Costul:** la același număr de pași, nodurile ajută cel mult puțin; la același timp, nu. GPT-ul simplu face ~145 de
+  pași pe secundă, plasa adaptivă ~100, deci în același timp GPT-ul ar face ~36.000 de pași în loc de 25.000. Pașii în
+  plus contează mult: GPT-ul simplu a ajuns la 0,8822 după 43.916 pași (Etapa M2), față de ~0,978 după 25.000 aici.
+
+```
+python unelte/compara_plasa_adaptiva.py     # semințele 0, 1, 2; 25.000 de pași; ~45 de minute
+```
 
 ## Toate comenzile
 
