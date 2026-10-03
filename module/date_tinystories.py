@@ -10,6 +10,9 @@ La prima folosire descarcă doar ÎNCEPUTUL fișierelor oficiale (cât e nevoie,
   conține povești din antrenare.
 Poveștile sunt despărțite de un rând „<|endoftext|>”, ca în fișierele originale.
 
+Setarea runda împarte poveștile de validare în două jumătăți (pentru testul plasei în două runde):
+0 = toată validarea, 1 = prima jumătate, 2 = a doua jumătate. Antrenarea rămâne aceeași.
+
 Pregătirea se face o singură dată; după aceea modulul doar citește fișierele. Se poate porni și
 de mână: python -m module.date_tinystories
 """
@@ -85,7 +88,7 @@ class DateTinyStories:
     MANIFEST = {
         "nume": "date_tinystories",
         "port": "date",
-        "versiune": "0.1.0",
+        "versiune": "0.2.0",
         "versiune_contract": 1,
         "resurse": {"disc_mb": 25},
         "permisiuni": ["internet", "citire_fisier", "scriere_fisier"],
@@ -98,11 +101,14 @@ class DateTinyStories:
         procent_validare: float = 0.1,
         url_antrenare: str = URL_ANTRENARE,
         url_validare: str = URL_VALIDARE,
+        runda: int = 0,
     ) -> None:
         if not 0 < megaocteti <= 2000:
             raise ValueError("megaocteti trebuie să fie între 0 și 2000")
         if not 0 < procent_validare < 0.5:
             raise ValueError("procent_validare trebuie să fie între 0 și 0.5")
+        if runda not in (0, 1, 2):
+            raise ValueError("runda trebuie să fie 0 (toată validarea), 1 sau 2 (o jumătate din povești)")
         self.director = Path(director)
         cerute = {
             "versiune": VERSIUNE_PREGATIRE,
@@ -119,6 +125,12 @@ class DateTinyStories:
         self.info = info if gata else pregateste(self.director, cerute)
         self._antrenare = (self.director / "antrenare.txt").read_text(encoding="utf-8")
         self._validare = (self.director / "validare.txt").read_text(encoding="utf-8")
+        self.runda = runda
+        if runda:  # jumătatea de povești de validare a rundei
+            despartitor = f"\n{SEPARATOR}\n"
+            povesti = self._validare.rstrip("\n").split(despartitor)
+            jumatate = len(povesti) // 2
+            self._validare = despartitor.join(povesti[:jumatate] if runda == 1 else povesti[jumatate:]) + "\n"
 
     def text_antrenare(self) -> str:
         return self._antrenare

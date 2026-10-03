@@ -49,3 +49,15 @@ def test_fara_internet_da_mesaj_clar(tmp_path):
 def test_setari_invalide():
     with pytest.raises(ValueError, match="procent_validare"):
         DateTinyStories(procent_validare=0.7)
+
+
+def test_rundele_impart_validarea_in_doua_jumatati(tmp_path):
+    setari = scrie_surse(tmp_path)
+    toata = DateTinyStories(**setari)
+    r1, r2 = DateTinyStories(**setari, runda=1), DateTinyStories(**setari, runda=2)
+    p1, p2 = _povesti(r1.text_validare()), _povesti(r2.text_validare())
+    assert p1 and p2 and not set(p1) & set(p2)  # jumătăți fără povești comune
+    assert p1 + p2 == _povesti(toata.text_validare())  # împreună, toată validarea, în ordine
+    assert r1.text_antrenare() == r2.text_antrenare() == toata.text_antrenare()  # antrenarea nu se schimbă
+    with pytest.raises(ValueError, match="runda"):
+        DateTinyStories(**setari, runda=3)
