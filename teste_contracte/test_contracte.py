@@ -27,6 +27,7 @@ MODULE = [
     ),
     ("date", "module.date_mostra:DateMostra", {"propozitii": 300}),
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
+    ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("profesor", "module.jucarii:ProfesorGol", {}),
@@ -50,6 +51,10 @@ def _setari_reale(setari, tmp_path):
         fisier = tmp_path / "text.txt"
         fisier.write_text("To be, or not to be, that is the question.\n" * 100, encoding="utf-8")
         setari["cale"] = str(fisier)
+    if setari.get("director") == "__tinystories_mic__":
+        from teste.tinystories_mic import scrie_surse
+
+        setari = scrie_surse(tmp_path)
     if setari.get("cale") == "__biblioteca_mica__":
         from teste.biblioteca_mica import biblioteca_mica
 
