@@ -6,8 +6,8 @@ dă examen, păstrează doar ce e mai bun și notează totul în jurnal.
 
 Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 (modelul n-gram și GPT-ul nostru, care a rulat o noapte pe placa video: cel mai bun scor 2,1873).
-**Etapa M1 (memoria ierarhică)** e construită și testată. Ambele comparații (la același timp și la același număr
-de pași) arată că memoria, așa cum e acum, strică: ajută la antrenare, dar e mai slabă la examen. 92 de teste trec.
+**Etapa M1 (memoria ierarhică)** e construită și testată. Comparațiile arată că memoria, așa cum e acum, nu ajută:
+cu 8 sau 4 niveluri strică, iar cu 2 niveluri nu schimbă nimic măsurabil. 94 de teste trec.
 
 ---
 
@@ -204,25 +204,32 @@ primesc un sens greșit („thou” = prescurtarea lui „thousand”). Pe Shake
 | media | **2,1873** | 2,2376 | −0,050 | |
 
 Memoria a fost mai slabă la toate cele trei semințe. Face cu 15–29% mai puțini pași în același timp și are de
-învățat 196.000 de parametri în plus (617.248 față de 421.632). Atenție la zgomot: aceeași rețetă cu aceeași
-sămânță a dat 2,1873 azi-noapte și 2,1779 azi, deci diferențele sub ~0,01 nu înseamnă nimic.
+învățat 196.000 de parametri în plus (617.248 față de 421.632). Atenție: la același timp, numărul de pași depinde
+de cât de repede merge placa în acel moment, așa că aceeași rețetă cu aceeași sămânță a dat 2,1873 azi-noapte și
+2,1779 azi. La același număr de pași, rezultatul se repetă exact (vezi mai jos).
 
-**La același număr de pași** (exact 35.000 de pași pentru ambele variante, pe aceleași date, în aceeași ordine):
+**La același număr de pași** (exact 35.000 de pași pentru ambele variante, pe aceleași date, în aceeași ordine,
+3 semințe), după câte niveluri din codul cuvântului folosește memoria:
 
-| Sămânța | Fără memorie | Cu memorie | Diferență | Secunde de antrenare (fără / cu) |
-| --- | --- | --- | --- | --- |
-| 1337 | **2,1990** | 2,2424 | −0,043 | 239 / 286 |
-| 2024 | **2,2055** | 2,2464 | −0,041 | 229 / 285 |
-| 7 | **2,1982** | 2,2218 | −0,024 | 245 / 281 |
-| media | **2,2009** | 2,2369 | −0,036 | |
+| Niveluri folosite | Parametri ai memoriei | Fără memorie (media) | Cu memorie (media) | Diferență (media) | Diferența la semințele 1337 / 2024 / 7 | Secunde cu memorie | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 8 | 195.616 | **2,2009** | 2,2369 | −0,036 | −0,043 / −0,041 / −0,024 | 281–286 | strică |
+| 4 | 78.816 | **2,2009** | 2,2199 | −0,019 | −0,026 / −0,022 / −0,009 | 264–271 | strică |
+| 2 | 9.856 | 2,2009 | 2,2032 | −0,002 | −0,008 / −0,008 / +0,009 | 254–295 | nehotărât |
 
-Memoria pierde și la număr egal de pași, deci nu doar viteza e de vină: cam 70% din diferența de la comparația
-la același timp (0,036 din 0,050) rămâne și când ambele variante fac aceiași pași. Un semn: la antrenare, varianta
-cu memorie greșește mai puțin la toate semințele (de ex. 1,755 față de 1,845 biți pe literă, măsurat pe ultimul lot),
-dar la examen e mai slabă. Arată a „tocire”: nivelurile adânci ale codului sunt aproape cât cuvântul însuși, iar
-modelul le folosește ca să rețină textul de antrenare. Idei de încercat: mai puține niveluri (2–4), cuvintele de
-legătură în bibliotecă. Detaliu minor: categoriile nevăzute la antrenare primesc o descriere neantrenată
-(0,7% din literele examenului; prea puțin ca să explice diferența, dar de reparat).
+- Fără memorie, scorurile s-au repetat exact în toate cele trei comparații (2,1990 / 2,2055 / 2,1982), iar
+  antrenarea a durat 229–245 de secunde. Antrenarea la număr fix de pași e reproductibilă: diferențele vin din
+  memorie și din sămânță, nu din placa video. De la o sămânță la alta, câștigul variază cu aproximativ ±0,01.
+- Toate trei folosesc biblioteca cu 12 niveluri, din care modelul ia primele 8, 4 sau 2. Rândul cu 8 niveluri e
+  dinainte de reparația categoriilor nevăzute la antrenare (care primeau o descriere neantrenată, la 0,7% din
+  literele examenului); 4 și 2 au rulat după reparație.
+
+**Concluzie:** cu cât memoria folosește mai multe niveluri, cu atât strică mai mult. Cu 8 niveluri, la antrenare
+greșește mai puțin la toate semințele (de ex. 1,755 față de 1,845 biți pe literă, măsurat pe ultimul lot), dar la
+examen e mai slabă: arată a „tocire”, pentru că nivelurile adânci sunt aproape cât cuvântul însuși. Cu 2 niveluri
+(partea de vorbire și raftul) nu strică, dar nici nu ajută măsurabil. Pentru acest GPT mic, pe litere, memoria din
+WordNet în forma de acum nu aduce câștig. Idei rămase: cuvintele de legătură în bibliotecă (acum lipsesc 31% din
+cuvinte), un model mai mare sau o antrenare mai lungă.
 
 ## Toate comenzile
 
