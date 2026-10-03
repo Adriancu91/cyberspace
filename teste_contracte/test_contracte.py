@@ -35,6 +35,7 @@ MODULE = [
     ("interfata", "module.interfata_consola:InterfataConsola", {"tacut": True}),
     ("traducere", "module.jucarii:TraducereIdentitate", {}),
     ("memorie", "module.jucarii:MemorieGoala", {}),
+    ("memorie", "module.memorie_ierarhica:MemorieIerarhica", {"cale": "__biblioteca_mica__", "nivele": 6}),
 ]
 
 
@@ -49,6 +50,10 @@ def _setari_reale(setari, tmp_path):
         fisier = tmp_path / "text.txt"
         fisier.write_text("To be, or not to be, that is the question.\n" * 100, encoding="utf-8")
         setari["cale"] = str(fisier)
+    if setari.get("cale") == "__biblioteca_mica__":
+        from teste.biblioteca_mica import biblioteca_mica
+
+        setari["cale"] = biblioteca_mica(tmp_path)
     if setari.get("director") == "__director_temporar__":
         setari["director"] = str(tmp_path / "stocare")
     return setari
