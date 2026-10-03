@@ -20,16 +20,22 @@ it = tehnologia informației, can = cutie de conserve, may = luna mai).
 
 Setarea sens_dupa_context (implicit oprită) alege sensul după cum e folosit cuvântul în text:
 a) formele de verb: o formă listată în bibliotecă (said → say, saw → see, went → go) sau un cuvânt
-   terminat în -ed / -ing a cărui bază e verb (looked → look, smiling → smile) primește sensul de verb;
+   terminat în -ed / -ing a cărui bază e verb (looked → look, smiling → smile) primește sensul de verb.
+   Excepții (EXCEPTII_FORME_VERB): ground, feed, wound, bit rămân pe sensul din dicționar;
 b) numele: un cuvânt cu literă mare care NU e la început de propoziție primește codul lui „person”,
    pus pe raftul noun.person (în WordNet, „person” stă pe raftul general noun.Tops); cuvintele care
-   stau deja pe noun.person (Mom) își păstrează codul. Început de propoziție = primul cuvânt din text,
-   un semn . ! ? sau un rând nou după cuvântul de dinainte, ori ghilimele lipite de cuvânt (said, "Look).
-   Se uită doar în urmă: nimic din ce urmează după cuvânt nu schimbă codul lui;
-c) cuvintele din lista scurtă și fixă ADVERBE_PREFERATE (very, then, now...) primesc sensul de adverb.
-Sunt reguli simple, nu „înțeleg” propoziția, deci mai greșesc: „ground” (pământul) e și trecutul lui
-„grind” (a măcina), „evening” pare forma -ing a lui „even”, iar un nume la început de propoziție rămâne
-cu sensul din dicționar (Lily = crin).
+   stau deja pe noun.person (Mom) își păstrează codul, iar cele scrise numai cu majuscule (TV) nu sunt
+   nume. Început de propoziție = primul cuvânt din text, un semn . ! ? sau un rând nou după cuvântul de
+   dinainte, ori ghilimele lipite de cuvânt (said, "Look). Un nume văzut deja în mijlocul unei propoziții
+   din ACELAȘI text rămâne nume și la început de propoziție (Lily went...). Textul de antrenare are mii
+   de povești lipite; numele se țin minte doar în aceeași poveste (până la separatorul <|endoftext|>):
+   altfel „One-Eye” dintr-o poveste ar face nume din fiecare „One day...” de după;
+c) cuvintele din lista scurtă și fixă ADVERBE_PREFERATE (very, then, now...) primesc sensul de adverb;
+d) după to / will / can / let's / don't / I / you / we / they, în aceeași propoziție, cuvântul primește
+   sensul de verb, dacă are unul („to play”, „let's go”, „I like”).
+Regulile b) și d) se uită doar în urmă: cuvântul de dinainte, începutul propoziției și numele văzute
+deja în text. Nimic din ce urmează după un cuvânt nu îi schimbă codul. Sunt reguli simple, nu „înțeleg”
+propoziția, deci mai greșesc: „evening” pare forma -ing a lui „even”, iar „to bed” face din „bed” un verb.
 """
 
 from __future__ import annotations
@@ -82,8 +88,15 @@ will would shall should can could may might must not there
 ADVERBE_PREFERATE = frozenset("""
 very then now back still just only here well much even away later together far fast
 """.split())
+# Regula a): forme de verb din dicționar care în povești înseamnă de obicei altceva (ground = pământul, nu trecutul
+# lui „grind”; feed = a hrăni, nu trecutul lui „fee”; wound = rana; bit = „a little bit”).
+EXCEPTII_FORME_VERB = frozenset({"ground", "feed", "wound", "bit"})
+# Regula d): după ele, în aceeași propoziție, vine de obicei un verb („to play”, „let's go”, „I like”).
+INAINTE_DE_VERB = frozenset({"to", "will", "can", "let's", "don't", "i", "you", "we", "they"})
 SFARSIT_DE_PROPOZITIE = frozenset(".!?\n")  # regula b): după ele începe o propoziție nouă
 GHILIMELE = ('"', "“")  # ... și după ghilimele lipite de cuvânt (said, "Look!)
+# Regula b): numele ținute minte sunt doar din aceeași poveste; separatorul dintre povești (ca în TinyStories) le golește.
+SEPARATOR_POVESTI = "<|endoftext|>"
 
 
 def _e_litera(c: str) -> bool:
@@ -112,7 +125,7 @@ class MemorieIerarhica:
     MANIFEST = {
         "nume": "memorie_ierarhica",
         "port": "memorie",
-        "versiune": "0.3.0",
+        "versiune": "0.4.0",
         "versiune_contract": 1,
         "resurse": {"ram_mb": 300},
         "permisiuni": ["citire_fisier"],
@@ -166,6 +179,8 @@ class MemorieIerarhica:
             self._cod_persoana = self._completeaza([SUBSTANTIV, raft] + self._cod[persoana[0]][2:])
         # Plasa: cuvânt → codul deja găsit (drumul știut) și de câte ori a fost folosit.
         self._plasa: dict[str, tuple[int, ...]] = {}
+        self._reguli: dict[str, str] = {}  # cuvânt → regula care i-a ales sensul în plasă (a, c sau "")
+        self._coduri_de_verb: dict[str, tuple[int, ...] | None] = {}  # pentru regula d)
         self._folosiri: Counter[str] = Counter()
         self._cautari = 0
         self._gasite = 0
@@ -186,17 +201,27 @@ class MemorieIerarhica:
                     return self._forme[baza[:-1]]
         return []
 
-    def _sensuri_alese(self, cuvant: str) -> list[int]:
-        """Ca _sensuri, dar cu setarea sens_dupa_context sensul potrivit trece primul (regulile c și a)."""
+    def _sensuri_alese(self, cuvant: str) -> tuple[list[int], str]:
+        """Ca _sensuri, dar cu setarea sens_dupa_context sensul potrivit trece primul (regulile c și a,
+        care nu țin de locul din text). Întoarce și regula care l-a ales ("" = ordinea din dicționar)."""
         cheie = cuvant.lower().strip("'")
         sensuri = self._sensuri(cheie)
-        if not self.sens_dupa_context:
-            return sensuri
+        if not self.sens_dupa_context or cheie in EXCEPTII_FORME_VERB:
+            return sensuri, ""
         if cheie in ADVERBE_PREFERATE:
-            alese = [s for s in sensuri if self._cod[s][0] == ADVERB]
+            alese, regula = [s for s in sensuri if self._cod[s][0] == ADVERB], "c_adverb"
         else:
-            alese = self._forme_verb.get(cheie) or self._verbe_din_baza(cheie)
-        return alese + [s for s in sensuri if s not in alese]
+            alese, regula = self._forme_verb.get(cheie) or self._verbe_din_baza(cheie), "a_forma_de_verb"
+        if not alese:
+            return sensuri, ""
+        return alese + [s for s in sensuri if s not in alese], regula
+
+    def _cod_de_verb(self, cheie: str) -> tuple[int, ...] | None:
+        """Regula d): codul primului sens de verb al cuvântului (None dacă nu are niciunul)."""
+        if cheie not in self._coduri_de_verb:
+            verbe = [s for s in self._sensuri(cheie) if self._cod[s][0] == VERB]
+            self._coduri_de_verb[cheie] = self._completeaza(self._cod[verbe[0]]) if verbe else None
+        return self._coduri_de_verb[cheie]
 
     def _verbe_din_baza(self, cuvant: str) -> list[int]:
         """Regula a), formele regulate: sensurile de verb ale bazei (looked → look, smiling → smile,
@@ -240,11 +265,19 @@ class MemorieIerarhica:
 
     # --- contractul -------------------------------------------------------------
 
-    def cod(self, cuvant: str, la_inceput: bool = True) -> tuple[int, ...]:
+    def cod(self, cuvant: str) -> tuple[int, ...]:
         """Codul sensului principal: exact `nivele` numere, completat cu 0 (GOL).
 
-        la_inceput: cuvântul începe o propoziție (sau e luat singur). Contează doar pentru regula b)
-        a setării sens_dupa_context: în mijlocul propoziției, un cuvânt cu literă mare e un nume.
+        Cuvântul e luat singur, ca la începutul unui text. Într-un text, cu setarea sens_dupa_context,
+        locul lui contează (regulile b și d): vezi cuvinte_cu_coduri.
+        """
+        return self._cod_in_text(cuvant, True, "", set())[0]
+
+    def _cod_in_text(self, cuvant: str, la_inceput: bool, anterior: str, nume: set[str]) -> tuple[tuple[int, ...], str]:
+        """Codul cuvântului în locul lui din text și regula care l-a ales ("" = sensul principal din dicționar).
+
+        anterior = cuvântul de dinainte (cu litere mici); nume = numele văzute deja în acest text (se
+        completează aici). Ambele vin doar din ce e scris înaintea cuvântului.
         """
         cheie = cuvant.lower().strip("'")
         self._cautari += 1
@@ -252,23 +285,44 @@ class MemorieIerarhica:
         cod = self._plasa.get(cheie)
         if cod is None:  # drum nou: îl căutăm în bibliotecă și îl prindem în plasă
             if self.este_cuvant_de_legatura(cheie):
-                sensuri = []  # umplutură: the, a, it's, can...
+                sensuri, regula = [], ""  # umplutură: the, a, it's, can...
             else:
-                sensuri = self._sensuri_alese(cheie)
+                sensuri, regula = self._sensuri_alese(cheie)
             cod = self._completeaza(self._cod[sensuri[0]] if sensuri else [NECUNOSCUT])
             self._plasa[cheie] = cod
-        if self._e_nume(cuvant, la_inceput) and cod[:2] != self._cod_persoana[:2]:
-            cod = self._cod_persoana  # nu intră în plasă: depinde de locul din propoziție
+            self._reguli[cheie] = regula
+        regula = self._reguli.get(cheie, "")
+        if self.sens_dupa_context and not self.este_cuvant_de_legatura(cheie):
+            # Regulile care țin de loc nu intră în plasă: același cuvânt poate primi alt cod în alt loc.
+            cod, regula = self._dupa_loc(cuvant, cheie, cod, regula, la_inceput, anterior, nume)
         if cod[0] != NECUNOSCUT:
             self._gasite += 1
-        return cod
+        return cod, regula
 
-    def _e_nume(self, cuvant: str, la_inceput: bool) -> bool:
-        """Regula b): literă mare în mijlocul propoziției (cuvintele de legătură rămân umplutură)."""
-        return (
-            self.sens_dupa_context and not la_inceput and cuvant.lstrip("'")[:1].isupper()
-            and not self.este_cuvant_de_legatura(cuvant)
-        )
+    def _dupa_loc(
+        self, cuvant: str, cheie: str, cod: tuple[int, ...], regula: str, la_inceput: bool, anterior: str, nume: set[str]
+    ) -> tuple[tuple[int, ...], str]:
+        """Regulile b) (numele, și cele ținute minte din acest text) și d) (verbul de după to / I / you...)."""
+        scris = cuvant.strip("'")
+        if scris.lower().endswith("'s"):  # Lily's → Lily, TV's → TV
+            scris = scris[:-2]
+        if scris[:1].isupper() and not scris.isupper():  # literă mare, dar nu numai majuscule (TV)
+            if not la_inceput:
+                nume.add(scris.lower())
+                regula_nume = "b_nume"
+            elif scris.lower() in nume:
+                regula_nume = "b_nume_tinut_minte"
+            else:
+                regula_nume = ""
+            if regula_nume:
+                if cod[:2] == self._cod_persoana[:2]:
+                    return cod, regula  # stătea deja pe noun.person (Mom): își păstrează codul
+                return self._cod_persoana, regula_nume
+        if anterior in INAINTE_DE_VERB and not la_inceput and cod[0] != VERB and cheie not in ADVERBE_PREFERATE:
+            verb = self._cod_de_verb(cheie)
+            if verb is not None:
+                return verb, "d_verb_dupa"
+        return cod, regula
 
     def este_cuvant_de_legatura(self, cuvant: str) -> bool:
         """Doar cu setarea fara_cuvinte_de_legatura: the, a, it, it's, i'm... (partea dinaintea apostrofului)."""
@@ -302,26 +356,43 @@ class MemorieIerarhica:
                 yield i, text[inceput:i], la_inceput
                 sfarsit, inceput, apostrof = i, -1, False
 
+    def cuvinte_cu_coduri(self, text: str) -> Iterator[tuple[int, str, tuple[int, ...], str]]:
+        """Pentru fiecare cuvânt terminat, în ordine: (poziția semnului care îl încheie, cuvântul, codul, regula).
+
+        regula = regula setării sens_dupa_context care a ales sensul ("" = sensul principal din dicționar).
+        Numele ținute minte (regula b) sunt doar cele din aceeași poveste a acestui text, văzute înaintea
+        cuvântului: la separatorul dintre povești (<|endoftext|>) se uită.
+        """
+        anterior = ""
+        nume: set[str] = set()
+        sfarsit_separator = SEPARATOR_POVESTI[:-2]  # „<|endoftext”: ce e scris până la semnul care încheie cuvântul
+        for pozitie, cuvant, la_inceput in self.cuvinte_terminate(text):
+            cod, regula = self._cod_in_text(cuvant, la_inceput, anterior, nume)
+            yield pozitie, cuvant, cod, regula
+            anterior = cuvant.lower()
+            if text[max(0, pozitie - len(sfarsit_separator)):pozitie] == sfarsit_separator:
+                nume.clear()  # începe altă poveste
+
     def caracteristici(self, text: str) -> list[tuple[int, ...]]:
         """Pentru fiecare literă: codul ultimului cuvânt TERMINAT până la ea, inclusiv."""
         curent = (GOL,) * self.nivele
         rezultat: list[tuple[int, ...]] = []
         ultima = 0
-        for pozitie, cuvant, la_inceput in self.cuvinte_terminate(text):
+        for pozitie, _, cod, _ in self.cuvinte_cu_coduri(text):
             rezultat.extend([curent] * (pozitie - ultima))  # până aici, codul cuvântului de dinainte
-            curent = self.cod(cuvant, la_inceput)
+            curent = cod
             ultima = pozitie
         rezultat.extend([curent] * (len(text) - ultima))
         return rezultat
 
     def coduri_cuvinte(self, text: str) -> list[tuple[int, ...]]:
         """Codul fiecărui cuvânt terminat, în ordine (ex. pentru a vedea ce fel de cuvinte stau alături)."""
-        return [self.cod(cuvant, la_inceput) for _, cuvant, la_inceput in self.cuvinte_terminate(text)]
+        return [cod for _, _, cod, _ in self.cuvinte_cu_coduri(text)]
 
     def cauta(self, cuvant: str) -> list[dict[str, Any]]:
         """Toate sensurile unui cuvânt, pentru oameni: cod, parte de vorbire, raft, drum, relații."""
         rezultat = []
-        for sens in self._sensuri_alese(cuvant):
+        for sens in self._sensuri_alese(cuvant)[0]:
             cod = self._cod[sens]
             rezultat.append({
                 "cod": ".".join(str(x) for x in cod),

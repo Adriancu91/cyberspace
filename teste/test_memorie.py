@@ -7,7 +7,10 @@ import json
 
 import pytest
 
-from module.memorie_ierarhica import ADVERBE_PREFERATE, GOL, NECUNOSCUT, MemorieIerarhica
+from module import memorie_ierarhica
+from module.memorie_ierarhica import (
+    ADVERBE_PREFERATE, EXCEPTII_FORME_VERB, GOL, INAINTE_DE_VERB, NECUNOSCUT, MemorieIerarhica,
+)
 from teste.biblioteca_mica import biblioteca_mica
 
 
@@ -127,7 +130,7 @@ def test_coduri_cuvinte_da_cuvintele_terminate_in_ordine(memorie):
     assert coduri == asteptat  # „no” e încă în curs: nu intră
 
 
-# --- setarea sens_dupa_context (regulile a, b, c) -----------------------------------------------
+# --- setarea sens_dupa_context (regulile a, b, c, d) --------------------------------------------
 
 
 @pytest.fixture
@@ -174,23 +177,77 @@ def test_inceputul_propozitiei_se_vede_doar_in_urma():
 
 
 def test_regula_b_numele_din_mijlocul_propozitiei(context):
-    text = 'Horse saw Horse. Horse ran with Timmy and Girl. Timmy ran. She said, "Horse ran," Horse said. '
-    coduri = context.coduri_cuvinte(text)
+    coduri = context.coduri_cuvinte("Horse saw Horse with Timmy and Girl. ")
     assert [_raft(context, c) for c in coduri] == [
-        "noun.animal", "verb.perception", "noun.person",  # Horse saw Horse
-        "noun.animal", "verb.motion", None, "noun.person", None, "noun.person",  # Horse ran with Timmy and Girl
-        None, "verb.motion",  # Timmy ran: la început de propoziție rămâne necunoscut
-        None, None, "noun.animal", "verb.motion", "noun.person", None,  # She said, "Horse ran," Horse said
+        "noun.animal", "verb.perception", "noun.person", None, "noun.person", None, "noun.person"
     ]
     persoana = coduri[2]
-    assert coduri[6] == coduri[15] == persoana
+    assert coduri[4] == persoana  # „Timmy” nu e în bibliotecă, dar e tot un nume
     assert persoana[2:] == context.cod("person")[2:]  # drumul lui „person”, pus pe raftul noun.person
-    assert coduri[8] == context.cod("girl")  # stătea deja pe noun.person: își păstrează codul
+    assert coduri[6] == context.cod("girl")  # stătea deja pe noun.person: își păstrează codul
     assert context.cod("Horse") == context.cod("horse")  # luat singur, cuvântul e ca la început de propoziție
 
 
+def test_numele_tinute_minte_doar_din_acelasi_text(context):
+    text = 'Timmy ran. Horse ran with Timmy. Timmy ran. She said, "Horse ran," Horse said. Horse\'s cat ran. '
+    assert [_raft(context, c) for c in context.coduri_cuvinte(text)] == [
+        None, "verb.motion",  # Timmy ran: încă nu știm că e un nume
+        "noun.animal", "verb.motion", None, "noun.person",  # Horse ran with Timmy: acum știm
+        "noun.person", "verb.motion",  # Timmy ran: ținut minte
+        None, None, "noun.animal", "verb.motion",  # She said, "Horse ran,": „Horse” încă n-a fost nume
+        "noun.person", None,  # Horse said
+        "noun.person", "noun.animal", "verb.motion",  # Horse's cat ran: ținut minte și cu „'s”
+    ]
+    assert _raft(context, context.coduri_cuvinte("Timmy ran. ")[0]) is None  # alt text: nu ține minte nimic
+    # Povești lipite în același text: numele se țin minte doar până la separatorul dintre ele.
+    povesti = "Horse ran with Timmy. Timmy ran.\n<|endoftext|>\nTimmy ran. "
+    assert [_raft(context, c) for c in context.coduri_cuvinte(povesti)] == [
+        "noun.animal", "verb.motion", None, "noun.person", "noun.person", "verb.motion", None, None, "verb.motion"
+    ]
+
+
+def test_majusculele_si_cuvintele_de_legatura_nu_sunt_nume(context):
+    coduri = context.coduri_cuvinte("the cat ran with TV and CAT. I ran. ")
+    assert [_raft(context, c) for c in coduri] == [
+        None, "noun.animal", "verb.motion", None, None, None, "noun.animal", None, "verb.motion"
+    ]
+
+
+def test_regula_d_verbul_dupa_to_i_you(context):
+    text = "they horse. we. horse the horse, to horse; let's horse don't horse I back. "
+    coduri = context.coduri_cuvinte(text)
+    assert [_raft(context, c) for c in coduri] == [
+        None, "verb.motion",  # they horse
+        None, "noun.animal",  # we. horse: altă propoziție, regula nu se aplică
+        None, "noun.animal",  # the horse
+        None, "verb.motion", None, "verb.motion", None, "verb.motion",  # to / let's / don't horse
+        None, "adv.all",  # I back: adverbele din listă rămân adverbe
+    ]
+    assert INAINTE_DE_VERB == {"to", "will", "can", "let's", "don't", "i", "you", "we", "they"}
+
+
+def test_regula_a_exceptiile_raman_pe_sensul_din_dictionar(tmp_path, monkeypatch):
+    cale = biblioteca_mica(tmp_path)
+    assert EXCEPTII_FORME_VERB == {"ground", "feed", "wound", "bit"}
+    context = MemorieIerarhica(cale=cale, nivele=8, sens_dupa_context=True)
+    assert _raft(context, context.cod("bit")) == "noun.artifact"  # burghiul, nu trecutul lui „bite”
+    monkeypatch.setattr(memorie_ierarhica, "EXCEPTII_FORME_VERB", frozenset())
+    fara_exceptii = MemorieIerarhica(cale=cale, nivele=8, sens_dupa_context=True)
+    assert _raft(fara_exceptii, fara_exceptii.cod("bit")) == "verb.contact"  # fără excepție, regula a) l-ar muta
+
+
+def test_regulile_spun_ce_au_ales(context):
+    text = "Horse saw Horse. Horse ran back, they horse. "
+    assert [regula for _, _, _, regula in context.cuvinte_cu_coduri(text)] == [
+        "", "a_forma_de_verb", "b_nume", "b_nume_tinut_minte", "a_forma_de_verb", "c_adverb", "", "d_verb_dupa"
+    ]
+
+
 def test_sensul_dupa_context_nu_dezvaluie_viitorul(context):
-    text = "Horse saw Timmy. \"Back, Horse!\" said Girl, horsing back; seeing Cat ran.\nTimmy's horses' hooves, Horse"
+    text = (
+        "Horse saw Timmy. \"Back, Horse!\" said Girl, horsing back; seeing Cat ran.\nTimmy's horses' hooves, "
+        "Horse to horse, they bit TV and CAT. Timmy ran, I saw.\n<|endoftext|>\nTimmy ran. Let's horse"
+    )
     complet = context.caracteristici(text)
     for i in range(len(text) + 1):
         assert context.caracteristici(text[:i]) == complet[:i], f"scurgere din viitor la poziția {i}"

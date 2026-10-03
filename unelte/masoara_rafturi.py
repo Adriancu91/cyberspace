@@ -9,7 +9,7 @@ pe care WordNet le are doar cu alt sens (a = vitamina A, can = cutie de conserve
   raft de unul al altui raft (cuvinte vecine, cu ordine), doar pentru perechile văzute de cel puțin 100 de ori.
 
     python unelte/masoara_rafturi.py                       # sensul principal din dicționar
-    python unelte/masoara_rafturi.py --sens-dupa-context   # cu regulile a, b, c ale memoriei, comparat cu cel de sus
+    python unelte/masoara_rafturi.py --sens-dupa-context   # cu regulile a, b, c, d ale memoriei, comparat cu cel de sus
 
 Rezultatul: pe ecran și în lucru/rafturi_tinystories.json (cu --sens-dupa-context: rafturi_tinystories_context.json).
 """
@@ -27,7 +27,9 @@ RADACINA = Path(__file__).resolve().parent.parent
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
-from module.memorie_ierarhica import ADVERBE_PREFERATE, MemorieIerarhica  # noqa: E402
+from module.memorie_ierarhica import (  # noqa: E402
+    ADVERBE_PREFERATE, EXCEPTII_FORME_VERB, INAINTE_DE_VERB, MemorieIerarhica,
+)
 
 UMPLUTURA = "umplutură"
 PRAG_NOD = 0.005  # un raft cu cel puțin 0,5% din cuvintele cu sens primește un nod
@@ -39,15 +41,6 @@ PRAGURI_ASOCIERE = (2, 3, 5)  # câte perechi trec de fiecare, ca să alegem pra
 def _categorie(memorie: MemorieIerarhica, cod: tuple[int, ...]) -> str:
     """Raftul codului sau, pentru cuvintele fără sens în bibliotecă, umplutura."""
     return memorie.rafturi[cod[1] - 1] if 1 <= cod[0] <= 4 else UMPLUTURA
-
-
-def _regula(cuvant: str, la_inceput: bool, raft_nou: str) -> str:
-    """Ce regulă a setării sens_dupa_context a mutat cuvântul (memoria le încearcă în ordinea b, c, a)."""
-    if raft_nou == "noun.person" and not la_inceput and cuvant.lstrip("'")[:1].isupper():
-        return "b_nume"
-    if cuvant.lower().strip("'") in ADVERBE_PREFERATE:
-        return "c_adverbe"
-    return "a_forme_de_verb"
 
 
 def masoara(
@@ -66,8 +59,8 @@ def masoara(
     legatura_cu_alt_sens: Counter[str] = Counter()
     schimbari: Counter[tuple[str, str, str]] = Counter()
     pe_reguli: Counter[str] = Counter()
-    for _, cuvant, la_inceput in memorie.cuvinte_terminate(text):
-        categorie = _categorie(memorie, memorie.cod(cuvant, la_inceput))
+    for _, cuvant, cod, regula in memorie.cuvinte_cu_coduri(text):
+        categorie = _categorie(memorie, cod)
         categorii.append(categorie)
         if categorie != UMPLUTURA:
             pe_raft[categorie] += 1
@@ -82,7 +75,7 @@ def masoara(
             inainte = _categorie(veche, veche.cod(cuvant))
             if inainte != categorie:
                 schimbari[(cuvant.lower(), inainte, categorie)] += 1
-                pe_reguli[_regula(cuvant, la_inceput, categorie)] += 1
+                pe_reguli[regula or "fara_regula"] += 1
 
     total, cu_sens = len(categorii), sum(pe_raft.values())
     rafturi, cumulat = [], 0
@@ -136,7 +129,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--biblioteca", default="date/biblioteca.json.gz")
     parser.add_argument("--date", default="date/tinystories", help="dosarul datelor TinyStories")
     parser.add_argument("--sens-dupa-context", action="store_true",
-                        help="regulile a, b, c ale memoriei (verbe, nume, adverbe), comparat cu măsurătoarea fără ele")
+                        help="regulile a, b, c, d ale memoriei (verbe, nume, adverbe), comparat cu măsurătoarea fără ele")
     args = parser.parse_args(argv)
 
     from module.date_tinystories import DateTinyStories
@@ -158,6 +151,8 @@ def main(argv: list[str] | None = None) -> int:
     if "schimbari" in rezultat:
         s = rezultat["schimbari"]
         print(f"\nSens după context. Lista fixă de adverbe (regula c): {', '.join(sorted(ADVERBE_PREFERATE))}")
+        print(f"Excepții la formele de verb (regula a): {', '.join(sorted(EXCEPTII_FORME_VERB))}; "
+              f"verb după (regula d): {', '.join(sorted(INAINTE_DE_VERB))}")
         print(f"Și-au schimbat raftul față de măsurătoarea fără reguli: {s['total']:,} cuvinte "
               f"({s['total'] / rezultat['cuvinte']:.1%} din toate; {s['cuvinte_diferite']:,} cuvinte diferite), "
               f"din care {s['din_umplutura']:,} erau umplutură")

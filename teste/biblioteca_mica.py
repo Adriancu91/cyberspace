@@ -8,6 +8,7 @@ Ierarhia:  entity > organism > animal > {horse, cat}
            entity > artifact > can (cutia de conserve: în text, „can” e de obicei verbul modal)
            organism > person (raftul noun.Tops, ca în WordNet) > girl (noun.person)
            see (verb, cu forma „saw”) și saw (fierăstrăul, sub artifact); back (spatele, sub entity) și back (adverb)
+           bite (verb, cu forma „bit”) și bit (burghiul, sub artifact)
 """
 
 from __future__ import annotations
@@ -48,6 +49,8 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <LexicalEntry id="t-saw-n"><Lemma writtenForm="saw" partOfSpeech="n"/><Sense id="t-saw-1" synset="t-23-n"/></LexicalEntry>
     <LexicalEntry id="t-back-n"><Lemma writtenForm="back" partOfSpeech="n"/><Sense id="t-back-1" synset="t-24-n"/></LexicalEntry>
     <LexicalEntry id="t-back-r"><Lemma writtenForm="back" partOfSpeech="r"/><Sense id="t-back-2" synset="t-25-r"/></LexicalEntry>
+    <LexicalEntry id="t-bit-n"><Lemma writtenForm="bit" partOfSpeech="n"/><Sense id="t-bit-1" synset="t-26-n"/></LexicalEntry>
+    <LexicalEntry id="t-bite-v"><Lemma writtenForm="bite" partOfSpeech="v"/><Form writtenForm="bit"/><Sense id="t-bite-1" synset="t-27-v"/></LexicalEntry>
     <Synset id="t-01-n" members="t-entity-n" partOfSpeech="n" lexfile="noun.Tops"/>
     <Synset id="t-02-n" members="t-organism-n" partOfSpeech="n" lexfile="noun.Tops">
       <SynsetRelation relType="hypernym" target="t-01-n"/></Synset>
@@ -94,6 +97,9 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <Synset id="t-24-n" members="t-back-n" partOfSpeech="n" lexfile="noun.body">
       <SynsetRelation relType="hypernym" target="t-01-n"/></Synset>
     <Synset id="t-25-r" members="t-back-r" partOfSpeech="r" lexfile="adv.all"/>
+    <Synset id="t-26-n" members="t-bit-n" partOfSpeech="n" lexfile="noun.artifact">
+      <SynsetRelation relType="hypernym" target="t-08-n"/></Synset>
+    <Synset id="t-27-v" members="t-bite-v" partOfSpeech="v" lexfile="verb.contact"/>
   </Lexicon>
 </LexicalResource>
 """

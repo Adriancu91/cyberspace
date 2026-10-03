@@ -44,17 +44,20 @@ def test_perechile_rare_nu_intra_la_asocieri(cale):
 
 
 def test_masoara_schimbarile_fata_de_masuratoarea_veche(cale):
-    text = "the cat saw Horse back. a cat can run. "
+    text = "the cat saw Horse back. they horse. Horse ran. "
     veche = MemorieIerarhica(cale, fara_cuvinte_de_legatura=True)
     noua = MemorieIerarhica(cale, fara_cuvinte_de_legatura=True, sens_dupa_context=True)
     r = masoara(text, noua, veche=veche, minim_pereche=1)
     s = r["schimbari"]
-    assert s["total"] == 3 and s["cuvinte_diferite"] == 3 and s["din_umplutura"] == 0
-    assert s["pe_reguli"] == {"a_forme_de_verb": 1, "b_nume": 1, "c_adverbe": 1}
+    assert s["total"] == 5 and s["cuvinte_diferite"] == 3 and s["din_umplutura"] == 0
+    assert s["pe_reguli"] == {
+        "a_forma_de_verb": 1, "b_nume": 1, "c_adverb": 1, "d_verb_dupa": 1, "b_nume_tinut_minte": 1
+    }
     assert {(x["cuvant"], x["de_la"], x["la"]) for x in s["cele_mai_dese"]} == {
         ("saw", "noun.artifact", "verb.perception"),
-        ("horse", "noun.animal", "noun.person"),
+        ("horse", "noun.animal", "noun.person"),  # „Horse” în mijloc, apoi ținut minte la început
         ("back", "noun.body", "adv.all"),
+        ("horse", "noun.animal", "verb.motion"),  # „they horse”
     }
     peste = r["asocieri_peste"]
     assert list(peste) == ["2x", "3x", "5x"] and peste["2x"] >= peste["3x"] >= peste["5x"]

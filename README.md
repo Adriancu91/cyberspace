@@ -349,6 +349,56 @@ Cu regulile de mai sus: 25.000 de pași pentru fiecare rulare (nu 5 minute), sem
   sămânță (cu 0,0001…0,0011; în medie 0,0007). E constant, dar de 7 ori sub pragul de zgomot: practic neglijabil.
 - Runda 2 e ceva mai grea decât runda 1 (Δ fără ≈ +0,009); de aceea se compară diferențele, nu scorurile direct.
 
+## Etapa M3: plasa adaptivă
+
+### Pasul 1: rafturile WordNet pe TinyStories (fără antrenare)
+
+`unelte/masoara_rafturi.py` numără, pe textul de antrenare (3.548.954 de cuvinte), câte cuvinte cad pe fiecare raft
+al bibliotecii și câte sunt **umplutură**: cuvintele de legătură (the, a, and, it, to, can...) și cele negăsite.
+
+Sensul principal din dicționar greșește des pe povești: said = adjectiv, saw = proverb, play = piesă de teatru,
+very = adjectiv, Lily = crin, Tom = motan. De aceea memoria are acum setarea `sens_dupa_context` (oprită implicit,
+deci rezultatele vechi rămân la fel), cu 4 reguli care se uită **doar în urmă**:
+
+- **a) formele de verb** (said, saw, went; looked, smiling) primesc sensul de verb. Excepții: ground, feed, wound, bit
+  (în dicționar sunt și trecutul lui grind, fee, wind, bite).
+- **b) numele:** un cuvânt cu literă mare în mijlocul propoziției e nume de persoană (noun.person), dar nu și cele
+  scrise numai cu majuscule (TV). Un nume văzut în mijlocul unei propoziții rămâne nume și la început de propoziție,
+  **în aceeași poveste** (textul de antrenare are 21.895 de povești lipite; ținute minte pe tot textul, „One-Eye”
+  dintr-o poveste făcea nume din fiecare „One day...” de după, iar „Yes”, „Thank”, „Look” deveneau și ele nume).
+- **c) 16 adverbe fixe:** very, then, now, back, still, just, only, here, well, much, even, away, later, together,
+  far, fast („little” nu: în povești e aproape mereu adjectiv).
+- **d) după** to / will / can / let's / don't / I / you / we / they, în aceeași propoziție, cuvântul primește sensul
+  de verb (to play, let's go, I want).
+
+Cu toate regulile, **648.889 de cuvinte (18,3%) și-au schimbat raftul**: a) 301.520, d) 110.186, b) 91.326 în mijlocul
+propoziției și 71.632 ținute minte, c) 74.225. Primele 10 rafturi (procente din cuvintele cu sens, 51,2% din text):
+
+| Raft | % | Cele mai dese |
+| --- | --- | --- |
+| noun.person | 15,1 | tim, mom, lily, tom, friends |
+| adj.all | 8,3 | big, happy, sad, new, other |
+| noun.artifact | 7,4 | ball, toy, car, house, toys |
+| adv.all | 7,2 | very, once, together, too, then |
+| verb.communication | 4,9 | said, named, asked, thank, told |
+| verb.motion | 4,4 | went, came, go, ran, walked |
+| noun.animal | 3,8 | bird, dog, cat, bear, fish |
+| verb.emotion | 3,8 | wanted, loved, liked, felt, scared |
+| noun.act | 3,1 | fun, let's, put, best, help |
+| noun.quantity | 3,0 | one, little, lots, lot, two |
+
+- **33 de rafturi** au cel puțin 0,5% din cuvintele cu sens (un nod fiecare); celelalte 11 merg la nodul „rar”.
+  25 de rafturi acoperă 90%.
+- **Asocierea** (cuvinte vecine, cu ordine, perechi văzute de cel puțin 100 de ori): din 592 de perechi, 62 trec de
+  2×, **29 trec de 3×**, 10 trec de 5×. Cele mai puternice: noun.quantity → noun.time 24,8× („one day”),
+  verb.social → noun.shape 17,0× („took turns”), noun.phenomenon → verb.body 9,8× („wind blew”).
+- Greșeli rămase: adjectivele pe care WordNet le pune întâi ca substantive (little, small, good, red, old, sweet) și
+  numele de la începutul unei povești, înainte să apară în mijlocul unei propoziții.
+
+```
+python unelte/masoara_rafturi.py --sens-dupa-context    # ~15 secunde; rezultatul și în lucru/rafturi_tinystories_context.json
+```
+
 ## Toate comenzile
 
 ```
