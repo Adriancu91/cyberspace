@@ -14,11 +14,12 @@ Două feluri de comparație:
 
     python unelte/compara_memorie.py                     # 3 semințe, la același timp, ~35-45 min
     python unelte/compara_memorie.py --pasi 35000        # 3 semințe, la același număr de pași
+    python unelte/compara_memorie.py --pasi 35000 --adancime 2   # memoria folosește doar 2 niveluri
     python unelte/compara_memorie.py --seminte 1337      # o singură pereche
     python unelte/compara_memorie.py --buget 20          # probă rapidă: 20 s de antrenare
 
-Rezultatul (tabel + verdict) apare pe ecran și în lucru/comparatie_memorie.json
-(sau lucru/comparatie_memorie_pasi.json, pentru comparația la număr egal de pași).
+Rezultatul (tabel + verdict) apare pe ecran și în lucru/comparatie_memorie[_pasi][_adancimeN].json;
+fiecare fel de comparație are fișierul și linia lui din jurnal, ca să nu se suprascrie între ele.
 """
 
 from __future__ import annotations
@@ -69,13 +70,23 @@ def main(argv: list[str] | None = None) -> int:
         "--pasi", type=int, default=None,
         help="compară la același număr de pași de antrenare; timpul devine doar o limită de siguranță",
     )
+    parser.add_argument(
+        "--adancime", type=int, default=None,
+        help="câte niveluri din codul cuvântului folosește memoria (implicit: din configurare)",
+    )
     args = parser.parse_args(argv)
     la_pasi = args.pasi is not None
     if la_pasi and args.pasi < 1:
         parser.error("--pasi trebuie să fie cel puțin 1")
+    if args.adancime is not None and args.adancime < 1:
+        parser.error("--adancime trebuie să fie cel puțin 1")
 
     config = citeste_config(args.config)
-    config.nume += "_comparatie_pasi" if la_pasi else "_comparatie"  # linii separate în jurnal
+    # Linii separate în jurnal și fișiere separate, pentru fiecare fel de comparație.
+    sufix = ("_pasi" if la_pasi else "") + (f"_adancime{args.adancime}" if args.adancime is not None else "")
+    config.nume += "_comparatie" + sufix
+    if args.adancime is not None:
+        config.porturi["model"].setdefault("setari", {})["adancime_memorie"] = args.adancime
     if args.buget is not None:
         config.buget_antrenare_secunde = args.buget
     elif la_pasi:
@@ -160,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Cuvinte găsite în bibliotecă: {ultima['cu']['acoperire_memorie']:.0%}")
     print(f"\nVerdict: {concluzie}")
 
-    iesire = config.director_lucru / ("comparatie_memorie_pasi.json" if la_pasi else "comparatie_memorie.json")
+    iesire = config.director_lucru / f"comparatie_memorie{sufix}.json"
     iesire.write_text(
         json.dumps(
             {

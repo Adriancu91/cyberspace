@@ -108,6 +108,21 @@ def test_comparatia_la_acelasi_numar_de_pasi(tmp_path, monkeypatch, capsys):
     assert not (tmp_path / "lucru" / "comparatie_memorie.json").exists()  # nu suprascrie comparația la același timp
 
 
+def test_adancimea_memoriei_se_poate_alege(tmp_path, monkeypatch):
+    cale = _pregateste(tmp_path, monkeypatch)
+
+    assert main(["--config", str(cale), "--seminte", "1", "2", "--pasi", "3", "--adancime", "2"]) == 0
+
+    rezultat = json.loads((tmp_path / "lucru" / "comparatie_memorie_pasi_adancime2.json").read_text(encoding="utf-8"))
+    assert rezultat["reteta"]["adancime_memorie"] == 2
+    fise = _fise(tmp_path)
+    assert {f["linie"] for f in fise} == {"test_memorie_comparatie_pasi_adancime2"}
+    assert all(f["setari"]["model"]["adancime_memorie"] == 2 for f in fise)
+    cu_memorie = [f for f in fise if f["setari"]["model"]["memorie"]]
+    assert all(len(f["statistici_antrenare"]["categorii_memorie"]) == 2 for f in cu_memorie)
+    assert not (tmp_path / "lucru" / "comparatie_memorie_pasi.json").exists()  # nu suprascrie alte comparații
+
+
 def test_avertizeaza_cand_pasii_nu_sunt_egali(tmp_path, monkeypatch):
     cale = _pregateste(tmp_path, monkeypatch)
 

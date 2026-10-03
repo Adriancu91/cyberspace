@@ -83,6 +83,23 @@ def test_la_inceput_memoria_nu_schimba_nimic(tmp_path):
     assert cu.biti_pentru(text) == pytest.approx(fara.biti_pentru(text), rel=1e-6)
 
 
+def test_categoriile_nevazute_la_antrenare_primesc_gol(tmp_path):
+    """„horse” nu apare în textul de antrenare (dar „cat” da): nivelurile comune cu „cat”
+    (substantiv, noun.animal, entity > organism > animal) sunt cunoscute, iar nivelul propriu
+    lui „horse” primește 0, nu o descriere neantrenată (zgomot)."""
+    memorie = MemorieIerarhica(cale=biblioteca_mica(tmp_path), nivele=6)
+    model = ModelGPT(**{**MIC_MEMORIE, "adancime_memorie": 6, "pasi_max": 1})
+    model.conecteaza_memorie(memorie)
+    date = DateMostra(propozitii=300)
+    assert "horse" not in date.text_antrenare() and "cat" in date.text_antrenare()
+    model.antreneaza(date, 30.0)
+    categorii = model._categorii(memorie.caracteristici("horse "))[5].tolist()  # la spațiu, „horse” e terminat
+    assert all(c > 0 for c in categorii[:5]) and categorii[5] == 0
+    assert model.retea is not None and all(
+        c < emb.num_embeddings for c, emb in zip(categorii, model.retea.memorie)
+    )
+
+
 def test_pasi_max_opreste_antrenarea_la_numarul_cerut(tmp_path):
     date = DateMostra(propozitii=200)
     assert ModelGPT(**MIC, pasi_max=7).antreneaza(date, 60.0)["pasi"] == 7

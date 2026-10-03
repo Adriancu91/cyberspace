@@ -36,8 +36,9 @@ except ImportError as e:  # registrul transformă asta într-un mesaj clar
     raise ImportError("Modulul model_gpt are nevoie de PyTorch. Vezi README: „Instalează PyTorch”.") from e
 
 NECUNOSCUT = "�"
-# Numerele rezervate pentru categoriile din memorie: 0 = nivel gol, 1 = categorie nevăzută la antrenare.
-CATEGORIE_GOALA, CATEGORIE_NOUA = 0, 1
+# Categoria 0 = „gol”: nivelul nu există sau categoria n-a fost văzută la antrenare. Descrierea ei e
+# mereu zero, deci modelul folosește doar nivelurile de deasupra pe care le cunoaște, ca la un cod mai scurt.
+CATEGORIE_GOALA = 0
 
 
 class _Bloc(nn.Module):
@@ -104,7 +105,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.3.0",
+        "versiune": "0.3.1",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -163,7 +164,7 @@ class ModelGPT:
         return self.sursa_memorie
 
     def _construieste_harta(self, coduri: list[tuple[int, ...]]) -> None:
-        """Numerotează categoriile văzute la antrenare, pe fiecare nivel.
+        """Numerotează (de la 1) categoriile văzute la antrenare, pe fiecare nivel.
 
         Categoria de pe nivelul k = codul până la nivelul k (drumul din bibliotecă), deci „horse” și
         „cat” au aceleași categorii pe nivelurile de sus și diferă abia jos.
@@ -173,17 +174,21 @@ class ModelGPT:
             for k in range(min(self.adancime_memorie, len(cod))):
                 if cod[k] == 0:
                     break
-                self.harta[k].setdefault(cod[: k + 1], len(self.harta[k]) + 2)
+                self.harta[k].setdefault(cod[: k + 1], len(self.harta[k]) + 1)
 
     def _categorii(self, coduri: list[tuple[int, ...]]) -> torch.Tensor:
-        """Pentru fiecare literă: numărul categoriei pe fiecare nivel (lungimea textului × adâncime)."""
+        """Pentru fiecare literă: numărul categoriei pe fiecare nivel (lungimea textului × adâncime).
+
+        O categorie nevăzută la antrenare (apare doar în textul nou) primește 0, ca un nivel gol: altfel
+        modelul ar primi o descriere pe care n-a antrenat-o niciodată, adică zgomot.
+        """
         if not coduri:
             return torch.zeros((0, self.adancime_memorie), dtype=torch.long)
         unice = list(dict.fromkeys(coduri))
         tabel = torch.tensor(
             [
                 [
-                    CATEGORIE_GOALA if k >= len(cod) or cod[k] == 0 else self.harta[k].get(cod[: k + 1], CATEGORIE_NOUA)
+                    CATEGORIE_GOALA if k >= len(cod) or cod[k] == 0 else self.harta[k].get(cod[: k + 1], CATEGORIE_GOALA)
                     for k in range(self.adancime_memorie)
                 ]
                 for cod in unice
@@ -202,7 +207,7 @@ class ModelGPT:
 
     def _construieste(self) -> None:
         torch.manual_seed(self.samanta)
-        categorii = [len(h) + 2 for h in self.harta] if self.foloseste_memorie else None
+        categorii = [len(h) + 1 for h in self.harta] if self.foloseste_memorie else None
         self.retea = _GPT(
             len(self.vocabular), **self.setari, categorii_memorie=categorii, n_emb_memorie=self.n_emb_memorie
         ).to(self.dispozitiv)
