@@ -172,19 +172,28 @@ class Plasa:
         temporar.replace(fisier)
 
 
-class _Nod(nn.Module):
-    """Un nod mic: prelucrează starea trunchiului pentru felul lui de cuvinte. Pornește tăcut."""
+class _Noduri(nn.Module):
+    """Nodurile mici, calculate toate deodată (pe placa video, mult mai repede decât unul câte unul).
 
-    def __init__(self, n_emb: int, n_ascuns: int) -> None:
+    Fiecare nod: normalizare (cu parametrii lui) → strat ascuns → GELU → înapoi la n_emb. Ieșirea
+    pornește de la zero („tăcut”), deci la început nodurile nu schimbă nimic.
+    """
+
+    def __init__(self, n_noduri: int, n_emb: int, n_ascuns: int) -> None:
         super().__init__()
-        self.ln = nn.LayerNorm(n_emb)
-        self.sus = nn.Linear(n_emb, n_ascuns)
-        self.jos = nn.Linear(n_ascuns, n_emb)
-        nn.init.zeros_(self.jos.weight)
-        nn.init.zeros_(self.jos.bias)
+        limita = n_emb**-0.5  # ca la nn.Linear
+        self.ln_pondere = nn.Parameter(torch.ones(n_noduri, n_emb))
+        self.ln_deplasare = nn.Parameter(torch.zeros(n_noduri, n_emb))
+        self.sus = nn.Parameter(torch.empty(n_noduri, n_emb, n_ascuns).uniform_(-limita, limita))
+        self.sus_deplasare = nn.Parameter(torch.empty(n_noduri, n_ascuns).uniform_(-limita, limita))
+        self.jos = nn.Parameter(torch.zeros(n_noduri, n_ascuns, n_emb))
+        self.jos_deplasare = nn.Parameter(torch.zeros(n_noduri, n_emb))
 
     def forward(self, h: torch.Tensor) -> torch.Tensor:
-        return self.jos(F.gelu(self.sus(self.ln(h))))
+        """h: lot × poziții × n_emb → lot × poziții × noduri × n_emb."""
+        x = F.layer_norm(h, h.shape[-1:]).unsqueeze(-2) * self.ln_pondere + self.ln_deplasare
+        ascuns = F.gelu(torch.einsum("lpne,neh->lpnh", x, self.sus) + self.sus_deplasare)
+        return torch.einsum("lpnh,nhe->lpne", ascuns, self.jos) + self.jos_deplasare
 
 
 class _GPTCuNoduri(_GPT):
@@ -200,7 +209,7 @@ class _GPTCuNoduri(_GPT):
         super().__init__(*args, **kwargs)
         n_emb = self.emb_token.embedding_dim
         # Nodurile și centrul se creează DUPĂ trunchi: cu aceeași sămânță, trunchiul pornește ca la GPT-ul simplu.
-        self.noduri = nn.ModuleList(_Nod(n_emb, n_ascuns_nod) for _ in range(n_noduri))
+        self.noduri = _Noduri(n_noduri, n_emb, n_ascuns_nod)
         self.pondere_centru = nn.Parameter(torch.ones(n_noduri))  # nodul central: cât contează fiecare nod
         self.register_buffer("identitate", torch.eye(n_noduri), persistent=False)
         self.cu_plasa = cu_plasa
@@ -222,7 +231,7 @@ class _GPTCuNoduri(_GPT):
         memorie = extra[..., :-1] if self.memorie is not None else None
         noduri = extra[..., -1]
         h = self.trunchi(idx, memorie)
-        iesiri = torch.stack([nod(h) for nod in self.noduri], dim=-2)  # lot × poziții × noduri × n_emb
+        iesiri = self.noduri(h)  # lot × poziții × noduri × n_emb
         ponderi = self.amestec()[noduri] * self.pondere_centru  # lot × poziții × noduri
         return self.cap(self.ln(h + (ponderi.unsqueeze(-1) * iesiri).sum(dim=-2)))
 
@@ -328,6 +337,11 @@ class ModelPlasa(ModelGPT):
             ]
             statistici["plasa"] = {
                 "legaturi_la_start": len(self.plasa.legaturi),
+                "cerere_maxima": round(max(abs(c) for rand in self._cereri for c in rand), 4),
+                "cereri": {
+                    NUME_NODURI[a]: {NUME_NODURI[b]: round(c, 4) for b, c in enumerate(rand) if a != b}
+                    for a, rand in enumerate(self._cereri)
+                },
                 "cereri_peste_prag": [
                     {"de_la": NUME_NODURI[a], "la": NUME_NODURI[b], "cerere": round(c, 4)}
                     for a, rand in enumerate(self._cereri) for b, c in enumerate(rand) if abs(c) >= PRAG_CERERE
