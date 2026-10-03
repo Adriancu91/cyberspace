@@ -18,4 +18,4 @@ include = ["kronos*", "module*"]
 [tool.pytest.ini_options]
 testpaths = ["teste", "teste_contracte"]
 pythonpath = ["."]
-addopts = "-q"
+addopts = "-q --basetemp=lucru/teste_tmp"
