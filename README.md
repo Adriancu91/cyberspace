@@ -10,8 +10,8 @@ Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 cu 8 sau 4 niveluri strică, iar cu 2 niveluri nu schimbă nimic măsurabil.
 **Etapa M2, primul pas** e gata: TinyStories, tokenizerul nostru pe bucăți de cuvinte (4.096 simboluri) și GPT-ul
 pe litere sau pe bucăți. Pe bucăți de cuvinte, scorul pe TinyStories e 0,8822 (pe litere: 1,3174).
-**Etapa M2, pasul 2 (plasa de noduri, versiunea minimă)** e construită și testată; primul test în două runde a ieșit
-neconcludent (vezi mai jos). 155 de teste trec.
+**Etapa M2, pasul 2 (plasa de noduri, versiunea minimă)** e construită și testată. Testul în două runde, la același
+număr de pași, arată că plasa păstrată între runde nu schimbă nimic măsurabil (efect +0,0002, sub zgomot). 166 de teste trec.
 
 ---
 
@@ -286,15 +286,24 @@ antrenare are 3,5 milioane de cuvinte, dar doar 9.846 de cuvinte diferite. Lipse
 - **Nodul central** adună ieșirile nodurilor, ponderate. Nodurile pornesc „tăcute”: la început, modelul e identic
   cu GPT-ul simplu.
 - **Plasa** (`plasa = true`): legături între noduri, cu tărie între 0 și 1, păstrate între experimente în
-  `lucru/plasa.json`. Un nod „cere” de la altul când ponderea învățată către el trece de 0,05; atunci se naște o
-  legătură cu tăria 0,1, în probă. După examen, fiecare legătură se întărește sau slăbește după **câștigul la examen**
-  × cât a fost folosită; uită 1% la fiecare experiment; peste 0,9 devine definitivă; sub 0,05 e tăiată. Legăturile
-  cu nodul central sunt fixe. Plasa nu vede niciodată textul de examen: primește câștigul doar ca număr, prin ușa
-  `dupa_examen` din Kronos (schimbare aprobată), iar starea ei intră în jurnal la fiecare experiment.
-- **Costul:** cu nodurile, modelul face ~97 de pași pe secundă (GPT-ul simplu: ~147).
+  `lucru/plasa.json`. Regulile:
+  - **naștere** (tărie 0,1, în probă): un nod „cere” de la altul (ponderea învățată către el trece de 0,05) **și**
+    un cuvânt al primului nod e urmat de unul al celuilalt de cel puțin **1,5× mai des decât întâmplător** (măsurat
+    pe textul de antrenare). Cerut inițial 3×, dar pe TinyStories nicio pereche nu trece de 1,95×;
+  - **întărire**: câștigul la examen × cât a fost folosită legătura (folosirea singură nu ajunge);
+  - **slăbire**: un câștig negativ înmulțește tăria cu până la 0,7, fără s-o taie direct;
+  - **uitare** 1% la fiecare experiment; peste 0,9 devine **definitivă**;
+  - **tăiere**: doar după 2 experimente la rând cu tăria sub 0,05.
+  Legăturile cu nodul central sunt fixe. Plasa nu vede niciodată textul de examen: primește câștigul doar ca număr,
+  prin ușa `dupa_examen` din Kronos (schimbare aprobată), iar starea ei intră în jurnal la fiecare experiment.
+- **Costul:** cu nodurile, modelul face ~90–100 de pași pe secundă (GPT-ul simplu: ~147).
+
+Asocierea măsurată (de câte ori mai des decât întâmplător e urmat un cuvânt al nodului din stânga de unul al
+nodului de sus): ființe → acțiuni 1,95; acțiuni → însușiri 1,86; locuri/obiecte → acțiuni 1,65; toate celelalte
+perechi sub 1,3.
 
 ```
-python unelte/compara_plasa.py     # testul în două runde: fără / cu plasă, 2 semințe, ~45-50 de minute
+python unelte/compara_plasa.py     # testul în două runde, la același număr de pași (25.000), semințele 0, 1, 2, ~1 oră
 ```
 
 ### Primul test în două runde (3 octombrie 2026)
@@ -317,8 +326,28 @@ Scriptul a scris „plasa a ajutat runda 2”, dar **testul e neconcludent**:
   scorul urmează aproape exact numărul de pași. Diferențele vin din viteză, nu din plasă; probabil și pierderea din
   runda 1 (care a tăiat legăturile) vine tot de aici.
 
-Pasul următor propus: același test la **același număr de pași** (acolo antrenarea se repetă exact, cum s-a văzut la
-memorie), ca plasa să primească un câștig curat și ca rundele să se poată compara.
+### Al doilea test în două runde: la același număr de pași (3 octombrie 2026)
+
+Cu regulile de mai sus: 25.000 de pași pentru fiecare rulare (nu 5 minute), semințele 0, 1, 2, pauze de răcire
+între rulări (până la 70°C). Toate cele 12 rulări au ajuns exact la 25.000 de pași, iar plasa a avut 3 legături la
+începutul rundei 2 la fiecare sămânță, deci testul e valid.
+
+| Sămânța | Fără R1 | Fără R2 | Cu R1 | Cu R2 | Δ fără (R2−R1) | Δ cu (R2−R1) | Legături la final R1 → R2 | Pași/s fără / cu |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0,9707 | 0,9811 | 0,9697 | 0,9804 | +0,0104 | +0,0107 | 3 → 3 | 114 / 92 |
+| 1 | 0,9744 | 0,9832 | 0,9743 | 0,9824 | +0,0088 | +0,0081 | 3 → 3 | 89 / 86 |
+| 2 | 0,9760 | 0,9834 | 0,9750 | 0,9831 | +0,0074 | +0,0081 | 3 → 3 | 92 / 98 |
+
+- **Legături născute: 9 în total**, câte 3 la fiecare sămânță, în runda 1: exact cele trei perechi permise de
+  asociere (ființe → acțiuni, locuri/obiecte → acțiuni, acțiuni → însușiri). Câștigurile primite au fost pozitive dar
+  mici (+0,0001…+0,0011), deci legăturile s-au întărit doar puțin (0,10 → 0,11–0,13) și au rămas în probă. Toate
+  legăturile unei semințe au aceeași tărie: câștigul e un singur număr pentru tot modelul.
+- **Efectul plasei păstrate**, (cu R2−R1) − (fără R2−R1): +0,0004, −0,0006, +0,0008; în medie **+0,0002**, de 25 de ori
+  sub pragul de zgomot (0,005). **Verdict: MIC (noroc).** Plasa păstrată din runda 1 nu schimbă nimic măsurabil în
+  runda 2.
+- În schimb, în toate cele 6 perechi, varianta cu plasă a fost puțin mai bună decât cea fără, pe aceeași rundă și
+  sămânță (cu 0,0001…0,0011; în medie 0,0007). E constant, dar de 7 ori sub pragul de zgomot: practic neglijabil.
+- Runda 2 e ceva mai grea decât runda 1 (Δ fără ≈ +0,009); de aceea se compară diferențele, nu scorurile direct.
 
 ## Toate comenzile
 
