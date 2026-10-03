@@ -103,6 +103,25 @@ def test_orchestratorul_da_memoria_modelului(config):
     assert fisa["module"]["memorie"]["nume"] == "memorie_goala"
 
 
+def test_modelul_primeste_rezultatul_examenului_doar_ca_numere(config):
+    config.porturi["model"]["modul"] = "teste.module_spion:ModelCareInvataDupaExamen"
+    o = Orchestrator(config)
+    prima = o.experiment(Propunere("primul"))
+    a_doua = o.experiment(Propunere("al doilea"))
+    primit = a_doua["dupa_examen"]["am_primit"]
+    assert set(primit) == {"id", "scor", "scor_anterior", "castig", "decizie"}
+    assert primit["id"] == a_doua["id"] and primit["scor_anterior"] == prima["scoruri"]["val_bpb"]
+    assert all(v is None or isinstance(v, (int, float, str)) for v in primit.values())  # numere, nu text
+    assert prima["dupa_examen"]["am_primit"]["castig"] is None  # primul experiment nu are cu ce se compara
+
+
+def test_o_eroare_dupa_examen_nu_strica_experimentul(config):
+    config.porturi["model"]["modul"] = "teste.module_spion:ModelCuEroareDupaExamen"
+    fisa = Orchestrator(config).experiment(Propunere("spion"))
+    assert fisa["decizie"] in ("pastrat", "respins")
+    assert "bum după examen" in fisa["eroare_dupa_examen"]
+
+
 def test_butonul_de_oprire(config):
     o = Orchestrator(config)
     o.paznic.cere_oprire()

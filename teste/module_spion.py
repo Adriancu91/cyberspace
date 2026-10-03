@@ -24,3 +24,15 @@ class ModelSpion:
 
     def incarca(self, cale):
         pass
+
+
+class ModelCareInvataDupaExamen(ModelSpion):
+    """Primește rezultatul examenului (doar numere) și îl întoarce, ca să-l vedem în jurnal."""
+
+    def dupa_examen(self, rezultat):
+        return {"am_primit": rezultat}
+
+
+class ModelCuEroareDupaExamen(ModelSpion):
+    def dupa_examen(self, rezultat):
+        raise RuntimeError("bum după examen")

@@ -233,6 +233,16 @@ class Orchestrator:
                 if castig is not None and castig > 0
                 else "scorul nu e mai bun"
             )
+
+        # 8. După examen: un model care învață între experimente (are `dupa_examen`) primește
+        #    rezultatul DOAR ca numere (scor, câștig, decizie), niciodată textul de examen.
+        if hasattr(model, "dupa_examen"):
+            try:
+                fisa["dupa_examen"] = model.dupa_examen(
+                    {"id": fisa["id"], "scor": scor, "scor_anterior": anterior, "castig": castig, "decizie": fisa["decizie"]}
+                )
+            except Exception as e:  # noqa: BLE001 - o eroare aici nu strică experimentul deja examinat
+                fisa["eroare_dupa_examen"] = f"{type(e).__name__}: {e}"
         stare("decis")
         return self._inregistreaza(fisa, start, stare)
 
