@@ -1,0 +1,57 @@
+# TinyStories cu GPT-ul nostru, pe placa video RTX 3060 (Etapa M2, primul pas: fără memorie).
+# Datele se pregătesc singure la prima folosire (~20 MB), sau de mână: python -m module.date_tinystories
+# Tokenizerul pe bucăți de cuvinte, o singură dată:      python unelte/antreneaza_tokenizer.py
+# Primul test (bucăți de cuvinte, apoi pe litere, aceeași rețetă):
+#   python -m kronos ruleaza --config config/laptop_tinystories.toml --experimente 1
+
+[platforma]
+nume = "tinystories"
+director_lucru = "lucru"
+buget_antrenare_secunde = 300
+experimente = 12               # ~12 experimente pe oră
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 900
+timp_test_secunde = 120
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt:ModelGPT"
+setari = { n_straturi = 2, n_capete = 4, n_emb = 128, context = 128, lot = 16, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json" }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories", megaocteti = 20.0 }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+tokenizer = ["litere", "bpe"]  # deocamdată comparăm doar tokenizerele; lărgim lista după primul test
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
