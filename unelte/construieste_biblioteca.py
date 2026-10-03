@@ -8,7 +8,8 @@ Ce pune în bibliotecă, pentru fiecare SENS (nu cuvânt: „horse” are mai mu
 - un cod pe niveluri, ca o cotă de bibliotecă: parte de vorbire, raft, apoi
   poziția fiecărui strămoș în nivelul lui, de la rădăcină până la sens;
 - relațiile: parte din / are parte, membru din / are membru, opus.
-Plus formele cuvintelor: lema și formele neregulate (geese → goose, ran → run).
+Plus formele cuvintelor: lema și formele neregulate (geese → goose, ran → run), iar separat
+formele de verb (said → say, saw → see), pentru alegerea sensului după context.
 
 Rulează din folderul proiectului:
     python unelte/construieste_biblioteca.py
@@ -175,6 +176,21 @@ def construieste(wn: dict[str, Any]) -> dict[str, Any]:
         if lista:
             forme_finale[cheie] = lista
 
+    # Formele flexionate ale verbelor (said → say, saw → see, went → go): sensurile verbului din care vin.
+    # Le folosește memoria, la cerere, ca „said” să fie verbul „say”, nu adjectivul „said”.
+    forme_verb: dict[str, list[int]] = {}
+    for lema, parte, forme, sensuri in wn["intrari"]:
+        if parte != "v":
+            continue
+        for forma in forme:
+            cheie = forma.lower()
+            if FORMA_CUVANT.fullmatch(cheie) and cheie != lema.lower():  # WordNet trece uneori și lema (bed, seed)
+                lista = forme_verb.setdefault(cheie, [])
+                for s in sensuri:
+                    i = index.get(s)
+                    if i is not None and i not in lista:
+                        lista.append(i)
+
     relatii: dict[int, list[list[Any]]] = defaultdict(list)
 
     def leaga(sursa: str, tip: str, tinta: str | None) -> None:
@@ -196,6 +212,7 @@ def construieste(wn: dict[str, Any]) -> dict[str, Any]:
         "parinte": [index[p] if (p := parinte(s)) is not None else -1 for s in ids],
         "cod": coduri,
         "forme": forme_finale,
+        "forme_verb": {cheie: forme_verb[cheie] for cheie in sorted(forme_verb) if forme_verb[cheie]},
         "relatii": {str(i): relatii[i] for i in sorted(relatii)},
     }
 

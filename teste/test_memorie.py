@@ -7,7 +7,7 @@ import json
 
 import pytest
 
-from module.memorie_ierarhica import GOL, NECUNOSCUT, MemorieIerarhica
+from module.memorie_ierarhica import ADVERBE_PREFERATE, GOL, NECUNOSCUT, MemorieIerarhica
 from teste.biblioteca_mica import biblioteca_mica
 
 
@@ -125,3 +125,84 @@ def test_coduri_cuvinte_da_cuvintele_terminate_in_ordine(memorie):
     coduri = memorie.coduri_cuvinte("the horse ran, the cat's tail; gallop'st no")
     asteptat = [memorie.cod(c) for c in ("the", "horse", "ran", "the", "cat", "tail", "gallop")]
     assert coduri == asteptat  # „no” e încă în curs: nu intră
+
+
+# --- setarea sens_dupa_context (regulile a, b, c) -----------------------------------------------
+
+
+@pytest.fixture
+def context(tmp_path):
+    """Memoria cu sensul ales după context și cuvintele de legătură ca umplutură (ca la măsurarea rafturilor)."""
+    return MemorieIerarhica(
+        cale=biblioteca_mica(tmp_path), nivele=8, fara_cuvinte_de_legatura=True, sens_dupa_context=True
+    )
+
+
+def _raft(memorie, cod):
+    return None if cod[0] == NECUNOSCUT else memorie.rafturi[cod[1] - 1]
+
+
+def test_fara_setare_ramane_sensul_din_dictionar(memorie):
+    coduri = memorie.coduri_cuvinte("Horse saw Horse back, horsing. ")
+    assert [_raft(memorie, c) for c in coduri] == ["noun.animal", "noun.artifact", "noun.animal", "noun.body", "noun.animal"]
+
+
+def test_regula_a_formele_de_verb(memorie, context):
+    assert _raft(context, context.cod("saw")) == "verb.perception"  # forma listată a lui „see”, nu fierăstrăul
+    assert _raft(context, context.cod("horsing")) == "verb.motion"  # -ing cu baza verb: verbul „horse”, nu calul
+    assert context.cod("horsed") == context.cod("horsing")
+    assert _raft(context, context.cod("seeing")) == "verb.perception"
+    assert context.cod("galloped") == context.cod("gallop")
+    assert context._verbe_din_baza("seed") == []  # „-eed” fără vocală înainte nu e formă de verb (seed, need)
+    assert context._verbe_din_baza("sing") == []  # nici „-ing” fără vocală în bază (sing, thing)
+    assert context.cod("horse") == memorie.cod("horse")  # cuvântul de bază rămâne cum era
+
+
+def test_regula_c_adverbele_din_lista(memorie, context):
+    assert "back" in ADVERBE_PREFERATE and "little" not in ADVERBE_PREFERATE
+    assert _raft(memorie, memorie.cod("back")) == "noun.body"
+    assert _raft(context, context.cod("back")) == "adv.all"
+    assert context.cauta("back")[0]["parte_de_vorbire"] == "adverb"  # căutarea arată întâi sensul ales
+
+
+def test_inceputul_propozitiei_se_vede_doar_in_urma():
+    text = 'Tom ran. Tom saw Tom, "Tom ran," Tom said!\nTom '
+    assert [(c, la_inceput) for _, c, la_inceput in MemorieIerarhica.cuvinte_terminate(text)] == [
+        ("Tom", True), ("ran", False), ("Tom", True), ("saw", False), ("Tom", False),
+        ("Tom", True), ("ran", False), ("Tom", False), ("said", False), ("Tom", True),
+    ]
+
+
+def test_regula_b_numele_din_mijlocul_propozitiei(context):
+    text = 'Horse saw Horse. Horse ran with Timmy and Girl. Timmy ran. She said, "Horse ran," Horse said. '
+    coduri = context.coduri_cuvinte(text)
+    assert [_raft(context, c) for c in coduri] == [
+        "noun.animal", "verb.perception", "noun.person",  # Horse saw Horse
+        "noun.animal", "verb.motion", None, "noun.person", None, "noun.person",  # Horse ran with Timmy and Girl
+        None, "verb.motion",  # Timmy ran: la început de propoziție rămâne necunoscut
+        None, None, "noun.animal", "verb.motion", "noun.person", None,  # She said, "Horse ran," Horse said
+    ]
+    persoana = coduri[2]
+    assert coduri[6] == coduri[15] == persoana
+    assert persoana[2:] == context.cod("person")[2:]  # drumul lui „person”, pus pe raftul noun.person
+    assert coduri[8] == context.cod("girl")  # stătea deja pe noun.person: își păstrează codul
+    assert context.cod("Horse") == context.cod("horse")  # luat singur, cuvântul e ca la început de propoziție
+
+
+def test_sensul_dupa_context_nu_dezvaluie_viitorul(context):
+    text = "Horse saw Timmy. \"Back, Horse!\" said Girl, horsing back; seeing Cat ran.\nTimmy's horses' hooves, Horse"
+    complet = context.caracteristici(text)
+    for i in range(len(text) + 1):
+        assert context.caracteristici(text[:i]) == complet[:i], f"scurgere din viitor la poziția {i}"
+
+
+def test_sensul_dupa_context_cere_formele_de_verb(tmp_path):
+    with gzip.open(biblioteca_mica(tmp_path), "rt", encoding="utf-8") as f:
+        biblioteca = json.load(f)
+    del biblioteca["forme_verb"]  # o bibliotecă construită înainte de regula a)
+    cale = tmp_path / "fara_forme_verb.json.gz"
+    with gzip.open(cale, "wt", encoding="utf-8") as f:
+        json.dump(biblioteca, f)
+    MemorieIerarhica(cale=str(cale))  # fără setare merge ca înainte
+    with pytest.raises(ValueError, match="construieste_biblioteca"):
+        MemorieIerarhica(cale=str(cale), sens_dupa_context=True)

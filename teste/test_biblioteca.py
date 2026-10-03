@@ -30,7 +30,7 @@ def _drum(bib, i):
 
 def test_fiecare_sens_are_parinte_cod_si_nume(bib):
     n = len(bib["cod"])
-    assert n == 19
+    assert n == 25
     assert len(bib["nume"]) == len(bib["parinte"]) == n
     assert bib["versiune"] == 1 and "WordNet de test" in bib["sursa"]
     for i in range(n):
@@ -63,6 +63,11 @@ def test_formele_si_sensul_principal(bib):
     assert [bib["cod"][i][0] for i in bib["forme"]["horse"]] == [1, 1, 2]
 
 
+def test_formele_de_verb(bib):
+    assert [bib["nume"][i] for i in bib["forme_verb"]["saw"]] == ["see"]  # „saw” e și fierăstrăul, dar ca verb vine din „see”
+    assert [bib["nume"][i] for i in bib["forme_verb"]["ran"]] == ["run"]
+    assert "horse" not in bib["forme_verb"]  # WordNet trece uneori verbul ca formă a lui însuși (bed, seed): nu e flexionată
+
 def test_relatiile(bib):
     def relatii(cuvant):
         return {(tip, bib["nume"][tinta]) for tip, tinta in bib["relatii"].get(str(_sens(bib, cuvant)), [])}
@@ -82,5 +87,5 @@ def test_scriptul_scrie_biblioteca(tmp_path, capsys):
     destinatie = tmp_path / "bib.json.gz"
     assert main(["--sursa", str(wordnet_mic(tmp_path)), "--destinatie", str(destinatie)]) == 0
     with gzip.open(destinatie, "rt", encoding="utf-8") as f:
-        assert len(json.load(f)["cod"]) == 19
-    assert "19 sensuri" in capsys.readouterr().out
+        assert len(json.load(f)["cod"]) == 25
+    assert "25 sensuri" in capsys.readouterr().out

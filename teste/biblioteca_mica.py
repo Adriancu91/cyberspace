@@ -6,6 +6,8 @@ Ierarhia:  entity > organism > animal > {horse, cat}
            entity > {hoof, herd, CAT, horse racing}
            run > gallop (verbe), horse (verb), good / bad (adjective opuse), o'clock (adverb)
            entity > artifact > can (cutia de conserve: în text, „can” e de obicei verbul modal)
+           organism > person (raftul noun.Tops, ca în WordNet) > girl (noun.person)
+           see (verb, cu forma „saw”) și saw (fierăstrăul, sub artifact); back (spatele, sub entity) și back (adverb)
 """
 
 from __future__ import annotations
@@ -23,7 +25,7 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <LexicalEntry id="t-animal-n"><Lemma writtenForm="animal" partOfSpeech="n"/><Sense id="t-animal-1" synset="t-03-n"/></LexicalEntry>
     <LexicalEntry id="t-horse-n"><Lemma writtenForm="horse" partOfSpeech="n"/>
       <Sense id="t-horse-1" synset="t-04-n"/><Sense id="t-horse-2" synset="t-10-n"/></LexicalEntry>
-    <LexicalEntry id="t-horse-v"><Lemma writtenForm="horse" partOfSpeech="v"/><Sense id="t-horse-v1" synset="t-15-v"/></LexicalEntry>
+    <LexicalEntry id="t-horse-v"><Lemma writtenForm="horse" partOfSpeech="v"/><Form writtenForm="horse"/><Sense id="t-horse-v1" synset="t-15-v"/></LexicalEntry>
     <LexicalEntry id="t-cat-n"><Lemma writtenForm="cat" partOfSpeech="n"/><Sense id="t-cat-1" synset="t-05-n"/></LexicalEntry>
     <LexicalEntry id="t-CAT-n"><Lemma writtenForm="CAT" partOfSpeech="n"/><Sense id="t-CAT-1" synset="t-16-n"/></LexicalEntry>
     <LexicalEntry id="t-hoof-n"><Lemma writtenForm="hoof" partOfSpeech="n"><Pronunciation>huːf</Pronunciation></Lemma>
@@ -40,6 +42,12 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
       <Sense id="t-bad-1" synset="t-14-a"><SenseRelation relType="antonym" target="t-good-1"/></Sense></LexicalEntry>
     <LexicalEntry id="t-oclock-r"><Lemma writtenForm="o'clock" partOfSpeech="r"/><Sense id="t-oclock-1" synset="t-18-r"/></LexicalEntry>
     <LexicalEntry id="t-can-n"><Lemma writtenForm="can" partOfSpeech="n"/><Sense id="t-can-1" synset="t-19-n"/></LexicalEntry>
+    <LexicalEntry id="t-person-n"><Lemma writtenForm="person" partOfSpeech="n"/><Sense id="t-person-1" synset="t-20-n"/></LexicalEntry>
+    <LexicalEntry id="t-girl-n"><Lemma writtenForm="girl" partOfSpeech="n"/><Sense id="t-girl-1" synset="t-21-n"/></LexicalEntry>
+    <LexicalEntry id="t-see-v"><Lemma writtenForm="see" partOfSpeech="v"/><Form writtenForm="saw"/><Sense id="t-see-1" synset="t-22-v"/></LexicalEntry>
+    <LexicalEntry id="t-saw-n"><Lemma writtenForm="saw" partOfSpeech="n"/><Sense id="t-saw-1" synset="t-23-n"/></LexicalEntry>
+    <LexicalEntry id="t-back-n"><Lemma writtenForm="back" partOfSpeech="n"/><Sense id="t-back-1" synset="t-24-n"/></LexicalEntry>
+    <LexicalEntry id="t-back-r"><Lemma writtenForm="back" partOfSpeech="r"/><Sense id="t-back-2" synset="t-25-r"/></LexicalEntry>
     <Synset id="t-01-n" members="t-entity-n" partOfSpeech="n" lexfile="noun.Tops"/>
     <Synset id="t-02-n" members="t-organism-n" partOfSpeech="n" lexfile="noun.Tops">
       <SynsetRelation relType="hypernym" target="t-01-n"/></Synset>
@@ -76,6 +84,16 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <Synset id="t-18-r" members="t-oclock-r" partOfSpeech="r" lexfile="adv.all"/>
     <Synset id="t-19-n" members="t-can-n" partOfSpeech="n" lexfile="noun.artifact">
       <SynsetRelation relType="hypernym" target="t-08-n"/></Synset>
+    <Synset id="t-20-n" members="t-person-n" partOfSpeech="n" lexfile="noun.Tops">
+      <SynsetRelation relType="hypernym" target="t-02-n"/></Synset>
+    <Synset id="t-21-n" members="t-girl-n" partOfSpeech="n" lexfile="noun.person">
+      <SynsetRelation relType="hypernym" target="t-20-n"/></Synset>
+    <Synset id="t-22-v" members="t-see-v" partOfSpeech="v" lexfile="verb.perception"/>
+    <Synset id="t-23-n" members="t-saw-n" partOfSpeech="n" lexfile="noun.artifact">
+      <SynsetRelation relType="hypernym" target="t-08-n"/></Synset>
+    <Synset id="t-24-n" members="t-back-n" partOfSpeech="n" lexfile="noun.body">
+      <SynsetRelation relType="hypernym" target="t-01-n"/></Synset>
+    <Synset id="t-25-r" members="t-back-r" partOfSpeech="r" lexfile="adv.all"/>
   </Lexicon>
 </LexicalResource>
 """
