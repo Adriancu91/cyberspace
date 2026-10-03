@@ -11,6 +11,7 @@ from module.examen_bpb import ExamenBpb  # noqa: E402
 from module.jucarii import MemorieGoala  # noqa: E402
 from module.memorie_ierarhica import MemorieIerarhica  # noqa: E402
 from module.model_gpt import ModelGPT  # noqa: E402
+from module.tokenizer_bpe import antreneaza_bpe  # noqa: E402
 from teste.biblioteca_mica import biblioteca_mica  # noqa: E402
 
 MIC = dict(n_straturi=2, n_capete=2, n_emb=64, context=64, lot=16, rata_invatare=3e-3, dispozitiv="cpu")
@@ -18,6 +19,14 @@ MIC_MEMORIE = dict(
     n_straturi=1, n_capete=2, n_emb=32, context=32, lot=8, dispozitiv="cpu",
     memorie=True, adancime_memorie=4, n_emb_memorie=8,
 )
+MIC_BPE = dict(n_straturi=1, n_capete=2, n_emb=32, context=32, lot=8, dispozitiv="cpu", tokenizer="bpe")
+
+
+@pytest.fixture
+def tokenizer_mic(tmp_path):
+    cale = tmp_path / "bpe_mic.json"
+    antreneaza_bpe(DateMostra(propozitii=600).text_antrenare(), 320).salveaza(cale)
+    return str(cale)
 
 
 def test_gpt_invata_ceva():
@@ -114,6 +123,59 @@ def test_pasi_max_opreste_antrenarea_la_numarul_cerut(tmp_path):
 def test_memorie_fara_port_conectat_da_mesaj_clar():
     with pytest.raises(RuntimeError, match="memorie"):
         ModelGPT(**MIC_MEMORIE).antreneaza(DateMostra(propozitii=100), 1.0)
+
+
+# --- pe bucăți de cuvinte (BPE) ------------------------------------------------------
+
+
+def test_gpt_pe_bucati_de_cuvinte_invata_si_se_reincarca(tmp_path, tokenizer_mic):
+    date = DateMostra(propozitii=300)
+    model = ModelGPT(**MIC_BPE, cale_tokenizer=tokenizer_mic)
+    statistici = model.antreneaza(date, 1.5)
+    assert statistici["tokenizer"] == "bpe" and statistici["pasi"] > 0
+    assert statistici["simboluri_antrenare"] < len(date.text_antrenare()) / 2  # mai puține simboluri decât litere
+    text = "the cat sat on the mat. Diacritice: ășț 🐱"
+    biti = model.biti_pentru(text)
+    assert math.isfinite(biti) and biti > 0
+    continuare = model.genereaza("the cat ", 25)
+    assert isinstance(continuare, str) and len(continuare) == 25
+
+    copie = ModelGPT(dispozitiv="cpu")  # tokenizerul vine din fișierul salvat
+    copie.incarca(model.salveaza(str(tmp_path / "model")))
+    assert copie.tokenizer == "bpe"
+    assert copie.biti_pentru(text) == pytest.approx(biti, rel=1e-5)
+    assert copie.genereaza("the cat ", 25) == continuare
+
+
+def test_examenul_merge_la_fel_pe_litere_si_pe_bucati(tokenizer_mic):
+    date = DateMostra(propozitii=300)
+    examen = ExamenBpb(max_caractere=2000)
+    for setari in ({**MIC_BPE, "tokenizer": "litere"}, {**MIC_BPE, "cale_tokenizer": tokenizer_mic}):
+        model = ModelGPT(**setari)
+        model.antreneaza(date, 0.5)
+        scoruri = examen.examineaza(model, date)
+        assert math.isfinite(scoruri["val_bpb"]) and scoruri["generare_ok"] == 1.0
+
+
+def test_tokenizer_lipsa_sau_gresit_da_mesaj_clar(tmp_path):
+    with pytest.raises(ValueError, match="antreneaza_tokenizer"):
+        ModelGPT(**MIC_BPE, cale_tokenizer=str(tmp_path / "nu_exista.json")).antreneaza(DateMostra(propozitii=100), 0.5)
+    with pytest.raises(ValueError, match="tokenizer"):
+        ModelGPT(tokenizer="cuvinte")
+
+
+def test_memoria_pe_simboluri_nu_vede_viitorul(tmp_path, tokenizer_mic):
+    """Fiecare simbol primește codul ultimului cuvânt terminat până la el: nimic din simbolurile următoare."""
+    model = ModelGPT(**MIC_BPE, cale_tokenizer=tokenizer_mic, memorie=True, adancime_memorie=4, n_emb_memorie=8, pasi_max=2)
+    model.conecteaza_memorie(MemorieIerarhica(cale=biblioteca_mica(tmp_path), nivele=6))
+    model.antreneaza(DateMostra(propozitii=300), 30.0)
+    simboluri = model.tok.codifica("the cat ran to the horse. A cat's tail; ășț “the” cat")
+    toate = model._coduri_memorie("", simboluri)
+    assert len(toate) == len(simboluri)
+    for t in range(1, len(simboluri) + 1):
+        assert model._coduri_memorie("", simboluri[:t]) == toate[:t], f"scurgere din viitor la simbolul {t}"
+    assert math.isfinite(model.biti_pentru("the cat ran."))
+    assert len(model.genereaza("the cat ", 15)) == 15
 
 
 def test_memoria_goala_nu_strica_nimic():

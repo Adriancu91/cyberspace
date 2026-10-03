@@ -13,12 +13,17 @@ Setări pe care Cercetătorul le poate schimba:
 - n_emb_memorie: cât de bogat descrie categoria de pe fiecare nivel
 - pasi_max: dacă e mai mare ca 0, antrenarea se oprește după exact atâția pași
   (pentru comparații la număr egal de pași); bugetul de timp rămâne limita de siguranță
+- tokenizer: "litere" (un simbol = o literă, ca la început) sau "bpe" (bucăți de cuvinte,
+  din fișierul cale_tokenizer, antrenat cu python unelte/antreneaza_tokenizer.py).
+  Examenul rămâne în biți pe octet, deci cele două se pot compara direct.
 
 Cum folosește memoria: la fiecare literă primește, în plus, codul ultimului cuvânt
 terminat (de ex. „horse” → substantiv → noun.animal → ... → equine → horse). Fiecare
 nivel al codului are o descriere învățată; descrierile se alătură și trec printr-o
 proiecție care pornește de la zero, deci la început modelul cu memorie e identic cu
 cel fără. Fără memorie, calculele sunt exact cele de dinainte de Etapa M1.
+Cu tokenizer = "bpe", fiecare simbol primește codul ultimului cuvânt terminat până la ultima
+lui literă completă (nimic din viitor).
 """
 
 from __future__ import annotations
@@ -34,6 +39,10 @@ try:
     import torch.nn.functional as F
 except ImportError as e:  # registrul transformă asta într-un mesaj clar
     raise ImportError("Modulul model_gpt are nevoie de PyTorch. Vezi README: „Instalează PyTorch”.") from e
+
+from module.tokenizer_bpe import TokenizerBPE
+
+TOKENIZERE = ("litere", "bpe")
 
 NECUNOSCUT = "�"
 # Categoria 0 = „gol”: nivelul nu există sau categoria n-a fost văzută la antrenare. Descrierea ei e
@@ -105,7 +114,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.3.1",
+        "versiune": "0.4.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -124,6 +133,8 @@ class ModelGPT:
         adancime_memorie: int = 8,
         n_emb_memorie: int = 32,
         pasi_max: int = 0,
+        tokenizer: str = "litere",
+        cale_tokenizer: str = "date/tinystories/bpe_4096.json",
         dispozitiv: str = "auto",
         samanta: int = 1337,
     ) -> None:
@@ -133,7 +144,12 @@ class ModelGPT:
             raise ValueError("toate dimensiunile și rata_invatare trebuie să fie pozitive")
         if pasi_max < 0:
             raise ValueError("pasi_max trebuie să fie 0 (fără limită de pași) sau un număr pozitiv")
+        if tokenizer not in TOKENIZERE:
+            raise ValueError(f"tokenizer trebuie să fie unul din: {', '.join(TOKENIZERE)}")
         self.pasi_max = pasi_max
+        self.tokenizer = tokenizer
+        self.cale_tokenizer = cale_tokenizer
+        self.tok: TokenizerBPE | None = None  # se încarcă la antrenare (sau din modelul salvat)
         self.setari = dict(
             n_straturi=n_straturi, n_capete=n_capete, n_emb=n_emb, context=context, dropout=dropout
         )
@@ -162,6 +178,21 @@ class ModelGPT:
         if self.sursa_memorie is None:
             raise RuntimeError("modelul are memorie=true, dar portul „memorie” nu e conectat (conecteaza_memorie)")
         return self.sursa_memorie
+
+    def _coduri_memorie(self, text: str, simboluri: list[int] | None = None) -> list[tuple[int, ...]]:
+        """Pentru fiecare poziție (literă sau simbol): codul ultimului cuvânt terminat până la ea, inclusiv.
+
+        Pe litere, e chiar ce dă memoria. Pe simboluri, fiecare simbol primește codul de la ultima lui
+        literă completă, deci nimic din viitor. Cu simbolurile date, textul se ia din ele.
+        """
+        memoria = self._memoria()
+        if self.tokenizer == "litere":
+            return memoria.caracteristici(text)
+        assert self.tok is not None
+        text, capete = self.tok.capete_caractere(self.tok.codifica(text) if simboluri is None else simboluri)
+        coduri = memoria.caracteristici(text)
+        gol = (0,) * memoria.nivele
+        return [coduri[cap - 1] if cap > 0 else gol for cap in capete]
 
     def _construieste_harta(self, coduri: list[tuple[int, ...]]) -> None:
         """Numerotează (de la 1) categoriile văzute la antrenare, pe fiecare nivel.
@@ -201,15 +232,24 @@ class ModelGPT:
     # --- utilitare --------------------------------------------------------
 
     def _codifica(self, text: str) -> torch.Tensor:
+        if self.tokenizer == "bpe":
+            assert self.tok is not None
+            return torch.tensor(self.tok.codifica(text), dtype=torch.long)
         idx = {c: i for i, c in enumerate(self.vocabular)}
         nec = idx[NECUNOSCUT]
         return torch.tensor([idx.get(c, nec) for c in text], dtype=torch.long)
+
+    def _marime_vocabular(self) -> int:
+        if self.tokenizer == "bpe":
+            assert self.tok is not None
+            return self.tok.marime
+        return len(self.vocabular)
 
     def _construieste(self) -> None:
         torch.manual_seed(self.samanta)
         categorii = [len(h) + 1 for h in self.harta] if self.foloseste_memorie else None
         self.retea = _GPT(
-            len(self.vocabular), **self.setari, categorii_memorie=categorii, n_emb_memorie=self.n_emb_memorie
+            self._marime_vocabular(), **self.setari, categorii_memorie=categorii, n_emb_memorie=self.n_emb_memorie
         ).to(self.dispozitiv)
 
     def _autocast(self):
@@ -220,20 +260,27 @@ class ModelGPT:
     # --- contractul ---------------------------------------------------------
 
     def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
-        inceput_pregatire = time.perf_counter()
         text = date.text_antrenare()
-        self.vocabular = sorted(set(text)) + [NECUNOSCUT]
+        simboluri = None
+        if self.tokenizer == "bpe":
+            self.tok = TokenizerBPE.incarca(self.cale_tokenizer)
+            simboluri = self.tok.codifica(text)
+        else:
+            self.vocabular = sorted(set(text)) + [NECUNOSCUT]
         memorie_t = None
         pregatire = 0.0
         if self.foloseste_memorie:
             # Pregătirea memoriei intră în bugetul de timp: comparația cu/fără memorie e cinstită.
-            coduri = self._memoria().caracteristici(text)
+            inceput_pregatire = time.perf_counter()
+            coduri = self._coduri_memorie(text, simboluri)
             self._construieste_harta(coduri)
             memorie_t = self._categorii(coduri).to(self.dispozitiv)
             pregatire = time.perf_counter() - inceput_pregatire
         self._construieste()
         assert self.retea is not None
-        date_t = self._codifica(text).to(self.dispozitiv)
+        date_t = (torch.tensor(simboluri, dtype=torch.long) if simboluri is not None else self._codifica(text)).to(
+            self.dispozitiv
+        )
         ctx = self.setari["context"]
         if len(date_t) <= ctx + 1:
             raise ValueError("textul de antrenare e mai scurt decât contextul")
@@ -268,6 +315,9 @@ class ModelGPT:
         }
         if self.pasi_max:
             statistici["pasi_max"] = self.pasi_max
+        if self.tokenizer == "bpe":
+            statistici["tokenizer"] = "bpe"
+            statistici["simboluri_antrenare"] = len(date_t)
         if self.retea.memorie is not None:
             statistici["parametri_memorie"] = sum(p.numel() for p in self.retea.memorie.parameters()) + (
                 self.retea.proiectie_memorie.weight.numel()
@@ -284,13 +334,18 @@ class ModelGPT:
         if not text:
             return 0.0
         self.retea.eval()
-        idx = self._codifica(text).to(self.dispozitiv)
-        memorie = self._categorii(self._memoria().caracteristici(text)).to(self.dispozitiv) if self.foloseste_memorie else None
+        simboluri = self.tok.codifica(text) if self.tokenizer == "bpe" and self.tok is not None else None
+        idx = (torch.tensor(simboluri, dtype=torch.long) if simboluri is not None else self._codifica(text)).to(
+            self.dispozitiv
+        )
+        memorie = (
+            self._categorii(self._coduri_memorie(text, simboluri)).to(self.dispozitiv) if self.foloseste_memorie else None
+        )
         ctx = self.setari["context"]
         nats = 0.0
-        # primul caracter nu are context: îl socotim cu probabilitate uniformă
-        biti_primul = math.log2(len(self.vocabular))
-        # bucăți de ctx+1 caractere (ultima poate fi mai scurtă), câte 64 deodată
+        # primul simbol nu are context: îl socotim cu probabilitate uniformă
+        biti_primul = math.log2(self._marime_vocabular())
+        # bucăți de ctx+1 simboluri (ultima poate fi mai scurtă), câte 64 deodată
         starturi = range(0, len(idx) - 1, ctx)
         intregi = [s for s in starturi if s + ctx + 1 <= len(idx)]
         rest = [s for s in starturi if s + ctx + 1 > len(idx)]
@@ -311,6 +366,8 @@ class ModelGPT:
             raise RuntimeError("modelul nu a fost antrenat sau încărcat")
         self.retea.eval()
         generator = torch.Generator(device="cpu").manual_seed(self.samanta)
+        if self.tokenizer == "bpe":
+            return self._genereaza_simboluri(inceput, lungime, generator)
         text = inceput or " "
         idx = self._codifica(text).unsqueeze(0).to(self.dispozitiv)
         nec = self.vocabular.index(NECUNOSCUT)
@@ -330,6 +387,27 @@ class ModelGPT:
             idx = torch.cat([idx, urm.to(self.dispozitiv)], dim=1)
         return "".join(rezultat)
 
+    def _genereaza_simboluri(self, inceput: str, lungime: int, generator: torch.Generator) -> str:
+        """Pe bucăți de cuvinte: generează simboluri până are cel puțin `lungime` litere, apoi taie exact."""
+        assert self.retea is not None and self.tok is not None
+        simboluri = self.tok.codifica(inceput or " ")
+        noi: list[int] = []
+        continuare = ""
+        ctx = self.setari["context"]
+        for _ in range(8 * lungime + 16):  # fiecare simbol adaugă cel puțin un octet; limită de siguranță
+            if len(continuare) >= lungime:
+                break
+            toate = simboluri + noi
+            idx = torch.tensor([toate[-ctx:]], dtype=torch.long, device=self.dispozitiv)
+            m = None
+            if self.foloseste_memorie:  # memoria vede tot ce s-a scris până acum, nimic din viitor
+                m = self._categorii(self._coduri_memorie("", toate))[-ctx:].unsqueeze(0).to(self.dispozitiv)
+            logits = self.retea(idx, m)[:, -1, :].float()
+            prob = F.softmax(logits, dim=-1).cpu()
+            noi.append(int(torch.multinomial(prob, 1, generator=generator).item()))
+            continuare = self.tok.decodeaza(noi)
+        return (continuare + " " * lungime)[:lungime]
+
     def salveaza(self, cale: str) -> str:
         if self.retea is None:
             raise RuntimeError("nu am ce salva: modelul nu e antrenat")
@@ -342,6 +420,8 @@ class ModelGPT:
                 "n_emb": self.n_emb_memorie,
                 "harta": [[[list(cod), nr] for cod, nr in nivel.items()] for nivel in self.harta],
             }
+        if self.tokenizer == "bpe" and self.tok is not None:  # tokenizerul intră în model: se încarcă singur
+            stare["tokenizer"] = {"tip": "bpe", "bpe": self.tok.ca_dictionar()}
         torch.save(stare, fisier)
         return str(fisier)
 
@@ -352,6 +432,9 @@ class ModelGPT:
         salvat = torch.load(fisier, map_location=self.dispozitiv, weights_only=True)
         self.setari = salvat["setari"]
         self.vocabular = salvat["vocabular"]
+        tokenizer = salvat.get("tokenizer")  # modelele salvate înainte de Etapa M2 sunt pe litere
+        self.tokenizer = "bpe" if tokenizer else "litere"
+        self.tok = TokenizerBPE.din_dictionar(tokenizer["bpe"]) if tokenizer else None
         memorie = salvat.get("memorie")  # modelele salvate înainte de Etapa M1 nu au memorie
         self.foloseste_memorie = memorie is not None
         self.harta = []

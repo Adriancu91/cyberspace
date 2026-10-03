@@ -25,6 +25,10 @@ MODULE = [
         "model", "module.model_gpt:ModelGPT", GPT_MIC,
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
+    pytest.param(
+        "model", "module.model_gpt:ModelGPT", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
     ("date", "module.date_mostra:DateMostra", {"propozitii": 300}),
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
@@ -51,6 +55,12 @@ def _setari_reale(setari, tmp_path):
         fisier = tmp_path / "text.txt"
         fisier.write_text("To be, or not to be, that is the question.\n" * 100, encoding="utf-8")
         setari["cale"] = str(fisier)
+    if setari.get("cale_tokenizer") == "__tokenizer_mic__":
+        from module.date_mostra import DateMostra
+        from module.tokenizer_bpe import antreneaza_bpe
+
+        antreneaza_bpe(DateMostra(propozitii=600).text_antrenare(), 320).salveaza(tmp_path / "bpe_mic.json")
+        setari["cale_tokenizer"] = str(tmp_path / "bpe_mic.json")
     if setari.get("director") == "__tinystories_mic__":
         from teste.tinystories_mic import scrie_surse
 
