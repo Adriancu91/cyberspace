@@ -13,6 +13,10 @@ până la ea. Niciodată cuvântul în curs de scriere: i-ar dezvălui literele 
 adică ar trișa la examen. Testul test_memoria_nu_dezvaluie_viitorul verifică asta.
 
 Biblioteca se construiește o singură dată: python unelte/construieste_biblioteca.py
+
+Setarea fara_cuvinte_de_legatura (implicit oprită): cuvintele de legătură (the, a, it, in, can...)
+sunt tratate ca negăsite („umplutură”), chiar dacă WordNet le are cu alt sens (a = vitamina A,
+it = tehnologia informației, can = cutie de conserve, may = luna mai).
 """
 
 from __future__ import annotations
@@ -39,6 +43,24 @@ TERMINATII = (
 )
 
 
+# Cuvintele de legătură ale englezei (clase închise): articole și determinanți, pronume, prepoziții,
+# conjuncții, verbe auxiliare și modale, negația, „there” existențial. Nu cuprinde adverbele cu sens
+# (very, then, now) și nici cuvintele cu două roluri dese (like = a plăcea, one = unu).
+CUVINTE_DE_LEGATURA = frozenset("""
+a an the this that these those some any each every no all both either neither another such
+i me my mine myself you your yours yourself yourselves he him his himself she her hers herself
+it its itself we us our ours ourselves they them their theirs themselves
+who whom whose which what whatever whoever how why where
+someone somebody something anyone anybody anything everyone everybody everything nobody nothing
+about above across after against along among around at before behind below beneath beside besides
+between beyond by down during except for from in inside into near of off on onto out outside over
+past since through throughout till to toward towards under underneath until up upon with within without
+and or but nor so yet because if when while although though than as unless whether
+be am is are was were been being have has had having do does did doing
+will would shall should can could may might must not there
+""".split())
+
+
 def _e_litera(c: str) -> bool:
     return c.isascii() and c.isalpha()
 
@@ -52,15 +74,18 @@ class MemorieIerarhica:
     MANIFEST = {
         "nume": "memorie_ierarhica",
         "port": "memorie",
-        "versiune": "0.1.2",
+        "versiune": "0.2.0",
         "versiune_contract": 1,
         "resurse": {"ram_mb": 300},
         "permisiuni": ["citire_fisier"],
     }
 
-    def __init__(self, cale: str = "date/biblioteca.json.gz", nivele: int = 12) -> None:
+    def __init__(
+        self, cale: str = "date/biblioteca.json.gz", nivele: int = 12, fara_cuvinte_de_legatura: bool = False
+    ) -> None:
         if not 1 <= nivele <= 64:
             raise ValueError("nivele trebuie să fie între 1 și 64")
+        self.fara_cuvinte_de_legatura = bool(fara_cuvinte_de_legatura)
         fisier = Path(cale)
         if not fisier.exists():
             raise ValueError(
@@ -127,15 +152,22 @@ class MemorieIerarhica:
         self._folosiri[cheie] += 1
         cod = self._plasa.get(cheie)
         if cod is None:  # drum nou: îl căutăm în bibliotecă și îl prindem în plasă
-            sensuri = self._sensuri(cheie)
+            if self.este_cuvant_de_legatura(cheie):
+                sensuri = []  # umplutură: the, a, it's, can...
+            else:
+                sensuri = self._sensuri(cheie)
             cod = self._completeaza(self._cod[sensuri[0]] if sensuri else [NECUNOSCUT])
             self._plasa[cheie] = cod
         if cod[0] != NECUNOSCUT:
             self._gasite += 1
         return cod
 
+    def este_cuvant_de_legatura(self, cuvant: str) -> bool:
+        """Doar cu setarea fara_cuvinte_de_legatura: the, a, it, it's, i'm... (partea dinaintea apostrofului)."""
+        return self.fara_cuvinte_de_legatura and cuvant.lower().strip("'").split("'")[0] in CUVINTE_DE_LEGATURA
+
     @staticmethod
-    def _terminari(text: str) -> Iterator[tuple[int, str]]:
+    def cuvinte_terminate(text: str) -> Iterator[tuple[int, str]]:
         """Cuvintele terminate, în ordine: (poziția semnului care încheie cuvântul, cuvântul).
 
         Un cuvânt = litere englezești, cu apostrof în interior (know'st). Se termină la primul
@@ -161,7 +193,7 @@ class MemorieIerarhica:
         curent = (GOL,) * self.nivele
         rezultat: list[tuple[int, ...]] = []
         ultima = 0
-        for pozitie, cuvant in self._terminari(text):
+        for pozitie, cuvant in self.cuvinte_terminate(text):
             rezultat.extend([curent] * (pozitie - ultima))  # până aici, codul cuvântului de dinainte
             curent = self.cod(cuvant)
             ultima = pozitie
@@ -170,7 +202,7 @@ class MemorieIerarhica:
 
     def coduri_cuvinte(self, text: str) -> list[tuple[int, ...]]:
         """Codul fiecărui cuvânt terminat, în ordine (ex. pentru a vedea ce fel de cuvinte stau alături)."""
-        return [self.cod(cuvant) for _, cuvant in self._terminari(text)]
+        return [self.cod(cuvant) for _, cuvant in self.cuvinte_terminate(text)]
 
     def cauta(self, cuvant: str) -> list[dict[str, Any]]:
         """Toate sensurile unui cuvânt, pentru oameni: cod, parte de vorbire, raft, drum, relații."""

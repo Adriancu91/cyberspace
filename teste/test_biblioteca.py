@@ -30,7 +30,7 @@ def _drum(bib, i):
 
 def test_fiecare_sens_are_parinte_cod_si_nume(bib):
     n = len(bib["cod"])
-    assert n == 18
+    assert n == 19
     assert len(bib["nume"]) == len(bib["parinte"]) == n
     assert bib["versiune"] == 1 and "WordNet de test" in bib["sursa"]
     for i in range(n):
@@ -82,5 +82,5 @@ def test_scriptul_scrie_biblioteca(tmp_path, capsys):
     destinatie = tmp_path / "bib.json.gz"
     assert main(["--sursa", str(wordnet_mic(tmp_path)), "--destinatie", str(destinatie)]) == 0
     with gzip.open(destinatie, "rt", encoding="utf-8") as f:
-        assert len(json.load(f)["cod"]) == 18
-    assert "18 sensuri" in capsys.readouterr().out
+        assert len(json.load(f)["cod"]) == 19
+    assert "19 sensuri" in capsys.readouterr().out

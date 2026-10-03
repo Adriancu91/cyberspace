@@ -5,6 +5,7 @@ Ierarhia:  entity > organism > animal > {horse, cat}
            entity > artifact > {sword, horse (calul de gimnastică)}
            entity > {hoof, herd, CAT, horse racing}
            run > gallop (verbe), horse (verb), good / bad (adjective opuse), o'clock (adverb)
+           entity > artifact > can (cutia de conserve: în text, „can” e de obicei verbul modal)
 """
 
 from __future__ import annotations
@@ -38,6 +39,7 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <LexicalEntry id="t-bad-a"><Lemma writtenForm="bad" partOfSpeech="a"/>
       <Sense id="t-bad-1" synset="t-14-a"><SenseRelation relType="antonym" target="t-good-1"/></Sense></LexicalEntry>
     <LexicalEntry id="t-oclock-r"><Lemma writtenForm="o'clock" partOfSpeech="r"/><Sense id="t-oclock-1" synset="t-18-r"/></LexicalEntry>
+    <LexicalEntry id="t-can-n"><Lemma writtenForm="can" partOfSpeech="n"/><Sense id="t-can-1" synset="t-19-n"/></LexicalEntry>
     <Synset id="t-01-n" members="t-entity-n" partOfSpeech="n" lexfile="noun.Tops"/>
     <Synset id="t-02-n" members="t-organism-n" partOfSpeech="n" lexfile="noun.Tops">
       <SynsetRelation relType="hypernym" target="t-01-n"/></Synset>
@@ -72,6 +74,8 @@ XML_MIC = """<?xml version="1.0" encoding="UTF-8"?>
     <Synset id="t-17-n" members="t-horse_racing-n" partOfSpeech="n" lexfile="noun.act">
       <SynsetRelation relType="instance_hypernym" target="t-01-n"/></Synset>
     <Synset id="t-18-r" members="t-oclock-r" partOfSpeech="r" lexfile="adv.all"/>
+    <Synset id="t-19-n" members="t-can-n" partOfSpeech="n" lexfile="noun.artifact">
+      <SynsetRelation relType="hypernym" target="t-08-n"/></Synset>
   </Lexicon>
 </LexicalResource>
 """
