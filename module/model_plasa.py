@@ -58,11 +58,14 @@ def nod_pentru_raft(raft: str) -> int:
 VERSIUNE_PLASA = 1
 TARIE_NASTERE = 0.1  # o legătură nouă începe cu tăria 0,1, „în probă”
 PRAG_CERERE = 0.05  # un nod „cere” de la altul când ponderea învățată către el trece de 0,05
+PRAG_ASOCIERE = 3.0  # ...și se naște legătura doar dacă cele două noduri apar alături de 3× mai des decât întâmplător
 PRAG_ACTIVA = 0.2  # o legătură iese din probă când trece de 0,2
 PRAG_DEFINITIVA = 0.9  # peste 0,9 devine definitivă: nu mai uită și nu mai e tăiată
-PRAG_TAIERE = 0.05  # sub 0,05 e tăiată
+PRAG_TAIERE = 0.05  # sub 0,05...
+EXPERIMENTE_SUB_PRAG = 2  # ...la atâtea experimente la rând, legătura e tăiată
 UITARE = 0.01  # la fiecare experiment, fiecare legătură (nedefinitivă) uită 1% din tărie
-PAS_INTARIRE = 0.2  # cât se poate întări sau slăbi o legătură într-un experiment
+PAS_INTARIRE = 0.2  # cât se poate întări o legătură într-un experiment cu câștig
+FACTOR_SLABIRE = 0.7  # la un câștig negativ, tăria se înmulțește cu cel mult 0,7 (nu e tăiată direct)
 SCALA_CASTIG = 0.01  # un câștig la examen de 0,01 (val_bpb) e un semnal întreg
 FOLOSIRE_PLINA = 0.1  # o pondere de 0,1 între două noduri = folosire deplină
 
@@ -74,10 +77,14 @@ def _intre(x: float, jos: float, sus: float) -> float:
 class Plasa:
     """Legăturile dintre noduri (tărie între 0 și 1), păstrate între experimente într-un fișier JSON.
 
-    Reguli: o legătură se naște când un nod cere de la altul (tărie 0,1, în probă); se întărește sau
-    slăbește după câștigul la examen, înmulțit cu cât a fost folosită (folosirea singură nu ajunge);
-    uită 1% la fiecare experiment; peste 0,9 devine definitivă; sub 0,05 e tăiată. Legăturile
-    fiecărui nod cu nodul central sunt fixe, deci nu stau aici.
+    Reguli:
+    - naștere (tărie 0,1, în probă): un nod cere de la altul (ponderea învățată ≥ 0,05) ȘI cuvintele
+      celor două noduri stau alături (unul după altul) de cel puțin 3× mai des decât întâmplător;
+    - întărire: câștig pozitiv la examen × cât a fost folosită legătura (folosirea singură nu ajunge);
+    - slăbire: un câștig negativ înmulțește tăria cu până la 0,7 (după cât a fost folosită), fără s-o taie;
+    - uitare 1% la fiecare experiment; peste 0,9 devine definitivă (nu mai uită, nu mai slăbește);
+    - tăiere: doar după 2 experimente la rând cu tăria sub 0,05.
+    Legăturile fiecărui nod cu nodul central sunt fixe, deci nu stau aici.
     """
 
     def __init__(self, noduri: list[str], legaturi: dict[tuple[str, str], dict[str, Any]] | None = None,
@@ -95,7 +102,9 @@ class Plasa:
         if date.get("versiune") != VERSIUNE_PLASA or date.get("noduri") != list(noduri):
             raise ValueError(f"Plasa din „{cale}” e pentru alte noduri ({date.get('noduri')}); folosește alt cale_plasa.")
         legaturi = {
-            (l["de_la"], l["la"]): {"tarie": l["tarie"], "stare": l["stare"], "nascuta_la": l.get("nascuta_la")}
+            (l["de_la"], l["la"]): {
+                "tarie": l["tarie"], "stare": l["stare"], "nascuta_la": l.get("nascuta_la"), "sub_prag": l.get("sub_prag", 0)
+            }
             for l in date["legaturi"]
         }
         return cls(noduri, legaturi, date.get("experimente", 0))
@@ -108,36 +117,59 @@ class Plasa:
             m[poz[a]][poz[b]] = leg["tarie"]
         return m
 
-    def actualizeaza(self, cereri: list[list[float]], folosire: list[list[float]], castig: float | None) -> dict[str, int]:
-        """Un experiment s-a încheiat: nașteri, întărire după câștigul la examen, uitare, definitive, tăieri."""
+    def actualizeaza(
+        self,
+        cereri: list[list[float]],
+        folosire: list[list[float]],
+        castig: float | None,
+        asociere: list[list[float]] | None = None,
+    ) -> dict[str, int]:
+        """Un experiment s-a încheiat: nașteri, întărire sau slăbire după câștigul la examen, uitare, tăieri.
+
+        asociere[a][b] = de câte ori mai des decât întâmplător e un cuvânt al nodului a urmat de unul al lui b
+        (măsurat pe textul de antrenare). Fără ea, nu se naște nicio legătură.
+        """
         numar = {"nascute": 0, "intarite": 0, "slabite": 0, "taiate": 0, "devenite_definitive": 0}
         self.experimente += 1
-        for a, de_la in enumerate(self.noduri):  # 1. nașteri: un nod a cerut de la altul cu care nu era legat
+        for a, de_la in enumerate(self.noduri):  # 1. nașteri: cerere + asociere, între noduri încă nelegate
             for b, la in enumerate(self.noduri):
-                if a != b and abs(cereri[a][b]) >= PRAG_CERERE and (de_la, la) not in self.legaturi:
-                    self.legaturi[(de_la, la)] = {"tarie": TARIE_NASTERE, "stare": "proba", "nascuta_la": self.experimente}
+                if (
+                    a != b
+                    and (de_la, la) not in self.legaturi
+                    and abs(cereri[a][b]) >= PRAG_CERERE
+                    and asociere is not None
+                    and asociere[a][b] >= PRAG_ASOCIERE
+                ):
+                    self.legaturi[(de_la, la)] = {
+                        "tarie": TARIE_NASTERE, "stare": "proba", "nascuta_la": self.experimente, "sub_prag": 0
+                    }
                     numar["nascute"] += 1
         poz = {nume: i for i, nume in enumerate(self.noduri)}
         semnal = 0.0 if castig is None else _intre(castig / SCALA_CASTIG, -1.0, 1.0)
         for (de_la, la), leg in list(self.legaturi.items()):
             if leg["stare"] == "definitiva":
                 continue
-            # 2. întărire: câștigul la examen × cât a fost folosită legătura (folosirea singură nu ajunge)
-            schimbare = PAS_INTARIRE * semnal * min(1.0, abs(folosire[poz[de_la]][poz[la]]) / FOLOSIRE_PLINA)
-            if schimbare > 0:
+            folosita = min(1.0, abs(folosire[poz[de_la]][poz[la]]) / FOLOSIRE_PLINA)
+            tarie = leg["tarie"]
+            if semnal > 0 and folosita > 0:  # 2. întărire: câștig pozitiv × folosire
+                tarie += PAS_INTARIRE * semnal * folosita
                 numar["intarite"] += 1
-            elif schimbare < 0:
+            elif semnal < 0 and folosita > 0:  # 3. slăbire: înmulțită cu până la 0,7, nu tăiată direct
+                tarie *= 1 - (1 - FACTOR_SLABIRE) * (-semnal) * folosita
                 numar["slabite"] += 1
-            # 3. uitare 1%, apoi starea: definitivă peste 0,9, tăiată sub 0,05, activă peste 0,2
-            leg["tarie"] = round(_intre(leg["tarie"] + schimbare, 0.0, 1.0) * (1 - UITARE), 6)
-            if leg["tarie"] > PRAG_DEFINITIVA:
+            leg["tarie"] = tarie = round(_intre(tarie, 0.0, 1.0) * (1 - UITARE), 6)  # 4. uitare 1%
+            if tarie > PRAG_DEFINITIVA:  # 5. starea
                 leg["stare"] = "definitiva"
                 numar["devenite_definitive"] += 1
-            elif leg["tarie"] < PRAG_TAIERE:
-                del self.legaturi[(de_la, la)]
-                numar["taiate"] += 1
-            elif leg["tarie"] >= PRAG_ACTIVA:
-                leg["stare"] = "activa"
+            elif tarie < PRAG_TAIERE:
+                leg["sub_prag"] = leg.get("sub_prag", 0) + 1
+                if leg["sub_prag"] >= EXPERIMENTE_SUB_PRAG:  # tăiată doar după mai multe experimente la rând
+                    del self.legaturi[(de_la, la)]
+                    numar["taiate"] += 1
+            else:
+                leg["sub_prag"] = 0
+                if tarie >= PRAG_ACTIVA:
+                    leg["stare"] = "activa"
         return numar
 
     def stare(self) -> dict[str, Any]:
@@ -163,7 +195,10 @@ class Plasa:
             "legaturi_cu_centrul": "fixe (nu se schimbă, nu stau aici)",
             "experimente": self.experimente,
             "legaturi": [
-                {"de_la": a, "la": b, "tarie": leg["tarie"], "stare": leg["stare"], "nascuta_la": leg.get("nascuta_la")}
+                {
+                    "de_la": a, "la": b, "tarie": leg["tarie"], "stare": leg["stare"],
+                    "nascuta_la": leg.get("nascuta_la"), "sub_prag": leg.get("sub_prag", 0),
+                }
                 for (a, b), leg in self.legaturi.items()
             ],
         }
@@ -264,6 +299,7 @@ class ModelPlasa(ModelGPT):
         self._legaturi_start: list[list[float]] | None = None  # plasa cu care s-a antrenat modelul
         self._cereri: list[list[float]] | None = None  # cât a cerut fiecare nod de la celelalte (la antrenare)
         self._folosire: list[list[float]] | None = None
+        self._asociere: list[list[float]] | None = None  # cât de des stau alături cuvintele nodurilor (antrenare)
         self._nod_pentru_cod: dict[tuple[int, ...], int] = {}
         self.simboluri_pe_nod = [0] * len(GRUPURI)
 
@@ -286,6 +322,24 @@ class ModelPlasa(ModelGPT):
 
     def _are_pozitii(self) -> bool:
         return True  # fiecare simbol trebuie să știe la ce nod merge
+
+    def _masoara_asocierea(self, text: str) -> list[list[float]] | None:
+        """asociere[a][b] = de câte ori mai des decât întâmplător un cuvânt al nodului a e urmat de unul al lui b.
+
+        1 = întâmplător; 3 = de trei ori mai des. Se măsoară doar pe textul de antrenare.
+        """
+        coduri_cuvinte = getattr(self.sursa_memorie, "coduri_cuvinte", None)
+        if coduri_cuvinte is None:
+            return None
+        noduri = [self._nod(cod) for cod in coduri_cuvinte(text)]
+        if len(noduri) < 2:
+            return None
+        n = len(GRUPURI)
+        cuvinte = torch.bincount(torch.tensor(noduri), minlength=n).double() / len(noduri)
+        perechi = torch.bincount(torch.tensor(noduri[:-1]) * n + torch.tensor(noduri[1:]), minlength=n * n).double()
+        perechi = perechi.view(n, n) / (len(noduri) - 1)
+        asteptat = cuvinte.unsqueeze(1) * cuvinte.unsqueeze(0)
+        return torch.where(asteptat > 0, perechi / asteptat.clamp_min(1e-12), torch.zeros_like(perechi)).tolist()
 
     def _pozitii(self, text: str, simboluri: list[int] | None, la_antrenare: bool = False) -> torch.Tensor:
         """Pentru fiecare simbol: [categoriile din memorie (dacă memorie=true)..., nodul la care merge]."""
@@ -319,6 +373,7 @@ class ModelPlasa(ModelGPT):
         if self.cu_plasa:  # plasa vine din experimentele de dinainte (sau e nouă, fără legături)
             self.plasa = Plasa.incarca(self.cale_plasa, NUME_NODURI)
             self._legaturi_start = self.plasa.matrice()
+            self._asociere = self._masoara_asocierea(date.text_antrenare())
         statistici = super().antreneaza(date, buget_secunde)
         assert isinstance(self.retea, _GPTCuNoduri)
         total = sum(self.simboluri_pe_nod) or 1
@@ -346,6 +401,13 @@ class ModelPlasa(ModelGPT):
                     {"de_la": NUME_NODURI[a], "la": NUME_NODURI[b], "cerere": round(c, 4)}
                     for a, rand in enumerate(self._cereri) for b, c in enumerate(rand) if abs(c) >= PRAG_CERERE
                 ],
+                "asociere": None if self._asociere is None else {
+                    NUME_NODURI[a]: {NUME_NODURI[b]: round(v, 3) for b, v in enumerate(rand) if a != b}
+                    for a, rand in enumerate(self._asociere)
+                },
+                "perechi_peste_prag_asociere": 0 if self._asociere is None else sum(
+                    1 for a, rand in enumerate(self._asociere) for b, v in enumerate(rand) if a != b and v >= PRAG_ASOCIERE
+                ),
             }
         return statistici
 
@@ -353,7 +415,7 @@ class ModelPlasa(ModelGPT):
         """După examen: plasa învață din câștig (un număr), niciodată din textul de examen, și se păstrează."""
         if not self.cu_plasa or self.plasa is None or self._cereri is None or self._folosire is None:
             return None
-        schimbari = self.plasa.actualizeaza(self._cereri, self._folosire, rezultat.get("castig"))
+        schimbari = self.plasa.actualizeaza(self._cereri, self._folosire, rezultat.get("castig"), self._asociere)
         self.plasa.salveaza(self.cale_plasa)
         return {"plasa": {**self.plasa.stare(), **schimbari, "castig_primit": rezultat.get("castig")}}
 

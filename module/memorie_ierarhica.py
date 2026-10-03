@@ -21,7 +21,7 @@ import gzip
 import json
 from collections import Counter
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 GOL = 0  # nivel gol: încă niciun cuvânt terminat, sau codul cuvântului s-a terminat
 NECUNOSCUT = 5  # pe primul nivel (partea de vorbire are 1-4): cuvânt care nu e în bibliotecă
@@ -52,7 +52,7 @@ class MemorieIerarhica:
     MANIFEST = {
         "nume": "memorie_ierarhica",
         "port": "memorie",
-        "versiune": "0.1.1",
+        "versiune": "0.1.2",
         "versiune_contract": 1,
         "resurse": {"ram_mb": 300},
         "permisiuni": ["citire_fisier"],
@@ -134,16 +134,15 @@ class MemorieIerarhica:
             self._gasite += 1
         return cod
 
-    def caracteristici(self, text: str) -> list[tuple[int, ...]]:
-        """Pentru fiecare literă: codul ultimului cuvânt TERMINAT până la ea, inclusiv.
+    @staticmethod
+    def _terminari(text: str) -> Iterator[tuple[int, str]]:
+        """Cuvintele terminate, în ordine: (poziția semnului care încheie cuvântul, cuvântul).
 
         Un cuvânt = litere englezești, cu apostrof în interior (know'st). Se termină la primul
-        semn care nu-l poate continua și abia atunci îi căutăm codul. Despre un apostrof după
-        litere nu știm încă dacă e în interior (know'st) sau la final (horses'), așa că decidem
-        la semnul următor; fiecare decizie folosește doar ce s-a scris deja.
+        semn care nu-l poate continua. Despre un apostrof după litere nu știm încă dacă e în
+        interior (know'st) sau la final (horses'), așa că decidem la semnul următor; fiecare
+        decizie folosește doar ce s-a scris deja. Cuvântul în curs, la finalul textului, nu intră.
         """
-        curent = (GOL,) * self.nivele
-        rezultat: list[tuple[int, ...]] = []
         inceput = -1  # unde a început cuvântul în curs (-1 = niciunul)
         apostrof = False  # semnul de dinainte a fost un apostrof după litere
         for i, c in enumerate(text):
@@ -154,10 +153,24 @@ class MemorieIerarhica:
             elif c == "'" and inceput >= 0 and not apostrof:
                 apostrof = True
             elif inceput >= 0:
-                curent = self.cod(text[inceput:i])
+                yield i, text[inceput:i]
                 inceput, apostrof = -1, False
-            rezultat.append(curent)
+
+    def caracteristici(self, text: str) -> list[tuple[int, ...]]:
+        """Pentru fiecare literă: codul ultimului cuvânt TERMINAT până la ea, inclusiv."""
+        curent = (GOL,) * self.nivele
+        rezultat: list[tuple[int, ...]] = []
+        ultima = 0
+        for pozitie, cuvant in self._terminari(text):
+            rezultat.extend([curent] * (pozitie - ultima))  # până aici, codul cuvântului de dinainte
+            curent = self.cod(cuvant)
+            ultima = pozitie
+        rezultat.extend([curent] * (len(text) - ultima))
         return rezultat
+
+    def coduri_cuvinte(self, text: str) -> list[tuple[int, ...]]:
+        """Codul fiecărui cuvânt terminat, în ordine (ex. pentru a vedea ce fel de cuvinte stau alături)."""
+        return [self.cod(cuvant) for _, cuvant in self._terminari(text)]
 
     def cauta(self, cuvant: str) -> list[dict[str, Any]]:
         """Toate sensurile unui cuvânt, pentru oameni: cod, parte de vorbire, raft, drum, relații."""

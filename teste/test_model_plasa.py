@@ -120,16 +120,25 @@ FOLOSITA = _matrice({LEGATURA: 0.1})  # legătura a fost folosită din plin
 
 
 def _plasa_cu(tarie: float, stare: str = "activa") -> Plasa:
-    return Plasa(NUME_NODURI, {LEGATURA: {"tarie": tarie, "stare": stare, "nascuta_la": 1}})
+    return Plasa(NUME_NODURI, {LEGATURA: {"tarie": tarie, "stare": stare, "nascuta_la": 1, "sub_prag": 0}})
 
 
-def test_o_cerere_naste_o_legatura_in_proba():
+ASOCIATE = _matrice({LEGATURA: 3.2, ("actiuni", "fiinte"): 3.2, ("fiinte", "insusiri"): 2.9})
+
+
+def test_se_naste_doar_cu_cerere_si_asociere_de_3_ori():
     plasa = Plasa(NUME_NODURI)
-    cereri = _matrice({LEGATURA: 0.06, ("actiuni", "fiinte"): 0.04})
-    assert plasa.actualizeaza(cereri, NIMIC, castig=None)["nascute"] == 1
+    cereri = _matrice({LEGATURA: 0.06, ("actiuni", "fiinte"): 0.04, ("fiinte", "insusiri"): 0.3})
+    assert plasa.actualizeaza(cereri, NIMIC, castig=None, asociere=ASOCIATE)["nascute"] == 1
     assert plasa.legaturi[LEGATURA]["stare"] == "proba"
     assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(TARIE_NASTERE * 0.99)
-    assert ("actiuni", "fiinte") not in plasa.legaturi  # 0,04 e sub pragul de cerere
+    assert ("actiuni", "fiinte") not in plasa.legaturi  # asociere destulă, dar cererea (0,04) e sub prag
+    assert ("fiinte", "insusiri") not in plasa.legaturi  # cerere mare, dar asocierea (2,9) e sub 3
+
+
+def test_fara_asociere_masurata_nu_se_naste_nimic():
+    plasa = Plasa(NUME_NODURI)
+    assert plasa.actualizeaza(_matrice({LEGATURA: 0.5}), NIMIC, castig=None, asociere=None)["nascute"] == 0
 
 
 def test_uitarea_e_1_la_suta_pe_experiment():
@@ -150,10 +159,13 @@ def test_intarirea_cere_si_castig_la_examen_si_folosire():
     assert doar_castig.legaturi[LEGATURA]["tarie"] == pytest.approx(0.495)
 
 
-def test_un_castig_negativ_slabeste():
+def test_un_castig_negativ_slabeste_inmultind_cu_0_7():
     plasa = _plasa_cu(0.5)
     assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["slabite"] == 1
-    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(0.3 * 0.99)
+    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(0.5 * 0.7 * 0.99)
+    putin = _plasa_cu(0.5)
+    putin.actualizeaza(NIMIC, FOLOSITA, castig=-0.005)  # câștig negativ mic → slăbire mică
+    assert putin.legaturi[LEGATURA]["tarie"] == pytest.approx(0.5 * (1 - 0.3 * 0.5) * 0.99)
 
 
 def test_peste_0_9_devine_definitiva_si_nu_mai_uita():
@@ -165,10 +177,27 @@ def test_peste_0_9_devine_definitiva_si_nu_mai_uita():
     assert plasa.legaturi[LEGATURA]["tarie"] == tarie  # definitivă: nu mai uită și nu mai slăbește
 
 
-def test_sub_0_05_e_taiata():
+def test_un_castig_negativ_nu_taie_direct_legatura_noua():
     plasa = _plasa_cu(TARIE_NASTERE, "proba")
-    assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["taiate"] == 1
-    assert not plasa.legaturi
+    assert plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["taiate"] == 0
+    assert plasa.legaturi[LEGATURA]["tarie"] == pytest.approx(0.1 * 0.7 * 0.99)  # 0,069: rămâne pentru runda 2
+
+
+def test_taiata_doar_dupa_doua_experimente_la_rand_sub_0_05():
+    plasa = _plasa_cu(TARIE_NASTERE, "proba")
+    taiate = [plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)["taiate"] for _ in range(3)]
+    # 0,1 → 0,069 (peste prag) → 0,048 (sub prag, 1) → 0,033 (sub prag, 2 la rând: tăiată)
+    assert taiate == [0, 0, 1] and not plasa.legaturi
+
+
+def test_revenirea_peste_prag_reia_numaratoarea():
+    plasa = _plasa_cu(0.049)
+    plasa.actualizeaza(NIMIC, NIMIC, castig=None)  # sub prag: 1
+    assert plasa.legaturi[LEGATURA]["sub_prag"] == 1
+    plasa.actualizeaza(NIMIC, FOLOSITA, castig=0.02)  # întărită peste prag: numărătoarea se reia
+    assert plasa.legaturi[LEGATURA]["sub_prag"] == 0
+    plasa.actualizeaza(NIMIC, FOLOSITA, castig=-0.02)
+    assert LEGATURA in plasa.legaturi
 
 
 def test_iese_din_proba_cand_trece_de_0_2():
@@ -236,3 +265,19 @@ def test_cu_plasa_se_salveaza_si_se_reincarca(tmp_path, memorie, tokenizer_mic):
     copie.conecteaza_memorie(memorie)
     copie.incarca(model.salveaza(str(tmp_path / "model")))
     assert copie.cu_plasa and copie.biti_pentru("the cat sat.") == pytest.approx(biti, rel=1e-5)
+
+
+def test_asocierea_numara_cuvintele_vecine(memorie, tokenizer_mic):
+    """În „good cat ran sword”, repetat, fiecare fel de cuvânt e urmat mereu de același fel: de 4× mai des ca întâmplător."""
+    model = ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic)
+    model.conecteaza_memorie(memorie)
+    asociere = model._masoara_asocierea("good cat ran sword " * 50)
+    insusiri, fiinte, actiuni, locuri = (NUME_NODURI.index(n) for n in ("insusiri", "fiinte", "actiuni", "locuri_obiecte"))
+    for a, b in ((insusiri, fiinte), (fiinte, actiuni), (actiuni, locuri), (locuri, insusiri)):
+        assert asociere[a][b] == pytest.approx(4.0, rel=0.02)
+    assert asociere[fiinte][insusiri] == 0.0  # în ordinea inversă nu apar niciodată
+    assert model._masoara_asocierea("x") is None  # niciun cuvânt terminat: nimic de măsurat
+
+
+def test_fara_memorie_nu_se_masoara_asocierea(tokenizer_mic):
+    assert ModelPlasa(**MIC, cale_tokenizer=tokenizer_mic)._masoara_asocierea("good cat ran sword " * 5) is None

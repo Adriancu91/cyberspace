@@ -119,3 +119,9 @@ def test_biblioteca_veche_da_mesaj_clar(tmp_path):
 def test_nivele_invalide(tmp_path):
     with pytest.raises(ValueError, match="nivele"):
         MemorieIerarhica(cale=biblioteca_mica(tmp_path), nivele=0)
+
+
+def test_coduri_cuvinte_da_cuvintele_terminate_in_ordine(memorie):
+    coduri = memorie.coduri_cuvinte("the horse ran, the cat's tail; gallop'st no")
+    asteptat = [memorie.cod(c) for c in ("the", "horse", "ran", "the", "cat", "tail", "gallop")]
+    assert coduri == asteptat  # „no” e încă în curs: nu intră
