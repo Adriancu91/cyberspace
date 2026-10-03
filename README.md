@@ -7,7 +7,9 @@ dă examen, păstrează doar ce e mai bun și notează totul în jurnal.
 Stadiu: **Etapa N1 (scheletul)** e gata și testată, plus primele module reale
 (modelul n-gram și GPT-ul nostru, care a rulat o noapte pe placa video: cel mai bun scor 2,1873).
 **Etapa M1 (memoria ierarhică)** e construită și testată. Comparațiile arată că memoria, așa cum e acum, nu ajută:
-cu 8 sau 4 niveluri strică, iar cu 2 niveluri nu schimbă nimic măsurabil. 94 de teste trec.
+cu 8 sau 4 niveluri strică, iar cu 2 niveluri nu schimbă nimic măsurabil.
+**Etapa M2, primul pas** e gata: TinyStories, tokenizerul nostru pe bucăți de cuvinte (4.096 simboluri) și GPT-ul
+pe litere sau pe bucăți. Pe bucăți de cuvinte, scorul pe TinyStories e 0,8822 (pe litere: 1,3174). 129 de teste trec.
 
 ---
 
@@ -162,7 +164,7 @@ Modulele de acum, pe cele 10 porturi:
 | Port | Modul | Ce face |
 | --- | --- | --- |
 | model | `model_ngram` / `model_gpt` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) |
-| date | `date_mostra` / `date_fisier` | propoziții generate / un fișier text (Shakespeare) |
+| date | `date_mostra` / `date_fisier` / `date_tinystories` | propoziții generate / un fișier text (Shakespeare) / povești TinyStories (~20 MB) |
 | examen | `examen_bpb` | val_bpb pe text nevăzut la antrenare |
 | cercetător | `cercetator_aleator` | schimbă câte o setare, pornind de la cea mai bună rețetă |
 | rulare | `rulare_locala` | laptopul: limită de timp, măsoară memoria video |
@@ -230,6 +232,45 @@ examen e mai slabă: arată a „tocire”, pentru că nivelurile adânci sunt a
 (partea de vorbire și raftul) nu strică, dar nici nu ajută măsurabil. Pentru acest GPT mic, pe litere, memoria din
 WordNet în forma de acum nu aduce câștig. Idei rămase: cuvintele de legătură în bibliotecă (acum lipsesc 31% din
 cuvinte), un model mai mare sau o antrenare mai lungă.
+
+## Etapa M2: TinyStories și bucăți de cuvinte (primul pas, fără plasa de noduri)
+
+- **Datele** (`module/date_tinystories.py`): povești scurte în engleză din `roneneldan/TinyStories` (Hugging Face,
+  licență CDLA-Sharing-1.0). Se descarcă doar începutul fișierelor oficiale: 21.896 de povești de antrenare (18 MB)
+  și 2.466 de validare (2 MB), din fișierul oficial de validare. Poveștile rămân întregi, iar validarea nu conține
+  povești din antrenare.
+- **Tokenizerul** (`module/tokenizer_bpe.py`): bucăți de cuvinte (BPE pe octeți), scris de noi și antrenat doar pe
+  textul de antrenare: 4.096 de simboluri, aproximativ 4 octeți pe simbol („ the”, „ and”, „ uncomfortable”...).
+  Orice text se poate scrie cu el, fără simbol „necunoscut”.
+- **GPT-ul** are setarea `tokenizer = "litere"` sau `"bpe"`. Examenul rămâne în biți pe octet, deci cele două se
+  compară direct. Cu memorie, fiecare simbol primește codul ultimului cuvânt terminat până la ultima lui literă
+  completă (nimic din viitor; testul `test_memoria_pe_simboluri_nu_vede_viitorul`).
+
+```
+python -m module.date_tinystories                                       # datele (o singură dată, ~15 s)
+python unelte/antreneaza_tokenizer.py                                   # tokenizerul (o singură dată, câteva secunde)
+python -m kronos ruleaza --config config/laptop_tinystories.toml --experimente 1   # bucăți de cuvinte, apoi litere
+python -m kronos scrie --config config/laptop_tinystories.toml --inceput "Once upon a time"
+```
+
+### Primul test (3 octombrie 2026)
+
+Aceeași rețetă (2 straturi, lot 16, rata 0.0003), 5 minute de antrenare pe placa video, fără memorie:
+
+| Tokenizer | val_bpb (mai mic = mai bine) | Pași | Parametri | Memorie video |
+| --- | --- | --- | --- | --- |
+| **bucăți de cuvinte** (4.096) | **0,8822** | 43.916 | 937.472 | 204 MB |
+| litere | 1,3174 | 43.294 | 425.216 | 191 MB |
+
+Pe bucăți de cuvinte, scorul e cu o treime mai bun. În același timp, ambele au apucat aproape același număr de
+pași (~44.000), dar fiecare pas al modelului pe bucăți vede de aproximativ 4 ori mai mult text (128 de simboluri ≈
+500 de litere); în schimb, are și de 2 ori mai mulți parametri (tabela de 4.096 de simboluri). Scorurile de pe TinyStories nu se compară cu cele de pe Shakespeare: textul e mult mai simplu.
+Început de poveste scris de modelul pe bucăți: *„Once upon a time, there was a big slide. Inside, there was a little
+swing and he was loving around with lots of fun. The sun was bright… Lily and the fairy had fun playing all day.”*
+
+**Acoperirea bibliotecii de sensuri pe TinyStories:** 71,5% din cuvinte sunt găsite (Shakespeare: 69%). Textul de
+antrenare are 3,5 milioane de cuvinte, dar doar 9.846 de cuvinte diferite. Lipsesc tot cuvintele de legătură
+(the, and, to, they, she, with, you), numele (Tim) și separatorul dintre povești.
 
 ## Toate comenzile
 
