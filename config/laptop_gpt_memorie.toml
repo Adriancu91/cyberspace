@@ -1,0 +1,63 @@
+# Shakespeare cu GPT-ul nostru + memoria ierarhică, pe placa video RTX 3060 (Etapa M1).
+# Întâi, o singură dată: python unelte/construieste_biblioteca.py
+# Comparația cinstită cu / fără memorie: python unelte/compara_memorie.py
+# Rețeta de pornire = câștigătoarea de azi-noapte (#32): 2 straturi, lot 16, rata 0.0003.
+
+[platforma]
+nume = "shakespeare_gpt_memorie"
+director_lucru = "lucru"
+buget_antrenare_secunde = 300
+experimente = 12               # ~12 experimente pe oră
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 900
+timp_test_secunde = 120
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt:ModelGPT"
+setari = { n_straturi = 2, n_capete = 4, n_emb = 128, context = 128, lot = 16, rata_invatare = 0.0003, memorie = true, adancime_memorie = 8, n_emb_memorie = 32 }
+
+[porturi.date]
+modul = "module.date_fisier:DateFisier"
+setari = { cale = "date/shakespeare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+adancime_memorie = [2, 4, 8, 12]
+n_emb_memorie = [16, 32, 64]
+n_straturi = [2, 4, 6, 8]
+n_emb = [128, 192, 256, 384]
+context = [64, 128, 256]
+lot = [16, 32, 64]
+rata_invatare = [0.0003, 0.0006, 0.001, 0.002]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.memorie_ierarhica:MemorieIerarhica"
+setari = { cale = "date/biblioteca.json.gz", nivele = 12 }
