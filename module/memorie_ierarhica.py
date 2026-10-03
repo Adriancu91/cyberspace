@@ -52,7 +52,7 @@ class MemorieIerarhica:
     MANIFEST = {
         "nume": "memorie_ierarhica",
         "port": "memorie",
-        "versiune": "0.1.0",
+        "versiune": "0.1.1",
         "versiune_contract": 1,
         "resurse": {"ram_mb": 300},
         "permisiuni": ["citire_fisier"],
@@ -77,6 +77,7 @@ class MemorieIerarhica:
         self.sursa: str = biblioteca["sursa"]
         self._parti: list[str] = biblioteca["parti_de_vorbire"]
         self._rafturi: list[str] = biblioteca["rafturi"]
+        self.rafturi = self._rafturi  # public: raftul k din cod = rafturi[k - 1] (ex. plasa grupează nodurile pe rafturi)
         self._nume: list[str] = biblioteca["nume"]
         self._parinte: list[int] = biblioteca["parinte"]
         self._cod: list[list[int]] = biblioteca["cod"]

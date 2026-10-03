@@ -29,6 +29,10 @@ MODULE = [
         "model", "module.model_gpt:ModelGPT", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
+    pytest.param(
+        "model", "module.model_plasa:ModelPlasa", {**GPT_MIC, "n_ascuns_nod": 16, "cale_tokenizer": "__tokenizer_mic__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
     ("date", "module.date_mostra:DateMostra", {"propozitii": 300}),
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),

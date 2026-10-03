@@ -98,7 +98,8 @@ class _GPT(nn.Module):
             self.proiectie_memorie = nn.Linear(n_emb_memorie * len(categorii_memorie), n_emb, bias=False)
             nn.init.zeros_(self.proiectie_memorie.weight)
 
-    def forward(self, idx: torch.Tensor, memorie: torch.Tensor | None = None) -> torch.Tensor:
+    def trunchi(self, idx: torch.Tensor, memorie: torch.Tensor | None = None) -> torch.Tensor:
+        """Simbolurile (și memoria) trec prin straturi; întoarce starea ascunsă, înainte de răspuns."""
         t = idx.size(1)
         poz = torch.arange(t, device=idx.device)
         x = self.emb_token(idx) + self.emb_pozitie(poz)
@@ -107,7 +108,10 @@ class _GPT(nn.Module):
             x = x + self.proiectie_memorie(descrieri)
         for strat in self.straturi:
             x = strat(x)
-        return self.cap(self.ln(x))
+        return x
+
+    def forward(self, idx: torch.Tensor, memorie: torch.Tensor | None = None) -> torch.Tensor:
+        return self.cap(self.ln(self.trunchi(idx, memorie)))
 
 
 class ModelGPT:
@@ -194,6 +198,17 @@ class ModelGPT:
         gol = (0,) * memoria.nivele
         return [coduri[cap - 1] if cap > 0 else gol for cap in capete]
 
+    def _are_pozitii(self) -> bool:
+        """Primește fiecare poziție ceva în plus pe lângă simbol? La GPT: categoriile din memorie, dacă e pornită."""
+        return self.foloseste_memorie
+
+    def _pozitii(self, text: str, simboluri: list[int] | None, la_antrenare: bool = False) -> torch.Tensor:
+        """Ce primește în plus fiecare poziție (poziții × coloane). La GPT: categoriile din memorie."""
+        coduri = self._coduri_memorie(text, simboluri)
+        if la_antrenare:
+            self._construieste_harta(coduri)
+        return self._categorii(coduri)
+
     def _construieste_harta(self, coduri: list[tuple[int, ...]]) -> None:
         """Numerotează (de la 1) categoriile văzute la antrenare, pe fiecare nivel.
 
@@ -269,12 +284,10 @@ class ModelGPT:
             self.vocabular = sorted(set(text)) + [NECUNOSCUT]
         memorie_t = None
         pregatire = 0.0
-        if self.foloseste_memorie:
-            # Pregătirea memoriei intră în bugetul de timp: comparația cu/fără memorie e cinstită.
+        if self._are_pozitii():
+            # Pregătirea (memoria, nodurile) intră în bugetul de timp: comparațiile rămân cinstite.
             inceput_pregatire = time.perf_counter()
-            coduri = self._coduri_memorie(text, simboluri)
-            self._construieste_harta(coduri)
-            memorie_t = self._categorii(coduri).to(self.dispozitiv)
+            memorie_t = self._pozitii(text, simboluri, la_antrenare=True).to(self.dispozitiv)
             pregatire = time.perf_counter() - inceput_pregatire
         self._construieste()
         assert self.retea is not None
@@ -338,9 +351,7 @@ class ModelGPT:
         idx = (torch.tensor(simboluri, dtype=torch.long) if simboluri is not None else self._codifica(text)).to(
             self.dispozitiv
         )
-        memorie = (
-            self._categorii(self._coduri_memorie(text, simboluri)).to(self.dispozitiv) if self.foloseste_memorie else None
-        )
+        memorie = self._pozitii(text, simboluri).to(self.dispozitiv) if self._are_pozitii() else None
         ctx = self.setari["context"]
         nats = 0.0
         # primul simbol nu are context: îl socotim cu probabilitate uniformă
@@ -375,8 +386,8 @@ class ModelGPT:
         rezultat = []
         for _ in range(lungime):
             m = None
-            if self.foloseste_memorie:  # memoria vede tot textul scris până acum, nimic din viitor
-                m = self._categorii(self._memoria().caracteristici(text))[-ctx:].unsqueeze(0).to(self.dispozitiv)
+            if self._are_pozitii():  # memoria vede tot textul scris până acum, nimic din viitor
+                m = self._pozitii(text, None)[-ctx:].unsqueeze(0).to(self.dispozitiv)
             logits = self.retea(idx[:, -ctx:], m)[:, -1, :].float()
             logits[:, nec] = -float("inf")  # nu generăm caracterul „necunoscut”
             prob = F.softmax(logits, dim=-1).cpu()
@@ -400,8 +411,8 @@ class ModelGPT:
             toate = simboluri + noi
             idx = torch.tensor([toate[-ctx:]], dtype=torch.long, device=self.dispozitiv)
             m = None
-            if self.foloseste_memorie:  # memoria vede tot ce s-a scris până acum, nimic din viitor
-                m = self._categorii(self._coduri_memorie("", toate))[-ctx:].unsqueeze(0).to(self.dispozitiv)
+            if self._are_pozitii():  # memoria vede tot ce s-a scris până acum, nimic din viitor
+                m = self._pozitii("", toate)[-ctx:].unsqueeze(0).to(self.dispozitiv)
             logits = self.retea(idx, m)[:, -1, :].float()
             prob = F.softmax(logits, dim=-1).cpu()
             noi.append(int(torch.multinomial(prob, 1, generator=generator).item()))
@@ -413,6 +424,12 @@ class ModelGPT:
             raise RuntimeError("nu am ce salva: modelul nu e antrenat")
         fisier = Path(cale).with_suffix(".pt")
         fisier.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(self._stare_de_salvat(), fisier)
+        return str(fisier)
+
+    def _stare_de_salvat(self) -> dict[str, Any]:
+        """Tot ce trebuie ca modelul să poată fi reconstruit exact (modelele derivate adaugă ce le trebuie)."""
+        assert self.retea is not None
         stare: dict[str, Any] = {"setari": self.setari, "vocabular": self.vocabular, "stare": self.retea.state_dict()}
         if self.foloseste_memorie:
             stare["memorie"] = {
@@ -422,14 +439,20 @@ class ModelGPT:
             }
         if self.tokenizer == "bpe" and self.tok is not None:  # tokenizerul intră în model: se încarcă singur
             stare["tokenizer"] = {"tip": "bpe", "bpe": self.tok.ca_dictionar()}
-        torch.save(stare, fisier)
-        return str(fisier)
+        return stare
 
     def incarca(self, cale: str) -> None:
         fisier = Path(cale)
         if not fisier.exists():
             fisier = fisier.with_suffix(".pt")
         salvat = torch.load(fisier, map_location=self.dispozitiv, weights_only=True)
+        self._restaureaza(salvat)
+        self._construieste()
+        assert self.retea is not None
+        self.retea.load_state_dict(salvat["stare"])
+
+    def _restaureaza(self, salvat: dict[str, Any]) -> None:
+        """Pune înapoi setările din fișierul salvat, înainte ca rețeaua să fie reconstruită."""
         self.setari = salvat["setari"]
         self.vocabular = salvat["vocabular"]
         tokenizer = salvat.get("tokenizer")  # modelele salvate înainte de Etapa M2 sunt pe litere
@@ -442,6 +465,3 @@ class ModelGPT:
             self.adancime_memorie = memorie["adancime"]
             self.n_emb_memorie = memorie["n_emb"]
             self.harta = [{tuple(cod): nr for cod, nr in nivel} for nivel in memorie["harta"]]
-        self._construieste()
-        assert self.retea is not None
-        self.retea.load_state_dict(salvat["stare"])
