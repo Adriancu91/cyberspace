@@ -879,6 +879,58 @@ text. Toate rulările au făcut ~2.000 de pași.
   fixă 0,00035) și cam o treime din forma scăderii (~0,043).
 - **Ce folosim mai departe:** rata de pornire 0,0007, cu scădere, în bucla cinstită și în antrenarea lungă.
 
+### Pasul 2: bucla cinstită (4 octombrie 2026, 20:32–21:32)
+
+**Cum funcționează** (`python unelte/bucla_pe_faze.py --minute 60`): cele două feluri de comparații stau pe linii de
+jurnal diferite, deci nu se amestecă în aceeași decizie.
+- **Faza 1, arhitecturile** (`config/laptop_bucla.toml`, linia „bucla_arhitecturi”):
+  - fiecare arhitectură pornește de la zero și are exact 10 minute, cu lot 30 și rata 0,0007 care scade;
+  - cercetătorul (`cercetator_local`) schimbă câte o setare față de cea mai bună arhitectură de atunci, în ordinea din
+    configurare, fără strângere.
+- **Faza 2, lotul și rata** (`config/laptop_bucla_lot_rata.toml`):
+  - starea arhitecturii câștigătoare se copiază o singură dată (`lucru/bucla_cinstita/stari_de_pornire/din_197.pt`);
+  - fiecare experiment pornește din această copie și are 5 minute, cu rata care scade din nou, de la rata lui până la
+    10%.
+
+**Faza 1: care arhitectură câștigă la 10 minute** (de la zero, la timp egal):
+
+| # | Arhitectura | Parametri | Pași în 10 minute | Simboluri văzute | val_bpb | Decizie |
+| --- | --- | --- | --- | --- | --- | --- |
+| 196 | 10 straturi × 512 (punctul de plecare) | 33,8 M | 3.906 | 30,0 M | 0,8245 | păstrat |
+| 197 | **8 straturi × 512** | 27,4 M | 4.692 | 36,0 M | **0,8076** | **păstrat: câștigă** |
+| 198 | 8 straturi × 640 | 42,2 M | 3.307 | 25,4 M | 0,9069 | respins |
+| 199 | 12 straturi × 512 | 40,1 M | 3.243 | 24,9 M | 0,8647 | respins |
+
+- **Câștigă 8 straturi × 512**, cu 0,017 mai bine decât 10 × 512. E mai mic și face cu 20% mai mulți pași în același
+  timp.
+- **Lățimea 640 pierde clar** (+0,099). A fost încercată pe 8 straturi, pentru că cercetătorul schimbă câte o setare
+  față de cea mai bună de atunci.
+- **12 straturi pierde clar** (+0,057).
+- **De citit cu grijă: e o singură sămânță.** În pasul 1, aceeași rețetă cu sămânța 0 și cu sămânța 1 a dat scoruri
+  care diferă cu 0,016–0,038, la 5 minute. Avantajul lui 8 straturi față de 10 (0,017) e de același ordin, deci nu e
+  sigur. Pierderile lui 640 și 12 straturi sunt mult peste.
+- **Efectul pasului 1:** în prima buclă, 10 × 512 avea după 10 minute de antrenare 0,9059 (rată fixă). Acum, cu rata
+  0,0007 care scade, are 0,8245.
+- Memoria video a fost cel mult 3,0 GB rezervați (12 straturi).
+
+**Faza 2: lotul și rata**, toate din starea lui #197 (10 minute de antrenare, 0,8076), câte 5 minute:
+
+| # | Lot | Rata de pornire | Pași | val_bpb | Decizie |
+| --- | --- | --- | --- | --- | --- |
+| 200 | 30 | 0,0007 (reperul: rețeta neschimbată) | 2.363 | 0,7317 | păstrat |
+| 201 | 30 | 0,001 | 2.359 | 0,7226 | păstrat (−0,009) |
+| 202 | **24** | **0,001** | 2.896 | **0,7167** | **păstrat (−0,006): câștigă** |
+
+- **Rata mai mare (0,001) și lotul mai mic (24) au ajutat, dar puțin:** 0,006–0,009, aproape de pragul de zgomot
+  (0,005).
+- **Comparația e dreaptă:** toate trei pornesc din aceeași copie a stării, care a rămas neatinsă. Pașii lor totali sunt
+  toți „4.692 + pașii proprii”.
+- **Neîncercate**, pentru că s-a terminat ora: rata 0,0005 și lotul 36.
+- Ora a avut 2 pauze de răcire, de câte 2 minute.
+
+**Rețeta pentru antrenarea lungă:** 8 straturi × 512, context 256, lot 24, rata 0,001 care scade pe toate cele 8 ore
+până la 0,0001. Pornește de la zero, ca scorul pe ore să arate tot drumul.
+
 ## Toate comenzile
 
 ```

@@ -2,6 +2,8 @@
 # (R2). Câte un experiment Kronos pe oră (examenul oficial la final), starea salvată după fiecare examen
 # (lucru/antrenare_lunga/gpt.pt). Rata scade singură pe toate cele 8 ore (durata_scaderii_secunde = 8 × 3.600):
 # încălzire în primii 100 de pași, apoi cosinus până la 10% din rata de pornire.
+# Rețeta câștigătoare a buclei cinstite (4 octombrie 2026): arhitectura din faza 1 (8 straturi × 512, #197), lotul și
+# rata din faza 2 (lot 24, rata 0,001, #202). Pornește de la zero.
 # Pornește doar cu unealta (ea pune câte o oră pe experiment, cu pauze și răcire între ele):
 #   python unelte/antrenare_lunga.py --ore 8      (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga.toml)
 #   python unelte/antrenare_lunga.py --raport     (tabelul pe ore și o poveste)
@@ -23,7 +25,7 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 30, rata_invatare = 0.00035, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 28800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga/gpt.pt", director_cache = "lucru/cache", samanta = 0 }
+setari = { n_straturi = 8, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.001, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 28800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga/gpt.pt", director_cache = "lucru/cache", samanta = 0 }
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"
@@ -34,7 +36,7 @@ modul = "module.examen_bpb:ExamenBpb"
 
 [porturi.cercetator]
 modul = "module.cercetator_local:CercetatorLocal"
-setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [30] } } }   # nu schimbă nimic: rețeta e fixă
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
 
 [porturi.profesor]
 modul = "module.jucarii:ProfesorGol"
