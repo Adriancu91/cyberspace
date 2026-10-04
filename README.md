@@ -588,6 +588,28 @@ python unelte/plafon_gpt.py                       # plafonul GPT-ului (~10 minut
 python unelte/trepte_plasa_mare.py --trepte 1     # treapta 1 (~50 de minute); apoi --trepte 2, --trepte 3
 ```
 
+### Treapta 1: R1, TinyStories, 20 de minute (4 octombrie 2026)
+
+Sămânța 0; în fiecare interval de 10 minute, întâi martorul, apoi plasa, fiecare continuând de unde a rămas.
+
+| Minutul | Plasa mare | GPT la plafon | Pași/s plasa / GPT | Mutarea nodurilor |
+| --- | --- | --- | --- | --- |
+| 10 | 1,4836 | **1,2560** | 2,1 / 4,1 | 73% din timp |
+| 20 | 1,3019 | **1,0880** | 1,9 / 4,1 | 75% din timp |
+
+- **Verdict: DA, funcționează și învață.** Scorul plasei scade cu 0,18 între minutul 10 și minutul 20 (pragul de zgomot:
+  0,005). GPT-ul la plafon e însă mai bun (1,088 față de 1,302), cu de două ori mai mulți pași (4.949 față de 2.407).
+- **Memoria video:** plasa 4,0 GB ocupată / 4,9–5,0 GB rezervată, sub 5,5 GB. GPT-ul la plafon 5,1 GB ocupată /
+  5,4–5,6 GB rezervată: în rularea întreagă trece puțin de 5,5 GB rezervați (la proba de 20 de pași: 5,4); paznicul
+  verifică memoria ocupată, deci n-a oprit nimic, iar viteza n-a scăzut.
+- **Mutarea nodurilor**, pe 10 minute: urcarea ~84 s, coborârea gradienților ~163 s, optimizatorul din RAM ~197 s. Pe
+  pas urcă toate nodurile active (34, apoi 38): în fiecare lot de 2.048 de simboluri apar cuvinte de pe toate rafturile.
+- **Plasa:** n-a avut legături la început și nu s-a născut niciuna. Cea mai mare cerere a ajuns la 0,048, iar pragul de
+  naștere e 0,05. Nodurile libere s-au alocat toate 6. După primele 10 minute: liber1 → noun.person (tim, tom, girl...),
+  liber2 → adj.all (big, new, many...), liber3 → noun.artifact (ball, house, box...), liber4 → adv.all (very, too,
+  back...). După 20 de minute: liber5 → liber1 (tim, friend, mia...) și liber6 → noun.person (mom, max, sue...). Rezerva
+  e acum goală.
+
 ## Toate comenzile
 
 ```
