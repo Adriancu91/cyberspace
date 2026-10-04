@@ -36,6 +36,7 @@ from module.model_plasa_adaptiva import (
 )
 
 VERSIUNE_STARE = 1
+PRAG_GOLIRE = 5000 * 2**20  # peste atâta memorie video rezervată, se golesc blocurile nefolosite (siguranță: limita e 5,5 GB)
 
 
 # --- nodurile din RAM ------------------------------------------------------------------------------
@@ -53,6 +54,7 @@ class _NoduriInRAM:
         self.optimizator: torch.optim.Optimizer | None = None  # se face la primul pas (are nevoie de rata de învățare)
         self._stare_optimizator: dict[str, Any] | None = None
         self._tampon: dict[str, torch.Tensor] | None = None
+        self._placa: dict[str, torch.Tensor] | None = None  # locul fix de pe placă, pentru toate nodurile (bf16)
         self.timp: Counter[str] = Counter()  # secunde: „sus” (pe placă), „jos” (gradienții înapoi), „optimizator”
         self.noduri_urcate = 0
         self.urcari = 0
@@ -90,20 +92,25 @@ class _NoduriInRAM:
         return self._tampon
 
     def urca(self, sloturi: list[int], dispozitiv: torch.device, cu_gradient: bool) -> dict[str, torch.Tensor]:
-        """Copiile nodurilor cerute, pe placă (bf16; pe procesor rămân fp32), în ordinea din `sloturi`."""
+        """Nodurile cerute urcă pe placă (bf16), în locul lor fix; întoarce tot locul (câte un rând pe nod, indicele =
+        nodul). Locul fix nu se mai face și desface la fiecare pas, deci memoria video nu se fărâmițează. Pe procesor
+        (teste), o copie fp32 a tuturor nodurilor."""
         start = time.perf_counter()
-        urcate = {}
         if dispozitiv.type == "cuda":
             tampon = self._tampoane(True)
-            for nume, sursa in self.greutati.items():
-                for j, k in enumerate(sloturi):
-                    tampon[nume][j].copy_(sursa[k])
-                urcate[nume] = tampon[nume][: len(sloturi)].to(dispozitiv)
+            if self._placa is None or next(iter(self._placa.values())).device != dispozitiv:
+                self._placa = {k: torch.zeros(v.shape, dtype=torch.bfloat16, device=dispozitiv, requires_grad=True)
+                               for k, v in self.greutati.items()}
+            with torch.no_grad():
+                for nume, sursa in self.greutati.items():
+                    for a, b in _bucati_consecutive(sloturi):
+                        tampon[nume][a:b].copy_(sursa[a:b])
+                        self._placa[nume][a:b].copy_(tampon[nume][a:b])
+            for t in self._placa.values():
+                t.grad = None
+            urcate = self._placa
         else:
-            urcate = {nume: sursa[sloturi].clone() for nume, sursa in self.greutati.items()}
-        if cu_gradient:
-            for t in urcate.values():
-                t.requires_grad_(True)
+            urcate = {nume: sursa.clone().requires_grad_(cu_gradient) for nume, sursa in self.greutati.items()}
         self.timp["sus"] += time.perf_counter() - start
         self.noduri_urcate += len(sloturi)
         self.urcari += 1
@@ -111,19 +118,20 @@ class _NoduriInRAM:
 
     def pas(self, sloturi: list[int], gradiente: dict[str, torch.Tensor | None], factor: float, rata: float,
             scadere: float) -> None:
-        """AdamW doar pentru nodurile urcate: gradienții coboară în RAM, apoi optimizatorul face pasul lor."""
+        """AdamW doar pentru nodurile urcate: gradienții lor (rândurile lor) coboară în RAM, apoi optimizatorul face pasul."""
         start = time.perf_counter()
         folositi = []
         for nume, g in gradiente.items():
             if g is None:
                 continue
             if g.device.type == "cuda":
-                tampon = self._tampoane(True)[nume][: len(sloturi)]
-                tampon.copy_(g)
+                tampon = self._tampoane(True)[nume]
+                for a, b in _bucati_consecutive(sloturi):
+                    tampon[a:b].copy_(g[a:b])
                 g = tampon
-            for j, k in enumerate(sloturi):
+            for k in sloturi:
                 p = self._parametri[(nume, k)]
-                p.grad = g[j].float() if factor == 1.0 else g[j].float().mul_(factor)
+                p.grad = g[k].float() if factor == 1.0 else g[k].float().mul_(factor)
                 folositi.append(p)
         self.timp["jos"] += time.perf_counter() - start
         start = time.perf_counter()
@@ -155,8 +163,19 @@ class _NoduriInRAM:
         return noduri
 
 
+def _bucati_consecutive(sloturi: list[int]) -> list[tuple[int, int]]:
+    """[0, 1, 2, 5, 6] → [(0, 3), (5, 7)]: nodurile vecine se mută dintr-o singură copiere."""
+    bucati: list[tuple[int, int]] = []
+    for k in sorted(sloturi):
+        if bucati and bucati[-1][1] == k:
+            bucati[-1] = (bucati[-1][0], k + 1)
+        else:
+            bucati.append((k, k + 1))
+    return bucati
+
+
 def _calcul_noduri(x: torch.Tensor, poz: torch.Tensor, loc: torch.Tensor, cap: int, w: dict[str, torch.Tensor]) -> torch.Tensor:
-    """Nodurile urcate, fiecare pe coada lui: x = perechi × n_emb (normalizat), poz = al câtelea nod urcat."""
+    """Nodurile, fiecare pe coada lui: x = perechi × n_emb (normalizat), poz = nodul perechii (rândul lui în w)."""
     tip = w["sus"].dtype
     coada = torch.zeros(w["sus"].shape[0], cap, x.size(-1), dtype=tip, device=x.device).index_put(
         (poz, loc), (x * w["ln_pondere"][poz] + w["ln_deplasare"][poz]).to(tip)
@@ -199,7 +218,8 @@ class _GPTCuNoduriInRAM(_GPT):
         simbol, nod = simbol[ordine], nod[ordine]
         numar = torch.bincount(nod, minlength=self.vecini.size(0))
         loc = torch.arange(nod.numel(), device=nod.device) - (torch.cumsum(numar, 0) - numar)[nod]
-        return simbol, plat[simbol], nod, loc, int(numar.max())
+        cap = (int(numar.max()) + 63) // 64 * 64  # rotunjit: mai puține mărimi diferite pe placă, memoria nu se fărâmițează
+        return simbol, plat[simbol], nod, loc, cap
 
     def forward(self, idx: torch.Tensor, extra: torch.Tensor | None = None) -> torch.Tensor:
         if extra is None:
@@ -213,10 +233,8 @@ class _GPTCuNoduriInRAM(_GPT):
             sloturi = torch.unique_consecutive(nod).tolist()  # doar nodurile cerute de lot urcă pe placă
             la_antrenare = self.training and torch.is_grad_enabled()
             urcate = self.noduri.urca(sloturi, h.device, la_antrenare)
-            harta = torch.full((self.noduri.n,), -1, dtype=torch.long, device=h.device)
-            harta[torch.tensor(sloturi, device=h.device)] = torch.arange(len(sloturi), device=h.device)
             plat = h.reshape(-1, h.size(-1))
-            iesiri = _calcul_noduri(F.layer_norm(plat[simbol], plat.shape[-1:]), harta[nod], loc, cap, urcate)
+            iesiri = _calcul_noduri(F.layer_norm(plat[simbol], plat.shape[-1:]), nod, loc, cap, urcate)
             ponderi = self.amestec()[nod_simbol, nod] * self.pondere_centru[nod]
             adaos = torch.zeros_like(plat).index_add(0, simbol, (iesiri.float() * ponderi.unsqueeze(-1)).to(plat.dtype))
             h = h + adaos.view_as(h)
@@ -274,6 +292,7 @@ class ModelPlasaMare(ModelPlasaAdaptiva):
         self.continuat = False
         self._salvat: dict[str, Any] | None = None
         self._cuvinte_antrenare: tuple[torch.Tensor, torch.Tensor, list[str]] | None = None
+        self._pasi_bucla = 0
 
     # --- drumul cuvintelor (40 de locuri fixe: rafturile, „rar”, apoi cele 6 libere) --------------
 
@@ -469,6 +488,9 @@ class ModelPlasaMare(ModelPlasaAdaptiva):
         if sloturi:
             self.noduri_ram.pas(sloturi, gradiente, factor, self.rata_invatare, 0.1)
         retea.ultimele_noduri = None
+        self._pasi_bucla += 1
+        if self.dispozitiv.type == "cuda" and self._pasi_bucla % 25 == 0 and torch.cuda.memory_reserved() > PRAG_GOLIRE:
+            torch.cuda.empty_cache()  # memoria video rămâne sub 5,5 GB tot timpul, și în antrenările lungi
         return loss.item()
 
     def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
