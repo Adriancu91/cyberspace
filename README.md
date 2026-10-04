@@ -610,6 +610,28 @@ Sămânța 0; în fiecare interval de 10 minute, întâi martorul, apoi plasa, f
   back...). După 20 de minute: liber5 → liber1 (tim, friend, mia...) și liber6 → noun.person (mom, max, sue...). Rezerva
   e acum goală.
 
+### Treapta 2: R2, TinyStories de 10× mai mult, 40 de minute (4 octombrie 2026)
+
+Ambele modele continuă din starea de la finalul treptei 1; examenul pe validarea lui R2 (nevăzută).
+
+| Minutul | Plasa mare | GPT la plafon | Plasa − GPT | Pași/s plasa / GPT | Mutarea nodurilor |
+| --- | --- | --- | --- | --- | --- |
+| 10 | 1,1592 | **0,9903** | +0,1689 | 1,8 / 4,1 | 77% |
+| 20 | 1,0906 | **0,9333** | +0,1573 | 1,8 / 4,0 | 78% |
+| 30 | 1,0539 | **0,8755** | +0,1784 | 1,8 / 4,0 | 78% |
+| 40 | 1,0158 | **0,8302** | +0,1857 | 1,8 / 3,9 | 78% |
+
+- **Verdict: NU, nu ține pasul.** La 40 de minute rămâne în urmă cu 0,186 (de 37 de ori pragul de zgomot), iar diferența
+  nu se micșorează: GPT-ul face de 2,2 ori mai mulți pași (9.604 față de 4.280) și coboară mai repede.
+- **Memoria video:** plasa 4,0 GB ocupată / 4,9–5,3 GB rezervată (sub 5,5 GB); GPT-ul 5,1 / 5,56–5,57 GB.
+- **Mutarea nodurilor**, pe 10 minute: urcarea ~87 s, coborârea gradienților ~173 s, optimizatorul din RAM ~205 s:
+  77–78% din timpul de antrenare. Pe pas urcă toate cele 40 de noduri; fiecare simbol calculează în medie 2,4 noduri.
+- **Plasa:** 0 legături la început; s-au născut 4: noun.body → liber3 (după 10 minute), verb.communication →
+  noun.communication și liber2 → noun.animal (după 20), liber2 → noun.attribute (după 30). Toate au fost folosite
+  (folosire 0,045–0,09; 0,1 = deplină) și s-au întărit la fiecare examen, de la 0,10 la 0,33–0,56 (active): câștigul
+  primit a fost mereu pozitiv, pentru că modelul se îmbunătățește oricum de la o bucată la alta, deci întărirea nu
+  arată cât au ajutat ele. Nodurile libere: nicio alocare nouă (rezerva era goală), toate 6 au lucrat.
+
 ## Toate comenzile
 
 ```
