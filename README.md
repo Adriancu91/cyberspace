@@ -632,6 +632,55 @@ Ambele modele continuă din starea de la finalul treptei 1; examenul pe validare
   primit a fost mereu pozitiv, pentru că modelul se îmbunătățește oricum de la o bucată la alta, deci întărirea nu
   arată cât au ajutat ele. Nodurile libere: nicio alocare nouă (rezerva era goală), toate 6 au lucrat.
 
+### Treapta 3: R3, Simple English Wikipedia, 60 de minute (4 octombrie 2026)
+
+Ambele modele continuă din starea de la finalul treptei 2; examenul pe articole nevăzute. Un GPT de mărimea plasei (333 M)
+nu încape pe placă; martorul de referință e cel mai mare GPT care încape (222 M).
+
+| Minutul | Plasa mare | Scădere față de minutul de dinainte | GPT la plafon (referință) | Pași/s plasa / GPT | Mutarea nodurilor |
+| --- | --- | --- | --- | --- | --- |
+| 10 | 2,2938 | — | **1,9775** | 1,8 / 4,0 | 74% |
+| 20 | 2,1227 | −0,1711 | **1,8295** | 1,8 / 4,0 | 73% |
+| 30 | 2,0426 | −0,0801 | **1,7318** | 1,8 / 4,0 | 73% |
+| 40 | 1,9803 | −0,0623 | **1,6787** | 1,8 / 4,0 | 73% |
+| 50 | 1,9337 | −0,0466 | **1,6389** | 1,8 / 4,0 | 73% |
+| 60 | 1,8992 | −0,0345 | **1,6018** | 1,4 / 4,0 | 71% |
+
+- **Pe scor: DA, scade constant.** Scorul plasei scade la fiecare 10 minute, de fiecare dată peste pragul de zgomot
+  (0,005), în total cu 0,395. Scăderile se micșorează (0,17 → 0,03), ca la orice antrenare.
+- **Verdictul uneltei e totuși „NU”**, din cauza memoriei: în primele 10 minute, plasa a rezervat 5.506 MB, cu 6 MB peste
+  5,5 GB (ocupată: 4,1 GB; paznicul, care verifică memoria ocupată, n-a oprit nimic, iar viteza n-a scăzut). În celelalte
+  bucăți a rămas sub: 5.388–5.498 MB. Pe Wikipedia, mai puține cuvinte sunt umplutură (34% față de 44%), deci nodurile
+  au cozi mai lungi și vârful de memorie urcă.
+- **GPT-ul la plafon e mai bun la fiecare punct**, cu ~0,30 (1,602 față de 1,899 la final), cu de 2,3 ori mai mulți pași
+  (14.472 față de 6.292).
+- În ultima bucată, plasa a făcut doar 834 de pași (1,4 pe secundă, nu 1,8): și calculul de pe placă, și coborârea
+  gradienților au mers mai încet, deci probabil placa a încetinit (căldură sau energie); cauza nu e sigură.
+- **Plasa:** 4 legături la început (cele din R2), toate folosite; s-au născut încă 13, deci 17 la final, multe între
+  animale, plante și mâncare (noun.animal → noun.food, noun.plant → noun.food, noun.food → noun.substance...). Tăria a
+  crescut la fiecare examen (câștigul primit a fost mereu pozitiv): 6 au ajuns la 0,99 (definitive). Nodurile libere au
+  rămas aceleași 6.
+
+### Concluzia testului în trei trepte (sămânța 0)
+
+| Treapta | Întrebarea | Răspunsul | Plasa la final | GPT la plafon la final |
+| --- | --- | --- | --- | --- |
+| R1, TinyStories, 20 min | funcționează și învață? | **DA** (−0,18 în 10 minute) | 1,3019 | 1,0880 |
+| R2, TinyStories 10×, 40 min | ține pasul cu GPT-ul la limită? | **NU** (în urmă cu 0,186) | 1,0158 | 0,8302 |
+| R3, Wikipedia, 60 min | scade scorul constant? | **DA pe scor**, dar memoria rezervată a trecut o dată de 5,5 GB cu 6 MB | 1,8992 | 1,6018 |
+
+- Plasa mare (1,5× plafonul) **merge**: se antrenează cu nodurile în RAM, sub 5,5 GB aproape tot timpul, păstrează tot
+  între trepte și învață pe trei texte diferite fără să pornească de la zero.
+- Dar **pierde clar la timp egal** în toate trei treptele: face 1,8 pași pe secundă față de 4,0 ai GPT-ului, pentru că
+  mutarea nodurilor între RAM și placă și optimizatorul din RAM iau 71–78% din timp (pe tot testul: urcarea ~17 minute,
+  coborârea gradienților ~33 de minute, optimizatorul ~39 de minute, din 2 ore de antrenare). Capacitatea în plus (333 M
+  față de 222 M) nu compensează pașii lipsă.
+- O singură sămânță (0): pragul de 0,005 e singura măsură a zgomotului; o a doua sămânță ar cere încă ~4,5 ore.
+
+```
+python unelte/trepte_plasa_mare.py --trepte 3     # treapta 3 (~2 ore și 20 de minute)
+```
+
 ## Toate comenzile
 
 ```
