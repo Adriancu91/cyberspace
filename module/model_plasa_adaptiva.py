@@ -454,6 +454,12 @@ class ModelPlasaAdaptiva(ModelGPT):
         statistici["pondere_centru"] = dict(zip(nume, (round(p, 4) for p in self.retea.pondere_centru.detach().cpu().tolist())))
         statistici["plasa"] = {
             "legaturi_la_start": len(self.stare.legaturi),
+            # Legăturile cu care a pornit: tăria lor și cât le-a folosit rețeaua (|ponderea|; 0,1 = folosire deplină).
+            "legaturi": [
+                {"de_la": a, "la": b, "tarie": leg["tarie"],
+                 "folosire": round(self._folosire[self._index[a]][self._index[b]], 4)}
+                for (a, b), leg in self.stare.legaturi.items() if a in self._index and b in self._index
+            ],
             "perechi_care_se_pot_naste": [
                 {"de_la": nume[a], "la": nume[b], "asociere": round(v, 2)}
                 for a, rand in enumerate(self._asociere_nastere) for b, v in enumerate(rand) if a != b and v >= PRAG_ASOCIERE

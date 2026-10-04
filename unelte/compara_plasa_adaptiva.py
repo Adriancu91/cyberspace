@@ -61,6 +61,7 @@ def rezultatul(fisa: dict[str, Any], scor_principal: str) -> dict[str, Any]:
     plasa = dupa.get("plasa") or {}
     nascute = plasa.get("nascute_acum", plasa.get("lista", []))  # plasa veche: toate legăturile sunt noi la start
     noduri = statistici.get("noduri")
+    adaptiva = isinstance(noduri, dict) and "active" in noduri
     return {
         "experiment": fisa["id"],
         "scor": fisa["scoruri"][scor_principal],
@@ -68,13 +69,65 @@ def rezultatul(fisa: dict[str, Any], scor_principal: str) -> dict[str, Any]:
         "pasi_pe_secunda": round(statistici["pasi"] / bucla, 1) if bucla else None,
         "secunde_antrenare": (fisa.get("consum") or {}).get("durata_antrenare_secunde"),
         "memorie_gpu_mb": (fisa.get("consum") or {}).get("memorie_gpu_max_mb"),
-        "noduri_active": noduri.get("active") if isinstance(noduri, dict) and "active" in noduri else None,
+        "noduri_active": noduri["active"] if adaptiva else None,
         "legaturi_nascute": [f"{l['de_la']} → {l['la']}" for l in nascute] if plasa else None,
         "noduri_alocate": [
             f"{a['nod']} → {a['ajuta']} (preia {a['preia']:.0%}: {', '.join(a['exemple'][:3])})"
             for a in (dupa.get("noduri") or {}).get("alocate", [])
         ] if "noduri" in dupa else None,
+        # Pentru runda 2: cu ce a pornit plasa, cât a primit fiecare ajutor și cum arată legăturile după examen.
+        "legaturi_la_start": (statistici.get("plasa") or {}).get("legaturi_la_start"),
+        "legaturi_folosite": (statistici.get("plasa") or {}).get("legaturi"),  # plasa adaptivă: tăria și folosirea
+        "ajutoare_la_start": [
+            f"{a['nod']} → {a['ajuta']} ({noduri['cuvinte_pe_nod'].get(a['nod'], 0):.1%} din cuvinte)"
+            for a in noduri.get("ajutoare", [])
+        ] if adaptiva else None,
+        "legaturi_dupa": {f"{l['de_la']} → {l['la']}": l["tarie"] for l in plasa.get("lista", [])} if plasa else None,
+        "castig_primit": plasa.get("castig_primit"),
     }
+
+
+def citeste_configurari(cai: dict[str, str]) -> tuple[dict[str, Any], dict[str, dict[str, Any]], list[str]]:
+    """Configurările variantelor, rețetele lor de model și setările din rețeta comună care diferă (ar trebui: niciuna)."""
+    configurari = {v: citeste_config(cale) for v, cale in cai.items()}
+    retete = {v: c.setari_port("model") for v, c in configurari.items()}
+    diferite = [k for k in RETETA_COMUNA if len({json.dumps(retete[v].get(k)) for v in retete}) > 1]
+    return configurari, retete, diferite
+
+
+def limita_de_timp(config: Any, buget: float | None) -> None:
+    """Bugetul de timp: cel dat sau, implicit, dublul celui obișnuit, sub limita paznicului (la pași fixați e doar o
+    plasă de siguranță)."""
+    if buget is not None:
+        config.buget_antrenare_secunde = buget
+    else:
+        timp_max = float(config.paznic.get("timp_max_secunde", 600))
+        config.buget_antrenare_secunde = min(2 * config.buget_antrenare_secunde, 0.9 * timp_max)
+
+
+def ruleaza(
+    config: Any, linie: str, descriere: str, modificari: dict[str, Any], runda: int = 0,
+    pauza: float = 0.0, racire: float = 0.0,
+) -> dict[str, Any] | None:
+    """Un experiment prin Kronos, pe linia de jurnal dată și pe partea de validare dată (0 = toată, 1 sau 2 = o
+    jumătate). Întâi pauza și răcirea plăcii. Întoarce rezultatul, sau None dacă s-a oprit ori a fost anulat."""
+    config = copy.deepcopy(config)
+    config.nume = linie
+    if runda:
+        config.porturi["date"].setdefault("setari", {})["runda"] = runda
+    o = Orchestrator(config)
+    time.sleep(pauza)
+    asteapta_racirea(o.paznic.temperatura_gpu, racire)
+    if o._opreste():  # butonul de oprire și pauzele obișnuite ale paznicului
+        print("S-a oprit înainte de final (motivul e scris mai sus).", flush=True)
+        return None
+    temperatura = o.paznic.temperatura_gpu()
+    o.setari_curente = {"model": dict(config.setari_port("model"))}
+    fisa = o.experiment(Propunere(descriere, {"model": modificari}))
+    if fisa["decizie"] == "anulat":
+        print(f"Experimentul #{fisa['id']} a fost anulat: {fisa.get('motiv')}", flush=True)
+        return None
+    return {**rezultatul(fisa, o.examen.scor_principal), "temperatura_la_start": temperatura}
 
 
 def verdict(randuri: list[dict[str, Any]], pasi_ceruti: int | None, prag: float, fata_de: str) -> str:
@@ -118,18 +171,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.pasi < 1:
         parser.error("--pasi trebuie să fie cel puțin 1")
 
-    configurari = {v: citeste_config(getattr(args, f"config_{v}")) for v in VARIANTE}
-    retete = {v: c.setari_port("model") for v, c in configurari.items()}
-    diferite = [k for k in RETETA_COMUNA if len({json.dumps(retete[v].get(k)) for v in VARIANTE}) > 1]
+    configurari, retete, diferite = citeste_configurari({v: getattr(args, f"config_{v}") for v in VARIANTE})
     if diferite:
         print(f"Rețetele nu sunt la fel ({', '.join(diferite)}): comparația n-ar fi cinstită. Nu pornesc.", flush=True)
         return 1
     for config in configurari.values():
-        if args.buget is not None:
-            config.buget_antrenare_secunde = args.buget
-        else:  # timpul e doar o limită de siguranță: dublul bugetului obișnuit, sub limita paznicului
-            timp_max = float(config.paznic.get("timp_max_secunde", 600))
-            config.buget_antrenare_secunde = min(2 * config.buget_antrenare_secunde, 0.9 * timp_max)
+        limita_de_timp(config, args.buget)
     eticheta = datetime.now().strftime("%Y%m%d_%H%M%S")
     prag = configurari["adaptiva"].prag_zgomot
     print(
@@ -143,25 +190,19 @@ def main(argv: list[str] | None = None) -> int:
     for samanta in args.seminte:
         rand: dict[str, Any] = {"samanta": samanta}
         for varianta in VARIANTE:
-            config = copy.deepcopy(configurari[varianta])
-            config.nume = f"{configurari[varianta].nume}_m3_{eticheta}_s{samanta}"  # o linie de jurnal pe rulare
-            o = Orchestrator(config)
-            if not prima:
-                time.sleep(args.pauza)
-                asteapta_racirea(o.paznic.temperatura_gpu, args.racire)
-            prima = False
-            if o._opreste():  # butonul de oprire și pauzele obișnuite ale paznicului
-                print("Comparația s-a oprit înainte de final (motivul e scris mai sus).", flush=True)
-                return 1
-            o.setari_curente = {"model": dict(retete[varianta])}
+            config = configurari[varianta]
             modificari: dict[str, Any] = {"samanta": samanta, "pasi_max": args.pasi}
             if varianta != "simplu":  # fiecare plasă pornește goală, în fișierul ei
                 modificari["cale_plasa"] = str(config.director_lucru / "plase" / f"m3_{eticheta}_{varianta}_s{samanta}.json")
-            fisa = o.experiment(Propunere(f"{NUME[varianta]}, sămânța {samanta}, {args.pasi:,} de pași", {"model": modificari}))
-            if fisa["decizie"] == "anulat":
-                print(f"Experimentul #{fisa['id']} a fost anulat: {fisa.get('motiv')}", flush=True)
+            rulare = ruleaza(
+                config, f"{config.nume}_m3_{eticheta}_s{samanta}",  # o linie de jurnal pe rulare
+                f"{NUME[varianta]}, sămânța {samanta}, {args.pasi:,} de pași", modificari,
+                pauza=0 if prima else args.pauza, racire=args.racire,
+            )
+            prima = False
+            if rulare is None:
                 return 1
-            rand[varianta] = rulare = rezultatul(fisa, o.examen.scor_principal)
+            rand[varianta] = rulare
             print(
                 f"   sămânța {samanta}, {NUME[varianta]}: val_bpb {rulare['scor']:.4f}, {rulare['pasi']:,} de pași, "
                 f"{rulare['pasi_pe_secunda']} pași/s" + (f"; legături născute: {len(rulare['legaturi_nascute'])}"
