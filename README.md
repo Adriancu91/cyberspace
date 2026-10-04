@@ -677,6 +677,25 @@ nu încape pe placă; martorul de referință e cel mai mare GPT care încape (2
   față de 222 M) nu compensează pașii lipsă.
 - O singură sămânță (0): pragul de 0,005 e singura măsură a zgomotului; o a doua sămânță ar cere încă ~4,5 ore.
 
+**La pași egali, nu la timp egal.** Pentru fiecare treaptă, scorul final al plasei și scorul GPT-ului la cel mai apropiat
+număr de pași, din fișele experimentelor. Se compară doar scoruri de pe același examen (din aceeași treaptă). Pașii se pot
+număra în două feluri: toți pașii de până atunci, sau doar pașii pe textul treptei; în R2 și R3 cele două diferă, pentru
+că cele două modele au ajuns la treaptă cu antrenamente diferite.
+
+| Treapta | Plasa: pași (total / pe textul treptei) → scor | GPT la cel mai apropiat număr total de pași | GPT la cel mai apropiat număr de pași pe textul treptei |
+| --- | --- | --- | --- |
+| R1 | 2.407 / 2.407 → 1,3019 | 2.490 → **1,2560** (GPT mai bun cu 0,046) | la fel |
+| R2 | 6.687 / 4.280 → 1,0158 | 7.421 (2.472 pe text) → **0,9903** (GPT mai bun cu 0,026) | 4.860 (9.809 total) → **0,9333** (GPT mai bun cu 0,083) |
+| R3 | 12.979 / 6.292 → 1,8992 | 16.953 (doar 2.400 pe Wikipedia) → 1,9775 (**plasa** mai bună cu 0,078) | 7.228 (21.781 total) → **1,7318** (GPT mai bun cu 0,167) |
+
+**Pe pas, plasa nu învață mai mult.** Comparația cea mai curată e R1: amândouă pornesc de la zero, pe același text, cu
+pași aproape egali (2.407 față de 2.490), iar GPT-ul e mai bun cu 0,046 (de 9 ori pragul de zgomot). În R2, GPT-ul e mai
+bun oricum s-ar număra pașii. În R3, răspunsul depinde de numărătoare: la pași totali apropiați plasa pare mai bună, dar
+doar pentru că făcuse de 2,6 ori mai mulți pași pe Wikipedia; la pași apropiați pe Wikipedia, GPT-ul e mai bun cu 0,167
+(dar ajunsese la R3 cu mai mult antrenament). Deci nicio dovadă că plasa învață mai mult pe pas, iar acolo unde
+comparația e curată, învață mai puțin. **Direcția „plasa mare” se închide aici**; din ea rămâne folosit
+`ModelGPTContinuu` (GPT-ul care continuă de unde a rămas).
+
 ```
 python unelte/trepte_plasa_mare.py --trepte 3     # treapta 3 (~2 ore și 20 de minute)
 ```

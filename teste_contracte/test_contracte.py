@@ -56,6 +56,7 @@ MODULE = [
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
+    ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("profesor", "module.jucarii:ProfesorGol", {}),
     ("rulare", "module.rulare_locala:RulareLocala", {}),
     ("stocare", "module.stocare_disc:StocareDisc", {"director": "__director_temporar__"}),

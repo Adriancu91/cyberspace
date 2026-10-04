@@ -209,3 +209,30 @@ def test_testul_rapid_nu_scrie_starea(mare, tmp_path):
     model.antreneaza(_Date(TEXT), 30.0)
     model.biti_pentru("the cat ran.")
     assert not (tmp_path / "plasa.pt").exists()  # doar dupa_examen (experimentul adevărat) o scrie
+
+
+# --- GPT-ul care continuă, în bucla de auto-îmbunătățire (o stare pentru fiecare arhitectură) ----------
+
+
+def test_fiecare_arhitectura_isi_continua_cea_mai_buna_stare(tmp_path, tokenizer_mic):
+    def nou(**setari):
+        return ModelGPTContinuu(**{**MIC, **setari}, tokenizer="bpe", cale_tokenizer=tokenizer_mic, pasi_max=20,
+                                director_stari=str(tmp_path / "stari"))
+
+    primul = nou()
+    primul.antreneaza(_Date(TEXT), 30.0)
+    assert primul.dupa_examen({"scor": 2.0})["continuare"]["salvat"]  # prima stare a arhitecturii
+    alta_arhitectura = nou(n_emb=64)
+    assert not alta_arhitectura.antreneaza(_Date(TEXT), 30.0)["continuat"]  # pornește de la zero, în fișierul ei
+    alta_arhitectura.dupa_examen({"scor": 2.5})
+    assert len(list((tmp_path / "stari").glob("gpt_*.pt"))) == 2
+
+    continuare = nou(rata_invatare=0.0005, lot=4)  # aceeași arhitectură, alt lot și altă rată
+    statistici = continuare.antreneaza(_Date(TEXT), 30.0)
+    assert statistici["continuat"] and statistici["pasi_total"] == 40 and statistici["scor_la_pornire"] == 2.0
+    assert continuare.optimizator.param_groups[0]["lr"] == 0.0005  # rata rețetei de acum, nu a celei salvate
+    assert not continuare.dupa_examen({"scor": 2.1})["continuare"]["salvat"]  # mai slab: starea bună rămâne
+    al_treilea = nou()
+    assert al_treilea.antreneaza(_Date(TEXT), 30.0)["pasi_total"] == 40  # pornește tot din starea cu scorul 2,0
+    assert al_treilea.dupa_examen({"scor": 1.9})["continuare"]["salvat"]  # mai bun: starea se înlocuiește
+    assert nou().antreneaza(_Date(TEXT), 30.0)["scor_la_pornire"] == 1.9
