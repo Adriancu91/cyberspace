@@ -165,10 +165,10 @@ Modulele de acum, pe cele 10 porturi:
 
 | Port | Modul | Ce face |
 | --- | --- | --- |
-| model | `model_ngram` / `model_gpt` / `model_plasa` / `model_plasa_adaptiva` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) / GPT cu 5 noduri și plasă (M2) / GPT cu un nod pe raft și noduri libere (M3) |
+| model | `model_ngram` / `model_gpt` / `model_plasa` / `model_plasa_adaptiva` / `model_continuu` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) / GPT cu 5 noduri și plasă (M2) / GPT cu un nod pe raft și noduri libere (M3) / GPT care continuă de unde a rămas (bucla: o stare pentru fiecare arhitectură) |
 | date | `date_mostra` / `date_fisier` / `date_tinystories` | propoziții generate / un fișier text (Shakespeare) / povești TinyStories (~20 MB) |
 | examen | `examen_bpb` | val_bpb pe text nevăzut la antrenare |
-| cercetător | `cercetator_aleator` | schimbă câte o setare, pornind de la cea mai bună rețetă |
+| cercetător | `cercetator_aleator` / `cercetator_local` | schimbă câte o setare, pornind de la cea mai bună rețetă / întâi fiecare valoare din listă, apoi strânge căutarea în jurul celor mai bune 3 rețete |
 | rulare | `rulare_locala` | laptopul: limită de timp, măsoară memoria video |
 | stocare | `stocare_disc` | folderul `lucru/stocare` |
 | interfață | `interfata_consola` | mesajele din terminal |
@@ -698,6 +698,154 @@ comparația e curată, învață mai puțin. **Direcția „plasa mare” se în
 
 ```
 python unelte/trepte_plasa_mare.py --trepte 3     # treapta 3 (~2 ore și 20 de minute)
+```
+
+## Bucla de auto-îmbunătățire pe GPT-ul simplu (4 octombrie 2026)
+
+După închiderea plasei mari, bucla lui Kronos rulează pe GPT-ul simplu, **cu continuare**: cercetătorul schimbă rețeta,
+iar modelul nu o ia de la zero la fiecare experiment, ci continuă să învețe de unde a rămas.
+
+**Ce a rulat** (`config/laptop_bucla.toml`), 3 ore (16:01–19:06):
+
+- **Date:** TinyStories de 10× (R2, 180 MB), pe bucăți de cuvinte (BPE). Examenul oficial e pe validarea lui R2
+  (nevăzută), același ca în treapta 2 din M3.
+- **Modelul la pornire:** GPT-ul simplu de ~52 M parametri (10 straturi × 640, context 256, lot 16, rata 0,0003).
+  Fiecare experiment = 5 minute de antrenare.
+- **Continuarea** (`ModelGPTContinuu`, cu setarea nouă `director_stari`): fiecare arhitectură (straturi, lățime, capete,
+  context) are starea ei în `lucru/bucla/stari/`. O rețetă cu o arhitectură deja încercată continuă din cea mai bună
+  stare a ei, cu lotul și rata noi; o arhitectură nouă pornește de la zero. Starea se scrie doar dacă scorul
+  arhitecturii s-a îmbunătățit, deci un experiment stricat nu strică starea bună.
+- **Cercetătorul nou** (`cercetator_local`):
+  - întâi **lista**: fiecare valoare o dată, ca singură schimbare față de cea mai bună rețetă de atunci (straturi
+    6/8/10/12/14, lățime 512/576/640/704/768, context 128/192/256/384/512, lot 8/12/16/24/32, rata
+    0,0001/0,0002/0,0003/0,0005/0,0008);
+  - când lista s-a epuizat, **strângerea** în jurul celor mai bune 3 rețete: la jumătatea drumului spre valorile vecine
+    deja încercate, întâi golurile mari, până la pasul setării (un strat; 32 la lățime și context; 2 la lot; la rată,
+    până la schimbări de 10%).
+- La 16:11, după #155, am oprit bucla curat și am repornit-o, ca să intre o reparație a cercetătorului: strângerea sărea
+  peste pașii mici la numere întregi, de exemplu un strat în plus. Niciun experiment nu s-a pierdut, pentru că Kronos a
+  continuat din jurnal.
+
+### Rezultatul
+
+- **34 de experimente** (#154–#187), **13 păstrate**. Lista a ținut 20 de experimente (#155–#174), iar strângerea
+  13 (#175–#187).
+- **Cel mai bun scor: 0,5409** la #187: 10 straturi × 512, context 256, lot 30, rata 0,00035; 33,8 M parametri; 75 de
+  minute de antrenare în spate, 40.770 de pași. La punctul de plecare era **1,2283**.
+- Fără erori și fără experimente anulate. Memoria video: cel mult 4,3 GB rezervați (#169, lățimea 768 cu lot 32), sub
+  5,5 GB. Paznicul a făcut 6 pauze de răcire de câte 2 minute: placa a ajuns la 86–87 °C, iar limita e 85 °C.
+- Ce scrie cel mai bun model (`python -m kronos scrie --config config/laptop_bucla.toml --inceput "Once upon a time"`):
+  > Once upon a time, there was a fearful crocodile in the big pond. He lived in a pond with his fish friends. One day,
+  > he wanted to balance on a tree. He tried very hard, but he was too scared. The crocodile felt sad and baby, and he
+  > wanted to make friends. He stayed still and watched the other animals playing. His friends saw him trying and
+  > joined him. They all had a great time, […]
+
+| # | Faza | Schimbarea | Rețeta (straturi×lățime · context · lot · rata) | Parametri | Pornire | Pași (simboluri văzute) | Minute în spate | val_bpb | Câștig | Decizie |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 154 | pornire | – | 10×640 · c256 · lot 16 · 0,0003 | 52,0 M | de la zero | 2.320 (9,5 M) | 5 | 1,2283 | – | **păstrat** |
+| 155 | lista | lățime: 640 → 512 | 10×512 · c256 · lot 16 · 0,0003 | 33,8 M | de la zero | 3.160 (12,9 M) | 5 | 1,0869 | +0,1414 | **păstrat** |
+| 156 | lista | rata: 0,0003 → 0,0001 | 10×512 · c256 · lot 16 · 0,0001 | 33,8 M | din starea cu 1,0869 | 3.183 (13,0 M) | 10 | 0,9059 | +0,1810 | **păstrat** |
+| 157 | lista | rata: 0,0001 → 0,0008 | 10×512 · c256 · lot 16 · 0,0008 | 33,8 M | din starea cu 0,9059 | 3.248 (13,3 M) | 15 | 0,7955 | +0,1105 | **păstrat** |
+| 158 | lista | rata: 0,0008 → 0,0002 | 10×512 · c256 · lot 16 · 0,0002 | 33,8 M | din starea cu 0,7955 | 3.239 (13,3 M) | 20 | 0,6849 | +0,1106 | **păstrat** |
+| 159 | lista | rata: 0,0002 → 0,0005 | 10×512 · c256 · lot 16 · 0,0005 | 33,8 M | din starea cu 0,6849 | 3.216 (13,2 M) | 25 | 0,6779 | +0,0070 | **păstrat** |
+| 160 | lista | lot: 16 → 8 | 10×512 · c256 · lot 8 · 0,0005 | 33,8 M | din starea cu 0,6779 | 5.463 (11,2 M) | 30 | 0,6663 | +0,0116 | **păstrat** |
+| 161 | lista | lățime: 512 → 704 | 10×704 · c256 · lot 8 · 0,0005 | 62,6 M | de la zero | 3.238 (6,6 M) | 5 | 1,1755 | -0,5092 | respins |
+| 162 | lista | straturi: 10 → 8 | 8×512 · c256 · lot 8 · 0,0005 | 27,4 M | de la zero | 6.671 (13,7 M) | 5 | 0,9415 | -0,2752 | respins |
+| 163 | lista | lot: 8 → 32 | 10×512 · c256 · lot 32 · 0,0005 | 33,8 M | din starea cu 0,6663 | 1.859 (15,2 M) | 35 | 0,6090 | +0,0573 | **păstrat** |
+| 164 | lista | lățime: 512 → 576 | 10×576 · c256 · lot 32 · 0,0005 | 42,4 M | de la zero | 1.415 (11,6 M) | 5 | 1,2249 | -0,6159 | respins |
+| 165 | lista | context: 256 → 128 | 10×512 · c128 · lot 32 · 0,0005 | 33,7 M | de la zero | 3.349 (13,7 M) | 5 | 0,9758 | -0,3668 | respins |
+| 166 | lista | context: 256 → 192 | 10×512 · c192 · lot 32 · 0,0005 | 33,7 M | de la zero | 2.290 (14,1 M) | 5 | 1,0904 | -0,4814 | respins |
+| 167 | lista | lot: 32 → 12 | 10×512 · c256 · lot 12 · 0,0005 | 33,8 M | din starea cu 0,6090 | 3.992 (12,3 M) | 40 | 0,6215 | -0,0125 | respins |
+| 168 | lista | straturi: 10 → 14 | 14×512 · c256 · lot 32 · 0,0005 | 46,4 M | de la zero | 1.320 (10,8 M) | 5 | 1,2182 | -0,6092 | respins |
+| 169 | lista | lățime: 512 → 768 | 10×768 · c256 · lot 32 · 0,0005 | 74,2 M | de la zero | 947 (7,8 M) | 5 | 1,4298 | -0,8208 | respins |
+| 170 | lista | straturi: 10 → 6 | 6×512 · c256 · lot 32 · 0,0005 | 21,1 M | de la zero | 2.774 (22,7 M) | 5 | 1,0491 | -0,4401 | respins |
+| 171 | lista | context: 256 → 384 | 10×512 · c384 · lot 32 · 0,0005 | 33,8 M | de la zero | 1.205 (14,8 M) | 5 | 1,3634 | -0,7543 | respins |
+| 172 | lista | lot: 32 → 24 | 10×512 · c256 · lot 24 · 0,0005 | 33,8 M | din starea cu 0,6090 | 2.242 (13,8 M) | 40 | 0,6039 | +0,0051 | **păstrat** |
+| 173 | lista | straturi: 10 → 12 | 12×512 · c256 · lot 24 · 0,0005 | 40,1 M | de la zero | 1.874 (11,5 M) | 5 | 1,1539 | -0,5500 | respins |
+| 174 | lista | context: 256 → 512 | 10×512 · c512 · lot 24 · 0,0005 | 33,9 M | de la zero | 1.117 (13,7 M) | 5 | 1,4181 | -0,8142 | respins |
+| 175 | strângere | rata: 0,0005 → 0,00065 | 10×512 · c256 · lot 24 · 0,00065 | 33,8 M | din starea cu 0,6039 | 2.231 (13,7 M) | 45 | 0,6035 | +0,0004 | respins |
+| 176 | strângere | context: 256 → 320 | 10×512 · c320 · lot 24 · 0,00065 | 33,8 M | de la zero | 1.837 (14,1 M) | 5 | 1,1572 | -0,5533 | respins |
+| 177 | strângere | rata: 0,0005 → 0,0004 | 10×512 · c256 · lot 24 · 0,0004 | 33,8 M | din starea cu 0,6035 | 2.302 (14,1 M) | 50 | 0,5744 | +0,0295 | **păstrat** |
+| 178 | strângere | lot: 24 → 20 | 10×512 · c256 · lot 20 · 0,0004 | 33,8 M | din starea cu 0,5744 | 2.651 (13,6 M) | 55 | 0,5705 | +0,0039 | respins |
+| 179 | strângere | lot: 24 → 28 | 10×512 · c256 · lot 28 · 0,0004 | 33,8 M | din starea cu 0,5705 | 1.980 (14,2 M) | 60 | 0,5567 | +0,0177 | **păstrat** |
+| 180 | strângere | rata: 0,0004 → 0,00035 | 10×512 · c256 · lot 28 · 0,00035 | 33,8 M | din starea cu 0,5567 | 1.976 (14,2 M) | 65 | 0,5496 | +0,0071 | **păstrat** |
+| 181 | strângere | context: 256 → 224 | 10×512 · c224 · lot 28 · 0,00035 | 33,7 M | de la zero | 2.185 (13,7 M) | 5 | 1,1365 | -0,5870 | respins |
+| 182 | strângere | context: 256 → 288 | 10×512 · c288 · lot 28 · 0,00035 | 33,8 M | de la zero | 1.707 (13,8 M) | 5 | 1,2352 | -0,6857 | respins |
+| 183 | strângere | rata: 0,0004 → 0,00045 | 10×512 · c256 · lot 28 · 0,00045 | 33,8 M | din starea cu 0,5496 | 1.995 (14,3 M) | 70 | 0,5528 | -0,0033 | respins |
+| 184 | strângere | straturi: 10 → 9 | 9×512 · c256 · lot 28 · 0,00035 | 30,6 M | de la zero | 2.273 (16,3 M) | 5 | 1,1410 | -0,5914 | respins |
+| 185 | strângere | straturi: 10 → 11 | 11×512 · c256 · lot 28 · 0,00035 | 36,9 M | de la zero | 1.890 (13,5 M) | 5 | 1,1494 | -0,5998 | respins |
+| 186 | strângere | lot: 28 → 26 | 10×512 · c256 · lot 26 · 0,00035 | 33,8 M | din starea cu 0,5496 | 2.119 (14,1 M) | 70 | 0,5449 | +0,0047 | respins |
+| 187 | strângere | lot: 28 → 30 | 10×512 · c256 · lot 30 · 0,00035 | 33,8 M | din starea cu 0,5449 | 1.901 (14,6 M) | 75 | 0,5409 | +0,0087 | **păstrat** |
+
+Cum se citesc coloanele:
+- **Schimbarea:** e față de rețeta de bază a cercetătorului. În faza „lista”, baza e cea mai bună rețetă de atunci; în
+  faza „strângere”, e rețeta în jurul căreia a căutat.
+- **Pornire:** modelul a pornit de la zero sau din starea arhitecturii lui (cu scorul acelei stări).
+- **Minute în spate:** toată antrenarea modelului până la examen, cu tot cu experimentele anterioare din care a
+  continuat.
+- **Câștig:** cât e mai bun decât cea mai bună rețetă de atunci (pozitiv = mai bun). Kronos păstrează doar câștigurile
+  peste pragul de zgomot (0,005).
+
+Raportul complet, cu tabelul pe setări și cele două comparații curate: `python unelte/raport_bucla.py`.
+
+### Ce direcții au ajutat
+
+1. **Continuarea însăși, de departe.** Același model (10 × 512) a învățat 75 de minute în 15 bucăți de câte 5 minute:
+   1,0869 → 0,5409. Câștigul pe bucată scade: 0,18 la minutul 10, doar 0,004–0,005 la minutele 70–75.
+2. **Un model mai mic, la început.** La 5 minute de la zero, cu același lot și aceeași rată, lățimea 512 bate lățimea
+   640: 1,0869 față de 1,2283. Motivul: face cu 36% mai mulți pași (3.160 față de 2.320). E o comparație curată.
+3. **Pe parcurs: rata mai mică și lotul mai mare**, adică pași cu mai puțin „zgomot”.
+   - **Două comparații curate**, din aceeași stare și cu aceleași 5 minute:
+     - din starea cu 0,6090: lot 24 → 0,6039, dar lot 12 → 0,6215 (mai slab decât la pornire);
+     - din starea cu 0,5496: rata 0,00035 cu lot 26 → 0,5449, dar rata 0,00045 cu lot 28 → 0,5528 (tot mai slab decât
+       la pornire).
+   - **Pe drum, între minutele 30 și 60**, câștigurile mari au venit imediat după ce rata a scăzut sau lotul a crescut:
+     lot 8 → 32: −0,057; rata 0,00065 → 0,0004: −0,029; lot 20 → 28: −0,014. Când rata a crescut (0,0005 → 0,00065),
+     câștigul a fost aproape zero (−0,0004). La minutele 65–75, diferențele sunt cât pragul de zgomot și nu mai arată
+     o direcție clară.
+   - Rețeta finală are lot 30 și rata 0,00035. Asta face și un program de rată care scade pe parcurs; bucla l-a găsit
+     „de mână”.
+4. **Ce n-a ajutat, în 5 minute de la zero:** modelele mai mari sau cu context mai lung (14 straturi: 1,2182; lățimea
+   768: 1,4298; contextul 384: 1,3634; contextul 512: 1,4181). La 5 minute câștigă cele care fac mai mulți pași: 8
+   straturi cu lot 8 (0,9415) și contextul 128 (0,9758). Asta nu spune nimic despre cum s-ar fi descurcat ele în 75 de
+   minute.
+
+**Comparația cu M3, pe același examen R2:**
+- GPT-ul la plafon (222 M parametri) a ajuns la 0,8302 după 40 de minute pe R2, plus 20 de minute pe R1 înainte.
+- Modelul de 34 M din buclă avea 0,6039 după 40 de minute (#172) și 0,5409 după 75. Lotul și rata lui au fost schimbate
+  pe drum de cercetător.
+- În 40 de minute, modelul mic a văzut ~106 M de simboluri din R2, iar cel mare ~20 M.
+- Concluzia: pe laptopul ăsta, la bugete de o oră, un model mai mic care vede mai mult text câștigă clar.
+
+### Limita buclei cu continuare
+
+Citește asta înainte de tabelul pe setări din raport:
+
+- **Continuările câștigă aproape mereu, arhitecturile noi pierd mereu.**
+  - Au fost păstrate 11 din 16 continuări, dar doar 1 din 17 rețete pornite de la zero. Aceea a fost #155, comparată
+    cu punctul de plecare, care pornise tot de la zero.
+  - O arhitectură nouă are 5 minute de antrenare, iar cea mai bună rețetă avea între 30 și 75. Nu poate câștiga, oricât
+    de bună ar fi.
+  - Așa s-au dus 16 din cele 33 de experimente, adică ~80 de minute.
+- **Tabelul pe setări din raport amestecă efectul setării cu minutele în plus.** De exemplu, „rata ↓: 4 din 4
+  păstrate”: fiecare dintre ele a fost o continuare cu încă 5 minute de antrenare. Dovezile curate sunt doar cele de la
+  punctele 2 și 3 de mai sus.
+- **Un amănunt:** starea unei arhitecturi se scrie ori de câte ori scorul ei se îmbunătățește, chiar și sub pragul de
+  zgomot.
+  - Experimentele #175, #178 și #186 au fost respinse de Kronos, dar starea lor a fost păstrată, iar experimentele
+    următoare au continuat din ea.
+  - Cele două experimente care au stricat modelul (#167, #183) au fost aruncate.
+
+**Variante pentru pasul următor:**
+1. **Căutare cinstită, apoi antrenare lungă.** Fiecare rețetă pornește de la zero, cu același timp și fără continuare,
+   ca arhitecturile să fie comparate drept. Apoi rețeta câștigătoare se antrenează lung, cu continuare.
+2. **O rată care scade singură în GPT**, de exemplu pe toată durata plănuită a antrenării. Bucla a găsit de mână că o
+   rată mai mică spre final ajută; un program în model ar face asta automat, iar cercetătorul ar putea căuta altceva.
+
+```
+python -m kronos ruleaza --config config/laptop_bucla.toml --experimente 60   # bucla (oprire: python -m kronos opreste --config ...)
+python unelte/raport_bucla.py                                                  # raportul: tabel, cel mai bun scor, direcții
+python -m kronos scrie --config config/laptop_bucla.toml --inceput "Once upon a time"
 ```
 
 ## Toate comenzile

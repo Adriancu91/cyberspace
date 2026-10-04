@@ -7,7 +7,8 @@ Faza 2, strângerea: când fiecare valoare din listă a fost încercată (lista 
 încercate (după scor) și caută între valori: pentru fiecare setare, jumătatea drumului spre valorile vecine deja
 cunoscute (ex. rata 0,0003 între 0,0002 și 0,0005 → 0,00025 și 0,0004), rotunjită la valori valide (setarea „pasi”: ex.
 n_emb din 32 în 32). Întâi golurile cele mai mari, din jurul oricăreia din cele 3 rețete; fiecare valoare nouă intră
-între cele cunoscute, deci căutarea devine tot mai fină, până la schimbări de 10%.
+între cele cunoscute, deci căutarea devine tot mai fină: la numere întregi până la pasul setării (ex. un strat), la
+numere cu virgulă (rata) până la schimbări de 10%.
 Dacă și asta se epuizează, propunerea e goală și Kronos se oprește singur.
 """
 
@@ -21,7 +22,7 @@ from typing import Any
 
 from kronos.contracte import Propunere
 
-PRAG_FIN = 0.1  # la strângere, o valoare nouă trebuie să difere cu cel puțin 10% de cea de la care pornește
+PRAG_FIN = 0.1  # la strângere, un număr cu virgulă nou (ex. rata) trebuie să difere cu cel puțin 10% de cel de pornire
 
 
 def _cheie(setari: dict[str, dict[str, Any]]) -> str:
@@ -115,8 +116,10 @@ class CercetatorLocal:
                                       min((v for v in valori if v > actuala), default=None)) if v is not None]
                 for vecin in vecini:
                     noua = _rotunjeste((actuala + vecin) / 2, actuala, self.pasi.get(setare))
-                    if noua in (actuala, vecin) or abs(noua - actuala) < PRAG_FIN * abs(actuala):
-                        continue  # nimic nou între ele, sau o schimbare prea mică să conteze
+                    if noua in (actuala, vecin):
+                        continue  # nimic nou între ele: s-a ajuns la pasul setării (ex. un strat, 32 de lățime)
+                    if isinstance(actuala, float) and abs(noua - actuala) < PRAG_FIN * abs(actuala):
+                        continue  # un număr cu virgulă (ex. rata) schimbat cu mai puțin de 10%: prea puțin să conteze
                     candidat = copy.deepcopy(reteta)
                     candidat.setdefault(port, {})[setare] = noua
                     if _cheie(candidat) not in incercate:

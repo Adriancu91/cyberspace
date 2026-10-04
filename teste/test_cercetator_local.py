@@ -65,6 +65,18 @@ def test_strangerea_cauta_intre_valori_si_rotunjeste():
     assert p.modificari["model"]["rata"] != 0.000275  # între 0,00025 și 0,0003: sub 10% față de 0,0003, nu se mai încearcă
 
 
+def test_strangerea_la_numere_intregi_merge_pana_la_pas():
+    # Un strat în plus sau în minus față de 12 (sub 10%) se încearcă: pragul de 10% e doar pentru numere cu virgulă.
+    cercetator = CercetatorLocal({"model": {"straturi": [10, 12, 14]}}, samanta=0)
+    istoric = [{"id": i, "setari": {"model": {"straturi": s}}, "scoruri": {"val_bpb": v}}
+               for i, (s, v) in enumerate([(12, 1.0), (10, 1.1), (14, 1.2)], start=1)]
+    assert cercetator.propune(istoric, {"model": {"straturi": 12}}).modificari == {"model": {"straturi": 11}}
+    istoric.append({"id": 4, "setari": {"model": {"straturi": 11}}, "scoruri": {"val_bpb": 1.3}})
+    assert cercetator.propune(istoric, {"model": {"straturi": 12}}).modificari == {"model": {"straturi": 13}}
+    istoric.append({"id": 5, "setari": {"model": {"straturi": 13}}, "scoruri": {"val_bpb": 1.4}})
+    assert cercetator.propune(istoric, {"model": {"straturi": 12}}).modificari == {}  # nimic între pași întregi
+
+
 def test_cand_nu_mai_e_nimic_de_incercat_se_opreste():
     spatiu = {"model": {"straturi": [8, 9]}}
     cercetator = CercetatorLocal(spatiu, samanta=0)
