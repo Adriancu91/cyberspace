@@ -469,6 +469,65 @@ răcire până la 70°C. Toate cele 9 rulări au ajuns exact la 25.000 de pași,
 python unelte/compara_plasa_adaptiva.py     # semințele 0, 1, 2; 25.000 de pași; ~45 de minute
 ```
 
+### Pasul 4: runda 2 (4 octombrie 2026)
+
+Ca testul în două runde din M2: aceleași semințe și 25.000 de pași, dar examenul pe a doua jumătate a poveștilor de
+validare. Fiecare plasă a pornit cu ce a hotărât în runda 1 la aceeași sămânță: plasa adaptivă cu 11–13 legături
+(tăria 0,099) și 4 noduri libere alocate (38 de noduri active), plasa veche cu cele 3 legături ale ei. GPT-ul simplu a
+rulat primul, ca martor, pe aceeași linie din jurnal: câștigul primit de plasa adaptivă după examen e cât a bătut-o pe
+el. R1 = toată validarea (din pasul 3), R2 = a doua jumătate; GPT-ul simplu, antrenat la fel, arată cât de diferit e
+textul de examen. **Efectul adaptării = (R2 − R1 plasa adaptivă) − (R2 − R1 GPT simplu).**
+
+| Sămânța | Simplu R1 | Simplu R2 | Adaptivă R1 | Adaptivă R2 | R2−R1 simplu | R2−R1 adaptivă | Efectul adaptării | Plasa veche R1 → R2 | Efectul plasei vechi |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0,9818 | 0,9926 | 0,9670 | 0,9778 | +0,0108 | +0,0108 | −0,0000 | 0,9697 → 0,9798 | −0,0007 |
+| 1 | 0,9770 | 0,9886 | 0,9704 | 0,9784 | +0,0115 | +0,0080 | −0,0036 | 0,9743 → 0,9821 | −0,0037 |
+| 2 | 0,9761 | 0,9850 | 0,9774 | 0,9910 | +0,0089 | +0,0136 | +0,0047 | 0,9750 → 0,9831 | −0,0008 |
+
+- **Verdict, plasa adaptivă: MICĂ (noroc).** Efectul mediu e +0,0004, de 12 ori sub pragul de zgomot (0,005), cu semn
+  diferit de la o sămânță la alta. Plasa n-a pornit goală, toate rulările au avut exact 25.000 de pași, deci testul e
+  valid: ce a hotărât plasa în runda 1 (legăturile și nodurile libere) nu schimbă nimic măsurabil în runda 2.
+- **Plasa veche: MICĂ (noroc)**, efect mediu −0,0017, la toate semințele în același sens, dar sub prag (ca în M2).
+- **Legăturile:** toate au fost folosite (folosire 0,05–0,42; 0,1 = deplină). La semințele 0 și 1, câștigul primit a
+  fost pozitiv (+0,0148, +0,0102), deci s-au întărit de la 0,099 la 0,296; la sămânța 2, negativ (−0,0060), deci au
+  slăbit la 0,080. **Atenție:** câștigul vine din avantajul întregii plase față de GPT-ul simplu, pe care îl avea și în
+  runda 1, fără legături. Legăturile s-au întărit deci fără să fi adus ele câștigul: semnalul de învățare din M2 nu
+  deosebește contribuția legăturilor de restul rețelei.
+- **Noduri libere folosite:** liber1 (jumătate din noun.person: 7,6% din cuvinte), liber2 (adj.all, 4,2%), liber3
+  (noun.artifact, 3,7%), liber4 (adv.all, 3,6%). După runda 2 s-au alocat și ultimele două, pentru o rundă 3:
+  liber5 ia jumătate din cuvintele lui liber1 (tim, friend, mia...), liber6 jumătate din noun.person (mom, max, sue...).
+- **Legături noi în runda 2:** câte 10–11, multe spre și dinspre nodurile libere (liber1 → verb.communication,
+  verb.motion → liber4...). La final: 22–23 de legături pe sămânță.
+- Viteza în runda 2, cu 38 de noduri: ~97 de pași pe secundă (cu 34: ~100).
+
+```
+python unelte/runda2_plasa_adaptiva.py      # pornește de la ultima comparație din lucru/; ~45 de minute
+```
+
+### Pasul 5: comparația la timp egal (4 octombrie 2026)
+
+Câte 5 minute de antrenare fiecare (pregătirea plasei intră în timpul ei), fără limită de pași, pe toată validarea,
+plasa adaptivă pornită goală. Înainte de fiecare rulare: 30 de secunde de pauză și răcire până la 70°C (placa a pornit
+de fiecare dată la 60–70°C).
+
+| Sămânța | Pași GPT simplu | Scor GPT simplu | Pași plasa adaptivă | Scor plasa adaptivă | Adaptivă − simplu |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 40.047 | **0,8970** | 27.744 | 0,9440 | +0,0470 |
+| 1 | 41.150 | **0,8864** | 28.468 | 0,9465 | +0,0602 |
+| 2 | 40.792 | **0,8855** | 27.119 | 0,9627 | +0,0772 |
+| media | 40.663 | **0,8896** | 27.777 | 0,9511 | +0,0614 |
+
+- **Verdict: MARE, dar în rău.** La același timp, GPT-ul simplu e mai bun la fiecare sămânță, în medie cu 0,061: de 12
+  ori pragul de zgomot. În aceleași 5 minute face cu ~46% mai mulți pași (~40.700 față de ~27.800), iar pașii în plus
+  contează mult mai mult decât câștigul pe pas al nodurilor (cel mult ~0,007, la pași egali).
+- Concluzia etapei M3: la pași egali, plasa adaptivă e cel mult puțin mai bună (neconcludent), adaptarea dintre runde
+  nu aduce nimic măsurabil, iar la timp egal pierde clar. Ca să merite, nodurile ar trebui să fie aproape gratuite
+  (sub ~5% încetinire) sau să aducă un câștig pe pas de zeci de ori mai mare.
+
+```
+python unelte/compara_timp_egal.py           # semințele 0, 1, 2; 5 minute fiecare; ~40 de minute
+```
+
 ## Toate comenzile
 
 ```
