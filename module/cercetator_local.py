@@ -10,6 +10,10 @@ n_emb din 32 în 32). Întâi golurile cele mai mari, din jurul oricăreia din c
 între cele cunoscute, deci căutarea devine tot mai fină: la numere întregi până la pasul setării (ex. un strat), la
 numere cu virgulă (rata) până la schimbări de 10%.
 Dacă și asta se epuizează, propunerea e goală și Kronos se oprește singur.
+
+Setări pentru bucle scurte: amesteca = false încearcă lista în ordinea din configurare, pe rând (prima valoare a fiecărei
+setări, apoi a doua...), ca valorile cele mai importante să apuce să fie încercate; strangere = false se oprește după
+listă.
 """
 
 from __future__ import annotations
@@ -43,7 +47,7 @@ class CercetatorLocal:
     MANIFEST = {
         "nume": "cercetator_local",
         "port": "cercetator",
-        "versiune": "0.1.0",
+        "versiune": "0.2.0",
         "versiune_contract": 1,
         "resurse": {},
         "permisiuni": [],
@@ -57,6 +61,8 @@ class CercetatorLocal:
         scor: str = "val_bpb",
         mai_mic_e_mai_bun: bool = True,
         cele_mai_bune: int = 3,
+        amesteca: bool = True,
+        strangere: bool = True,
     ) -> None:
         if not spatiu or not all(isinstance(v, dict) and v for v in spatiu.values()):
             raise ValueError("spatiu trebuie să fie de forma {port: {setare: [valori posibile]}}")
@@ -69,8 +75,15 @@ class CercetatorLocal:
         self.scor = scor
         self.mai_mic_e_mai_bun = mai_mic_e_mai_bun
         self.cele_mai_bune = cele_mai_bune
-        perechi = [(port, s, v) for port in sorted(spatiu) for s in sorted(spatiu[port]) for v in spatiu[port][s]]
-        random.Random(samanta).shuffle(perechi)
+        self.strangere = strangere
+        if amesteca:
+            perechi = [(port, s, v) for port in sorted(spatiu) for s in sorted(spatiu[port]) for v in spatiu[port][s]]
+            random.Random(samanta).shuffle(perechi)
+        else:  # în ordinea din configurare, pe rând: prima valoare a fiecărei setări, apoi a doua...
+            setari = [(port, s) for port in spatiu for s in spatiu[port]]
+            cele_mai_multe = max(len(spatiu[port][s]) for port, s in setari)
+            perechi = [(port, s, spatiu[port][s][i]) for i in range(cele_mai_multe) for port, s in setari
+                       if i < len(spatiu[port][s])]
         self._ordine = perechi
 
     def _scorul(self, fisa: dict[str, Any]) -> float | None:
@@ -89,6 +102,8 @@ class CercetatorLocal:
             candidat.setdefault(port, {})[setare] = valoare
             if _cheie(candidat) not in incercate:
                 return Propunere(f"lista: {port}.{setare}: {veche} → {valoare}", {port: {setare: valoare}})
+        if not self.strangere:
+            return Propunere("am încercat toată lista (strângerea e oprită)", {})
         # Faza 2: între valorile cunoscute, în jurul celor mai bune 3 rețete încercate.
         cu_scor = [(s, f) for f in istoric if isinstance(f.get("setari"), dict) and (s := self._scorul(f)) is not None]
         cu_scor.sort(key=lambda x: x[0], reverse=not self.mai_mic_e_mai_bun)

@@ -236,3 +236,58 @@ def test_fiecare_arhitectura_isi_continua_cea_mai_buna_stare(tmp_path, tokenizer
     assert al_treilea.antreneaza(_Date(TEXT), 30.0)["pasi_total"] == 40  # pornește tot din starea cu scorul 2,0
     assert al_treilea.dupa_examen({"scor": 1.9})["continuare"]["salvat"]  # mai bun: starea se înlocuiește
     assert nou().antreneaza(_Date(TEXT), 30.0)["scor_la_pornire"] == 1.9
+
+
+# --- GPT-ul care continuă, în bucla cinstită: de la zero, din aceeași stare, rata care scade între experimente -------
+
+
+def test_de_la_zero_nu_incarca_dar_isi_scrie_starea(tmp_path, tokenizer_mic):
+    def nou():
+        return ModelGPTContinuu(**MIC, tokenizer="bpe", cale_tokenizer=tokenizer_mic, pasi_max=10,
+                                director_stari=str(tmp_path / "stari"), de_la_zero=True)
+
+    for _ in range(2):  # a doua oară, aceeași arhitectură pornește tot de la zero (și își scrie din nou starea)
+        model = nou()
+        statistici = model.antreneaza(_Date(TEXT), 30.0)
+        assert statistici["pasi_total"] == 10 and not statistici["continuat"] and statistici["pornit_din"] is None
+        assert model.dupa_examen({"scor": 2.0})["continuare"]["salvat"]
+    assert len(list((tmp_path / "stari").glob("gpt_*.pt"))) == 1
+
+
+def test_stare_de_pornire_e_aceeasi_pentru_fiecare_experiment(tmp_path, tokenizer_mic):
+    comun = dict(**MIC, tokenizer="bpe", cale_tokenizer=tokenizer_mic, pasi_max=10)
+    sursa = ModelGPTContinuu(**comun, cale_stare=str(tmp_path / "pornire.pt"))
+    sursa.antreneaza(_Date(TEXT), 30.0)
+    sursa.dupa_examen({"scor": 2.0})
+    continut = (tmp_path / "pornire.pt").read_bytes()
+    for setari in ({"lot": 4}, {"rata_invatare": 5e-4}):  # lotul și rata se schimbă, starea de pornire nu
+        model = ModelGPTContinuu(**{**comun, **setari}, stare_de_pornire=str(tmp_path / "pornire.pt"))
+        statistici = model.antreneaza(_Date(TEXT), 30.0)
+        assert statistici["continuat"] and statistici["pasi_total"] == 20  # 10 din stare + 10 acum, de fiecare dată
+        assert statistici["pornit_din"] == str(tmp_path / "pornire.pt")
+        assert model.dupa_examen({"scor": 1.0}) is None  # nu scrie nicăieri
+    assert (tmp_path / "pornire.pt").read_bytes() == continut  # fișierul de pornire a rămas neatins
+    lipsa = ModelGPTContinuu(**comun, stare_de_pornire=str(tmp_path / "nu_exista.pt"))
+    with pytest.raises(FileNotFoundError, match="nu pornesc de la zero"):
+        lipsa.antreneaza(_Date(TEXT), 30.0)
+    with pytest.raises(ValueError, match="de_la_zero"):
+        ModelGPTContinuu(**comun, de_la_zero=True, stare_de_pornire=str(tmp_path / "pornire.pt"))
+
+
+def test_rata_care_scade_continua_intre_experimente(tmp_path, tokenizer_mic):
+    def nou():
+        return ModelGPTContinuu(**MIC, tokenizer="bpe", cale_tokenizer=tokenizer_mic, pasi_max=10,
+                                cale_stare=str(tmp_path / "gpt.pt"), rata_care_scade=True, incalzire_pasi=5,
+                                durata_scaderii_secunde=3600.0)
+
+    primul = nou()
+    assert primul.rata_acum(0, 0.0) == pytest.approx(primul.rata_invatare / 5)  # încălzirea, doar la început
+    primul.antreneaza(_Date(TEXT), 30.0)
+    primul.dupa_examen({"scor": 2.0})
+    al_doilea = nou()
+    al_doilea.antreneaza(_Date(TEXT), 30.0)  # citește starea: pașii și minutele de dinainte
+    al_doilea.pasi_total, al_doilea.minute_total = 10, primul.minute_total  # cum erau în timpul antrenării lui
+    assert al_doilea._pasi_anteriori() == 10 and al_doilea.rata_acum(0, 0.0) == pytest.approx(al_doilea.rata_invatare)
+    # Scăderea continuă de unde a rămas: progresul pornește din secundele de antrenare de dinainte, pe cele 3.600.
+    assert al_doilea._progres(0, 0.0, 0.0, 30.0) == pytest.approx(primul.minute_total * 60 / 3600)
+    assert al_doilea._progres(0, 0.0, 1800.0, 30.0) == pytest.approx((primul.minute_total * 60 + 1800) / 3600)

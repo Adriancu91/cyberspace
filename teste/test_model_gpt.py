@@ -184,3 +184,34 @@ def test_memoria_goala_nu_strica_nimic():
     model.antreneaza(DateMostra(propozitii=200), 0.5)
     assert math.isfinite(model.biti_pentru("the cat sat."))
     assert len(model.genereaza("the ", 10)) == 10
+
+
+# --- rata care scade singură ---------------------------------------------------------
+
+
+def test_rata_care_scade_incalzire_apoi_cosinus():
+    m = ModelGPT(**MIC, rata_care_scade=True, incalzire_pasi=10, fractie_rata_finala=0.1)
+    r = MIC["rata_invatare"]
+    assert m.rata_acum(0, 0.0) == pytest.approx(r / 10)  # încălzirea: primul pas, o zecime
+    assert m.rata_acum(9, 0.0) == pytest.approx(r)  # după 10 pași, toată rata
+    assert m.rata_acum(50, 0.5) == pytest.approx(r * 0.55)  # la jumătate: 10% + 90% × 0,5
+    assert m.rata_acum(50, 1.0) == pytest.approx(r * 0.1)  # la final: 10%
+    assert m.rata_acum(50, 3.0) == pytest.approx(r * 0.1)  # după final rămâne la 10%
+    assert ModelGPT(**MIC).rata_acum(0, 0.5) == r  # oprită (implicit): rata fixă, ca înainte
+
+
+def test_rata_care_scade_ajunge_la_final_pe_pasi_max():
+    m = ModelGPT(**MIC, pasi_max=40, rata_care_scade=True, incalzire_pasi=5)
+    statistici = m.antreneaza(DateMostra(propozitii=200), 60.0)
+    # Ultimul pas (al 40-lea) are progresul 39/40: cosinusul e aproape de capăt, deci rata e aproape de 10%.
+    asteptat = MIC["rata_invatare"] * (0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * 39 / 40)))
+    assert statistici["rata_la_final"] == pytest.approx(asteptat)
+    assert m.optimizator.param_groups[0]["lr"] == pytest.approx(asteptat)
+    assert "rata_la_final" not in ModelGPT(**MIC, pasi_max=3).antreneaza(DateMostra(propozitii=200), 60.0)
+
+
+def test_rata_care_scade_setari_invalide():
+    for setari in ({"fractie_rata_finala": 0.0}, {"fractie_rata_finala": 1.5}, {"incalzire_pasi": -1},
+                   {"durata_scaderii_secunde": -1.0}):
+        with pytest.raises(ValueError, match="fractie_rata_finala"):
+            ModelGPT(**MIC, rata_care_scade=True, **setari)

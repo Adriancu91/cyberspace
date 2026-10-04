@@ -89,3 +89,12 @@ def test_rotunjirea():
     assert _rotunjeste(608.0, 640, 32) == 608 and _rotunjeste(600.0, 640, 32) == 608 and _rotunjeste(9.0, 10, None) == 9
     assert _rotunjeste(0.00025, 0.0003, None) == 0.00025 and _rotunjeste(0.000123456, 0.0001, None) == 0.000123
     assert _rotunjeste(1.0, 16, 2) == 2  # niciodată sub un pas
+
+
+def test_in_ordinea_din_configurare_si_fara_strangere():
+    spatiu = {"model": {"straturi": [4, 12], "rata": [0.0001]}}  # în configurare: întâi straturile, apoi rata
+    cercetator = CercetatorLocal(spatiu, amesteca=False, strangere=False)
+    assert cercetator._ordine == [("model", "straturi", 4), ("model", "rata", 0.0001), ("model", "straturi", 12)]
+    propuneri, _ = _ruleaza(cercetator, _scor)
+    assert [m["straturi"] if "straturi" in d else m["rata"] for d, m in propuneri] == [4, 0.0001, 12]
+    assert all(d.startswith("lista") for d, _ in propuneri)  # după listă se oprește, fără strângere

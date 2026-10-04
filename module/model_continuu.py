@@ -14,6 +14,15 @@ Pentru bucla de auto-îmbunătățire (cercetătorul schimbă și arhitectura): 
 stare a ei (cu lotul și rata de învățare noi); o arhitectură nouă pornește de la zero. După examen, starea se scrie doar
 dacă scorul e mai bun decât cel mai bun scor de până atunci al acelei arhitecturi: un experiment stricat (de ex. o rată
 prea mare) nu strică starea bună.
+
+Pentru bucla cinstită (cele două feluri de comparații separate):
+- de_la_zero: modelul nu încarcă nicio stare (pornește mereu de la zero), dar își scrie starea de la final (cu
+  director_stari, câte una pentru fiecare arhitectură). Așa se compară arhitecturile, la timp egal.
+- stare_de_pornire: fiecare experiment pornește din ACEST fișier, care nu se scrie niciodată. Așa se compară lotul și
+  rata: toate din aceeași stare. Dacă fișierul lipsește, antrenarea se oprește cu un mesaj clar (nu pornește pe tăcute
+  de la zero).
+Cu rata_care_scade (din model_gpt), încălzirea se face doar în primii pași ai modelului, iar cu durata_scaderii_secunde
+scăderea continuă de la un experiment la altul (din minutele de antrenare din stare).
 """
 
 from __future__ import annotations
@@ -73,7 +82,7 @@ class ModelGPTContinuu(ModelGPT):
     MANIFEST = {
         "nume": "model_gpt_continuu",
         "port": "model",
-        "versiune": "0.1.0",
+        "versiune": "0.2.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 5500},
         "permisiuni": ["citire_fisier", "scriere_fisier"],
@@ -82,15 +91,23 @@ class ModelGPTContinuu(ModelGPT):
     _pregatirea_intra_in_buget = False
     _textul_ramane_in_ram = True
 
-    def __init__(self, cale_stare: str = "", director_cache: str = "", director_stari: str = "", **setari: Any) -> None:
+    def __init__(
+        self, cale_stare: str = "", director_cache: str = "", director_stari: str = "", de_la_zero: bool = False,
+        stare_de_pornire: str = "", **setari: Any,
+    ) -> None:
         super().__init__(**setari)
+        if de_la_zero and stare_de_pornire:
+            raise ValueError("de_la_zero și stare_de_pornire nu merg împreună: alege una")
         self.cale_stare = cale_stare
         self.director_cache = director_cache
         self.director_stari = director_stari
+        self.de_la_zero = bool(de_la_zero)
+        self.stare_de_pornire = stare_de_pornire
         self.pasi_total = 0  # câți pași a făcut modelul în toate experimentele de până acum
         self.minute_total = 0.0  # câte minute de antrenare are în spate
         self.scor_la_pornire: float | None = None  # cu director_stari: cel mai bun scor al arhitecturii, de unde pornește
         self.continuat = False
+        self.pornit_din: str | None = None  # fișierul stării din care a pornit
 
     def elibereaza_placa(self) -> None:
         self.retea = None
@@ -108,12 +125,17 @@ class ModelGPTContinuu(ModelGPT):
         return self.cale_stare
 
     def _stare_salvata(self) -> dict[str, Any] | None:
-        cale = self.cale_starii()
+        if self.de_la_zero:
+            return None
+        cale = self.stare_de_pornire or self.cale_starii()
         if not cale or not Path(cale).exists():
+            if self.stare_de_pornire:
+                raise FileNotFoundError(f"Nu găsesc starea de pornire „{cale}”: nu pornesc de la zero pe tăcute.")
             return None
         stare = torch.load(cale, map_location="cpu", weights_only=True)
         if stare["setari"] != self.setari:
             raise ValueError(f"Starea din „{cale}” e a altui model ({stare['setari']}); folosește alt cale_stare.")
+        self.pornit_din = cale
         return stare
 
     def _pregateste_reteaua(self) -> None:
@@ -135,12 +157,18 @@ class ModelGPTContinuu(ModelGPT):
         # Primul experiment alege bucățile ca GPT-ul simplu; la fiecare continuare, alte bucăți de text.
         return self.samanta if self.pasi_total == 0 else self.samanta * 1_000_003 + self.pasi_total
 
+    def _pasi_anteriori(self) -> int:
+        return self.pasi_total  # în timpul antrenării: pașii de dinainte (se adună după)
+
+    def _secunde_anterioare(self) -> float:
+        return self.minute_total * 60
+
     def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
         statistici = super().antreneaza(date, buget_secunde)
         self.pasi_total += statistici["pasi"]
         self.minute_total += statistici["secunde_bucla"] / 60
         statistici.update(pasi_total=self.pasi_total, minute_total=round(self.minute_total, 1), continuat=self.continuat,
-                          scor_la_pornire=self.scor_la_pornire)
+                          scor_la_pornire=self.scor_la_pornire, pornit_din=self.pornit_din)
         if self.dispozitiv.type == "cuda":
             statistici["memorie_rezervata_mb"] = round(torch.cuda.max_memory_reserved() / 2**20)
         return statistici

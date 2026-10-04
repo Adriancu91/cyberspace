@@ -1,0 +1,65 @@
+# Prima buclă de auto-îmbunătățire pe GPT-ul simplu, cu continuare amestecată (4 octombrie 2026, linia „bucla_gpt”).
+# Păstrată pentru raport și pentru reluare; bucla de acum e config/laptop_bucla.toml (varianta cinstită).
+# GPT-ul pe bucăți de cuvinte (BPE), ~52 M parametri la pornire (10 straturi × 640), pe TinyStories de 10× (R2, 180 MB).
+# Fiecare experiment = 5 minute de antrenare. Fiecare arhitectură își continuă cea mai bună stare (lucru/bucla/stari/);
+# o arhitectură nouă pornește de la zero. Cercetătorul: întâi fiecare valoare din listă, apoi strânge căutarea în jurul
+# celor mai bune 3 rețete.
+#   python -m kronos ruleaza --config config/laptop_bucla_v1.toml --experimente 60  (oprire: python -m kronos opreste ...)
+#   python unelte/raport_bucla.py --config config/laptop_bucla_v1.toml             (tabelul și direcțiile care au ajutat)
+
+[platforma]
+nume = "bucla_gpt"
+director_lucru = "lucru"
+buget_antrenare_secunde = 300   # 5 minute de antrenare (pregătirea nu intră)
+experimente = 60
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 900
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 640, context = 256, lot = 16, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", director_stari = "lucru/bucla/stari", director_cache = "lucru/cache", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_r2", megaocteti = 182.0, procent_validare = 0.011, decalaj_antrenare_mo = 18.0, decalaj_validare_mo = 2.0, fara_povestile_din = ["date/tinystories"] }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+[porturi.cercetator.setari]
+samanta = 1
+pasi = { n_emb = 32, context = 32, lot = 2 }   # la strângere: n_emb și context din 32 în 32, lotul număr par
+[porturi.cercetator.setari.spatiu.model]
+n_straturi = [6, 8, 10, 12, 14]
+n_emb = [512, 576, 640, 704, 768]          # 8 capete: toate se împart exact
+context = [128, 192, 256, 384, 512]
+lot = [8, 12, 16, 24, 32]
+rata_invatare = [0.0001, 0.0002, 0.0003, 0.0005, 0.0008]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

@@ -1,0 +1,61 @@
+# Bucla cinstită, faza 2: lotul și rata DOAR prin continuare din aceeași stare, câte 5 minute.
+# Starea de pornire e cea a arhitecturii câștigătoare din faza 1 (config/laptop_bucla.toml), copiată o dată și apoi
+# neatinsă. O pune unelte/bucla_pe_faze.py, împreună cu arhitectura câștigătoare și linia de jurnal
+# („bucla_lot_rata_din_<nr. experimentului câștigător>”), ca toate experimentele unei linii să pornească din aceeași stare.
+# Pornită direct, fără unealtă, starea de mai jos nu există și experimentul se oprește cu un mesaj clar.
+# Rata scade singură în fiecare experiment (cosinus până la 10%), fără încălzire: modelul continuă, nu pornește de la zero.
+#   python unelte/bucla_pe_faze.py --minute 60
+
+[platforma]
+nume = "bucla_lot_rata"
+director_lucru = "lucru"
+buget_antrenare_secunde = 300   # 5 minute de antrenare, din aceeași stare
+experimente = 10
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 900
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 30, rata_invatare = 0.0007, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", stare_de_pornire = "lucru/bucla_cinstita/stari_de_pornire/pune_o_unealta.pt", director_cache = "lucru/cache", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_r2", megaocteti = 182.0, procent_validare = 0.011, decalaj_antrenare_mo = 18.0, decalaj_validare_mo = 2.0, fara_povestile_din = ["date/tinystories"] }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+[porturi.cercetator.setari]
+amesteca = false    # pe rând: rata 0,001, lotul 24, rata 0,0005, lotul 36 (în jurul lui 0,0007 și 30)
+strangere = false
+[porturi.cercetator.setari.spatiu.model]
+rata_invatare = [0.001, 0.0005]
+lot = [24, 36]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

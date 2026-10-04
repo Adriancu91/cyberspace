@@ -16,6 +16,11 @@ Setări pe care Cercetătorul le poate schimba:
 - tokenizer: "litere" (un simbol = o literă, ca la început) sau "bpe" (bucăți de cuvinte,
   din fișierul cale_tokenizer, antrenat cu python unelte/antreneaza_tokenizer.py).
   Examenul rămâne în biți pe octet, deci cele două se pot compara direct.
+- rata_care_scade (oprită implicit): rata de învățare nu mai e fixă. Întâi încălzirea: în primii incalzire_pasi pași ai
+  modelului crește în linie dreaptă până la rata_invatare; apoi scade în formă de cosinus până la
+  fractie_rata_finala × rata_invatare (implicit 10%). Scăderea se întinde pe tot bugetul de timp al antrenării (sau până
+  la pasi_max, dacă se oprește mai devreme) ori, cu durata_scaderii_secunde, pe toată antrenarea plănuită a unui model
+  care continuă între experimente (ex. 8 ore, cu examen la fiecare oră).
 
 Cum folosește memoria: la fiecare literă primește, în plus, codul ultimului cuvânt
 terminat (de ex. „horse” → substantiv → noun.animal → ... → equine → horse). Fiecare
@@ -118,7 +123,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.4.0",
+        "versiune": "0.5.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -141,6 +146,10 @@ class ModelGPT:
         cale_tokenizer: str = "date/tinystories/bpe_4096.json",
         dispozitiv: str = "auto",
         samanta: int = 1337,
+        rata_care_scade: bool = False,
+        incalzire_pasi: int = 100,
+        fractie_rata_finala: float = 0.1,
+        durata_scaderii_secunde: float = 0.0,
     ) -> None:
         if n_emb % n_capete != 0:
             raise ValueError("n_emb trebuie să se împartă exact la n_capete")
@@ -148,6 +157,8 @@ class ModelGPT:
             raise ValueError("toate dimensiunile și rata_invatare trebuie să fie pozitive")
         if pasi_max < 0:
             raise ValueError("pasi_max trebuie să fie 0 (fără limită de pași) sau un număr pozitiv")
+        if incalzire_pasi < 0 or not 0 < fractie_rata_finala <= 1 or durata_scaderii_secunde < 0:
+            raise ValueError("incalzire_pasi și durata_scaderii_secunde nu pot fi negative; fractie_rata_finala e între 0 și 1")
         if tokenizer not in TOKENIZERE:
             raise ValueError(f"tokenizer trebuie să fie unul din: {', '.join(TOKENIZERE)}")
         self.pasi_max = pasi_max
@@ -159,6 +170,10 @@ class ModelGPT:
         )
         self.lot = lot
         self.rata_invatare = rata_invatare
+        self.rata_care_scade = bool(rata_care_scade)
+        self.incalzire_pasi = incalzire_pasi
+        self.fractie_rata_finala = fractie_rata_finala
+        self.durata_scaderii_secunde = durata_scaderii_secunde
         self.samanta = samanta
         self.foloseste_memorie = bool(memorie)
         self.adancime_memorie = adancime_memorie
@@ -294,6 +309,35 @@ class ModelGPT:
         """De unde pornește alegerea bucăților de text: aceeași sămânță = aceleași loturi, în aceeași ordine."""
         return self.samanta
 
+    def _pasi_anteriori(self) -> int:
+        """Câți pași a făcut modelul înainte de antrenarea de acum. Aici: niciunul; cele care continuă îi au în stare."""
+        return 0
+
+    def _secunde_anterioare(self) -> float:
+        """Câte secunde de antrenare are modelul în spate. Aici: niciuna; cele care continuă le au în stare."""
+        return 0.0
+
+    def _progres(self, pasi: int, secunde_buget: float, secunde_bucla: float, buget_secunde: float) -> float:
+        """Cât din scădere s-a parcurs, de la 0 la 1: din bugetul antrenării de acum (sau din pasi_max, dacă se oprește
+        mai devreme) ori, cu durata_scaderii_secunde, din toată antrenarea plănuită, cu cea din experimentele de dinainte."""
+        if self.durata_scaderii_secunde > 0:
+            return (self._secunde_anterioare() + secunde_bucla) / self.durata_scaderii_secunde
+        progres = secunde_buget / buget_secunde if buget_secunde > 0 else 1.0
+        if self.pasi_max:
+            progres = max(progres, pasi / self.pasi_max)
+        return progres
+
+    def rata_acum(self, pasi: int, progres: float) -> float:
+        """Rata de învățare pentru pasul `pasi` al antrenării de acum. Fixă, sau (rata_care_scade): încălzirea în primii
+        incalzire_pasi pași ai modelului, apoi cosinus de la rata_invatare (progres 0) la fractie_rata_finala din ea (1)."""
+        if not self.rata_care_scade:
+            return self.rata_invatare
+        f = self.fractie_rata_finala
+        rata = self.rata_invatare * (f + (1 - f) * 0.5 * (1 + math.cos(math.pi * min(max(progres, 0.0), 1.0))))
+        if self.incalzire_pasi:
+            rata *= min(1.0, (self._pasi_anteriori() + pasi + 1) / self.incalzire_pasi)
+        return rata
+
     def _pas(self, x: torch.Tensor, y: torch.Tensor, m: torch.Tensor | None) -> float:
         """Un pas de antrenare: pierderea pe lot, înapoi prin rețea, pasul optimizatorului."""
         assert self.retea is not None and self.optimizator is not None
@@ -336,6 +380,7 @@ class ModelGPT:
         start = inceput_bucla - (pregatire if self._pregatirea_intra_in_buget else 0.0)
         pasi = 0
         pierdere = float("nan")
+        rata = self.rata_invatare
         while time.perf_counter() - start < buget_secunde and not (self.pasi_max and pasi >= self.pasi_max):
             pozitii = torch.randint(len(date_t) - ctx - 1, (self.lot,), generator=generator)
             x = torch.stack([date_t[p : p + ctx] for p in pozitii])
@@ -344,6 +389,11 @@ class ModelGPT:
             if self._textul_ramane_in_ram:  # pe placă urcă doar lotul
                 x, y = x.to(self.dispozitiv, torch.long), y.to(self.dispozitiv, torch.long)
                 m = m.to(self.dispozitiv, torch.long) if m is not None else None
+            if self.rata_care_scade:
+                acum = time.perf_counter()
+                rata = self.rata_acum(pasi, self._progres(pasi, acum - start, acum - inceput_bucla, buget_secunde))
+                for grup in self.optimizator.param_groups:
+                    grup["lr"] = rata
             pierdere = self._pas(x, y, m)
             pasi += 1
             if not math.isfinite(pierdere):
@@ -357,6 +407,8 @@ class ModelGPT:
         }
         if self.pasi_max:
             statistici["pasi_max"] = self.pasi_max
+        if self.rata_care_scade:
+            statistici["rata_la_final"] = rata  # rata ultimului pas
         if self.tokenizer == "bpe":
             statistici["tokenizer"] = "bpe"
             statistici["simboluri_antrenare"] = len(date_t)

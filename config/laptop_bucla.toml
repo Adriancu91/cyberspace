@@ -1,20 +1,23 @@
-# Bucla de auto-îmbunătățire pe GPT-ul simplu, cu continuare (după Etapa M3).
-# GPT-ul pe bucăți de cuvinte (BPE), ~52 M parametri la pornire (10 straturi × 640), pe TinyStories de 10× (R2, 180 MB).
-# Fiecare experiment = 5 minute de antrenare. Fiecare arhitectură își continuă cea mai bună stare (lucru/bucla/stari/);
-# o arhitectură nouă pornește de la zero. Cercetătorul: întâi fiecare valoare din listă, apoi strânge căutarea în jurul
-# celor mai bune 3 rețete.
-#   python -m kronos ruleaza --config config/laptop_bucla.toml --experimente 60     (oprire: python -m kronos opreste ...)
-#   python unelte/raport_bucla.py                                                   (tabelul și direcțiile care au ajutat)
+# Bucla de auto-îmbunătățire, varianta cinstită (după prima buclă, config/laptop_bucla_v1.toml).
+# Cele două feluri de comparații nu se amestecă în aceeași decizie (stau pe linii de jurnal diferite):
+#   faza 1 (acest fișier, linia „bucla_arhitecturi”): arhitecturile DOAR de la zero, la timp egal: 10 minute fiecare;
+#   faza 2 (config/laptop_bucla_lot_rata.toml): lotul și rata DOAR prin continuare din aceeași stare, cea a
+#   arhitecturii câștigătoare din faza 1.
+# Rata de învățare scade singură în fiecare experiment: încălzire în primii 100 de pași, apoi cosinus până la 10%.
+# Lotul e cel găsit de prima buclă (30). Rata de pornire e dublă față de a ei (0,0007 în loc de 0,00035): cu scădere,
+# rata medie e ~55% din cea de pornire, iar testul pasului 1 a arătat că 0,00035 cu scădere e prea puțin.
+#   python unelte/bucla_pe_faze.py --minute 60        (amândouă fazele, în timpul dat; oprire: python -m kronos opreste ...)
+#   python unelte/raport_bucla.py                     (tabelul fazei 1)
 
 [platforma]
-nume = "bucla_gpt"
+nume = "bucla_arhitecturi"
 director_lucru = "lucru"
-buget_antrenare_secunde = 300   # 5 minute de antrenare (pregătirea nu intră)
-experimente = 60
+buget_antrenare_secunde = 600   # 10 minute de antrenare, de la zero (pregătirea nu intră)
+experimente = 20
 prag_zgomot = 0.005
 
 [paznic]
-timp_max_secunde = 900
+timp_max_secunde = 1200
 timp_test_secunde = 600
 temperatura_gpu_max = 85
 memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
@@ -23,7 +26,7 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = { n_straturi = 10, n_capete = 8, n_emb = 640, context = 256, lot = 16, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", director_stari = "lucru/bucla/stari", director_cache = "lucru/cache", samanta = 0 }
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 30, rata_invatare = 0.0007, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", director_stari = "lucru/bucla_cinstita/arhitecturi", de_la_zero = true, director_cache = "lucru/cache", samanta = 0 }
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"
@@ -35,14 +38,11 @@ modul = "module.examen_bpb:ExamenBpb"
 [porturi.cercetator]
 modul = "module.cercetator_local:CercetatorLocal"
 [porturi.cercetator.setari]
-samanta = 1
-pasi = { n_emb = 32, context = 32, lot = 2 }   # la strângere: n_emb și context din 32 în 32, lotul număr par
+amesteca = false    # în ordinea de mai jos, pe rând: 8 straturi, lățimea 640, 12 straturi
+strangere = false   # într-o oră: doar lista
 [porturi.cercetator.setari.spatiu.model]
-n_straturi = [6, 8, 10, 12, 14]
-n_emb = [512, 576, 640, 704, 768]          # 8 capete: toate se împart exact
-context = [128, 192, 256, 384, 512]
-lot = [8, 12, 16, 24, 32]
-rata_invatare = [0.0001, 0.0002, 0.0003, 0.0005, 0.0008]
+n_straturi = [8, 12]
+n_emb = [640]       # 8 capete: se împarte exact
 
 [porturi.profesor]
 modul = "module.jucarii:ProfesorGol"

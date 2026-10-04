@@ -165,7 +165,7 @@ Modulele de acum, pe cele 10 porturi:
 
 | Port | Modul | Ce face |
 | --- | --- | --- |
-| model | `model_ngram` / `model_gpt` / `model_plasa` / `model_plasa_adaptiva` / `model_continuu` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU) / GPT cu 5 noduri și plasă (M2) / GPT cu un nod pe raft și noduri libere (M3) / GPT care continuă de unde a rămas (bucla: o stare pentru fiecare arhitectură) |
+| model | `model_ngram` / `model_gpt` / `model_plasa` / `model_plasa_adaptiva` / `model_continuu` | n-gram pe caractere (fără GPU) / GPT mic de la 0 (pe GPU; opțional, rata care scade singură) / GPT cu 5 noduri și plasă (M2) / GPT cu un nod pe raft și noduri libere (M3) / GPT care continuă de unde a rămas (o stare pentru fiecare arhitectură, sau de la zero, sau din aceeași stare de pornire) |
 | date | `date_mostra` / `date_fisier` / `date_tinystories` | propoziții generate / un fișier text (Shakespeare) / povești TinyStories (~20 MB) |
 | examen | `examen_bpb` | val_bpb pe text nevăzut la antrenare |
 | cercetător | `cercetator_aleator` / `cercetator_local` | schimbă câte o setare, pornind de la cea mai bună rețetă / întâi fiecare valoare din listă, apoi strânge căutarea în jurul celor mai bune 3 rețete |
@@ -705,7 +705,7 @@ python unelte/trepte_plasa_mare.py --trepte 3     # treapta 3 (~2 ore și 20 de 
 După închiderea plasei mari, bucla lui Kronos rulează pe GPT-ul simplu, **cu continuare**: cercetătorul schimbă rețeta,
 iar modelul nu o ia de la zero la fiecare experiment, ci continuă să învețe de unde a rămas.
 
-**Ce a rulat** (`config/laptop_bucla.toml`), 3 ore (16:01–19:06):
+**Ce a rulat** (`config/laptop_bucla_v1.toml`, la început `config/laptop_bucla.toml`), 3 ore (16:01–19:06):
 
 - **Date:** TinyStories de 10× (R2, 180 MB), pe bucăți de cuvinte (BPE). Examenul oficial e pe validarea lui R2
   (nevăzută), același ca în treapta 2 din M3.
@@ -734,7 +734,7 @@ iar modelul nu o ia de la zero la fiecare experiment, ci continuă să învețe 
   minute de antrenare în spate, 40.770 de pași. La punctul de plecare era **1,2283**.
 - Fără erori și fără experimente anulate. Memoria video: cel mult 4,3 GB rezervați (#169, lățimea 768 cu lot 32), sub
   5,5 GB. Paznicul a făcut 6 pauze de răcire de câte 2 minute: placa a ajuns la 86–87 °C, iar limita e 85 °C.
-- Ce scrie cel mai bun model (`python -m kronos scrie --config config/laptop_bucla.toml --inceput "Once upon a time"`):
+- Ce scrie cel mai bun model (`python -m kronos scrie --config config/laptop_bucla_v1.toml --inceput "Once upon a time"`):
   > Once upon a time, there was a fearful crocodile in the big pond. He lived in a pond with his fish friends. One day,
   > he wanted to balance on a tree. He tried very hard, but he was too scared. The crocodile felt sad and baby, and he
   > wanted to make friends. He stayed still and watched the other animals playing. His friends saw him trying and
@@ -786,7 +786,7 @@ Cum se citesc coloanele:
 - **Câștig:** cât e mai bun decât cea mai bună rețetă de atunci (pozitiv = mai bun). Kronos păstrează doar câștigurile
   peste pragul de zgomot (0,005).
 
-Raportul complet, cu tabelul pe setări și cele două comparații curate: `python unelte/raport_bucla.py`.
+Raportul complet, cu tabelul pe setări și cele două comparații curate: `python unelte/raport_bucla.py --config config/laptop_bucla_v1.toml`.
 
 ### Ce direcții au ajutat
 
@@ -843,10 +843,41 @@ Citește asta înainte de tabelul pe setări din raport:
    rată mai mică spre final ajută; un program în model ar face asta automat, iar cercetătorul ar putea căuta altceva.
 
 ```
-python -m kronos ruleaza --config config/laptop_bucla.toml --experimente 60   # bucla (oprire: python -m kronos opreste --config ...)
-python unelte/raport_bucla.py                                                  # raportul: tabel, cel mai bun scor, direcții
-python -m kronos scrie --config config/laptop_bucla.toml --inceput "Once upon a time"
+python -m kronos ruleaza --config config/laptop_bucla_v1.toml --experimente 60   # bucla (oprire: python -m kronos opreste --config ...)
+python unelte/raport_bucla.py --config config/laptop_bucla_v1.toml               # raportul: tabel, cel mai bun scor, direcții
+python -m kronos scrie --config config/laptop_bucla_v1.toml --inceput "Once upon a time"
 ```
+
+## După prima buclă: rata care scade, bucla cinstită și antrenarea lungă
+
+### Pasul 1: rata care scade singură (4 octombrie 2026)
+
+**Ce e nou** (`module/model_gpt.py`): setarea opțională `rata_care_scade`, oprită implicit.
+- Rata crește în linie dreaptă în primii 100 de pași ai modelului (încălzirea).
+- Apoi scade în formă de cosinus până la 10% din rata de pornire, la finalul antrenării.
+- Cu `durata_scaderii_secunde`, scăderea se întinde pe toată antrenarea plănuită a unui model care continuă (de exemplu
+  8 ore, cu examen la fiecare oră), nu pe fiecare experiment.
+- E pornită în `config/laptop_bucla.toml`.
+
+**Testul** (`python unelte/compara_scaderea_ratei.py`): rețeta primei bucle (10 straturi × 512, context 256, lot 30), de
+la zero, câte 5 minute, semințele 0 și 1. Aceeași sămânță înseamnă aceleași greutăți de pornire și aceleași bucăți de
+text. Toate rulările au făcut ~2.000 de pași.
+
+| Rata de învățare | Sămânța 0 | Sămânța 1 |
+| --- | --- | --- |
+| fixă 0,00035 (rețeta primei bucle) | 1,1656 | 1,1811 |
+| care scade, de la 0,00035 | 1,2361 | 1,2315 |
+| fixă 0,0007 | 1,0806 | 1,1187 |
+| care scade, de la 0,0007 | **1,0474** | **1,0668** |
+
+- **Cu aceeași rețetă ca prima buclă (0,00035), scăderea STRICĂ:** +0,071 și +0,051, de 10–14 ori pragul de zgomot.
+  O rată care scade până la 10% are în medie doar ~55% din rata de pornire, iar 0,00035 e oricum mică pentru primele
+  minute de la zero.
+- **Cu rata de pornire dublă (0,0007), scăderea AJUTĂ:** față de rata fixă 0,0007, −0,033 și −0,052 (aceeași rețetă,
+  la amândouă semințele). Față de vechea rețetă (fixă 0,00035), câștigul e −0,118 și −0,114.
+- **De unde vine câștigul total de ~0,116:** cam două treimi din rata mai mare (fixă 0,0007 e cu ~0,074 mai bună decât
+  fixă 0,00035) și cam o treime din forma scăderii (~0,043).
+- **Ce folosim mai departe:** rata de pornire 0,0007, cu scădere, în bucla cinstită și în antrenarea lungă.
 
 ## Toate comenzile
 
