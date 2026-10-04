@@ -13,6 +13,10 @@ Poveștile sunt despărțite de un rând „<|endoftext|>”, ca în fișierele 
 Setarea runda împarte poveștile de validare în două jumătăți (pentru testul plasei în două runde):
 0 = toată validarea, 1 = prima jumătate, 2 = a doua jumătate. Antrenarea rămâne aceeași.
 
+Pentru un text nou, fără suprapunere cu altul deja pregătit (testul în trei trepte din M3): decalaj_antrenare_mo și
+decalaj_validare_mo spun de unde începe bucata descărcată din fiecare fișier oficial (în milioane de octeți), iar
+fara_povestile_din = dosarele altor seturi pregătite, ale căror povești se scot (dacă apar identic și aici).
+
 Pregătirea se face o singură dată; după aceea modulul doar citește fișierele. Se poate porni și
 de mână: python -m module.date_tinystories
 """
@@ -30,12 +34,23 @@ SEPARATOR = "<|endoftext|>"
 VERSIUNE_PREGATIRE = 1
 
 
-def _descarca_inceput(url: str, octeti: int) -> bytes:
-    """Primii `octeti` din fișier. Cerem doar bucata asta (Range); chiar dacă serverul trimite tot, citim doar cât ne trebuie."""
-    cerere = urllib.request.Request(url, headers={"Range": f"bytes=0-{octeti - 1}", "User-Agent": "cyberspace"})
+def _descarca_inceput(url: str, octeti: int, decalaj: int = 0) -> bytes:
+    """`octeti` din fișier, începând de la `decalaj`. Cerem doar bucata asta (Range); chiar dacă serverul trimite tot,
+    citim doar cât ne trebuie (un fișier local, fără Range, se citește de la decalaj)."""
+    interval = f"bytes={decalaj}-{decalaj + octeti - 1}"
+    cerere = urllib.request.Request(url, headers={"Range": interval, "User-Agent": "cyberspace"})
     try:
-        with urllib.request.urlopen(cerere, timeout=120) as raspuns:
-            return raspuns.read(octeti)
+        with urllib.request.urlopen(cerere, timeout=300) as raspuns:
+            if decalaj and getattr(raspuns, "status", 200) != 206:  # serverul (sau fișierul local) a trimis tot
+                raspuns.read(decalaj)
+            bucati, ramas = [], octeti
+            while ramas > 0:  # bucată cu bucată: un fișier mare nu vine dintr-o singură citire
+                bucata = raspuns.read(min(ramas, 1 << 24))
+                if not bucata:
+                    break
+                bucati.append(bucata)
+                ramas -= len(bucata)
+            return b"".join(bucati)
     except OSError as e:
         raise ValueError(f"Nu am putut descărca TinyStories de la {url}: {e}. Verifică internetul.") from e
 
@@ -58,11 +73,21 @@ def pregateste(director: Path, cerute: dict[str, Any]) -> dict[str, Any]:
     """Descarcă începutul fișierelor oficiale și scrie antrenare.txt, validare.txt și info.json."""
     total = cerute["megaocteti"] * 1_000_000
     p = cerute["procent_validare"]
+    decalaj_antrenare = int(cerute.get("decalaj_antrenare_mo", 0) * 1_000_000)
+    decalaj_validare = int(cerute.get("decalaj_validare_mo", 0) * 1_000_000)
     print(f"Pregătesc TinyStories (~{cerute['megaocteti']:g} MB de text)...", flush=True)
-    antrenare = _povesti_intregi(_descarca_inceput(cerute["url_antrenare"], int(total * (1 - p))))
-    validare_bruta = _povesti_intregi(_descarca_inceput(cerute["url_validare"], int(total * p)))
+    antrenare = _povesti_intregi(_descarca_inceput(cerute["url_antrenare"], int(total * (1 - p)), decalaj_antrenare))
+    validare_bruta = _povesti_intregi(_descarca_inceput(cerute["url_validare"], int(total * p), decalaj_validare))
+    alte: set[str] = set()  # poveștile altor seturi pregătite (ex. R1), care nu au voie să apară și aici
+    for dosar in cerute.get("fara_povestile_din", []):
+        for nume in ("antrenare.txt", "validare.txt"):
+            fisier = Path(dosar) / nume
+            if fisier.exists():
+                alte.update(p.strip() for p in fisier.read_text(encoding="utf-8").split(SEPARATOR) if p.strip())
+    antrenare_bruta = antrenare
+    antrenare = [poveste for poveste in antrenare_bruta if poveste not in alte]
     din_antrenare = set(antrenare)
-    validare = [poveste for poveste in validare_bruta if poveste not in din_antrenare]
+    validare = [poveste for poveste in validare_bruta if poveste not in din_antrenare and poveste not in alte]
     if not antrenare or not validare:
         raise ValueError("Bucata descărcată din TinyStories nu are destule povești întregi; mărește megaocteti.")
     director.mkdir(parents=True, exist_ok=True)
@@ -71,6 +96,7 @@ def pregateste(director: Path, cerute: dict[str, Any]) -> dict[str, Any]:
         "sursa": "roneneldan/TinyStories (Hugging Face), licență CDLA-Sharing-1.0",
         "povesti_antrenare": len(antrenare),
         "povesti_validare": len(validare),
+        "scoase_din_antrenare": len(antrenare_bruta) - len(antrenare),
         "scoase_din_validare": len(validare_bruta) - len(validare),
         "octeti_antrenare": _scrie(director / "antrenare.txt", antrenare),
         "octeti_validare": _scrie(director / "validare.txt", validare),
@@ -88,7 +114,7 @@ class DateTinyStories:
     MANIFEST = {
         "nume": "date_tinystories",
         "port": "date",
-        "versiune": "0.2.0",
+        "versiune": "0.3.0",
         "versiune_contract": 1,
         "resurse": {"disc_mb": 25},
         "permisiuni": ["internet", "citire_fisier", "scriere_fisier"],
@@ -102,6 +128,9 @@ class DateTinyStories:
         url_antrenare: str = URL_ANTRENARE,
         url_validare: str = URL_VALIDARE,
         runda: int = 0,
+        decalaj_antrenare_mo: float = 0.0,
+        decalaj_validare_mo: float = 0.0,
+        fara_povestile_din: list[str] | None = None,
     ) -> None:
         if not 0 < megaocteti <= 2000:
             raise ValueError("megaocteti trebuie să fie între 0 și 2000")
@@ -109,14 +138,19 @@ class DateTinyStories:
             raise ValueError("procent_validare trebuie să fie între 0 și 0.5")
         if runda not in (0, 1, 2):
             raise ValueError("runda trebuie să fie 0 (toată validarea), 1 sau 2 (o jumătate din povești)")
+        if decalaj_antrenare_mo < 0 or decalaj_validare_mo < 0:
+            raise ValueError("decalajele nu pot fi negative")
         self.director = Path(director)
-        cerute = {
+        cerute: dict[str, Any] = {
             "versiune": VERSIUNE_PREGATIRE,
             "megaocteti": megaocteti,
             "procent_validare": procent_validare,
             "url_antrenare": url_antrenare,
             "url_validare": url_validare,
         }
+        if decalaj_antrenare_mo or decalaj_validare_mo or fara_povestile_din:  # doar atunci: seturile vechi rămân valabile
+            cerute.update(decalaj_antrenare_mo=decalaj_antrenare_mo, decalaj_validare_mo=decalaj_validare_mo,
+                          fara_povestile_din=list(fara_povestile_din or []))
         fisier_info = self.director / "info.json"
         info = json.loads(fisier_info.read_text(encoding="utf-8")) if fisier_info.exists() else {}
         gata = all(info.get(k) == v for k, v in cerute.items()) and all(

@@ -1,0 +1,55 @@
+# GPT-ul simplu la plafon (Etapa M3, testul în trei trepte: martorul). Cel mai mare GPT care se antrenează sub 5,5 GB cu
+# lot 8 și context 256 (python unelte/plafon_gpt.py): 1280 × 11 straturi, 20 de capete, 222 M parametri.
+# Fiecare experiment = 10 minute de antrenare, pornind din starea lăsată de cel dinainte (cale_stare).
+
+[platforma]
+nume = "m3_gpt_plafon"
+director_lucru = "lucru"
+buget_antrenare_secunde = 600   # 10 minute de antrenare (pregătirea nu intră)
+experimente = 6
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 2400
+timp_test_secunde = 1500
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 11, n_capete = 20, n_emb = 1280, context = 256, lot = 8, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/m3_mare/gpt_plafon.pt", director_cache = "lucru/cache", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories", megaocteti = 20.0 }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+rata_invatare = [0.0002, 0.0003]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

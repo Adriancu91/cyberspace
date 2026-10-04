@@ -61,3 +61,28 @@ def test_rundele_impart_validarea_in_doua_jumatati(tmp_path):
     assert r1.text_antrenare() == r2.text_antrenare() == toata.text_antrenare()  # antrenarea nu se schimbă
     with pytest.raises(ValueError, match="runda"):
         DateTinyStories(**setari, runda=3)
+
+
+def test_un_set_nou_ia_bucata_de_dupa_si_scoate_povestile_comune(tmp_path):
+    setari = scrie_surse(tmp_path)
+    primul = DateTinyStories(**setari)
+    al_doilea = DateTinyStories(**{**setari, "director": str(tmp_path / "r2"), "decalaj_antrenare_mo": 0.002,
+                                   "decalaj_validare_mo": 0.001, "fara_povestile_din": [setari["director"]]})
+    p1, p2 = set(_povesti(primul.text_antrenare())), set(_povesti(al_doilea.text_antrenare()))
+    assert p2 and not p1 & p2  # nicio poveste comună cu primul set
+    assert not set(_povesti(al_doilea.text_validare())) & (p1 | p2)
+    assert al_doilea.info["decalaj_antrenare_mo"] == 0.002
+    assert DateTinyStories(**setari).info == primul.info  # setul vechi rămâne valabil, nu se descarcă din nou
+
+
+def test_wikipedia_imparte_articolele_fara_suprapunere(tmp_path):
+    pytest.importorskip("pyarrow")
+    from module.date_wikipedia import DateWikipedia
+    from teste.wikipedia_mic import articol, scrie_wikipedia
+
+    date = DateWikipedia(**scrie_wikipedia(tmp_path))
+    antrenare = set(_povesti(date.text_antrenare()))
+    validare = set(_povesti(date.text_validare()))
+    assert antrenare and validare and not antrenare & validare
+    assert antrenare | validare <= {articol(i) for i in range(1000)}
+    assert date.info["articole_antrenare"] > 900  # ~1 din 100 la validare

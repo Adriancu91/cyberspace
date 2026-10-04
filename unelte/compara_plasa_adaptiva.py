@@ -107,10 +107,11 @@ def limita_de_timp(config: Any, buget: float | None) -> None:
 
 def ruleaza(
     config: Any, linie: str, descriere: str, modificari: dict[str, Any], runda: int = 0,
-    pauza: float = 0.0, racire: float = 0.0,
+    pauza: float = 0.0, racire: float = 0.0, cu_fisa: bool = False,
 ) -> dict[str, Any] | None:
     """Un experiment prin Kronos, pe linia de jurnal dată și pe partea de validare dată (0 = toată, 1 sau 2 = o
-    jumătate). Întâi pauza și răcirea plăcii. Întoarce rezultatul, sau None dacă s-a oprit ori a fost anulat."""
+    jumătate). Întâi pauza și răcirea plăcii. Întoarce rezultatul (cu_fisa: și fișa întreagă, sub „fisa”), sau None
+    dacă s-a oprit ori a fost anulat."""
     config = copy.deepcopy(config)
     config.nume = linie
     if runda:
@@ -127,7 +128,10 @@ def ruleaza(
     if fisa["decizie"] == "anulat":
         print(f"Experimentul #{fisa['id']} a fost anulat: {fisa.get('motiv')}", flush=True)
         return None
-    return {**rezultatul(fisa, o.examen.scor_principal), "temperatura_la_start": temperatura}
+    rezultat = {**rezultatul(fisa, o.examen.scor_principal), "temperatura_la_start": temperatura}
+    if cu_fisa:
+        rezultat["fisa"] = fisa
+    return rezultat
 
 
 def verdict(randuri: list[dict[str, Any]], pasi_ceruti: int | None, prag: float, fata_de: str) -> str:

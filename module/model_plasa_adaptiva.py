@@ -68,7 +68,7 @@ def _asocierea(noduri: list[int], n: int) -> tuple[list[list[float]], list[list[
     total = len(noduri)
     if total < 2 or n == 0:
         return zero
-    t = torch.tensor(noduri, dtype=torch.long)
+    t = torch.as_tensor(noduri, dtype=torch.long)
     a, b = t[:-1], t[1:]
     bune = (a >= 0) & (b >= 0)
     perechi = torch.bincount(a[bune] * n + b[bune], minlength=n * n).view(n, n)
@@ -425,10 +425,13 @@ class ModelPlasaAdaptiva(ModelGPT):
             n_ascuns_nod=self.n_ascuns_nod, vecini=self._vecini, legaturi=self._legaturi_start,
         ).to(self.dispozitiv)
 
-    def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
+    def _incarca_starea(self) -> None:
         self.stare = StareAdaptiva.incarca(self.cale_plasa, self.noduri_libere)  # din experimentele de dinainte
+
+    def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
+        self._incarca_starea()
         statistici = super().antreneaza(date, buget_secunde)
-        assert isinstance(self.retea, _GPTCuNoduriRare) and self.stare is not None
+        assert self.retea is not None and hasattr(self.retea, "cerere") and self.stare is not None
         nume = self.nume_noduri
         vecini = [set(v) for v in self._vecini]
         # Cererile se învață DOAR pe textul de antrenare; nodurile fără niciun simbol n-au folosit nimic.

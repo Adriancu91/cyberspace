@@ -1,0 +1,58 @@
+# Plasa adaptivă MARE (Etapa M3, testul în trei trepte), pe placa video RTX 3060 + RAM.
+# ~1,5× cel mai mare GPT care încape (plafonul: 1280 × 11 straturi, 222 M parametri):
+# trunchiul pe placă (1280 × 6 straturi, 124 M), 34 + 6 noduri în RAM (câte 2.048 de neuroni ascunși, 210 M în total).
+# Fiecare experiment = 10 minute de antrenare, pornind din starea lăsată de cel dinainte (cale_stare).
+# Treptele (cu martorul GPT la plafon):  python unelte/trepte_plasa_mare.py --trepte 1
+
+[platforma]
+nume = "m3_plasa_mare"
+director_lucru = "lucru"
+buget_antrenare_secunde = 600   # 10 minute de antrenare (pregătirea nu intră)
+experimente = 6
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 2400        # 10 minute de antrenare + încărcarea stării + prima pregătire a unui text mare
+timp_test_secunde = 1500       # testul rapid face și el prima pregătire a textului (apoi o ia din director_cache)
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_plasa_mare:ModelPlasaMare"
+setari = { n_straturi = 6, n_capete = 20, n_emb = 1280, context = 256, lot = 8, rata_invatare = 0.0003, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", n_ascuns_nod = 2048, noduri_libere = 6, cale_stare = "lucru/m3_mare/plasa_mare.pt", director_cache = "lucru/cache", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories", megaocteti = 20.0 }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_aleator:CercetatorAleator"
+[porturi.cercetator.setari]
+samanta = 1
+[porturi.cercetator.setari.spatiu.model]
+rata_invatare = [0.0002, 0.0003]
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.memorie_ierarhica:MemorieIerarhica"
+setari = { cale = "date/biblioteca.json.gz", nivele = 12, fara_cuvinte_de_legatura = true, sens_dupa_context = true }

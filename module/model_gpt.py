@@ -171,6 +171,7 @@ class ModelGPT:
         self.dispozitiv = torch.device(dispozitiv)
         self.vocabular: list[str] = [NECUNOSCUT]
         self.retea: _GPT | None = None
+        self.optimizator: torch.optim.Optimizer | None = None
 
     # --- memoria ------------------------------------------------------------
 
@@ -274,35 +275,65 @@ class ModelGPT:
 
     # --- contractul ---------------------------------------------------------
 
+    # Puncte de prindere pentru modelele care continuă de unde au rămas și pentru cele cu noduri în RAM (M3, trei trepte).
+    _pregatirea_intra_in_buget = True  # pregătirea (memoria, nodurile) intră în bugetul de timp: comparații cinstite
+    _textul_ramane_in_ram = False  # True: textul stă în RAM și pe placă urcă doar loturile (pentru texte foarte mari)
+
+    def _simboluri(self, text: str) -> Any:
+        """Simbolurile textului de antrenare (o listă sau un tensor)."""
+        assert self.tok is not None
+        return self.tok.codifica(text)
+
+    def _pregateste_reteaua(self) -> None:
+        """Rețeaua și optimizatorul ei. Aici: de la zero; modelele care continuă le încarcă din starea salvată."""
+        self._construieste()
+        assert self.retea is not None
+        self.optimizator = torch.optim.AdamW(self.retea.parameters(), lr=self.rata_invatare, weight_decay=0.1)
+
+    def _samanta_loturi(self) -> int:
+        """De unde pornește alegerea bucăților de text: aceeași sămânță = aceleași loturi, în aceeași ordine."""
+        return self.samanta
+
+    def _pas(self, x: torch.Tensor, y: torch.Tensor, m: torch.Tensor | None) -> float:
+        """Un pas de antrenare: pierderea pe lot, înapoi prin rețea, pasul optimizatorului."""
+        assert self.retea is not None and self.optimizator is not None
+        with self._autocast():
+            logits = self.retea(x, m)
+            loss = F.cross_entropy(logits.float().view(-1, logits.size(-1)), y.view(-1))
+        self.optimizator.zero_grad(set_to_none=True)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.retea.parameters(), 1.0)
+        self.optimizator.step()
+        return loss.item()
+
     def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
         text = date.text_antrenare()
         simboluri = None
         if self.tokenizer == "bpe":
             self.tok = TokenizerBPE.incarca(self.cale_tokenizer)
-            simboluri = self.tok.codifica(text)
+            simboluri = self._simboluri(text)
         else:
             self.vocabular = sorted(set(text)) + [NECUNOSCUT]
+        locul = torch.device("cpu") if self._textul_ramane_in_ram else self.dispozitiv
         memorie_t = None
         pregatire = 0.0
         if self._are_pozitii():
-            # Pregătirea (memoria, nodurile) intră în bugetul de timp: comparațiile rămân cinstite.
             inceput_pregatire = time.perf_counter()
-            memorie_t = self._pozitii(text, simboluri, la_antrenare=True).to(self.dispozitiv)
+            memorie_t = self._pozitii(text, simboluri, la_antrenare=True).to(locul)
             pregatire = time.perf_counter() - inceput_pregatire
-        self._construieste()
+        self._pregateste_reteaua()
         assert self.retea is not None
-        date_t = (torch.tensor(simboluri, dtype=torch.long) if simboluri is not None else self._codifica(text)).to(
-            self.dispozitiv
-        )
+        date_t = (torch.as_tensor(simboluri) if simboluri is not None else self._codifica(text)).to(locul)
+        if not self._textul_ramane_in_ram:
+            date_t = date_t.long()
         ctx = self.setari["context"]
         if len(date_t) <= ctx + 1:
             raise ValueError("textul de antrenare e mai scurt decât contextul")
-        optimizator = torch.optim.AdamW(self.retea.parameters(), lr=self.rata_invatare, weight_decay=0.1)
-        generator = torch.Generator(device="cpu").manual_seed(self.samanta)
+        generator = torch.Generator(device="cpu").manual_seed(self._samanta_loturi())
 
         self.retea.train()
         inceput_bucla = time.perf_counter()
-        start = inceput_bucla - pregatire
+        start = inceput_bucla - (pregatire if self._pregatirea_intra_in_buget else 0.0)
         pasi = 0
         pierdere = float("nan")
         while time.perf_counter() - start < buget_secunde and not (self.pasi_max and pasi >= self.pasi_max):
@@ -310,15 +341,11 @@ class ModelGPT:
             x = torch.stack([date_t[p : p + ctx] for p in pozitii])
             y = torch.stack([date_t[p + 1 : p + ctx + 1] for p in pozitii])
             m = torch.stack([memorie_t[p : p + ctx] for p in pozitii]) if memorie_t is not None else None
-            with self._autocast():
-                logits = self.retea(x, m)
-                loss = F.cross_entropy(logits.float().view(-1, logits.size(-1)), y.view(-1))
-            optimizator.zero_grad(set_to_none=True)
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(self.retea.parameters(), 1.0)
-            optimizator.step()
+            if self._textul_ramane_in_ram:  # pe placă urcă doar lotul
+                x, y = x.to(self.dispozitiv, torch.long), y.to(self.dispozitiv, torch.long)
+                m = m.to(self.dispozitiv, torch.long) if m is not None else None
+            pierdere = self._pas(x, y, m)
             pasi += 1
-            pierdere = loss.item()
             if not math.isfinite(pierdere):
                 raise FloatingPointError("pierderea a devenit infinită (rata de învățare prea mare?)")
         statistici: dict[str, Any] = {

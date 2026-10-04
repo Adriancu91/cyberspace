@@ -528,6 +528,66 @@ de fiecare dată la 60–70°C).
 python unelte/compara_timp_egal.py           # semințele 0, 1, 2; 5 minute fiecare; ~40 de minute
 ```
 
+## Etapa M3: testul în trei trepte (propus de Adrian)
+
+O plasă adaptivă mai mare decât cel mai mare GPT care încape pe placă, antrenată pe trei texte tot mai mari, fără să
+pornească vreodată de la zero, cu GPT-ul la plafon ca martor.
+
+### Pregătirea (4 octombrie 2026)
+
+**Plafonul GPT-ului simplu** (`unelte/plafon_gpt.py`): cel mai mare GPT care se antrenează sub 5,5 GB (memoria rezervată,
+mai strictă decât cea verificată de paznic), cu lot 8 și context 256, 20 de pași; fiecare încercare într-un proces separat.
+
+| Lățime (n_emb) | Straturi | Capete | Parametri | Memorie ocupată / rezervată | Pași pe secundă |
+| --- | --- | --- | --- | --- | --- |
+| 512 | 55 | 8 | 175,6 M | 5.339 / 5.462 MB | 3,8 |
+| 768 | 27 | 12 | 194,7 M | 5.064 / 5.478 MB | 4,2 |
+| 1024 | 17 | 16 | 218,6 M | 5.158 / 5.256 MB | 4,0 |
+| **1280** | **11** | **20** | **222,0 M** | **5.094 / 5.400 MB** | **4,3** |
+| 1536 | 7 | 24 | 205,0 M | 4.466 / 5.010 MB | 4,8 |
+| 2048 | 4 | 32 | 210,4 M | 4.340 / 4.938 MB | 5,0 |
+
+**Plafonul: 1280 × 11 straturi, 20 de capete, 222.024.960 de parametri.** Atenție: pe Windows, o placă plină nu dă
+eroare, ci împrumută în tăcere memorie din RAM și devine foarte lentă; de aceea limita se păzește strict.
+
+**Plasa mare** (`module/model_plasa_mare.py`, `config/laptop_m3_plasa_mare.toml`), **333,6 M parametri = 1,50× plafonul**:
+- trunchiul pe placă: 1280 × 6 straturi (123,6 M), cu optimizatorul lui;
+- 34 de noduri + 6 libere în RAM, câte 2.048 de neuroni ascunși (210,0 M), cu greutățile întregi și optimizatorul lor
+  (AdamW „topit” al PyTorch, pe procesor). La fiecare pas urcă pe placă doar nodurile cerute de lot (o copie bf16, pe
+  jumătate de mărime), iar gradienții lor coboară înapoi; placa nu ține niciodată stările optimizatorului nodurilor;
+- între experimente se păstrează tot: greutățile trunchiului și ale nodurilor, optimizatorii, legăturile cu tăria lor,
+  alocările nodurilor libere. Un nod liber alocat pornește ca o copie a nodului ajutat; când tăria unei legături se
+  schimbă, cererea învățată se ajustează invers, ca rețeaua să nu sară.
+- Pe TinyStories, 2 minute: **2,0 pași pe secundă** (GPT-ul la plafon: 4,3), memorie video 3,4 GB ocupată / 4,3 GB
+  rezervată; pe pas, urcarea nodurilor ~0,07 s, coborârea gradienților ~0,14 s, optimizatorul din RAM ~0,16 s: împreună
+  **75% din timpul de antrenare** (cu un optimizator scris pas cu pas era 82%, 1,45 pași pe secundă).
+
+**Martorul** (`module/model_continuu.py`, `config/laptop_m3_gpt_plafon.toml`): GPT-ul la plafon, care continuă și el de
+unde a rămas (greutăți, optimizator).
+
+**Datele**, fără suprapunere (poveștile identice cu ale lui R1 se scot din R2); examenul fiecărei trepte pe o bucată
+nevăzută din textul ei (primele 100.000 de caractere ale validării, ca până acum):
+
+| Treapta | Text | Antrenare | Examen |
+| --- | --- | --- | --- |
+| R1 | TinyStories de acum | 21.896 de povești, 18 MB, 3,5 M cuvinte | 2 MB |
+| R2 | TinyStories, bucata de după R1 (10×) | 219.751 de povești, 180 MB, 35,5 M cuvinte | 2 MB (tot de după R1) |
+| R3 | Simple English Wikipedia (20231101, CC BY-SA 4.0 / GFDL) | 239.329 de articole, 270 MB, 43,4 M cuvinte | 1.758 de articole, 2 MB |
+
+De ce Simple English Wikipedia pentru R3: e liberă, mai grea (fapte, nume, cifre, cuvinte rare, propoziții mai lungi;
+tokenizerul TinyStories o taie în mai multe bucăți), dar tot în engleză simplă, deci memoria rămâne folositoare; și e
+mai mare decât R2. Cere pachetul `pyarrow` (instalat cu pip).
+
+**Cum se măsoară:** fiecare treaptă e împărțită în bucăți de câte 10 minute de antrenare, fiecare bucată un experiment
+Kronos cu examenul oficial la final, deci scorul la fiecare 10 minute. Pregătirea (un text de 270 MB se împarte o singură
+dată și se ține minte în `lucru/cache/`) nu intră în cele 10 minute. În fiecare interval rulează întâi martorul, apoi
+plasa, cu pauză și răcire înainte.
+
+```
+python unelte/plafon_gpt.py                       # plafonul GPT-ului (~10 minute)
+python unelte/trepte_plasa_mare.py --trepte 1     # treapta 1 (~50 de minute); apoi --trepte 2, --trepte 3
+```
+
 ## Toate comenzile
 
 ```
