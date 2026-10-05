@@ -18,7 +18,8 @@ lângă stare, și intră în totaluri. Cu --compara-cu <nr. experiment>, povest
 și de modelul acelui experiment, ca să se vadă diferența.
 
 Rezultatul: pe ecran și în lucru/<linia>/rezultat.json: scorul pe ore, pașii și textul văzut (în total și de câte ori a
-trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final.
+trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final (din starea salvată, dacă Kronos n-a salvat
+separat ultima oră, fiind sub pragul de zgomot).
 """
 
 from __future__ import annotations
@@ -92,6 +93,17 @@ def poveste(config: Any, fisa: dict[str, Any], inceput: str, lungime: int) -> st
     """O poveste scrisă de modelul salvat la experimentul dat (ca python -m kronos scrie)."""
     model = Registru().creeaza("model", config.porturi["model"]["modul"], fisa["setari"]["model"]).instanta
     model.incarca(fisa["model_salvat"])
+    return inceput + model.genereaza(inceput, lungime)
+
+
+def poveste_din_stare(config: Any, fisa: dict[str, Any], cale_stare: Path, inceput: str, lungime: int) -> str:
+    """O poveste scrisă de modelul din starea de la final (după ultima oră, chiar dacă Kronos n-a salvat-o separat, fiind
+    sub pragul de zgomot): rețeaua și tokenizerul vin din modelul salvat la experimentul dat, greutățile din stare."""
+    import torch
+
+    model = Registru().creeaza("model", config.porturi["model"]["modul"], fisa["setari"]["model"]).instanta
+    model.incarca(fisa["model_salvat"])
+    model.retea.load_state_dict(torch.load(cale_stare, map_location=model.dispozitiv, weights_only=True)["retea"])
     return inceput + model.genereaza(inceput, lungime)
 
 
@@ -200,11 +212,14 @@ def main(argv: list[str] | None = None) -> int:
               f"„{inainte['linie']}”): {total['pasi']:,} de pași, {total['simboluri'] / 1e6:,.0f} M de simboluri "
               f"(≈ {total['simboluri'] * LITERE_PE_SIMBOL / 1e9:.1f} miliarde de litere).")
     cu_model = [o for o in ore if o["model_salvat"]]
-    text = None
+    text, ora_povestii = None, None
     if cu_model:
         fisa = next(f for f in jurnal.istoric(config.nume) if f["id"] == cu_model[-1]["experiment"])
-        text = poveste(config, fisa, args.inceput, args.lungime)
-        print(f"\nPovestea modelului de după ora {cu_model[-1]['ora']}:\n{text}")
+        if ore[-1]["model_salvat"] or not cale_stare.exists():
+            text, ora_povestii = poveste(config, fisa, args.inceput, args.lungime), cu_model[-1]["ora"]
+        else:  # ultima oră n-a fost salvată separat (sub pragul de zgomot): povestea o scrie starea de la final
+            text, ora_povestii = poveste_din_stare(config, fisa, cale_stare, args.inceput, args.lungime), ore[-1]["ora"]
+        print(f"\nPovestea modelului de după ora {ora_povestii}:\n{text}")
     comparatie = None
     if args.compara_cu is not None:
         comparatie = poveste(config, fisa_experimentului(jurnal, args.compara_cu), args.inceput, args.lungime)
@@ -214,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     iesire.write_text(json.dumps({
         "data": datetime.now().isoformat(timespec="seconds"), "linie": config.nume, "reteta": config.setari_port("model"),
         "ore": ore, "litere_pe_simbol": LITERE_PE_SIMBOL, "inainte": inainte, "total": total,
-        "poveste": {"ora": cu_model[-1]["ora"], "inceput": args.inceput, "text": text} if text else None,
+        "poveste": {"ora": ora_povestii, "inceput": args.inceput, "text": text} if text else None,
         "poveste_comparatie": {"experiment": args.compara_cu, "text": comparatie} if comparatie else None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\nSalvat în {iesire}", flush=True)

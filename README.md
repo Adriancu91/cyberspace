@@ -1022,11 +1022,77 @@ Comanda e `python unelte/pregateste_tinystories_tot.py`. Rulează o singură dat
 - **Examen și salvare:** examen la fiecare oră, pe validarea R2, iar starea se salvează după fiecare oră
   (`lucru/antrenare_lunga_2/gpt.pt`).
 
-Rezultatul se adaugă aici la final.
+**Rezultatul (07:47–15:56):**
+
+| Ora | val_bpb | Față de ora dinainte | Pași în oră | Text văzut în aceste ore (simboluri) | De câte ori textul nou (TinyStories întreg) | Rata la final |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0,5140 | +0,022 (față de pornire: 0,4922) | 34.690 | 213 M | 0,4 | 0,00048 |
+| 2 | 0,5029 | −0,011 | 34.781 | 427 M | 0,8 | 0,00043 |
+| 3 | 0,4942 | −0,009 | 35.216 | 643 M | 1,2 | 0,00036 |
+| 4 | 0,4855 | −0,009 | 34.786 | 857 M | 1,5 | 0,00028 |
+| 5 | 0,4700 | −0,016 | 34.293 | 1.068 M | 1,9 | 0,00019 |
+| 6 | 0,4582 | −0,012 | 34.067 | 1.277 M | 2,3 | 0,00012 |
+| 7 | 0,4482 | −0,010 | 34.148 | 1.487 M | 2,7 | 0,00007 |
+| 8 | **0,4436** | −0,005 | 33.993 | 1.696 M | 3,0 | 0,00005 |
+
+- **Scorul final: 0,4436.** Aseară a fost 0,4921, deci câștigul e −0,049, de ~10 ori pragul de zgomot. Examenul e
+  același (validarea R2), deci comparația e directă.
+- **Urcarea de la început:** la ora 1, scorul a urcat la 0,5140.
+  - Rata a repornit la 0,0005, de 5 ori mai mare decât la finalul de aseară (0,0001), iar optimizatorul a pornit de
+    la zero. Pașii mari „scutură” modelul.
+  - Scorul a coborât sub cel de aseară abia la ora 4 (0,4855).
+- **Ora 8:** a câștigat 0,0046, puțin sub pragul de zgomot (0,005), deci Kronos a respins-o și n-a salvat-o separat.
+  - Starea de la final e totuși salvată (`lucru/antrenare_lunga_2/gpt.pt`), iar povestea de mai jos o scrie ea.
+  - Spre deosebire de aseară, scorul încă scădea la final: textul nou nu s-a „terminat”.
+- **De câte ori a văzut textul nou:** de 3,0 ori tot TinyStories întreg. Asta înseamnă 1.696 M de simboluri, ≈ 6,8
+  miliarde de litere, în cele 8 ore. Aseară văzuse R2 de 36,8 ori.
+- **În total, cu cele 7 ore de aseară:** 512.170 de pași și 3.147 M de simboluri (≈ 12,6 miliarde de litere).
+- **Fără probleme:**
+  - nicio eroare și nicio așteptare de răcire (pauza de un minut dintre ore a ajuns);
+  - memoria video a rămas la 1,9 GB;
+  - viteza a fost de 9,4–9,8 pași pe secundă;
+  - RAM-ul folosit a fost de ~11,4 GB (textul întreg și simbolurile).
+
+**Povestea, din același început** („Once upon a time, there was a fearful little dog named Coco”), scrisă de cele două
+modele:
+
+Azi, modelul de la final (ora 8, 0,4436):
+> Once upon a time, there was a fearful little dog named Coco. Coco lived in a big house with a tall stadium. Coco was
+> scared to climb the stadium because he saw so many people sitting and talking. Coco wanted to hold a friend, but he
+> was too scared. One day, Coco saw a young boy in the stadium. The boy had a bright red hat. Coco thought the hat looked
+> nice, so he handed the boy his hat. The boy laughed and said, "Thank you Coco,! Your hat is so funny!" Coco felt
+> happy, but he still felt scared. He didn't want to hold a tie. The moral of the story is that Tim's hat is special
+> because it helps you when you feel scared. You don't need a tie to be yourself[…]
+
+Aseară, modelul orei 7 (experimentul 209, 0,4922):
+> Once upon a time, there was a fearful little dog named Coco. He was scared of everything in the world, and he would
+> run away! Coco ran to his friend, the kind old lady named Mrs. Brown. "Mrs. Brown, can you please be my dog? I am too
+> scared," Coco refused to be scared, but he followed Chirpy out of her house. Mrs. Brown saw Coco didn't mean any harm.
+> He just wanted to play with her. She stopped being scary and went to Coco. "Hey, little dog. Let's play!" she said.
+> Coco was scared at first, but then she saw that Mrs. Brown was nice. She decided to be brave. Tim and Coco played
+> together in the garden, and she wasn't so fearful anymore.
+
+Cinstit despre povești:
+- **Azi:**
+  - Coco rămâne „el” de la un capăt la altul, iar cuvintele sunt mai variate (stadium, bright red hat).
+  - Sensul încă scapă: o casă „cu un stadion înalt”, „hold a friend”, îi dă băiatului pălăria pe care o avea chiar
+    băiatul, „hold a tie”, un „Tim” apărut din senin și o morală care nu decurge din poveste.
+- **Aseară:**
+  - Coco e când „el”, când „ea”, iar rolurile se amestecă („can you please be my dog?”, „She stopped being scary”).
+  - „Chirpy” și „Tim” apar din senin.
+- **O singură poveste e o singură mostră.** Modelul orei 7 de azi (0,4482) a scris, din același început, o poveste mai
+  legată, despre Coco, o fetiță și un pui de pasăre (e în `lucru/antrenare_lunga_2.log`). Măsura cinstită rămâne
+  scorul.
+
+**Propuneri pentru pasul următor:**
+1. **Încă o antrenare pe același text întreg.** Scorul încă scădea la final, iar textul a fost văzut doar de 3 ori.
+2. **Un model mai mare pe textul întreg** (de exemplu 10 sau 12 straturi). Cu de 12 ori mai mult text, riscul de a
+   învăța pe de rost e mai mic, deci un model mai mare ar putea acum să câștige.
 
 ```
 python unelte/pregateste_tinystories_tot.py
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_2.toml --ore 8 --porneste-din 209 --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_2.toml --raport --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
 ```
 
 ## Toate comenzile

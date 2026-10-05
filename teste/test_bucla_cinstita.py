@@ -225,3 +225,20 @@ def test_antrenarea_lunga_porneste_din_modelul_altui_experiment(tmp_path, monkey
     assert "Cu cele 1 ore de dinainte" in capsys.readouterr().out
     assert antrenare_lunga.main(argumente) == 0  # reluat: starea nu se mai face din nou, ora e deja făcută
     assert len([f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga_2"]) == 1
+
+
+def test_povestea_vine_din_starea_de_la_final(tmp_path, monkeypatch):
+    torch = pytest.importorskip("torch")
+    monkeypatch.chdir(tmp_path)
+    cale = config_mic(tmp_path, "antrenare_lunga", model=', cale_stare = "lucru/antrenare_lunga/gpt.pt"', spatiu="lot = [4]")
+    assert antrenare_lunga.main(["--config", str(cale), "--ore", "1", "--pauza", "0", "--racire", "0", "--lungime", "40"]) == 0
+    config, fisa = antrenare_lunga.citeste_config(str(cale)), fise(tmp_path)[0]
+    stare = tmp_path / "lucru" / "antrenare_lunga" / "gpt.pt"
+    # După o oră păstrată, starea și modelul salvat de Kronos au aceleași greutăți: exact aceeași poveste.
+    salvata = antrenare_lunga.poveste(config, fisa, "Once upon a time", 40)
+    assert antrenare_lunga.poveste_din_stare(config, fisa, stare, "Once upon a time", 40) == salvata
+    # Alte greutăți în stare (ca după o oră pe care Kronos n-a salvat-o separat): povestea o scriu ele.
+    s = torch.load(stare, weights_only=True)
+    s["retea"] = {k: v * 0 for k, v in s["retea"].items()}
+    torch.save(s, stare)
+    assert antrenare_lunga.poveste_din_stare(config, fisa, stare, "Once upon a time", 40) != salvata
