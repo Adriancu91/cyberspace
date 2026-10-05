@@ -931,6 +931,68 @@ jurnal diferite, deci nu se amestecă în aceeași decizie.
 **Rețeta pentru antrenarea lungă:** 8 straturi × 512, context 256, lot 24, rata 0,001 care scade pe toate cele 8 ore
 până la 0,0001. Pornește de la zero, ca scorul pe ore să arate tot drumul.
 
+### Pasul 3: antrenarea lungă, peste noapte (4–5 octombrie 2026, 21:35–05:46)
+
+**Ce a rulat** (`python unelte/antrenare_lunga.py --ore 8`, `config/laptop_antrenare_lunga.toml`):
+- **Rețeta:** câștigătoarea buclei cinstite: 8 straturi × 512 (27,4 M parametri), context 256, lot 24.
+- **Durata și datele:** de la zero, 8 ore pe TinyStories de 10× (R2).
+- **Pe ore:** câte un experiment Kronos pe oră, cu examenul oficial la final și starea salvată după fiecare examen
+  (`lucru/antrenare_lunga/gpt.pt`).
+- **Rata:** a scăzut o singură dată, pe toate cele 8 ore, de la 0,001 (după încălzire) la 0,0001.
+- **Între ore:** un minut de pauză, apoi răcire până la 70 °C.
+
+| Ora | val_bpb | Față de ora dinainte | Pași în oră | Pași în total | Text văzut în total (simboluri) | De câte ori tot textul R2 | Rata la final |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0,5850 | – | 33.908 | 33.908 | 208 M | 4,6 | 0,00097 |
+| 2 | 0,5614 | −0,024 | 32.449 | 66.357 | 408 M | 9,0 | 0,00087 |
+| 3 | 0,5447 | −0,017 | 33.399 | 99.756 | 613 M | 13,6 | 0,00072 |
+| 4 | 0,5292 | −0,016 | 34.041 | 133.797 | 822 M | 18,2 | 0,00055 |
+| 5 | 0,5162 | −0,013 | 34.147 | 167.944 | 1.032 M | 22,9 | 0,00038 |
+| 6 | 0,5013 | −0,015 | 34.005 | 201.949 | 1.241 M | 27,5 | 0,00023 |
+| 7 | 0,4922 | −0,009 | 34.247 | 236.196 | 1.451 M | 32,2 | 0,00013 |
+| 8 | **0,4921** | −0,0001 | 34.270 | 270.466 | 1.662 M | 36,8 | 0,00010 |
+
+- **Scorul final: 0,4921**, de la 0,5850 după prima oră. Față de cel mai bun model al primei bucle (0,5409, 10 × 512,
+  75 de minute): −0,049.
+- **Cât text a văzut:** 270.466 de pași × 24 × 256 = 1.662 M de simboluri, adică ≈ 6,6 miliarde de litere (~6,6 GB de
+  text). Asta înseamnă de 36,8 ori tot textul de antrenare R2 (45,1 M de simboluri, 180 MB).
+- **Ultima oră n-a mai adus nimic:** 0,4922 → 0,4921, sub pragul de zgomot, deci Kronos a respins-o.
+  - Două explicații posibile, pe care testul nu le poate despărți: rata ajunsese la minim (0,0001), iar modelul văzuse
+    textul de ~37 de ori.
+  - Scorul nu a crescut, deci nu se vede o învățare pe de rost care să strice examenul.
+- **Fără probleme:**
+  - nicio eroare;
+  - memoria video a rămas tot timpul la 1,9 GB rezervați, sub 5,5 GB;
+  - viteza a fost de 9,0–9,5 pași pe secundă;
+  - a fost o singură așteptare de răcire (înainte de ora 3, cu placa la 87 °C);
+  - laptopul a rămas treaz.
+
+**Povestea**, de la „Once upon a time”. A scris-o modelul de după ora 7: Kronos n-a salvat separat modelul orei 8,
+fiindcă a fost respinsă, dar scorurile sunt practic egale (0,4922 față de 0,4921).
+
+> Once upon a time, there was a fearful little dog named Coco. Coco was scared of everything. One day, Coco saw a big
+> fireplace. The fireplace was in a room where fire could hold hugs. Coco wanted to help baby, but she was too scared to
+> go near it. Coco saw a big dog named Max near the fireplace. Coco thought Max could help him, so she decided to shave
+> him away. Max smiled at Coco and asked him to help. Coco was so happy that she could help Max. Together, Coco and Max
+> worked together to keep the fireplace safe. The family and byvero saw that Tim and Coco were not fearful anymore. They
+> were brave and knew that t[…]
+
+Cinstit despre poveste:
+- **Ce merge:** propozițiile sunt corecte, iar povestea are un fir (frică → un prieten → curaj).
+- **Ce scapă încă:** greșeli de sens („fire could hold hugs”, „shave him away”), un cuvânt inventat („byvero”), un
+  „Tim” apărut din senin și „el”/„ea” amestecate pentru același personaj.
+
+**Propuneri pentru pasul următor:**
+1. **Mai mult text, nu mai mult timp.** Modelul a văzut R2 de ~37 de ori și s-a oprit. Următorul pas firesc e
+   TinyStories întreg (~2 GB, de vreo 10 ori mai mult decât R2), cu aceeași rețetă.
+2. **O a doua sămânță pentru 8 față de 10 straturi.** La 10 minute, diferența a fost de ordinul zgomotului dintre
+   semințe. Pe termen lung, modelul mai mare ar putea câștiga.
+
+```
+python unelte/antrenare_lunga.py --ore 8       # antrenarea lungă (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga.toml)
+python unelte/antrenare_lunga.py --raport      # tabelul pe ore și o poveste
+```
+
 ## Toate comenzile
 
 ```
