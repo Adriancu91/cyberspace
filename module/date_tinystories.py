@@ -17,6 +17,11 @@ Pentru un text nou, fără suprapunere cu altul deja pregătit (testul în trei 
 decalaj_validare_mo spun de unde începe bucata descărcată din fiecare fișier oficial (în milioane de octeți), iar
 fara_povestile_din = dosarele altor seturi pregătite, ale căror povești se scot (dacă apar identic și aici).
 
+Pentru mai mult text cu același examen (după antrenarea lungă): validare_din = dosarul unui set deja pregătit, a cărui
+validare se copiază exact (octet cu octet), deci scorurile rămân comparabile; toți megaocteti merg la antrenare (cu un
+număr mai mare decât fișierul, se citește tot fișierul), iar orice poveste de antrenare care apare identic în validare
+e scoasă.
+
 Pregătirea se face o singură dată; după aceea modulul doar citește fișierele. Se poate porni și
 de mână: python -m module.date_tinystories
 """
@@ -24,6 +29,7 @@ de mână: python -m module.date_tinystories
 from __future__ import annotations
 
 import json
+import shutil
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -72,12 +78,17 @@ def _scrie(cale: Path, povesti: list[str]) -> int:
 def pregateste(director: Path, cerute: dict[str, Any]) -> dict[str, Any]:
     """Descarcă începutul fișierelor oficiale și scrie antrenare.txt, validare.txt și info.json."""
     total = cerute["megaocteti"] * 1_000_000
-    p = cerute["procent_validare"]
+    validare_din = cerute.get("validare_din")
+    p = 0.0 if validare_din else cerute["procent_validare"]  # cu validare_din, totul merge la antrenare
     decalaj_antrenare = int(cerute.get("decalaj_antrenare_mo", 0) * 1_000_000)
     decalaj_validare = int(cerute.get("decalaj_validare_mo", 0) * 1_000_000)
     print(f"Pregătesc TinyStories (~{cerute['megaocteti']:g} MB de text)...", flush=True)
     antrenare = _povesti_intregi(_descarca_inceput(cerute["url_antrenare"], int(total * (1 - p)), decalaj_antrenare))
-    validare_bruta = _povesti_intregi(_descarca_inceput(cerute["url_validare"], int(total * p), decalaj_validare))
+    if validare_din:  # validarea altui set, exact cum e
+        sursa_validare = Path(validare_din) / "validare.txt"
+        validare_bruta = [p.strip() for p in sursa_validare.read_text(encoding="utf-8").split(SEPARATOR) if p.strip()]
+    else:
+        validare_bruta = _povesti_intregi(_descarca_inceput(cerute["url_validare"], int(total * p), decalaj_validare))
     alte: set[str] = set()  # poveștile altor seturi pregătite (ex. R1), care nu au voie să apară și aici
     for dosar in cerute.get("fara_povestile_din", []):
         for nume in ("antrenare.txt", "validare.txt"):
@@ -86,8 +97,15 @@ def pregateste(director: Path, cerute: dict[str, Any]) -> dict[str, Any]:
                 alte.update(p.strip() for p in fisier.read_text(encoding="utf-8").split(SEPARATOR) if p.strip())
     antrenare_bruta = antrenare
     antrenare = [poveste for poveste in antrenare_bruta if poveste not in alte]
-    din_antrenare = set(antrenare)
-    validare = [poveste for poveste in validare_bruta if poveste not in din_antrenare and poveste not in alte]
+    if validare_din:  # validarea rămâne neatinsă; din antrenare iese orice poveste care apare identic în ea
+        din_validare = set(validare_bruta)
+        inainte = len(antrenare)
+        antrenare = [poveste for poveste in antrenare if poveste not in din_validare]
+        scoase_ca_in_validare = inainte - len(antrenare)
+        validare = validare_bruta
+    else:
+        din_antrenare = set(antrenare)
+        validare = [poveste for poveste in validare_bruta if poveste not in din_antrenare and poveste not in alte]
     if not antrenare or not validare:
         raise ValueError("Bucata descărcată din TinyStories nu are destule povești întregi; mărește megaocteti.")
     director.mkdir(parents=True, exist_ok=True)
@@ -99,8 +117,13 @@ def pregateste(director: Path, cerute: dict[str, Any]) -> dict[str, Any]:
         "scoase_din_antrenare": len(antrenare_bruta) - len(antrenare),
         "scoase_din_validare": len(validare_bruta) - len(validare),
         "octeti_antrenare": _scrie(director / "antrenare.txt", antrenare),
-        "octeti_validare": _scrie(director / "validare.txt", validare),
     }
+    if validare_din:  # copia exactă a validării celuilalt set, ca examenul să fie același
+        shutil.copyfile(sursa_validare, director / "validare.txt")
+        info["octeti_validare"] = len((director / "validare.txt").read_text(encoding="utf-8").encode("utf-8"))
+        info["scoase_ca_in_validare"] = scoase_ca_in_validare
+    else:
+        info["octeti_validare"] = _scrie(director / "validare.txt", validare)
     (director / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     print(
         f"Gata: {info['povesti_antrenare']:,} povești de antrenare ({info['octeti_antrenare'] / 1e6:.1f} MB), "
@@ -114,7 +137,7 @@ class DateTinyStories:
     MANIFEST = {
         "nume": "date_tinystories",
         "port": "date",
-        "versiune": "0.3.0",
+        "versiune": "0.4.0",
         "versiune_contract": 1,
         "resurse": {"disc_mb": 25},
         "permisiuni": ["internet", "citire_fisier", "scriere_fisier"],
@@ -131,9 +154,12 @@ class DateTinyStories:
         decalaj_antrenare_mo: float = 0.0,
         decalaj_validare_mo: float = 0.0,
         fara_povestile_din: list[str] | None = None,
+        validare_din: str = "",
     ) -> None:
-        if not 0 < megaocteti <= 2000:
-            raise ValueError("megaocteti trebuie să fie între 0 și 2000")
+        if not 0 < megaocteti <= 5000:
+            raise ValueError("megaocteti trebuie să fie între 0 și 5000")
+        if validare_din and not (Path(validare_din) / "validare.txt").exists():
+            raise ValueError(f"validare_din: nu găsesc „{Path(validare_din) / 'validare.txt'}” (pregătește întâi setul acela)")
         if not 0 < procent_validare < 0.5:
             raise ValueError("procent_validare trebuie să fie între 0 și 0.5")
         if runda not in (0, 1, 2):
@@ -151,6 +177,8 @@ class DateTinyStories:
         if decalaj_antrenare_mo or decalaj_validare_mo or fara_povestile_din:  # doar atunci: seturile vechi rămân valabile
             cerute.update(decalaj_antrenare_mo=decalaj_antrenare_mo, decalaj_validare_mo=decalaj_validare_mo,
                           fara_povestile_din=list(fara_povestile_din or []))
+        if validare_din:
+            cerute["validare_din"] = validare_din
         fisier_info = self.director / "info.json"
         info = json.loads(fisier_info.read_text(encoding="utf-8")) if fisier_info.exists() else {}
         gata = all(info.get(k) == v for k, v in cerute.items()) and all(

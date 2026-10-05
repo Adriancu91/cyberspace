@@ -86,3 +86,20 @@ def test_wikipedia_imparte_articolele_fara_suprapunere(tmp_path):
     assert antrenare and validare and not antrenare & validare
     assert antrenare | validare <= {articol(i) for i in range(1000)}
     assert date.info["articole_antrenare"] > 900  # ~1 din 100 la validare
+
+
+def test_validare_din_copiaza_exact_validarea_si_o_scoate_din_antrenare(tmp_path):
+    setari = scrie_surse(tmp_path)
+    primul = DateTinyStories(**setari)
+    validare_primului = _povesti(primul.text_validare())
+    # Antrenarea noii surse conține o poveste identică cu una din validarea primului set.
+    (tmp_path / "train.txt").write_text(SEP.join(["început", poveste_antrenare(1), validare_primului[0],
+                                                  poveste_antrenare(2), "sfârșit"]), encoding="utf-8")
+    tot = DateTinyStories(**{**setari, "director": str(tmp_path / "tot"), "megaocteti": 1.0,
+                             "validare_din": setari["director"]})
+    assert (tmp_path / "tot" / "validare.txt").read_bytes() == (tmp_path / "tinystories" / "validare.txt").read_bytes()
+    assert tot.text_validare() == primul.text_validare()  # același examen
+    assert _povesti(tot.text_antrenare()) == [poveste_antrenare(1), poveste_antrenare(2)]  # tot fișierul, fără povestea comună
+    assert tot.info["scoase_ca_in_validare"] == 1 and tot.info["validare_din"] == setari["director"]
+    with pytest.raises(ValueError, match="validare_din"):
+        DateTinyStories(**{**setari, "director": str(tmp_path / "x"), "validare_din": str(tmp_path / "lipsa")})

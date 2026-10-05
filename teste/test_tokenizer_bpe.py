@@ -86,3 +86,13 @@ def test_capetele_numara_doar_literele_complete(tok, text):
         if cap < len(text):
             assert len(text[: cap + 1].encode("utf-8")) > octeti  # următoarea literă nu e încă completă
     assert capete == sorted(capete)
+
+
+@pytest.mark.parametrize("marime", [1, 7, 40, 10_000])
+def test_pe_bucati_da_exact_aceleasi_simboluri(tok, marime):
+    povesti = "\n<|endoftext|>\n".join(f"Once upon a time, a cat number {i} ran. It's “fun”!" for i in range(30))
+    for text in [povesti, "<|endoftext|>" + povesti + "<|endoftext|>", "fără separator, doar un text lung " * 20, *EXEMPLE]:
+        bucati = list(tok.codifica_pe_bucati(text, marime))
+        assert [s for b in bucati for s in b] == tok.codifica(text)
+        if marime == 40 and text == povesti:
+            assert len(bucati) > 10  # chiar s-a tăiat în multe bucăți

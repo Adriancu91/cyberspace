@@ -26,7 +26,7 @@ import re
 from collections import Counter, defaultdict
 from itertools import accumulate
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 VERSIUNE = 1
 SPECIALE_IMPLICITE = ("<|endoftext|>",)
@@ -94,6 +94,20 @@ class TokenizerBPE:
                 for bucata in BUCATI.findall(segment):
                     simboluri.extend(self._bucata(bucata))
         return simboluri
+
+    def codifica_pe_bucati(self, text: str, marime: int = 50_000_000) -> Iterator[list[int]]:
+        """Ca codifica, dar pe bucăți de ~marime litere, tăiate imediat după un simbol special: acolo nu se lipește nimic
+        peste tăietură, deci simbolurile puse cap la cap sunt exact cele de la codifica(text). Pentru texte foarte mari
+        (ex. TinyStories întreg), fără o listă uriașă în memorie."""
+        start = 0
+        while start < len(text):
+            capat = len(text)
+            if start + marime < len(text):
+                taieturi = [p + len(s) for s in self.speciale if (p := text.find(s, start + marime)) >= 0]
+                if taieturi:
+                    capat = min(taieturi)
+            yield self.codifica(text[start:capat])
+            start = capat
 
     def decodeaza(self, simboluri: Iterable[int]) -> str:
         return b"".join(self._octeti[s] for s in simboluri).decode("utf-8", errors="replace")

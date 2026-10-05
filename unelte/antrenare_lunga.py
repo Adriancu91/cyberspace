@@ -11,8 +11,14 @@ butonul de oprire. Se poate relua: orele făcute se citesc din jurnal. Cât rule
     python unelte/antrenare_lunga.py --ore 8
     python unelte/antrenare_lunga.py --raport      # doar tabelul și povestea, din orele făcute
 
-Rezultatul: pe ecran și în lucru/antrenare_lunga/rezultat.json: scorul pe ore, pașii și textul văzut (în total și de
-câte ori a trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final.
+Cu --porneste-din <nr. experiment>, prima oră nu pornește de la zero, ci din modelul salvat de Kronos la acel experiment
+(greutățile lui): optimizatorul și numărătoarea pașilor pornesc din nou, deci rata repornește (încălzire scurtă, apoi
+scădere pe toată durata plănuită). Ce făcuse modelul înainte (ore, pași, text văzut, scor) se ține minte în pornire.json,
+lângă stare, și intră în totaluri. Cu --compara-cu <nr. experiment>, povestea de la final se scrie, din același început,
+și de modelul acelui experiment, ca să se vadă diferența.
+
+Rezultatul: pe ecran și în lucru/<linia>/rezultat.json: scorul pe ore, pașii și textul văzut (în total și de câte ori a
+trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final.
 """
 
 from __future__ import annotations
@@ -34,6 +40,7 @@ from kronos.registru import Registru  # noqa: E402
 from unelte.compara_plasa_adaptiva import ruleaza  # noqa: E402
 
 LITERE_PE_SIMBOL = 4.0  # măsurat pe TinyStories, cu tokenizerul BPE de 4.096 de simboluri
+ARHITECTURA = ("n_straturi", "n_capete", "n_emb", "context")
 
 
 def tine_treaz(da: bool) -> None:
@@ -88,6 +95,40 @@ def poveste(config: Any, fisa: dict[str, Any], inceput: str, lungime: int) -> st
     return inceput + model.genereaza(inceput, lungime)
 
 
+def fisa_experimentului(jurnal: Any, id_experiment: int) -> dict[str, Any]:
+    fisa = next((f for f in jurnal.istoric() if f["id"] == id_experiment), None)
+    if fisa is None or not fisa.get("model_salvat"):
+        raise ValueError(f"Experimentul #{id_experiment} nu există în jurnal sau n-are un model salvat de Kronos.")
+    return fisa
+
+
+def stare_de_pornire(config: Any, jurnal: Any, id_experiment: int, scor_principal: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Starea de pornire din modelul salvat de Kronos la experimentul dat: greutățile lui, un optimizator nou și
+    numărătoarea de la zero (rata repornește). Plus ce făcuse modelul înainte, pe linia lui, până la acel experiment."""
+    import torch
+
+    fisa = fisa_experimentului(jurnal, id_experiment)
+    setari = config.setari_port("model")
+    model = Registru().creeaza("model", config.porturi["model"]["modul"], {**setari, "dispozitiv": "cpu"}).instanta
+    asteptat = {k: setari[k] for k in ARHITECTURA}
+    model.incarca(fisa["model_salvat"])
+    if {k: model.setari[k] for k in ARHITECTURA} != asteptat:
+        raise ValueError(f"Modelul experimentului #{id_experiment} are altă arhitectură ({model.setari}) decât rețeta "
+                         f"din configurare ({asteptat}).")
+    optimizator = torch.optim.AdamW(model.retea.parameters(), lr=model.rata_invatare, weight_decay=0.1)
+    linia = [f for f in jurnal.istoric(fisa["linie"]) if f["id"] <= id_experiment]
+    ore = ore_din_jurnal(linia, scor_principal)
+    statistici = fisa.get("statistici_antrenare") or {}
+    inainte = {
+        "experiment": id_experiment, "linie": fisa["linie"], "ore": len(ore), "scor": fisa["scoruri"][scor_principal],
+        "pasi": statistici.get("pasi_total", sum(o["pasi"] for o in ore)), "minute": statistici.get("minute_total"),
+        "simboluri": ore[-1]["simboluri_total"] if ore else 0,
+    }
+    stare = {"setari": model.setari, "retea": model.retea.state_dict(), "optimizator": optimizator.state_dict(),
+             "pasi_total": 0, "minute": 0.0, "scor": inainte["scor"]}
+    return stare, inainte
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -101,12 +142,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--raport", action="store_true", help="nu antrena; doar tabelul și povestea, din orele făcute")
     parser.add_argument("--inceput", default="Once upon a time", help="începutul poveștii de la final")
     parser.add_argument("--lungime", type=int, default=600, help="câte litere scrie modelul")
+    parser.add_argument("--porneste-din", type=int, default=None, help="prima oră pornește din modelul acestui experiment")
+    parser.add_argument("--compara-cu", type=int, default=None, help="povestea se scrie și de modelul acestui experiment")
     args = parser.parse_args(argv)
 
     config = citeste_config(args.config)
     examen = Registru().creeaza("examen", config.porturi["examen"]["modul"], config.setari_port("examen")).instanta
     jurnal = Jurnal(config.director_lucru)
     facute = len(ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal))
+    cale_stare = Path(config.setari_port("model").get("cale_stare") or "fara_stare.pt")
+    fisier_pornire = cale_stare.with_name("pornire.json")
+    if args.porneste_din is not None and not args.raport and facute == 0 and not cale_stare.exists():
+        if not config.setari_port("model").get("cale_stare"):
+            print("--porneste-din cere un cale_stare în configurare (acolo se scrie starea de pornire).", flush=True)
+            return 1
+        from module.model_continuu import salveaza_atomic
+
+        stare, inainte = stare_de_pornire(config, jurnal, args.porneste_din, examen.scor_principal)
+        salveaza_atomic(stare, cale_stare)
+        fisier_pornire.write_text(json.dumps(inainte, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"Pornesc din modelul experimentului #{inainte['experiment']} (linia „{inainte['linie']}”, ora "
+              f"{inainte['ore']}, val_bpb {inainte['scor']:.4f}): optimizatorul și rata pornesc din nou.", flush=True)
+    inainte = json.loads(fisier_pornire.read_text(encoding="utf-8")) if fisier_pornire.exists() else None
     if not args.raport and facute < args.ore:
         reteta = config.setari_port("model")
         print(f"Antrenarea lungă: orele {facute + 1}–{args.ore}, rețeta {reteta['n_straturi']}×{reteta['n_emb']}, context "
@@ -133,21 +190,32 @@ def main(argv: list[str] | None = None) -> int:
     print("\n=== Antrenarea lungă: scorul pe ore (val_bpb, mai mic = mai bine) ===")
     print("\n".join(tabel(ore)))
     ultima = ore[-1]
-    print(f"\nÎn total: {ultima['pasi_total']:,} de pași, {ultima['simboluri_total'] / 1e6:,.0f} M de simboluri văzute "
-          f"(≈ {ultima['simboluri_total'] * LITERE_PE_SIMBOL / 1e9:.1f} miliarde de litere), adică de "
+    print(f"\nÎn aceste ore: {ultima['pasi_total']:,} de pași, {ultima['simboluri_total'] / 1e6:,.0f} M de simboluri "
+          f"văzute (≈ {ultima['simboluri_total'] * LITERE_PE_SIMBOL / 1e9:.1f} miliarde de litere), adică de "
           f"{ultima['treceri_prin_text'] or 0:.1f} ori tot textul de antrenare.")
+    total = None
+    if inainte:
+        total = {"pasi": inainte["pasi"] + ultima["pasi_total"], "simboluri": inainte["simboluri"] + ultima["simboluri_total"]}
+        print(f"Cu cele {inainte['ore']} ore de dinainte (până la experimentul #{inainte['experiment']}, linia "
+              f"„{inainte['linie']}”): {total['pasi']:,} de pași, {total['simboluri'] / 1e6:,.0f} M de simboluri "
+              f"(≈ {total['simboluri'] * LITERE_PE_SIMBOL / 1e9:.1f} miliarde de litere).")
     cu_model = [o for o in ore if o["model_salvat"]]
     text = None
     if cu_model:
         fisa = next(f for f in jurnal.istoric(config.nume) if f["id"] == cu_model[-1]["experiment"])
         text = poveste(config, fisa, args.inceput, args.lungime)
         print(f"\nPovestea modelului de după ora {cu_model[-1]['ora']}:\n{text}")
-    iesire = config.director_lucru / "antrenare_lunga" / "rezultat.json"
+    comparatie = None
+    if args.compara_cu is not None:
+        comparatie = poveste(config, fisa_experimentului(jurnal, args.compara_cu), args.inceput, args.lungime)
+        print(f"\nAceeași poveste, scrisă de modelul experimentului #{args.compara_cu}:\n{comparatie}")
+    iesire = config.director_lucru / config.nume / "rezultat.json"
     iesire.parent.mkdir(parents=True, exist_ok=True)
     iesire.write_text(json.dumps({
         "data": datetime.now().isoformat(timespec="seconds"), "linie": config.nume, "reteta": config.setari_port("model"),
-        "ore": ore, "litere_pe_simbol": LITERE_PE_SIMBOL,
-        "poveste": {"ora": cu_model[-1]["ora"], "text": text} if text else None,
+        "ore": ore, "litere_pe_simbol": LITERE_PE_SIMBOL, "inainte": inainte, "total": total,
+        "poveste": {"ora": cu_model[-1]["ora"], "inceput": args.inceput, "text": text} if text else None,
+        "poveste_comparatie": {"experiment": args.compara_cu, "text": comparatie} if comparatie else None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\nSalvat în {iesire}", flush=True)
     return 0

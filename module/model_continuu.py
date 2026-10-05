@@ -57,14 +57,23 @@ def amprenta(*bucati: bytes) -> str:
     return h.hexdigest()[:16]
 
 
+def cale_simboluri(text: str, director: str, cale_tokenizer: str) -> Path:
+    """Fișierul din director_cache cu simbolurile acestui text (după amprenta textului și a tokenizerului)."""
+    return Path(director) / f"simboluri_{amprenta(text.encode('utf-8'), Path(cale_tokenizer).read_bytes())}.pt"
+
+
 def simboluri_din_cache(tok: Any, text: str, director: str, cale_tokenizer: str) -> Any:
-    """Simbolurile textului: din director_cache dacă textul a mai fost împărțit, altfel le împarte și le ține minte."""
+    """Simbolurile textului: din director_cache dacă textul a mai fost împărțit, altfel le împarte și le ține minte.
+    Un text mare se împarte pe bucăți (tăiate între povești, deci aceleași simboluri), fiecare pusă direct în numere mici
+    (int16): fără o listă uriașă în memorie."""
     if not director:
         return tok.codifica(text)
-    fisier = Path(director) / f"simboluri_{amprenta(text.encode('utf-8'), Path(cale_tokenizer).read_bytes())}.pt"
+    fisier = cale_simboluri(text, director, cale_tokenizer)
     if fisier.exists():
         return torch.load(fisier, weights_only=True)
-    simboluri = torch.tensor(tok.codifica(text), dtype=torch.int16 if tok.marime < 2**15 else torch.int32)
+    tip = torch.int16 if tok.marime < 2**15 else torch.int32
+    bucati = [torch.tensor(b, dtype=tip) for b in tok.codifica_pe_bucati(text)]
+    simboluri = torch.cat(bucati) if bucati else torch.zeros(0, dtype=tip)
     salveaza_atomic(simboluri, fisier)
     return simboluri
 

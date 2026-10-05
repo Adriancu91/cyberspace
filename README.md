@@ -993,6 +993,42 @@ python unelte/antrenare_lunga.py --ore 8       # antrenarea lungă (oprire: pyth
 python unelte/antrenare_lunga.py --raport      # tabelul pe ore și o poveste
 ```
 
+## A doua antrenare lungă: mai mult text, nu mai mult timp (5 octombrie 2026)
+
+### Pregătirea: TinyStories întreg, cu același examen
+
+Comanda e `python unelte/pregateste_tinystories_tot.py`. Rulează o singură dată și a durat 10 minute.
+- **Datele** stau în `date/tinystories_tot/`. E tot fișierul oficial de antrenare TinyStories V2 (GPT-4), de 2,23 GB,
+  cu licență CDLA-Sharing-1.0: 2.717.493 de povești (2.226,7 MB de text), de ~12 ori mai mult decât R2.
+- **Examenul e același.** Validarea e copia exactă, octet cu octet, a validării R2 (2.457 de povești, 2,0 MB). O face
+  setarea nouă `validare_din` din `module/date_tinystories.py`. Așa scorurile se compară direct cu 0,4921.
+- **Suprapunerile:** din antrenare se scoate orice poveste care apare identic în validarea R2. N-a fost niciuna.
+  Potrivirea e exactă, deci povești doar asemănătoare nu se pot prinde așa.
+- **Simbolurile** s-au împărțit o singură dată (201 secunde) și sunt ținute minte în `lucru/cache`: 558.283.756 de
+  simboluri, adică 3,99 litere pe simbol.
+- **Memoria:** simbolurile ocupă 1,12 GB, deci încap în RAM (64 GB) și nu trebuie citite pe bucăți. Împărțirea în
+  simboluri se face totuși pe bucăți (`codifica_pe_bucati` în tokenizer), tăiate între povești, ca să nu se țină în
+  memorie liste uriașe. Simbolurile ies exact aceleași ca dintr-o bucată.
+
+### Antrenarea: 8 ore, din modelul orei 7
+
+- **Pornirea:** din modelul orei 7 de aseară (experimentul 209, val_bpb 0,4922), cu `--porneste-din 209`.
+  - Greutățile vin de la el.
+  - Optimizatorul și numărătoarea pașilor pornesc din nou, deci rata repornește: încălzire în primii 100 de pași,
+    apoi de la 0,0005 scade pe toate cele 8 ore până la 0,00005.
+  - Ce făcuse modelul înainte (7 ore, pași, text văzut) se ține minte în `lucru/antrenare_lunga_2/pornire.json` și
+    intră în totaluri.
+- **Aceeași rețetă:** 8 straturi × 512, context 256, lot 24 (`config/laptop_antrenare_lunga_2.toml`).
+- **Examen și salvare:** examen la fiecare oră, pe validarea R2, iar starea se salvează după fiecare oră
+  (`lucru/antrenare_lunga_2/gpt.pt`).
+
+Rezultatul se adaugă aici la final.
+
+```
+python unelte/pregateste_tinystories_tot.py
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_2.toml --ore 8 --porneste-din 209 --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"
+```
+
 ## Toate comenzile
 
 ```

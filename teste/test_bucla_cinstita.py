@@ -189,3 +189,39 @@ def test_antrenarea_lunga_continua_ora_cu_ora_si_se_reia(tmp_path, monkeypatch, 
     assert antrenare_lunga.main(argumente + ["--ore", "2"]) == 0  # nimic de făcut: doar raportul
     assert len(fise(tmp_path)) == 2
     assert "Povestea modelului" in capsys.readouterr().out
+
+
+def test_antrenarea_lunga_porneste_din_modelul_altui_experiment(tmp_path, monkeypatch, capsys):
+    torch = pytest.importorskip("torch")
+    monkeypatch.chdir(tmp_path)
+    prima = config_mic(tmp_path, "antrenare_lunga", model=', cale_stare = "lucru/antrenare_lunga/gpt.pt"', spatiu="lot = [4]")
+    comun = ["--pauza", "0", "--racire", "0", "--lungime", "40"]
+    assert antrenare_lunga.main(["--config", str(prima), "--ore", "2"] + comun) == 0
+    sursa = [f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga" and f.get("model_salvat")][0]
+
+    # Starea de pornire: greutățile modelului salvat, optimizator nou, numărătoarea de la zero.
+    config = antrenare_lunga.citeste_config(str(prima))
+    stare, inainte = antrenare_lunga.stare_de_pornire(config, antrenare_lunga.Jurnal(config.director_lucru), sursa["id"], "val_bpb")
+    salvat = torch.load(sursa["model_salvat"], map_location="cpu", weights_only=True)["stare"]
+    assert all(torch.equal(stare["retea"][k].cpu(), salvat[k].cpu()) for k in salvat)
+    assert stare["pasi_total"] == 0 and stare["minute"] == 0.0 and stare["optimizator"]["state"] == {}
+    assert inainte["ore"] == 1 and inainte["pasi"] == sursa["statistici_antrenare"]["pasi_total"]
+    assert inainte["simboluri"] == sursa["statistici_antrenare"]["pasi"] * 4 * 16  # lot 4, context 16
+
+    a_doua = config_mic(tmp_path, "antrenare_lunga_2", model=', cale_stare = "lucru/antrenare_lunga_2/gpt.pt", '
+                        'durata_scaderii_secunde = 0.6', spatiu="lot = [4]")
+    argumente = ["--config", str(a_doua), "--ore", "1", "--porneste-din", str(sursa["id"]), "--compara-cu", str(sursa["id"]),
+                 "--inceput", "Once upon a time, there was"] + comun
+    assert antrenare_lunga.main(argumente) == 0
+    ora = [f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga_2"][0]["statistici_antrenare"]
+    assert ora["continuat"] and ora["pasi_total"] == ora["pasi"]  # din starea de pornire, cu numărătoarea de la zero
+    rezultat = json.loads((tmp_path / "lucru" / "antrenare_lunga_2" / "rezultat.json").read_text(encoding="utf-8"))
+    assert rezultat["inainte"]["experiment"] == sursa["id"]
+    assert rezultat["total"]["pasi"] == inainte["pasi"] + ora["pasi"]
+    assert rezultat["total"]["simboluri"] == inainte["simboluri"] + ora["pasi"] * 4 * 16
+    assert rezultat["poveste"]["text"].startswith("Once upon a time, there was")
+    assert rezultat["poveste_comparatie"]["experiment"] == sursa["id"]
+    assert rezultat["poveste_comparatie"]["text"].startswith("Once upon a time, there was")
+    assert "Cu cele 1 ore de dinainte" in capsys.readouterr().out
+    assert antrenare_lunga.main(argumente) == 0  # reluat: starea nu se mai face din nou, ora e deja făcută
+    assert len([f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga_2"]) == 1
