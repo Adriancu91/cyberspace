@@ -15,7 +15,9 @@ Cu --porneste-din <nr. experiment>, prima oră nu pornește de la zero, ci din m
 (greutățile lui): optimizatorul și numărătoarea pașilor pornesc din nou, deci rata repornește (încălzire scurtă, apoi
 scădere pe toată durata plănuită). Ce făcuse modelul înainte (ore, pași, text văzut, scor) se ține minte în pornire.json,
 lângă stare, și intră în totaluri. Cu --compara-cu <nr. experiment>, povestea de la final se scrie, din același început,
-și de modelul acelui experiment, ca să se vadă diferența.
+și de modelul acelui experiment, ca să se vadă diferența. Cu --alaturi-de <linie>, la fiecare oră apare și scorul altei
+antrenări lungi din aceeași oră, cu diferența, iar la final un verdict cu pragul --prag-alaturi (implicit 0,02: zgomotul
+dintre semințe).
 
 Rezultatul: pe ecran și în lucru/<linia>/rezultat.json: scorul pe ore, pașii și textul văzut (în total și de câte ori a
 trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final (din starea salvată, dacă Kronos n-a salvat
@@ -79,14 +81,35 @@ def ore_din_jurnal(fise: list[dict[str, Any]], scor_principal: str) -> list[dict
     return ore
 
 
-def tabel(ore: list[dict[str, Any]]) -> list[str]:
-    linii = [f"{'ora':>3}  {'val_bpb':>7}  {'pași':>7}  {'pași total':>10}  {'text văzut':>10}  {'treceri':>7}  "
-             f"{'rata la final':>13}  {'memorie':>8}"]
+def tabel(ore: list[dict[str, Any]], alaturi: dict[int, float] | None = None) -> list[str]:
+    """Tabelul pe ore; cu alaturi (scorul altei antrenări la aceeași oră), și scorul acela și diferența."""
+    cap = f"{'ora':>3}  {'val_bpb':>7}" + (f"  {'alături':>7}  {'diferența':>9}" if alaturi is not None else "")
+    linii = [cap + f"  {'pași':>7}  {'pași total':>10}  {'text văzut':>10}  {'treceri':>7}  {'rata la final':>13}  "
+                   f"{'memorie':>8}"]
     for o in ore:
-        linii.append(f"{o['ora']:>3}  {o['scor']:>7.4f}  {o['pasi']:>7,}  {o['pasi_total'] or 0:>10,}  "
-                     f"{o['simboluri_total'] / 1e6:>8.0f} M  {o['treceri_prin_text'] or 0:>7.1f}  "
-                     f"{o['rata_la_final'] or 0:>13.6f}  {o['memorie_rezervata_mb'] or 0:>5} MB")
+        rand = f"{o['ora']:>3}  {o['scor']:>7.4f}"
+        if alaturi is not None:
+            ref = alaturi.get(o["ora"])
+            rand += f"  {ref:>7.4f}  {o['scor'] - ref:>+9.4f}" if ref is not None else f"  {'–':>7}  {'–':>9}"
+        linii.append(rand + f"  {o['pasi']:>7,}  {o['pasi_total'] or 0:>10,}  {o['simboluri_total'] / 1e6:>8.0f} M  "
+                            f"{o['treceri_prin_text'] or 0:>7.1f}  {o['rata_la_final'] or 0:>13.6f}  "
+                            f"{o['memorie_rezervata_mb'] or 0:>5} MB")
     return linii
+
+
+def verdict_alaturi(ore: list[dict[str, Any]], alaturi: dict[int, float], linie: str, prag: float) -> str | None:
+    """Ultima oră de acum față de aceeași oră a celeilalte antrenări, cu pragul dat (ex. zgomotul dintre semințe)."""
+    ultima = ore[-1]
+    ref = alaturi.get(ultima["ora"])
+    if ref is None:
+        return None
+    dif = ultima["scor"] - ref
+    text = f"la ora {ultima['ora']}: {ultima['scor']:.4f} față de {ref:.4f} („{linie}”), diferența {dif:+.4f}, pragul {prag}"
+    if dif < -prag:
+        return f"MAI BUN, peste prag: {text}."
+    if dif > prag:
+        return f"MAI SLAB, peste prag: {text}."
+    return f"ÎN ZGOMOT (nu se poate spune care e mai bun): {text}."
 
 
 def poveste(config: Any, fisa: dict[str, Any], inceput: str, lungime: int) -> str:
@@ -156,6 +179,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--lungime", type=int, default=600, help="câte litere scrie modelul")
     parser.add_argument("--porneste-din", type=int, default=None, help="prima oră pornește din modelul acestui experiment")
     parser.add_argument("--compara-cu", type=int, default=None, help="povestea se scrie și de modelul acestui experiment")
+    parser.add_argument("--alaturi-de", default="", help="linia altei antrenări: scorul ei la aceeași oră, alături")
+    parser.add_argument("--prag-alaturi", type=float, default=0.02, help="pragul verdictului față de cealaltă antrenare")
     args = parser.parse_args(argv)
 
     config = citeste_config(args.config)
@@ -176,6 +201,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Pornesc din modelul experimentului #{inainte['experiment']} (linia „{inainte['linie']}”, ora "
               f"{inainte['ore']}, val_bpb {inainte['scor']:.4f}): optimizatorul și rata pornesc din nou.", flush=True)
     inainte = json.loads(fisier_pornire.read_text(encoding="utf-8")) if fisier_pornire.exists() else None
+    alaturi = ({o["ora"]: o["scor"] for o in ore_din_jurnal(jurnal.istoric(args.alaturi_de), examen.scor_principal)}
+               if args.alaturi_de else None)
     if not args.raport and facute < args.ore:
         reteta = config.setari_port("model")
         print(f"Antrenarea lungă: orele {facute + 1}–{args.ore}, rețeta {reteta['n_straturi']}×{reteta['n_emb']}, context "
@@ -190,8 +217,11 @@ def main(argv: list[str] | None = None) -> int:
                 )
                 if rulare is None:
                     break
-                print(f"   ora {ora}: val_bpb {rulare['scor']:.4f}, {rulare['pasi']:,} de pași "
-                      f"({rulare['pasi_pe_secunda']} pași/s), la {datetime.now():%H:%M}", flush=True)
+                ref = (alaturi or {}).get(ora)
+                print(f"   ora {ora}: val_bpb {rulare['scor']:.4f}"
+                      + (f" (alături, „{args.alaturi_de}”: {ref:.4f}, diferența {rulare['scor'] - ref:+.4f})" if ref else "")
+                      + f", {rulare['pasi']:,} de pași ({rulare['pasi_pe_secunda']} pași/s), la {datetime.now():%H:%M}",
+                      flush=True)
         finally:
             tine_treaz(False)
 
@@ -200,7 +230,12 @@ def main(argv: list[str] | None = None) -> int:
         print("Nicio oră făcută încă.", flush=True)
         return 1
     print("\n=== Antrenarea lungă: scorul pe ore (val_bpb, mai mic = mai bine) ===")
-    print("\n".join(tabel(ore)))
+    if alaturi is not None:
+        print(f"„alături” = scorul antrenării „{args.alaturi_de}” la aceeași oră; diferența = acum − alături.")
+    print("\n".join(tabel(ore, alaturi)))
+    verdict = verdict_alaturi(ore, alaturi, args.alaturi_de, args.prag_alaturi) if alaturi else None
+    if verdict:
+        print(f"\nFață de „{args.alaturi_de}”: {verdict}")
     ultima = ore[-1]
     print(f"\nÎn aceste ore: {ultima['pasi_total']:,} de pași, {ultima['simboluri_total'] / 1e6:,.0f} M de simboluri "
           f"văzute (≈ {ultima['simboluri_total'] * LITERE_PE_SIMBOL / 1e9:.1f} miliarde de litere), adică de "
@@ -229,6 +264,8 @@ def main(argv: list[str] | None = None) -> int:
     iesire.write_text(json.dumps({
         "data": datetime.now().isoformat(timespec="seconds"), "linie": config.nume, "reteta": config.setari_port("model"),
         "ore": ore, "litere_pe_simbol": LITERE_PE_SIMBOL, "inainte": inainte, "total": total,
+        "alaturi": {"linie": args.alaturi_de, "scoruri": alaturi, "prag": args.prag_alaturi, "verdict": verdict}
+        if alaturi is not None else None,
         "poveste": {"ora": ora_povestii, "inceput": args.inceput, "text": text} if text else None,
         "poveste_comparatie": {"experiment": args.compara_cu, "text": comparatie} if comparatie else None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")

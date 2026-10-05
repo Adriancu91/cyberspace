@@ -242,3 +242,29 @@ def test_povestea_vine_din_starea_de_la_final(tmp_path, monkeypatch):
     s["retea"] = {k: v * 0 for k, v in s["retea"].items()}
     torch.save(s, stare)
     assert antrenare_lunga.poveste_din_stare(config, fisa, stare, "Once upon a time", 40) != salvata
+
+
+def test_antrenarea_lunga_alaturi_de_alta_antrenare(tmp_path, monkeypatch, capsys):
+    pytest.importorskip("torch")
+    monkeypatch.chdir(tmp_path)
+    comun = ["--pauza", "0", "--racire", "0", "--lungime", "40"]
+    prima = config_mic(tmp_path, "antrenare_lunga", model=', cale_stare = "lucru/antrenare_lunga/gpt.pt"', spatiu="lot = [4]")
+    assert antrenare_lunga.main(["--config", str(prima), "--ore", "2"] + comun) == 0
+    a_treia = config_mic(tmp_path, "antrenare_lunga_3", model=', cale_stare = "lucru/antrenare_lunga_3/gpt.pt"',
+                         spatiu="lot = [4]")
+    capsys.readouterr()
+    assert antrenare_lunga.main(["--config", str(a_treia), "--ore", "1", "--alaturi-de", "antrenare_lunga"] + comun) == 0
+    iesire = capsys.readouterr().out
+    rezultat = json.loads((tmp_path / "lucru" / "antrenare_lunga_3" / "rezultat.json").read_text(encoding="utf-8"))
+    prima_ora = [f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga"][0]["scoruri"]["val_bpb"]
+    assert rezultat["alaturi"]["scoruri"]["1"] == prima_ora and len(rezultat["alaturi"]["scoruri"]) == 2
+    assert "la ora 1:" in rezultat["alaturi"]["verdict"] and rezultat["alaturi"]["prag"] == 0.02
+    assert "alături" in iesire and f"{prima_ora:.4f}" in iesire
+
+
+@pytest.mark.parametrize("scor,inceput", [(0.46, "MAI BUN"), (0.52, "MAI SLAB"), (0.49, "ÎN ZGOMOT"), (0.475, "ÎN ZGOMOT")])
+def test_verdictul_alaturi(scor, inceput):
+    ore = [{"ora": 1, "scor": 0.6}, {"ora": 8, "scor": scor}]
+    verdict = antrenare_lunga.verdict_alaturi(ore, {1: 0.58, 8: 0.4921}, "antrenare_lunga", 0.02)
+    assert verdict.startswith(inceput) and "la ora 8: " in verdict and "0.4921" in verdict
+    assert antrenare_lunga.verdict_alaturi(ore, {1: 0.58}, "antrenare_lunga", 0.02) is None  # nicio oră 8 alături

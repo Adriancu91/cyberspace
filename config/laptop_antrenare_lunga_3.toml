@@ -1,0 +1,56 @@
+# A treia antrenare lungă: un model mai mare pe textul întreg (5–6 octombrie 2026).
+# 10 straturi × 512 (33,8 M parametri), de la zero, pe TinyStories ÎNTREG (date/tinystories_tot, ca la a doua), cu
+# rețeta primei antrenări lungi: lot 24, rata 0,001 care scade pe toate cele 8 ore până la 0,0001 (încălzire în primii
+# 100 de pași). Examenul e același: validarea R2 (validare_din), deci scorurile se compară cu prima antrenare lungă
+# (8 × 512, de la zero, 8 ore: 0,4921), oră cu oră.
+#   python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_3.toml --ore 8 --alaturi-de antrenare_lunga --compara-cu 209
+#   (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga_3.toml)
+
+[platforma]
+nume = "antrenare_lunga_3"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea nu intră)
+experimente = 8
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.001, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 28800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_3/gpt.pt", director_cache = "lucru/cache", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # pregătit deja, ca la a doua antrenare
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
