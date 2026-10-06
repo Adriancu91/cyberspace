@@ -215,3 +215,31 @@ def test_rata_care_scade_setari_invalide():
                    {"durata_scaderii_secunde": -1.0}):
         with pytest.raises(ValueError, match="fractie_rata_finala"):
             ModelGPT(**MIC, rata_care_scade=True, **setari)
+
+
+# --- completarea fără întâmplare (examenul de fapte) ------------------------------------
+
+
+class _Text:
+    def __init__(self, text):
+        self.text = text
+
+    def text_antrenare(self):
+        return self.text
+
+    def text_validare(self):
+        return self.text[:200]
+
+
+def test_completeaza_alege_mereu_continuarea_cea_mai_probabila(tokenizer_mic):
+    text = _Text("the cat sat on the mat. " * 200)
+    pe_bucati = ModelGPT(**{**MIC_BPE, "rata_invatare": 3e-3}, cale_tokenizer=tokenizer_mic, pasi_max=200)
+    pe_bucati.antreneaza(text, 60.0)
+    completare = pe_bucati.completeaza("the cat sat on the", 3)
+    assert completare.split()[0].strip(".") == "mat"  # a învățat textul pe de rost
+    assert pe_bucati.completeaza("the cat sat on the", 3) == completare  # fără întâmplare: mereu la fel
+    pe_litere = ModelGPT(**MIC, pasi_max=200)
+    pe_litere.antreneaza(_Text("abc" * 400), 60.0)
+    assert pe_litere.completeaza("ab", 4) == "cabc"
+    with pytest.raises(RuntimeError):
+        ModelGPT(**MIC).completeaza("ab")

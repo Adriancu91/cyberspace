@@ -63,6 +63,17 @@ def taie_la_propozitie(text: str) -> str:
     return text[: capete[-1].end()] if capete else text
 
 
+def povesti_elevului(elev: Any, originale: list[str]) -> list[dict[str, str]]:
+    """Elevul pornește din prima propoziție a fiecărei povești originale și scrie cam cât ea (între 200 și 1.000 de
+    litere); povestea lui se taie la ultima propoziție întreagă."""
+    povesti = []
+    for original in originale:
+        inceput = prima_propozitie(original)
+        lungime = max(200, min(1000, len(original) - len(inceput)))
+        povesti.append({"inceput": inceput, "poveste": taie_la_propozitie(inceput + elev.genereaza(inceput, lungime))})
+    return povesti
+
+
 def model_elev(config: Any, jurnal: Jurnal, linie: str) -> tuple[Any, dict[str, Any]]:
     """Ultimul model salvat de Kronos pe linia elevului (ex. ora 8 a antrenării lungi a treia)."""
     fise = [f for f in jurnal.istoric(linie) if f.get("model_salvat")]
@@ -115,11 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     # 1. Elevul: 20 de povești din primele propoziții ale unor povești nevăzute (apoi iese de pe placă).
     originale = alege_povesti(Path(args.validare).read_text(encoding="utf-8"), args.elev)
     elev, fisa_elev = model_elev(config, jurnal, args.elev_linie)
-    povesti_elev = []
-    for original in originale:
-        inceput = prima_propozitie(original)
-        lungime = max(200, min(1000, len(original) - len(inceput)))
-        povesti_elev.append({"inceput": inceput, "poveste": taie_la_propozitie(inceput + elev.genereaza(inceput, lungime))})
+    povesti_elev = povesti_elevului(elev, originale)
     del elev
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

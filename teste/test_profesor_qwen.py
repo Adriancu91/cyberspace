@@ -54,7 +54,7 @@ def test_pe_loturi_si_contractul(monkeypatch):
     assert profesor.genereaza("cats") == "Story about cats."
     assert profesor.noteaza("A story.") == {"nota": 8, "motiv": "Good."} and motor.loturi[-1] == (1, 60, False)
     exercitii = profesor.genereaza_exercitii("bees", 4)
-    assert [e["stil"] for e in exercitii] == ["simplu", "dialog", "morala", "simplu"]
+    assert [e["stil"] for e in exercitii] == ["simplu", "dialog", "morala", "problema"]
     assert all(e == {"subiect": "bees", "stil": e["stil"], "fapt": FAPTE["bees"], "poveste": "Story about bees."}
                for e in exercitii)
 
@@ -63,3 +63,9 @@ def test_setari_invalide():
     for setari in ({"lot": 0}, {"max_simboluri": 0}, {"temperatura": 0.0}):
         with pytest.raises(ValueError):
             ProfesorQwen(**setari)
+
+
+def test_personajul_intra_in_cerere():
+    text = cerere_poveste("owls", "seara", "a curious puppy")[-1]["content"]
+    assert "The main character is a curious puppy." in text and STILURI["seara"] in text
+    assert "main character" not in cerere_poveste("owls", "seara")[-1]["content"]

@@ -1258,6 +1258,98 @@ python unelte/test_profesor.py                  # testul de calitate (~7 minute;
 python unelte/test_profesor.py --povesti 8 --elev 4   # probă scurtă
 ```
 
+## Faza 3, pasul 2: hrana elevului și două examene noi (6 octombrie 2026)
+
+### Hrana: povești cu fapte (`python unelte/genereaza_fapte.py`)
+
+**Cum s-au scris:**
+- Profesorul a scris 9.000 de povești în 4,0 ore: 37,5 pe minut, cu tot cu notatul.
+- Fiecare poveste e pe unul din cele 50 de subiecte și are un singur fapt.
+- Ca poveștile despre același fapt să nu semene între ele, se schimbă pe rând:
+  - 8 stiluri: simplu, dialog, morală, o problemă rezolvată, o întrebare cu răspuns, doi prieteni, poveste de seară,
+    amuzant;
+  - 8 personaje principale (o fetiță, un băiețel, un cățel curios și altele).
+- Fiecare poveste a fost notată pe loc.
+
+**Ce a ieșit:**
+- **Au rămas 7.520 de povești (84%)**, cu **860.410 cuvinte**.
+- **Scoase:** 1.096 cu faptul repetat, cuvânt cu cuvânt, și 384 cu nota sub 8.
+- **Notele, pentru toate cele 9.000:** 10 → 4.552, 9 → 3.147, 8 → 917, 7 → 180, 6 → 109, 5 → 36, 4 → 58, 3 → 1. Media
+  e 9,28.
+- **Pe fapt** au rămas între 74 și 178 de povești.
+  - Faptele scurte sunt cele pe care profesorul le repetă cel mai des, deci au rămas cele mai puține: morcovii (74),
+    păsările (76), merele (86), vacile (97).
+  - Faptele lungi au păstrat aproape toate poveștile: toamna (178), curcubeul și umbrele (177).
+- **Faptul spus altfel:** în 762 de povești rămase, faptul nu apare cuvânt cu cuvânt; de obicei e spus la trecut („lava
+  came out of volcanoes”). Am scos doar ce ai cerut (nota sub 8 și faptul repetat), deci acestea au rămas, dar sunt
+  numărate.
+
+**Fișierele**, în `date/fapte/`:
+- `povesti.txt`: poveștile rămase (4,8 MB de text), despărțite ca în TinyStories;
+- `fapte.json`: lista fapt → povești;
+- `toate.jsonl`: toate cele 9.000, cu notele și motivele.
+
+**Ce am reglat pe drum:**
+- **Cererea mai fermă.** Cererea a devenit „exact o dată, nici măcar la final”. La proba de 32 de povești, 34% repetau
+  faptul; după schimbare, 16%. Pe toată rularea, 12%.
+- **Memoria video.**
+  - Rularea a pornit cu loturi de 16, care la probă ocupau 4,3 GB.
+  - Memoria rezervată de PyTorch a crescut însă de la un lot la altul, pentru că loturile au lungimi diferite. A ajuns
+    la 5,9 GB (văzut în contoarele Windows), peste limita de 5,5 GB.
+  - Am oprit generarea curat, imediat după ce a scris o bucată pe disc (la povestea 4.672). Am pus profesorul să dea
+    memoria înapoi după fiecare lot, apoi am repornit generarea de unde rămăsese.
+  - De atunci a ocupat 3,6 GB între loturi și cel mult 4,2 GB (vârful măsurat de PyTorch), fără să scadă viteza.
+
+### Examenul de fapte (`python unelte/examen_fapte.py`)
+
+**Ce e:** un examen separat de cel oficial (val_bpb), pe care nu-l atinge. Pentru fiecare din cele 50 de fapte sunt 3
+propoziții cu golul la capăt, ca elevul să-l poată completa scriind de la stânga la dreapta:
+- faptul însuși: „Birds have ___.”;
+- spus de mama: „Mom said, "Birds have ___."”;
+- învățat de Lily: „Lily learned that birds have ___.”.
+
+**Cum se notează:**
+- Elevul completează fără întâmplare: metoda nouă `ModelGPT.completeaza` alege la fiecare pas simbolul cel mai probabil.
+- Răspunsul e corect dacă primul cuvânt (după un „the/a/an”) e cuvântul din fapt.
+- Separat, se numără și răspunsurile cu câteva sinonime la fel de adevărate (de exemplu „clean” la dinți, „metal” la
+  magneți).
+
+**Punctul de plecare: 10 × 512 de azi-noapte (#226).**
+- **41 din 150 (27%)** cu cuvântul din fapt; 50 din 150 (33%) cu sinonime.
+- 24 din 50 de fapte au măcar un răspuns corect.
+- Pe propoziții (din câte 50): faptul însuși 13, spus de mama 14, învățat de Lily 23.
+
+**Nu e aproape de zero, cum ne așteptam.**
+- Elevul știe faptele care apar și în poveștile TinyStories: plantele au nevoie de apă și soare ca să crească,
+  păianjenii au opt picioare, omida devine fluture, vacile dau lapte, găinile fac ouă.
+- Nu știe faptele mai „de carte”. Răspunsurile lui: „Water freezes into the air”, „Birds have a nest”, „The Sun is a
+  special thing”, „The Moon goes around the room”, „Fish breathe through their breath”, „Frogs start their lives as they
+  are”.
+- Măsura are loc să crească: 73% din răspunsuri sunt greșite, iar golurile sunt exact faptele din hrana de mai sus.
+
+### Examenul profesorului (`python unelte/examen_profesor.py`)
+
+**Ce face:** dă nota profesorului pe aceleași 20 de povești nevăzute (aceeași sămânță ca la testul profesorului), pentru
+orice model salvat.
+- Modelul se alege cu `--experiment <nr.>` sau cu `--linie <linie>` (ultimul model salvat de pe ea).
+- Elevul pornește din prima propoziție a fiecărei povești, iar profesorul notează fără întâmplare.
+
+**Se repetă exact.** Pe modelul de azi-noapte (#226) dă din nou **4,7**, cu aceleași 20 de povești și aceleași 20 de
+note ca la testul de ieri. Deci se poate folosi pe modelele de acum înainte.
+
+### În jurnal, doar numere
+
+Fișele noi nu conțin niciun text generat:
+- #228 și #229: examenul de fapte (a doua are și numărul fără sinonime);
+- #230: hrana (9.000 de povești scrise, 7.520 rămase);
+- #231: examenul profesorului (4,7).
+
+```
+python unelte/genereaza_fapte.py --doar-local                 # 9.000 de povești sau 5 ore (se poate relua)
+python unelte/examen_fapte.py --experiment 226 --dispozitiv cpu
+python unelte/examen_profesor.py --experiment 226            # sau --linie antrenare_lunga_3
+```
+
 ## Toate comenzile
 
 ```

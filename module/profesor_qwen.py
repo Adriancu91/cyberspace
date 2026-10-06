@@ -87,7 +87,17 @@ STILURI = {
     "simplu": "simple and calm, told by a narrator",
     "dialog": "with a short conversation between the characters, using quotation marks",
     "morala": "ending with a short, clear lesson",
+    "problema": "where a small problem is solved by the end",
+    "intrebare": "where a child asks a question and a grown-up answers it",
+    "prieteni": "about two friends who help each other",
+    "seara": "as a calm bedtime story",
+    "amuzant": "funny, with a silly surprise",
 }
+# Personajul principal, ca poveștile despre același fapt să nu semene între ele.
+PERSONAJE = (
+    "a little girl", "a little boy", "a curious puppy", "a small kitten", "a grandma and her grandson",
+    "two best friends", "a mom and her daughter", "a dad and his son",
+)
 SISTEM_POVESTE = (
     "You write short stories for small children, in the style of the TinyStories dataset: very simple English that a "
     "3-year-old understands, short sentences, and a clear beginning, middle and end."
@@ -97,21 +107,24 @@ _NOTA = re.compile(r"GRADE\s*:\s*(\d+)", re.IGNORECASE)
 _MOTIV = re.compile(r"REASON\s*:\s*(.+)", re.IGNORECASE)
 
 
-def cerere_poveste(subiect: str, stil: str = "simplu") -> list[dict[str, str]]:
-    """Mesajele pentru o poveste: subiectul, stilul (din STILURI sau scris liber) și faptul adevărat de pus în ea."""
+def cerere_poveste(subiect: str, stil: str = "simplu", personaj: str | None = None) -> list[dict[str, str]]:
+    """Mesajele pentru o poveste: subiectul, stilul (din STILURI sau scris liber), personajul principal (dacă e dat) și
+    faptul adevărat de pus în ea."""
     fapt = FAPTE.get(subiect)
     if fapt:
-        cerinta = ("The story must include this true fact about the world, said once, simply and correctly, as a "
-                   f'natural part of the story (for example, a character learns it): "{fapt}" '
-                   "Do not add other facts that are not true.")
+        cerinta = ("The story must include this true fact about the world exactly once (do not repeat it anywhere, not "
+                   "even at the end), said simply and correctly as a natural part of the story (for example, a "
+                   f'character learns it): "{fapt}" Do not add other facts that are not true.')
     else:
         cerinta = (f"The story must include one true, simple fact about {subiect} that a child can learn, said once, "
                    "as a natural part of the story. Make sure the fact is correct.")
     return [
         {"role": "system", "content": SISTEM_POVESTE},
         {"role": "user", "content": f"Write a short story (about 150 words) about {subiect}. "
-                                    f"Style: {STILURI.get(stil, stil)}. {cerinta} Write it as one to three normal "
-                                    "paragraphs, not one sentence per line. Write only the story, with no title."},
+                                    f"Style: {STILURI.get(stil, stil)}. "
+                                    + (f"The main character is {personaj}. " if personaj else "")
+                                    + f"{cerinta} Write it as one to three normal paragraphs, not one sentence per "
+                                    "line. Write only the story, with no title."},
     ]
 
 
@@ -227,15 +240,20 @@ class ProfesorQwen:
         self.secunde += time.perf_counter() - start
         noi = iesire[:, intrare["input_ids"].shape[1]:]
         self.simboluri_generate += int((noi != self._tok.pad_token_id).sum())
-        return [t.strip() for t in self._tok.batch_decode(noi, skip_special_tokens=True)]
+        raspunsuri = [t.strip() for t in self._tok.batch_decode(noi, skip_special_tokens=True)]
+        # Loturile au lungimi diferite, iar PyTorch păstrează memoria eliberată pentru refolosire: fără asta, memoria
+        # rezervată crește de la un lot la altul (într-o rulare de ore a ajuns la 5,9 GB, peste limita de 5,5 GB).
+        del iesire, noi, intrare
+        torch.cuda.empty_cache()
+        return raspunsuri
 
     # --- ce face profesorul ---------------------------------------------------------
 
-    def genereaza_mai_multe(self, cereri: list[tuple[str, str]]) -> list[str]:
-        """Câte o poveste pentru fiecare (subiect, stil), pe loturi."""
+    def genereaza_mai_multe(self, cereri: list[tuple[str, ...]]) -> list[str]:
+        """Câte o poveste pentru fiecare (subiect, stil) sau (subiect, stil, personaj), pe loturi."""
         povesti: list[str] = []
         for i in range(0, len(cereri), self.lot):
-            lot = [cerere_poveste(subiect, stil) for subiect, stil in cereri[i : i + self.lot]]
+            lot = [cerere_poveste(*cerere) for cerere in cereri[i : i + self.lot]]
             povesti += self._raspunsuri(lot, self.max_simboluri, cu_intamplare=True)
         return povesti
 

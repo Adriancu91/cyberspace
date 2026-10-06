@@ -479,6 +479,35 @@ class ModelGPT:
             idx = torch.cat([idx, urm.to(self.dispozitiv)], dim=1)
         return "".join(rezultat)
 
+    @torch.no_grad()
+    def completeaza(self, inceput: str, max_simboluri: int = 6) -> str:
+        """Continuarea cea mai probabilă, fără întâmplare: la fiecare pas, simbolul (pe litere: litera) cu șansa cea mai
+        mare. Pentru examene cu goluri („Birds have ___”): același început dă mereu aceeași completare."""
+        if self.retea is None:
+            raise RuntimeError("modelul nu a fost antrenat sau încărcat")
+        self.retea.eval()
+        ctx = self.setari["context"]
+        if self.tokenizer == "bpe":
+            assert self.tok is not None
+            simboluri = self.tok.codifica(inceput or " ")
+            noi: list[int] = []
+            for _ in range(max_simboluri):
+                toate = simboluri + noi
+                idx = torch.tensor([toate[-ctx:]], dtype=torch.long, device=self.dispozitiv)
+                m = self._pozitii("", toate)[-ctx:].unsqueeze(0).to(self.dispozitiv) if self._are_pozitii() else None
+                noi.append(int(self.retea(idx, m)[0, -1].argmax().item()))
+            return self.tok.decodeaza(noi)
+        text = inceput or " "
+        nec = self.vocabular.index(NECUNOSCUT)
+        rezultat = ""
+        for _ in range(max_simboluri):
+            idx = self._codifica(text + rezultat)[-ctx:].unsqueeze(0).to(self.dispozitiv)
+            m = self._pozitii(text + rezultat, None)[-ctx:].unsqueeze(0).to(self.dispozitiv) if self._are_pozitii() else None
+            logits = self.retea(idx, m)[0, -1].float()
+            logits[nec] = -float("inf")  # nu completăm cu caracterul „necunoscut”
+            rezultat += self.vocabular[int(logits.argmax().item())]
+        return rezultat
+
     def _genereaza_simboluri(self, inceput: str, lungime: int, generator: torch.Generator) -> str:
         """Pe bucăți de cuvinte: generează simboluri până are cel puțin `lungime` litere, apoi taie exact."""
         assert self.retea is not None and self.tok is not None
