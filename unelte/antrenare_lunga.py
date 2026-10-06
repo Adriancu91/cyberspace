@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import statistics
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -43,6 +44,9 @@ from kronos.registru import Registru  # noqa: E402
 from unelte.compara_plasa_adaptiva import ruleaza  # noqa: E402
 
 LITERE_PE_SIMBOL = 4.0  # măsurat pe TinyStories, cu tokenizerul BPE de 4.096 de simboluri
+# Criteriile din afara examenului oficial (examene_suplimentare), ca coloane: (nume, titlu, lățime).
+COLOANE_CRITERII = (("fapte_corecte", "fapte", 5), ("nota_profesor", "nota prof.", 10))
+ZECIMALE_CRITERII = (0, 2)
 ARHITECTURA = ("n_straturi", "n_capete", "n_emb", "context")
 
 
@@ -76,18 +80,72 @@ def ore_din_jurnal(fise: list[dict[str, Any]], scor_principal: str) -> list[dict
             "simboluri_total": simboluri_total,
             "treceri_prin_text": simboluri_total / s["simboluri_antrenare"] if s.get("simboluri_antrenare") else None,
             "rata_la_final": s.get("rata_la_final"), "memorie_rezervata_mb": s.get("memorie_rezervata_mb"),
-            "decizie": fisa["decizie"], "model_salvat": fisa.get("model_salvat"),
+            "decizie": fisa["decizie"], "model_salvat": fisa.get("model_salvat"), "criterii": criterii_din(fisa),
         })
     return ore
 
 
-def tabel(ore: list[dict[str, Any]], alaturi: dict[int, float] | None = None) -> list[str]:
-    """Tabelul pe ore; cu alaturi (scorul altei antrenări la aceeași oră), și scorul acela și diferența."""
-    cap = f"{'ora':>3}  {'val_bpb':>7}" + (f"  {'alături':>7}  {'diferența':>9}" if alaturi is not None else "")
+def criterii_din(fisa: dict[str, Any]) -> dict[str, float]:
+    """Criteriile suplimentare ale orei (examene_suplimentare): cu [criterii], în fișă; fără, în răspunsul dupa_examen."""
+    criterii = fisa.get("criterii") or (fisa.get("dupa_examen") or {}).get("criterii") or {}
+    return {k: v for k, v in criterii.items() if isinstance(v, (int, float)) and not isinstance(v, bool)}
+
+
+def masuratori_examene(jurnal: Any, experiment: int) -> dict[str, float]:
+    """Ultimele măsurători din afara examenului oficial pentru modelul experimentului dat (unelte/examen_fapte.py și
+    unelte/examen_profesor.py), ca punct de plecare al unei antrenări care pornește din el."""
+    rezultat: dict[str, float] = {}
+    for linie, cheie, nume in (("examen_fapte", "corecte_doar_cuvantul_din_fapt", "fapte_corecte"),
+                               ("examen_profesor", "nota_medie", "nota_profesor")):
+        fise = [f for f in jurnal.istoric(linie)
+                if ((f.get("module") or {}).get("elev") or {}).get("experiment") == experiment
+                and isinstance((f.get("scoruri") or {}).get(cheie), (int, float))]
+        if fise:
+            rezultat[nume] = fise[-1]["scoruri"][cheie]
+    return rezultat
+
+
+def corelatii(ore: list[dict[str, Any]], pornire: dict[str, Any] | None) -> dict[str, float | None]:
+    """Legătura (Pearson) dintre val_bpb și fiecare criteriu, pe ore (cu punctul de plecare): −1 = când val_bpb scade,
+    criteriul urcă mereu; 0 = nicio legătură. None dacă sunt mai puțin de 3 puncte sau criteriul nu se schimbă."""
+    puncte = ([{"scor": pornire["scor"], "criterii": pornire}] if pornire else []) + ore
+    rezultat: dict[str, float | None] = {}
+    for nume, _, _ in COLOANE_CRITERII:
+        perechi = [(p["scor"], p["criterii"][nume]) for p in puncte if nume in p["criterii"]]
+        try:
+            rezultat[nume] = round(statistics.correlation(*zip(*perechi)), 2) if len(perechi) >= 3 else None
+        except statistics.StatisticsError:
+            rezultat[nume] = None
+    return rezultat
+
+
+def _celula(valoare: Any, latime: int, zecimale: int) -> str:
+    return f"{valoare:>{latime}.{zecimale}f}" if isinstance(valoare, (int, float)) else f"{'–':>{latime}}"
+
+
+def tabel(ore: list[dict[str, Any]], alaturi: dict[int, float] | None = None,
+          pornire: dict[str, Any] | None = None) -> list[str]:
+    """Tabelul pe ore; cu alaturi (scorul altei antrenări la aceeași oră), și scorul acela și diferența; cu criterii
+    (examene_suplimentare), faptele corecte și nota profesorului; cu pornire, întâi rândul punctului de plecare."""
+    cu_criterii = any(nume in o["criterii"] for o in ore for nume, _, _ in COLOANE_CRITERII) or bool(
+        pornire and any(nume in pornire for nume, _, _ in COLOANE_CRITERII))
+    cap = f"{'ora':>3}  {'val_bpb':>7}"
+    if cu_criterii:
+        cap += "".join(f"  {titlu:>{latime}}" for _, titlu, latime in COLOANE_CRITERII)
+    cap += f"  {'alături':>7}  {'diferența':>9}" if alaturi is not None else ""
     linii = [cap + f"  {'pași':>7}  {'pași total':>10}  {'text văzut':>10}  {'treceri':>7}  {'rata la final':>13}  "
                    f"{'memorie':>8}"]
+    if pornire:
+        rand = f"{0:>3}  {pornire['scor']:>7.4f}"
+        if cu_criterii:
+            rand += "".join(f"  {_celula(pornire.get(nume), latime, zecimale)}"
+                            for (nume, _, latime), zecimale in zip(COLOANE_CRITERII, ZECIMALE_CRITERII))
+        linii.append(rand + "  (punctul de plecare)")
     for o in ore:
         rand = f"{o['ora']:>3}  {o['scor']:>7.4f}"
+        if cu_criterii:
+            rand += "".join(f"  {_celula(o['criterii'].get(nume), latime, zecimale)}"
+                            for (nume, _, latime), zecimale in zip(COLOANE_CRITERII, ZECIMALE_CRITERII))
         if alaturi is not None:
             ref = alaturi.get(o["ora"])
             rand += f"  {ref:>7.4f}  {o['scor'] - ref:>+9.4f}" if ref is not None else f"  {'–':>7}  {'–':>9}"
@@ -213,13 +271,16 @@ def main(argv: list[str] | None = None) -> int:
             for ora in range(facute + 1, args.ore + 1):
                 rulare = ruleaza(
                     config, config.nume, f"antrenare lungă, ora {ora} din {args.ore}", {"samanta": reteta.get("samanta", 0)},
-                    pauza=0 if ora == facute + 1 else args.pauza, racire=args.racire,
+                    pauza=0 if ora == facute + 1 else args.pauza, racire=args.racire, cu_fisa=True,
                 )
                 if rulare is None:
                     break
+                criterii = criterii_din(rulare.pop("fisa"))
                 ref = (alaturi or {}).get(ora)
                 print(f"   ora {ora}: val_bpb {rulare['scor']:.4f}"
                       + (f" (alături, „{args.alaturi_de}”: {ref:.4f}, diferența {rulare['scor'] - ref:+.4f})" if ref else "")
+                      + (f", fapte {criterii['fapte_corecte']:g}" if "fapte_corecte" in criterii else "")
+                      + (f", nota profesorului {criterii['nota_profesor']:g}" if "nota_profesor" in criterii else "")
                       + f", {rulare['pasi']:,} de pași ({rulare['pasi_pe_secunda']} pași/s), la {datetime.now():%H:%M}",
                       flush=True)
         finally:
@@ -232,7 +293,12 @@ def main(argv: list[str] | None = None) -> int:
     print("\n=== Antrenarea lungă: scorul pe ore (val_bpb, mai mic = mai bine) ===")
     if alaturi is not None:
         print(f"„alături” = scorul antrenării „{args.alaturi_de}” la aceeași oră; diferența = acum − alături.")
-    print("\n".join(tabel(ore, alaturi)))
+    pornire = {"scor": inainte["scor"], **masuratori_examene(jurnal, inainte["experiment"])} if inainte else None
+    print("\n".join(tabel(ore, alaturi, pornire)))
+    legaturi = corelatii(ore, pornire)
+    if any(v is not None for v in legaturi.values()):
+        print("\nLegătura cu val_bpb, pe ore (−1: când val_bpb scade, urcă și ea mereu; 0: nicio legătură): "
+              + ", ".join(f"{nume} {v:+.2f}" for nume, v in legaturi.items() if v is not None) + ".")
     verdict = verdict_alaturi(ore, alaturi, args.alaturi_de, args.prag_alaturi) if alaturi else None
     if verdict:
         print(f"\nFață de „{args.alaturi_de}”: {verdict}")
@@ -266,6 +332,7 @@ def main(argv: list[str] | None = None) -> int:
         "ore": ore, "litere_pe_simbol": LITERE_PE_SIMBOL, "inainte": inainte, "total": total,
         "alaturi": {"linie": args.alaturi_de, "scoruri": alaturi, "prag": args.prag_alaturi, "verdict": verdict}
         if alaturi is not None else None,
+        "pornire": pornire, "corelatii": legaturi,
         "poveste": {"ora": ora_povestii, "inceput": args.inceput, "text": text} if text else None,
         "poveste_comparatie": {"experiment": args.compara_cu, "text": comparatie} if comparatie else None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")

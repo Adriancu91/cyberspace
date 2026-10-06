@@ -58,7 +58,8 @@ def test_nota_profesorului_iese_ca_numar(tmp_path, tokenizer_mic, monkeypatch):
     monkeypatch.setattr(profesor_qwen.ProfesorQwen, "_raspunsuri",
                         lambda self, conversatii, max_simboluri, cu_intamplare: ["GRADE: 6\nREASON: Ok." for _ in conversatii])
     model = _gpt(ModelGPT, tokenizer_mic, examene_suplimentare=["profesor"], validare_examene=str(validare))
-    assert model.dupa_examen({"scor": 3.0}) == {"criterii": {"nota_profesor": 6}}
+    # Toate notele 6: media 6, iar cât poate varia ea din întâmplare (eroarea standard a mediei) e 0.
+    assert model.dupa_examen({"scor": 3.0}) == {"criterii": {"nota_profesor": 6, "nota_profesor_eroare": 0.0}}
 
 
 def test_prin_kronos_cu_criterii(tmp_path, monkeypatch):
@@ -73,3 +74,28 @@ def test_prin_kronos_cu_criterii(tmp_path, monkeypatch):
     assert isinstance(a_doua["criterii"]["fapte_corecte"], int)
     if a_doua["decizie"] == "respins" and a_doua["castig"] > o.config.prag_zgomot:  # scorul era mai bun: a pierdut faptele
         assert a_doua["motiv"].startswith("a pierdut fapte_corecte")
+
+
+def test_antrenarea_lunga_masoara_criteriile_pe_ore(tmp_path, monkeypatch, capsys):
+    import json
+
+    from teste.test_bucla_cinstita import fise
+    from unelte import antrenare_lunga, examen_fapte
+
+    monkeypatch.chdir(tmp_path)
+    comun = ["--pauza", "0", "--racire", "0", "--lungime", "30"]
+    sursa = config_mic(tmp_path, "antrenare_lunga_3", model=', cale_stare = "lucru/antrenare_lunga_3/gpt.pt"', spatiu="lot = [4]")
+    assert antrenare_lunga.main(["--config", str(sursa), "--ore", "1"] + comun) == 0
+    fisa_sursa = [f for f in fise(tmp_path) if f["linie"] == "antrenare_lunga_3" and f.get("model_salvat")][-1]
+    assert examen_fapte.main(["--experiment", str(fisa_sursa["id"])]) == 0  # punctul de plecare stă în jurnal
+    a_patra = config_mic(tmp_path, "antrenare_lunga_4", spatiu="lot = [4]", model=', cale_stare = '
+                         '"lucru/antrenare_lunga_4/gpt.pt", examene_suplimentare = ["fapte"]')
+    assert antrenare_lunga.main(["--config", str(a_patra), "--ore", "2", "--porneste-din", str(fisa_sursa["id"])] + comun) == 0
+
+    rezultat = json.loads((tmp_path / "lucru" / "antrenare_lunga_4" / "rezultat.json").read_text(encoding="utf-8"))
+    assert rezultat["pornire"]["scor"] == fisa_sursa["scoruri"]["val_bpb"]
+    assert isinstance(rezultat["pornire"]["fapte_corecte"], int) and "nota_profesor" not in rezultat["pornire"]
+    assert all(isinstance(o["criterii"]["fapte_corecte"], int) for o in rezultat["ore"])  # din dupa_examen, fără [criterii]
+    assert set(rezultat["corelatii"]) == {"fapte_corecte", "nota_profesor"} and rezultat["corelatii"]["nota_profesor"] is None
+    iesire = capsys.readouterr().out
+    assert "(punctul de plecare)" in iesire and "nota prof." in iesire and ", fapte " in iesire

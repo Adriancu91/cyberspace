@@ -496,15 +496,22 @@ class ModelGPT:
 
     def ruleaza_examene_suplimentare(self) -> dict[str, float]:
         """Examenele din examene_suplimentare, pe modelul de acum (după examenul oficial): doar numerele lor."""
+        import statistics
+
         from module import examene_elev
 
+        if torch.cuda.is_available():  # memoria rămasă de la antrenare înapoi, ca profesorul să încapă lângă elev
+            torch.cuda.empty_cache()
         criterii: dict[str, float] = {}
         if "fapte" in self.examene_suplimentare:
             criterii.update(examene_elev.scor_fapte(examene_elev.examineaza_fapte(self)))
         if "profesor" in self.examene_suplimentare:
-            nota = examene_elev.nota_profesorului(self, self.validare_examene)["nota_medie"]
-            if nota is not None:
-                criterii["nota_profesor"] = nota
+            note = [n["nota"] for n in examene_elev.nota_profesorului(self, self.validare_examene)["note"]]
+            valide = [n for n in note if n is not None]
+            if valide:
+                criterii["nota_profesor"] = examene_elev.medie(valide)
+            if len(valide) > 1:  # cât poate varia media doar din întâmplare (eroarea standard a mediei)
+                criterii["nota_profesor_eroare"] = round(statistics.stdev(valide) / len(valide) ** 0.5, 2)
         return criterii
 
     @torch.no_grad()
