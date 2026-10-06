@@ -1095,6 +1095,71 @@ python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_2.toml -
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_2.toml --raport --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
 ```
 
+## A treia antrenare lungă: un model mai mare pe textul întreg (5–6 octombrie 2026, 22:45–06:55)
+
+**Ce a rulat** (`config/laptop_antrenare_lunga_3.toml`):
+- **Modelul:** 10 straturi × 512 (33,8 M parametri), de la zero, pe TinyStories întreg.
+- **Rețeta:** cea din noaptea întâi: lot 24, rata 0,001 care scade pe toate cele 8 ore până la 0,0001.
+- **Examen și salvare:** examen la fiecare oră pe validarea R2, starea salvată după fiecare oră.
+- **Comparația dreaptă** e cu noaptea întâi: 8 × 512, de la zero, 8 ore, cu aceeași rețetă și același examen. Unealta
+  pune scorul ei din aceeași oră alături (`--alaturi-de antrenare_lunga`).
+
+| Ora | 10 × 512 (azi) | 8 × 512 (noaptea întâi) | Diferența | Pași în oră (10 × 512) | Text văzut (simboluri) | De câte ori textul întreg | Rata la final |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0,5762 | 0,5850 | −0,009 | 27.708 | 170 M | 0,3 | 0,00097 |
+| 2 | 0,5501 | 0,5614 | −0,011 | 27.678 | 340 M | 0,6 | 0,00087 |
+| 3 | 0,5285 | 0,5447 | −0,016 | 27.647 | 510 M | 0,9 | 0,00072 |
+| 4 | 0,5102 | 0,5292 | −0,019 | 27.705 | 680 M | 1,2 | 0,00055 |
+| 5 | 0,4941 | 0,5162 | −0,022 | 27.589 | 850 M | 1,5 | 0,00038 |
+| 6 | 0,4771 | 0,5013 | −0,024 | 27.682 | 1.020 M | 1,8 | 0,00023 |
+| 7 | 0,4636 | 0,4922 | −0,029 | 27.713 | 1.190 M | 2,1 | 0,00013 |
+| 8 | **0,4567** | 0,4921 | **−0,036** | 28.119 | 1.363 M | 2,4 | 0,00010 |
+
+**Verdict: modelul mai mare câștigă.** La final, 10 × 512 e sub 0,4921 cu 0,0355, mai mult decât pragul de 0,02 (zgomotul
+dintre semințe). După regula stabilită, îl continuăm mâine pe textul întreg.
+
+Ce trebuie știut despre verdict:
+- **A câștigat deși a văzut cu 18% mai puțin text.** E mai lent: 7,7 pași pe secundă față de 9,4, deci 221.841 de pași
+  față de 270.466 în aceleași 8 ore.
+- **Avantajul crește oră de oră**, de la −0,009 la −0,036. A trecut de prag la ora 5.
+- **Comparația nu e perfect curată:** 8 × 512 a învățat pe R2, un text de 12 ori mai mic.
+  - La ora 7, unde textul încă nu-l limitase, diferența e −0,029, tot peste prag.
+  - La ora 8 crește la −0,036 și pentru că 8 × 512 se oprise atunci.
+- **E o singură sămânță pentru fiecare model.** Pragul de 0,02 e tocmai pentru asta; diferența finală e de ~1,8 ori
+  pragul.
+- **Pentru context:** modelul 8 × 512 continuat ieri pe textul întreg are 0,4436, dar după 15 ore de antrenare, nu 8.
+  Comparația aceea nu e dreaptă.
+
+**Cât text a văzut în total:** 221.841 de pași și 1.363 M de simboluri (≈ 5,5 miliarde de litere), adică de 2,4 ori tot
+TinyStories. Modelul a pornit de la zero, deci acesta e tot ce a văzut.
+
+**Fără probleme:**
+- nicio eroare și nicio așteptare de răcire;
+- memoria video a rămas la 2,2 GB rezervați;
+- viteza a fost de 7,7–7,8 pași pe secundă.
+
+**Povestea, din același început.** Azi, 10 × 512 de la final (0,4567):
+> Once upon a time, there was a fearful little dog named Coco. He was scared of everything in his town. One day, Coco
+> found a big hole in the ground. He was very curious about the hole. Coco met a nice bird named Titi. Titi said,
+> "Don't be scared, Coco. I can help you." She tied the rope to a tree to near a hill. Titi said, "Now, you can wash your
+> hand when you are dirty." Coco went to wash his hand. When he was clean, he went back to the hole and saw a wheel. He
+> turned the wheel and it made a funny noise. Titi laughed and said, "Surprise! Time for us!" Coco was not fearful
+> anymore. He found out that the hole was just a magic hill behind his home. He ha[…]
+
+Povestea modelului 8 × 512 din noaptea întâi (experimentul 209, 0,4922) e mai sus, la a doua antrenare lungă.
+
+Cinstit despre poveste:
+- **Ce merge:** Coco rămâne „el”, iar Titi e prezentată cum trebuie („a nice bird named Titi”) și rămâne „ea”. Dialogul
+  e scris corect, iar povestea are un drum (frică → curiozitate → ajutor → curaj). Niciun personaj nu mai apare din
+  senin.
+- **Ce scapă încă:** „tied the rope to a tree to near a hill”, un câine care se spală „pe mână” și o groapă care se
+  dovedește „un deal magic”.
+
+```
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_3.toml --ore 8 --alaturi-de antrenare_lunga --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_3.toml --raport --alaturi-de antrenare_lunga --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
+```
+
 ## Toate comenzile
 
 ```
