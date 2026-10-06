@@ -1523,6 +1523,162 @@ python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_4.toml -
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_4.toml --raport --compara-cu 226 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
 ```
 
+## CONTINUUM v0: ritmul zilei (7 octombrie 2026)
+
+Planul e în `docs/CONTINUUM_plan.md`, adus din ramura `claude-continuum`. Aici e construit doar **v0** (secțiunile 13
+și 15 din plan).
+
+**Ce face.** CONTINUUM decide ce face Kronos când nimeni nu-i spune. Nu antrenează și nu dă examene singur. La fiecare
+ciclu:
+1. se uită în jur;
+2. alege **o singură nevoie**;
+3. dacă e voie, cere lui Kronos un experiment, cu o configurare existentă, sau pornește o unealtă de examene;
+4. citește fișa din jurnalul Kronos și notează ce a ieșit.
+
+Nu atinge `kronos/`, examenul oficial, jurnalul Kronos sau `date/`. Ce ține minte stă în `lucru/continuum/`.
+
+### Cum îl pornești, îl oprești și îl citești
+
+```
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza   # doar spune ce ar alege și de ce
+python -m module.continuum.bucla --config config/continuum.toml               # pornește și experimentele
+python -m module.continuum.bucla --config config/continuum.toml --jurnal      # ultimele 20 de cicluri, pe scurt
+python -m kronos opreste  --config config/proba.toml    # oprirea: același buton STOP ca la Kronos (lucru/STOP)
+python -m kronos porneste --config config/proba.toml    # ca să poată porni din nou
+```
+
+- **Modul simulat** (`--simuleaza`): face tot ciclul, dar nu pornește nimic. Doar scrie ce ar fi pornit și de ce
+  („[simulat] Aș porni: …”). Așa se testează prima zi.
+- **Oprirea:**
+  - STOP-ul se verifică la începutul fiecărui ciclu, înainte de acțiune și, în pauze, la câteva secunde.
+  - O antrenare pornită de CONTINUUM vede și ea STOP-ul și se oprește după ora în curs, ca de obicei.
+- **Jurnalul ciclurilor:** `lucru/continuum/cicluri.jsonl`, un rând pe ciclu.
+  - Câmpul `pe_scurt` spune ciclul în una-două propoziții, în română; `--jurnal` le arată pe ultimele.
+  - Restul rândului are amănuntele: ce a observat, nivelul și de ce, nevoile, ce a sărit și de ce, ce a ales,
+    comanda, verdictul.
+- **Memoria:** `lucru/continuum/stare.json`. Ține:
+  - capacitățile, cu liniile lor de bază;
+  - strategiile și experimentele cerute (cu modelul de dinainte, de unde se poate reveni);
+  - problemele, deschise sau rezolvate.
+
+### Ce face un ciclu
+
+OBSERVĂ → EVALUEAZĂ → NEVOI → ALEGE → ACȚIONEAZĂ → MĂSOARĂ → ÎNVAȚĂ → STARE. Fiecare etapă e în fișierul ei din
+`module/continuum/`, plus guvernatorul (`guvernator.py`) și bucla (`bucla.py`).
+
+**Ce observă:**
+- jurnalul Kronos, doar citit, și butonul STOP;
+- placa video: temperatura, memoria și ce programe o folosesc;
+- dacă omul a atins tastatura sau mouse-ul, și ora;
+- modulele din `[module]`, descoperite la pornire și la fiecare 6 cicluri;
+- hrana din `date/fapte` și configurările de antrenare.
+
+**Nivelul, dat de guvernator:**
+- **REPAUS:** doar observă. Se ajunge aici dacă:
+  - omul a folosit laptopul în ultimele 10 minute;
+  - placa e ocupată (un program Python pe ea, sau sub 4.500 MB liberi) ori nu poate fi citită;
+  - ora e în afara ferestrelor.
+- **ÎNTREȚINERE:** ziua (07:00–22:00), cu placa liberă: examene și hrană de la profesor, fără antrenări.
+- **ÎNVĂȚARE:** noaptea (22:00–07:00), cu placa liberă: și antrenări lungi.
+- Placa peste 85 °C coboară un nivel.
+
+**Capacitățile:**
+- povestirile: val_bpb;
+- faptele: fapte_corecte, din 150;
+- sensul: nota profesorului, din 10.
+
+Linia de bază e cea mai bună valoare dintre experimentele **păstrate** de Kronos în antrenările lungi. Toate dau
+examenul pe validarea R2, deci se pot compara.
+
+**Cele trei nevoi, în ordinea urgenței:**
+1. **masoara:** ultimul model păstrat n-a dat examenele de fapte sau al profesorului. CONTINUUM le dă, cu
+   `unelte/examen_fapte.py` și `unelte/examen_profesor.py`.
+2. **continua:** val_bpb a coborât în ultima oră cu cel puțin 0,005, sau ultima antrenare lungă e neterminată.
+   CONTINUUM pornește o antrenare lungă cu o configurare `config/laptop_antrenare_lunga*.toml` existentă și
+   neterminată.
+3. **dezvolta**, pentru cea mai slabă capacitate (cel mai mic procent din maxim; azi, faptele):
+   - noaptea: antrenare pe hrana ei, cu o configurare `config/laptop_fapte*.toml` care pomenește `date/fapte`;
+   - ziua: hrană nouă de la profesor, dar doar dacă hrana nefolosită s-a terminat (e sub 5.000 de povești sau a fost
+     folosită deja).
+
+**Verdictul (MĂSOARĂ):** SUCCES, EȘEC sau NECONCLUDENT.
+- Contează pragul de zgomot al fiecărei capacități: 0,02 la val_bpb, 3 fapte, 0,3 la notă.
+- Se aplică și regula 4: un câștig care pierde altă capacitate e EȘEC.
+
+**Ce învață (ÎNVAȚĂ):** fiecare strategie are o încredere. Pornește de la 0,5 și se schimbă cu ±0,1 la SUCCES sau
+EȘEC. În v0 doar se ține minte.
+
+Toate pragurile, ferestrele și comenzile sunt în `config/continuum.toml`, nu în cod.
+
+### Ce trebuie știut, cinstit
+
+- **Nu creează configurări.** Pentru o noapte nouă, configurarea (de ex. `laptop_antrenare_lunga_5.toml` sau
+  `laptop_fapte.toml`) trebuie pregătită de om, ca până acum. Fără ea, CONTINUUM spune ce ar vrea și ce lipsește, de
+  exemplu „capacitate_indisponibila: nu există nicio configurare potrivită (config/laptop_fapte*.toml)”.
+  `config/laptop_fapte.toml` nu există încă.
+- **De unde pornește o antrenare:**
+  - o linie nouă pornește din ultimul model păstrat cu aceeași arhitectură (`--porneste-din`);
+  - fără un astfel de model, sau dacă configurarea cere `de_la_zero`, pornește de la zero;
+  - o linie începută și întreruptă se reia de unde a rămas.
+- **Hrana „folosită”:** hrana e folosită dacă o linie care o pomenește a rulat după ultima ei schimbare. Când
+  profesorul adaugă povești, hrana redevine nouă.
+- **Modulele:** CONTINUUM nu creează instanțe și nu încarcă modele.
+  - Verifică doar dacă modulul se încarcă și are MANIFEST.
+  - Dacă un modul oferă `sanatate()` sau `semnale()`, ca metode de clasă, le întreabă. Niciun modul de azi nu le
+    oferă.
+  - CONTINUUM nu stă pe niciun port Kronos, deci nu intră în `teste_contracte/`.
+- **Pragurile de zgomot** sunt cele din plan (secțiunea 7): 0,02, 3 fapte și 0,3 la notă. Noaptea a patra arată că
+  la fapte și la notă sunt prea mici:
+  - faptele sar cu până la ±13 de la o oră la alta;
+  - o notă are eroarea ±0,3–0,5.
+
+  Propunerea mea e 10 fapte și 0,5 la notă. Se schimbă doar în `config/continuum.toml`, după ce decide Adrian.
+- **Ce nu e în v0:** răcirea nevoilor, limita de reîncercări, bugetul zilnic de ore pe placă, setul sacru, repararea
+  și explorarea. Vin în v1–v3, doar după confirmare.
+
+### Testele: 71 noi, toate fără placă video (399 trec în total)
+
+Testele folosesc module de probă (`teste/continuum_proba.py`) și un proiect mic într-un dosar temporar: configurări,
+jurnal, hrană și unelte care doar scriu fișe.
+- Fiecare etapă are testele ei (`teste/test_continuum_*.py`).
+- Bucla e încercată întreagă în aceste situații:
+  - o noapte simulată (jurnalul Kronos rămâne neatins);
+  - o zi și o noapte „pe bune”, cu unelte de probă;
+  - 0 module și 1 modul;
+  - un modul care cade, și unul scos și reintrodus în timpul rulării;
+  - omul la laptop (→ REPAUS);
+  - o etapă care cade și configurarea stricată în timpul rulării;
+  - butonul STOP.
+
+### Primul ciclu pe datele adevărate (7 octombrie, 01:46, simulat)
+
+După antrenare, cu placa liberă, am rulat un singur ciclu simulat (`--cicluri 1`, 3 secunde):
+> ÎNVĂȚARE: e fereastra de noapte (22:00–07:00), placa e liberă (6.144 MB liberi, 51 °C), omul n-a mai atins
+> laptopul de 191 min. Nu pornesc nimic: continua:povesti — capacitate_indisponibila: toate configurările potrivite
+> sunt încheiate: config/laptop_antrenare_lunga.toml (8 din 8), […]_2, […]_3, […]_4 (8 din 8); pentru încă o noapte
+> trebuie pregătită una nouă; dezvolta:fapte — capacitate_indisponibila: nu există nicio configurare potrivită
+> (config/laptop_fapte*.toml).
+
+Ce a văzut:
+- toate cele 4 module se încarcă;
+- liniile de bază: val_bpb 0,4389 (#239), 51 de fapte (#239), nota 4,7 (#226);
+- ultimul model (#239) are deja toate examenele, din noaptea asta, deci nu cere măsurare.
+
+Ce ar face:
+- **ar continua**, pentru că val_bpb încă scădea în ultima oră (−0,0064, peste pragul de 0,005);
+- **ar dezvolta faptele**, pentru că sunt cea mai slabă capacitate (34%) și au 7.520 de povești nefolosite.
+
+Ambele cer o configurare nouă, pregătită de om. E chiar alegerea pentru diseară: continuare sau fapte.
+
+### Ce urmează, după plan
+
+Urmează proba lui Adrian: o zi întreagă în `--simuleaza`, cu deciziile comparate cu ce am fi ales de mână, apoi o
+noapte reală. Criteriul de acceptare:
+- 24 de ore fără să cadă;
+- un modul scos și reintrodus în timpul rulării;
+- omul folosește laptopul la un moment dat (→ REPAUS);
+- jurnalul explică fiecare decizie în română.
+
 ## Toate comenzile
 
 ```
@@ -1534,6 +1690,8 @@ python -m kronos cauta <cuvânt> --config <fișier>  # unde stă cuvântul în m
 python -m kronos opreste       --config <fișier>
 python -m kronos porneste      --config <fișier>
 python -m kronos aproba-examen --config <fișier>   # doar după o schimbare făcută de tine în examen
+python -m module.continuum.bucla --config config/continuum.toml [--simuleaza] [--cicluri N]   # CONTINUUM
+python -m module.continuum.bucla --config config/continuum.toml --jurnal [N]                  # ultimele cicluri
 ```
 
 ## Ce urmează
