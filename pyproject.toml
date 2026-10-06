@@ -7,6 +7,9 @@ dependencies = []
 
 [project.optional-dependencies]
 teste = ["pytest>=8"]
+# Profesorul (module/profesor_qwen.py): Qwen3-4B-Instruct-2507 în 4 biți, pe placa video. Toate din PyPI, gata făcute
+# pentru Windows; folosesc PyTorch-ul cu CUDA deja instalat. Modelul (~8 GB) se descarcă de pe Hugging Face la prima folosire.
+profesor = ["transformers>=5", "accelerate>=1", "bitsandbytes>=0.45"]
 # PyTorch se instalează separat, cu comanda de pe pytorch.org (varianta CUDA). Vezi README.
 
 [project.scripts]

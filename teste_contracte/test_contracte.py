@@ -18,6 +18,21 @@ from kronos.registru import Registru
 ARE_TORCH = importlib.util.find_spec("torch") is not None
 GPT_MIC = {"n_straturi": 1, "n_capete": 2, "n_emb": 32, "context": 32, "lot": 8, "dispozitiv": "cpu"}
 
+
+def _profesor_gata() -> bool:
+    """Profesorul adevărat (Qwen3-4B în 4 biți) se testează doar dacă are tot ce-i trebuie: pachetele, placa video și
+    modelul deja descărcat (testul nu descarcă 8 GB)."""
+    if not ARE_TORCH or any(importlib.util.find_spec(m) is None for m in ("transformers", "bitsandbytes")):
+        return False
+    import torch
+
+    from module.profesor_qwen import e_descarcat
+
+    return torch.cuda.is_available() and e_descarcat()
+
+
+PROFESOR_GATA = _profesor_gata()
+
 # (port, cale, setari)
 MODULE = [
     ("model", "module.model_ngram:ModelNgram", {"ordin": 3}),
@@ -58,6 +73,10 @@ MODULE = [
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("profesor", "module.jucarii:ProfesorGol", {}),
+    pytest.param(
+        "profesor", "module.profesor_qwen:ProfesorQwen", {"max_simboluri": 40, "doar_local": True},
+        marks=pytest.mark.skipif(not PROFESOR_GATA, reason="transformers, bitsandbytes, placa video sau modelul lipsesc"),
+    ),
     ("rulare", "module.rulare_locala:RulareLocala", {}),
     ("stocare", "module.stocare_disc:StocareDisc", {"director": "__director_temporar__"}),
     ("interfata", "module.interfata_consola:InterfataConsola", {"tacut": True}),

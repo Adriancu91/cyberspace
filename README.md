@@ -173,7 +173,8 @@ Modulele de acum, pe cele 10 porturi:
 | stocare | `stocare_disc` | folderul `lucru/stocare` |
 | interfață | `interfata_consola` | mesajele din terminal |
 | memorie | `memorie_ierarhica` / `memorie_goala` | biblioteca de sensuri din WordNet (coduri, relații, plasă) / fără memorie |
-| profesor, traducere | module „de jucărie” | respectă contractul, devin reale în fazele următoare |
+| profesor | `profesor_gol` / `profesor_qwen` | gol (de jucărie) / Qwen3-4B-Instruct-2507 local, în 4 biți: scrie povești cu un fapt adevărat și le notează |
+| traducere | module „de jucărie” | respectă contractul, devin reale în fazele următoare |
 
 ## Memoria ierarhică (Etapa M1)
 
@@ -1158,6 +1159,103 @@ Cinstit despre poveste:
 ```
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_3.toml --ore 8 --alaturi-de antrenare_lunga --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_3.toml --raport --alaturi-de antrenare_lunga --compara-cu 209 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
+```
+
+## Faza 3, pasul 1: profesorul (6 octombrie 2026)
+
+**Ce e:** `module/profesor_qwen.py`, pe portul „profesor”, trece testele de contract. E un model de limbaj mare care
+rulează local: **Qwen3-4B-Instruct-2507** (Qwen, licență Apache 2.0, de pe Hugging Face), cuantizat la încărcare în 4
+biți (NF4).
+
+**Modelul:** Qwen2.5-3B-Instruct, cerut la început, are licența „qwen-research” (cercetare necomercială), nu Apache 2.0.
+Am ales împreună Qwen3-4B-Instruct-2507: Apache 2.0, din aceeași familie, mai nou.
+
+**Cum rulează: transformers + bitsandbytes în 4 biți, nu GGUF prin llama-cpp-python.**
+- Pe Windows, llama-cpp-python nu are pe PyPI variante gata făcute, ci doar codul sursă. Acesta trebuie compilat cu
+  Visual Studio, CMake și setul de unelte CUDA, pe care laptopul nu le are. Variantele gata făcute cu CUDA stau pe un
+  site separat al proiectului, nu pe PyPI.
+- transformers 5.18, accelerate 1.15 și bitsandbytes 0.50 vin gata făcute din PyPI. Folosesc PyTorch-ul cu CUDA pe care
+  îl aveam deja, fără să-l schimbe.
+- Instalarea: `pip install -e .[profesor]`. Modelul (~8 GB) se descarcă de pe Hugging Face la prima folosire.
+
+**Ce face:**
+- **`genereaza(subiect, stil)`** scrie o poveste scurtă în engleză simplă, ca în TinyStories, cu un fapt adevărat despre
+  lume.
+  - Lista de 50 de subiecte (`SUBIECTE`) are, pentru fiecare, faptul scris de noi, ca să fie sigur adevărat. Exemple:
+    „Birds have feathers.”, „Water freezes into ice when it is very cold.”.
+  - Stilurile: simplu, cu dialog, cu morală (sau un stil scris liber).
+- **`noteaza(poveste)`** dă o notă de la 1 la 10 și un rând de motivare, pentru coerență, sens și gramatică. Nu folosește
+  întâmplarea, deci aceeași poveste primește mereu aceeași notă.
+- **`genereaza_exercitii(tema, numar)`** e cerința contractului portului.
+
+### Testul de calitate (`python unelte/test_profesor.py`)
+
+- **Viteza:**
+  - scrie 31,6 povești pe minut, câte 8 deodată (82,9 simboluri pe secundă, ~111 cuvinte pe poveste);
+  - dă 99 de note pe minut;
+  - se încarcă în 12 secunde.
+- **Memoria video:** 3,2 GB folosiți (3,6 GB rezervați), sub limita de 5,5 GB.
+- **Notele pentru propriile 100 de povești** (50 de subiecte × 2 stiluri): 10 → 46, 9 → 41, 8 → 11, 7 → 2. Media e
+  9,31.
+- **Elevul față de TinyStories.** Elevul e 10 × 512, ora 8 de azi-noapte (#226). Ambele sunt notate pe aceleași 20 de
+  povești din validarea R2, nevăzute la antrenare. Elevul pornește din prima propoziție a fiecăreia, iar povestea lui se
+  taie la ultima propoziție întreagă.
+
+| Cine a scris | Media notelor | Notele (nota → câte) |
+| --- | --- | --- |
+| Elevul (10 × 512) | **4,7** | 2 → 1, 3 → 5, 4 → 7, 5 → 1, 6 → 2, 7 → 2, 9 → 2 |
+| TinyStories (poveștile originale) | **9,35** | 6 → 1, 8 → 2, 9 → 5, 10 → 12 |
+
+**Prima măsură a elevului care nu e val_bpb:** 4,7 din 10, față de 9,35 pentru poveștile originale. Elevul scrie în
+medie 125 de cuvinte, originalele 142.
+
+**5 exemple din poveștile profesorului**, cu nota lui. Textele întregi sunt în `lucru/profesor/test_20261006_105259/`.
+- *dogs (simplu), nota 8* („mici goluri de cauză și efect”):
+  > Lily found a lost dog under a tree. The dog was shivering and sad. Lily sat next to it and whispered, "It's okay."
+  > The dog sniffed her hand and wagged its tail. Lily noticed the dog could smell something sweet in the air. It
+  > followed a trail of cookies to the park. […] Dogs have a very good sense of smell. They can find things people
+  > can't see. […]
+- *butterflies (dialog), nota 10*:
+  > Lily saw a tiny caterpillar on a flower. "Is that a butterfly?" she asked. "No," said Tom. "It's just a
+  > caterpillar." […] Tom smiled. "Yes, but it takes time. A caterpillar changes into a butterfly." […] "First, it eats.
+  > Then it grows. Then it makes a chrysalis. Then it becomes a butterfly!"
+- *snakes (dialog), nota 9*:
+  > Lily saw a snake on the ground. "Wow!" she said. The snake slid slowly. "Is it scary?" asked Ben. […] Ben sat down.
+  > "Snakes have no legs." […] "See?" said Ben. "It moves with its belly." Lily smiled. "It's not scary at all."
+- *volcanoes (simplu), nota 9*:
+  > A volcano sits on a mountain. It is quiet. Then, a big rumble. […] Hot melted rock called lava comes out of
+  > volcanoes. It flows down the mountain like a river. […] The volcano is not scary. It is part of nature. […] Nature
+  > is kind. Nature is strong. Nature is full of wonder.
+- *snow (simplu), nota 7* („explicația despre cum se face zăpada pare nelalocul ei”):
+  > Snow falls softly from the sky. […] Water freezes into ice when it is very cold. That is why the snow stays on the
+  > ground. […] The snowman turns to water. The water flows down the hill. […]
+
+**Elevul**, cea mai bună și cea mai slabă poveste:
+- *nota 9*:
+  > Once upon a time, there was a small house. A little cat lived in the house. […] The dog and the cat played with the
+  > toy. They took turns. The cat was very happy. The dog was happy too. They became best friends.
+- *nota 2* („evenimente fără legătură, cuvinte ca «warriage» și «knee-deine»”):
+  > Once there was a boy and his dad. They were both very fearful. He had a big warriage. […] The boy set off for
+  > knee-deine, which was his favorite wedding game. […]
+
+### Ce trebuie știut despre note
+
+- **Profesorul se notează generos pe sine.** Media pentru propriile povești e 9,31, cam cât pentru originale. Un model
+  care își notează propriile texte are o părtinire cunoscută. Comparația curată e elevul față de originale: același
+  profesor, aceeași cerere, texte pe care nu le-a scris el.
+- **Scara e strânsă sus.** Aproape tot ce e bun ia 9–10, deci notele nu despart bine poveștile bune între ele. Despart
+  însă clar elevul de originale.
+- **„Sensul” e citit la propriu.** O poveste originală cu o fantezie (un dulap care se deschide spre cer) a luat 6.
+- **Poveștile profesorului au încă scăpări.**
+  - Faptul apare uneori de două ori, deși cererea spune „o dată”.
+  - Mai apar fraze de umplutură („Nature is kind.”) și legături slabe (în povestea despre zăpadă).
+- **Jurnalul are doar numere.** Fișa e pe linia „profesor” (#227): viteze, memorie, medii, distribuțiile notelor,
+  fără niciun text generat. Textele, cu note și motive, sunt în `lucru/profesor/`.
+
+```
+pip install -e .[profesor]                      # transformers, accelerate, bitsandbytes (din PyPI)
+python unelte/test_profesor.py                  # testul de calitate (~7 minute; prima dată descarcă modelul, ~8 GB)
+python unelte/test_profesor.py --povesti 8 --elev 4   # probă scurtă
 ```
 
 ## Toate comenzile
