@@ -1420,6 +1420,109 @@ Alte lucruri de știut:
 - 5 sunt noi pentru partea din module.
 - `test_arhitectura` trece: `kronos/` nu importă nimic din `module/`.
 
+## A patra antrenare lungă: martorul, cu toate trei examenele la fiecare oră (6–7 octombrie 2026, 17:27–01:43)
+
+**Ce a rulat** (`config/laptop_antrenare_lunga_4.toml`):
+- **Modelul:** 10 × 512 de la sfârșitul nopții a treia (experimentul #226), continuat 8 ore pe TinyStories întreg.
+  Fără poveștile cu fapte: noaptea asta e **martorul**.
+- **Rețeta:** lot 24. Rata repornește la 0,0005 (optimizatorul pornește din nou, cu 100 de pași de încălzire), apoi
+  scade pe toate cele 8 ore până la 0,00005.
+- **La fiecare oră:**
+  - examenul oficial (val_bpb pe validarea R2);
+  - apoi cele două examene suplimentare: faptele și nota profesorului, pe aceleași 20 de povești nevăzute;
+  - salvarea modelului.
+
+  Setarea `examene_suplimentare` a fost pornită fără `[criterii]`: s-a măsurat, dar nu s-a respins nimic pentru ele.
+
+| Ora | Experimentul | val_bpb | Fapte corecte (din 150) | Nota profesorului | Rata la final |
+| --- | --- | --- | --- | --- | --- |
+| 0 (plecarea) | #226 | 0,4567 | 41 | 4,7 | – |
+| 1 | #232 | 0,5048 | 27 | 3,55 ± 0,37 | 0,00048 |
+| 2 | #233 | 0,4976 | 27 | 3,55 ± 0,26 | 0,00043 |
+| 3 | #234 | 0,4880 | 28 | 3,75 ± 0,36 | 0,00036 |
+| 4 | #235 | 0,4769 | 31 | 3,9 ± 0,34 | 0,00028 |
+| 5 | #236 | 0,4667 | 27 | 3,8 ± 0,31 | 0,00019 |
+| 6 | #237 | 0,4534 | 40 | 3,9 ± 0,31 | 0,00012 |
+| 7 | #238 | 0,4453 | 38 | 4,2 ± 0,38 | 0,00007 |
+| 8 | #239 | **0,4389** | **51** | **4,5 ± 0,49** | 0,00005 |
+
+Cum se citește tabelul:
+- „± …” e cât poate varia nota doar din întâmplare (eroarea standard a mediei celor 20 de note).
+- Plecarea (#226) e măsurată cu aceleași examene, pe același model.
+- Fiecare oră a avut ~27.000 de pași (7,4–7,6 pe secundă).
+
+**Concluzia cinstită: nota profesorului urcă odată cu val_bpb? Da, pe ansamblu, dar e o măsură grosieră.**
+- **Legătura e puternică.**
+  - Pe cele 9 puncte (plecarea + 8 ore), legătura dintre val_bpb și notă e −0,80; doar pe cele 8 ore, −0,91.
+  - Cu cât val_bpb e mai mic, cu atât nota e mai mare: în medie, +0,14 puncte pentru fiecare 0,01 în minus la
+    val_bpb.
+- **Cel mai convingător e începutul.**
+  - La repornirea ratei, val_bpb s-a stricat (0,4567 → 0,5048), iar nota a căzut odată cu el (4,7 → 3,55), la fel ca
+    faptele (41 → 27).
+  - Apoi au urcat toate trei împreună.
+  - Deci nota nu urcă doar „cu timpul”: când val_bpb a dat înapoi, a dat și ea.
+- **Dar nota e grosieră.** O măsurare are o eroare de ±0,26–0,49, pentru că sunt doar 20 de povești. Vede deci doar
+  schimbări mari de val_bpb, de ordinul 0,03–0,05. De la o oră la alta, val_bpb s-a schimbat cu 0,006–0,013, iar nota
+  a stat pe loc sau s-a mișcat cu 0,1–0,3, adică în zgomot.
+- **La final, nota nu poate confirma câștigul mic.**
+  - val_bpb e mai bun decât la plecare cu 0,018, sub pragul de 0,02.
+  - Nota e 4,5, față de 4,7 la plecare.
+  - Nota nu poate deosebi diferența asta de zgomot, nici într-un sens, nici în celălalt.
+- **De urmărit, nedovedit.** Modelul de plecare (#226) a luat o notă mai mare decât ar „prezice” val_bpb-ul lui
+  (4,7 față de ~4,2). Era, ca și ora 8, la capătul scăderii ratei. Poate că modelele „răcite” la final scriu puțin mai
+  bine decât arată val_bpb, dar cu 20 de povești nu se poate spune.
+
+**Faptele urcă și ele odată cu val_bpb.**
+- Legătura e −0,85: de la 27 la 51, peste plecare (41).
+- Dar sar mult de la o oră la alta: 27 → 40 → 38 → 51, de două ori cu +13 într-o singură oră.
+- Pentru CONTINUUM, asta înseamnă că pragul de zgomot de 3 fapte din plan e prea mic. După noaptea asta, o
+  diferență sub ~10 între două modele poate fi întâmplare.
+
+**Martorul e gata.** La final, modelul fără povești cu fapte are 0,4389, 51 de fapte și nota 4,5. Cu el se compară
+noaptea cu poveștile profesorului.
+
+**Scorul se compară cu 0,4436.** 0,4389 e cel mai mic val_bpb de până acum pe validarea R2. Recordul de dinainte,
+0,4436, era al modelului 8 × 512, după 15 ore. Diferența e de 0,005, sub pragul de 0,02, deci scorurile sunt
+comparabile, nu unul clar mai bun.
+
+**Cât text a văzut:**
+- în noaptea asta: 215.865 de pași și 1.326 M de simboluri (≈ 5,3 miliarde de litere), adică de 2,4 ori tot
+  TinyStories;
+- împreună cu noaptea a treia, din care a pornit: 437.706 de pași și 2.689 M de simboluri (≈ 10,8 miliarde de
+  litere), adică de 4,8 ori tot textul.
+
+**Fără probleme:**
+- nicio eroare și nicio așteptare de răcire;
+- toate cele 8 ore păstrate;
+- memoria rezervată la antrenare: 2,2 GB;
+- fiecare oră a durat ~61 de minute, cu examenele.
+
+**Povestea, din același început.** Modelul de la final (ora 8, #239, 0,4389):
+> Once upon a time, there was a fearful little dog named Coco. Coco was fearful of big things. One day, Coco saw a big
+> red ball. He wanted to play with it. He looked at the ball and felt scared. Coco saw a friend, a cat named Fluffy.
+> Coco said, "Fluffy, do you want to play with the big red ball?" Fluffy said, "Yes, Coco! Let's play together!" They
+> played with the big red ball all day. They were very happy. But then, something unexpected happened. The big red ball
+> popped! Coco and Fluffy were sad. They thought the popped ball would not be fun anymore. But they were still happy
+> and decided to play together. Tim said, "Coco, use your brain to think and sol[…]
+
+Povestea modelului de plecare (#226) e mai sus, la a treia antrenare lungă.
+
+Cinstit despre poveste:
+- **Ce merge:**
+  - Coco rămâne „el”, iar prietenul e prezentat cum trebuie („a cat named Fluffy”);
+  - dialogul e scris corect;
+  - povestea are o întorsătură („The big red ball popped!”) și un sfârșit cu sentimente.
+- **Ce scapă:**
+  - „Tim” apare din senin;
+  - frica lui Coco dispare fără motiv: se joacă toată ziua cu mingea de care se speria;
+  - povestea e mai simplă decât cea de plecare.
+- **Ce spune profesorul:** o vede la fel, cu nota medie 4,5 față de 4,7.
+
+```
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_4.toml --ore 8 --porneste-din 226 --compara-cu 226 --inceput "Once upon a time, there was a fearful little dog named Coco"
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_4.toml --raport --compara-cu 226 --inceput "Once upon a time, there was a fearful little dog named Coco"   # doar raportul
+```
+
 ## Toate comenzile
 
 ```
