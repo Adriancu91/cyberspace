@@ -21,6 +21,10 @@ Setări pe care Cercetătorul le poate schimba:
   fractie_rata_finala × rata_invatare (implicit 10%). Scăderea se întinde pe tot bugetul de timp al antrenării (sau până
   la pasi_max, dacă se oprește mai devreme) ori, cu durata_scaderii_secunde, pe toată antrenarea plănuită a unui model
   care continuă între experimente (ex. 8 ore, cu examen la fiecare oră).
+- examene_suplimentare (gol implicit): ex. ["fapte", "profesor"]. După examenul oficial (pe care nu-l schimbă), modelul
+  dă prin dupa_examen criteriile suplimentare ale deciziei (regula 4), doar numere: fapte_corecte (examenul de fapte,
+  doar cu cuvântul din fapt; plus fapte_corecte_cu_sinonime și fapte_stiute) și nota_profesor (media notelor
+  profesorului pe aceleași 20 de povești nevăzute, din validare_examene). Vezi module/examene_elev.py.
 
 Cum folosește memoria: la fiecare literă primește, în plus, codul ultimului cuvânt
 terminat (de ex. „horse” → substantiv → noun.animal → ... → equine → horse). Fiecare
@@ -48,6 +52,7 @@ except ImportError as e:  # registrul transformă asta într-un mesaj clar
 from module.tokenizer_bpe import TokenizerBPE
 
 TOKENIZERE = ("litere", "bpe")
+EXAMENE_SUPLIMENTARE = ("fapte", "profesor")
 
 NECUNOSCUT = "�"
 # Categoria 0 = „gol”: nivelul nu există sau categoria n-a fost văzută la antrenare. Descrierea ei e
@@ -123,7 +128,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.5.0",
+        "versiune": "0.6.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -150,6 +155,8 @@ class ModelGPT:
         incalzire_pasi: int = 100,
         fractie_rata_finala: float = 0.1,
         durata_scaderii_secunde: float = 0.0,
+        examene_suplimentare: list[str] | tuple[str, ...] = (),
+        validare_examene: str = "date/tinystories_r2/validare.txt",
     ) -> None:
         if n_emb % n_capete != 0:
             raise ValueError("n_emb trebuie să se împartă exact la n_capete")
@@ -174,6 +181,14 @@ class ModelGPT:
         self.incalzire_pasi = incalzire_pasi
         self.fractie_rata_finala = fractie_rata_finala
         self.durata_scaderii_secunde = durata_scaderii_secunde
+        necunoscute = [e for e in examene_suplimentare if e not in EXAMENE_SUPLIMENTARE]
+        if necunoscute:
+            raise ValueError(f"examene_suplimentare: nu știu {necunoscute}; se pot alege: {', '.join(EXAMENE_SUPLIMENTARE)}")
+        self.examene_suplimentare = list(examene_suplimentare)
+        self.validare_examene = validare_examene
+        if self.examene_suplimentare and not hasattr(type(self), "dupa_examen"):
+            # Ușa dupa_examen apare doar cu examene suplimentare: fără ele, fișele GPT-ului rămân exact ca înainte.
+            self.dupa_examen = lambda rezultat: {"criterii": self.ruleaza_examene_suplimentare()}
         self.samanta = samanta
         self.foloseste_memorie = bool(memorie)
         self.adancime_memorie = adancime_memorie
@@ -478,6 +493,19 @@ class ModelGPT:
             text += litera
             idx = torch.cat([idx, urm.to(self.dispozitiv)], dim=1)
         return "".join(rezultat)
+
+    def ruleaza_examene_suplimentare(self) -> dict[str, float]:
+        """Examenele din examene_suplimentare, pe modelul de acum (după examenul oficial): doar numerele lor."""
+        from module import examene_elev
+
+        criterii: dict[str, float] = {}
+        if "fapte" in self.examene_suplimentare:
+            criterii.update(examene_elev.scor_fapte(examene_elev.examineaza_fapte(self)))
+        if "profesor" in self.examene_suplimentare:
+            nota = examene_elev.nota_profesorului(self, self.validare_examene)["nota_medie"]
+            if nota is not None:
+                criterii["nota_profesor"] = nota
+        return criterii
 
     @torch.no_grad()
     def completeaza(self, inceput: str, max_simboluri: int = 6) -> str:

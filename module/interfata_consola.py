@@ -43,8 +43,9 @@ class InterfataConsola:
             scor_text = f"{scor:.4f}" if isinstance(scor, (int, float)) else "-"
             linie = f"#{detalii['id']:<3} {DECIZII.get(detalii['decizie'], detalii['decizie']):<8} scor {scor_text}  ← {detalii['propunere']}"
             self._scrie(linie)
-            if detalii.get("decizie") == "anulat" and detalii.get("motiv"):
-                self._scrie(f"      motiv: {detalii['motiv']}")
+            motiv = detalii.get("motiv")
+            if motiv and (detalii.get("decizie") == "anulat" or str(motiv).startswith("a pierdut")):
+                self._scrie(f"      motiv: {motiv}")  # anulat, sau respins de regula 4 (a pierdut un criteriu)
         elif eveniment == "racire":
             self._scrie(f"Pauză de răcire {detalii['pauza_secunde']:.0f} s: {detalii['motiv']}")
         elif eveniment in ("oprit", "gata"):

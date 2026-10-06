@@ -5,8 +5,9 @@ A schimba un modul = a schimba o linie într-un fișier .toml din folderul confi
 
 from __future__ import annotations
 
+import math
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,9 @@ class Config:
     prag_zgomot: float
     paznic: dict[str, Any]
     porturi: dict[str, dict[str, Any]]  # port -> {"modul": str, "setari": dict}
+    # Regula 4 (nou ≠ mai bun): criterii suplimentare la decizie, pe lângă scorul principal al examenului.
+    # nume -> {"mai_mare_e_mai_bine": bool, "prag": cât poate scădea, cel mult, față de cel mai bun experiment păstrat}
+    criterii: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def setari_port(self, port: str) -> dict[str, Any]:
         return dict(self.porturi[port].get("setari", {}))
@@ -55,6 +59,18 @@ def citeste_config(cale: str | Path) -> Config:
         if not isinstance(valoare, dict) or "modul" not in valoare:
             raise EroareConfig(f"Portul „{port}” din „{cale}” trebuie să aibă „modul = ...”")
 
+    criterii = brut.get("criterii", {})
+    if not isinstance(criterii, dict):
+        raise EroareConfig(f"În „{cale}”, [criterii] trebuie să fie o secțiune: [criterii.<nume>]")
+    for nume, regula in criterii.items():
+        directie = regula.get("mai_mare_e_mai_bine") if isinstance(regula, dict) else None
+        prag = regula.get("prag") if isinstance(regula, dict) else None
+        if not isinstance(directie, bool) or isinstance(prag, bool) or not isinstance(prag, (int, float)) \
+                or not math.isfinite(prag) or prag < 0:
+            raise EroareConfig(
+                f"În „{cale}”, criteriul „{nume}” trebuie să aibă mai_mare_e_mai_bine = true/false și prag = un număr ≥ 0"
+            )
+
     director = Path(platforma.get("director_lucru", "lucru"))
     if not director.is_absolute():
         director = Path.cwd() / director
@@ -68,4 +84,6 @@ def citeste_config(cale: str | Path) -> Config:
         prag_zgomot=float(platforma.get("prag_zgomot", 0.002)),
         paznic=dict(brut.get("paznic", {})),
         porturi={p: dict(v) for p, v in porturi.items()},
+        criterii={nume: {"mai_mare_e_mai_bine": r["mai_mare_e_mai_bine"], "prag": float(r["prag"])}
+                  for nume, r in criterii.items()},
     )

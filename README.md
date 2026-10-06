@@ -1350,6 +1350,76 @@ python unelte/examen_fapte.py --experiment 226 --dispozitiv cpu
 python unelte/examen_profesor.py --experiment 226            # sau --linie antrenare_lunga_3
 ```
 
+## Regula 4: nou ≠ mai bun — criterii suplimentare la decizie (6 octombrie 2026)
+
+O schimbare în `kronos/`, aprobată explicit de Adrian.
+
+**Ce face.** Până acum, Kronos păstra un experiment doar după scorul examenului oficial (val_bpb). Acum, pe lângă el, un
+experiment poate aduce **criterii** suplimentare: numere cu nume, de exemplu `fapte_corecte` și `nota_profesor`.
+
+**Configurarea.** În secțiunea `[criterii]` se scrie, pentru fiecare criteriu, direcția și cât are voie să scadă, cel
+mult, față de cel mai bun experiment păstrat:
+
+```toml
+[criterii.fapte_corecte]
+mai_mare_e_mai_bine = true
+prag = 3          # cât poate scădea, cel mult, față de cel mai bun experiment păstrat
+
+[criterii.nota_profesor]
+mai_mare_e_mai_bine = true
+prag = 0.5
+```
+
+**Decizia.**
+- Un experiment e **păstrat** doar dacă val_bpb e mai bun **și** niciun criteriu n-a scăzut mai mult decât pragul lui.
+- Dacă val_bpb e mai bun, dar un criteriu a căzut, experimentul e **respins**. Motivul e de forma „a pierdut
+  fapte_corecte: 5 față de 10 la #12 (a scăzut cu 5, pragul e 2)” și apare și pe ecran.
+- Decizia rămâne scrisă „respins”, iar „a pierdut…” stă în motiv, ca uneltele care citesc jurnalul să meargă mai
+  departe (ele recunosc doar „păstrat”, „respins” și „anulat”).
+
+**Ordinea.**
+- Cu `[criterii]`, modelul dă criteriile prin ușa existentă, `dupa_examen`, chemată acum **înainte** de decizie.
+  Modelul primește decizia pe care ar lua-o val_bpb singur.
+- **Fără `[criterii]`, totul e exact ca înainte:** aceeași ordine și aceeași decizie. Testele vechi trec neschimbate.
+
+**Amănunte:**
+- Contează doar numerele; orice altceva primit de la model se lasă deoparte.
+- Un criteriu configurat pe care modelul nu-l dă se notează în `criterii_lipsa` și nu oprește nimic.
+- Un criteriu pe care cel mai bun experiment păstrat nu-l are nu se poate compara.
+- La reluare, referința se citește din jurnal.
+
+**Partea din module.** GPT-ul (`model_gpt`, `model_continuu`) are setarea opțională `examene_suplimentare = ["fapte",
+"profesor"]`. După examenul oficial, care nu s-a schimbat, `dupa_examen` întoarce doar numere:
+- **`fapte_corecte`**: examenul de fapte, doar cu cuvântul din fapt. Vin și `fapte_corecte_cu_sinonime` și
+  `fapte_stiute`.
+- **`nota_profesor`**: media notelor profesorului pe aceleași 20 de povești nevăzute, din `validare_examene` (implicit,
+  validarea R2).
+
+Alte lucruri de știut:
+- **Unde stă codul.** Nucleul celor două examene s-a mutat în `module/examene_elev.py`, ca să-l poată folosi și GPT-ul.
+  Uneltele îl folosesc la fel ca înainte.
+- **GPT-ul simplu fără setare** nu are `dupa_examen`, deci fișele lui rămân neschimbate.
+- **GPT-ul care continuă** salvează întâi starea, apoi rulează examenele suplimentare. Așa, o eroare într-un examen nu
+  poate pierde antrenamentul.
+
+**Costul pe experiment:**
+- examenul de fapte: câteva secunde;
+- examenul profesorului: ~1 minut (încărcarea profesorului, 20 de povești, notele);
+- memoria video: elevul și profesorul împreună încap sub 5,5 GB.
+
+**Teste: 327, toate trec.**
+- 11 sunt noi pentru regulă:
+  - un criteriu care cade → respins, deși val_bpb e mai bun;
+  - un criteriu stabil sau exact la prag → păstrat;
+  - referința e cel mai bun experiment păstrat, și după reluare;
+  - direcția inversă (mai mic e mai bine);
+  - criterii lipsă;
+  - configurări greșite;
+  - motivul apare pe ecran;
+  - fără `[criterii]`, totul e ca înainte.
+- 5 sunt noi pentru partea din module.
+- `test_arhitectura` trece: `kronos/` nu importă nimic din `module/`.
+
 ## Toate comenzile
 
 ```

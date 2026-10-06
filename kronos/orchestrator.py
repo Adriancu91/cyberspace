@@ -3,6 +3,11 @@
 propus → verificat → aplicat → testat_rapid → antrenat → examinat → decis → inregistrat
 
 Orice eșec duce direct la „anulat”, iar fișa ajunge oricum în jurnal.
+
+Regula 4 (nou ≠ mai bun), doar cu [criterii] în configurare: pe lângă scorul principal al examenului, modelul dă prin
+dupa_examen „criterii” suplimentare (numere cu nume, ex. fapte_corecte, nota_profesor), înainte de decizie. Un experiment
+e păstrat doar dacă scorul principal e mai bun ȘI niciun criteriu nu a scăzut mai mult decât pragul lui față de cel mai
+bun experiment păstrat; altfel e „respins”, cu motivul „a pierdut <criteriu>”. Fără [criterii], totul e ca înainte.
 """
 
 from __future__ import annotations
@@ -218,6 +223,18 @@ class Orchestrator:
             mai_bun = castig > self.config.prag_zgomot
         fisa["scor_anterior"] = anterior
         fisa["castig"] = castig
+        pierdut = None
+        if self.config.criterii:
+            # Regula 4: criteriile suplimentare vin de la model, prin dupa_examen, ÎNAINTE de decizie (modelul primește
+            # decizia pe care ar lua-o scorul principal singur). Doar numere.
+            self._dupa_examen(model, fisa, scor, anterior, castig, "pastrat" if mai_bun else "respins")
+            fisa["criterii"] = self._criterii(fisa.get("dupa_examen"))
+            lipsa = [nume for nume in self.config.criterii if nume not in fisa["criterii"]]
+            if lipsa:
+                fisa["criterii_lipsa"] = lipsa
+            if mai_bun:
+                pierdut = self._criteriu_pierdut(fisa["criterii"])
+                mai_bun = pierdut is None
         if mai_bun:
             fisa["decizie"] = "pastrat"
             try:
@@ -228,7 +245,7 @@ class Orchestrator:
             self.cel_mai_bun = fisa
         else:
             fisa["decizie"] = "respins"
-            fisa["motiv"] = (
+            fisa["motiv"] = pierdut or (
                 f"câștig {castig:+.4f} sub pragul de zgomot {self.config.prag_zgomot}"
                 if castig is not None and castig > 0
                 else "scorul nu e mai bun"
@@ -236,15 +253,47 @@ class Orchestrator:
 
         # 8. După examen: un model care învață între experimente (are `dupa_examen`) primește
         #    rezultatul DOAR ca numere (scor, câștig, decizie), niciodată textul de examen.
+        #    (Cu [criterii], dupa_examen a fost deja chemat mai sus, înainte de decizie.)
+        if not self.config.criterii:
+            self._dupa_examen(model, fisa, scor, anterior, castig, fisa["decizie"])
+        stare("decis")
+        return self._inregistreaza(fisa, start, stare)
+
+    @staticmethod
+    def _dupa_examen(model: Any, fisa: dict[str, Any], scor: float, anterior: float | None, castig: float | None,
+                     decizie: str) -> None:
         if hasattr(model, "dupa_examen"):
             try:
                 fisa["dupa_examen"] = model.dupa_examen(
-                    {"id": fisa["id"], "scor": scor, "scor_anterior": anterior, "castig": castig, "decizie": fisa["decizie"]}
+                    {"id": fisa["id"], "scor": scor, "scor_anterior": anterior, "castig": castig, "decizie": decizie}
                 )
             except Exception as e:  # noqa: BLE001 - o eroare aici nu strică experimentul deja examinat
                 fisa["eroare_dupa_examen"] = f"{type(e).__name__}: {e}"
-        stare("decis")
-        return self._inregistreaza(fisa, start, stare)
+
+    @staticmethod
+    def _criterii(raspuns: Any) -> dict[str, float]:
+        """Criteriile din răspunsul modelului (dupa_examen → {"criterii": {nume: număr}}): doar numere finite."""
+        criterii = raspuns.get("criterii") if isinstance(raspuns, dict) else None
+        if not isinstance(criterii, dict):
+            return {}
+        return {str(nume): valoare for nume, valoare in criterii.items()
+                if isinstance(valoare, (int, float)) and not isinstance(valoare, bool) and math.isfinite(valoare)}
+
+    def _criteriu_pierdut(self, criterii: dict[str, float]) -> str | None:
+        """Motivul respingerii, dacă un criteriu a scăzut mai mult decât pragul lui față de cel mai bun experiment
+        păstrat; None dacă niciunul. Un criteriu pe care nu-l au amândouă nu se poate compara și nu oprește nimic."""
+        if self.cel_mai_bun is None:
+            return None
+        referinta = self.cel_mai_bun.get("criterii") or self._criterii(self.cel_mai_bun.get("dupa_examen"))
+        for nume, regula in self.config.criterii.items():
+            if nume not in criterii or nume not in referinta:
+                continue
+            acum, atunci = criterii[nume], referinta[nume]
+            scadere = (atunci - acum) if regula["mai_mare_e_mai_bine"] else (acum - atunci)
+            if scadere > regula["prag"]:
+                return (f"a pierdut {nume}: {acum:g} față de {atunci:g} la #{self.cel_mai_bun['id']} "
+                        f"(a scăzut cu {scadere:g}, pragul e {regula['prag']:g})")
+        return None
 
     def _fa(self, port: str, setari: dict[str, dict[str, Any]]) -> Any:
         """Creează un modul nou (model sau date) cu setările date.

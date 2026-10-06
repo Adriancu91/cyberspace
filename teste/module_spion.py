@@ -36,3 +36,18 @@ class ModelCareInvataDupaExamen(ModelSpion):
 class ModelCuEroareDupaExamen(ModelSpion):
     def dupa_examen(self, rezultat):
         raise RuntimeError("bum după examen")
+
+
+class ModelCuCriterii(ModelSpion):
+    """Pentru regula 4: scorul (biți pe literă = val_bpb) și criteriile vin din setări; criteriile le dă prin dupa_examen."""
+
+    def __init__(self, biti=5.0, fapte=10, nota=5.0, **_):
+        super().__init__()
+        self.biti, self.fapte, self.nota = biti, fapte, nota
+
+    def biti_pentru(self, text):
+        return self.biti * len(text.encode("utf-8"))
+
+    def dupa_examen(self, rezultat):
+        return {"am_primit": rezultat,
+                "criterii": {"fapte_corecte": self.fapte, "nota_profesor": self.nota, "text": "nu e un număr"}}

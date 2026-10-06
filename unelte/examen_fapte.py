@@ -20,115 +20,21 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 RADACINA = Path(__file__).resolve().parent.parent
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from kronos.jurnal import Jurnal  # noqa: E402
+from module.examene_elev import (  # noqa: E402  (nucleul examenului e în module/, ca să-l poată folosi și GPT-ul)
+    CADRE, INTREBARI, e_corect, intrebarea, raspunsul,
+    examineaza_fapte as examineaza,
+)
 from module.profesor_qwen import SUBIECTE  # noqa: E402
 from unelte.modele_salvate import fisa_modelului, incarca_modelul  # noqa: E402
-
-# subiect → (începutul propoziției, până la gol; răspunsurile acceptate). Primul răspuns e cuvântul din fapt.
-INTREBARI: dict[str, tuple[str, tuple[str, ...]]] = {
-    "snow": ("Water freezes into", ("ice",)),
-    "birds": ("Birds have", ("feathers",)),
-    "the Sun": ("The Sun is a", ("star",)),
-    "plants": ("Plants need water and sunlight to", ("grow",)),
-    "the Moon": ("The Moon goes around the", ("earth",)),
-    "bees": ("Bees make", ("honey",)),
-    "fish": ("Fish breathe through their", ("gills",)),
-    "rain": ("Rain falls from", ("clouds",)),
-    "spiders": ("Spiders have eight", ("legs",)),
-    "frogs": ("Frogs start their lives as", ("tadpoles",)),
-    "butterflies": ("A caterpillar changes into a", ("butterfly",)),
-    "cows": ("Cows give", ("milk",)),
-    "teeth": ("Brushing your teeth helps keep them", ("healthy", "clean")),
-    "rainbows": ("A rainbow can appear when sunlight shines through", ("raindrops", "rain")),
-    "autumn": ("Many trees lose their leaves in", ("autumn", "fall")),
-    "the sea": ("Sea water is", ("salty",)),
-    "magnets": ("Magnets pull things made of", ("iron", "metal")),
-    "the heart": ("The heart pumps", ("blood",)),
-    "bats": ("Bats are mammals that can", ("fly",)),
-    "penguins": ("Penguins are birds that cannot", ("fly",)),
-    "volcanoes": ("Hot melted rock called", ("lava",)),
-    "shadows": ("A shadow forms when something blocks the", ("light", "sun", "sunlight")),
-    "boiling water": ("Water boils when it gets very", ("hot",)),
-    "owls": ("Many owls hunt at", ("night",)),
-    "camels": ("Camels can go a long time without drinking", ("water",)),
-    "elephants": ("Elephants use their", ("trunks",)),
-    "stars": ("Stars are very", ("far",)),
-    "wind": ("Wind is moving", ("air",)),
-    "ants": ("Ants live and work together in big groups called", ("colonies", "colony")),
-    "seeds": ("A big tree can grow from a small", ("seed",)),
-    "snakes": ("Snakes have no", ("legs",)),
-    "whales": ("Whales breathe air through a", ("blowhole",)),
-    "ice cream": ("Ice cream melts when it gets", ("warm", "hot")),
-    "night": ("It gets dark at night because our side of the Earth turns away from the", ("sun",)),
-    "sleep": ("Our bodies need sleep to stay", ("healthy",)),
-    "bread": ("Bread is made from", ("flour", "wheat")),
-    "chickens": ("Hens lay", ("eggs",)),
-    "turtles": ("A turtle carries its", ("shell",)),
-    "thunderstorms": ("We see lightning before we hear the", ("thunder",)),
-    "mountains": ("At the top of a high mountain, it is usually", ("colder", "cold")),
-    "dogs": ("Dogs have a very good sense of", ("smell",)),
-    "cats": ("Cats can see well when there is little", ("light",)),
-    "apples": ("Apples grow on", ("trees",)),
-    "the Earth": ("The Earth goes around the", ("sun",)),
-    "squirrels": ("Squirrels hide", ("nuts", "acorns")),
-    "bears": ("Some bears sleep through most of the", ("winter",)),
-    "carrots": ("Carrots grow under the", ("ground", "soil", "dirt")),
-    "clouds": ("Clouds are made of tiny drops of", ("water",)),
-    "sand": ("Sand is made of tiny pieces of", ("rock", "stone", "shells")),
-    "washing hands": ("Washing your hands with soap helps wash away", ("germs",)),
-}
-CADRE = ("{p} ___.", 'Mom said, "{p} ___."', "Lily learned that {pm} ___.")
-ARTICOLE = ("the", "a", "an")
-
-
-def intrebarea(cadru: str, inceput: str) -> tuple[str, str]:
-    """(propoziția cu gol, textul pe care îl primește elevul: tot ce e înainte de gol)."""
-    propozitie = cadru.format(p=inceput, pm=inceput[0].lower() + inceput[1:])
-    return propozitie, propozitie.split(" ___")[0]
-
-
-def _singular(cuvant: str) -> str:
-    return cuvant[:-1] if cuvant.endswith("s") and len(cuvant) > 3 else cuvant
-
-
-def raspunsul(completare: str) -> str:
-    """Primul cuvânt al completării, cu litere mici, după un „the/a/an” de la început (dacă e)."""
-    cuvinte = re.findall(r"[A-Za-z]+", completare)
-    if len(cuvinte) > 1 and cuvinte[0].lower() in ARTICOLE:
-        cuvinte = cuvinte[1:]
-    return cuvinte[0].lower() if cuvinte else ""
-
-
-def e_corect(completare: str, acceptate: tuple[str, ...]) -> bool:
-    raspuns = raspunsul(completare)
-    return bool(raspuns) and any(_singular(raspuns) == _singular(a) for a in acceptate)
-
-
-def examineaza(model: Any) -> list[dict[str, Any]]:
-    """Cele 150 de întrebări (50 de fapte × 3 propoziții), cu completarea elevului și dacă e corectă."""
-    max_simboluri = 4 if getattr(model, "tokenizer", "") == "bpe" else 16  # pe litere: un cuvânt are mai multe semne
-    rezultate = []
-    for subiect, fapt in SUBIECTE:
-        inceput, acceptate = INTREBARI[subiect]
-        for k, cadru in enumerate(CADRE, start=1):
-            propozitie, text = intrebarea(cadru, inceput)
-            completare = model.completeaza(text, max_simboluri)
-            rezultate.append({"subiect": subiect, "fapt": fapt, "propozitie": k, "intrebare": propozitie,
-                              "completare": completare, "raspuns": raspunsul(completare),
-                              "acceptate": list(acceptate), "corect": e_corect(completare, acceptate),
-                              "corect_cuvantul_din_fapt": e_corect(completare, acceptate[:1])})
-    return rezultate
-
 
 def main(argv: list[str] | None = None) -> int:
     try:

@@ -18,12 +18,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import random
-import re
 import statistics
 import sys
 import time
-from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -35,43 +32,20 @@ if str(RADACINA) not in sys.path:
 from kronos.config import citeste_config  # noqa: E402
 from kronos.jurnal import Jurnal  # noqa: E402
 from kronos.registru import Registru  # noqa: E402
+from module.examene_elev import (  # noqa: E402  (nucleul examenelor e în module/, ca să-l poată folosi și GPT-ul)
+    SEPARATOR, alege_povesti, distributie, medie, povesti_elevului, prima_propozitie, taie_la_propozitie,
+)
 from module.profesor_qwen import SUBIECTE, ProfesorQwen  # noqa: E402
 
-SEPARATOR = "<|endoftext|>"
 STILURI_TEST = ("simplu", "dialog")
 
 
-def alege_povesti(text: str, numar: int, samanta: int = 0) -> list[str]:
-    """`numar` povești din validare, alese la întâmplare (aceeași sămânță = aceleași povești), în ordinea din text."""
-    povesti = [p.strip() for p in text.split(SEPARATOR) if p.strip()]
-    return [povesti[i] for i in sorted(random.Random(samanta).sample(range(len(povesti)), numar))]
 
 
-def prima_propozitie(poveste: str) -> str:
-    """Începutul dat elevului: prima propoziție (până la primul . ! ?), sau primele 8 cuvinte dacă nu are."""
-    gasit = re.match(r"\s*(.+?[.!?][\"”']?)(?=\s|$)", poveste, re.S)
-    return gasit.group(1) if gasit else " ".join(poveste.split()[:8])
 
 
-def taie_la_propozitie(text: str) -> str:
-    """Povestea elevului până la primul sfârșit de poveste și, dacă e tăiată la mijloc, până la ultima propoziție întreagă
-    (ca nota să nu fie trasă în jos doar de lungimea la care s-a oprit scrisul)."""
-    text = text.split(SEPARATOR)[0].strip()
-    if re.search(r"[.!?][\"”']?$", text):
-        return text
-    capete = list(re.finditer(r"[.!?][\"”']?(?=\s|$)", text))
-    return text[: capete[-1].end()] if capete else text
 
 
-def povesti_elevului(elev: Any, originale: list[str]) -> list[dict[str, str]]:
-    """Elevul pornește din prima propoziție a fiecărei povești originale și scrie cam cât ea (între 200 și 1.000 de
-    litere); povestea lui se taie la ultima propoziție întreagă."""
-    povesti = []
-    for original in originale:
-        inceput = prima_propozitie(original)
-        lungime = max(200, min(1000, len(original) - len(inceput)))
-        povesti.append({"inceput": inceput, "poveste": taie_la_propozitie(inceput + elev.genereaza(inceput, lungime))})
-    return povesti
 
 
 def model_elev(config: Any, jurnal: Jurnal, linie: str) -> tuple[Any, dict[str, Any]]:
@@ -85,14 +59,8 @@ def model_elev(config: Any, jurnal: Jurnal, linie: str) -> tuple[Any, dict[str, 
     return model, fisa
 
 
-def distributie(note: list[int | None]) -> dict[str, int]:
-    numarate = Counter(n for n in note if n is not None)
-    return {str(n): numarate.get(n, 0) for n in range(1, 11)}
 
 
-def medie(note: list[int | None]) -> float | None:
-    valide = [n for n in note if n is not None]
-    return round(statistics.mean(valide), 2) if valide else None
 
 
 def scrie_jsonl(cale: Path, randuri: list[dict[str, Any]]) -> None:

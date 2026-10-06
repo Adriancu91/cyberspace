@@ -91,7 +91,7 @@ class ModelGPTContinuu(ModelGPT):
     MANIFEST = {
         "nume": "model_gpt_continuu",
         "port": "model",
-        "versiune": "0.2.0",
+        "versiune": "0.3.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 5500},
         "permisiuni": ["citire_fisier", "scriere_fisier"],
@@ -183,8 +183,17 @@ class ModelGPTContinuu(ModelGPT):
         return statistici
 
     def dupa_examen(self, rezultat: dict[str, Any]) -> dict[str, Any] | None:
-        """După examen (doar experimentul adevărat): starea nouă se salvează pentru experimentul următor. Cu
-        director_stari, doar dacă scorul e mai bun decât cel mai bun de până atunci al arhitecturii."""
+        """După examen (doar experimentul adevărat): starea nouă se salvează pentru experimentul următor; apoi, cu
+        examene_suplimentare, criteriile suplimentare ale deciziei (regula 4), doar numere. Întâi starea: o eroare într-un
+        examen suplimentar nu poate pierde antrenamentul."""
+        raspuns = self._salveaza_starea(rezultat)
+        if self.examene_suplimentare:
+            raspuns = {**(raspuns or {}), "criterii": self.ruleaza_examene_suplimentare()}
+        return raspuns
+
+    def _salveaza_starea(self, rezultat: dict[str, Any]) -> dict[str, Any] | None:
+        """Starea nouă, pentru experimentul următor. Cu director_stari, doar dacă scorul e mai bun decât cel mai bun de
+        până atunci al arhitecturii."""
         cale = self.cale_starii()
         if not cale or self.retea is None or self.optimizator is None:
             return None
