@@ -2034,6 +2034,100 @@ azi, v0 a ales:
   - noaptea pe fapte se încheie acum cu o remăsurare care confirmă sau infirmă ultima oră.
 - `teste/test_lant_antrenare.py`: alegerea celui mai bun model după fapte, citirea plăcii și ordinea etapelor.
 
+## 7 octombrie: rezultatele lanțului (fapte, apoi a cincea antrenare, 09:33–16:57)
+
+Lanțul a mers singur, fără erori, în 7 ore și 24 de minute: faptele în 2 ore și 10 minute, apoi a cincea antrenare în 5
+ore și 13 minute. Placa a stat la 86–87 °C cât a antrenat. Paznicul a făcut o singură pauză de răcire, la pornirea
+etapei a doua (73 °C → 70 °C). Antrenarea a rezervat cel mult 2.226 MB de memorie video. Cu profesorul, la examene,
+placa avea ~3,2 GB ocupați când m-am uitat (limita: 5,5 GB).
+
+Peste tot:
+- „fapte noi” = examenul nou, din 150. În paranteză: aceeași cifră cu sinonime, apoi din câte din cele 50 de fapte s-a
+  știut măcar un răspuns;
+- „fapte vechi” = examenul vechi, din 150;
+- nota e pe 40 de povești, cu eroarea estimată.
+
+### Antrenarea pe fapte (`config/laptop_fapte.toml`, din #239, 4 × 30 de minute, 5% hrană)
+
+| Ora | Exp. | Decizia lui Kronos | val_bpb | Fapte noi | Fapte vechi | Nota | Pași |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | #239 | punctul de plecare | 0,4389 | 36 (39 / 24) | 51 | 4,4 ± 0,34 | – |
+| 1 | #249 | păstrat: primul pe linie, fără comparație | 0,4675 | 59 (62 / 35) | 147 | 3,7 ± 0,24 | 14.048 |
+| 2 | #250 | respins: fapte noi +1 față de #249, trebuia peste 10 | 0,4573 | 60 (61 / 38) | 147 | 4,4 ± 0,27 | 13.661 |
+| 3 | #251 | respins: +7 | 0,4415 | 66 (68 / 40) | 146 | 4,47 ± 0,34 | 13.657 |
+| 4 | #252 | **păstrat: +13** | **0,4340** | **72 (76 / 41)** | 146 | 4,75 ± 0,32 | 13.716 |
+
+- **Pragul de 10 la fapte noi a fost trecut la limită.** #252 are +13 față de #249, doar cu 3 peste prag, iar zgomotul
+  examenului nou nu e încă măsurat (0 perechi).
+- **Creșterea în sine e însă reală:** a urcat în toate cele 4 jumătăți de oră (59, 60, 66, 72). Față de #239 (36),
+  faptele noi s-au dublat, iar faptele știute au urcat de la 24 la 41 din 50.
+- **Prima jumătate de oră n-a trecut prin regula 4:** Kronos păstrează automat primul experiment al unei linii noi. Ea a
+  stricat val_bpb (0,4389 → 0,4675) și nota (4,4 → 3,7), din cauza ratei repornite la 0,0002. Amândouă și-au revenit
+  până la ora 4.
+- **La final, #252 e la egalitate cu #239 pe celelalte două:**
+  - val_bpb 0,4340: cu 0,0049 mai bun, sub pragul de 0,005;
+  - nota 4,75 ± 0,32 față de 4,4 ± 0,34: diferența e în eroare.
+- **Examenul vechi de fapte (146–147 din 150) măsoară memorarea:** 97 din propozițiile lui apar cuvânt cu cuvânt în
+  hrană.
+- **Legătura cu val_bpb pe cele 4 ore: fapte noi −0,96.** Faptele noi au urcat cât timp val_bpb cobora, odată cu rata.
+  Cifra din rezumatul uneltei (−0,01) pune la socoteală și ora 0 (#239, de dinainte de hrană).
+
+### A cincea antrenare lungă (`config/laptop_antrenare_lunga_5.toml`, din #252, 5 × 60 de minute, fără hrană)
+
+| Ora | Exp. | Decizia lui Kronos | val_bpb | Fapte noi | Fapte vechi | Nota | Pași | Rata la final |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | #252 | punctul de plecare | 0,4340 | 72 (76 / 41) | 146 | 4,75 ± 0,32 | – | – |
+| 1 | #253 | păstrat: primul pe linie, fără comparație | 0,4692 | 33 (35 / 19) | 42 | 3,8 ± 0,21 | 27.279 | 0,000183 |
+| 2 | #254 | păstrat: −0,0088 | 0,4605 | 32 (34 / 20) | 45 | 4,65 ± 0,35 | 27.277 | 0,000138 |
+| 3 | #255 | păstrat: −0,0132 | 0,4473 | 27 (31 / 18) | 44 | 4,2 ± 0,29 | 27.189 | 0,000082 |
+| 4 | #256 | păstrat: −0,0137 | 0,4336 | 36 (39 / 24) | 50 | 4,83 ± 0,36 | 27.090 | 0,000037 |
+| 5 | #257 | păstrat: −0,0055 | **0,4281** | 37 (40 / 24) | 54 | 4,4 ± 0,31 | 27.002 | 0,000020 |
+
+Configurarea n-are `[criterii]`, deci Kronos a decis doar după val_bpb (prag 0,005). Examenele doar s-au măsurat. Ora 5 a
+trecut pragul la limită: −0,0055, față de 0,005.
+
+**Verdict cinstit:**
+- **val_bpb 0,4281 e cel mai bun scor de până acum.** E cu 0,0108 sub #239 și cu 0,0059 sub #252. Dar vine după încă 5
+  ore de antrenare, deci e în bună parte efectul pașilor în plus.
+- **Faptele învățate s-au pierdut.**
+  - În prima oră fără hrană, faptele noi au căzut de la 72 la 33, iar cele vechi de la 146 la 42.
+  - La final, faptele noi sunt 37 (24 de fapte știute din 50), adică exact cât avea #239 dimineață (36, tot 24).
+  - Deci cele 2 ore pe fapte n-au lăsat nimic durabil, după 5 ore fără hrană.
+- **Nota a ajuns la 4,4 ± 0,31**, ca la #239 (4,4 ± 0,34).
+- **Repornirea ratei la 0,0002 a costat din nou prima oră:** val_bpb a urcat cu 0,035 (0,4340 → 0,4692) și abia la
+  ora 4 a revenit la plecare. În noaptea a patra, cu 0,0005, saltul a fost +0,048.
+
+**Ce e „cel mai bun model” acum depinde de criteriu:**
+- după val_bpb: #257 (0,4281, 37 de fapte noi);
+- după fapte: #252 (72 de fapte noi, val_bpb 0,4340).
+
+Variante pentru data viitoare:
+1. **Hrana și în antrenarea lungă.** Aceeași 5% povești cu fapte în fiecare lot, ca faptele să nu se piardă. Se măsoară
+   la fel, pe ore, și se vede dacă faptele rămân.
+2. **Fără repornirea ratei.** Continuarea pornește de la rata la care s-a oprit etapa de dinainte (0,00002) sau urcă
+   încet. Așa nu se pierde prima oră.
+
+### CONTINUUM v0, simulat toată ziua (36 de cicluri, 0 erori)
+
+| Când | Ce a ales și de ce |
+| --- | --- |
+| 01:46 | nimic: toate configurările lungi erau încheiate, iar `laptop_fapte.toml` nu exista încă |
+| proba „ca la 23:00” | **dezvolta:fapte**, din #239 (fapte 34%, cea mai slabă; 7.520 de povești nefolosite) |
+| 07:15–08:15, 09:00–09:30 | nimic: ziua (ÎNTREȚINERE) antrenarea nu era permisă, iar hrana era gata |
+| 08:45 | **masoara:fapte**: #239 încă n-avea examenul de fapte nou |
+| 08:30 | REPAUS: placa era ocupată de altă sarcină |
+| 09:45–16:45 | REPAUS: placa era ocupată de lanț |
+| 17:00 | nimic, cu placa liberă: hrana de fapte a fost folosită (`fapte_1`), iar toate configurările lungi sunt încheiate, și `laptop_antrenare_lunga_5.toml` (5 din 5). Pentru mai departe trebuie pregătită una nouă |
+
+În REPAUS, nevoile în așteptare au urmat modelele noi:
+- **dezvolta:sens**, după #249 (nota 3,7): sensul devenise cel mai slab;
+- **dezvolta:fapte**, după #253 (33 de fapte noi): faptele redeveniseră cele mai slabe;
+- **continua:povesti**, cât timp val_bpb încă scădea.
+
+Simularea rulează în continuare cu codul v0, pornită la 07:15.
+
+**Testele, după lanț:** toată suita, cu placa: 473 trec (cu cele 4 fișiere amânate și cu profesorul adevărat).
+
 ## Toate comenzile
 
 ```
