@@ -1,0 +1,69 @@
+# Antrenarea 6b (noaptea 7–8 octombrie 2026). Întrebarea: mai câștigă ceva continuarea cu pași mici, peste zgomot?
+# Copie a antrenării 5 (config/laptop_antrenare_lunga_5.toml): 5 ore, TinyStories întreg, fără hrană, lot 24, aceeași
+# sămânță, aceleași examene la fiecare oră (val_bpb, fapte_noi, fapte_corecte, nota pe 40). Diferențele:
+# - pornește din #257 (sfârșitul antrenării 5: val_bpb 0,4281), nu din #252;
+# - rata mică, fără repornire: 0,00002 (cât avea antrenarea 5 la final), care scade pe 5 ore până la 0,000002.
+#   Optimizatorul pornește totuși din nou (așa face --porneste-din), cu încălzire în primii 100 de pași;
+# - [criterii] ca la 6a: val_bpb principal (prag 0,005), fapte_noi nu scad cu peste 10, nota nu scade cu peste 0,5.
+#   python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_6b.toml --ore 5 --porneste-din 257 --compara-cu 257 --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga_6b.toml)
+
+[platforma]
+nume = "antrenare_lunga_6b"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 5
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.00002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_6b/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # pregătit deja: TinyStories întreg, fără poveștile cu fapte
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
+
+# Regula 4, cu val_bpb principal (implicit, pragul prag_zgomot = 0,005): un experiment e păstrat doar dacă val_bpb e mai
+# bun cu peste 0,005 decât cel mai bun păstrat al liniei, iar faptele noi și nota nu scad peste pragurile lor. Primul
+# experiment al liniei e păstrat, ca de obicei (n-are cu ce fi comparat). fapte_corecte (examenul vechi) doar se raportează.
+[criterii.fapte_noi]
+mai_mare_e_mai_bine = true
+prag = 10              # faptele noi nu au voie să scadă cu peste 10 (din 150)
+
+[criterii.nota_profesor]
+mai_mare_e_mai_bine = true
+prag = 0.5             # nota (pe 40 de povești) nu are voie să scadă cu peste 0,5

@@ -2128,6 +2128,30 @@ Simularea rulează în continuare cu codul v0, pornită la 07:15.
 
 **Testele, după lanț:** toată suita, cu placa: 473 trec (cu cele 4 fișiere amânate și cu profesorul adevărat).
 
+## Noaptea 7–8 octombrie: lanțul 6 (de ce se uită faptele)
+
+Patru rulări, una după alta, cu `python unelte/lant_antrenare.py --plan config/lant_6.toml`. Scriptul de înlănțuire
+citește acum etapele dintr-un plan. Fiecare configurare e o copie a antrenării 5, cu doar diferențele de mai jos:
+
+| Rulare | Configurarea | Întrebarea | Diferențe față de antrenarea 5 |
+| --- | --- | --- | --- |
+| 6a | `laptop_antrenare_lunga_6a.toml` | Rămân faptele dacă hrana e mereu în amestec? | 5% hrană cu fapte în fiecare lot; `[criterii]`: val_bpb principal (0,005), fapte_noi −10 cel mult, nota −0,5 cel mult |
+| 6c-restart | `laptop_masurare_6c_restart.toml` | Uitarea vine din pașii mari ai ratei repornite... | doar prima oră, examen la fiecare 15 minute; fără criterii |
+| 6c-continuare | `laptop_masurare_6c_continuare.toml` | ...sau din simplul fapt că antrenează pe altceva? | ca 6c-restart, dar rata 0,00002 → 0,000002 (fără repornire) |
+| 6b | `laptop_antrenare_lunga_6b.toml` | Mai câștigă continuarea cu pași mici, peste zgomot? | din #257; rata 0,00002 → 0,000002; criteriile ca la 6a |
+
+De știut:
+- **De unde pornesc.** 6a și ambele 6c pornesc din #252: 72 de fapte noi, val_bpb 0,4340. 6b pornește din #257:
+  val_bpb 0,4281.
+- **6c sunt măsurători, nu candidați.**
+  - Liniile lor se numesc `masurare_6c_*`, iar numele configurărilor nu se potrivesc cu liniile urmărite de CONTINUUM.
+  - Scăderea ratei e aceeași ca la antrenarea 5 (cosinus pe 5 ore), dar se face doar prima oră.
+  - Între cele două rulări diferă doar mărimea ratei (de 10 ori).
+- **Nota se dă la toate cele 4 puncte ale lui 6c**, nu doar la 30 și 60 de minute: modelul nu poate sări examenul
+  profesorului la unele experimente. Costă ~1 minut în plus pe punct și nu schimbă antrenarea.
+- **Optimizatorul pornește din nou în toate rulările.** Așa face unealta cu `--porneste-din`, cu încălzire în primii 100
+  de pași. „Fără repornire” înseamnă aici doar că rata nu sare înapoi la 0,0002.
+
 ## Toate comenzile
 
 ```
@@ -2143,6 +2167,7 @@ python -m module.continuum.bucla --config config/continuum.toml [--simuleaza] [-
 python -m module.continuum.bucla --config config/continuum.toml --jurnal [N]                  # ultimele cicluri
 python -m module.continuum.bucla --config config/continuum.toml --simuleaza [--placa-libera] [--stare DOSAR]
 python unelte/lant_antrenare.py                                  # fapte, apoi a cincea antrenare (7 octombrie)
+python unelte/lant_antrenare.py --plan config/lant_6.toml        # etapele dintr-un plan (noaptea 7–8 octombrie)
 ```
 
 ## Ce urmează

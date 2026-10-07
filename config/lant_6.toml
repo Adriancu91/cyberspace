@@ -1,0 +1,35 @@
+# Lanțul nopții 7–8 octombrie 2026: patru rulări, una după alta, fără pauză între ele.
+#   python unelte/lant_antrenare.py --plan config/lant_6.toml
+# Înainte de fiecare etapă, scriptul se uită la butonul STOP (lucru/STOP: oprește tot lanțul) și așteaptă placa liberă:
+# niciun alt program Python pe ea (o singură sarcină grea), cel puțin 5.500 MB liberi, cel mult 85 °C. Unealta de
+# antrenare mai așteaptă și răcirea până la 70 °C înaintea fiecărei ore.
+# Etapele nu depind una de alta (fiecare pornește dintr-un model fix), deci o etapă căzută nu le oprește pe celelalte.
+
+[lant]
+la_eroare = "continua"
+
+[[etapa]]
+nume = "Antrenarea 6a: hrana mereu în amestec (5 ore, din #252)"
+config = "config/laptop_antrenare_lunga_6a.toml"
+ore = 5
+porneste_din = 252
+
+[[etapa]]
+nume = "Testul de consolidare 6c-restart: rata repornită, examen la 15 minute (1 oră, din #252)"
+config = "config/laptop_masurare_6c_restart.toml"
+ore = 4
+porneste_din = 252
+nota = "măsurătoare, nu candidat: linia masurare_6c_restart nu e urmărită de CONTINUUM"
+
+[[etapa]]
+nume = "Testul de consolidare 6c-continuare: rata mică, fără repornire, examen la 15 minute (1 oră, din #252)"
+config = "config/laptop_masurare_6c_continuare.toml"
+ore = 4
+porneste_din = 252
+nota = "măsurătoare, nu candidat: linia masurare_6c_continuare nu e urmărită de CONTINUUM"
+
+[[etapa]]
+nume = "Antrenarea 6b: continuare cu pași mici (5 ore, din #257)"
+config = "config/laptop_antrenare_lunga_6b.toml"
+ore = 5
+porneste_din = 257

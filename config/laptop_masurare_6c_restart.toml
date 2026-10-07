@@ -1,0 +1,60 @@
+# Testul de consolidare 6c, cu rata repornită (noaptea 7–8 octombrie 2026). MĂSURĂTOARE, NU CANDIDAT: modelele acestei linii
+# („masurare_6c_restart”) sunt puncte de măsurare. Numele fișierului nu se potrivește cu liniile urmărite de CONTINUUM
+# (laptop_antrenare_lunga*, laptop_fapte*), deci nu intră nici în liniile lui de bază.
+# Întrebarea: uitarea faptelor vine din pașii mari ai ratei repornite, sau din simplul fapt că antrenează pe altceva?
+# Copie a antrenării 5 (config/laptop_antrenare_lunga_5.toml): din #252, TinyStories întreg, fără hrană, lot 24, aceeași
+# sămânță, aceeași scădere a ratei (cosinus pe 5 ore = 18.000 de secunde, cu încălzire în primii 100 de pași), dar doar
+# prima oră, cu examen la fiecare 15 minute (4 experimente de câte 900 de secunde): val_bpb, fapte_noi, fapte_corecte și
+# nota pe 40 (modelul nu poate sări nota la unele experimente, deci se dă la toate patru; în raport contează 30 și 60
+# de minute). Fără [criterii]: doar se măsoară. Diferența dintre cele două rulări 6c e doar rata: 0,0002 → 0,00002, exact ca antrenarea 5.
+#   python unelte/antrenare_lunga.py --config config/laptop_masurare_6c_restart.toml --ore 4 --porneste-din 252 --compara-cu 252 --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/laptop_masurare_6c_restart.toml)
+
+[platforma]
+nume = "masurare_6c_restart"
+director_lucru = "lucru"
+buget_antrenare_secunde = 900    # 15 minute de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 4
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/masurare_6c_restart/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # pregătit deja: TinyStories întreg, fără poveștile cu fapte
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
