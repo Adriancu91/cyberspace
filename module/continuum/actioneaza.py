@@ -29,7 +29,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from module.continuum import INVATARE, cate
+from module.continuum import INVATARE, cate, ro_scurt
 from module.continuum.evalueaza import StareaOrganismului, se_potriveste, pomeneste
 from module.continuum.nevoi import Nevoie
 
@@ -141,7 +141,8 @@ def plan_antrenare(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, 
     else:
         cum = f"din modelul #{model}" if model else "de la zero"
     return Plan(nevoie.cheie, "antrenare", strategie,
-                f"antrenare lungă cu {cale} (linia {linie['linie']}, {cate(linie['ore_planificate'], 'ore')}, {cum})",
+                f"antrenare lungă cu {cale} (linia {linie['linie']}, {linie['ore_planificate']} × "
+                f"{ro_scurt(linie['buget_secunde'] / 60)} min, {cum})",
                 [comanda], config["nevoi"][nevoie.tip]["timeout_secunde"], linie=linie["linie"],
                 detalii={"config": cale, "model_de_pornire": model})
 

@@ -61,7 +61,7 @@ def test_o_noapte_simulata_spune_doar_ce_ar_alege(proiect):
         "ÎNVĂȚARE: e fereastra de noapte (22:00–07:00), placa e liberă (5.800 MB liberi, 50 °C), omul n-a mai atins "
         "laptopul de 60 min. Aleg dezvolta:fapte: fapte = 27% (41 din 150), cea mai slabă capacitate (sens = 47%); "
         "7.520 de povești nefolosite în date/fapte. [simulat] Aș porni: antrenare lungă cu config/laptop_fapte.toml "
-        "(linia fapte_1, 8 ore, din modelul #8).")
+        "(linia fapte_1, 8 × 60 min, din modelul #8).")
     assert iesire[0].startswith("[23:30] #1 ÎNVĂȚARE:")
     # Nimic pornit: jurnalul Kronos e neatins, nu există ieșiri de unelte, iar încrederea nu s-a schimbat.
     assert (proiect / "lucru" / "jurnal" / "experimente.jsonl").read_bytes() == jurnal_kronos
@@ -216,3 +216,36 @@ def test_jurnalul_ciclurilor_se_citeste_pe_scurt(proiect, capsys):
     assert main(["--config", str(proiect / "config" / "continuum.toml"), "--jurnal", "1"]) == 0
     iesire = capsys.readouterr().out.strip().splitlines()
     assert len(iesire) == 1 and iesire[0].startswith("#2  2026-10-07 23:30  ÎNVĂȚARE:")
+
+
+def test_aceeasi_pauza_pe_orice_nivel(proiect):
+    noaptea_3(proiect)
+    pauze: list[float] = []
+    bucla = Bucla(config_continuum(proiect), simuleaza=True, senzori=Lume(om_minute=1).senzori(), dormi=pauze.append,
+                  iesire=lambda _: None, pauza_minute=15)
+    bucla.ruleaza(2)
+    assert pauze == [900]  # o zi simulată, un ciclu la 15 minute (în REPAUS, configurarea de probă are 0)
+
+
+def test_configurarea_adevarata():
+    from module.continuum import citeste_config
+    from teste.continuum_proba import RADACINA
+
+    config = citeste_config(RADACINA / "config" / "continuum.toml")
+    assert config["continuum"]["ordinea_nevoilor"] == ["masoara", "dezvolta", "continua"]
+    assert {n: c["prag_zgomot"] for n, c in config["capacitati"].items()} == {"povesti": 0.005, "fapte": 10, "sens": 0.5}
+    assert "40" in config["capacitati"]["sens"]["masurare"]
+
+
+def test_ca_la_o_ora_de_noapte_fara_om(proiect, monkeypatch):
+    noaptea_3(proiect)
+    scrie_hrana(proiect)
+    config_kronos(proiect, "laptop_fapte.toml", "fapte_1", date=', hrana = "date/fapte/povesti.txt"')
+    config = str(config_continuum(proiect))
+    monkeypatch.setattr("module.continuum.observa.citeste_placa", Lume().placa)  # fără nvidia-smi în teste
+    assert main(["--config", config, "--ca-la", "23:00"]) == 1  # nu merge pe bune
+    assert main(["--config", config, "--simuleaza", "--ca-la", "25:00"]) == 1
+    assert main(["--config", config, "--simuleaza", "--ca-la", "23"]) == 0  # „23” înseamnă 23:00
+    rand = json.loads((proiect / "lucru" / "continuum" / "cicluri.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+    assert rand["ca_la"] == "23:00" and rand["nevoie"] == "dezvolta:fapte"
+    assert rand["pe_scurt"].startswith("[ca la 23:00, fără om] ÎNVĂȚARE: e fereastra de noapte")

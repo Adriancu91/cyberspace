@@ -97,3 +97,10 @@ def test_o_singura_ora_n_are_tendinta(proiect):
     assert not stare.linii["config/laptop_antrenare_lunga_4.toml"]["terminata"]
     scrie_jurnal(proiect, [fisa_unealta(2, "examen_profesor", 1, {"nota_medie": 3.55})])
     assert stare_din(proiect).capacitati["sens"].curent == 3.55
+
+
+def test_masurarea_cu_unealta_e_mai_noua_decat_cea_de_la_ora(proiect):
+    config_kronos(proiect, "laptop_antrenare_lunga_4.toml", "antrenare_lunga_4")
+    scrie_jurnal(proiect, [fisa(1, "antrenare_lunga_4", 0.4389, criterii={"nota_profesor": 4.5}),
+                           fisa_unealta(2, "examen_profesor", 1, {"nota_medie": 4.4, "povesti": 40})])
+    assert stare_din(proiect).capacitati["sens"].curent == 4.4  # pe 40 de povești, după oră

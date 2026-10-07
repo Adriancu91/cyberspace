@@ -202,6 +202,7 @@ def citeste_configurari(globuri: list[str]) -> dict[str, dict[str, Any]]:
                     brut = tomllib.load(f)
                 model = kronos.setari_port("model")
                 rezultat[cheie] = {"stare": "ok", "linie": kronos.nume, "ore_planificate": kronos.experimente,
+                                   "buget_secunde": kronos.buget_antrenare_secunde,
                                    "arhitectura": {k: model[k] for k in ARHITECTURA if k in model},
                                    "de_la_zero": bool(model.get("de_la_zero", False)),
                                    "texte": sorted(_texte_din(brut.get("porturi", {})))}

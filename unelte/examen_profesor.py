@@ -1,10 +1,12 @@
-"""Examenul profesorului (Faza 3, pasul 2): nota profesorului pe aceleași 20 de povești nevăzute, pentru orice model
-salvat, ca măsura din testul profesorului (elevul 10 × 512: 4,7 din 10) să se poată repeta pe modelele viitoare.
+"""Examenul profesorului (Faza 3, pasul 2): nota profesorului pe aceleași povești nevăzute, pentru orice model salvat,
+ca măsura din testul profesorului (elevul 10 × 512: 4,7 din 10) să se poată repeta pe modelele viitoare.
 
-- Aceleași 20 de povești din validarea R2, alese cu aceeași sămânță ca în unelte/test_profesor.py.
+- Aceleași povești din validarea R2, alese cu aceeași sămânță ca în unelte/test_profesor.py. Din 7 octombrie 2026 sunt
+  40, nu 20: primele 20 sunt aceleași ca până atunci, plus 20 noi (eroarea notei scade de ~1,4 ori).
 - Elevul pornește din prima propoziție a fiecăreia și scrie cam cât povestea originală (între 200 și 1.000 de litere);
   povestea lui se taie la ultima propoziție întreagă.
 - Profesorul (module/profesor_qwen.py) dă note fără întâmplare, pe aceleași loturi, deci aceeași poveste ia aceeași notă.
+- Eroarea notei = cât poate varia media doar din întâmplare (abaterea standard a notelor, împărțită la √povești).
 Textele, cu notele și motivele, merg în lucru/profesor/examen_experiment_<nr>_<data>/. În jurnal, o fișă doar cu numere
 (linia „examen_profesor”).
 
@@ -36,12 +38,12 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.reconfigure(encoding="utf-8")
     except (AttributeError, ValueError):
         pass
-    parser = argparse.ArgumentParser(description="Nota profesorului pe aceleași 20 de povești nevăzute, pentru un model salvat.")
+    parser = argparse.ArgumentParser(description="Nota profesorului pe aceleași 40 de povești nevăzute, pentru un model salvat.")
     alegere = parser.add_mutually_exclusive_group(required=True)
     alegere.add_argument("--experiment", type=int, help="numărul experimentului cu modelul salvat")
     alegere.add_argument("--linie", help="ultimul model salvat de pe această linie de jurnal")
     parser.add_argument("--validare", default="date/tinystories_r2/validare.txt", help="poveștile TinyStories nevăzute")
-    parser.add_argument("--povesti", type=int, default=20, help="câte povești (aceleași ca în testul profesorului)")
+    parser.add_argument("--povesti", type=int, default=40, help="câte povești (primele 20 sunt cele din testul profesorului)")
     parser.add_argument("--lot", type=int, default=8, help="câte povești notează profesorul deodată")
     parser.add_argument("--director-lucru", default="lucru")
     parser.add_argument("--doar-local", action="store_true", help="nu descărca nimic (modelul trebuie să fie în cache)")
@@ -65,8 +67,11 @@ def main(argv: list[str] | None = None) -> int:
     dosar.mkdir(parents=True, exist_ok=True)
     scrie_jsonl(dosar / "povesti.jsonl", [{**p, **n} for p, n in zip(povesti, note)])
     valori = [n["nota"] for n in note]
+    valide = [v for v in valori if v is not None]
     scoruri = {"nota_medie": medie(valori), "povesti": len(povesti), "note_lipsa": sum(v is None for v in valori),
                "cuvinte_pe_poveste": round(statistics.mean(len(p["poveste"].split()) for p in povesti), 1)}
+    if len(valide) > 1:
+        scoruri["eroare"] = round(statistics.stdev(valide) / len(valide) ** 0.5, 2)
     jurnal.adauga({
         "id": jurnal.urmatorul_id(), "linie": "examen_profesor",
         "inceput": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -77,7 +82,8 @@ def main(argv: list[str] | None = None) -> int:
         "decizie": "masurat", "scoruri": scoruri, "distributie_note": distributie(valori),
     })
     print(f"=== Examenul profesorului: modelul experimentului #{fisa['id']} (linia „{fisa['linie']}”) ===")
-    print(f"Media notelor: {scoruri['nota_medie']} din 10, pe {len(povesti)} povești (~{scoruri['cuvinte_pe_poveste']:.0f} "
+    eroare = f" ± {scoruri['eroare']}" if "eroare" in scoruri else ""
+    print(f"Media notelor: {scoruri['nota_medie']}{eroare} din 10, pe {len(povesti)} povești (~{scoruri['cuvinte_pe_poveste']:.0f} "
           f"de cuvinte); notele (nota: câte): "
           + ", ".join(f"{n}: {c}" for n, c in distributie(valori).items() if c) + ".")
     print(f"Textele: {dosar}", flush=True)

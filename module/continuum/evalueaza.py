@@ -15,8 +15,9 @@
 
 O valoare vine, în ordine:
 1. din scorurile fișei (examenul oficial);
-2. din criteriile ei (examene_suplimentare);
-3. din fișa unei unelte de examen care pomenește experimentul (ex. unelte/examen_fapte.py).
+2. din fișa unei unelte de examen care pomenește experimentul (ex. unelte/examen_profesor.py): e mai nouă decât ora
+   lui și poate fi mai precisă (ex. nota pe 40 de povești, nu pe 20);
+3. din criteriile fișei (examene_suplimentare, date la sfârșitul orei).
 """
 
 from __future__ import annotations
@@ -56,14 +57,15 @@ def masuratori_unelte(fise: list[dict[str, Any]], config: dict[str, Any]) -> dic
 
 def valoare(fisa: dict[str, Any], cap: dict[str, Any], unelte: dict[tuple[str, int], dict[str, Any]]) -> float | None:
     """Valoarea capacității pe modelul unei fișe, sau None dacă n-a fost măsurată."""
-    for sursa in ((fisa.get("scoruri") or {}), criterii_din(fisa)):
-        if numar(sursa.get(cap["metrica"])):
-            return float(sursa[cap["metrica"]])
-    if cap["unealta"]:
+    oficial = (fisa.get("scoruri") or {}).get(cap["metrica"])
+    if numar(oficial):
+        return float(oficial)
+    if cap["unealta"]:  # măsurarea cu unealta vine după oră: cea mai nouă
         scor = unelte.get((cap["unealta"]["linie"], fisa.get("id")), {}).get(cap["unealta"]["scor"])
         if numar(scor):
             return float(scor)
-    return None
+    criteriu = criterii_din(fisa).get(cap["metrica"])
+    return float(criteriu) if numar(criteriu) else None
 
 
 @dataclass

@@ -266,6 +266,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Antrenarea lungă: orele {facute + 1}–{args.ore}, rețeta {reteta['n_straturi']}×{reteta['n_emb']}, context "
               f"{reteta['context']}, lot {reteta['lot']}, rata {reteta['rata_invatare']:g} care scade pe "
               f"{reteta.get('durata_scaderii_secunde', 0) / 3600:g} ore (linia „{config.nume}”).", flush=True)
+        if config.buget_antrenare_secunde != 3600:
+            print(f"   Aici o „oră” e un experiment de {config.buget_antrenare_secunde / 60:g} minute de antrenare "
+                  f"(cu examenele după el).", flush=True)
+        if reteta.get("hrana"):
+            print(f"   Fiecare lot: {reteta.get('fractie_hrana', 0):.0%} bucăți din {reteta['hrana']}, restul din "
+                  f"textul de antrenare.", flush=True)
         tine_treaz(True)
         try:
             for ora in range(facute + 1, args.ore + 1):

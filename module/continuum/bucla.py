@@ -1,8 +1,10 @@
 """Bucla CONTINUUM: leagă cele 8 etape, cu același buton STOP ca Kronos și cu modul --simuleaza.
 
     python -m module.continuum.bucla --config config/continuum.toml --simuleaza   # doar spune ce ar alege
+    python -m module.continuum.bucla --config config/continuum.toml --simuleaza --pauza-minute 15   # o zi, la 15 min
     python -m module.continuum.bucla --config config/continuum.toml               # pornește și experimentele
     python -m module.continuum.bucla --config config/continuum.toml --jurnal      # ultimele cicluri, pe scurt
+    python -m module.continuum.bucla --config config/continuum.toml --simuleaza --ca-la 23:00   # ce ar alege la noapte
 
 Oprirea: același buton ca la Kronos, fișierul lucru/STOP:
     python -m kronos opreste --config config/proba.toml     (orice configurare cu director_lucru = "lucru")
@@ -21,9 +23,12 @@ from __future__ import annotations
 import argparse
 import sys
 import time
+from datetime import date, datetime
+from datetime import time as Ora
 from pathlib import Path
 from typing import Any, Callable
 
+import module.continuum.observa as senzori_reali
 from kronos.paznic import Paznic
 from module.continuum import REPAUS, EroareContinuum, citeste_config
 from module.continuum import stare as memorie_continuum
@@ -41,6 +46,8 @@ MESAJ_STOP = ("Oprit: butonul STOP (lucru/STOP) e apăsat. Ca să pornească din
 
 def pe_scurt(rand: dict[str, Any]) -> str:
     """Ciclul într-o propoziție sau două, în română: ce a văzut, ce a ales și de ce."""
+    if rand.get("ca_la"):
+        return f"[ca la {rand['ca_la']}, fără om] " + pe_scurt({k: v for k, v in rand.items() if k != "ca_la"})
     if rand.get("oprit"):
         return MESAJ_STOP
     if rand.get("eroare"):
@@ -61,7 +68,8 @@ def pe_scurt(rand: dict[str, Any]) -> str:
 
 class Bucla:
     def __init__(self, cale_config: str | Path, simuleaza: bool = False, senzori: Senzori | None = None,
-                 dormi: Callable[[float], None] | None = None, iesire: Callable[[str], None] = print) -> None:
+                 dormi: Callable[[float], None] | None = None, iesire: Callable[[str], None] = print,
+                 pauza_minute: float | None = None, ca_la: str | None = None) -> None:
         self.cale_config = cale_config
         self.config = citeste_config(cale_config)
         self.simuleaza = simuleaza
@@ -74,6 +82,8 @@ class Bucla:
         self.cicluri_facute = 0
         self.dormi = dormi or self.asteapta
         self.iesire = iesire
+        self.pauza_minute = pauza_minute  # dacă e dată: aceeași pauză după orice nivel (ex. o zi simulată, la 15 minute)
+        self.ca_la = ca_la  # doar simulat: ciclurile se fac „ca la” ora asta, fără om la laptop (se scrie în jurnal)
 
     def asteapta(self, secunde: float) -> None:
         """Pauza dintre cicluri; se termină mai devreme dacă cineva apasă STOP."""
@@ -94,6 +104,8 @@ class Bucla:
         numar = self.memorie["ciclu"] + 1
         rand: dict[str, Any] = {"ciclu": numar, "timp": self.senzori.acum().isoformat(timespec="seconds"),
                                 "simulat": self.simuleaza}
+        if self.ca_la:
+            rand["ca_la"] = self.ca_la
         probleme = {"configurare": self.problema_config} if self.problema_config else {}
         etapa = "observa"
         try:
@@ -159,7 +171,10 @@ class Bucla:
             self.iesire(f"[{rand['timp'][11:16]}] #{rand['ciclu']} {rand['pe_scurt']}")
             if rand.get("oprit") or (cicluri is not None and self.cicluri_facute >= cicluri):
                 break
-            self.dormi(60 * self.config["guvernator"]["pauza_minute"][rand.get("nivel") or REPAUS])
+            pauza = self.pauza_minute
+            if pauza is None:
+                pauza = self.config["guvernator"]["pauza_minute"][rand.get("nivel") or REPAUS]
+            self.dormi(60 * pauza)
         return 0
 
 
@@ -174,6 +189,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", default="config/continuum.toml")
     parser.add_argument("--simuleaza", action="store_true", help="nu pornește nimic: doar scrie ce ar alege și de ce")
     parser.add_argument("--cicluri", type=int, default=None, help="câte cicluri (implicit: până la STOP)")
+    parser.add_argument("--pauza-minute", type=float, default=None,
+                        help="aceeași pauză între cicluri, pe orice nivel (implicit: cea din configurare, pe nivel)")
+    parser.add_argument("--ca-la", default=None, metavar="HH:MM",
+                        help="doar cu --simuleaza: un ciclu ca și cum ar fi ora asta și omul ar fi plecat de la laptop "
+                             "(ex. ce ar alege la noapte); placa rămâne cea adevărată")
     parser.add_argument("--jurnal", type=int, nargs="?", const=20, default=None, metavar="N",
                         help="nu rula: arată ultimele N cicluri (implicit 20), pe scurt")
     args = parser.parse_args(argv)
@@ -190,7 +210,24 @@ def main(argv: list[str] | None = None) -> int:
         for rand in randuri:
             print(f"#{rand.get('ciclu')}  {str(rand.get('timp', ''))[:16].replace('T', ' ')}  {rand.get('pe_scurt', '')}")
         return 0
-    bucla = Bucla(args.config, simuleaza=args.simuleaza)
+    if args.pauza_minute is not None and args.pauza_minute < 0:
+        print("Eroare: --pauza-minute nu poate fi negativ.", file=sys.stderr)
+        return 1
+    senzori, cicluri = None, args.cicluri
+    if args.ca_la:
+        try:
+            ora = Ora.fromisoformat(args.ca_la)
+        except ValueError:
+            print("Eroare: --ca-la e de forma 23:00.", file=sys.stderr)
+            return 1
+        if not args.simuleaza:
+            print("Eroare: --ca-la merge doar cu --simuleaza (nu pornește nimic „ca la” altă oră).", file=sys.stderr)
+            return 1
+        senzori = Senzori(acum=lambda: datetime.combine(date.today(), ora), placa=senzori_reali.citeste_placa,
+                          om=lambda: {"stare": "ok", "minute_de_la_ultima_atingere": 60.0, "presupus": True})
+        cicluri = 1 if cicluri is None else cicluri
+    bucla = Bucla(args.config, simuleaza=args.simuleaza, pauza_minute=args.pauza_minute, senzori=senzori,
+                  ca_la=f"{ora:%H:%M}" if args.ca_la else None)
     if bucla.paznic.oprire_ceruta():
         print(MESAJ_STOP)
         return 1
@@ -198,7 +235,7 @@ def main(argv: list[str] | None = None) -> int:
           f"Ciclurile se scriu în {(director / 'cicluri.jsonl').as_posix()}.\n"
           f"Oprire: python -m kronos opreste --config config/proba.toml (același STOP ca Kronos).", flush=True)
     try:
-        return bucla.ruleaza(args.cicluri)
+        return bucla.ruleaza(cicluri)
     except KeyboardInterrupt:
         print("\nOprit cu Ctrl+C.", file=sys.stderr)
         return 130

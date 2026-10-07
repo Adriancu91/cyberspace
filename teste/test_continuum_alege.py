@@ -79,9 +79,21 @@ def test_noaptea_alege_faptele_cand_exista_configurarea(proiect):
     assert alegere.nevoie.cheie == "dezvolta:fapte" and alegere.plan.fel == "antrenare"
     assert alegere.plan.comenzi[0][1:] == ["unelte/antrenare_lunga.py", "--config", "config/laptop_fapte.toml",
                                           "--ore", "8", "--porneste-din", "8"]
-    assert alegere.plan.descriere == ("antrenare lungă cu config/laptop_fapte.toml (linia fapte_1, 8 ore, din "
+    assert alegere.plan.descriere == ("antrenare lungă cu config/laptop_fapte.toml (linia fapte_1, 8 × 60 min, din "
                                       "modelul #8)")
     assert alegere.plan.strategie == "dezvolta:fapte:antrenare" and alegere.plan.linie == "fapte_1"
+
+
+def test_cu_ordinea_din_configurarea_adevarata_hrana_noua_are_intaietate(proiect):
+    noaptea_3(proiect)
+    scrie_hrana(proiect)
+    config_kronos(proiect, "laptop_fapte.toml", "fapte_1", ore=6, buget=1800, date=', hrana = "date/fapte/povesti.txt"')
+    config_kronos(proiect, "laptop_antrenare_lunga_5.toml", "antrenare_lunga_5", ore=5)
+    alegere = alegerea(proiect, inlocuiri={'ordinea_nevoilor = ["masoara", "continua", "dezvolta"]':
+                                           'ordinea_nevoilor = ["masoara", "dezvolta", "continua"]'})
+    assert alegere.nevoie.cheie == "dezvolta:fapte"
+    assert alegere.plan.descriere == ("antrenare lungă cu config/laptop_fapte.toml (linia fapte_1, 6 × 30 min, din "
+                                      "modelul #8)")
 
 
 def test_noaptea_continuarea_are_intaietate_fata_de_dezvoltare(proiect):

@@ -1,0 +1,58 @@
+# A cincea antrenare lungă (7–8 octombrie 2026, după antrenarea pe fapte): continuare simplă din cel mai bun model după
+# fapte, adică ultimul experiment păstrat pe linia fapte_1 (cu criteriul principal, fiecare păstrat are mai multe fapte
+# decât cel dinainte). 5 ore, ca noaptea a patra: TinyStories întreg, fără hrană, lot 24, rata repornită la 0,0005 care
+# scade pe cele 5 ore până la 0,00005 (încălzire în primii 100 de pași). La fiecare oră: examenul oficial, faptele și
+# nota profesorului pe 40 de povești, FĂRĂ [criterii]: doar se măsoară. Arată dacă faptele învățate rămân.
+# Numărul modelului de pornire: ultimul „păstrat” din python -m kronos jurnal --config config/laptop_fapte.toml
+# (CONTINUUM îl găsește singur: e ultimul model păstrat cu aceeași arhitectură).
+#   python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_5.toml --ore 5 --porneste-din <nr> --compara-cu <nr> --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga_5.toml)
+
+[platforma]
+nume = "antrenare_lunga_5"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 5
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_5/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # pregătit deja: TinyStories întreg, fără poveștile cu fapte
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

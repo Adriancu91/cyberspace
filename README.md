@@ -1572,6 +1572,8 @@ Nu atinge `kronos/`, examenul oficial, jurnalul Kronos sau `date/`. Ce ține min
 python -m module.continuum.bucla --config config/continuum.toml --simuleaza   # doar spune ce ar alege și de ce
 python -m module.continuum.bucla --config config/continuum.toml               # pornește și experimentele
 python -m module.continuum.bucla --config config/continuum.toml --jurnal      # ultimele 20 de cicluri, pe scurt
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza --pauza-minute 15   # o zi, un ciclu la 15 min
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza --ca-la 23:00       # ce ar alege la noapte
 python -m kronos opreste  --config config/proba.toml    # oprirea: același buton STOP ca la Kronos (lucru/STOP)
 python -m kronos porneste --config config/proba.toml    # ca să poată porni din nou
 ```
@@ -1619,19 +1621,24 @@ OBSERVĂ → EVALUEAZĂ → NEVOI → ALEGE → ACȚIONEAZĂ → MĂSOARĂ → �
 Linia de bază e cea mai bună valoare dintre experimentele **păstrate** de Kronos în antrenările lungi. Toate dau
 examenul pe validarea R2, deci se pot compara.
 
-**Cele trei nevoi, în ordinea urgenței:**
+**Cele trei nevoi, în ordinea urgenței** (din 7 octombrie, „dezvolta” vine înaintea lui „continua”):
 1. **masoara:** ultimul model păstrat n-a dat examenele de fapte sau al profesorului. CONTINUUM le dă, cu
-   `unelte/examen_fapte.py` și `unelte/examen_profesor.py`.
-2. **continua:** val_bpb a coborât în ultima oră cu cel puțin 0,005, sau ultima antrenare lungă e neterminată.
-   CONTINUUM pornește o antrenare lungă cu o configurare `config/laptop_antrenare_lunga*.toml` existentă și
-   neterminată.
-3. **dezvolta**, pentru cea mai slabă capacitate (cel mai mic procent din maxim; azi, faptele):
+   `unelte/examen_fapte.py` și `unelte/examen_profesor.py` (pe 40 de povești).
+2. **dezvolta**, pentru cea mai slabă capacitate (cel mai mic procent din maxim; azi, faptele):
    - noaptea: antrenare pe hrana ei, cu o configurare `config/laptop_fapte*.toml` care pomenește `date/fapte`;
    - ziua: hrană nouă de la profesor, dar doar dacă hrana nefolosită s-a terminat (e sub 5.000 de povești sau a fost
      folosită deja).
+3. **continua:** val_bpb a coborât în ultima oră cu cel puțin 0,005, sau ultima antrenare lungă e neterminată.
+   CONTINUUM pornește o antrenare lungă cu o configurare `config/laptop_antrenare_lunga*.toml` existentă și
+   neterminată.
+
+De ce „dezvolta” înaintea lui „continua”: planul definește ÎNVĂȚAREA ca „hrană nouă sau un model neterminat”, cu
+hrana nouă întâi. Cu ordinea veche, CONTINUUM ar fi ales continuarea simplă (val_bpb încă scade), deși
+`laptop_antrenare_lunga_5.toml` trebuie să vină abia după fapte.
 
 **Verdictul (MĂSOARĂ):** SUCCES, EȘEC sau NECONCLUDENT.
-- Contează pragul de zgomot al fiecărei capacități: 0,02 la val_bpb, 3 fapte, 0,3 la notă.
+- Contează pragul de zgomot al fiecărei capacități: 0,005 la val_bpb, 10 fapte, 0,5 la notă (alese de Adrian
+  pe 7 octombrie).
 - Se aplică și regula 4: un câștig care pierde altă capacitate e EȘEC.
 
 **Ce învață (ÎNVAȚĂ):** fiecare strategie are o încredere. Pornește de la 0,5 și se schimbă cu ±0,1 la SUCCES sau
@@ -1644,7 +1651,7 @@ Toate pragurile, ferestrele și comenzile sunt în `config/continuum.toml`, nu �
 - **Nu creează configurări.** Pentru o noapte nouă, configurarea (de ex. `laptop_antrenare_lunga_5.toml` sau
   `laptop_fapte.toml`) trebuie pregătită de om, ca până acum. Fără ea, CONTINUUM spune ce ar vrea și ce lipsește, de
   exemplu „capacitate_indisponibila: nu există nicio configurare potrivită (config/laptop_fapte*.toml)”.
-  `config/laptop_fapte.toml` nu există încă.
+  Din 7 octombrie, amândouă există.
 - **De unde pornește o antrenare:**
   - o linie nouă pornește din ultimul model păstrat cu aceeași arhitectură (`--porneste-din`);
   - fără un astfel de model, sau dacă configurarea cere `de_la_zero`, pornește de la zero;
@@ -1656,12 +1663,11 @@ Toate pragurile, ferestrele și comenzile sunt în `config/continuum.toml`, nu �
   - Dacă un modul oferă `sanatate()` sau `semnale()`, ca metode de clasă, le întreabă. Niciun modul de azi nu le
     oferă.
   - CONTINUUM nu stă pe niciun port Kronos, deci nu intră în `teste_contracte/`.
-- **Pragurile de zgomot** sunt cele din plan (secțiunea 7): 0,02, 3 fapte și 0,3 la notă. Noaptea a patra arată că
-  la fapte și la notă sunt prea mici:
-  - faptele sar cu până la ±13 de la o oră la alta;
-  - o notă are eroarea ±0,3–0,5.
-
-  Propunerea mea e 10 fapte și 0,5 la notă. Se schimbă doar în `config/continuum.toml`, după ce decide Adrian.
+- **Pragurile de zgomot:** cele din plan (0,02, 3 fapte, 0,3 la notă) s-au dovedit prea mici în noaptea a patra.
+  Faptele sar cu până la ±13 de la o oră la alta, iar o notă are eroarea ±0,3–0,5. Adrian a ales pe 7 octombrie:
+  0,005 la val_bpb (ca `prag_zgomot`), 10 fapte și 0,5 la notă.
+- **Măsurători:** când o capacitate e măsurată și la oră, și apoi cu unealta (ex. nota pe 40 de povești), contează
+  măsurătoarea uneltei, care e mai nouă.
 - **Ce nu e în v0:** răcirea nevoilor, limita de reîncercări, bugetul zilnic de ore pe placă, setul sacru, repararea
   și explorarea. Vin în v1–v3, doar după confirmare.
 
@@ -1707,6 +1713,98 @@ noapte reală. Criteriul de acceptare:
 - un modul scos și reintrodus în timpul rulării;
 - omul folosește laptopul la un moment dat (→ REPAUS);
 - jurnalul explică fiecare decizie în română.
+
+## 7 octombrie: pregătirea antrenării pe fapte
+
+### Nota profesorului, pe 40 de povești
+
+Examenul profesorului (`unelte/examen_profesor.py`) folosește acum **40 de povești nevăzute**, nu 20.
+- **Metoda e aceeași:** aceeași sămânță, deci primele 20 sunt cele de până acum, plus 20 noi.
+- **Eroarea estimată** intră în fișă și pe ecran. E abaterea standard a notelor împărțită la √40.
+
+| Modelul #239 (sfârșitul nopții a patra) | Nota |
+| --- | --- |
+| pe 20 de povești, la ora 8 | 4,5 ± 0,49 |
+| **pe 40 de povești** | **4,4 ± 0,34** |
+| din ele, cele 20 vechi | 4,55 |
+| din ele, cele 20 noi | 4,25 |
+
+Ce trebuie știut:
+- Cele 20 de povești vechi au ieșit aproape la fel ca la oră. Diferența mică vine probabil de la notarea în alte loturi.
+- Memoria video a fost de cel mult 3.573 MB.
+- În GPT, setarea nouă `povesti_profesor` spune pe câte povești se dă nota la fiecare oră. Implicit rămâne 20, ca
+  înainte; configurările noi au 40.
+
+### `config/laptop_fapte.toml`: 3 ore pe fapte
+
+- **Pornirea:** continuare din #239.
+- **Rata:** repornește la 0,0002 și scade pe cele 3 ore până la 0,00002.
+- **Hrana în loturi:** fiecare lot de 24 are 10% bucăți din `date/fapte/povesti.txt`, restul din TinyStories întreg.
+  - Setările `hrana` și `fractie_hrana` sunt noi în GPT; fără ele, antrenarea e exact ca înainte.
+  - 24 × 10% = 2,4, deci loturile iau pe rând 2 sau 3 bucăți (2, 2, 3, 2, 3, …), iar media e exact 10%.
+- **Examen la fiecare 30 de minute** (6 experimente): val_bpb, faptele și nota pe 40 de povești.
+- **Regula 4, cu criteriul principal `fapte_corecte`:** faptele trebuie să crească cu peste 10, iar nota (prag 0,5) și
+  val_bpb (prag 0,005) nu au voie să scadă.
+
+**De știut: modelul va memora mult.** Hrana are doar 1,37 milioane de simboluri. Cu 2,4 bucăți de câte 256 în fiecare
+lot, în 3 ore modelul o vede de ~35–40 de ori, pe când TinyStories doar de ~0,8 ori.
+
+### Verificarea examenului de fapte: NU e zero
+
+Am căutat cele 150 de propoziții ale examenului (cu răspunsul cerut) în cele 7.520 de povești cu fapte, cuvânt cu
+cuvânt. **97 din 150 apar.**
+
+| Forma întrebării | Câte din 50 apar în povești | În câte povești |
+| --- | --- | --- |
+| „Birds have ___.” (forma simplă) | 49 | 6.621 |
+| „Mom said, "Birds have ___."” | 44 | 191 |
+| „Lily learned that birds have ___.” | 4 | 4 |
+
+Forma simplă e chiar faptul pe care l-a primit profesorul ca să scrie poveștile, iar poveștile trebuiau să-l spună cuvânt
+cu cuvânt. Deci, după antrenarea pe fapte, `fapte_corecte` va măsura în bună parte **memorarea propozițiilor din
+antrenare**, nu înțelegerea faptelor. Examenul nu l-am schimbat (ar strica comparația cu noaptea a patra). Variante:
+1. **Un examen nou, cu propoziții reformulate**, verificat automat să nu apară în povești. Examenul vechi rămâne pentru
+   comparația cu martorul, iar cel nou se măsoară întâi pe #239, ca punct de plecare.
+2. **Fără examen nou.** Cele 150 de întrebări se împart în „văzute” (97) și „nevăzute” (53, mai ales forma „Lily
+   learned that…”) și se raportează separat. Criteriul principal ar putea fi doar pe cele nevăzute. E mai rapid, dar
+   setul nevăzut e mic.
+
+### `config/laptop_antrenare_lunga_5.toml`: 5 ore după fapte
+
+- **Pornirea:** continuare simplă din cel mai bun model după fapte, adică ultimul experiment păstrat pe linia
+  `fapte_1`. Cu criteriul principal, fiecare experiment păstrat are mai multe fapte decât cel dinainte.
+- **Rețeta e ca în noaptea a patra:** TinyStories întreg, fără hrană, lot 24, rata repornită la 0,0005 care scade pe
+  cele 5 ore până la 0,00005.
+- **Examenele:** toate trei, la fiecare oră (nota pe 40), fără `[criterii]`: doar se măsoară.
+
+**De știut: rata 0,0005 poate strica ce s-a câștigat.** În noaptea a patra, repornirea la 0,0005 a stricat val_bpb în
+prima oră (0,4567 → 0,5048), iar modelul a avut nevoie de 6 ore ca să revină sub plecare. În 5 ore s-ar putea să nu
+revină, iar o rată mare poate șterge și faptele învățate. Variantă: pornirea la 0,0002, ca la fapte.
+
+### CONTINUUM, simulat toată ziua
+
+CONTINUUM rulează în modul simulat, cu un ciclu la 15 minute:
+```
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza --pauza-minute 15
+```
+
+Un ciclu „ca la 23:00, fără om” (`--ca-la 23:00`), pe datele adevărate, a ales singur faptele:
+> [ca la 23:00, fără om] ÎNVĂȚARE: e fereastra de noapte (22:00–07:00), placa e liberă (6.144 MB liberi, 57 °C), omul
+> n-a mai atins laptopul de 60 min. Aleg dezvolta:fapte: fapte = 34% (51 din 150), cea mai slabă capacitate (sens =
+> 44%); 7.520 de povești nefolosite în date/fapte. [simulat] Aș porni: antrenare lungă cu config/laptop_fapte.toml
+> (linia fapte_1, 6 × 30 min, din modelul #239).
+
+Ce ar urma: după fapte, hrana devine „folosită”, iar următoarea alegere de noapte e continuarea. Ea ar porni
+`laptop_antrenare_lunga_5.toml` din ultimul model păstrat, adică cel mai bun după fapte.
+
+### Comenzile pentru diseară
+
+```
+python unelte/antrenare_lunga.py --config config/laptop_fapte.toml --ore 6 --porneste-din 239 --compara-cu 239 --inceput "Once upon a time, there was a fearful little dog named Coco"
+python -m kronos jurnal --config config/laptop_fapte.toml        # ultimul „păstrat” = cel mai bun model după fapte
+python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_5.toml --ore 5 --porneste-din <nr> --compara-cu <nr> --inceput "Once upon a time, there was a fearful little dog named Coco"
+python -m module.continuum.bucla --config config/continuum.toml --jurnal 100    # ce a ales CONTINUUM azi
+```
 
 ## Toate comenzile
 

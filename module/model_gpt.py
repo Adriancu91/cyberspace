@@ -24,7 +24,12 @@ Setări pe care Cercetătorul le poate schimba:
 - examene_suplimentare (gol implicit): ex. ["fapte", "profesor"]. După examenul oficial (pe care nu-l schimbă), modelul
   dă prin dupa_examen criteriile suplimentare ale deciziei (regula 4), doar numere: fapte_corecte (examenul de fapte,
   doar cu cuvântul din fapt; plus fapte_corecte_cu_sinonime și fapte_stiute) și nota_profesor (media notelor
-  profesorului pe aceleași 20 de povești nevăzute, din validare_examene). Vezi module/examene_elev.py.
+  profesorului pe aceleași povesti_profesor povești nevăzute, din validare_examene; implicit 20, primele dintre cele
+  40 ale examenului de acum). Vezi module/examene_elev.py.
+- hrana + fractie_hrana (oprite implicit): un text în plus (ex. "date/fapte/povesti.txt", poveștile cu fapte ale
+  profesorului), din care vine fractie_hrana din bucățile fiecărui lot (ex. 0.1 = 10%); restul vin din textul de
+  antrenare. Când lotul nu se împarte exact (24 × 10% = 2,4), loturile iau pe rând 2 sau 3 bucăți din hrană, ca media
+  să fie exact fracția cerută. Examenul nu se schimbă.
 
 Cum folosește memoria: la fiecare literă primește, în plus, codul ultimului cuvânt
 terminat (de ex. „horse” → substantiv → noun.animal → ... → equine → horse). Fiecare
@@ -128,7 +133,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.6.0",
+        "versiune": "0.7.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -157,6 +162,9 @@ class ModelGPT:
         durata_scaderii_secunde: float = 0.0,
         examene_suplimentare: list[str] | tuple[str, ...] = (),
         validare_examene: str = "date/tinystories_r2/validare.txt",
+        povesti_profesor: int = 20,
+        hrana: str = "",
+        fractie_hrana: float = 0.0,
     ) -> None:
         if n_emb % n_capete != 0:
             raise ValueError("n_emb trebuie să se împartă exact la n_capete")
@@ -168,6 +176,12 @@ class ModelGPT:
             raise ValueError("incalzire_pasi și durata_scaderii_secunde nu pot fi negative; fractie_rata_finala e între 0 și 1")
         if tokenizer not in TOKENIZERE:
             raise ValueError(f"tokenizer trebuie să fie unul din: {', '.join(TOKENIZERE)}")
+        if bool(hrana) != (fractie_hrana > 0) or not 0 <= fractie_hrana < 1:
+            raise ValueError("hrana și fractie_hrana merg împreună: un fișier și o fracție între 0 și 1 (ex. 0.1)")
+        if povesti_profesor < 2:
+            raise ValueError("povesti_profesor: cel puțin 2 povești (ca nota să aibă o eroare)")
+        if hrana and memorie:
+            raise ValueError("hrana nu merge (încă) împreună cu memoria ierarhică")
         self.pasi_max = pasi_max
         self.tokenizer = tokenizer
         self.cale_tokenizer = cale_tokenizer
@@ -186,6 +200,9 @@ class ModelGPT:
             raise ValueError(f"examene_suplimentare: nu știu {necunoscute}; se pot alege: {', '.join(EXAMENE_SUPLIMENTARE)}")
         self.examene_suplimentare = list(examene_suplimentare)
         self.validare_examene = validare_examene
+        self.povesti_profesor = povesti_profesor
+        self.hrana = hrana
+        self.fractie_hrana = fractie_hrana
         if self.examene_suplimentare and not hasattr(type(self), "dupa_examen"):
             # Ușa dupa_examen apare doar cu examene suplimentare: fără ele, fișele GPT-ului rămân exact ca înainte.
             self.dupa_examen = lambda rezultat: {"criterii": self.ruleaza_examene_suplimentare()}
@@ -320,6 +337,12 @@ class ModelGPT:
         assert self.retea is not None
         self.optimizator = torch.optim.AdamW(self.retea.parameters(), lr=self.rata_invatare, weight_decay=0.1)
 
+    def bucati_din_hrana(self, pas: int) -> int:
+        """Câte bucăți din lotul pasului dat (numărat de la primul pas al modelului) vin din hrană: pe rând, ca media să
+        fie exact fractie_hrana (ex. lot 24 × 10% = 2,4 → 2, 2, 3, 2, 3, …)."""
+        pe_lot = self.fractie_hrana * self.lot
+        return math.floor(pe_lot * (pas + 1) + 1e-9) - math.floor(pe_lot * pas + 1e-9)
+
     def _samanta_loturi(self) -> int:
         """De unde pornește alegerea bucăților de text: aceeași sămânță = aceleași loturi, în aceeași ordine."""
         return self.samanta
@@ -389,6 +412,16 @@ class ModelGPT:
         if len(date_t) <= ctx + 1:
             raise ValueError("textul de antrenare e mai scurt decât contextul")
         generator = torch.Generator(device="cpu").manual_seed(self._samanta_loturi())
+        hrana_t = None
+        if self.hrana:  # textul în plus (ex. poveștile cu fapte), din care vine fractie_hrana din fiecare lot
+            text_hrana = Path(self.hrana).read_text(encoding="utf-8")
+            hrana_t = (torch.as_tensor(self._simboluri(text_hrana)) if self.tokenizer == "bpe"
+                       else self._codifica(text_hrana)).to(locul)
+            if not self._textul_ramane_in_ram:
+                hrana_t = hrana_t.long()
+            if len(hrana_t) <= ctx + 1:
+                raise ValueError("hrana e mai scurtă decât contextul")
+        secvente_hrana = 0
 
         self.retea.train()
         inceput_bucla = time.perf_counter()
@@ -397,9 +430,18 @@ class ModelGPT:
         pierdere = float("nan")
         rata = self.rata_invatare
         while time.perf_counter() - start < buget_secunde and not (self.pasi_max and pasi >= self.pasi_max):
-            pozitii = torch.randint(len(date_t) - ctx - 1, (self.lot,), generator=generator)
-            x = torch.stack([date_t[p : p + ctx] for p in pozitii])
-            y = torch.stack([date_t[p + 1 : p + ctx + 1] for p in pozitii])
+            if hrana_t is None:
+                pozitii = torch.randint(len(date_t) - ctx - 1, (self.lot,), generator=generator)
+                x = torch.stack([date_t[p : p + ctx] for p in pozitii])
+                y = torch.stack([date_t[p + 1 : p + ctx + 1] for p in pozitii])
+            else:
+                k = self.bucati_din_hrana(self._pasi_anteriori() + pasi)
+                pozitii = torch.randint(len(date_t) - ctx - 1, (self.lot - k,), generator=generator)
+                pozitii_hrana = torch.randint(len(hrana_t) - ctx - 1, (k,), generator=generator)
+                surse = [(date_t, p) for p in pozitii] + [(hrana_t, p) for p in pozitii_hrana]
+                x = torch.stack([s[p : p + ctx] for s, p in surse])
+                y = torch.stack([s[p + 1 : p + ctx + 1] for s, p in surse])
+                secvente_hrana += k
             m = torch.stack([memorie_t[p : p + ctx] for p in pozitii]) if memorie_t is not None else None
             if self._textul_ramane_in_ram:  # pe placă urcă doar lotul
                 x, y = x.to(self.dispozitiv, torch.long), y.to(self.dispozitiv, torch.long)
@@ -424,6 +466,9 @@ class ModelGPT:
             statistici["pasi_max"] = self.pasi_max
         if self.rata_care_scade:
             statistici["rata_la_final"] = rata  # rata ultimului pas
+        if hrana_t is not None:
+            statistici.update(secvente_hrana=secvente_hrana, secvente_total=pasi * self.lot,
+                              simboluri_hrana=len(hrana_t))
         if self.tokenizer == "bpe":
             statistici["tokenizer"] = "bpe"
             statistici["simboluri_antrenare"] = len(date_t)
@@ -506,7 +551,8 @@ class ModelGPT:
         if "fapte" in self.examene_suplimentare:
             criterii.update(examene_elev.scor_fapte(examene_elev.examineaza_fapte(self)))
         if "profesor" in self.examene_suplimentare:
-            note = [n["nota"] for n in examene_elev.nota_profesorului(self, self.validare_examene)["note"]]
+            note = [n["nota"] for n in examene_elev.nota_profesorului(self, self.validare_examene,
+                                                                      numar=self.povesti_profesor)["note"]]
             valide = [n for n in note if n is not None]
             if valide:
                 criterii["nota_profesor"] = examene_elev.medie(valide)

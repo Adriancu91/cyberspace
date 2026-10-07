@@ -152,6 +152,7 @@ CONFIG_KRONOS = """
 [platforma]
 nume = "@LINIE@"
 director_lucru = "lucru"
+buget_antrenare_secunde = @BUGET@
 experimente = @ORE@
 
 [porturi.model]
@@ -203,12 +204,12 @@ def config_continuum(radacina: Path, module: dict[str, str] | None = None, redes
 
 
 def config_kronos(radacina: Path, fisier: str, linie: str, ore: int = 8, straturi: int = 10, model: str = "",
-                  date: str = "") -> Path:
+                  date: str = "", buget: int = 3600) -> Path:
     cale = radacina / "config" / fisier
     cale.parent.mkdir(parents=True, exist_ok=True)
     text = CONFIG_KRONOS
     for vechi, nou in (("@LINIE@", linie), ("@ORE@", str(ore)), ("@STRATURI@", str(straturi)), ("@MODEL@", model),
-                       ("@DATE@", date)):
+                       ("@DATE@", date), ("@BUGET@", str(buget))):
         text = text.replace(vechi, nou)
     cale.write_text(text, encoding="utf-8")
     return cale

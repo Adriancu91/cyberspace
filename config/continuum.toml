@@ -13,7 +13,9 @@
 director_lucru = "lucru"               # ca la Kronos: același STOP (lucru/STOP), același jurnal (doar citit)
 redescopera_la_cicluri = 6             # la câte cicluri recitește acest fișier și reverifică modulele
 jurnal_max_mb = 20                     # peste atât, cicluri.jsonl se mută deoparte și se începe altul
-ordinea_nevoilor = ["masoara", "continua", "dezvolta"]   # urgența (secțiunea 4.4): măsurare, învățare, dezvoltare
+# Urgența: măsurarea întâi; apoi hrana nouă pentru cea mai slabă capacitate are întâietate față de continuarea
+# simplă (secțiunea 3: ÎNVĂȚARE = „hrană nouă sau un model neterminat”; așa a ales Adrian pentru 7 octombrie).
+ordinea_nevoilor = ["masoara", "dezvolta", "continua"]
 
 [guvernator]
 fereastra_invatare = "22:00-07:00"     # noaptea: și antrenări lungi (ÎNVĂȚARE)
@@ -46,30 +48,31 @@ profesor = "module.profesor_qwen:ProfesorQwen"
 configurari = ["config/laptop_antrenare_lunga*.toml", "config/laptop_fapte*.toml"]
 
 # --- Capacitățile și examenele lor (secțiunea 5). Linia de bază = cel mai bun experiment PĂSTRAT de Kronos.
-# Pragurile de zgomot: secțiunea 7 (se reajustează când avem măsurători pe mai multe semințe).
+# Pragurile de zgomot, alese de Adrian pe 7 octombrie 2026, după noaptea a patra (faptele sar cu până la ±13 de la o
+# oră la alta; o notă pe 20 de povești are eroarea ±0,3–0,5): 0,005 la val_bpb (ca prag_zgomot), 10 fapte, 0,5 la notă.
 [capacitati.povesti]
 metrica = "val_bpb"                    # examenul oficial, din fișa experimentului
 mai_mare_e_mai_bine = false
-prag_zgomot = 0.02                     # zgomotul dintre semințe, la 8 ore
+prag_zgomot = 0.005                    # ca prag_zgomot din configurările Kronos
 module = ["model", "examen"]
 
 [capacitati.fapte]
 metrica = "fapte_corecte"              # din 150, doar cu cuvântul din fapt
 mai_mare_e_mai_bine = true
-prag_zgomot = 3
+prag_zgomot = 10
 maxim = 150                            # „cea mai slabă capacitate” = cel mai mic procent din maxim
 module = ["examene_elev"]
 unealta = { linie = "examen_fapte", scor = "corecte_doar_cuvantul_din_fapt" }
 masurare = ["{python}", "unelte/examen_fapte.py", "--experiment", "{experiment}"]
 
 [capacitati.sens]
-metrica = "nota_profesor"              # media notelor profesorului pe aceleași 20 de povești nevăzute
+metrica = "nota_profesor"              # media notelor profesorului pe aceleași 40 de povești nevăzute
 mai_mare_e_mai_bine = true
-prag_zgomot = 0.3
+prag_zgomot = 0.5
 maxim = 10
 module = ["profesor"]
 unealta = { linie = "examen_profesor", scor = "nota_medie" }
-masurare = ["{python}", "unelte/examen_profesor.py", "--experiment", "{experiment}", "--doar-local"]
+masurare = ["{python}", "unelte/examen_profesor.py", "--experiment", "{experiment}", "--povesti", "40", "--doar-local"]
 
 # --- Hrana: textele noi pe care învață o capacitate (le scrie profesorul).
 [hrana.fapte]
