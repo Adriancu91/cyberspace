@@ -8,6 +8,10 @@ Regula 4 (nou ≠ mai bun), doar cu [criterii] în configurare: pe lângă scoru
 dupa_examen „criterii” suplimentare (numere cu nume, ex. fapte_corecte, nota_profesor), înainte de decizie. Un experiment
 e păstrat doar dacă scorul principal e mai bun ȘI niciun criteriu nu a scăzut mai mult decât pragul lui față de cel mai
 bun experiment păstrat; altfel e „respins”, cu motivul „a pierdut <criteriu>”. Fără [criterii], totul e ca înainte.
+
+Criteriul principal (principal = true la un criteriu, cel mult unul): atunci el hotărăște. Păstrat = principalul e mai
+bun cu peste pragul lui ȘI niciun alt criteriu, inclusiv scorul examenului (pragul lui e prag_zgomot), nu scade peste
+pragul lui. Referința e cel mai bun experiment păstrat după criteriul principal. Fără „principal”, totul e ca înainte.
 """
 
 from __future__ import annotations
@@ -58,6 +62,9 @@ class Orchestrator:
         self.cel_mai_bun = self.jurnal.cel_mai_bun(
             config.nume, self.examen.scor_principal, self.examen.mai_mic_e_mai_bun
         )
+        principal = config.criteriu_principal()
+        if principal is not None:  # cu un criteriu principal, referința e cel mai bun experiment păstrat după el
+            self.cel_mai_bun = self._cel_mai_bun_dupa(principal) or self.cel_mai_bun
         if self.cel_mai_bun is not None:
             self.setari_curente = copy.deepcopy(self.cel_mai_bun["setari"])
 
@@ -232,7 +239,11 @@ class Orchestrator:
             lipsa = [nume for nume in self.config.criterii if nume not in fisa["criterii"]]
             if lipsa:
                 fisa["criterii_lipsa"] = lipsa
-            if mai_bun:
+            principal = self.config.criteriu_principal()
+            if principal is not None:
+                pierdut = self._decizie_principal(principal, fisa, scor, anterior, castig)
+                mai_bun = pierdut is None
+            elif mai_bun:
                 pierdut = self._criteriu_pierdut(fisa["criterii"])
                 mai_bun = pierdut is None
         if mai_bun:
@@ -294,6 +305,37 @@ class Orchestrator:
                 return (f"a pierdut {nume}: {acum:g} față de {atunci:g} la #{self.cel_mai_bun['id']} "
                         f"(a scăzut cu {scadere:g}, pragul e {regula['prag']:g})")
         return None
+
+    def _cel_mai_bun_dupa(self, principal: str) -> dict[str, Any] | None:
+        """Cel mai bun experiment PĂSTRAT al liniei după criteriul principal (din criteriile din fișe)."""
+        pastrate = [f for f in self.jurnal.istoric(self.config.nume)
+                    if f.get("decizie") == "pastrat" and principal in (f.get("criterii") or {})]
+        if not pastrate:
+            return None
+        alege = max if self.config.criterii[principal]["mai_mare_e_mai_bine"] else min
+        return alege(pastrate, key=lambda f: f["criterii"][principal])
+
+    def _decizie_principal(self, principal: str, fisa: dict[str, Any], scor: float, anterior: float | None,
+                           castig: float | None) -> str | None:
+        """Cu un criteriu principal: motivul respingerii, sau None (păstrat). Păstrat = principalul e mai bun cu peste
+        pragul lui față de cel mai bun experiment păstrat ȘI niciun alt criteriu, inclusiv scorul examenului (pragul
+        lui e prag_zgomot), nu scade peste pragul lui. Primul experiment al liniei e păstrat, ca înainte."""
+        if self.cel_mai_bun is None:
+            return None
+        regula = self.config.criterii[principal]
+        referinta = self.cel_mai_bun.get("criterii") or self._criterii(self.cel_mai_bun.get("dupa_examen"))
+        id_referinta = self.cel_mai_bun["id"]
+        if principal not in fisa["criterii"] or principal not in referinta:
+            return f"criteriul principal {principal} nu se poate compara cu #{id_referinta} (lipsește)"
+        acum, atunci = fisa["criterii"][principal], referinta[principal]
+        fisa["castig_principal"] = (acum - atunci) if regula["mai_mare_e_mai_bine"] else (atunci - acum)
+        if fisa["castig_principal"] <= regula["prag"]:
+            return (f"criteriul principal {principal}: {acum:g} față de {atunci:g} la #{id_referinta} "
+                    f"(câștig {fisa['castig_principal']:+g}, trebuie peste {regula['prag']:g})")
+        if castig is not None and -castig > self.config.prag_zgomot:
+            return (f"a pierdut {self.examen.scor_principal}: {scor:g} față de {anterior:g} la #{id_referinta} "
+                    f"(a scăzut cu {-castig:g}, pragul e {self.config.prag_zgomot:g})")
+        return self._criteriu_pierdut(fisa["criterii"])
 
     def _fa(self, port: str, setari: dict[str, dict[str, Any]]) -> Any:
         """Creează un modul nou (model sau date) cu setările date.

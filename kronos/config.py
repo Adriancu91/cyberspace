@@ -30,10 +30,16 @@ class Config:
     porturi: dict[str, dict[str, Any]]  # port -> {"modul": str, "setari": dict}
     # Regula 4 (nou ≠ mai bun): criterii suplimentare la decizie, pe lângă scorul principal al examenului.
     # nume -> {"mai_mare_e_mai_bine": bool, "prag": cât poate scădea, cel mult, față de cel mai bun experiment păstrat}
+    # Unul singur poate avea și "principal": True: atunci el hotărăște (trebuie să crească peste pragul lui), iar
+    # scorul examenului devine un criteriu ca celelalte, cu pragul prag_zgomot.
     criterii: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def setari_port(self, port: str) -> dict[str, Any]:
         return dict(self.porturi[port].get("setari", {}))
+
+    def criteriu_principal(self) -> str | None:
+        """Criteriul marcat principal = true în [criterii]; None: principalul e scorul examenului (ex. val_bpb)."""
+        return next((nume for nume, regula in self.criterii.items() if regula.get("principal")), None)
 
 
 def citeste_config(cale: str | Path) -> Config:
@@ -70,6 +76,11 @@ def citeste_config(cale: str | Path) -> Config:
             raise EroareConfig(
                 f"În „{cale}”, criteriul „{nume}” trebuie să aibă mai_mare_e_mai_bine = true/false și prag = un număr ≥ 0"
             )
+        if not isinstance(regula.get("principal", False), bool):
+            raise EroareConfig(f"În „{cale}”, la criteriul „{nume}”, principal e true sau false")
+    principale = [nume for nume, regula in criterii.items() if regula.get("principal")]
+    if len(principale) > 1:
+        raise EroareConfig(f"În „{cale}”, un singur criteriu poate fi principal (acum: {', '.join(principale)})")
 
     director = Path(platforma.get("director_lucru", "lucru"))
     if not director.is_absolute():
@@ -84,6 +95,7 @@ def citeste_config(cale: str | Path) -> Config:
         prag_zgomot=float(platforma.get("prag_zgomot", 0.002)),
         paznic=dict(brut.get("paznic", {})),
         porturi={p: dict(v) for p, v in porturi.items()},
-        criterii={nume: {"mai_mare_e_mai_bine": r["mai_mare_e_mai_bine"], "prag": float(r["prag"])}
+        criterii={nume: {"mai_mare_e_mai_bine": r["mai_mare_e_mai_bine"], "prag": float(r["prag"]),
+                         **({"principal": True} if r.get("principal") else {})}
                   for nume, r in criterii.items()},
     )

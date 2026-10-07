@@ -1420,6 +1420,35 @@ Alte lucruri de știut:
 - 5 sunt noi pentru partea din module.
 - `test_arhitectura` trece: `kronos/` nu importă nimic din `module/`.
 
+### Criteriul principal (7 octombrie 2026, aprobat de Adrian)
+
+În `[criterii]`, un criteriu poate fi marcat `principal = true`, cel mult unul. Fără el, val_bpb rămâne principalul și
+totul e exact ca înainte.
+
+```toml
+[criterii.fapte_corecte]
+mai_mare_e_mai_bine = true
+prag = 10
+principal = true    # el hotărăște
+
+[criterii.nota_profesor]
+mai_mare_e_mai_bine = true
+prag = 0.5
+```
+
+**Decizia, cu un criteriu principal.** Experimentul e păstrat doar dacă:
+- principalul e mai bun cu **peste** pragul lui;
+- **și** niciun alt criteriu nu scade peste pragul lui. Asta include val_bpb, al cărui prag e `prag_zgomot` (0,005).
+
+Motivele de respingere:
+- „criteriul principal fapte_corecte: 30 față de 25 la #12 (câștig +5, trebuie peste 10)”;
+- sau „a pierdut val_bpb: …”, ori „a pierdut nota_profesor: …”.
+
+**Referința** e cel mai bun experiment păstrat după criteriul principal, și la reluarea din jurnal. Primul experiment
+al unei linii e păstrat, ca înainte.
+
+**Teste:** 8 noi (`teste/test_criteriu_principal.py`). Cele vechi ale regulii 4 trec neschimbate.
+
 ## A patra antrenare lungă: martorul, cu toate trei examenele la fiecare oră (6–7 octombrie 2026, 17:27–01:43)
 
 **Ce a rulat** (`config/laptop_antrenare_lunga_4.toml`):
