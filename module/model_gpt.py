@@ -21,9 +21,11 @@ Setări pe care Cercetătorul le poate schimba:
   fractie_rata_finala × rata_invatare (implicit 10%). Scăderea se întinde pe tot bugetul de timp al antrenării (sau până
   la pasi_max, dacă se oprește mai devreme) ori, cu durata_scaderii_secunde, pe toată antrenarea plănuită a unui model
   care continuă între experimente (ex. 8 ore, cu examen la fiecare oră).
-- examene_suplimentare (gol implicit): ex. ["fapte", "profesor"]. După examenul oficial (pe care nu-l schimbă), modelul
-  dă prin dupa_examen criteriile suplimentare ale deciziei (regula 4), doar numere: fapte_corecte (examenul de fapte,
-  doar cu cuvântul din fapt; plus fapte_corecte_cu_sinonime și fapte_stiute) și nota_profesor (media notelor
+- examene_suplimentare (gol implicit): ex. ["fapte", "fapte_noi", "profesor"]. După examenul oficial (pe care nu-l
+  schimbă), modelul dă prin dupa_examen criteriile suplimentare ale deciziei (regula 4), doar numere: fapte_corecte
+  (examenul de fapte, doar cu cuvântul din fapt; plus fapte_corecte_cu_sinonime și fapte_stiute), fapte_noi (examenul de
+  fapte nou, cu propozițiile reformulate din examen_fapte_nou; plus fapte_noi_cu_sinonime și fapte_noi_stiute) și
+  nota_profesor (media notelor
   profesorului pe aceleași povesti_profesor povești nevăzute, din validare_examene; implicit 20, primele dintre cele
   40 ale examenului de acum). Vezi module/examene_elev.py.
 - hrana + fractie_hrana (oprite implicit): un text în plus (ex. "date/fapte/povesti.txt", poveștile cu fapte ale
@@ -57,7 +59,7 @@ except ImportError as e:  # registrul transformă asta într-un mesaj clar
 from module.tokenizer_bpe import TokenizerBPE
 
 TOKENIZERE = ("litere", "bpe")
-EXAMENE_SUPLIMENTARE = ("fapte", "profesor")
+EXAMENE_SUPLIMENTARE = ("fapte", "fapte_noi", "profesor")
 
 NECUNOSCUT = "�"
 # Categoria 0 = „gol”: nivelul nu există sau categoria n-a fost văzută la antrenare. Descrierea ei e
@@ -163,6 +165,7 @@ class ModelGPT:
         examene_suplimentare: list[str] | tuple[str, ...] = (),
         validare_examene: str = "date/tinystories_r2/validare.txt",
         povesti_profesor: int = 20,
+        examen_fapte_nou: str = "date/fapte/examen_nou.json",
         hrana: str = "",
         fractie_hrana: float = 0.0,
     ) -> None:
@@ -201,6 +204,7 @@ class ModelGPT:
         self.examene_suplimentare = list(examene_suplimentare)
         self.validare_examene = validare_examene
         self.povesti_profesor = povesti_profesor
+        self.examen_fapte_nou = examen_fapte_nou
         self.hrana = hrana
         self.fractie_hrana = fractie_hrana
         if self.examene_suplimentare and not hasattr(type(self), "dupa_examen"):
@@ -550,6 +554,8 @@ class ModelGPT:
         criterii: dict[str, float] = {}
         if "fapte" in self.examene_suplimentare:
             criterii.update(examene_elev.scor_fapte(examene_elev.examineaza_fapte(self)))
+        if "fapte_noi" in self.examene_suplimentare:
+            criterii.update(examene_elev.scor_fapte_noi(examene_elev.examineaza_fapte_noi(self, self.examen_fapte_nou)))
         if "profesor" in self.examene_suplimentare:
             note = [n["nota"] for n in examene_elev.nota_profesorului(self, self.validare_examene,
                                                                       numar=self.povesti_profesor)["note"]]

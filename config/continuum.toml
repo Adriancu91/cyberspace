@@ -57,13 +57,13 @@ prag_zgomot = 0.005                    # ca prag_zgomot din configurările Krono
 module = ["model", "examen"]
 
 [capacitati.fapte]
-metrica = "fapte_corecte"              # din 150, doar cu cuvântul din fapt
+metrica = "fapte_noi"                  # din 150: examenul de fapte nou, reformulat (din 7 octombrie 2026)
 mai_mare_e_mai_bine = true
 prag_zgomot = 10
 maxim = 150                            # „cea mai slabă capacitate” = cel mai mic procent din maxim
 module = ["examene_elev"]
-unealta = { linie = "examen_fapte", scor = "corecte_doar_cuvantul_din_fapt" }
-masurare = ["{python}", "unelte/examen_fapte.py", "--experiment", "{experiment}"]
+unealta = { linie = "examen_fapte_nou", scor = "fapte_noi" }
+masurare = ["{python}", "unelte/examen_fapte_nou.py", "--experiment", "{experiment}"]
 
 [capacitati.sens]
 metrica = "nota_profesor"              # media notelor profesorului pe aceleași 40 de povești nevăzute

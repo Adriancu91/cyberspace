@@ -1,8 +1,9 @@
 # A cincea antrenare lungă (7–8 octombrie 2026, după antrenarea pe fapte): continuare simplă din cel mai bun model după
-# fapte, adică ultimul experiment păstrat pe linia fapte_1 (cu criteriul principal, fiecare păstrat are mai multe fapte
-# decât cel dinainte). 5 ore, ca noaptea a patra: TinyStories întreg, fără hrană, lot 24, rata repornită la 0,0005 care
-# scade pe cele 5 ore până la 0,00005 (încălzire în primii 100 de pași). La fiecare oră: examenul oficial, faptele și
-# nota profesorului pe 40 de povești, FĂRĂ [criterii]: doar se măsoară. Arată dacă faptele învățate rămân.
+# fapte, adică ultimul experiment păstrat pe linia fapte_1 (cu criteriul principal fapte_noi, fiecare păstrat are mai
+# multe fapte noi decât cel dinainte). 5 ore: TinyStories întreg, fără hrană, lot 24, rata repornită la 0,0002 care
+# scade pe cele 5 ore până la 0,00002 (încălzire în primii 100 de pași; în noaptea a patra, 0,0005 a stricat val_bpb în
+# prima oră). La fiecare oră: examenul oficial, faptele noi și vechi și nota profesorului pe 40 de povești, FĂRĂ
+# [criterii]: doar se măsoară. Arată dacă faptele învățate rămân.
 # Numărul modelului de pornire: ultimul „păstrat” din python -m kronos jurnal --config config/laptop_fapte.toml
 # (CONTINUUM îl găsește singur: e ultimul model păstrat cu aceeași arhitectură).
 #   python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_5.toml --ore 5 --porneste-din <nr> --compara-cu <nr> --inceput "Once upon a time, there was a fearful little dog named Coco"
@@ -25,7 +26,7 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_5/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_5/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"

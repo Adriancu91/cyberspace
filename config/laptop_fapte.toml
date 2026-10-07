@@ -1,22 +1,23 @@
 # Antrenarea pe fapte (7 octombrie 2026, seara): continuare din #239, sfârșitul nopții a patra (martorul):
-# val_bpb 0,4389, 51 de fapte din 150, nota profesorului 4,4 ± 0,34 pe 40 de povești. 3 ore.
-# Fiecare lot de 24: 10% bucăți din poveștile cu fapte ale profesorului (date/fapte/povesti.txt, 7.520 de povești),
-# restul din TinyStories întreg. 24 × 10% = 2,4, deci loturile iau pe rând 2 sau 3 bucăți din hrană (media: exact 10%).
-# Rata repornește la 0,0002 (optimizatorul pornește din nou, încălzire în primii 100 de pași) și scade pe cele 3 ore
+# val_bpb 0,4389, 51 de fapte din 150 la examenul vechi, nota profesorului 4,4 ± 0,34 pe 40 de povești. 2 ore.
+# Fiecare lot de 24: 5% bucăți din poveștile cu fapte ale profesorului (date/fapte/povesti.txt, 7.520 de povești),
+# restul din TinyStories întreg. 24 × 5% = 1,2, deci loturile iau pe rând 1 sau 2 bucăți din hrană (media: exact 5%).
+# Rata repornește la 0,0002 (optimizatorul pornește din nou, încălzire în primii 100 de pași) și scade pe cele 2 ore
 # până la 0,00002.
-# Examen la fiecare 30 de minute (6 experimente): oficial (val_bpb pe validarea R2), apoi faptele și nota profesorului
-# pe 40 de povești nevăzute.
-# Regula 4 cu criteriul principal fapte_corecte: un experiment e păstrat doar dacă faptele cresc cu peste 10 (din 150)
+# Examen la fiecare 30 de minute (4 experimente), cu toate: oficial (val_bpb pe validarea R2), examenul de fapte nou
+# (fapte_noi: propoziții reformulate, care nu apar în poveștile de antrenare), examenul de fapte vechi (fapte_corecte,
+# doar raportat) și nota profesorului pe 40 de povești nevăzute.
+# Regula 4 cu criteriul principal fapte_noi: un experiment e păstrat doar dacă fapte_noi crește cu peste 10 (din 150)
 # față de cel mai bun experiment păstrat și nici val_bpb (pragul 0,005 = prag_zgomot), nici nota (pragul 0,5) nu scad
 # peste pragul lor. Primul experiment al liniei e păstrat, ca de obicei.
-#   python unelte/antrenare_lunga.py --config config/laptop_fapte.toml --ore 6 --porneste-din 239 --compara-cu 239 --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   python unelte/antrenare_lunga.py --config config/laptop_fapte.toml --ore 4 --porneste-din 239 --compara-cu 239 --inceput "Once upon a time, there was a fearful little dog named Coco"
 #   (oprire: python -m kronos opreste --config config/laptop_fapte.toml)
 
 [platforma]
 nume = "fapte_1"
 director_lucru = "lucru"
 buget_antrenare_secunde = 1800   # 30 de minute de antrenare pe experiment (pregătirea și examenele nu intră)
-experimente = 6
+experimente = 4
 prag_zgomot = 0.005
 
 [paznic]
@@ -29,7 +30,7 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 10800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/fapte_1/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.1 }
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 7200.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/fapte_1/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05 }
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"
@@ -62,9 +63,10 @@ modul = "module.jucarii:TraducereIdentitate"
 modul = "module.jucarii:MemorieGoala"
 
 # Regula 4 cu criteriul principal (aprobat de Adrian, 7 octombrie 2026). val_bpb are pragul prag_zgomot (0,005).
-[criterii.fapte_corecte]
+# fapte_corecte (examenul vechi) nu e aici: doar se raportează.
+[criterii.fapte_noi]
 mai_mare_e_mai_bine = true
-prag = 10              # faptele trebuie să crească cu PESTE 10 (din 150)
+prag = 10              # faptele noi trebuie să crească cu PESTE 10 (din 150)
 principal = true
 
 [criterii.nota_profesor]

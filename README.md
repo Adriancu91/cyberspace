@@ -1615,7 +1615,7 @@ OBSERVĂ → EVALUEAZĂ → NEVOI → ALEGE → ACȚIONEAZĂ → MĂSOARĂ → �
 
 **Capacitățile:**
 - povestirile: val_bpb;
-- faptele: fapte_corecte, din 150;
+- faptele: fapte_noi, din 150 (examenul de fapte nou, reformulat; până pe 7 octombrie, fapte_corecte);
 - sensul: nota profesorului, din 10.
 
 Linia de bază e cea mai bună valoare dintre experimentele **păstrate** de Kronos în antrenările lungi. Toate dau
@@ -1737,6 +1737,8 @@ Ce trebuie știut:
 
 ### `config/laptop_fapte.toml`: 3 ore pe fapte
 
+(Varianta de dimineață; schimbată în aceeași zi, vezi secțiunea următoare.)
+
 - **Pornirea:** continuare din #239.
 - **Rata:** repornește la 0,0002 și scade pe cele 3 ore până la 0,00002.
 - **Hrana în loturi:** fiecare lot de 24 are 10% bucăți din `date/fapte/povesti.txt`, restul din TinyStories întreg.
@@ -1771,6 +1773,8 @@ antrenare**, nu înțelegerea faptelor. Examenul nu l-am schimbat (ar strica com
 
 ### `config/laptop_antrenare_lunga_5.toml`: 5 ore după fapte
 
+(Varianta de dimineață; rata s-a schimbat la 0,0002 în aceeași zi, vezi secțiunea următoare.)
+
 - **Pornirea:** continuare simplă din cel mai bun model după fapte, adică ultimul experiment păstrat pe linia
   `fapte_1`. Cu criteriul principal, fiecare experiment păstrat are mai multe fapte decât cel dinainte.
 - **Rețeta e ca în noaptea a patra:** TinyStories întreg, fără hrană, lot 24, rata repornită la 0,0005 care scade pe
@@ -1797,10 +1801,99 @@ Un ciclu „ca la 23:00, fără om” (`--ca-la 23:00`), pe datele adevărate, a
 Ce ar urma: după fapte, hrana devine „folosită”, iar următoarea alegere de noapte e continuarea. Ea ar porni
 `laptop_antrenare_lunga_5.toml` din ultimul model păstrat, adică cel mai bun după fapte.
 
+**Schimbat în aceeași zi:** după alegerea examenului de fapte nou (secțiunea următoare), antrenarea pe fapte are 2 ore,
+5% hrană și criteriul principal `fapte_noi`, iar a cincea antrenare pornește cu rata 0,0002. Comenzile pentru diseară
+sunt în secțiunea următoare.
+
+## 7 octombrie, ziua: examenul de fapte nou (varianta 1)
+
+Examenul vechi întreabă faptele exact cum le-a primit profesorul ca să scrie poveștile: 97 din cele 150 de propoziții ale
+lui apar cuvânt cu cuvânt în poveștile de antrenare. Adrian a ales varianta 1: un examen nou, cu propoziții reformulate.
+
+### Cum s-a făcut (`python unelte/examen_fapte_nou.py --genereaza`)
+
+Pentru fiecare din cele 50 de fapte, profesorul scrie 3 propoziții reformulate, cu golul la capăt și același
+cuvânt-răspuns. Totul se verifică automat. O propoziție intră în examen doar dacă:
+- **forma e bună:** e o singură propoziție, de 5–16 cuvinte, cu răspunsul abia la capăt; nu începe cu aceleași două
+  cuvinte ca faptul și nu seamănă prea mult cu celelalte două ale faptului;
+- **niciun fragment de 5 cuvinte la rând** (deci nici propoziția întreagă) nu apare în poveștile cu fapte
+  (869.012 cuvinte) sau în TinyStories întreg (439.692.799 de cuvinte, antrenare și validare);
+- **profesorul confirmă sensul:** întrebat fără întâmplare, spune că propoziția spune același fapt, numind despre ce e
+  vorba, și că e adevărată;
+- **golul e clar:** pus să completeze golul singur, profesorul scrie chiar răspunsul (sau un sinonim acceptat).
+
+Cele respinse se regenerează: profesorul primește propoziția respinsă și motivul și scrie 3 variante noi.
+
+**Cât a trebuit regenerat:**
+- **114 din 150 de propoziții** au fost respinse cel puțin o dată; doar 36 au trecut din prima.
+- În total au fost **4.208 încercări:**
+  - 3.511 la generarea întreagă (60 de runde, după care au rămas 10 nereușite);
+  - 684 la prima completare (`--completeaza` păstrează propozițiile bune și le scrie doar pe cele care lipsesc);
+  - 13 la a doua.
+
+**Motivele respingerilor, la generarea întreagă:**
+- 2.581 pentru formă (de cele mai multe ori, răspunsul nu era la capăt);
+- 299 pentru un fragment din poveștile cu fapte și 121 pentru unul din TinyStories;
+- 244 pentru că nu spuneau clar același fapt;
+- 126 pentru că golul era neclar.
+
+**Verificarea finală:** toate cele 150, trecute din nou prin aceleași reguli, într-o singură trecere independentă: 0
+probleme, 0 fragmente de 5 cuvinte găsite.
+
+**Cinstit, despre drum:**
+- Primele trei generări le-am aruncat.
+  - La prima, „alt subiect” a ajuns uneori „alt animal”: „A worm moves through the soil without ___.” pentru
+    „Snakes have no legs.”.
+  - La a doua și a treia, profesorul lipea răspunsul după punct („… of a whale. blowhole”) sau scria goluri
+    neclare („…a shadow shows up in the ___.” cerea „light”).
+  - De aici au venit verificarea sensului, completarea golului de către profesor și cererea propoziției direct cu
+    „___” la capăt.
+- Chiar exemplul „When it is very cold, water turns into ___.” ar fi fost respins: „when it is very cold” apare în
+  poveștile cu fapte, pentru că e în faptul însuși.
+- Câteva propoziții rămân stângace, deși trec toate verificările. De exemplu, „These birds walk on ice and can't
+  ___.” nu numește pinguinii, iar cele trei de la curcubeu sunt construite la fel („… a rainbow … when there are
+  ___”). Toate sunt în `date/fapte/examen_nou.json`, cu încercările în `lucru/examen_fapte_nou/`.
+
+**5 exemple:**
+
+| Faptul | Propoziția nouă | Răspuns |
+| --- | --- | --- |
+| Water freezes into ice when it is very cold. | When water gets cold enough, it turns into ___. | ice |
+| Birds have feathers. | The thing that covers a bird is ___. | feathers |
+| The heart pumps blood around the body. | What the heart moves around your body is ___. | blood |
+| Whales breathe air through a blowhole on top of their heads. | Whales push air out through a hole on their heads called a ___. | blowhole |
+| Dogs have a very good sense of smell. | Dogs can track a person using their strong sense of ___. | smell |
+
+### Punctul de plecare, pe examenul nou (`python unelte/examen_fapte_nou.py --experiment N`)
+
+| Modelul | Examenul vechi (fapte_corecte) | **Examenul nou (fapte_noi)** | cu sinonime | fapte cu măcar un răspuns corect |
+| --- | --- | --- | --- | --- |
+| #226 (sfârșitul nopții a treia) | 41 | **36** din 150 | 41 | 23 din 50 |
+| #239 (sfârșitul nopții a patra) | 51 | **36** din 150 | 39 | 24 din 50 |
+
+Pe examenul nou, cele două modele sunt la egalitate. Creșterea 41 → 51 de la examenul vechi, într-o noapte fără
+povești cu fapte, ține deci de examenul vechi, nu de fapte învățate. Asta se potrivește cu ce s-a văzut în noaptea a
+patra: faptele vechi săreau cu ±13 de la o oră la alta.
+
+### Configurările pentru diseară
+
+- **`config/laptop_fapte.toml`:**
+  - criteriul principal e acum `fapte_noi` (prag 10); `fapte_corecte` doar se raportează;
+  - nota are pragul 0,5, iar val_bpb pragul 0,005;
+  - hrana e 5% din fiecare lot (24 × 5% = 1,2, deci pe rând 1 sau 2 bucăți);
+  - 2 ore, cu examen la fiecare 30 de minute: val_bpb, fapte_noi, fapte_corecte și nota pe 40;
+  - rata 0,0002 → 0,00002 pe cele 2 ore.
+- **`config/laptop_antrenare_lunga_5.toml`:** rata pornește la 0,0002 și scade la 0,00002 pe 5 ore, din cel mai bun
+  model după fapte. La fiecare oră se măsoară și `fapte_noi`.
+- **GPT-ul** dă examenul nou la fiecare oră, cu `examene_suplimentare = ["fapte", "fapte_noi", "profesor"]`. Tabelul
+  uneltei de antrenare lungă are o coloană „fapte noi” (doar când e măsurat).
+- **CONTINUUM** măsoară acum capacitatea „fapte” cu examenul nou (`fapte_noi`, prin `unelte/examen_fapte_nou.py`).
+  Rularea simulată de toată ziua recitește configurarea singură.
+
 ### Comenzile pentru diseară
 
 ```
-python unelte/antrenare_lunga.py --config config/laptop_fapte.toml --ore 6 --porneste-din 239 --compara-cu 239 --inceput "Once upon a time, there was a fearful little dog named Coco"
+python unelte/antrenare_lunga.py --config config/laptop_fapte.toml --ore 4 --porneste-din 239 --compara-cu 239 --inceput "Once upon a time, there was a fearful little dog named Coco"
 python -m kronos jurnal --config config/laptop_fapte.toml        # ultimul „păstrat” = cel mai bun model după fapte
 python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_5.toml --ore 5 --porneste-din <nr> --compara-cu <nr> --inceput "Once upon a time, there was a fearful little dog named Coco"
 python -m module.continuum.bucla --config config/continuum.toml --jurnal 100    # ce a ales CONTINUUM azi

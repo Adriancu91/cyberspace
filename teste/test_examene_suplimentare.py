@@ -99,3 +99,27 @@ def test_antrenarea_lunga_masoara_criteriile_pe_ore(tmp_path, monkeypatch, capsy
     assert set(rezultat["corelatii"]) == {"fapte_corecte", "nota_profesor"} and rezultat["corelatii"]["nota_profesor"] is None
     iesire = capsys.readouterr().out
     assert "(punctul de plecare)" in iesire and "nota prof." in iesire and ", fapte " in iesire
+
+
+def test_examenul_de_fapte_nou_iese_ca_numere(tmp_path, tokenizer_mic):
+    import json
+
+    examen = tmp_path / "examen_nou.json"
+    examen.write_text(json.dumps({"intrebari": [
+        {"subiect": "birds", "fapt": "Birds have feathers.", "propozitie": "A bird's body is covered with ___.",
+         "raspuns": "feathers", "acceptate": ["feathers"]}]}), encoding="utf-8")
+    model = _gpt(ModelGPT, tokenizer_mic, examene_suplimentare=["fapte_noi"], examen_fapte_nou=str(examen))
+    raspuns = model.dupa_examen({"scor": 3.0})
+    assert set(raspuns["criterii"]) == {"fapte_noi", "fapte_noi_cu_sinonime", "fapte_noi_stiute"}
+    assert all(isinstance(v, int) and 0 <= v <= 1 for v in raspuns["criterii"].values())
+
+
+def test_coloana_faptelor_noi_apare_doar_cand_e_masurata():
+    from unelte.antrenare_lunga import coloanele, corelatii
+
+    ore = [{"ora": i, "scor": 0.5 - 0.01 * i, "criterii": {"fapte_corecte": 40 + i, "nota_profesor": 4.0}} for i in (1, 2, 3)]
+    assert [c[0] for c in coloanele(ore, None)] == ["fapte_corecte", "nota_profesor"]
+    for i, o in enumerate(ore):
+        o["criterii"]["fapte_noi"] = 10 + 2 * i
+    assert [c[0] for c in coloanele(ore, None)] == ["fapte_corecte", "fapte_noi", "nota_profesor"]
+    assert corelatii(ore, None)["fapte_noi"] == -1.0  # val_bpb scade, faptele noi urcă

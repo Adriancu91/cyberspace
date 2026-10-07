@@ -1,17 +1,22 @@
-"""Examenele elevului din afara examenului oficial (Faza 3): examenul de fapte și nota profesorului pe 20 de povești
-nevăzute. Nu e un modul de port, ci o bibliotecă: o folosesc uneltele (unelte/examen_fapte.py, unelte/examen_profesor.py,
+"""Examenele elevului din afara examenului oficial (Faza 3): examenul de fapte (cel vechi și cel nou, reformulat) și
+nota profesorului pe povești nevăzute. Nu e un modul de port, ci o bibliotecă: o folosesc uneltele (unelte/examen_fapte.py, unelte/examen_profesor.py,
 unelte/test_profesor.py) și GPT-ul însuși, cu setarea examene_suplimentare, ca să dea prin dupa_examen criteriile
 suplimentare ale deciziei (regula 4). Examenul oficial (val_bpb) nu se atinge.
 
 Examenul de fapte: pentru fiecare din cele 50 de fapte ale profesorului, 3 propoziții cu un gol la capăt (faptul însuși;
 spus de mama; învățat de Lily). Elevul completează fără întâmplare (completeaza). Corect = primul cuvânt (după un
 „the/a/an”) e printre cele acceptate; numărăm și doar cu cuvântul din fapt, fără sinonime.
-Nota profesorului: elevul pornește din prima propoziție a 20 de povești din validarea R2 (alese mereu la fel) și scrie cam
+Examenul de fapte nou (7 octombrie 2026, unelte/examen_fapte_nou.py): pentru aceleași 50 de fapte, câte 3 propoziții
+REFORMULATE de profesor (alt subiect, altă construcție), cu același cuvânt-răspuns la capăt, în date/fapte/examen_nou.json.
+Niciuna și niciun fragment de 5 cuvinte din ele nu apare în poveștile cu fapte sau în TinyStories: le poate ști doar
+cine a înțeles faptul, nu cine a memorat propozițiile din antrenare. Scorul principal: fapte_noi (doar cu cuvântul din fapt).
+Nota profesorului: elevul pornește din prima propoziție a unor povești din validarea R2 (alese mereu la fel) și scrie cam
 cât povestea originală; profesorul notează fără întâmplare.
 """
 
 from __future__ import annotations
 
+import json
 import random
 import re
 import statistics
@@ -129,7 +134,45 @@ def scor_fapte(rezultate: list[dict[str, Any]]) -> dict[str, int]:
     }
 
 
-# --- nota profesorului pe 20 de povești nevăzute --------------------------------------------------------------
+# --- examenul de fapte nou: propoziții reformulate, care nu apar în textele de antrenare ------------------------
+
+CALE_EXAMEN_NOU = "date/fapte/examen_nou.json"
+
+
+def cuvinte(text: str) -> list[str]:
+    """Cuvintele unui text, cu litere mici și fără semne (apostroful din interior rămâne: „bird's”)."""
+    return re.findall(r"[a-z0-9]+(?:'[a-z0-9]+)*", text.lower().replace("’", "'").replace("‘", "'"))
+
+
+def citeste_examen_nou(cale: str | Path = CALE_EXAMEN_NOU) -> list[dict[str, Any]]:
+    """Întrebările examenului nou: subiect, fapt, propoziție (cu „___” la capăt), răspuns (cuvântul din fapt), acceptate."""
+    return json.loads(Path(cale).read_text(encoding="utf-8"))["intrebari"]
+
+
+def examineaza_fapte_noi(model: Any, cale: str | Path = CALE_EXAMEN_NOU) -> list[dict[str, Any]]:
+    """Cele 150 de propoziții reformulate, cu completarea elevului (fără întâmplare) și dacă e corectă."""
+    max_simboluri = 4 if getattr(model, "tokenizer", "") == "bpe" else 16
+    rezultate = []
+    for intrebare in citeste_examen_nou(cale):
+        completare = model.completeaza(intrebare["propozitie"].split(" ___")[0], max_simboluri)
+        rezultate.append({"subiect": intrebare["subiect"], "fapt": intrebare["fapt"], "intrebare": intrebare["propozitie"],
+                          "completare": completare, "raspuns": raspunsul(completare),
+                          "acceptate": list(intrebare["acceptate"]),
+                          "corect": e_corect(completare, tuple(intrebare["acceptate"])),
+                          "corect_cuvantul_din_fapt": e_corect(completare, (intrebare["raspuns"],))})
+    return rezultate
+
+
+def scor_fapte_noi(rezultate: list[dict[str, Any]]) -> dict[str, int]:
+    """Numerele examenului nou, ca la cel vechi: doar cu cuvântul din fapt (fapte_noi), cu sinonime, fapte știute."""
+    return {
+        "fapte_noi": sum(r["corect_cuvantul_din_fapt"] for r in rezultate),
+        "fapte_noi_cu_sinonime": sum(r["corect"] for r in rezultate),
+        "fapte_noi_stiute": len({r["subiect"] for r in rezultate if r["corect"]}),
+    }
+
+
+# --- nota profesorului pe povești nevăzute ---------------------------------------------------------------------
 
 
 def alege_povesti(text: str, numar: int, samanta: int = 0) -> list[str]:

@@ -257,6 +257,14 @@ class ProfesorQwen:
             povesti += self._raspunsuri(lot, self.max_simboluri, cu_intamplare=True)
         return povesti
 
+    def raspunde_mai_multe(self, conversatii: list[list[dict[str, str]]], max_simboluri: int,
+                           cu_intamplare: bool = True) -> list[str]:
+        """Răspunsurile la conversații gata făcute (ex. propozițiile examenului de fapte nou), pe loturi."""
+        raspunsuri: list[str] = []
+        for i in range(0, len(conversatii), self.lot):
+            raspunsuri += self._raspunsuri(conversatii[i : i + self.lot], max_simboluri, cu_intamplare)
+        return raspunsuri
+
     def genereaza(self, subiect: str, stil: str = "simplu") -> str:
         """O poveste scurtă în engleză simplă, cu un fapt adevărat despre lume."""
         return self.genereaza_mai_multe([(subiect, stil)])[0]
