@@ -2152,6 +2152,98 @@ De știut:
 - **Optimizatorul pornește din nou în toate rulările.** Așa face unealta cu `--porneste-din`, cu încălzire în primii 100
   de pași. „Fără repornire” înseamnă aici doar că rata nu sare înapoi la 0,0002.
 
+### Rezultatele nopții 7–8 octombrie (18:55–02:41)
+
+**Pe scurt:**
+- **6a, 6c-restart și 6c-continuare au mers.**
+- **6b n-a mai rulat.** L-am oprit la 02:41, după 4 minute, din cauza unei probleme cu alimentarea laptopului (mai jos).
+- **Pentru toate tabelele:** R = fapte_noi împărțit la 72 (cât avea #252 la plecare); fapte vechi și nota sunt pe
+  40 de povești, cu eroarea estimată.
+
+**6a: hrana mereu în amestec** (din #252, 5 ore, 5% hrană, criterii: val_bpb principal 0,005, fapte_noi −10, nota −0,5)
+
+| Ora | Exp. | Decizia lui Kronos | val_bpb | Fapte noi | R | Fapte vechi | Nota | Pași |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | #258 | păstrat: primul pe linie, fără comparație | 0,4703 | 65 | 0,90 | 146 | 4,17 ± 0,26 | 27.831 |
+| 2 | #259 | păstrat: −0,0098 | 0,4605 | 57 | 0,79 | 145 | 3,88 ± 0,25 | 27.560 |
+| 3 | #260 | păstrat: −0,0120 | 0,4485 | 67 | 0,93 | 146 | 5,08 ± 0,36 | 27.733 |
+| 4 | #261 | respins: nota a scăzut cu 0,98 față de #260 (pragul 0,5) | 0,4370 | 65 | 0,90 | 146 | 4,1 ± 0,19 | 29.148 |
+| 5 | #262 | păstrat: −0,0181 față de #260 | **0,4304** | 59 | 0,82 | 145 | 4,67 ± 0,31 | 29.032 |
+
+**6a lângă antrenarea 5** (aceeași rețetă, aceeași sămânță; diferă doar hrana):
+
+| Ora | val_bpb 5 | val_bpb 6a | Costul hranei | Fapte noi 5 (R) | Fapte noi 6a (R) |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 0,4692 | 0,4703 | +0,0011 | 33 (0,46) | 65 (0,90) |
+| 2 | 0,4605 | 0,4605 | +0,0001 | 32 (0,44) | 57 (0,79) |
+| 3 | 0,4473 | 0,4485 | +0,0013 | 27 (0,38) | 67 (0,93) |
+| 4 | 0,4336 | 0,4370 | +0,0034 | 36 (0,50) | 65 (0,90) |
+| 5 | 0,4281 | 0,4304 | +0,0023 | 37 (0,51) | 59 (0,82) |
+
+- **Hrana păstrează faptele:** R a stat între 0,79 și 0,93, față de 0,38–0,51 fără hrană.
+- **Costul la val_bpb e mic:** +0,0023 la final, sub pragul de 0,005. Cinstit, costul e puțin subestimat la orele 4–5:
+  atunci 6a a avut cu ~7% mai mulți pași decât antrenarea 5 (29,1 mii față de 27,0 mii pe oră; placa a mers mai repede
+  noaptea).
+- **Respingerea lui #261 vine din zgomotul notei.** #260 avusese o notă mare (5,08 ± 0,36), iar #261 a coborât la 4,1,
+  deși val_bpb se îmbunătățise cu 0,0115.
+
+**6c: curba uitării** (din #252, TinyStories fără hrană, examen la fiecare 15 minute; măsurători, nu candidați)
+
+| Minutul | 6c-restart (0,0002) | | | 6c-continuare (0,00002) | | |
+| --- | --- | --- | --- | --- | --- | --- |
+| | **fapte noi (R)** | val_bpb | pași adunați | **fapte noi (R)** | val_bpb | pași adunați |
+| 0 | 72 (1,00) | 0,4340 | 0 | 72 (1,00) | 0,4340 | 0 |
+| 15 | 35 (0,49) | 0,4731 | 7.336 | 63 (0,88) | 0,4331 | 7.313 |
+| 30 | 33 (0,46) | 0,4726 | 14.703 | 56 (0,78) | 0,4322 | 13.148 |
+| 45 | 30 (0,42) | 0,4714 | 22.058 | 48 (0,67) | 0,4317 | 18.884 |
+| 60 | 31 (0,43) | 0,4670 | 29.386 | 45 (0,62) | 0,4317 | 21.248 |
+
+Nota, la 30 și 60 de minute: restart 4,0 și 3,85; continuare 4,45 și 4,22. Decizia lui Kronos nu contează aici.
+
+- **Cu rata repornită, faptele cad în primele 15 minute,** de la 72 la 35, apoi stau pe loc (30–35). La 60 de minute,
+  restart-ul se potrivește cu ora 1 a antrenării 5 (31 față de 33, val_bpb 0,4670 față de 0,4692).
+- **Cu rata mică, faptele scad încet și constant:** 63, 56, 48, 45.
+  - Chiar la aceiași pași, uitarea e mult mai mică: la ~7.300 de pași, 63 față de 35; la ~21.000–22.000, 45 față de 30.
+  - val_bpb nu se strică (0,4317–0,4331).
+- **Răspunsul la întrebare:** căderea bruscă vine din pașii mari ai ratei repornite. Simplul fapt că antrenează pe
+  altceva le roade și el, dar încet: cam 7 fapte pe sfert de oră.
+- **Atenție, 6c-continuare a avut mai puțini pași în sferturile 2–4,** din cauza problemei cu curentul: 80%, 78% și
+  32% din normal. De aceea am pus și pașii adunați. Comparația la pași egali rămâne clară, dar curba „pe minute” a
+  continuării e mai scurtă decât ar fi trebuit.
+
+**6b: n-a rulat.** Întrebarea lui (mai câștigă ceva continuarea cu pași mici?) rămâne deschisă. Un indiciu din 6c-continuare
+(alt model de plecare, #252): în 15 minute, val_bpb a coborât cu ~0,002 (0,4340 → 0,4317), apoi a stat pe loc. Asta e sub
+pragul de 0,005.
+
+**Cel mai bun model păstrat, după fiecare criteriu** (antrenările lungi de la #239 încoace, fără 6c):
+- **val_bpb:** #257, sfârșitul antrenării 5: 0,4281 (37 de fapte noi).
+- **fapte noi:** #252, sfârșitul etapei pe fapte: 72 (val_bpb 0,4340).
+- **nota:** #260, ora 3 din 6a: 5,08 ± 0,36 (val_bpb 0,4485). Notele sunt zgomotoase: 4,4–5,1 se suprapun în ±2 erori.
+- **cel mai bun compromis:** #262, sfârșitul lui 6a: val_bpb 0,4304 (doar +0,0023 față de #257, sub prag), 59 de fapte
+  noi, nota 4,67.
+
+**Problema cu alimentarea (de verificat înainte de altă rulare lungă):**
+- **Ce s-a întâmplat.** De la 22:31, Windows a înregistrat tot mai des „schimbarea sursei de curent” (evenimentul
+  Kernel-Power 105):
+  - 4 în ora 22;
+  - 121 în ora 01;
+  - 699 în primele 40 de minute ale orei 02, la 1–3 secunde una de alta.
+- **Efectul.** Laptopul trecea mereu între priză și baterie. Bateria a coborât la 34%, iar placa a fost frânată: 210 MHz
+  în loc de ~1.500, în regimul de repaus P8, cu motivele „limitare de putere” și „limitare termică” din partea
+  sistemului.
+- **De aceea a încetinit 6c-continuare** (8,1 → 6,5 → 6,4 → 2,6 pași pe secundă).
+- **De ce am oprit 6b.** Ar fi rulat frânat, iar prima lui oră ar fi fost păstrată automat ca prima a liniei, deși
+  nu era comparabilă.
+- **După oprire:**
+  - 6 comutări în 3 minute, față de 175 în cele 9 minute de dinainte, cu sarcină;
+  - bateria se încarcă din nou.
+
+  Deci încărcătorul sau contactul lui cedează sub sarcină.
+- **De verificat:** încărcătorul original de 200 W, mufa bine introdusă la ambele capete și cablul neîndoit.
+- **Ce a rămas de la 6b.** Starea lui de pornire, în `lucru/antrenare_lunga_6b/`, e cea din #257, neantrenată. O rulare
+  nouă pornește de acolo.
+- **Antrenările de dinainte nu par atinse** (6a, 6c-restart: 7,7–8,2 pași pe secundă, ca de obicei).
+
 ## Toate comenzile
 
 ```
