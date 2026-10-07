@@ -1989,6 +1989,32 @@ python -m module.continuum.bucla --config config/continuum.toml --simuleaza --pl
 - **Pragurile se compară fără resturile de rotunjire ale calculatorului.** De exemplu, 4,4 − 3,4 dă în calculator
   1,0000000000000004: fără grijă, o scădere de exact 2 praguri ar fi ieșit zona roșie.
 
+### Prima rulare v1 pe jurnalul real (7 octombrie, 10:18, simulat)
+
+Un singur ciclu, cu memoria în `lucru/continuum_v1_proba/` (ca să nu se amestece cu rularea v0 de toată ziua):
+> REPAUS: placa e ocupată de altă sarcină (python.exe (17816)): o singură sarcină grea odată, doar observ. Nevoi în
+> așteptare: remasoara:povesti, remasoara:sens, dezvolta:sens.
+
+**Ce vede v1** pe ultimul model păstrat, #249 (prima jumătate de oră pe fapte):
+
+| Capacitatea | Scor pe #249 | Linia de bază | Pragul folosit | Zona |
+| --- | --- | --- | --- | --- |
+| povești (val_bpb) | 0,4675 | 0,4389 (#239) | 0,0144, învățat din 22 de perechi de semințe | galbenă (1,99 praguri sub) |
+| fapte (fapte_noi) | 59 din 150 (39%) | 59 (#249) | 10, neînvățat încă | verde |
+| sens (nota) | 3,7 din 10 (37%) | 4,7 (#226) | 0,5, neînvățat încă | galbenă (exact 2 praguri sub) |
+
+**Dacă placa ar fi fost liberă** (`--placa-libera`, ca probă): ar fi remăsurat nota pe #249 („remasoara:sens”), nu ar fi
+pornit o acțiune. Nivelul ar fi fost ÎNTREȚINERE, nu ÎNVĂȚARE, pentru că placa avea 87 °C, încălzită de antrenare.
+
+**V0, la aceeași oră (10:15):** tot REPAUS, cu „dezvolta:sens” în așteptare. V0 nu vede cele două scăderi. Mai devreme,
+azi, v0 a ales:
+- „masoara:fapte” la 08:45, când #239 încă n-avea examenul de fapte nou;
+- „dezvolta:fapte” la proba „ca la 23:00”;
+- în rest, nimic: ziua, ÎNTREȚINEREA nu permitea antrenări.
+
+**Diferența:** v1 remăsoară întâi ce pare să fi scăzut, apoi dezvoltă. V0 trece direct la „dezvoltă”. Amândouă văd acum
+„sensul” drept cea mai slabă capacitate. Atenție însă: nota de bază (4,7) e pe 20 de povești, iar cea de pe #249 pe 40.
+
 ### Testele: 37 noi pentru v1 și lanț, toate fără placă video
 
 - **Cât rula lanțul,** suita a mers pe procesor, cu placa ascunsă: 431 trec, iar 1 e sărit (contractul cu profesorul

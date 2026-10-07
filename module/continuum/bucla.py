@@ -263,7 +263,7 @@ def main(argv: list[str] | None = None) -> int:
         except (AttributeError, ValueError):
             pass
     parser = argparse.ArgumentParser(prog="python -m module.continuum.bucla",
-                                     description="CONTINUUM v0: decide ce face Kronos când nimeni nu-i spune.")
+                                     description="CONTINUUM v1: decide ce face Kronos când nimeni nu-i spune.")
     parser.add_argument("--config", default="config/continuum.toml")
     parser.add_argument("--simuleaza", action="store_true", help="nu pornește nimic: doar scrie ce ar alege și de ce")
     parser.add_argument("--cicluri", type=int, default=None, help="câte cicluri (implicit: până la STOP)")
@@ -328,7 +328,7 @@ def main(argv: list[str] | None = None) -> int:
     if bucla.paznic.oprire_ceruta():
         print(MESAJ_STOP)
         return 1
-    print(f"CONTINUUM v0{' în modul simulat: nu pornește nimic, doar spune ce ar alege' if args.simuleaza else ''}. "
+    print(f"CONTINUUM v1{' în modul simulat: nu pornește nimic, doar spune ce ar alege' if args.simuleaza else ''}. "
           f"Ciclurile se scriu în {(director / 'cicluri.jsonl').as_posix()}.\n"
           f"Oprire: python -m kronos opreste --config config/proba.toml (același STOP ca Kronos).", flush=True)
     try:
