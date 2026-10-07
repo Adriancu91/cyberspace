@@ -14,10 +14,14 @@ Nivelurile din v0, de la cel mai liniștit:
 
 Placa prea caldă coboară un nivel. „O singură sarcină grea pe placă odată”: placa e ocupată dacă un program din
 „procese_grele” (de ex. python, adică Kronos sau profesorul) o folosește, sau dacă are prea puțină memorie liberă.
+
+v1, anti-buclă: **bugetul zilnic de ore pe placă** ([guvernator] buget_ore_placa_pe_zi). Orele de azi se adună din
+jurnalul Kronos (cât au durat experimentele începute azi, oricine le-a pornit); peste buget, REPAUS până mâine.
 """
 
 from __future__ import annotations
 
+from datetime import date, datetime
 from datetime import time as Ora
 from pathlib import PureWindowsPath
 from typing import Any
@@ -56,14 +60,30 @@ def procese_grele(placa: dict[str, Any], nume_grele: list[str]) -> list[str]:
     return gasite
 
 
+def ore_placa_azi(fise: list[dict[str, Any]], azi: date) -> float:
+    """Câte ore au durat experimentele începute azi (după ceasul laptopului), din jurnalul Kronos."""
+    secunde = 0.0
+    for fisa in fise:
+        try:
+            inceput = datetime.fromisoformat(str(fisa.get("inceput")))
+        except ValueError:
+            continue
+        local = inceput.astimezone().date() if inceput.tzinfo else inceput.date()
+        durata = fisa.get("durata_totala_secunde")
+        if local == azi and isinstance(durata, (int, float)) and not isinstance(durata, bool):
+            secunde += durata
+    return secunde / 3600
+
+
 def nivel(observat: Any, config: dict[str, Any]) -> tuple[str, str]:
     """(nivelul, de ce) din ce s-a observat: ora, omul, placa. Motivul e o propoziție în română, pentru jurnal."""
     g = config["guvernator"]
     ora = observat.timp.time()
     if in_fereastra(ora, g["fereastra_invatare"]):
-        nivel_ferestrei, fereastra = INVATARE, f"e fereastra de noapte ({text_fereastra(g['fereastra_invatare'])})"
+        nivel_ferestrei, fereastra = INVATARE, f"e fereastra de învățare ({text_fereastra(g['fereastra_invatare'])})"
     elif in_fereastra(ora, g["fereastra_intretinere"]):
-        nivel_ferestrei, fereastra = INTRETINERE, f"e fereastra de zi ({text_fereastra(g['fereastra_intretinere'])})"
+        nivel_ferestrei, fereastra = INTRETINERE, (f"e fereastra de întreținere "
+                                                   f"({text_fereastra(g['fereastra_intretinere'])})")
     else:
         return REPAUS, f"ora {ora:%H:%M} e în afara ferestrelor de lucru: doar observ"
 
@@ -77,6 +97,10 @@ def nivel(observat: Any, config: dict[str, Any]) -> tuple[str, str]:
     else:
         despre_om = "nu pot vedea dacă omul folosește laptopul"
 
+    ore_azi = ore_placa_azi(getattr(observat, "fise", []), observat.timp.date())
+    if ore_azi >= g["buget_ore_placa_pe_zi"]:
+        return REPAUS, (f"bugetul de azi pe placă e consumat ({ro(ore_azi, 1)} ore din {ro(g['buget_ore_placa_pe_zi'])}): "
+                        f"nu mai pornesc nimic până mâine, doar observ")
     placa = observat.placa
     if placa.get("stare") != "ok":
         return REPAUS, f"nu pot citi placa video ({placa.get('eroare', 'motiv necunoscut')}): nu pornesc nimic pe ea"
@@ -88,7 +112,8 @@ def nivel(observat: Any, config: dict[str, Any]) -> tuple[str, str]:
     if libera < g["memorie_video_libera_min_mb"]:
         return REPAUS, (f"placa are doar {ro(libera)} MB liberi (trebuie cel puțin "
                         f"{ro(g['memorie_video_libera_min_mb'])}): e ocupată, doar observ")
-    motiv = f"{fereastra}, placa e liberă ({ro(libera)} MB liberi, {ro(placa['temperatura'])} °C), {despre_om}"
+    motiv = (f"{fereastra}, placa e liberă ({ro(libera)} MB liberi, {ro(placa['temperatura'])} °C), {despre_om}; azi "
+             f"{ro(ore_azi, 1)} ore pe placă din {ro(g['buget_ore_placa_pe_zi'])}")
     if placa["temperatura"] > g["temperatura_max"]:
         mai_jos = coboara(nivel_ferestrei)
         return mai_jos, (f"{motiv}; dar placa are {ro(placa['temperatura'])} °C, peste {ro(g['temperatura_max'])} °C: "

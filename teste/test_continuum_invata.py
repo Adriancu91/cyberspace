@@ -10,7 +10,8 @@ from module.continuum.invata import invata
 from module.continuum.stare import memorie_goala
 from teste.test_continuum_masoara import antrenare
 
-CONFIG = {"invatare": {"incredere_initiala": 0.5, "pas_incredere": 0.1}}
+CONFIG = {"invatare": {"incredere_initiala": 0.5, "pas_incredere": 0.1},
+          "anti_bucla": {"racire_cicluri": 6, "max_esecuri": 5}}
 
 
 def test_invata_increderea_si_experimentele():
@@ -20,8 +21,11 @@ def test_invata_increderea_si_experimentele():
     invata(memorie, alegere, {"verdict": ESEC, "motiv": "rău"}, CONFIG, 4, "t2")
     invata(memorie, alegere, {"verdict": ESEC, "motiv": "rău"}, CONFIG, 5, "t3")
     invata(memorie, alegere, {"verdict": NECONCLUDENT, "motiv": "?"}, CONFIG, 6, "t4")
-    assert memorie["strategii"]["dezvolta:fapte:antrenare"] == {"incredere": 0.4, "succese": 1, "esecuri": 2,
-                                                                "neconcludente": 1, "stare": "activa"}
+    assert memorie["strategii"]["dezvolta:fapte:antrenare"] == {
+        "incredere": 0.4, "succese": 1, "esecuri": 2, "neconcludente": 1, "stare": "activa",
+        # v1: succesele scumpe, cele care așteaptă confirmarea, eșecurile la rând (un rezultat neconcludent nu le
+        # șterge) și câștigurile pe oră de placă ale succeselor
+        "succese_scumpe": 0, "in_asteptare": 0, "esecuri_la_rand": 2, "castiguri_pe_ora": []}
     assert [e["verdict"] for e in memorie["experimente"]] == [SUCCES, ESEC, ESEC, NECONCLUDENT]
     assert memorie["experimente"][0]["fise"] == [11, 12] and memorie["experimente"][0]["ciclu"] == 3
     inainte = copy.deepcopy(memorie["strategii"])

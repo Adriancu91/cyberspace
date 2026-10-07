@@ -224,9 +224,73 @@ Rotire automată a fișierelor. Nu se editează de mână (ca jurnalul Kronos).
 - **Utilizare concretă:** rulat o zi în `--simuleaza`, deciziile lui trebuie să coincidă cu ce am fi ales de mână (ziua: examene + hrană de la profesor; noaptea: continuare sau fapte). Apoi o noapte reală.
 - **Criteriu de acceptare:** 24 de ore fără să cadă, cu un modul scos și reintrodus în timpul rulării, cu omul care folosește laptopul la un moment dat (→ REPAUS), și jurnalul explică fiecare decizie în română.
 
-### v1 — Nevoi complete
-- Toate tipurile de nevoi, prioritățile, răcirea, limita de reîncercări.
-- Guvernatorul cu toate nivelurile și bugetul zilnic.
+### v1 — Măsurare atentă și anti-buclă (făcut pe 7 octombrie 2026, aprobat de Adrian)
+
+Șapte puncte, construite în ordinea asta, fiecare cu testele lui (`teste/test_continuum_v1.py`, pe proiectul de probă
+din `teste/continuum_proba.py`, fără placă video). Toate pragurile noi stau în `config/continuum.toml`, scrise și
+explicate; fiecare are o valoare implicită (`IMPLICITE_V1` în `module/continuum/__init__.py`), deci o configurare din
+v0 merge neschimbată.
+
+1. **Zgomotul învățat** (`[zgomot]`, `module/continuum/zgomot.py`). Pentru fiecare capacitate, cât diferă de obicei
+   două măsurători ale aceluiași lucru, învățat din jurnalul Kronos:
+   - același model examinat de două ori (ex. examenul de la oră și unealta de examen);
+   - două semințe ale aceleiași configurări (aceleași setări, același text, aceeași durată).
+
+   Zgomotul = rădăcina mediei pătratelor diferențelor × `factor`. **Pragul folosit = max(podea, zgomot învățat)**, unde
+   podeaua e `prag_zgomot` de la capacitate. Sub `perechi_minime` (3) perechi rămâne podeaua, iar jurnalul spune
+   „neînvățat încă”. Pe jurnalul real (7 oct.), val_bpb are 22 de perechi de semințe, deci zgomotul 0,0144 (pragul
+   urcă de la 0,005); fapte_noi (0 perechi) și nota (1 pereche) sunt încă neînvățate.
+   *Alegere:* regula „continuă” (punctul 6) nu folosește zgomotul dintre semințe. Două ore ale aceleiași antrenări au
+   aceeași sămânță, deci acolo contează doar `castig_minim` și zgomotul de remăsurare (același model de două ori).
+2. **Trei zone față de linia de bază** (`[zone]`, în praguri):
+   - **verde:** cel mult 1 prag sub;
+   - **galbenă:** între 1 și 2 praguri sub (exact 2 e încă galbenă). Nevoia `remasoara` cere o remăsurare a ultimului model, o singură dată;
+     nu e o acțiune;
+   - **roșie:** peste 2 praguri sub. Nevoia `repara`, cu urgența 1. În v1, „repara” înseamnă doar un raport clar către
+     om, în `lucru/continuum/rapoarte/`, cu modelul păstrat la care s-ar întoarce (cel al liniei de bază). Raportul se
+     scrie o singură dată cât timp capacitatea stă în zona roșie; se închide când iese din ea. Poate fi scris și în
+     REPAUS, pentru că nu folosește placa.
+3. **Stabilitate pe două niveluri** (`[stabilitate]`, `module/continuum/stabilitate.py`).
+   - Un scor mai bun decât linia de bază cu peste prag devine **candidat**, în coada din `stare.json` („candidati”,
+     fiecare cu motivul, de când e și ce l-a decis).
+   - Linia de bază, și încrederea strategiei care l-a adus, se mută **doar după o a doua măsurătoare independentă**
+     care îl confirmă: a doua examinare a aceluiași model, sau o oră păstrată mai nouă de pe aceeași linie.
+   - Pentru un candidat cu unealtă de examen, CONTINUUM cere singur remăsurarea (`remasoara`, „confirmare”).
+   - Linia de bază nouă e cea mai slabă dintre măsurătorile care confirmă (prudent) și nu coboară niciodată.
+   - După o antrenare pornită de CONTINUUM, toate orele păstrate noi intră în coadă, în ordine: ora 7 e confirmată de
+     ora 8. Ultima oră așteaptă o remăsurare sau o oră de după.
+   - La prima pornire, linia de bază e cea mai bună valoare păstrată din jurnal („inițializată din jurnal”).
+4. **Verdictul cu eficiență** (`[eficienta]`). MĂSOARĂ ia și costul acțiunii: orele pe placă (cât au durat
+   comenzile), pașii pe secundă și memoria video (din fișele noi). Un SUCCES cu câștigul pe oră de placă sub
+   `fractie_scump` (50%) din media strategiei (din succesele ei de dinainte) devine **SUCCES SCUMP**: încrederea nu
+   urcă.
+5. **Vectorul capacităților** (`vector_capacitati` în `stare.json` și în jurnalul ciclurilor). Toate capacitățile din
+   configurare, și cele nemăsurate (zona „nemăsurată”), fiecare cu: scor, linie de bază (și dacă e confirmată), zonă,
+   pragul folosit (podeaua, zgomotul învățat, câte perechi), procentul din maxim. „Cea mai slabă” = cel mai mic procent
+   din vector.
+6. **Regula „continuă” cu temei** (`[nevoi.continua]`). Se continuă pe povești doar dacă:
+   - ultima oră a coborât val_bpb cu **peste** `castig_minim` (0,005);
+   - ȘI tendința pe ultimele `ore_tendinta` (3) ore e bună (panta dreptei prin ele). Cu mai puține ore, tendința nu
+     se știe încă, deci nu se continuă.
+
+   Două ore la rând cu câștig sub prag = **„saturat”**: „dezvolta” trece înaintea lui „continua”. (În v0, o linie
+   neterminată se continua oricum.)
+7. **Anti-buclă** (`[anti_bucla]` și `[guvernator]`):
+   - **răcire:** o nevoie tratată pe bune nu se reia `racire_cicluri` (6) cicluri; „repara” n-are răcire;
+   - **limita de reîncercări:** după `max_esecuri` (5) eșecuri la rând, strategia e **„blocată”** (ALEGE n-o mai
+     alege), iar omul primește un raport;
+   - **bugetul zilnic:** `buget_ore_placa_pe_zi` (20) ore pe placă, adunate din jurnalul Kronos (tot ce a rulat azi,
+     oricine l-a pornit). Peste buget: REPAUS până mâine.
+
+**Ordinea nevoilor în v1:** repara (mereu prima), masoara, remasoara (după masoara), apoi restul, din configurare.
+ALEGE spune pentru fiecare nevoie sărită de ce, în ordinea asta: nivelul; ce lipsește; răcirea; strategia blocată.
+
+**Opțiuni noi la `python -m module.continuum.bucla`:**
+- `--stare DOSAR`: alt dosar pentru `stare.json` și `cicluri.jsonl`, ca o probă să nu amestece memoria;
+- `--placa-libera`: doar cu `--simuleaza`, ca și cum placa ar fi liberă (ce ar alege după antrenarea de acum).
+
+**Ce n-a intrat în v1:** întoarcerea automată la modelul păstrat (o decide omul, din raport), oscilația, explorarea,
+cererea externă și setul sacru. Rămân pentru v2–v3.
 
 ### v2 — Setul sacru și promovarea
 - A doua bucată de validare, invizibilă deciziilor automate.
@@ -259,6 +323,9 @@ cyberspace/
     invata.py
     stare.py
     guvernator.py
+    masuratori.py     # v1: de unde vine valoarea unei capacități (oră, unealtă, criterii)
+    zgomot.py         # v1: zgomotul învățat
+    stabilitate.py    # v1: candidații și confirmarea lor
   config/continuum.toml   # praguri, ferestre orare, bugete, nevoi permise
   teste/test_continuum_*.py
   lucru/continuum/        # stare.json, cicluri.jsonl (nu se editează de mână)
@@ -269,7 +336,8 @@ cyberspace/
 
 ## 15. Instrucțiuni pentru Claude Code
 
-1. Implementează **doar v0**. Nu trece la v1 fără confirmare.
+1. Implementează **doar v0**. Nu trece la v1 fără confirmare. (v1 a fost cerut de Adrian și făcut pe 7 octombrie
+   2026; v2 tot doar după confirmare.)
 2. Fiecare etapă = funcție separată, cu teste proprii; testează cu 0 module, 1 modul și un modul care cade în timpul rulării.
 3. Toate pragurile, ferestrele și bugetele în `config/continuum.toml`, nu în cod.
 4. Nu modifica `kronos/`, examenul oficial și nici jurnalul Kronos. Dacă ai nevoie de ceva din nucleu care lipsește, spune ce și de ce, nu improviza.

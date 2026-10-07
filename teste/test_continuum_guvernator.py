@@ -37,7 +37,8 @@ def test_nivelurile_se_permit_in_ordine():
 def test_noaptea_cu_placa_libera_si_omul_plecat_e_invatare(config):
     ales, motiv = nivel(observat(Lume(ora="23:30")), config)
     assert ales == INVATARE
-    assert "fereastra de noapte (22:00–07:00)" in motiv and "5.800 MB liberi" in motiv and "de 60 min" in motiv
+    assert "fereastra de învățare (22:00–07:00)" in motiv and "5.800 MB liberi" in motiv and "de 60 min" in motiv
+    assert motiv.endswith("; azi 0,0 ore pe placă din 20")  # v1: bugetul zilnic, din jurnal (aici, fără fișe)
 
 
 def test_ziua_e_intretinere(config):

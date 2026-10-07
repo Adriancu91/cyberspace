@@ -1899,6 +1899,115 @@ python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_5.toml -
 python -m module.continuum.bucla --config config/continuum.toml --jurnal 100    # ce a ales CONTINUUM azi
 ```
 
+## 7 octombrie, ziua: lanțul de antrenare și CONTINUUM v1
+
+Din 7 octombrie, laptopul e doar al lui Kronos, zi și noapte. Deci antrenarea nu mai așteaptă seara.
+
+### Lanțul de antrenare (`python unelte/lant_antrenare.py`)
+
+Un script mic pornește cele două antrenări una după alta, fără să aștepte nimeni între ele. Nu schimbă `kronos/` și nici
+uneltele, doar le pornește pe rând:
+1. **antrenarea pe fapte:** `config/laptop_fapte.toml`, 4 × 30 de minute, din #239;
+2. **cel mai bun model după fapte:** experimentul păstrat al liniei `fapte_1` cu cele mai multe `fapte_noi` (criteriul
+   principal; Kronos îl alege la fel);
+3. **a cincea antrenare lungă:** `config/laptop_antrenare_lunga_5.toml`, 5 ore, din modelul de la pasul 2.
+
+Înainte de fiecare etapă se uită la butonul STOP. Apoi așteaptă, cel mult 30 de minute, ca placa să fie liberă:
+- niciun alt program Python pe ea (o singură sarcină grea);
+- cel puțin 5.500 MB liberi;
+- temperatura sub 85 °C.
+
+O etapă care iese cu eroare oprește lanțul. Pornit pe 7 octombrie la 09:33, în fundal; ce scrie e în
+`lucru/lant_7_octombrie.log`.
+
+**De știut:** Kronos păstrează automat **primul** experiment al unei linii noi, pentru că n-are încă un „cel mai bun” cu
+care să-l compare. Deci prima jumătate de oră pe fapte (#249) n-a trecut prin regula 4. Celelalte se compară cu ea.
+
+În `config/continuum.toml`, fereastra de învățare e acum toată ziua (`00:00-23:59`); `minute_fara_om` a rămas 10.
+
+### CONTINUUM v1: măsurare atentă și anti-buclă
+
+Cerut de Adrian pe 7 octombrie și construit cât rula lanțul: doar cod și teste, fără placa video. N-am atins `kronos/`
+și nici examenul oficial. Toate pragurile noi stau în `config/continuum.toml`, scrise și explicate, cu valori implicite:
+o configurare din v0 merge neschimbată. Amănuntele sunt în `docs/CONTINUUM_plan.md` (secțiunea 13, v1).
+
+**Ce face în plus:**
+1. **Zgomotul învățat.** Pentru fiecare capacitate, CONTINUUM învață din jurnal cât diferă de obicei două măsurători
+   ale aceluiași lucru: același model examinat de două ori, sau aceeași rețetă cu altă sămânță.
+   - Pragul folosit e cel mai mare dintre pragul din configurare (care rămâne „podea”) și zgomotul învățat.
+   - Sub 3 perechi rămâne podeaua, iar jurnalul spune „neînvățat încă”.
+2. **Trei zone, față de linia de bază:**
+   - **verde:** cel mult 1 prag sub;
+   - **galbenă:** între 1 și 2 praguri sub (exact 2 e încă galbenă). Cere o remăsurare, nu o acțiune;
+   - **roșie:** peste 2 praguri sub. CONTINUUM scrie un raport către om în `lucru/continuum/rapoarte/`, cu modelul
+     păstrat la care s-ar întoarce. Nu repară singur.
+3. **Linia de bază se mută doar confirmată.**
+   - Un scor mai bun e întâi „candidat”, în coada din `stare.json`, cu motivul lui.
+   - Linia de bază și încrederea strategiei se mută abia după o a doua măsurătoare care îl confirmă: încă un examen pe
+     același model, sau ora următoare a aceleiași antrenări.
+   - Când are unealta de examen, CONTINUUM cere singur remăsurarea.
+   - Linia de bază nu coboară niciodată.
+4. **Cât a costat.** MĂSOARĂ notează orele pe placă, pașii pe secundă și memoria video. Un succes cu câștigul pe oră sub
+   jumătate din media strategiei e „SUCCES SCUMP”: încrederea nu urcă.
+5. **Vectorul capacităților.** Toate capacitățile, și cele nemăsurate, au scor, linie de bază, zonă, prag folosit și
+   procent. „Cea mai slabă” iese din el.
+6. **„Continuă” doar cu temei.** Povestirile se continuă doar dacă:
+   - ultima oră a coborât val_bpb cu peste 0,005;
+   - și pe ultimele 3 ore tendința e bună.
+
+   Două ore la rând sub prag înseamnă „saturat”, iar dezvoltarea trece în față.
+7. **Anti-buclă:**
+   - o nevoie tratată nu se reia 6 cicluri (în afară de raportul pentru zona roșie);
+   - după 5 eșecuri la rând, strategia e blocată și omul primește un raport;
+   - cel mult 20 de ore pe placă pe zi, cu tot ce a rulat azi, oricine l-a pornit.
+
+**Ordinea nevoilor:** repara, masoara, remasoara, dezvolta, continua.
+
+**Comenzi noi:**
+```
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza --stare lucru/continuum_v1_proba   # memorie separată
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza --placa-libera   # ca și cum placa ar fi liberă
+```
+
+### Ce trebuie știut, cinstit
+
+- **Pe jurnalul real, pragul la val_bpb urcă de la 0,005 la 0,0144.**
+  - Vine din 22 de perechi de semințe, mai ales din experimentele scurte de căutare, unde două semințe diferă mai mult
+    decât la antrenările lungi.
+  - Deci zonele și verdictele pe povești sunt acum mai prudente.
+  - Pentru „continuă” nu se aplică: două ore ale aceleiași antrenări au aceeași sămânță, deci acolo pragul rămâne 0,005.
+- **Faptele și nota n-au încă zgomot învățat** (0 și 1 perechi). Rămân pragurile alese de Adrian: 10 și 0,5.
+- **Examenul de fapte e determinist:** același model dă aceleași răspunsuri. Deci o remăsurare a lui confirmă aproape
+  mereu. Confirmarea mai tare vine de la ora păstrată de după.
+- **Ultima oră a unei antrenări** rămâne candidat până la o remăsurare sau o oră de după. La val_bpb nu există unealtă de
+  remăsurare, deci doar o oră de după o poate confirma.
+- **Nota de bază vine din alt examen.** Linia de bază la „sens” (4,7, #226) e o notă pe 20 de povești. Modelele noi au
+  nota pe 40, iar cele 20 de povești noi ies mai greu (la #239: 4,25 față de 4,55). Comparația nu e deci de la egal la
+  egal. Variantă: o capacitate separată pentru nota pe 40, cu linia ei de bază.
+- **Bugetul de ore** se adună din duratele fișelor Kronos începute azi. Examenele date separat, cu unelte, nu au durată în
+  fișă, deci nu intră în buget.
+- **Pragurile se compară fără resturile de rotunjire ale calculatorului.** De exemplu, 4,4 − 3,4 dă în calculator
+  1,0000000000000004: fără grijă, o scădere de exact 2 praguri ar fi ieșit zona roșie.
+
+### Testele: 37 noi pentru v1 și lanț, toate fără placă video
+
+- **Cât rula lanțul,** suita a mers pe procesor, cu placa ascunsă: 431 trec, iar 1 e sărit (contractul cu profesorul
+  adevărat, care cere placa).
+- **4 fișiere (41 de teste) le-am lăsat pentru după lanț:** `test_cap_coada`, `test_criterii`, `test_criteriu_principal`
+  și `test_examene_suplimentare`.
+  - Ele pornesc Kronos, iar paznicul lor citește temperatura reală a plăcii.
+  - Cu antrenarea, placa stă la ~87 °C, peste limita de 85 °C din `config/proba.toml`, deci ar face pauze de răcire la
+    nesfârșit.
+  - Nu ating nimic din ce s-a schimbat azi. Rulează după lanț, cu toată suita pe placă.
+
+- `teste/test_continuum_v1.py`: câte un grup pentru fiecare din cele 7 puncte, plus configurarea veche și cea greșită.
+  Testele merg pe proiectul de probă din `teste/continuum_proba.py`.
+- Testele din v0 au fost aduse la regulile v1. De exemplu:
+  - „repara” are mereu urgența 1;
+  - o linie neterminată nu se mai continuă fără câștig;
+  - noaptea pe fapte se încheie acum cu o remăsurare care confirmă sau infirmă ultima oră.
+- `teste/test_lant_antrenare.py`: alegerea celui mai bun model după fapte, citirea plăcii și ordinea etapelor.
+
 ## Toate comenzile
 
 ```
@@ -1912,6 +2021,8 @@ python -m kronos porneste      --config <fișier>
 python -m kronos aproba-examen --config <fișier>   # doar după o schimbare făcută de tine în examen
 python -m module.continuum.bucla --config config/continuum.toml [--simuleaza] [--cicluri N]   # CONTINUUM
 python -m module.continuum.bucla --config config/continuum.toml --jurnal [N]                  # ultimele cicluri
+python -m module.continuum.bucla --config config/continuum.toml --simuleaza [--placa-libera] [--stare DOSAR]
+python unelte/lant_antrenare.py                                  # fapte, apoi a cincea antrenare (7 octombrie)
 ```
 
 ## Ce urmează

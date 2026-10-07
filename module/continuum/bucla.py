@@ -30,12 +30,12 @@ from typing import Any, Callable
 
 import module.continuum.observa as senzori_reali
 from kronos.paznic import Paznic
-from module.continuum import REPAUS, EroareContinuum, citeste_config
+from module.continuum import NECONCLUDENT, REPAUS, SUCCES, EroareContinuum, citeste_config, ro_scurt, stabilitate
 from module.continuum import stare as memorie_continuum
 from module.continuum.actioneaza import actioneaza, text_comanda
 from module.continuum.alege import alege
 from module.continuum.evalueaza import evalueaza
-from module.continuum.invata import invata
+from module.continuum.invata import dupa_confirmare, invata
 from module.continuum.masoara import masoara
 from module.continuum.nevoi import nevoi
 from module.continuum.observa import Senzori, descopera_module, observa
@@ -54,10 +54,14 @@ def pe_scurt(rand: dict[str, Any]) -> str:
         return (f"Ciclul s-a încheiat la etapa {rand['eroare']['etapa']}: {rand['eroare']['mesaj']}. "
                 f"Urmează ciclul următor.")
     text = f"{rand['nivel']}: {rand['de_ce_nivelul']}."
+    for schimbare in rand.get("candidati", []):
+        text += f" Candidat: {schimbare}."
     if rand.get("nevoie"):
         text += f" Aleg {rand['nevoie']}: {rand['motiv']}."
         if rand.get("simulat"):
-            return text + f" [simulat] Aș porni: {rand['actiune']}."
+            return text + f" [simulat] Aș {'scrie' if rand.get('fel') == 'raport' else 'porni'}: {rand['actiune']}."
+        if rand.get("fel") == "raport":
+            return text + f" Am scris: {rand['actiune']} ({(rand.get('rezultat') or {}).get('raport')})."
         return text + f" Am pornit: {rand['actiune']}. Verdict: {rand.get('verdict')} ({rand.get('motiv_verdict')})."
     if rand["nivel"] == REPAUS and rand.get("nevoi"):
         return text + " Nevoi în așteptare: " + ", ".join(n["nevoie"] for n in rand["nevoi"]) + "."
@@ -69,12 +73,12 @@ def pe_scurt(rand: dict[str, Any]) -> str:
 class Bucla:
     def __init__(self, cale_config: str | Path, simuleaza: bool = False, senzori: Senzori | None = None,
                  dormi: Callable[[float], None] | None = None, iesire: Callable[[str], None] = print,
-                 pauza_minute: float | None = None, ca_la: str | None = None) -> None:
+                 pauza_minute: float | None = None, ca_la: str | None = None, director_stare: str | Path | None = None) -> None:
         self.cale_config = cale_config
         self.config = citeste_config(cale_config)
         self.simuleaza = simuleaza
         self.senzori = senzori or Senzori()
-        self.director = self.config["continuum"]["director_lucru"] / "continuum"
+        self.director = Path(director_stare) if director_stare else self.config["continuum"]["director_lucru"] / "continuum"
         self.paznic = Paznic({}, self.config["continuum"]["director_lucru"])  # același STOP ca Kronos
         self.memorie = memorie_continuum.incarca(self.director)
         self.module: dict[str, Any] = {}
@@ -119,34 +123,49 @@ class Bucla:
                     f": {info['eroare']}" if info.get("eroare") else "")
                     for nume, info in observat.module.items() if info.get("stare") != "ok"})
                 etapa = "evalueaza"
-                inainte = evalueaza(observat, self.config)
+                inainte = evalueaza(observat, self.config, self.memorie)
+                stabilitate.initializeaza(self.memorie, inainte, rand["timp"])  # linia de bază: de dinaintea acțiunii
                 rand.update(nivel=inainte.nivel, de_ce_nivelul=inainte.motiv_nivel, organism=inainte.rezumat())
                 etapa = "nevoi"
-                lista = nevoi(inainte, self.config)
+                lista = nevoi(inainte, self.config, self.memorie)
                 rand["nevoi"] = [{"nevoie": n.cheie, "motiv": n.motiv} for n in lista]
                 etapa = "alege"
-                alegere = alege(lista, inainte, self.config)
+                alegere = alege(lista, inainte, self.config, self.memorie, numar)
                 rand["sarite"] = alegere.sarite
                 if alegere.plan:
                     rand.update(nevoie=alegere.nevoie.cheie, motiv=alegere.nevoie.motiv, actiune=alegere.plan.descriere,
-                                comenzi=[text_comanda(c) for c in alegere.plan.comenzi])
+                                comenzi=[text_comanda(c) for c in alegere.plan.comenzi], fel=alegere.plan.fel)
                 if alegere.plan and self.paznic.oprire_ceruta():
                     rand["oprit"] = True
                 else:
                     etapa = "actioneaza"
                     rezultat = actioneaza(alegere.plan, self.simuleaza, self.director, numar) if alegere.plan else None
-                    if rezultat and not rezultat["simulat"]:
+                    pe_bune = bool(rezultat) and not rezultat["simulat"]
+                    if pe_bune:
                         rand["rezultat"] = rezultat
+                        if alegere.nevoie.tip != "repara":  # anti-buclă: răcirea (fără „repara”)
+                            self.memorie["racire"][alegere.nevoie.cheie] = numar + self.config["anti_bucla"]["racire_cicluri"]
+                        if alegere.plan.fel == "raport":
+                            self.memorie["rapoarte"].append({"cheie": alegere.plan.detalii["cheie"], "tip": "repara",
+                                                             "capacitate": alegere.nevoie.capacitate, "deschis": True,
+                                                             "ciclu": numar, "timp": rand["timp"], "fisier": rezultat["raport"]})
                     etapa = "masoara"
-                    dupa = None
-                    if rezultat and not rezultat["simulat"]:
-                        dupa = evalueaza(observa(self.config, self.module, self.senzori), self.config)
-                    masurare = masoara(alegere, inainte, dupa, rezultat)
+                    dupa, fise = None, observat.fise
+                    if pe_bune and alegere.plan.fel != "raport":
+                        observat_dupa = observa(self.config, self.module, self.senzori)
+                        fise = observat_dupa.fise
+                        dupa = evalueaza(observat_dupa, self.config, self.memorie)
+                    masurare = masoara(alegere, inainte, dupa, rezultat, fise, self.memorie, self.config)
+                    candidati_noi: list[str] = []
+                    if masurare.get("candidat") and dupa is not None:
+                        candidati_noi = self._confirma_imediat(masurare, alegere, inainte, dupa, fise, rand["timp"])
                     if alegere.plan and not self.simuleaza:
                         rand.update({k: v for k, v in masurare.items() if k != "motiv"}, motiv_verdict=masurare["motiv"])
                     etapa = "invata"
                     self.memorie = invata(self.memorie, alegere, masurare, self.config, numar, rand["timp"])
                     etapa = "stare"
+                    rand["candidati"] = candidati_noi + self._stabilitate(dupa or inainte, fise, rand["timp"])
+                    self._rapoarte_strategii(numar, rand)
                     memorie_continuum.actualizeaza_capacitati(self.memorie, dupa or inainte, rand["timp"])
         except Exception as e:  # noqa: BLE001 - o etapă care cade încheie ciclul, nu bucla
             rand["eroare"] = {"etapa": etapa, "mesaj": f"{type(e).__name__}: {e}"}
@@ -160,6 +179,65 @@ class Bucla:
         except Exception as e:  # noqa: BLE001 - ex. discul plin: bucla merge mai departe
             print(f"Nu pot scrie starea lui CONTINUUM: {type(e).__name__}: {e}", file=sys.stderr)
         return rand
+
+    def _confirma_imediat(self, masurare: dict[str, Any], alegere: Any, inainte: Any, dupa: Any,
+                          fise: list[dict[str, Any]], timp: str) -> list[str]:
+        """Scorul nou al unei antrenări e un candidat (față de linia de bază, sau doar față de modelul de pornire). Dacă
+        o a doua măsurătoare îl confirmă deja (ex. două ore păstrate), ÎNVAȚĂ mută încrederea acum; altfel, strategia
+        așteaptă confirmarea. Un SUCCES SCUMP nu așteaptă nimic: încrederea lui nu urcă oricum."""
+        tinta, experiment = masurare["candidat"]["capacitate"], masurare["candidat"]["experiment"]
+        noi = stabilitate.adauga_candidati(self.memorie, dupa, timp, fise, self.config, de_la_id=inainte.ultimul_id)
+        intrare = stabilitate.cauta(self.memorie, tinta, experiment, muta_baza=True)
+        if intrare is None and masurare["verdict"] == SUCCES:
+            intrare = stabilitate.adauga_succes(self.memorie, dupa, tinta, inainte.capacitati[tinta].curent,
+                                                masurare.get("model_inainte"), timp)
+            noi.append(intrare)
+        stabilitate.actualizeaza(self.memorie, fise, self.config, timp)
+        if intrare is None:
+            return [k["motiv"] for k in noi]
+        # Una dintre orele noi confirmată (ex. ora 7, de ora 8) ajunge: acțiunea a ajutat cu adevărat.
+        confirmate = [k["experiment"] for k in noi if k["capacitate"] == tinta and k["stare"] == stabilitate.CONFIRMAT]
+        confirmata = confirmate or None
+        masurare["candidat"]["stare"] = stabilitate.CONFIRMAT if confirmata else intrare["stare"]
+        if confirmata is None and intrare["stare"] == stabilitate.NECONFIRMAT:
+            masurare.update(verdict=NECONCLUDENT, motiv=f"{masurare['motiv']}; {intrare['motiv']}")
+        elif masurare["verdict"] == SUCCES:
+            masurare["confirmat"] = confirmata is not None or intrare["stare"] == stabilitate.CONFIRMAT
+            if confirmata is not None:
+                baza = self.memorie["capacitati"][tinta]
+                ore = (f"ora #{confirmate[0]} e confirmată" if len(confirmate) == 1 else
+                       f"orele {', '.join(f'#{e}' for e in confirmate)} sunt confirmate" if len(confirmate) <= 3 else
+                       f"orele #{confirmate[0]} … #{confirmate[-1]} ({len(confirmate)}) sunt confirmate")
+                masurare["motiv"] += (f"; {ore} de orele păstrate de după: linia de bază e acum "
+                                      f"{ro_scurt(baza['linie_de_baza'])} (#{baza['experiment_baza']})")
+            elif intrare["stare"] == stabilitate.CANDIDAT:
+                intrare.update(strategie=alegere.plan.strategie, castig_pe_ora=masurare.get("castig_pe_ora"))
+                masurare["motiv"] += "; e un candidat: încrederea urcă după a doua măsurătoare"
+        return [k["motiv"] for k in noi]
+
+    def _stabilitate(self, stare: Any, fise: list[dict[str, Any]], timp: str) -> list[str]:
+        """Linia de bază: inițializată o dată din jurnal, apoi mutată doar prin candidați confirmați."""
+        stabilitate.initializeaza(self.memorie, stare, timp)
+        noi = stabilitate.adauga_candidati(self.memorie, stare, timp)
+        schimbate = stabilitate.actualizeaza(self.memorie, fise, self.config, timp,
+                                             aplica=dupa_confirmare(self.memorie, self.config))
+        return [k["motiv"] for k in noi + schimbate]
+
+    def _rapoarte_strategii(self, numar: int, rand: dict[str, Any]) -> None:
+        """Strategiile blocate (prea multe eșecuri la rând): raport către om, o singură dată."""
+        while self.memorie["de_raportat"]:
+            de_raportat = self.memorie["de_raportat"].pop(0)
+            fisier = self.director / "rapoarte" / f"ciclu_{numar:05d}_blocata_{de_raportat['strategie'].replace(':', '_')}.md"
+            fisier.parent.mkdir(parents=True, exist_ok=True)
+            fisier.write_text(
+                f"# CONTINUUM: strategia {de_raportat['strategie']} e blocată\n\n"
+                f"- A eșuat de {de_raportat['esecuri_la_rand']} ori la rând (limita: "
+                f"{self.config['anti_bucla']['max_esecuri']}).\n- Ultimul motiv: {de_raportat['ultimul_motiv']}\n\n"
+                f"CONTINUUM n-o mai alege până nu decide omul (de ex. o configurare nouă sau ștergerea blocării din "
+                f"stare.json).\n", encoding="utf-8")
+            self.memorie["rapoarte"].append({"cheie": f"blocata:{de_raportat['strategie']}", "tip": "strategie_blocata",
+                                             "ciclu": numar, "timp": de_raportat["timp"], "fisier": fisier.as_posix()})
+            rand.setdefault("rapoarte", []).append(fisier.as_posix())
 
     def ruleaza(self, cicluri: int | None = None) -> int:
         """Ciclu după ciclu, până la STOP (sau până la numărul dat de cicluri)."""
@@ -194,6 +272,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ca-la", default=None, metavar="HH:MM",
                         help="doar cu --simuleaza: un ciclu ca și cum ar fi ora asta și omul ar fi plecat de la laptop "
                              "(ex. ce ar alege la noapte); placa rămâne cea adevărată")
+    parser.add_argument("--placa-libera", action="store_true",
+                        help="doar cu --simuleaza: ca și cum placa ar fi liberă (ex. ce ar alege după antrenarea de acum)")
+    parser.add_argument("--stare", default=None, metavar="DOSAR",
+                        help="alt dosar pentru stare.json și cicluri.jsonl (implicit: lucru/continuum)")
     parser.add_argument("--jurnal", type=int, nargs="?", const=20, default=None, metavar="N",
                         help="nu rula: arată ultimele N cicluri (implicit 20), pe scurt")
     args = parser.parse_args(argv)
@@ -202,7 +284,7 @@ def main(argv: list[str] | None = None) -> int:
     except EroareContinuum as e:
         print(f"Eroare: {e}", file=sys.stderr)
         return 1
-    director = config["continuum"]["director_lucru"] / "continuum"
+    director = Path(args.stare) if args.stare else config["continuum"]["director_lucru"] / "continuum"
     if args.jurnal is not None:
         randuri = memorie_continuum.citeste_cicluri(director, args.jurnal)
         if not randuri:
@@ -214,6 +296,9 @@ def main(argv: list[str] | None = None) -> int:
         print("Eroare: --pauza-minute nu poate fi negativ.", file=sys.stderr)
         return 1
     senzori, cicluri = None, args.cicluri
+    if args.placa_libera and not args.simuleaza:
+        print("Eroare: --placa-libera merge doar cu --simuleaza.", file=sys.stderr)
+        return 1
     if args.ca_la:
         try:
             ora = Ora.fromisoformat(args.ca_la)
@@ -226,8 +311,20 @@ def main(argv: list[str] | None = None) -> int:
         senzori = Senzori(acum=lambda: datetime.combine(date.today(), ora), placa=senzori_reali.citeste_placa,
                           om=lambda: {"stare": "ok", "minute_de_la_ultima_atingere": 60.0, "presupus": True})
         cicluri = 1 if cicluri is None else cicluri
+    if args.placa_libera:
+        placa_reala = (senzori.placa if senzori else senzori_reali.citeste_placa)
+
+        def placa_libera() -> dict[str, Any]:
+            placa = dict(placa_reala())
+            if placa.get("stare") == "ok":
+                placa.update(procese=[], memorie_libera_mb=placa["memorie_totala_mb"], presupus_liber=True)
+            return placa
+
+        senzori = Senzori(acum=senzori.acum if senzori else datetime.now, placa=placa_libera,
+                          om=senzori.om if senzori else senzori_reali.citeste_omul)
+        cicluri = 1 if cicluri is None else cicluri
     bucla = Bucla(args.config, simuleaza=args.simuleaza, pauza_minute=args.pauza_minute, senzori=senzori,
-                  ca_la=f"{ora:%H:%M}" if args.ca_la else None)
+                  ca_la=f"{ora:%H:%M}" if args.ca_la else None, director_stare=args.stare)
     if bucla.paznic.oprire_ceruta():
         print(MESAJ_STOP)
         return 1

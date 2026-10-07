@@ -58,8 +58,9 @@ def test_o_noapte_simulata_spune_doar_ce_ar_alege(proiect):
     assert rand["nivel"] == INVATARE and rand["nevoie"] == "dezvolta:fapte"
     assert rand["comenzi"][0].startswith("python unelte/antrenare_lunga.py --config config/laptop_fapte.toml")
     assert rand["pe_scurt"] == (
-        "ÎNVĂȚARE: e fereastra de noapte (22:00–07:00), placa e liberă (5.800 MB liberi, 50 °C), omul n-a mai atins "
-        "laptopul de 60 min. Aleg dezvolta:fapte: fapte = 27% (41 din 150), cea mai slabă capacitate (sens = 47%); "
+        "ÎNVĂȚARE: e fereastra de învățare (22:00–07:00), placa e liberă (5.800 MB liberi, 50 °C), omul n-a mai atins "
+        "laptopul de 60 min; azi 0,0 ore pe placă din 20. Aleg dezvolta:fapte: fapte = 27% (41 din 150), cea mai slabă "
+        "capacitate (sens = 47%); "
         "7.520 de povești nefolosite în date/fapte. [simulat] Aș porni: antrenare lungă cu config/laptop_fapte.toml "
         "(linia fapte_1, 8 × 60 min, din modelul #8).")
     assert iesire[0].startswith("[23:30] #1 ÎNVĂȚARE:")
@@ -193,21 +194,41 @@ def test_o_zi_pe_bune_examenele_lipsa(proiect):
 
 
 def test_o_noapte_pe_bune_pe_fapte(proiect):
+    """Trei cicluri pe bune (v1). 1: antrenarea pe fapte iese mai bună (41 → 57 în 8 ore); fiecare oră e confirmată de
+    ora păstrată de după ea, deci încrederea urcă, iar linia de bază ajunge la 55 (#17); ultima oră (#18) rămâne
+    candidat. 2: remăsurarea lui #18 (unealta de examen dă 33, nu 57) îl infirmă. 3: cu 33, faptele sunt în zona roșie
+    și omul primește un raport, cu modelul #17 la care s-ar întoarce."""
     noaptea_3(proiect)
     scrie_hrana(proiect)
     config_kronos(proiect, "laptop_fapte.toml", "fapte_1", date=', hrana = "date/fapte/povesti.txt"')
-    bucla, randuri, _ = ruleaza(proiect, 2, simuleaza=False)
+    bucla, randuri, _ = ruleaza(proiect, 3, simuleaza=False)
     rand = randuri[0]
     assert rand["nevoie"] == "dezvolta:fapte" and rand["verdict"] == SUCCES and rand["fise"] == list(range(11, 19))
     assert rand["inainte"]["fapte"] == 41 and rand["dupa"]["fapte"] == 57  # 41 + 2 pe oră, 8 ore
+    assert rand["motiv_verdict"] == ("fapte: 41 → 57, mai bine cu mai mult decât pragul de 3; orele #12 … #17 (6) "
+                                     "sunt confirmate de orele păstrate de după: linia de bază e acum 55 (#17)")
+    assert rand["cost"]["ore_placa"] < 0.01 and rand["castig_pe_ora"] > 0  # unealta de probă durează o clipă
     argumente = json.loads((proiect / "lucru" / "jurnal" / "argumente.json").read_text(encoding="utf-8"))
     assert argumente == ["--config", "config/laptop_fapte.toml", "--ore", "8", "--porneste-din", "8"]
-    # A doua oară, hrana e deja folosită de linia fapte_1, iar val_bpb nu mai scade destul ca să ceară continuare.
-    assert randuri[1].get("nevoie") is None
-    assert "folosită deja (fapte_1)" in randuri[1]["pe_scurt"]
     experiment = bucla.memorie["experimente"][0]
     assert experiment["strategie"] == "dezvolta:fapte:antrenare" and experiment["model_inainte"] == 8
     assert experiment["cel_mai_bun_inainte"] == {"povesti": 8, "fapte": 8, "sens": 8}  # de unde se poate reveni
+    assert experiment["confirmare"] is None  # confirmat pe loc, de orele de după
+    # A doua oară: remăsurarea care ar confirma ultima oră (hrana e folosită, iar val_bpb nu mai scade destul).
+    assert randuri[1]["nevoie"] == "remasoara:fapte" and randuri[1]["verdict"] == SUCCES
+    assert randuri[1]["actiune"] == "remăsurare (confirmare): examenul fapte din nou pe modelul #18"
+    candidat = next(k for k in bucla.memorie["candidati"] if k["capacitate"] == "fapte" and k["experiment"] == 18)
+    assert candidat["stare"] == "neconfirmat" and candidat["infirmat_de"] == "a doua măsurătoare a modelului #18"
+    strategie = bucla.memorie["strategii"]["dezvolta:fapte:antrenare"]
+    assert (strategie["succese"], strategie["neconcludente"], strategie["in_asteptare"], strategie["incredere"]) == (1, 0, 0, 0.6)
+    baza = bucla.memorie["capacitati"]["fapte"]
+    assert (baza["linie_de_baza"], baza["experiment_baza"]) == (55, 17)  # nu urcă la 57: #18 n-a fost confirmat
+    # A treia oară: faptele (33 pe #18) sunt cu 22 sub linia de bază, peste 2 praguri de 3: zona roșie, raport.
+    assert randuri[2]["nevoie"] == "repara:fapte" and randuri[2]["fel"] == "raport"
+    raport = proiect / randuri[2]["rezultat"]["raport"]
+    assert raport.name == "ciclu_00003_repara_fapte.md" and "Modelul păstrat la care s-ar întoarce: #17" in raport.read_text(
+        encoding="utf-8")
+    assert bucla.memorie["rapoarte"][0]["deschis"] and "racire" not in randuri[2]  # „repara” n-are răcire
 
 
 def test_jurnalul_ciclurilor_se_citeste_pe_scurt(proiect, capsys):
@@ -232,7 +253,14 @@ def test_configurarea_adevarata():
     from teste.continuum_proba import RADACINA
 
     config = citeste_config(RADACINA / "config" / "continuum.toml")
-    assert config["continuum"]["ordinea_nevoilor"] == ["masoara", "dezvolta", "continua"]
+    # Fișierul are ordinea din v0; v1 pune singur „repara” prima și „remasoara” după „masoara”.
+    assert config["continuum"]["ordinea_nevoilor"] == ["repara", "masoara", "remasoara", "dezvolta", "continua"]
+    assert config["guvernator"]["fereastra_invatare"][0].hour == 0  # laptopul e al lui Kronos toată ziua
+    assert config["guvernator"]["minute_fara_om"] == 10 and config["guvernator"]["buget_ore_placa_pe_zi"] == 20
+    assert (config["zgomot"], config["zone"], config["stabilitate"], config["eficienta"], config["anti_bucla"]) == (
+        {"perechi_minime": 3, "factor": 1.0}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1}, {"fractie_scump": 0.5},
+        {"racire_cicluri": 6, "max_esecuri": 5})
+    assert config["nevoi"]["continua"]["ore_tendinta"] == 3
     assert {n: c["prag_zgomot"] for n, c in config["capacitati"].items()} == {"povesti": 0.005, "fapte": 10, "sens": 0.5}
     assert "40" in config["capacitati"]["sens"]["masurare"]
 
@@ -248,4 +276,4 @@ def test_ca_la_o_ora_de_noapte_fara_om(proiect, monkeypatch):
     assert main(["--config", config, "--simuleaza", "--ca-la", "23"]) == 0  # „23” înseamnă 23:00
     rand = json.loads((proiect / "lucru" / "continuum" / "cicluri.jsonl").read_text(encoding="utf-8").splitlines()[-1])
     assert rand["ca_la"] == "23:00" and rand["nevoie"] == "dezvolta:fapte"
-    assert rand["pe_scurt"].startswith("[ca la 23:00, fără om] ÎNVĂȚARE: e fereastra de noapte")
+    assert rand["pe_scurt"].startswith("[ca la 23:00, fără om] ÎNVĂȚARE: e fereastra de învățare")

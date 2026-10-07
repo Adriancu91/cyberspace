@@ -1,71 +1,44 @@
 """EVALUEAZĂ (etapa 2): starea organismului, din ce s-a observat (secțiunea 4.2 din plan).
 
 - **Capacitățile** (din [capacitati]):
-  - linia de bază: cea mai bună valoare dintre experimentele PĂSTRATE de Kronos pe liniile urmărite;
   - scorul curent: valoarea pe ultimul model păstrat;
-  - procentul din maxim;
-  - dacă e degradată (sub linia de bază cu mai mult decât pragul ei de zgomot);
-  - dacă e disponibilă (modulele de care depinde se încarcă).
-- **Ultimul model păstrat** (cu model salvat) și **tendința** pe ultima linie: cât s-a îmbunătățit capacitatea
-  nevoii „continua” (val_bpb) între ultimele două ore.
-- **Configurările Kronos**: câte ore are fiecare linie din câte are planificate.
-- **Hrana**: câtă e și dacă a fost deja folosită. E folosită dacă o linie care pomenește dosarul ei a rulat după
-  ultima schimbare a hranei.
-- **Nivelul** permis de guvernator, cu motivul.
+  - linia de bază:
+    - cea confirmată din memorie (stare.json), dacă există;
+    - altfel cea mai bună valoare dintre experimentele PĂSTRATE de Kronos pe liniile urmărite (o singură dată, la
+      început). De acolo se mută doar prin confirmare (stabilitate.py, v1 punctul 3);
+  - pragul folosit = max(podea, zgomot învățat): podeaua e prag_zgomot din configurare, iar zgomotul se învață din
+    jurnal (zgomot.py, v1 punctul 1);
+  - zona față de linia de bază (v1 punctul 2):
+    - verde;
+    - galbenă: între 1 și 2 praguri sub (cere remăsurare);
+    - roșie: peste 2 praguri sub (nevoia „repara”);
+  - procentul din maxim și dacă e disponibilă (modulele de care depinde se încarcă).
+- **Vectorul capacităților** (v1 punctul 5): toate capacitățile din configurare, și cele nemăsurate, marcate așa.
+- **Ultimul model păstrat** și **tendința** pe ultima linie (v1 punctul 6):
+  - câștigul pe ultima oră și pe ultimele ore;
+  - panta pe ultimele N ore;
+  - „saturat”, când două ore la rând au câștigat sub prag.
+  Pragul regulii „continuă” e castig_minim din [nevoi.continua], ridicat doar de zgomotul de remăsurare (același model
+  examinat de două ori), dacă e învățat. Zgomotul dintre semințe nu se aplică între două ore ale aceleiași antrenări.
+- **Configurările Kronos**, **hrana** și **nivelul** permis de guvernator, ca în v0.
 
-O valoare vine, în ordine:
-1. din scorurile fișei (examenul oficial);
-2. din fișa unei unelte de examen care pomenește experimentul (ex. unelte/examen_profesor.py): e mai nouă decât ora
-   lui și poate fi mai precisă (ex. nota pe 40 de povești, nu pe 20);
-3. din criteriile fișei (examene_suplimentare, date la sfârșitul orei).
+Valorile vin din măsurători (masuratori.py): scorurile fișei, apoi uneltele de examen, apoi criteriile de la oră.
 """
 
 from __future__ import annotations
 
 import fnmatch
-import math
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from module.continuum import guvernator
+from module.continuum import GALBENA, ROSIE, VERDE, guvernator, peste
+from module.continuum.masuratori import REUSITE, criterii_din, masuratori_unelte, numar, valoare  # noqa: F401
 from module.continuum.observa import ARHITECTURA
+from module.continuum.zgomot import masuratori_pe_experiment, zgomot_invatat
 
-REUSITE = ("pastrat", "respins")  # ca la unelte/antrenare_lunga.py: o oră făcută = un experiment reușit
-
-
-def numar(valoare: Any) -> bool:
-    return isinstance(valoare, (int, float)) and not isinstance(valoare, bool) and math.isfinite(valoare)
-
-
-def criterii_din(fisa: dict[str, Any]) -> dict[str, Any]:
-    """Criteriile unei ore (examene_suplimentare): cu [criterii] în fișă; fără, în răspunsul dupa_examen."""
-    return fisa.get("criterii") or (fisa.get("dupa_examen") or {}).get("criterii") or {}
-
-
-def masuratori_unelte(fise: list[dict[str, Any]], config: dict[str, Any]) -> dict[tuple[str, int], dict[str, Any]]:
-    """(linia uneltei, experimentul) → scorurile ultimei ei fișe pentru acel experiment."""
-    linii = {cap["unealta"]["linie"] for cap in config["capacitati"].values() if cap["unealta"]}
-    rezultat: dict[tuple[str, int], dict[str, Any]] = {}
-    for fisa in sorted((f for f in fise if f.get("linie") in linii), key=lambda f: f.get("id", 0)):
-        experiment = ((fisa.get("module") or {}).get("elev") or {}).get("experiment")
-        if isinstance(experiment, int):  # o fișă mai nouă înlocuiește scorurile pe care le are și le păstrează pe rest
-            rezultat.setdefault((fisa["linie"], experiment), {}).update(fisa.get("scoruri") or {})
-    return rezultat
-
-
-def valoare(fisa: dict[str, Any], cap: dict[str, Any], unelte: dict[tuple[str, int], dict[str, Any]]) -> float | None:
-    """Valoarea capacității pe modelul unei fișe, sau None dacă n-a fost măsurată."""
-    oficial = (fisa.get("scoruri") or {}).get(cap["metrica"])
-    if numar(oficial):
-        return float(oficial)
-    if cap["unealta"]:  # măsurarea cu unealta vine după oră: cea mai nouă
-        scor = unelte.get((cap["unealta"]["linie"], fisa.get("id")), {}).get(cap["unealta"]["scor"])
-        if numar(scor):
-            return float(scor)
-    criteriu = criterii_din(fisa).get(cap["metrica"])
-    return float(criteriu) if numar(criteriu) else None
+NEMASURATA = "nemăsurată"
 
 
 @dataclass
@@ -73,7 +46,7 @@ class Capacitate:
     nume: str
     metrica: str
     mai_mare_e_mai_bine: bool
-    prag_zgomot: float
+    prag_zgomot: float            # pragul folosit: max(podea, zgomot învățat)
     maxim: float | None
     disponibila: bool
     motiv_indisponibila: str | None
@@ -81,11 +54,28 @@ class Capacitate:
     experiment_baza: int | None = None
     curent: float | None = None   # pe ultimul model păstrat
     procent: float | None = None  # curent, din maxim
-    degradata: bool = False
+    degradata: bool = False       # sub linia de bază cu mai mult decât pragul (zona galbenă sau roșie)
+    podea: float | None = None    # prag_zgomot din configurare
+    zgomot_invatat: float | None = None
+    zgomot_remasurare: float | None = None  # doar din „același model examinat de două ori”
+    perechi_zgomot: int = 0
+    stare_zgomot: str = ""
+    zona: str | None = None
+    baza_confirmata: bool = False  # linia de bază vine din memorie, confirmată; altfel e cea mai bună din jurnal
+    masuratori: int = 0            # de câte ori a fost măsurat ultimul model (oră, unelte): 2+ = remăsurat
 
     def castig(self, nou: float, vechi: float) -> float:
         """Cât e nou mai bun decât vechi, în direcția capacității (negativ = mai rău)."""
         return nou - vechi if self.mai_mare_e_mai_bine else vechi - nou
+
+    def in_vector(self) -> dict[str, Any]:
+        return {"masurata": self.curent is not None, "scor": self.curent, "linie_de_baza": self.linie_de_baza,
+                "experiment_baza": self.experiment_baza, "baza_confirmata": self.baza_confirmata,
+                "zona": self.zona or NEMASURATA, "prag_folosit": self.prag_zgomot, "podea": self.podea,
+                "zgomot_invatat": self.zgomot_invatat, "stare_zgomot": self.stare_zgomot,
+                "perechi_zgomot": self.perechi_zgomot, "masuratori_ultimul_model": self.masuratori,
+                "procent": self.procent, "disponibila": self.disponibila,
+                "motiv_indisponibila": self.motiv_indisponibila}
 
 
 @dataclass
@@ -102,14 +92,16 @@ class StareaOrganismului:
     hrana: dict[str, dict[str, Any]] = field(default_factory=dict)
     module: dict[str, dict[str, Any]] = field(default_factory=dict)
 
+    def vector(self) -> dict[str, dict[str, Any]]:
+        """Vectorul capacităților (v1 punctul 5): toate, cu scor, linie de bază, zonă, prag folosit și procent."""
+        return {n: c.in_vector() for n, c in self.capacitati.items()}
+
     def rezumat(self) -> dict[str, Any]:
         """Ce intră în jurnalul ciclurilor."""
         return {
             "nivel": self.nivel, "de_ce_nivelul": self.motiv_nivel, "ultimul_id": self.ultimul_id,
-            "ultimul_model": self.ultimul_model,
-            "capacitati": {n: {k: v for k, v in asdict(c).items() if k not in ("nume", "metrica", "mai_mare_e_mai_bine")}
-                           for n, c in self.capacitati.items()},
-            "tendinta": self.tendinta, "hrana": self.hrana,
+            "ultimul_model": self.ultimul_model, "capacitati": self.vector(), "tendinta": self.tendinta,
+            "hrana": self.hrana,
             "linii": {cale: {k: v for k, v in l.items() if k != "texte"} for cale, l in self.linii.items()},
         }
 
@@ -149,7 +141,47 @@ def _indisponibila(cap: dict[str, Any], module: dict[str, dict[str, Any]]) -> st
     return None
 
 
-def evalueaza(observat: Any, config: dict[str, Any]) -> StareaOrganismului:
+def zona(c: Capacitate, reguli: dict[str, float]) -> str | None:
+    """Verde / galbenă (între „galben” și „rosu” praguri sub linia de bază) / roșie (peste „rosu” praguri sub)."""
+    if c.curent is None or c.linie_de_baza is None:
+        return None
+    scadere = -c.castig(c.curent, c.linie_de_baza)
+    if peste(scadere, reguli["rosu"] * c.prag_zgomot):
+        return ROSIE
+    if peste(scadere, reguli["galben"] * c.prag_zgomot):
+        return GALBENA
+    return VERDE
+
+
+def panta(valori: list[float]) -> float:
+    """Panta dreptei celei mai potrivite prin valori (pe oră); 0 pentru mai puțin de 2 valori."""
+    n = len(valori)
+    if n < 2:
+        return 0.0
+    medie_x, medie_y = (n - 1) / 2, sum(valori) / n
+    return sum((x - medie_x) * (y - medie_y) for x, y in enumerate(valori)) / sum((x - medie_x) ** 2 for x in range(n))
+
+
+def tendinta(puncte: list[tuple[int, float]], c: Capacitate, reguli: dict[str, Any], linie: str) -> dict[str, Any]:
+    """Pe ultima linie: câștigul ultimei ore, câștigurile ultimelor ore, panta pe ultimele N ore (în direcția bună: pozitivă
+    = se îmbunătățește) și dacă e saturat (două ore la rând cu câștig sub prag)."""
+    prag = max(reguli.get("castig_minim", 0.0), c.zgomot_remasurare or 0.0)
+    n = reguli.get("ore_tendinta", 3)
+    castiguri = [c.castig(b, a) for (_, a), (_, b) in zip(puncte, puncte[1:])]
+    ultimele = [v for _, v in puncte[-n:]]
+    t: dict[str, Any] = {"linie": linie, "capacitate": c.nume, "la": {"experiment": puncte[-1][0], "valoare": puncte[-1][1]},
+                         "castig": castiguri[-1] if castiguri else None, "castiguri": castiguri[-n:], "prag": prag,
+                         "ore_tendinta": n, "panta": None, "saturat": len(castiguri) >= 2 and not any(
+                             peste(g, prag) for g in castiguri[-2:])}
+    if len(puncte) >= 2:
+        t["de_la"] = {"experiment": puncte[-2][0], "valoare": puncte[-2][1]}
+    if len(ultimele) >= n:
+        p = panta(ultimele)
+        t["panta"] = p if c.mai_mare_e_mai_bine else -p
+    return t
+
+
+def evalueaza(observat: Any, config: dict[str, Any], memorie: dict[str, Any] | None = None) -> StareaOrganismului:
     nivel, motiv_nivel = guvernator.nivel(observat, config)
     fise = observat.fise
     linii: dict[str, dict[str, Any]] = {}
@@ -174,18 +206,28 @@ def evalueaza(observat: Any, config: dict[str, Any]) -> StareaOrganismului:
         linii=linii, module=observat.module,
     )
 
+    din_memorie = (memorie or {}).get("capacitati") or {}
     for nume, cap in config["capacitati"].items():
         motiv = _indisponibila(cap, observat.module)
-        c = Capacitate(nume, cap["metrica"], cap["mai_mare_e_mai_bine"], cap["prag_zgomot"], cap["maxim"],
-                       disponibila=motiv is None, motiv_indisponibila=motiv)
-        valori = [(f["id"], v) for f in pastrate if (v := valoare(f, cap, unelte)) is not None]
-        if valori:
-            c.experiment_baza, c.linie_de_baza = (max if c.mai_mare_e_mai_bine else min)(valori, key=lambda p: p[1])
+        zg = zgomot_invatat(fise, cap, config["zgomot"])
+        c = Capacitate(nume, cap["metrica"], cap["mai_mare_e_mai_bine"], zg["prag"], cap["maxim"],
+                       disponibila=motiv is None, motiv_indisponibila=motiv, podea=zg["podea"],
+                       zgomot_invatat=zg["zgomot"], perechi_zgomot=zg["perechi"], stare_zgomot=zg["stare"],
+                       zgomot_remasurare=zg["zgomot_remasurare"])
+        confirmata = din_memorie.get(nume) or {}
+        if confirmata.get("baza_confirmata") and numar(confirmata.get("linie_de_baza")):
+            c.linie_de_baza, c.experiment_baza = float(confirmata["linie_de_baza"]), confirmata.get("experiment_baza")
+            c.baza_confirmata = True
+        else:
+            valori = [(f["id"], v) for f in pastrate if (v := valoare(f, cap, unelte)) is not None]
+            if valori:
+                c.experiment_baza, c.linie_de_baza = (max if c.mai_mare_e_mai_bine else min)(valori, key=lambda p: p[1])
         c.curent = valoare(ultimul, cap, unelte) if ultimul else None
+        c.masuratori = len(masuratori_pe_experiment(fise, cap).get(ultimul["id"], [])) if ultimul else 0
         if c.curent is not None and c.maxim:
             c.procent = round(100 * c.curent / c.maxim, 1)
-        if c.curent is not None and c.linie_de_baza is not None:
-            c.degradata = c.castig(c.curent, c.linie_de_baza) < -c.prag_zgomot
+        c.zona = zona(c, config["zone"])
+        c.degradata = c.zona in (GALBENA, ROSIE)
         stare.capacitati[nume] = c
 
     continua = config["nevoi"].get("continua")
@@ -194,12 +236,7 @@ def evalueaza(observat: Any, config: dict[str, Any]) -> StareaOrganismului:
         linie = reusite[-1]["linie"]
         puncte = [(f["id"], v) for f in reusite if f["linie"] == linie and (v := valoare(f, cap, unelte)) is not None]
         if puncte:
-            c = stare.capacitati[continua["capacitate"]]
-            stare.tendinta = {"linie": linie, "capacitate": c.nume,
-                              "la": {"experiment": puncte[-1][0], "valoare": puncte[-1][1]}, "castig": None}
-            if len(puncte) >= 2:
-                stare.tendinta["de_la"] = {"experiment": puncte[-2][0], "valoare": puncte[-2][1]}
-                stare.tendinta["castig"] = c.castig(puncte[-1][1], puncte[-2][1])
+            stare.tendinta = tendinta(puncte, stare.capacitati[continua["capacitate"]], continua, linie)
 
     for capacitate, h in observat.hrana.items():
         minima = config["hrana"][capacitate]["minima_povesti"]

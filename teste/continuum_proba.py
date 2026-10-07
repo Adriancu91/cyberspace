@@ -218,9 +218,16 @@ def config_kronos(radacina: Path, fisier: str, linie: str, ore: int = 8, stratur
 # --- jurnalul Kronos și hrana ------------------------------------------------------------------------------------------
 
 def fisa(id: int, linie: str, val_bpb: float, decizie: str = "pastrat", criterii: dict[str, Any] | None = None,
-         straturi: int = 10, inceput: str = "2026-10-06T20:00:00+00:00") -> dict[str, Any]:
+         straturi: int = 10, inceput: str = "2026-10-06T20:00:00+00:00", samanta: int | None = None,
+         durata: float | None = None) -> dict[str, Any]:
+    """O oră Kronos. `samanta` intră în setările modelului (perechi de semințe, pentru zgomotul învățat); `durata` e
+    durata_totala_secunde (bugetul zilnic de ore pe placă)."""
     f: dict[str, Any] = {"id": id, "linie": linie, "inceput": inceput, "decizie": decizie, "scoruri": {"val_bpb": val_bpb},
                          "setari": {"model": {"n_straturi": straturi, "n_capete": 8, "n_emb": 512, "context": 256}}}
+    if samanta is not None:
+        f["setari"]["model"]["samanta"] = samanta
+    if durata is not None:
+        f["durata_totala_secunde"] = durata
     if decizie == "pastrat":
         f["model_salvat"] = f"lucru/stocare/modele/experiment_{id}.pt"
     if criterii:
@@ -311,14 +318,16 @@ info.write_text(json.dumps(date), encoding="utf-8")
 
 
 def scrie_unelte(radacina: Path, val_bpb: float = 0.4567, pas_val_bpb: float = -0.004, fapte: int = 41,
-                 pas_fapte: int = 2) -> None:
-    """Uneltele de probă, în radacina/unelte/: examenele scriu o fișă; antrenarea scrie orele care lipsesc (val_bpb
-    și faptele se schimbă cu pasul dat la fiecare oră); hrana adaugă povești în info.json."""
+                 pas_fapte: int = 2, fapte_examen: int = 33) -> None:
+    """Uneltele de probă, în radacina/unelte/: examenele scriu o fișă (examenul de fapte dă `fapte_examen`); antrenarea
+    scrie orele care lipsesc (val_bpb și faptele se schimbă cu pasul dat la fiecare oră); hrana adaugă povești în
+    info.json."""
     unelte = radacina / "unelte"
     unelte.mkdir(parents=True, exist_ok=True)
     radacina_text = repr(str(RADACINA))
     (unelte / "examen_fapte.py").write_text(UNEALTA_EXAMEN.replace("@RADACINA@", radacina_text).replace(
-        "@LINIE@", '"examen_fapte"').replace("@CHEIE@", '"corecte_doar_cuvantul_din_fapt"').replace("@VALOARE@", "33"),
+        "@LINIE@", '"examen_fapte"').replace("@CHEIE@", '"corecte_doar_cuvantul_din_fapt"').replace(
+        "@VALOARE@", str(fapte_examen)),
         encoding="utf-8")
     (unelte / "examen_profesor.py").write_text(UNEALTA_EXAMEN.replace("@RADACINA@", radacina_text).replace(
         "@LINIE@", '"examen_profesor"').replace("@CHEIE@", '"nota_medie"').replace("@VALOARE@", "5.1"), encoding="utf-8")

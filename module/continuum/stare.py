@@ -11,6 +11,9 @@
 - **probleme**, deschise sau rezolvate. Se deschid singure când apar și se închid când dispar: un modul care nu se
   încarcă, o etapă care a căzut, configurarea stricată.
 - **de_reluat**: gol în v0.
+- v1: **vector_capacitati** (toate capacitățile, cu scor, linie de bază, zonă, prag folosit, procent), **candidati**
+  (coada de confirmare, stabilitate.py), **racire** (nevoie → ciclul până la care nu se reia), **rapoarte** (ce a primit
+  omul) și **de_raportat** (strategiile blocate, până se scrie raportul).
 
 **cicluri.jsonl** are un rând pe ciclu și doar crește. Peste „jurnal_max_mb” se mută deoparte (cicluri_<data>.jsonl)
 și se începe altul. Nu se editează de mână, ca jurnalul Kronos.
@@ -26,12 +29,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from module.continuum import ROSIE
 from module.continuum.evalueaza import StareaOrganismului
 
 
 def memorie_goala() -> dict[str, Any]:
     return {"versiune": 1, "ciclu": 0, "actualizat": None, "capacitati": {}, "strategii": {}, "experimente": [],
-            "probleme": [], "de_reluat": []}
+            "probleme": [], "de_reluat": [],
+            # v1: vectorul capacităților, coada de confirmare, răcirea nevoilor, rapoartele către om
+            "vector_capacitati": {}, "candidati": [], "racire": {}, "rapoarte": [], "de_raportat": []}
 
 
 def incarca(director: Path) -> dict[str, Any]:
@@ -67,9 +73,16 @@ def actualizeaza_capacitati(memorie: dict[str, Any], stare: StareaOrganismului, 
         m = memorie["capacitati"].setdefault(nume, {})
         if c.curent is not None and (m.get("ultimul_scor"), m.get("pe_modelul")) != (c.curent, model):
             m["ultima_schimbare"] = timp
-        m.update({"metrica": c.metrica, "mai_mare_e_mai_bine": c.mai_mare_e_mai_bine, "linie_de_baza": c.linie_de_baza,
-                  "experiment_baza": c.experiment_baza, "ultimul_scor": c.curent, "pe_modelul": model,
-                  "procent": c.procent, "disponibila": c.disponibila})
+        if not m.get("baza_confirmata"):  # o linie de bază confirmată se mută doar prin stabilitate.py
+            m.update(linie_de_baza=c.linie_de_baza, experiment_baza=c.experiment_baza)
+        m.update({"metrica": c.metrica, "mai_mare_e_mai_bine": c.mai_mare_e_mai_bine, "ultimul_scor": c.curent,
+                  "pe_modelul": model, "procent": c.procent, "disponibila": c.disponibila, "zona": c.zona,
+                  "prag_folosit": c.prag_zgomot})
+    memorie["vector_capacitati"] = stare.vector()
+    for raport in memorie["rapoarte"]:  # zona roșie s-a dus: raportul se închide, iar o recădere aduce unul nou
+        c = stare.capacitati.get(raport.get("capacitate"))
+        if raport.get("tip") == "repara" and raport.get("deschis") and (c is None or c.zona != ROSIE):
+            raport.update(deschis=False, inchis=timp, zona_la_inchidere=c.zona if c else None)
 
 
 def actualizeaza_probleme(memorie: dict[str, Any], curente: dict[str, str], timp: str) -> None:

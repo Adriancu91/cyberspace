@@ -115,7 +115,8 @@ def test_masurarea_e_prima_si_noaptea(proiect):
 def test_o_linie_intrerupta_se_reia(proiect):
     noaptea_3(proiect)
     config_kronos(proiect, "laptop_antrenare_lunga_4.toml", "antrenare_lunga_4")
-    examene = {"fapte_corecte": 28, "nota_profesor": 3.75}  # ca azi-noapte: toate trei examenele la fiecare oră
+    # Toate trei examenele la fiecare oră, la nivelul liniei de bază (cu 28 de fapte ar fi zona roșie: vezi v1).
+    examene = {"fapte_corecte": 41, "nota_profesor": 4.7}
     scrie_jurnal(proiect, [fisa(11, "antrenare_lunga_4", 0.5048, criterii=examene),
                            fisa(12, "antrenare_lunga_4", 0.4976, criterii=examene),
                            fisa(13, "antrenare_lunga_4", 0.4880, criterii=examene)])

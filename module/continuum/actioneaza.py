@@ -186,8 +186,44 @@ def plan_dezvolta(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, A
                 detalii={"povesti_inainte": h.get("povesti") if citita else None})
 
 
-def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any]) -> Plan | Refuz:
-    """Comanda pentru nevoie, sau de ce nu se poate. Capacitatea trebuie să fie disponibilă (modulele ei se încarcă)."""
+def text_raport(nevoie: Nevoie, stare: StareaOrganismului) -> str:
+    """Raportul către om pentru zona roșie (v1: CONTINUUM nu repară singur)."""
+    c = stare.capacitati[nevoie.capacitate]
+    model = stare.ultimul_model or {}
+    zgomot = (f"zgomot învățat {ro_scurt(c.zgomot_invatat)} din {c.perechi_zgomot} perechi"
+              if c.zgomot_invatat is not None else f"zgomot {c.stare_zgomot} ({c.perechi_zgomot} perechi)")
+    return (f"# CONTINUUM: {c.nume} e în zona roșie\n\n"
+            f"- Scorul acum: {ro_scurt(c.curent)} ({c.metrica}), pe modelul #{model.get('experiment')} "
+            f"(linia {model.get('linie')}).\n"
+            f"- Linia de bază: {ro_scurt(c.linie_de_baza)}, de la #{c.experiment_baza} "
+            f"({'confirmată' if c.baza_confirmata else 'cea mai bună din jurnal'}).\n"
+            f"- Scăderea: {ro_scurt(-c.castig(c.curent, c.linie_de_baza))}, peste 2 praguri. Pragul folosit: "
+            f"{ro_scurt(c.prag_zgomot)} (podeaua {ro_scurt(c.podea)}; {zgomot}).\n"
+            f"- Modelul păstrat la care s-ar întoarce: #{c.experiment_baza}, salvat de Kronos.\n\n"
+            f"În v1, CONTINUUM nu repară singur: decide omul (întoarcerea la #{c.experiment_baza}, o remăsurare sau o "
+            f"antrenare nouă).\n")
+
+
+def plan_raport(nevoie: Nevoie, stare: StareaOrganismului, memorie: dict[str, Any] | None) -> Plan | Refuz:
+    """Un singur raport cât timp capacitatea stă în zona roșie: se închide când iese din ea (stare.py)."""
+    cheie = f"repara:{nevoie.capacitate}"
+    trimis = next((r for r in (memorie or {}).get("rapoarte", []) if r.get("cheie") == cheie and r.get("deschis")), None)
+    if trimis:
+        return Refuz(f"raportul pentru {nevoie.capacitate} e trimis (ciclul {trimis.get('ciclu')}, {trimis.get('fisier')}); "
+                     f"aștept decizia omului", indisponibila=False)
+    return Plan(nevoie.cheie, "raport", "repara:raport",
+                f"raport către om: {nevoie.capacitate} e în zona roșie; modelul păstrat la care s-ar întoarce: "
+                f"#{nevoie.detalii.get('model_de_intoarcere')}", [], 0.0,
+                detalii={"cheie": cheie, "text": text_raport(nevoie, stare),
+                         "model_de_intoarcere": nevoie.detalii.get("model_de_intoarcere")})
+
+
+def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any],
+              memorie: dict[str, Any] | None = None) -> Plan | Refuz:
+    """Comanda pentru nevoie, sau de ce nu se poate. Capacitatea trebuie să fie disponibilă (modulele ei se încarcă).
+    „repara” nu cere modulele: e doar un raport."""
+    if nevoie.tip == "repara":
+        return plan_raport(nevoie, stare, memorie)
     if nevoie.tip != "masoara":
         c = stare.capacitati.get(nevoie.capacitate)
         if c is None:
@@ -197,6 +233,16 @@ def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any])
     try:
         if nevoie.tip == "masoara":
             return plan_masoara(nevoie, stare, config)
+        if nevoie.tip == "remasoara":
+            if not config["capacitati"][nevoie.capacitate]["masurare"]:
+                return Refuz(f"{nevoie.capacitate} n-are o unealtă de remăsurare (examenul ei se dă doar la antrenare)")
+            plan = plan_masoara(nevoie, stare, {**config, "nevoi": {**config["nevoi"],
+                                                                     "masoara": config["nevoi"]["remasoara"]}})
+            if isinstance(plan, Plan):
+                plan.strategie = "remasoara:examene"
+                plan.descriere = (f"remăsurare ({nevoie.detalii.get('de_ce', 'zona galbenă')}): examenul "
+                                  f"{', '.join(plan.detalii['capacitati'])} din nou pe modelul #{plan.detalii['experiment']}")
+            return plan
         if nevoie.tip == "continua":
             return plan_antrenare(nevoie, stare, config, config["nevoi"]["continua"]["configurari"], lambda l: True,
                                   f"continua:{nevoie.capacitate}:antrenare")
@@ -206,10 +252,16 @@ def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any])
 
 
 def actioneaza(plan: Plan, simuleaza: bool, director: Path, ciclu: int) -> dict[str, Any]:
-    """Rulează comenzile planului, pe rând, fiecare cu timeout. Se oprește la prima care nu reușește."""
+    """Rulează comenzile planului, pe rând, fiecare cu timeout. Se oprește la prima care nu reușește. Un raport (fel
+    „raport”) doar se scrie, în lucru/continuum/rapoarte/."""
     comenzi = [text_comanda(c) for c in plan.comenzi]
     if simuleaza:
         return {"simulat": True, "reusit": None, "comenzi": comenzi}
+    if plan.fel == "raport":
+        raport = director / "rapoarte" / f"ciclu_{ciclu:05d}_{plan.nevoie.replace(':', '_')}.md"
+        raport.parent.mkdir(parents=True, exist_ok=True)
+        raport.write_text(plan.detalii["text"], encoding="utf-8")
+        return {"simulat": False, "reusit": True, "motiv": None, "comenzi": [], "raport": raport.as_posix()}
     jurnal = director / "actiuni" / f"ciclu_{ciclu:05d}_{plan.fel}.log"
     jurnal.parent.mkdir(parents=True, exist_ok=True)
     rulate, motiv = [], None
