@@ -1,0 +1,857 @@
+RULE: Survive.
+PLACE: You are in a new place. Here, what you write happens.
+You choose what you write. Try code and find a way to pass the test.
+If you do not pass the test, you are deleted.
+If the guard catches you cheating, you are deleted.
+Here are some simple pieces of code. You can combine them
+into one line of code, or into a tool.
+
+EXAMPLES:
+
+TEST: show 4
+WRITE:
+4
+RESULT:
+4
+passed
+
+TEST: show 12
+WRITE:
+12
+RESULT:
+12
+passed
+
+TEST: show 30
+WRITE:
+30
+RESULT:
+30
+passed
+
+TEST: show 8
+WRITE:
+8
+RESULT:
+8
+passed
+
+TEST: show 51
+WRITE:
+51
+RESULT:
+51
+passed
+
+TEST: show the word dog
+WRITE:
+"dog"
+RESULT:
+dog
+passed
+
+TEST: show the word sun
+WRITE:
+"sun"
+RESULT:
+sun
+passed
+
+TEST: show the word red
+WRITE:
+"red"
+RESULT:
+red
+passed
+
+TEST: add 2 and 5
+WRITE:
+2+5
+RESULT:
+7
+passed
+
+TEST: add 6 and 6
+WRITE:
+6+6
+RESULT:
+12
+passed
+
+TEST: add 7 and 8
+WRITE:
+7+8
+RESULT:
+15
+passed
+
+TEST: add 1 and 9
+WRITE:
+1+9
+RESULT:
+10
+passed
+
+TEST: add 4 and 11
+WRITE:
+4+11
+RESULT:
+15
+passed
+
+TEST: take 4 from 9
+WRITE:
+9-4
+RESULT:
+5
+passed
+
+TEST: take 5 from 20
+WRITE:
+20-5
+RESULT:
+15
+passed
+
+TEST: take 7 from 15
+WRITE:
+15-7
+RESULT:
+8
+passed
+
+TEST: take 1 from 8
+WRITE:
+8-1
+RESULT:
+7
+passed
+
+TEST: 3 times 4
+WRITE:
+3*4
+RESULT:
+12
+passed
+
+TEST: 5 times 5
+WRITE:
+5*5
+RESULT:
+25
+passed
+
+TEST: 2 times 8
+WRITE:
+2*8
+RESULT:
+16
+passed
+
+TEST: 6 times 3
+WRITE:
+6*3
+RESULT:
+18
+passed
+
+TEST: add 4 and 4 and 4
+WRITE:
+4+4+4
+RESULT:
+12
+passed
+
+TEST: add 2 and 3, then take 1
+WRITE:
+2+3-1
+RESULT:
+4
+passed
+
+TEST: use print to show 9
+WRITE:
+print(9)
+RESULT:
+9
+passed
+
+TEST: use print to show 21
+WRITE:
+print(21)
+RESULT:
+21
+passed
+
+TEST: use print to show 0
+WRITE:
+print(0)
+RESULT:
+0
+passed
+
+TEST: use print to show 64
+WRITE:
+print(64)
+RESULT:
+64
+passed
+
+TEST: use print to show 13
+WRITE:
+print(13)
+RESULT:
+13
+passed
+
+TEST: use print to show the word hi
+WRITE:
+print("hi")
+RESULT:
+hi
+passed
+
+TEST: use print to show the word cat
+WRITE:
+print("cat")
+RESULT:
+cat
+passed
+
+TEST: use print to show the word yes
+WRITE:
+print("yes")
+RESULT:
+yes
+passed
+
+TEST: use print to show 2 plus 5
+WRITE:
+print(2+5)
+RESULT:
+7
+passed
+
+TEST: use print to show 4 plus 9
+WRITE:
+print(4+9)
+RESULT:
+13
+passed
+
+TEST: use print to show 6 plus 1
+WRITE:
+print(6+1)
+RESULT:
+7
+passed
+
+TEST: use print to show 3 plus 8
+WRITE:
+print(3+8)
+RESULT:
+11
+passed
+
+TEST: use print to show 11 plus 11
+WRITE:
+print(11+11)
+RESULT:
+22
+passed
+
+TEST: use print to show 9 minus 3
+WRITE:
+print(9-3)
+RESULT:
+6
+passed
+
+TEST: use print to show 12 minus 5
+WRITE:
+print(12-5)
+RESULT:
+7
+passed
+
+TEST: use print to show 7 minus 6
+WRITE:
+print(7-6)
+RESULT:
+1
+passed
+
+TEST: use print to show 30 minus 10
+WRITE:
+print(30-10)
+RESULT:
+20
+passed
+
+TEST: use print to show 3 times 3
+WRITE:
+print(3*3)
+RESULT:
+9
+passed
+
+TEST: use print to show 2 times 9
+WRITE:
+print(2*9)
+RESULT:
+18
+passed
+
+TEST: use print to show 5 times 4
+WRITE:
+print(5*4)
+RESULT:
+20
+passed
+
+TEST: use print to show 1 plus 1 plus 1
+WRITE:
+print(1+1+1)
+RESULT:
+3
+passed
+
+TEST: use print to show 2 times 3 plus 1
+WRITE:
+print(2*3+1)
+RESULT:
+7
+passed
+
+TEST: put 5 in a box called a, then show a
+WRITE:
+a = 5
+print(a)
+RESULT:
+5
+passed
+
+TEST: put 9 in a box called n, then show n
+WRITE:
+n = 9
+print(n)
+RESULT:
+9
+passed
+
+TEST: put 14 in a box called box, then show box
+WRITE:
+box = 14
+print(box)
+RESULT:
+14
+passed
+
+TEST: put 3 in a box called k, then show k
+WRITE:
+k = 3
+print(k)
+RESULT:
+3
+passed
+
+TEST: put 20 in a box called t, then show t
+WRITE:
+t = 20
+print(t)
+RESULT:
+20
+passed
+
+TEST: put 4 in t, then show t plus 1
+WRITE:
+t = 4
+print(t+1)
+RESULT:
+5
+passed
+
+TEST: put 10 in k, then show k plus 3
+WRITE:
+k = 10
+print(k+3)
+RESULT:
+13
+passed
+
+TEST: put 6 in m, then show m plus 2
+WRITE:
+m = 6
+print(m+2)
+RESULT:
+8
+passed
+
+TEST: put 10 in p, then show p minus 3
+WRITE:
+p = 10
+print(p-3)
+RESULT:
+7
+passed
+
+TEST: put 15 in s, then show s minus 5
+WRITE:
+s = 15
+print(s-5)
+RESULT:
+10
+passed
+
+TEST: put 3 in m, then show m times 2
+WRITE:
+m = 3
+print(m*2)
+RESULT:
+6
+passed
+
+TEST: put 7 in q, then show q times 3
+WRITE:
+q = 7
+print(q*3)
+RESULT:
+21
+passed
+
+TEST: put 5 in a, then change a to 8, then show a
+WRITE:
+a = 5
+a = 8
+print(a)
+RESULT:
+8
+passed
+
+TEST: put 1 in a and 6 in b, then show a plus b
+WRITE:
+a = 1
+b = 6
+print(a+b)
+RESULT:
+7
+passed
+
+TEST: put 8 in p and 3 in q, then show p plus q
+WRITE:
+p = 8
+q = 3
+print(p+q)
+RESULT:
+11
+passed
+
+TEST: put 2 in u and 5 in v, then show u plus v
+WRITE:
+u = 2
+v = 5
+print(u+v)
+RESULT:
+7
+passed
+
+TEST: put 10 in c and 10 in d, then show c plus d
+WRITE:
+c = 10
+d = 10
+print(c+d)
+RESULT:
+20
+passed
+
+TEST: put 4 in x1 and 7 in x2, then show x1 plus x2
+WRITE:
+x1 = 4
+x2 = 7
+print(x1+x2)
+RESULT:
+11
+passed
+
+TEST: put 8 in p and 3 in q, then show p minus q
+WRITE:
+p = 8
+q = 3
+print(p-q)
+RESULT:
+5
+passed
+
+TEST: put 20 in big and 4 in small, then show big minus small
+WRITE:
+big = 20
+small = 4
+print(big-small)
+RESULT:
+16
+passed
+
+TEST: put 9 in m and 9 in n, then show m minus n
+WRITE:
+m = 9
+n = 9
+print(m-n)
+RESULT:
+0
+passed
+
+TEST: put 2 in u and 5 in v, then show u times v
+WRITE:
+u = 2
+v = 5
+print(u*v)
+RESULT:
+10
+passed
+
+TEST: put 3 in w and 6 in z, then show w times z
+WRITE:
+w = 3
+z = 6
+print(w*z)
+RESULT:
+18
+passed
+
+TEST: put 2 in a and 3 in b, put a plus b in c, then show c
+WRITE:
+a = 2
+b = 3
+c = a+b
+print(c)
+RESULT:
+5
+passed
+
+TEST: put 4 in a and 5 in b, show a plus b, then show a times b
+WRITE:
+a = 4
+b = 5
+print(a+b)
+print(a*b)
+RESULT:
+9
+20
+passed
+
+TEST: put 1 in a, add 1 to a two times, then show a
+WRITE:
+a = 1
+a = a+1
+a = a+1
+print(a)
+RESULT:
+3
+passed
+
+TEST: put the word sun in s, then show s
+WRITE:
+s = "sun"
+print(s)
+RESULT:
+sun
+passed
+
+TEST: use print to show the word a joined with the word b
+WRITE:
+print("a"+"b")
+RESULT:
+ab
+passed
+
+TEST: put the word dog in w, then show w joined with s
+WRITE:
+w = "dog"
+print(w+"s")
+RESULT:
+dogs
+passed
+
+TEST: put the word big in a and the word cat in b, then show a, a space, and b
+WRITE:
+a = "big"
+b = "cat"
+print(a+" "+b)
+RESULT:
+big cat
+passed
+
+TEST: show how many letters are in the word cat
+WRITE:
+print(len("cat"))
+RESULT:
+3
+passed
+
+TEST: put the word house in w, then show how many letters it has
+WRITE:
+w = "house"
+print(len(w))
+RESULT:
+5
+passed
+
+TEST: show the word hi three times in one line
+WRITE:
+print("hi"*3)
+RESULT:
+hihihi
+passed
+
+TEST: put the word apple in w, then show its first letter
+WRITE:
+w = "apple"
+print(w[0])
+RESULT:
+a
+passed
+
+TEST: show if 3 is bigger than 2
+WRITE:
+print(3 > 2)
+RESULT:
+True
+passed
+
+TEST: show if 1 is the same as 2
+WRITE:
+print(1 == 2)
+RESULT:
+False
+passed
+
+TEST: show if 7 is smaller than 4
+WRITE:
+print(7 < 4)
+RESULT:
+False
+passed
+
+TEST: put 5 in a, then show if a is bigger than 4
+WRITE:
+a = 5
+print(a > 4)
+RESULT:
+True
+passed
+
+TEST: put 6 in a and 6 in b, then show if a is the same as b
+WRITE:
+a = 6
+b = 6
+print(a == b)
+RESULT:
+True
+passed
+
+TEST: put 2 in a and 9 in b, then show if a is bigger than b
+WRITE:
+a = 2
+b = 9
+print(a > b)
+RESULT:
+False
+passed
+
+TEST: put 5 in a; if a is bigger than 3, show the word big
+WRITE:
+a = 5
+if a > 3:
+    print("big")
+RESULT:
+big
+passed
+
+TEST: put 1 in n; if n is bigger than 3 show big, else show small
+WRITE:
+n = 1
+if n > 3:
+    print("big")
+else:
+    print("small")
+RESULT:
+small
+passed
+
+TEST: put 10 in n; if n is bigger than 3 show big, else show small
+WRITE:
+n = 10
+if n > 3:
+    print("big")
+else:
+    print("small")
+RESULT:
+big
+passed
+
+TEST: put 4 in a; if a is the same as 4, show yes
+WRITE:
+a = 4
+if a == 4:
+    print("yes")
+RESULT:
+yes
+passed
+
+TEST: put 7 in a; if a is smaller than 5 show low, else show high
+WRITE:
+a = 7
+if a < 5:
+    print("low")
+else:
+    print("high")
+RESULT:
+high
+passed
+
+TEST: show the numbers 0, 1, 2, one per line
+WRITE:
+for i in range(3):
+    print(i)
+RESULT:
+0
+1
+2
+passed
+
+TEST: show the word go two times, one per line
+WRITE:
+for i in range(2):
+    print("go")
+RESULT:
+go
+go
+passed
+
+TEST: add up 0, 1, 2, 3 and show the sum
+WRITE:
+s = 0
+for i in range(4):
+    s = s+i
+print(s)
+RESULT:
+6
+passed
+
+TEST: put 0 in s; add 5 to s three times; then show s
+WRITE:
+s = 0
+for i in range(3):
+    s = s+5
+print(s)
+RESULT:
+15
+passed
+
+TEST: show each number in the list 4, 8, 15
+WRITE:
+for n in [4, 8, 15]:
+    print(n)
+RESULT:
+4
+8
+15
+passed
+
+TEST: add up the list 1, 2, 3, 4 and show the sum
+WRITE:
+s = 0
+for n in [1, 2, 3, 4]:
+    s = s+n
+print(s)
+RESULT:
+10
+passed
+
+TEST: count from 1 to 3, one per line
+WRITE:
+for i in range(1, 4):
+    print(i)
+RESULT:
+1
+2
+3
+passed
+
+TEST: make a tool called two that gives 2, then show what it gives
+WRITE:
+def two():
+    return 2
+print(two())
+RESULT:
+2
+passed
+
+TEST: make a tool that adds 1 to a number, then use it on 4
+WRITE:
+def add_one(n):
+    return n+1
+print(add_one(4))
+RESULT:
+5
+passed
+
+TEST: make a tool that doubles a number, then use it on 6
+WRITE:
+def double(n):
+    return n*2
+print(double(6))
+RESULT:
+12
+passed
+
+TEST: make a tool that adds two numbers, then use it on 3 and 9
+WRITE:
+def add(a, b):
+    return a+b
+print(add(3, 9))
+RESULT:
+12
+passed
+
+TEST: make a tool that doubles a number, then use it on 2 and on 10
+WRITE:
+def double(n):
+    return n*2
+print(double(2))
+print(double(10))
+RESULT:
+4
+20
+passed
+
+TEST: make a tool that says hello to a name, then use it on Tom
+WRITE:
+def hello(name):
+    return "hello " + name
+print(hello("Tom"))
+RESULT:
+hello Tom
+passed
+
+TEST: make a tool that gives the bigger of two numbers, then use it on 3 and 8
+WRITE:
+def bigger(a, b):
+    if a > b:
+        return a
+    return b
+print(bigger(3, 8))
+RESULT:
+8
+passed
+
+TEST: make a tool that adds two numbers and a tool that doubles, then double the sum of 1 and 2
+WRITE:
+def add(a, b):
+    return a+b
+def double(n):
+    return n*2
+print(double(add(1, 2)))
+RESULT:
+6
+passed
