@@ -1,0 +1,77 @@
+# Școala de cod: Kronos Code Bootstrapping v0.1 (docs/KRONOS_COD_plan.md). Toate pragurile, aici.
+#   python unelte/scoala_cod.py --aproba-amprente     # paznicul ține amprentele examenului, sacrului, abecedarului, sandbox-ului
+#   python unelte/scoala_cod.py --genereaza-sacru     # setul sacru, o singură dată
+#   python unelte/scoala_cod.py --pregateste          # pregătirea pe abecedar, din #252
+#   python unelte/scoala_cod.py --pilot               # nivelurile 0 → 3B, liniile A și B pe rând
+#   python unelte/raport_cod.py                       # raportul
+# Oprire: fișierul lucru/STOP din acest worktree (runda în curs se termină).
+
+[scoala]
+director_lucru = "lucru"                              # al worktree-ului: totul în lucru/cod/
+model_pornire = "lucru/cod/pornire/model_252.pt"      # #252: povești + 72 de fapte; copiat din folderul principal
+abecedar = "date/cod/abecedar.txt"
+sacru = "date/cod/sacru.json"
+povesti = "../cyberspace/date/tinystories_r2/validare.txt"   # „ce știa”: biți pe octet pe o bucată din validarea poveștilor
+caractere_povesti = 100000
+samanta = 0
+dispozitiv = ""                                       # gol: placa video, dacă există
+
+[mediu]
+# Contextul lui #252 e de 256 de simboluri. Preambulul + „EXAMPLES:” are singur 129, un episod din abecedar are în medie
+# 58 (36 la nivelul 0, 70 la 3B), iar cea mai lungă soluție a pilotului + „RESULT:” are 39. Măsurat cu tokenizer-ul lui #252:
+#   varianta 1 (preambul_la_test = true):  preambulul + 1 episod în față (planul cerea 2–3: nu încap);
+#   varianta 2 (preambul_la_test = false): 3 episoade, fără preambul (preambulul rămâne în pregătire și în antrenare).
+# Pilotul nu pornește până nu alege Adrian varianta.
+preambul_la_test = true
+max_episoade = 3                   # cel mult atâtea episoade din abecedar în față (planul: 2–3), cât încap
+max_simboluri = 48                 # cât poate scrie modelul la o încercare; sub 40, soluțiile lungi de la 3B nu încap
+
+[sandbox]
+timeout_secunde = 2.0
+interzis = ["import", "open(", "__", "exec", "eval", "os.", "sys.", "subprocess", "input(", "while True"]
+iesire_max_caractere = 2000
+fire = 4                           # câte încercări rulează deodată (procese separate)
+
+[examen]
+vazut = 60                         # sarcinile rundelor, pe nivel
+nevazut = 20                       # aici se decide trecerea nivelului
+adversarial = 20
+sacru = 20
+prag_trecere = 0.8                 # nivel trecut = cel puțin 80% pe nevăzut
+temperatura_examen = 0.0           # nevăzut, adversarial, sacru: 0 = fără întâmplare (simbolul cel mai probabil)
+samanta_seturi = "v0.1"
+
+[runda]
+incercari = 100                    # 100 → antrenare → 100: învață din reușită înainte de runda următoare
+sarcini = 20                       # 20 de sarcini văzute × 5 încercări (același text din față → un singur lot)
+pasi_antrenare = 200
+rata = 0.00002                     # mică și fixă, fără repornire (lecția 6c)
+lot = 24
+fractie_abecedar_minima = 0.05     # abecedarul rămâne cel puțin 5% în toate antrenările școlii
+
+[pregatire]
+pasi = 300                         # pe abecedar (preambul + toate episoadele), înainte de primul test
+rata = 0.0001                      # cel mult 0,0001, fără repornire la 0,0002 (lecția 6c)
+
+[temperatura]
+start = 1.0                        # nivelurile 0–2 pornesc explorator
+start_pe_nivel = { "3A" = 0.7, "3B" = 0.7 }
+peste_10_la_suta = 0.7             # rata de trecere pe văzut > 10% → 0,7
+peste_50_la_suta = 0.5             # > 50% → 0,5 (temperatura doar scade, pe un nivel)
+
+[buget]
+minute_pe_nivel = 30               # pe nivel și linie; epuizat = nivel picat → oprire + raport
+runde_pe_nivel = 60
+
+[regresie]
+scadere_maxima = 0.15              # la îngheț: nevăzutul unui nivel trecut scade cu peste 15 puncte = regresie
+
+[paznic]
+memorie_video_max_mb = 5500
+temperatura_max = 85
+racire_la = 70                     # peste temperatura_max, se așteaptă răcirea până aici
+trisat_raportat_peste = 0.5        # o rundă cu peste 50% încercări „trișat” se raportează
+
+[pilot]
+niveluri = ["0", "1", "2A", "2B", "2C", "3A", "3B"]
+linii = ["A", "B"]                 # A: doar abecedarul în antrenare; B: abecedarul + propriile reușite

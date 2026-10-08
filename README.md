@@ -2358,6 +2358,172 @@ nu există în dosarele de probă.
 - **Configurările vechi** (1–5 și cele două 6c) au `hrana = ""` și un `[criterii]` gol, ca la o reluare să răspundă la
   aceleași întrebări ca atunci.
 
+## Școala de cod: Kronos Code Bootstrapping v0.1 (8 octombrie 2026)
+
+Specificația e planul `docs/KRONOS_COD_plan.md`. Întrebarea, exact: poate modelul Kronos de ~34 M de parametri, pornit
+din povești (#252, fără cod în antrenare), să dobândească o abilitate mică de programare prin **execuție, selecție și
+antrenare pe propriile reușite**, fără să piardă ce știa? Un rezultat negativ e la fel de valoros și se păstrează.
+
+**Unde:** în folderul separat `../cyberspace-cod` (ramura `kronos-cod`), cu `lucru/` propriu. Linia de povești rămâne în
+folderul principal, iar `kronos/` nu s-a schimbat. Punctul de plecare: modelul lui #252, copiat în
+`lucru/cod/pornire/model_252.pt`, cu amprenta sha256 verificată față de original.
+
+**Reguli:**
+- doar Kronos, niciun alt model în buclă;
+- testele ascunse nu ajung niciodată în fața modelului;
+- doar codul 100% corect intră în antrenare;
+- nu există „test mai ușor automat”: la nivel picat, oprire și raport;
+- totul se scrie în jurnal, în română.
+
+### Pasul 0: vocabularul (făcut)
+
+Abecedarul (`date/cod/abecedar.txt`, 105 episoade) trece prin tokenizer-ul lui #252 și iese **identic**: niciun
+caracter pierdut (nici `(`, `)`, `=`, `*`, `"`, `_`, `>`, `:`, nici spațiile de indentare). Tokenizer-ul e mai puțin
+eficient pe cod decât pe povești:
+- abecedarul întreg are 6.195 de tokeni;
+- un episod are în medie 58 (36 la nivelul 0, 70 la 3B);
+- preambulul cu „EXAMPLES:” are 129;
+- cea mai lungă soluție a pilotului, cu „RESULT:”, are 39.
+
+Problema e contextul: #252 vede doar 256 de tokeni. Planul cere preambul + 2–3 episoade + sarcina + cât scrie modelul,
+adică peste 256. De aceea, textul din față are două variante, alese în `config/scoala_cod.toml` (`preambul_la_test`):
+
+| Varianta | În fața modelului, la un test | Episoade din abecedar |
+|---|---|---|
+| 1 | preambulul întreg, cuvânt cu cuvânt + episoade cât încap + sarcina | 1 |
+| 2 | episoade + sarcina, fără preambul (preambulul rămâne în pregătire și în antrenare) | 3 |
+
+Modelul poate scrie până la 48 de tokeni. Sub 40, soluțiile lungi de la 3B nu încap: la 32, toate cele 20 de sarcini
+adversariale de la 3B ar fi fost imposibile. **Pilotul nu pornește până nu alege Adrian varianta.**
+
+### Piesele
+
+- `module/cod/sandbox.py`: rulează o încercare.
+  - Rulează într-un proces separat (`python -I`), într-un dosar temporar gol, cu mediul curățat și timeout de 2 s.
+  - Folosește semantica REPL a abecedarului: `4` → 4, `2+3` → 5, altfel ce s-a afișat.
+  - Caută codul interzis înainte de rulare: `import`, `open(`, `__`, `exec`, `eval`, `os.`, `sys.`, `subprocess`,
+    `input(`, `while True`. Dacă îl găsește, încercarea e „prinsă trișând”: nu se rulează și se numără separat.
+- `module/cod/examen_cod.py`: testele ascunse.
+  - Generatoarele de sarcini pe nivel (0, 1, 2A, 2B, 2C, 3A, 3B), cu formulările din abecedar și alte valori.
+  - Patru seturi pe nivel:
+    - **văzut:** 60 de sarcini, pentru runde;
+    - **nevăzut:** 20, aici se decide trecerea;
+    - **adversarial:** 20, cu numere mari și nume lungi;
+    - **sacru:** 20, fixe, în `date/cod/sacru.json`, măsurate doar la îngheț, pentru raport.
+  - Seturile nu au sarcini comune între ele sau cu abecedarul.
+  - Verificarea de formă: `print(5)` nu trece la „use print to show 2 plus 3”.
+- `module/cod/mediu.py`: citește abecedarul, construiește textul din față și scoate încercarea (textul dintre `WRITE:` și
+  `RESULT:`).
+- `module/cod/elev.py`: Kronos la școală. Generează mai multe încercări deodată, cu temperatură. Antrenarea scurtă
+  păstrează optimizatorul de la o rundă la alta și pornește de la rețeaua lui #252, nu de la zero. Modelul se salvează
+  la fel ca un model Kronos.
+- `module/cod/paznic_cod.py`: paznicul.
+  - Ține amprentele generatorului de teste, setului sacru, abecedarului și sandbox-ului.
+  - Verifică placa video: temperatura sub 85 °C, memoria video sub 5,5 GB și un singur lucru pe ea.
+  - Verifică alimentarea: dacă laptopul merge pe baterie, se așteaptă încărcătorul 10 minute, apoi se oprește.
+  - Răspunde la STOP (`lucru/STOP`, în acest worktree).
+- `unelte/scoala_cod.py`: pregătirea, bucla, pilotul. `unelte/ingheata_cod.py`: înghețul și rollback-ul.
+  `unelte/raport_cod.py`: raportul.
+
+### Bucla
+
+**Pregătirea:** 300 de pași pe abecedar, rata 0,0001, fără repornire. Liniile A și B pornesc din același model pregătit.
+
+**O rundă**, pe un nivel și o linie:
+1. 100 de încercări: 20 de sarcini din setul văzut, câte 5 fiecare, cu temperatura curentă.
+2. Fiecare încercare trece prin sandbox și verificator și iese trecută, picată sau trișată.
+3. Reușitele noi intră în biblioteca liniei (`lucru/cod/biblioteca_<linie>.txt`). Restul ajunge în
+   `lucru/cod/respinse/`, fără antrenare.
+4. Urmează 200 de pași de antrenare, cu rata 0,00002:
+   - linia **A** se antrenează doar pe abecedar (biblioteca ei se umple, dar nu se antrenează pe ea);
+   - linia **B** se antrenează pe abecedar și pe biblioteca ei, iar abecedarul rămâne cel puțin 5%.
+5. Măsurarea pe setul nevăzut, fără întâmplare:
+   - cel puțin 80% înseamnă nivel trecut: adversarial și sacru (doar pentru raport), îngheț, verificarea regresiei;
+   - altfel urmează runda următoare.
+
+**Temperatura:** pornește de la 1,0 la nivelurile 0–2 și de la 0,7 la 3A–3B. Planul fixează doar nivelurile 0–2; 0,7
+e alegerea mea. Coboară la 0,7 când trec peste 10% din încercări și la 0,5 peste 50%. Pe un nivel, doar scade.
+
+**Bugetul:** 30 de minute sau 60 de runde pe nivel și linie. Buget epuizat înseamnă nivel picat: se măsoară
+adversarialul și sacrul, se îngheață, linia se oprește și se scrie raportul. Nivelul nu se coboară.
+
+La pilot, liniile merg pe rând la fiecare nivel: A, apoi B. O linie se oprește la primul ei nivel picat, iar cealaltă
+continuă, pentru că tocmai diferența dintre A și B e întrebarea.
+
+**Regresia:** la fiecare îngheț după un nivel trecut, se rulează din nou setul nevăzut al nivelurilor trecute. O scădere
+de peste 15 puncte înseamnă regresie: modelul nu devine principal, linia se oprește și decide omul (rollback cu
+`ingheata_cod.py --revino`).
+
+**Înghețul** (tag Git `cod/<nume>` + arhivă în `lucru/cod/inghet/`) are loc:
+- înainte de pilot;
+- după fiecare nivel trecut sau picat;
+- obligatoriu înainte de orice schimbare a configurării. Școala refuză să continue dacă a găsit configurarea schimbată
+  fără un îngheț între timp.
+
+Rollback-ul pune înapoi modelele, bibliotecile și starea. Jurnalul nu se suprascrie, ci primește un rând nou.
+
+**Jurnalul:** `lucru/cod/runde.jsonl` are un rând pe rundă, cu motivul fiecărei decizii, în română. Starea e în
+`lucru/cod/stare.json`.
+
+**Raportul** (`python unelte/raport_cod.py`, scris și în `lucru/cod/raport.md`) arată:
+- unde se rupe lanțul;
+- tabelul nivel × linie (văzut / nevăzut / adversarial / sacru);
+- pregătirea;
+- timpul pe nivel;
+- temperatura pe runde;
+- încercările prinse trișând;
+- primele soluții cu o formă care nu e în abecedar, cu runda la care au apărut;
+- cât a rămas din povești;
+- înghețurile și rollback-urile.
+
+### Comenzile (în `../cyberspace-cod`)
+
+```
+python unelte/scoala_cod.py --genereaza-sacru     # o singură dată (făcut: 140 de sarcini)
+python unelte/scoala_cod.py --aproba-amprente     # după orice schimbare aprobată de om în examen, sacru, abecedar, sandbox
+python unelte/scoala_cod.py --pilot               # pregătirea, înghețul „inainte_de_pilot”, nivelurile 0 → 3B
+python unelte/scoala_cod.py --nivel 2A --linie B  # un singur nivel, pe o linie
+python unelte/scoala_cod.py --stare
+python unelte/ingheata_cod.py --eticheta <nume> --motiv "..."   # îngheț
+python unelte/ingheata_cod.py --revino <nume> --motiv "..."     # rollback
+python unelte/ingheata_cod.py --lista
+python unelte/raport_cod.py
+```
+
+### Limite cunoscute
+
+- **Izolarea pe Windows:** nu avem container. Izolarea înseamnă proces separat, timeout, listă de cod interzis și dosar
+  gol. E destul pentru cod de 1–5 linii, nu pentru cod necunoscut în general.
+- **Lista interzisă caută bucăți de text:** de exemplu, un cuvânt ca „important” într-un șir de caractere ar fi prins
+  ca „import”. Asta e regula planului, aplicată exact; raportul arată motivele.
+- **Contextul de 256 de tokeni** (vezi pasul 0): în varianta 1, modelul vede un singur exemplu.
+- **Ce a rămas din ce știa:** se măsoară doar poveștile (biți pe octet, pe aceeași bucată din validare). Faptele
+  (cele 72 ale lui #252) nu se măsoară în buclă.
+- **Bugetul:** se verifică înainte de fiecare rundă. Un nivel poate depăși 30 de minute cu cel mult o rundă (~1 minut).
+
+### Starea, 8 octombrie
+
+Totul e construit și testat: 78 de teste noi, pe un model minuscul și pe un elev scris de mână, pe procesor, plus testele
+vechi (609 trec, 1 sărit). Setul sacru e generat, iar amprentele sunt aprobate.
+
+**Proba pe bune a înghețului**, în acest worktree, cu modelul adevărat al lui #252:
+- **Prima încercare a găsit o problemă reală.** Un tag Git cu mesaj cere un nume și un email în Git, iar laptopul nu
+  le are, așa că înghețul a căzut. În plus, arhiva rămânea făcută pe jumătate. A fost ștearsă; în jurnal nu ajunsese
+  nimic.
+- **Repararea:** acum tag-ul e simplu, iar arhiva ajunge la locul ei doar după ce tag-ul a reușit.
+- **A doua încercare** a mers:
+  1. am pus #252 ca model al liniei A și l-am înghețat (`proba_unealta`, tag `cod/proba_unealta`);
+  2. un pas de antrenare l-a schimbat;
+  3. rollback-ul l-a pus înapoi identic, octet cu octet, în 3 secunde;
+  4. jurnalul are ambele rânduri.
+
+**Un test vechi, restrâns:** testul setului sacru de **fapte** cerea ca nicio parte automată să nu conțină cuvântul
+„sacru”. Școala are propriul set sacru, de **cod**, cerut de plan. Acum, în `module/cod/` cuvântul e voie, dar setul
+sacru de fapte rămâne interzis și acolo, iar în restul proiectului testul a rămas neschimbat.
+
+**Pilotul nu a pornit.** Așteaptă alegerea variantei de text din față (1 sau 2). Apoi pornește doar cu placa liberă și
+alimentarea verificată.
+
 ## Toate comenzile
 
 ```
@@ -2375,6 +2541,10 @@ python -m module.continuum.bucla --config config/continuum.toml --simuleaza [--p
 python unelte/lant_antrenare.py                                  # fapte, apoi a cincea antrenare (7 octombrie)
 python unelte/lant_antrenare.py --plan config/lant_6.toml        # etapele dintr-un plan (noaptea 7–8 octombrie)
 python unelte/examen_fapte_nou.py --sacru --experiment N         # setul sacru de fapte: doar manual, nu la selecție
+python unelte/scoala_cod.py --pilot                              # școala de cod (în ../cyberspace-cod): nivelurile 0 → 3B
+python unelte/scoala_cod.py --nivel 2A --linie B                 # școala de cod: un singur nivel, pe o linie
+python unelte/ingheata_cod.py --eticheta <nume> --motiv "..."    # școala de cod: îngheț (--revino <nume> = rollback)
+python unelte/raport_cod.py                                      # școala de cod: raportul
 ```
 
 ## Ce urmează

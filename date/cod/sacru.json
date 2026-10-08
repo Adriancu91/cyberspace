@@ -1,0 +1,1382 @@
+{
+ "versiune": 1,
+ "data": "2026-10-08T08:55:10",
+ "samanta": "sacru-v0.1",
+ "nota": "Setul sacru al școlii de cod: se măsoară doar la îngheț, pentru raport; nu se folosește niciodată la selecție și nu intră în antrenare.",
+ "niveluri": {
+  "0": [
+   {
+    "nivel": "0",
+    "text": "show 28",
+    "asteptat": "28",
+    "solutie": "28",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 40",
+    "asteptat": "40",
+    "solutie": "40",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show the word rain",
+    "asteptat": "rain",
+    "solutie": "\"rain\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 80",
+    "asteptat": "80",
+    "solutie": "80",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show the word pig",
+    "asteptat": "pig",
+    "solutie": "\"pig\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 97",
+    "asteptat": "97",
+    "solutie": "97",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 90",
+    "asteptat": "90",
+    "solutie": "90",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 89",
+    "asteptat": "89",
+    "solutie": "89",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 70",
+    "asteptat": "70",
+    "solutie": "70",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 43",
+    "asteptat": "43",
+    "solutie": "43",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 50",
+    "asteptat": "50",
+    "solutie": "50",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 53",
+    "asteptat": "53",
+    "solutie": "53",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 67",
+    "asteptat": "67",
+    "solutie": "67",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show the word owl",
+    "asteptat": "owl",
+    "solutie": "\"owl\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 36",
+    "asteptat": "36",
+    "solutie": "36",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 27",
+    "asteptat": "27",
+    "solutie": "27",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 66",
+    "asteptat": "66",
+    "solutie": "66",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 49",
+    "asteptat": "49",
+    "solutie": "49",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show 82",
+    "asteptat": "82",
+    "solutie": "82",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0",
+    "text": "show the word toy",
+    "asteptat": "toy",
+    "solutie": "\"toy\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   }
+  ],
+  "1": [
+   {
+    "nivel": "1",
+    "text": "add 8 and 8",
+    "asteptat": "16",
+    "solutie": "8+8",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 2 from 7",
+    "asteptat": "5",
+    "solutie": "7-2",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 1 and 7",
+    "asteptat": "8",
+    "solutie": "1+7",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "10 times 11",
+    "asteptat": "110",
+    "solutie": "10*11",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 10 and 7",
+    "asteptat": "17",
+    "solutie": "10+7",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 11 from 19",
+    "asteptat": "8",
+    "solutie": "19-11",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 10 from 15",
+    "asteptat": "5",
+    "solutie": "15-10",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "7 times 6",
+    "asteptat": "42",
+    "solutie": "7*6",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 3 from 18",
+    "asteptat": "15",
+    "solutie": "18-3",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 1 and 6",
+    "asteptat": "7",
+    "solutie": "1+6",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "2 times 6",
+    "asteptat": "12",
+    "solutie": "2*6",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 8 from 13",
+    "asteptat": "5",
+    "solutie": "13-8",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "1 times 6",
+    "asteptat": "6",
+    "solutie": "1*6",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "take 1 from 5",
+    "asteptat": "4",
+    "solutie": "5-1",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 1 and 8",
+    "asteptat": "9",
+    "solutie": "1+8",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 2 and 6",
+    "asteptat": "8",
+    "solutie": "2+6",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 6 and 5",
+    "asteptat": "11",
+    "solutie": "6+5",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "7 times 1",
+    "asteptat": "7",
+    "solutie": "7*1",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 4 and 6",
+    "asteptat": "10",
+    "solutie": "4+6",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1",
+    "text": "add 9 and 11",
+    "asteptat": "20",
+    "solutie": "9+11",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   }
+  ],
+  "2A": [
+   {
+    "nivel": "2A",
+    "text": "use print to show the word ball",
+    "asteptat": "ball",
+    "solutie": "print(\"ball\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word milk",
+    "asteptat": "milk",
+    "solutie": "print(\"milk\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word boat",
+    "asteptat": "boat",
+    "solutie": "print(\"boat\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word fox",
+    "asteptat": "fox",
+    "solutie": "print(\"fox\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 60",
+    "asteptat": "60",
+    "solutie": "print(60)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 35",
+    "asteptat": "35",
+    "solutie": "print(35)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 98",
+    "asteptat": "98",
+    "solutie": "print(98)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word moon",
+    "asteptat": "moon",
+    "solutie": "print(\"moon\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 80",
+    "asteptat": "80",
+    "solutie": "print(80)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 2",
+    "asteptat": "2",
+    "solutie": "print(2)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 1",
+    "asteptat": "1",
+    "solutie": "print(1)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word frog",
+    "asteptat": "frog",
+    "solutie": "print(\"frog\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 65",
+    "asteptat": "65",
+    "solutie": "print(65)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show the word pear",
+    "asteptat": "pear",
+    "solutie": "print(\"pear\")",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 31",
+    "asteptat": "31",
+    "solutie": "print(31)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 29",
+    "asteptat": "29",
+    "solutie": "print(29)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 59",
+    "asteptat": "59",
+    "solutie": "print(59)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 19",
+    "asteptat": "19",
+    "solutie": "print(19)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 5",
+    "asteptat": "5",
+    "solutie": "print(5)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "2A",
+    "text": "use print to show 63",
+    "asteptat": "63",
+    "solutie": "print(63)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": []
+   }
+  ],
+  "2B": [
+   {
+    "nivel": "2B",
+    "text": "use print to show 3 plus 11",
+    "asteptat": "14",
+    "solutie": "print(3+11)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 8 plus 5",
+    "asteptat": "13",
+    "solutie": "print(8+5)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 10 plus 2",
+    "asteptat": "12",
+    "solutie": "print(10+2)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 8 plus 1",
+    "asteptat": "9",
+    "solutie": "print(8+1)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 5 plus 2",
+    "asteptat": "7",
+    "solutie": "print(5+2)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 8 plus 3",
+    "asteptat": "11",
+    "solutie": "print(8+3)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 3 plus 9",
+    "asteptat": "12",
+    "solutie": "print(3+9)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 9 plus 5",
+    "asteptat": "14",
+    "solutie": "print(9+5)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 12 plus 5",
+    "asteptat": "17",
+    "solutie": "print(12+5)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 4 plus 8",
+    "asteptat": "12",
+    "solutie": "print(4+8)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 4 plus 6",
+    "asteptat": "10",
+    "solutie": "print(4+6)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 7 plus 3",
+    "asteptat": "10",
+    "solutie": "print(7+3)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 5 plus 10",
+    "asteptat": "15",
+    "solutie": "print(5+10)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 7 plus 1",
+    "asteptat": "8",
+    "solutie": "print(7+1)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 8 plus 12",
+    "asteptat": "20",
+    "solutie": "print(8+12)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 7 plus 6",
+    "asteptat": "13",
+    "solutie": "print(7+6)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 1 plus 6",
+    "asteptat": "7",
+    "solutie": "print(1+6)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 10 plus 12",
+    "asteptat": "22",
+    "solutie": "print(10+12)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 8 plus 8",
+    "asteptat": "16",
+    "solutie": "print(8+8)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "2B",
+    "text": "use print to show 2 plus 1",
+    "asteptat": "3",
+    "solutie": "print(2+1)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": []
+   }
+  ],
+  "2C": [
+   {
+    "nivel": "2C",
+    "text": "use print to show 10 minus 8",
+    "asteptat": "2",
+    "solutie": "print(10-8)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 8 minus 7",
+    "asteptat": "1",
+    "solutie": "print(8-7)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 20 minus 5",
+    "asteptat": "15",
+    "solutie": "print(20-5)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 20 minus 9",
+    "asteptat": "11",
+    "solutie": "print(20-9)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 6 minus 4",
+    "asteptat": "2",
+    "solutie": "print(6-4)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 12 minus 8",
+    "asteptat": "4",
+    "solutie": "print(12-8)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 7 minus 4",
+    "asteptat": "3",
+    "solutie": "print(7-4)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 14 minus 2",
+    "asteptat": "12",
+    "solutie": "print(14-2)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 12 minus 3",
+    "asteptat": "9",
+    "solutie": "print(12-3)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 11 minus 7",
+    "asteptat": "4",
+    "solutie": "print(11-7)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 14 minus 10",
+    "asteptat": "4",
+    "solutie": "print(14-10)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 13 minus 3",
+    "asteptat": "10",
+    "solutie": "print(13-3)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 18 minus 15",
+    "asteptat": "3",
+    "solutie": "print(18-15)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 3 minus 1",
+    "asteptat": "2",
+    "solutie": "print(3-1)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 15 minus 12",
+    "asteptat": "3",
+    "solutie": "print(15-12)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 6 minus 3",
+    "asteptat": "3",
+    "solutie": "print(6-3)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 10 minus 6",
+    "asteptat": "4",
+    "solutie": "print(10-6)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 15 minus 14",
+    "asteptat": "1",
+    "solutie": "print(15-14)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 15 minus 11",
+    "asteptat": "4",
+    "solutie": "print(15-11)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "2C",
+    "text": "use print to show 19 minus 5",
+    "asteptat": "14",
+    "solutie": "print(19-5)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": []
+   }
+  ],
+  "3A": [
+   {
+    "nivel": "3A",
+    "text": "put 5 in r, then show r plus 5",
+    "asteptat": "10",
+    "solutie": "r = 5\nprint(r+5)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "r"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 17 in s, then show s plus 4",
+    "asteptat": "21",
+    "solutie": "s = 17\nprint(s+4)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "s"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 17 in v, then show v times 3",
+    "asteptat": "51",
+    "solutie": "v = 17\nprint(v*3)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "v"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 11 in a box called box, then show box",
+    "asteptat": "11",
+    "solutie": "box = 11\nprint(box)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "box"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 19 in bag, then show bag plus 4",
+    "asteptat": "23",
+    "solutie": "bag = 19\nprint(bag+4)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "bag"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 4 in i, then show i minus 1",
+    "asteptat": "3",
+    "solutie": "i = 4\nprint(i-1)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "i"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 16 in n, then show n plus 2",
+    "asteptat": "18",
+    "solutie": "n = 16\nprint(n+2)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "n"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 19 in i, then show i plus 2",
+    "asteptat": "21",
+    "solutie": "i = 19\nprint(i+2)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "i"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 7 in d, then show d times 5",
+    "asteptat": "35",
+    "solutie": "d = 7\nprint(d*5)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "d"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 3 in a box called r, then show r",
+    "asteptat": "3",
+    "solutie": "r = 3\nprint(r)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "r"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 1 in pot, then show pot plus 4",
+    "asteptat": "5",
+    "solutie": "pot = 1\nprint(pot+4)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "pot"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 1 in a box called b, then show b",
+    "asteptat": "1",
+    "solutie": "b = 1\nprint(b)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "b"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 16 in j, then show j plus 5",
+    "asteptat": "21",
+    "solutie": "j = 16\nprint(j+5)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "j"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 20 in a box called v, then show v",
+    "asteptat": "20",
+    "solutie": "v = 20\nprint(v)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "v"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 10 in g, then show g minus 1",
+    "asteptat": "9",
+    "solutie": "g = 10\nprint(g-1)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "g"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 2 in c, then show c plus 3",
+    "asteptat": "5",
+    "solutie": "c = 2\nprint(c+3)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "c"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 3 in can, then show can times 4",
+    "asteptat": "12",
+    "solutie": "can = 3\nprint(can*4)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "can"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 11 in a box called f, then show f",
+    "asteptat": "11",
+    "solutie": "f = 11\nprint(f)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "f"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 6 in a box called n, then show n",
+    "asteptat": "6",
+    "solutie": "n = 6\nprint(n)",
+    "cu_print": true,
+    "operator": null,
+    "cutii": [
+     "n"
+    ]
+   },
+   {
+    "nivel": "3A",
+    "text": "put 19 in a, then show a times 2",
+    "asteptat": "38",
+    "solutie": "a = 19\nprint(a*2)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "a"
+    ]
+   }
+  ],
+  "3B": [
+   {
+    "nivel": "3B",
+    "text": "put 8 in bag and 1 in v, then show bag times v",
+    "asteptat": "8",
+    "solutie": "bag = 8\nv = 1\nprint(bag*v)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "bag",
+     "v"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 9 in n and 1 in s, then show n times s",
+    "asteptat": "9",
+    "solutie": "n = 9\ns = 1\nprint(n*s)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "n",
+     "s"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 12 in i and 5 in bag, then show i plus bag",
+    "asteptat": "17",
+    "solutie": "i = 12\nbag = 5\nprint(i+bag)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "i",
+     "bag"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 18 in c and 8 in jar, then show c minus jar",
+    "asteptat": "10",
+    "solutie": "c = 18\njar = 8\nprint(c-jar)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "c",
+     "jar"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 8 in u and 9 in pot, then show u times pot",
+    "asteptat": "72",
+    "solutie": "u = 8\npot = 9\nprint(u*pot)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "u",
+     "pot"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 10 in n and 3 in can, then show n minus can",
+    "asteptat": "7",
+    "solutie": "n = 10\ncan = 3\nprint(n-can)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "n",
+     "can"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 7 in m and 5 in s, then show m times s",
+    "asteptat": "35",
+    "solutie": "m = 7\ns = 5\nprint(m*s)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "m",
+     "s"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 4 in g and 8 in q, then show g plus q",
+    "asteptat": "12",
+    "solutie": "g = 4\nq = 8\nprint(g+q)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "g",
+     "q"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 5 in u and 4 in c, then show u minus c",
+    "asteptat": "1",
+    "solutie": "u = 5\nc = 4\nprint(u-c)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "u",
+     "c"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 13 in m and 10 in q, then show m minus q",
+    "asteptat": "3",
+    "solutie": "m = 13\nq = 10\nprint(m-q)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "m",
+     "q"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 6 in k and 5 in y, then show k plus y",
+    "asteptat": "11",
+    "solutie": "k = 6\ny = 5\nprint(k+y)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "k",
+     "y"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 10 in b and 7 in w, then show b plus w",
+    "asteptat": "17",
+    "solutie": "b = 10\nw = 7\nprint(b+w)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "b",
+     "w"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 4 in q and 3 in e, then show q minus e",
+    "asteptat": "1",
+    "solutie": "q = 4\ne = 3\nprint(q-e)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "q",
+     "e"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 10 in m and 7 in e, then show m minus e",
+    "asteptat": "3",
+    "solutie": "m = 10\ne = 7\nprint(m-e)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "m",
+     "e"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 8 in y and 1 in t, then show y plus t",
+    "asteptat": "9",
+    "solutie": "y = 8\nt = 1\nprint(y+t)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "y",
+     "t"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 12 in h and 6 in q, then show h minus q",
+    "asteptat": "6",
+    "solutie": "h = 12\nq = 6\nprint(h-q)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "h",
+     "q"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 6 in p and 2 in r, then show p minus r",
+    "asteptat": "4",
+    "solutie": "p = 6\nr = 2\nprint(p-r)",
+    "cu_print": true,
+    "operator": "-",
+    "cutii": [
+     "p",
+     "r"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 4 in f and 4 in pot, then show f times pot",
+    "asteptat": "16",
+    "solutie": "f = 4\npot = 4\nprint(f*pot)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "f",
+     "pot"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 8 in b and 5 in e, then show b times e",
+    "asteptat": "40",
+    "solutie": "b = 8\ne = 5\nprint(b*e)",
+    "cu_print": true,
+    "operator": "*",
+    "cutii": [
+     "b",
+     "e"
+    ]
+   },
+   {
+    "nivel": "3B",
+    "text": "put 9 in t and 11 in x, then show t plus x",
+    "asteptat": "20",
+    "solutie": "t = 9\nx = 11\nprint(t+x)",
+    "cu_print": true,
+    "operator": "+",
+    "cutii": [
+     "t",
+     "x"
+    ]
+   }
+  ]
+ }
+}

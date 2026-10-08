@@ -65,12 +65,21 @@ def test_fara_sacru_implicit_e_examenul_nou(monkeypatch):
 
 
 def test_nicio_parte_automata_nu_pomeneste_setul_sacru():
-    """Modelele, kronos, CONTINUUM (cod și configurare), unealta de antrenare lungă și lanțul nu știu de setul sacru."""
+    """Modelele, kronos, CONTINUUM (cod și configurare), unealta de antrenare lungă și lanțul nu știu de setul sacru.
+    Școala de cod (module/cod/) are propriul ei set sacru, de cod (docs/KRONOS_COD_plan.md, secțiunea 5): acolo
+    cuvântul „sacru” e voie, dar setul sacru de fapte e interzis și acolo."""
     surse = [*(RADACINA / "module").rglob("*.py"), *(RADACINA / "kronos").rglob("*.py"),
              RADACINA / "config" / "continuum.toml", RADACINA / "unelte" / "antrenare_lunga.py",
              RADACINA / "unelte" / "lant_antrenare.py"]
+    scoala_de_cod = RADACINA / "module" / "cod"
+
+    def interzise(p: Path) -> tuple[str, ...]:
+        if scoala_de_cod in p.parents:  # școala nu atinge nici setul sacru de fapte, nici unealta examenului de fapte
+            return ("examen_sacru", "fapte_sacre", "examen_fapte_nou")
+        return ("examen_sacru", "fapte_sacre", "sacru")
+
     pomenit = [p.relative_to(RADACINA).as_posix() for p in surse
-               if any(cuvant in p.read_text(encoding="utf-8") for cuvant in ("examen_sacru", "fapte_sacre", "sacru"))]
+               if any(cuvant in p.read_text(encoding="utf-8") for cuvant in interzise(p))]
     assert pomenit == []
     from module import model_gpt
     assert "sacru" not in model_gpt.EXAMENE_SUPLIMENTARE
