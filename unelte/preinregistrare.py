@@ -21,7 +21,7 @@ import argparse
 import json
 import re
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -100,8 +100,19 @@ def _local(text: str | None) -> datetime | None:
     return t.astimezone().replace(tzinfo=None) if t.tzinfo else t
 
 
+def _sfarsit(fisa: dict[str, Any]) -> datetime | None:
+    """Când s-a aflat rezultatul experimentului: începutul plus durata (fără durată, doar începutul)."""
+    inceput = _local(fisa.get("inceput"))
+    durata = fisa.get("durata_totala_secunde")
+    if inceput is None or not isinstance(durata, (int, float)) or isinstance(durata, bool):
+        return inceput
+    return inceput + timedelta(seconds=durata)
+
+
 def experimente_dupa(moment: datetime, director_lucru: Path) -> list[dict[str, Any]]:
-    return [f for f in Jurnal(director_lucru).istoric() if (_local(f.get("inceput")) or moment) >= moment]
+    """Experimentele terminate după moment, chiar dacă au început înainte: rezultatul unei ore începute cu un minut
+    înaintea pre-înregistrării nu se știa când s-a scris."""
+    return [f for f in Jurnal(director_lucru).istoric() if (_sfarsit(f) or moment) >= moment]
 
 
 def cicluri_dupa(moment: datetime, dosar_continuum: Path) -> list[dict[str, Any]]:

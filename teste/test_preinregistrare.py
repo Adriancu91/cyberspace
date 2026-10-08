@@ -30,7 +30,10 @@ def test_sablonul_si_inchiderea(tmp_path):
         pre.scrie("noaptea 1!", "nume rău", dosar=dosar)
 
     (lucru / "jurnal").mkdir(parents=True)
-    fise = [experiment(278, "antrenare_lunga_7", datetime(2026, 10, 8, 21, 10), 0.431, "pastrat", 66),  # înainte
+    fise = [experiment(277, "antrenare_lunga_7", datetime(2026, 10, 8, 21, 0), 0.433, "pastrat", 65,
+                       durata_totala_secunde=3700),  # terminată la 22:01, înainte de 22:30: nu intră
+            experiment(278, "antrenare_lunga_7", datetime(2026, 10, 8, 22, 5), 0.431, "pastrat", 66,
+                       durata_totala_secunde=3700),  # începută înainte, terminată după (23:06): rezultatul nu se știa
             experiment(279, "antrenare_lunga_8", datetime(2026, 10, 8, 23, 20), 0.4300, "respins", 68,
                        fata_de_pornire=278, scor_anterior=0.431),
             experiment(280, "antrenare_lunga_8", datetime(2026, 10, 9, 0, 25), 0.4240, "pastrat", 69)]
@@ -47,7 +50,8 @@ def test_sablonul_si_inchiderea(tmp_path):
     inchisa = cale.read_text(encoding="utf-8")
     assert inchisa.startswith(text)  # ce era scris înainte a rămas exact cum era
     adaos = inchisa[len(text):]
-    assert "| 279 | antrenare_lunga_8 |" in adaos and "| 280 |" in adaos and "| 278 |" not in adaos
+    assert "| 279 | antrenare_lunga_8 |" in adaos and "| 280 |" in adaos and "| 278 |" in adaos
+    assert "| 277 |" not in adaos
     assert "**antrenare_lunga_8:** 2 ore, 1 păstrate; val_bpb de la 0,4300 la 0,4240" in adaos
     assert "cel mai bun păstrat: #280 (0,4240); pornită din #278 (0,4310)" in adaos
     assert "2 cicluri (ÎNVĂȚARE: 1, REPAUS: 1), 1 cu o acțiune" in adaos
