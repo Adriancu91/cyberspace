@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from module.cod import PILOT
-from module.cod.examen_cod import genereaza_sacru
+from module.cod.examen_cod import GENERATOARE, genereaza_sacru
 from module.cod.mediu import citeste_abecedar
 
 RADACINA = Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ def config_din(text: str, schimbari: dict[str, Any]) -> str:
     """Textul configurării, cu valorile din `schimbari` ({"sectiune.cheie": valoare}) înlocuite."""
     ramase, linii, sectiune = dict(schimbari), [], None
     for rand in text.splitlines():
-        antet = re.match(r"\[(\w+)\]\s*$", rand)
+        antet = re.match(r"\[([\w.]+)\]\s*$", rand)
         cheie = re.match(r"(\w+)\s*=", rand)
         if antet:
             sectiune = antet.group(1)
@@ -38,26 +38,35 @@ def config_din(text: str, schimbari: dict[str, Any]) -> str:
     return "\n".join(linii) + "\n"
 
 
-def worktree_de_proba(tmp: Path, schimbari: dict[str, Any] | None = None, sacre_pe_nivel: int = 5) -> Path:
-    """Întoarce calea configurării. Rădăcina e tmp/wt."""
+def worktree_de_proba(tmp: Path, schimbari: dict[str, Any] | None = None, sacre_pe_nivel: int = 5,
+                      config: str = "config/scoala_cod.toml") -> Path:
+    """Întoarce calea configurării (bazată pe `config`, cea reală, cu numere mici). Rădăcina e tmp/wt. Cu configurarea
+    v0.2, poveștile de antrenare sunt un text mic, împărțit de elev (fără memoria lui Kronos)."""
     rad = tmp / "wt"
     for cale in ("module/cod/examen_cod.py", "module/cod/sandbox.py", "date/cod/abecedar.txt"):
         (rad / cale).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(RADACINA / cale, rad / cale)
     abecedar = citeste_abecedar(rad / "date/cod/abecedar.txt")
-    sacru = genereaza_sacru({e.test for e in abecedar.episoade}, sacre_pe_nivel, samanta="test")
+    sacru = genereaza_sacru({e.test for e in abecedar.episoade}, sacre_pe_nivel, samanta="test",
+                            niveluri=tuple(GENERATOARE), marimi={"0a": 0})
     (rad / "date/cod/sacru.json").write_text(json.dumps(sacru, ensure_ascii=False), encoding="utf-8")
     (rad / "date/povesti.txt").write_text("Once upon a time there was a little cat. " * 60, encoding="utf-8")
+    (rad / "date/povesti_antrenare.txt").write_text("Lily and Tom went to the park. They played all day. " * 200,
+                                                     encoding="utf-8")
     valori = {"scoala.model_pornire": "lucru/cod/pornire/model.pt", "scoala.povesti": "date/povesti.txt",
               "scoala.caractere_povesti": 2000, "scoala.dispozitiv": "cpu", "sandbox.fire": 8,
               "examen.vazut": 6, "examen.nevazut": 5, "examen.adversarial": 5, "examen.sacru": sacre_pe_nivel,
               "examen.samanta_seturi": "test", "runda.incercari": 4, "runda.sarcini": 2, "runda.pasi_antrenare": 2,
               "runda.rata": 0.001, "runda.lot": 2, "pregatire.pasi": 2, "pregatire.rata": 0.001,
-              "buget.runde_pe_nivel": 2, "pilot.niveluri": ["0", "1"], **(schimbari or {})}
-    cale = rad / "config" / "scoala_cod.toml"
+              "buget.runde_pe_nivel": 2, "pilot.niveluri": ["0", "1"]}
+    if config.endswith("_v02.toml"):
+        valori.update({"pilot.niveluri": ["0a", "0b"], "povesti.text_antrenare": "date/povesti_antrenare.txt",
+                       "povesti.director_cache": "", "povesti.tokenizer": "", "pregatire.pasi": 30,
+                       "pregatire.verifica_la": 10})
+    valori.update(schimbari or {})
+    cale = rad / "config" / Path(config).name
     cale.parent.mkdir(parents=True, exist_ok=True)
-    cale.write_text(config_din((RADACINA / "config/scoala_cod.toml").read_text(encoding="utf-8"), valori),
-                    encoding="utf-8")
+    cale.write_text(config_din((RADACINA / config).read_text(encoding="utf-8"), valori), encoding="utf-8")
     return cale
 
 
@@ -73,6 +82,9 @@ class ElevDeProba:
         self.trisor = False
         self.fete: list[tuple[str, int, float]] = []
         self.antrenari: list[str] = []
+        self.cu_povesti: list[tuple[float, int]] = []    # (fracția de povești, câte simboluri de povești) la fiecare antrenare
+        self.pierderi = [2.0, 1.4, 0.9, 0.45, 0.3]       # pierderea pe abecedar, pe rând, după fiecare măsurare
+        self.bpo = 0.44                                  # biții pe octet pe povești (sub pragul v0.2 de 0,46)
 
     def numara(self, text: str) -> int:
         return len(text) // 4
@@ -83,17 +95,26 @@ class ElevDeProba:
         cod = "import os" if self.trisor else GRESIT if sarcina in self.gresit else self.solutii.get(sarcina, GRESIT)
         return [cod + "\nRESULT:"] * n
 
-    def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int) -> dict[str, Any]:
+    def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int, povesti: Any = None,
+                   fractie_povesti: float = 0.0) -> dict[str, Any]:
         self.antrenari.append(text)
+        self.cu_povesti.append((fractie_povesti, 0 if povesti is None else len(povesti)))
         return {"pasi": pasi, "pierdere_finala": 1.0, "secunde": 0.0, "simboluri_text": len(text) // 4,
-                "memorie_video_mb": 0}
+                "memorie_video_mb": 0, "ferestre": pasi * lot,
+                "ferestre_povesti": round(fractie_povesti * pasi * lot) if povesti is not None else 0}
+
+    def simboluri(self, text: str) -> list[int]:
+        return [ord(c) % 97 for c in text]
+
+    def pierdere_pe(self, text: str) -> float:
+        return self.pierderi.pop(0) if len(self.pierderi) > 1 else self.pierderi[0]
 
     def salveaza(self, cale: str | Path) -> None:
         Path(cale).parent.mkdir(parents=True, exist_ok=True)
         Path(cale).write_text(json.dumps({"antrenari": len(self.antrenari)}), encoding="utf-8")
 
     def biti_pe_octet(self, text: str) -> float:
-        return 1.5
+        return self.bpo
 
 
 def solutiile(scoala: Any, niveluri: tuple[str, ...] = PILOT) -> dict[str, str]:

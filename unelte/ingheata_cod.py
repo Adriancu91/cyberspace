@@ -55,13 +55,18 @@ def _linii_existente(cod: Path) -> list[str]:
     return sorted(d.name for d in (cod / "linii").iterdir() if d.is_dir()) if (cod / "linii").exists() else []
 
 
+def _biblioteci(cod: Path, linie: str) -> list[Path]:
+    """Bibliotecile liniei: reușitele ei și, la linia D, soluțiile primite de la unealtă."""
+    return [cod / f"{baza}_{linie}{ext}" for baza in ("biblioteca", "biblioteca_unealta") for ext in (".txt", ".jsonl")]
+
+
 def _de_arhivat(cod: Path, linii: list[str] | None) -> list[Path]:
     fisiere: list[Path] = []
     for linie in linii or _linii_existente(cod):
         dosar = cod / "linii" / linie
         if dosar.exists():
             fisiere += [f for f in sorted(dosar.rglob("*")) if f.is_file() and not f.name.endswith(".tmp")]
-        fisiere += [f for f in (cod / f"biblioteca_{linie}.txt", cod / f"biblioteca_{linie}.jsonl") if f.exists()]
+        fisiere += [f for f in _biblioteci(cod, linie) if f.exists()]
     comune = [cod / "stare.json", cod / "runde.jsonl"] + ([] if linii else [cod / "pregatit.pt"])
     return fisiere + [f for f in comune if f.exists()]
 
@@ -71,21 +76,21 @@ def _tag_exista(tag: str, radacina: Path) -> bool:
                           capture_output=True).returncode == 0
 
 
-def exista(lucru: Path, eticheta: str, git: bool = True, radacina: Path = RADACINA) -> bool:
+def exista(lucru: Path, eticheta: str, git: bool = True, radacina: Path = RADACINA, dosar: str = "cod") -> bool:
     """Există deja un îngheț (arhivă sau tag Git) cu acest nume?"""
-    return (lucru / "cod" / "inghet" / f"{eticheta}.zip").exists() or (git and _tag_exista(f"cod/{eticheta}", radacina))
+    return (lucru / dosar / "inghet" / f"{eticheta}.zip").exists() or (git and _tag_exista(f"cod/{eticheta}", radacina))
 
 
 def ingheata(lucru: Path, eticheta: str, motiv: str, linii: list[str] | None = None, git: bool = True,
-             radacina: Path = RADACINA) -> Path:
+             radacina: Path = RADACINA, dosar: str = "cod") -> Path:
     """Arhiva și tag-ul Git. Întoarce arhiva. Un nume folosit deja nu se suprascrie.
 
     Tag-ul e unul simplu (fără mesaj): unul cu mesaj cere un nume și un email în Git, iar laptopul nu le are. Motivul
     înghețului stă în jurnal și în arhivă (inghet.json). Arhiva ajunge la locul ei doar după ce tag-ul a reușit: un
-    îngheț pe jumătate nu rămâne."""
-    cod = lucru / "cod"
+    îngheț pe jumătate nu rămâne. `dosar` = dosarul versiunii școlii, în lucru/ (v0.1: cod, v0.2: cod_v02)."""
+    cod = lucru / dosar
     arhiva = cod / "inghet" / f"{eticheta}.zip"
-    if exista(lucru, eticheta, git, radacina):
+    if exista(lucru, eticheta, git, radacina, dosar):
         raise FileExistsError(f"înghețul „{eticheta}” există deja (arhiva sau tag-ul Git cod/{eticheta})")
     arhiva.parent.mkdir(parents=True, exist_ok=True)
     fisiere = _de_arhivat(cod, linii)
@@ -110,7 +115,7 @@ def ingheata(lucru: Path, eticheta: str, motiv: str, linii: list[str] | None = N
         stare["inghetat_dupa_ultima_runda"] = True
         _scrie_starea(cod, stare)
     scrie_in_jurnal(cod, {"tip": "inghet", "eticheta": eticheta, "motiv": f"îngheț „{eticheta}”: {motiv}",
-                          "linii": linii or "toate", "arhiva": f"lucru/cod/inghet/{arhiva.name}",
+                          "linii": linii or "toate", "arhiva": f"lucru/{dosar}/inghet/{arhiva.name}",
                           "marime_mb": round(arhiva.stat().st_size / 2 ** 20, 1), "fisiere": len(fisiere),
                           "tag_git": tag})
     return arhiva
@@ -129,9 +134,10 @@ def _pune_starea(cod: Path, din_arhiva: dict[str, Any], linii: list[str] | str) 
     _scrie_starea(cod, stare)
 
 
-def revino(lucru: Path, eticheta: str, motiv: str) -> list[str]:
-    """Pune înapoi ce e în arhivă (fără jurnal) și notează rollback-ul în jurnal. Întoarce fișierele puse înapoi."""
-    cod = lucru / "cod"
+def revino(lucru: Path, eticheta: str, motiv: str, dosar: str = "cod") -> list[str]:
+    """Pune înapoi ce e în arhivă (fără jurnal) și notează rollback-ul în jurnal. Bibliotecile liniilor înghețate care
+    n-existau la îngheț se șterg: starea e exact cea înghețată. Întoarce fișierele puse înapoi."""
+    cod = lucru / dosar
     arhiva = cod / "inghet" / f"{eticheta}.zip"
     if not arhiva.exists():
         raise FileNotFoundError(f"nu există înghețul „{eticheta}” ({arhiva})")
@@ -151,14 +157,20 @@ def revino(lucru: Path, eticheta: str, motiv: str) -> list[str]:
                     shutil.copyfileobj(sursa, destinatie)
                 temporar.replace(tinta)
             puse.append(nume)
-    scrie_in_jurnal(cod, {"tip": "rollback", "eticheta": eticheta, "motiv": f"rollback la {eticheta}, motiv: {motiv}",
-                          "linii": info["linii"], "fisiere": len(puse)})
+        in_arhiva = set(z.namelist())
+    linii = _linii_existente(cod) if info["linii"] == "toate" else info["linii"]
+    sterse = [f.name for linie in linii for f in _biblioteci(cod, linie) if f.exists() and f.name not in in_arhiva]
+    for nume in sterse:
+        (cod / nume).unlink()
+    scrie_in_jurnal(cod, {"tip": "rollback", "eticheta": eticheta, "motiv": f"rollback la {eticheta}, motiv: {motiv}"
+                          + (f"; șterse, fiindcă n-existau la îngheț: {', '.join(sterse)}" if sterse else ""),
+                          "linii": info["linii"], "fisiere": len(puse), "sterse": sterse})
     return puse
 
 
-def lista(lucru: Path) -> list[dict[str, Any]]:
+def lista(lucru: Path, dosar: str = "cod") -> list[dict[str, Any]]:
     rezultat = []
-    for arhiva in sorted((lucru / "cod" / "inghet").glob("*.zip")):
+    for arhiva in sorted((lucru / dosar / "inghet").glob("*.zip")):
         with zipfile.ZipFile(arhiva) as z:
             rezultat.append({**json.loads(z.read("inghet.json")), "marime_mb": round(arhiva.stat().st_size / 2 ** 20, 1)})
     return rezultat
@@ -175,23 +187,25 @@ def main(argv: list[str] | None = None) -> int:
     ce.add_argument("--revino", help="rollback la înghețul cu acest nume")
     ce.add_argument("--lista", action="store_true")
     parser.add_argument("--motiv", default="", help="de ce (intră în jurnal)")
-    parser.add_argument("--linie", action="append", choices=("A", "B"), help="doar linia dată; implicit toate")
+    parser.add_argument("--linie", action="append", choices=("A", "B", "D"), help="doar linia dată; implicit toate")
     parser.add_argument("--director-lucru", default=str(RADACINA / "lucru"))
+    parser.add_argument("--dosar", default="cod", help="dosarul versiunii școlii, în lucru/ (v0.1: cod, v0.2: cod_v02)")
     parser.add_argument("--fara-git", action="store_true", help="fără tag Git (doar arhiva)")
     args = parser.parse_args(argv)
     lucru = Path(args.director_lucru)
     if args.lista:
-        for i in lista(lucru):
+        for i in lista(lucru, args.dosar):
             print(f"{i['eticheta']:<24} {i['timp']}  {i['marime_mb']:>7} MB  {i['motiv']}")
         return 0
     if args.revino:
         if not args.motiv:
             print("Un rollback cere --motiv (intră în jurnal).")
             return 1
-        puse = revino(lucru, args.revino, args.motiv)
+        puse = revino(lucru, args.revino, args.motiv, args.dosar)
         print(f"Rollback la „{args.revino}”: {len(puse)} fișiere puse înapoi. Motiv: {args.motiv}")
         return 0
-    arhiva = ingheata(lucru, args.eticheta, args.motiv or "îngheț de mână", args.linie, git=not args.fara_git)
+    arhiva = ingheata(lucru, args.eticheta, args.motiv or "îngheț de mână", args.linie, git=not args.fara_git,
+                      dosar=args.dosar)
     print(f"Înghețat „{args.eticheta}”: {arhiva} ({arhiva.stat().st_size / 2 ** 20:.1f} MB)"
           + ("" if args.fara_git else f", tag Git cod/{args.eticheta}"))
     return 0

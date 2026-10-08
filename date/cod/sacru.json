@@ -1377,6 +1377,565 @@
      "x"
     ]
    }
+  ],
+  "0a": [],
+  "0b": [
+   {
+    "nivel": "0b",
+    "text": "show 96",
+    "asteptat": "96",
+    "solutie": "96",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 18",
+    "asteptat": "18",
+    "solutie": "18",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 75",
+    "asteptat": "75",
+    "solutie": "75",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word egg",
+    "asteptat": "egg",
+    "solutie": "\"egg\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word boat",
+    "asteptat": "boat",
+    "solutie": "\"boat\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word kite",
+    "asteptat": "kite",
+    "solutie": "\"kite\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 58",
+    "asteptat": "58",
+    "solutie": "58",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 42",
+    "asteptat": "42",
+    "solutie": "42",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 95",
+    "asteptat": "95",
+    "solutie": "95",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 69",
+    "asteptat": "69",
+    "solutie": "69",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 29",
+    "asteptat": "29",
+    "solutie": "29",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 19",
+    "asteptat": "19",
+    "solutie": "19",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 47",
+    "asteptat": "47",
+    "solutie": "47",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 16",
+    "asteptat": "16",
+    "solutie": "16",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word pig",
+    "asteptat": "pig",
+    "solutie": "\"pig\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word bee",
+    "asteptat": "bee",
+    "solutie": "\"bee\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 26",
+    "asteptat": "26",
+    "solutie": "26",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 17",
+    "asteptat": "17",
+    "solutie": "17",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show the word tree",
+    "asteptat": "tree",
+    "solutie": "\"tree\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   },
+   {
+    "nivel": "0b",
+    "text": "show 92",
+    "asteptat": "92",
+    "solutie": "92",
+    "cu_print": false,
+    "operator": null,
+    "cutii": []
+   }
+  ],
+  "1a": [
+   {
+    "nivel": "1a",
+    "text": "4 times 1",
+    "asteptat": "4",
+    "solutie": "4*1",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "3 times 7",
+    "asteptat": "21",
+    "solutie": "3*7",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 3 and 7",
+    "asteptat": "10",
+    "solutie": "3+7",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "5 times 3",
+    "asteptat": "15",
+    "solutie": "5*3",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 2 and 2",
+    "asteptat": "4",
+    "solutie": "2+2",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 3 and 9",
+    "asteptat": "12",
+    "solutie": "3+9",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 7 and 6",
+    "asteptat": "13",
+    "solutie": "7+6",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 3 and 8",
+    "asteptat": "11",
+    "solutie": "3+8",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 1 and 4",
+    "asteptat": "5",
+    "solutie": "1+4",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "take 4 from 6",
+    "asteptat": "2",
+    "solutie": "6-4",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "take 5 from 7",
+    "asteptat": "2",
+    "solutie": "7-5",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "7 times 3",
+    "asteptat": "21",
+    "solutie": "7*3",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 5 and 1",
+    "asteptat": "6",
+    "solutie": "5+1",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "6 times 5",
+    "asteptat": "30",
+    "solutie": "6*5",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 7 and 1",
+    "asteptat": "8",
+    "solutie": "7+1",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "7 times 5",
+    "asteptat": "35",
+    "solutie": "7*5",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 2 and 8",
+    "asteptat": "10",
+    "solutie": "2+8",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "take 2 from 6",
+    "asteptat": "4",
+    "solutie": "6-2",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "9 times 2",
+    "asteptat": "18",
+    "solutie": "9*2",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1a",
+    "text": "add 6 and 7",
+    "asteptat": "13",
+    "solutie": "6+7",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   }
+  ],
+  "1b": [
+   {
+    "nivel": "1b",
+    "text": "add 11 and 24",
+    "asteptat": "35",
+    "solutie": "11+24",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "add 80 and 40",
+    "asteptat": "120",
+    "solutie": "80+40",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "47 times 10",
+    "asteptat": "470",
+    "solutie": "47*10",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 10 from 47",
+    "asteptat": "37",
+    "solutie": "47-10",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "add 52 and 71",
+    "asteptat": "123",
+    "solutie": "52+71",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "28 times 24",
+    "asteptat": "672",
+    "solutie": "28*24",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "89 times 58",
+    "asteptat": "5162",
+    "solutie": "89*58",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 39 from 91",
+    "asteptat": "52",
+    "solutie": "91-39",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 18 from 92",
+    "asteptat": "74",
+    "solutie": "92-18",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "add 65 and 38",
+    "asteptat": "103",
+    "solutie": "65+38",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "add 81 and 87",
+    "asteptat": "168",
+    "solutie": "81+87",
+    "cu_print": false,
+    "operator": "+",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 32 from 36",
+    "asteptat": "4",
+    "solutie": "36-32",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 33 from 42",
+    "asteptat": "9",
+    "solutie": "42-33",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "73 times 70",
+    "asteptat": "5110",
+    "solutie": "73*70",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "57 times 18",
+    "asteptat": "1026",
+    "solutie": "57*18",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "51 times 84",
+    "asteptat": "4284",
+    "solutie": "51*84",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "67 times 47",
+    "asteptat": "3149",
+    "solutie": "67*47",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 69 from 77",
+    "asteptat": "8",
+    "solutie": "77-69",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "31 times 45",
+    "asteptat": "1395",
+    "solutie": "31*45",
+    "cu_print": false,
+    "operator": "*",
+    "cutii": []
+   },
+   {
+    "nivel": "1b",
+    "text": "take 18 from 22",
+    "asteptat": "4",
+    "solutie": "22-18",
+    "cu_print": false,
+    "operator": "-",
+    "cutii": []
+   }
   ]
- }
+ },
+ "adaugari": [
+  {
+   "data": "2026-10-08T11:22:02",
+   "samanta": "sacru-v0.2",
+   "niveluri": [
+    "0a",
+    "0b",
+    "1a",
+    "1b"
+   ]
+  }
+ ]
 }

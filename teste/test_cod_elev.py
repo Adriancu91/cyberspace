@@ -69,3 +69,25 @@ def test_salvarea_pastreaza_optimizatorul_si_ramane_model_kronos(model_mic, tmp_
 def test_textul_prea_scurt_e_refuzat(model_mic):
     with pytest.raises(ValueError, match="sub contextul"):
         ElevCod(model_mic, "cpu").antreneaza("print(1)", 1, 1e-3, 2, samanta=0)
+
+
+def test_povestile_intra_in_fiecare_lot(model_mic):
+    """v0.2: 70% din fiecare lot vine din povești; la 0,7 × 10 = 7 ferestre pe pas."""
+    elev = ElevCod(model_mic, "cpu")
+    povesti = torch.tensor(elev.simboluri("Once upon a time, a little dog ran in the park. " * 80), dtype=torch.int16)
+    cu = elev.antreneaza(ABECEDAR.text, 3, 1e-3, 10, samanta=0, povesti=povesti, fractie_povesti=0.7)
+    assert cu["ferestre_povesti"] == 21 and cu["ferestre"] == 30
+    fara = elev.antreneaza(ABECEDAR.text, 3, 1e-3, 10, samanta=0)
+    assert fara["ferestre_povesti"] == 0
+    impar = elev.antreneaza(ABECEDAR.text, 10, 1e-3, 24, samanta=0, povesti=povesti, fractie_povesti=0.7)
+    assert impar["ferestre_povesti"] == 168  # 16,8 pe pas: pe rând 16 și 17, în medie exact 0,7
+
+
+def test_pierderea_pe_abecedar_scade_cand_invata(tmp_path):
+    cale = model_de_proba(tmp_path / "rep.pt", REPETAT, context=64, marime_vocabular=280)
+    elev = ElevCod(cale, "cpu")
+    inainte = elev.pierdere_pe(REPETAT)
+    elev.antreneaza(REPETAT, 150, 3e-3, 8, samanta=0)
+    dupa = elev.pierdere_pe(REPETAT)
+    assert math.isfinite(inainte) and dupa < inainte / 2
+    assert abs(dupa - elev.model.biti_pentru(REPETAT) * math.log(2) / len(elev.simboluri(REPETAT))) < 0.5

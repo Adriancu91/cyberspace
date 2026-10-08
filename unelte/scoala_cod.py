@@ -35,6 +35,15 @@ După fiecare rundă verifică memoria video. Încercările „trișat” se num
 **Jurnalul:** lucru/cod/runde.jsonl, un rând pe rundă, plus pregătirea, înghețurile, rollback-urile și deciziile,
 fiecare cu motivul în română. Starea: lucru/cod/stare.json.
 
+**v0.2** (config/scoala_cod_v02.toml, în lucru/cod_v02/):
+- **poveștile rămân în lecții:** 70% din fiecare lot vine din textul de antrenare al poveștilor. Biții pe octet pe
+  povești se măsoară la fiecare îngheț; peste 0,46 e regresie;
+- **pregătirea** se oprește la o pierdere pe abecedar de ~0,5 sau la un număr fix de pași;
+- **treptele 0a, 0b, 1a, 1b:** numere de o cifră, apoi de două cifre. 0a are seturi mici: doar 8 numere de o cifră nu
+  sunt în abecedar;
+- **linia D (control):** în fiecare rundă primește tot atâtea soluții corecte câte reușite noi a avut B în aceeași
+  rundă. Soluțiile vin de la unealtă (sarcini văzute alese la întâmplare, cu soluția noastră), nu descoperite de D.
+
     python unelte/scoala_cod.py --genereaza-sacru     # o singură dată
     python unelte/scoala_cod.py --aproba-amprente
     python unelte/scoala_cod.py --pilot               # pregătirea, înghețul „inainte_de_pilot”, nivelurile 0 → 3B
@@ -65,7 +74,8 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from module.cod import ordinea, paznic_cod, sandbox  # noqa: E402
-from module.cod.examen_cod import Sarcina, Seturi, citeste_sacru, genereaza_sacru, judeca, seturi  # noqa: E402
+from module.cod.examen_cod import (Sarcina, Seturi, adauga_sacru, citeste_sacru, genereaza_sacru, judeca,  # noqa: E402
+                                   seturi)
 from module.cod.mediu import (Abecedar, Episod, citeste_abecedar, incercarea, schelet, text_cu_regula,  # noqa: E402
                               text_fata)
 from unelte.ingheata_cod import exista, ingheata, scrie_in_jurnal  # noqa: E402
@@ -73,6 +83,7 @@ from unelte.ingheata_cod import exista, ingheata, scrie_in_jurnal  # noqa: E402
 SECTIUNI = ("scoala", "mediu", "sandbox", "examen", "runda", "pregatire", "temperatura", "buget", "regresie", "paznic",
             "pilot")
 REGULI = ("scurta", "lunga", "fara")
+LINII = ("A", "B", "D")
 DESCRIERE_REGULA = {"scurta": "regula scurtată", "lunga": "regula lungă (preambulul)", "fara": "fără regulă"}
 
 
@@ -89,8 +100,13 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
         raise ValueError(f"în {cale} lipsește: {', '.join(f'[{s}]' for s in lipsa)}")
     for nivel in cfg["pilot"]["niveluri"]:
         ordinea(nivel)
-    if not set(cfg["pilot"]["linii"]) <= {"A", "B"}:
-        raise ValueError("[pilot] linii: doar A și B în v0.1")
+    linii = cfg["pilot"]["linii"]
+    if not set(linii) <= set(LINII):
+        raise ValueError(f"[pilot] linii: doar {', '.join(LINII)}")
+    if "D" in linii and ("B" not in linii or linii.index("B") > linii.index("D")):
+        raise ValueError("[pilot] linii: linia D cere linia B înaintea ei (primește câte soluții a găsit B)")
+    if not 0 <= (cfg.get("povesti") or {}).get("fractie", 0) < 1:
+        raise ValueError("[povesti] fractie: între 0 și 1")
     if cfg["runda"]["incercari"] % cfg["runda"]["sarcini"]:
         raise ValueError("[runda] incercari trebuie să se împartă exact la sarcini (ex. 100 = 20 × 5)")
     if cfg["mediu"]["regula"] not in REGULI:
@@ -114,9 +130,9 @@ class Biblioteca:
     """Reușitele unei linii (doar cod 100% corect), deduplicate după (sarcină, cod), cu nivelul și runda la care au
     apărut. biblioteca_<linie>.txt = episoadele (pentru antrenare); biblioteca_<linie>.jsonl = aceleași, cu detalii."""
 
-    def __init__(self, cod: Path, linie: str, scheletele_abecedarului: set[str]) -> None:
-        self.fisier = cod / f"biblioteca_{linie}.jsonl"
-        self.text = cod / f"biblioteca_{linie}.txt"
+    def __init__(self, cod: Path, linie: str, scheletele_abecedarului: set[str], nume: str = "biblioteca") -> None:
+        self.fisier = cod / f"{nume}_{linie}.jsonl"
+        self.text = cod / f"{nume}_{linie}.txt"
         self.abecedar = scheletele_abecedarului
         self.intrari = [json.loads(r) for r in self.fisier.read_text(encoding="utf-8").splitlines() if r.strip()] \
             if self.fisier.exists() else []
@@ -165,11 +181,14 @@ class Scoala:
     git_la_inghet: bool = True
     afiseaza: Callable[[str], None] = field(default=lambda text: print(text, flush=True))
     _seturi: dict[str, Seturi] = field(default_factory=dict, repr=False)
+    _povesti: Any = field(default=None, repr=False)
 
     def __post_init__(self) -> None:
         s = self.cfg["scoala"]
         self.lucru = self._cale(s["director_lucru"])
-        self.cod = self.lucru / "cod"
+        self.dosar = s.get("dosar", "cod")          # v0.2: cod_v02 (v0.1 rămâne neatins în lucru/cod)
+        self.cod = self.lucru / self.dosar
+        self.prefix = s.get("prefix_inghet", "")   # v0.2: v02_ (tag-urile Git sunt comune tuturor versiunilor)
         self.abecedar: Abecedar = citeste_abecedar(self._cale(s["abecedar"]))
         self.regula_test, regula_antrenare = regulile(self.cfg["mediu"], self.abecedar)
         self.text_abecedar = text_cu_regula(self.abecedar, regula_antrenare)  # pregătirea și antrenarea
@@ -193,7 +212,7 @@ class Scoala:
         stare = json.loads(fisier.read_text(encoding="utf-8")) if fisier.exists() else {}
         stare.setdefault("versiune", 1)
         stare.setdefault("linii", {})
-        for linie in ("A", "B"):
+        for linie in LINII:
             sl = stare["linii"].setdefault(linie, {})
             for cheie, valoare in (("nivel_curent", None), ("niveluri_trecute", {}), ("niveluri_picate", {}),
                                    ("oprita", False), ("motiv_oprire", None), ("ultimul_inghet", None),
@@ -219,14 +238,14 @@ class Scoala:
 
     def _eticheta_libera(self, baza: str) -> str:
         eticheta, i = baza, 2
-        while exista(self.lucru, eticheta, self.git_la_inghet, self.radacina):
+        while exista(self.lucru, eticheta, self.git_la_inghet, self.radacina, self.dosar):
             eticheta, i = f"{baza}_{i}", i + 1
         return eticheta
 
     def _ingheata(self, stare: dict[str, Any], eticheta: str, motiv: str, linii: list[str] | None) -> None:
         stare["inghetat_dupa_ultima_runda"] = True
         self.salveaza_stare(stare)
-        ingheata(self.lucru, eticheta, motiv, linii, git=self.git_la_inghet, radacina=self.radacina)
+        ingheata(self.lucru, eticheta, motiv, linii, git=self.git_la_inghet, radacina=self.radacina, dosar=self.dosar)
 
     # --- seturi, încercări, măsurare ---------------------------------------------------------------------------------
 
@@ -236,8 +255,10 @@ class Scoala:
                 raise RuntimeError(f"setul sacru lipsește pentru nivelul {nivel}: python unelte/scoala_cod.py "
                                    f"--genereaza-sacru")
             e = self.cfg["examen"]
-            self._seturi[nivel] = seturi(nivel, self.texte_abecedar, self.sacru[nivel], e["vazut"], e["nevazut"],
-                                         e["adversarial"], e["samanta_seturi"])
+            m = e.get("marimi", {}).get(nivel, {})  # 0a: doar 8 numere de o cifră, deci seturi mici
+            self._seturi[nivel] = seturi(nivel, self.texte_abecedar, self.sacru[nivel], m.get("vazut", e["vazut"]),
+                                         m.get("nevazut", e["nevazut"]), m.get("adversarial", e["adversarial"]),
+                                         e["samanta_seturi"])
         return self._seturi[nivel]
 
     def fata(self, elev: Any, sarcina: Sarcina, nivel: str, rng: random.Random) -> tuple[str, int]:
@@ -291,17 +312,64 @@ class Scoala:
             return None
         return round(elev.biti_pe_octet(cale.read_text(encoding="utf-8")[: s["caractere_povesti"]]), 4)
 
+    def povesti_antrenare(self, elev: Any) -> Any:
+        """Simbolurile textului de antrenare al poveștilor (v0.2), citite o singură dată. Vin din memoria lui Kronos
+        (director_cache, doar citire), dacă sunt acolo; altfel se împart cu tokenizer-ul elevului, doar la texte mici, ca
+        în teste. Fără [povesti] sau cu fractie = 0: None (v0.1)."""
+        pv = self.cfg.get("povesti") or {}
+        if not pv.get("fractie"):
+            return None
+        if self._povesti is None:
+            import torch
+
+            text = self._cale(pv["text_antrenare"]).read_text(encoding="utf-8")
+            if pv.get("director_cache"):
+                from module.model_continuu import cale_simboluri
+
+                tokenizer = self._cale(pv["tokenizer"])
+                if hasattr(elev, "tokenizer_ca") and not elev.tokenizer_ca(tokenizer):
+                    raise RuntimeError(f"tokenizer-ul elevului nu e {tokenizer}: simbolurile poveștilor n-ar fi ale lui")
+                fisier = cale_simboluri(text, str(self._cale(pv["director_cache"])), str(tokenizer))
+                if not fisier.exists():
+                    raise RuntimeError(f"simbolurile poveștilor lipsesc din memoria lui Kronos ({fisier})")
+                self._povesti = torch.load(fisier, weights_only=True)
+            else:
+                self._povesti = torch.tensor(elev.simboluri(text), dtype=torch.int32)
+        return self._povesti
+
+    def _antreneaza(self, elev: Any, text: str, pasi: int, rata: float, seed: int) -> dict[str, Any]:
+        """Antrenarea școlii: textul școlii, plus poveștile (v0.2: 70% din fiecare lot), dacă sunt în configurare."""
+        povesti = self.povesti_antrenare(elev)
+        if povesti is None:
+            return elev.antreneaza(text, pasi, rata, self.cfg["runda"]["lot"], seed)
+        return elev.antreneaza(text, pasi, rata, self.cfg["runda"]["lot"], seed, povesti=povesti,
+                               fractie_povesti=self.cfg["povesti"]["fractie"])
+
+    def de_la_unealta(self, nivel: str, numar: int, unealta: Biblioteca) -> tuple[list[dict[str, Any]], int]:
+        """Linia D: tot atâtea soluții corecte câte reușite noi a avut linia B în aceeași rundă a nivelului, date de
+        unealtă. Sarcinile sunt alese la întâmplare din setul văzut (aceeași sămânță pe rundă), cu soluția noastră și
+        rezultatul ei. Întoarce (adăugate, câte a găsit B); mai puține adăugate = n-au mai rămas sarcini văzute noi."""
+        b = Biblioteca(self.cod, "B", self.schelete_abecedar)
+        cate = sum(1 for i in b.intrari if i["nivel"] == nivel and i["runda"] == numar)
+        if not cate:
+            return [], 0
+        vazut = list(self.seturi(nivel).vazut)
+        random.Random(samanta(self.cfg["scoala"]["samanta"], "unealta", nivel, numar)).shuffle(vazut)
+        alese = [s for s in vazut if (s.text, s.solutie) not in unealta.chei][:cate]
+        noi = unealta.adauga([{"test": s.text, "cod": s.solutie, "rezultat": s.asteptat} for s in alese], nivel, numar)
+        return noi, cate
+
     # --- runda ---------------------------------------------------------------------------------------------------
 
     def runda(self, linie: str, nivel: str, numar: int, elev: Any, temperatura: float,
-              biblioteca: Biblioteca) -> dict[str, Any]:
+              biblioteca: Biblioteca, unealta: Biblioteca | None = None) -> dict[str, Any]:
         r, baza = self.cfg["runda"], self.cfg["scoala"]["samanta"]
         start = time.perf_counter()
         vazut = self.seturi(nivel).vazut
         sarcini = random.Random(samanta(baza, "runda", nivel, numar)).sample(vazut, min(r["sarcini"], len(vazut)))
         fete = [self.fata(elev, s, nivel, random.Random(samanta(baza, "fata", nivel, numar, j)))
                 for j, s in enumerate(sarcini)]
-        incercari = self.incearca(elev, [(s, f) for s, (f, _) in zip(sarcini, fete)], r["incercari"] // r["sarcini"],
+        incercari = self.incearca(elev, [(s, f) for s, (f, _) in zip(sarcini, fete)], r["incercari"] // len(sarcini),
                                   temperatura, [samanta(baza, "gen", nivel, numar, j) for j in range(len(sarcini))])
         secunde_incercari = time.perf_counter() - start
         trecute = [i for i in incercari if i["verdict"] == "trecut"]
@@ -313,9 +381,12 @@ class Scoala:
             f.writelines(json.dumps({"nivel": nivel, "runda": numar, **{k: i[k] for k in ("test", "cod", "verdict",
                                      "motiv", "aproape")}}, ensure_ascii=False) + "\n"
                          for i in incercari if i["verdict"] != "trecut")
-        text = text_antrenare(self.text_abecedar, biblioteca.episoade() if linie == "B" else "",
-                              r["fractie_abecedar_minima"])
-        antrenare = elev.antreneaza(text, r["pasi_antrenare"], r["rata"], r["lot"], samanta(baza, "antrenare", nivel, numar))
+        de_la_unealta, cerute = [], 0
+        if linie == "D" and unealta is not None:  # soluții date, nu descoperite: câte a găsit B în runda asta
+            de_la_unealta, cerute = self.de_la_unealta(nivel, numar, unealta)
+        lectii = biblioteca.episoade() if linie == "B" else unealta.episoade() if linie == "D" and unealta else ""
+        text = text_antrenare(self.text_abecedar, lectii, r["fractie_abecedar_minima"])
+        antrenare = self._antreneaza(elev, text, r["pasi_antrenare"], r["rata"], samanta(baza, "antrenare", nivel, numar))
         inceput_masurare = time.perf_counter()
         rata_nevazut, _ = self.masoara(elev, self.seturi(nivel).nevazut, "nevazut", nivel)
         return {
@@ -326,7 +397,10 @@ class Scoala:
             "forme_noi": sum(i["forma_noua"] for i in noi), "marime_biblioteca": len(biblioteca.intrari),
             "episoade_in_fata": round(sum(p for _, p in fete) / max(1, len(fete)), 2),
             "pasi_antrenare": antrenare["pasi"], "pierdere": antrenare["pierdere_finala"],
-            "simboluri_antrenare": antrenare.get("simboluri_text"),
+            "simboluri_antrenare": antrenare.get("simboluri_text"), "ferestre_povesti": antrenare.get("ferestre_povesti", 0),
+            "ferestre": antrenare.get("ferestre"),
+            **({"de_la_unealta": len(de_la_unealta), "cerute_de_la_unealta": cerute,
+                "marime_unealta": len(unealta.intrari)} if linie == "D" and unealta is not None else {}),
             "rata_vazut": round(len(trecute) / max(1, len(incercari)), 3), "rata_nevazut": round(rata_nevazut, 3),
             "secunde": round(time.perf_counter() - start, 1), "secunde_incercari": round(secunde_incercari, 1),
             "secunde_antrenare": antrenare.get("secunde"),
@@ -357,7 +431,11 @@ class Scoala:
                  + (f", {r['aproape']} cu rezultatul corect, dar fără forma cerută" if r["aproape"] else ""),
                  f"{r['unice_noi']} reușite noi în biblioteca liniei (are {r['marime_biblioteca']})",
                  f"antrenare {r['pasi_antrenare']} de pași pe "
-                 + ("abecedar și bibliotecă" if linie == "B" else "abecedar (linia A nu se antrenează pe bibliotecă)"),
+                 + ("abecedar și bibliotecă" if linie == "B" else
+                    f"abecedar și soluțiile uneltei ({r.get('de_la_unealta', 0)} noi, cât a găsit B în runda asta: "
+                    f"{r.get('cerute_de_la_unealta', 0)}; are {r.get('marime_unealta', 0)})" if linie == "D" else
+                    f"abecedar (linia {linie} nu se antrenează pe propriile reușite)")
+                 + (f", cu {r['ferestre_povesti'] / r['ferestre']:.0%} povești" if r.get("ferestre_povesti") else ""),
                  f"nevăzut {r['rata_nevazut']:.0%} " + (f"≥ {e['prag_trecere']:.0%}: nivel trecut" if trecut
                                                         else f"< {e['prag_trecere']:.0%}: runda următoare")]
         if dupa != temperatura:
@@ -415,6 +493,7 @@ class Scoala:
                                f"„{sl['niveluri_trecute'][nivel]['inghet']}”)")
         elev = self.fabrica_elev(self.model_liniei(linie))
         biblioteca = Biblioteca(self.cod, linie, self.schelete_abecedar)
+        unealta = Biblioteca(self.cod, linie, self.schelete_abecedar, "biblioteca_unealta") if linie == "D" else None
         buget = sl["buget"].setdefault(nivel, {"runde": 0, "secunde": 0.0})
         reluat = sl["nivel_curent"] == nivel and sl["temperatura"] is not None
         temperatura = float(sl["temperatura"]) if reluat else self.temperatura_de_start(nivel)
@@ -435,7 +514,7 @@ class Scoala:
                 return self._oprit(stare, linie, nivel, oprire)
             if buget["runde"] >= b["runde_pe_nivel"] or buget["secunde"] >= 60 * b["minute_pe_nivel"]:
                 return self._picat(stare, linie, nivel, buget, elev, ultima)
-            rand = self.runda(linie, nivel, buget["runde"] + 1, elev, temperatura, biblioteca)
+            rand = self.runda(linie, nivel, buget["runde"] + 1, elev, temperatura, biblioteca, unealta)
             buget["runde"] += 1
             buget["secunde"] = round(buget["secunde"] + rand["secunde"], 1)
             elev.salveaza(self.model_liniei(linie))
@@ -466,14 +545,15 @@ class Scoala:
         adversarial, _ = self.masoara(elev, self.seturi(nivel).adversarial, "adversarial", nivel)
         sacru, _ = self.masoara(elev, self.seturi(nivel).sacru, "sacru", nivel)
         povesti = self.ce_stia(elev)
-        eticheta = self._eticheta_libera(f"{linie}_{nivel}_picat")
+        peste = self.povesti_peste_prag(povesti)
+        eticheta = self._eticheta_libera(f"{self.prefix}{linie}_{nivel}_picat")
         motiv = (f"nivelul {nivel} picat pe linia {linie}: buget epuizat ({buget['runde']} runde, "
                  f"{buget['secunde'] / 60:.0f} minute)")
         vazut = ultima["rata_vazut"] if ultima else None
         nevazut = ultima["rata_nevazut"] if ultima else None
         sl["niveluri_picate"][nivel] = {"vazut": vazut, "nevazut": nevazut, "adversarial": round(adversarial, 3),
                                         "sacru": round(sacru, 3), "runde": buget["runde"], "secunde": buget["secunde"],
-                                        "inghet": eticheta, "povesti_bpo": povesti}
+                                        "inghet": eticheta, "povesti_bpo": povesti, "regresie_povesti": peste}
         sl.update(oprita=True, motiv_oprire=motiv)
         self._ingheata(stare, eticheta, motiv, [linie])
         procent = lambda x: "—" if x is None else f"{x:.0%}"  # noqa: E731
@@ -482,8 +562,9 @@ class Scoala:
                      "rata_adversarial": round(adversarial, 3), "rata_sacru": round(sacru, 3), "povesti_bpo": povesti,
                      "inghet": eticheta,
                      "motiv": f"{motiv}; la ultima rundă: văzut {procent(vazut)}, nevăzut {procent(nevazut)}; "
-                              f"adversarial {adversarial:.0%}, sacru {sacru:.0%} (doar pentru raport); înghețat "
-                              f"„{eticheta}”. Linia se oprește: nivelul nu se coboară automat, decide omul"})
+                              f"adversarial {adversarial:.0%}, sacru {sacru:.0%} (doar pentru raport); povești "
+                              f"{povesti} biți pe octet" + (" (PESTE PRAG: regresie)" if peste else "")
+                              + f"; înghețat „{eticheta}”. Linia se oprește: nivelul nu se coboară automat, decide omul"})
         return "picat"
 
     def _trecut(self, stare: dict[str, Any], linie: str, nivel: str, elev: Any, rand: dict[str, Any],
@@ -493,74 +574,109 @@ class Scoala:
         sacru, _ = self.masoara(elev, self.seturi(nivel).sacru, "sacru", nivel)
         povesti = self.ce_stia(elev)
         regresii = {}
+        g = self.cfg["regresie"]
         for anterior, info in sl["niveluri_trecute"].items():
-            acum, _ = self.masoara(elev, self.seturi(anterior).nevazut, "nevazut", anterior)
-            if info["nevazut"] - acum > self.cfg["regresie"]["scadere_maxima"] + 1e-9:
+            nevazut_anterior = self.seturi(anterior).nevazut
+            acum, _ = self.masoara(elev, nevazut_anterior, "nevazut", anterior)
+            pierdute = round((info["nevazut"] - acum) * len(nevazut_anterior))  # pe seturi mici, o sarcină = 25 de puncte
+            if info["nevazut"] - acum > g["scadere_maxima"] + 1e-9 and pierdute >= g.get("sarcini_minime", 1):
                 regresii[anterior] = {"atunci": info["nevazut"], "acum": round(acum, 3)}
+        peste = self.povesti_peste_prag(povesti)
         principal = sl["ultimul_inghet"]
-        eticheta = self._eticheta_libera(f"{linie}_{nivel}")
+        eticheta = self._eticheta_libera(f"{self.prefix}{linie}_{nivel}")
         sl["niveluri_trecute"][nivel] = {"vazut": rand["rata_vazut"], "nevazut": rand["rata_nevazut"],
                                          "adversarial": round(adversarial, 3), "sacru": round(sacru, 3),
                                          "runda": rand["runda"], "secunde": buget["secunde"], "inghet": eticheta,
-                                         "regresii": regresii, "povesti_bpo": povesti}
-        if regresii:
+                                         "regresii": regresii, "povesti_bpo": povesti, "regresie_povesti": peste}
+        if regresii or peste:
             sl.update(oprita=True, motiv_oprire=f"regresie după nivelul {nivel}: " + ", ".join(
-                f"{n} {r['atunci']:.0%} → {r['acum']:.0%}" for n, r in regresii.items()))
+                [f"{n} {r['atunci']:.0%} → {r['acum']:.0%}" for n, r in regresii.items()]
+                + ([f"povești {povesti} biți pe octet, peste pragul de {self.cfg['povesti']['prag_regresie']}"]
+                   if peste else [])))
         else:
             sl["ultimul_inghet"] = eticheta
         sl["nivel_curent"], sl["temperatura"] = None, None
         self._ingheata(stare, eticheta, f"linia {linie} a trecut nivelul {nivel} (nevăzut {rand['rata_nevazut']:.0%})"
-                       + (", cu regresie" if regresii else ""), [linie])
+                       + (", cu regresie" if regresii or peste else ""), [linie])
         motiv = (f"nivelul {nivel} trecut pe linia {linie} în runda {rand['runda']}: nevăzut {rand['rata_nevazut']:.0%}, "
                  f"adversarial {adversarial:.0%}, sacru {sacru:.0%} (adversarialul și sacrul doar pentru raport); "
-                 f"înghețat „{eticheta}”")
-        if regresii:
+                 + (f"povești {povesti} biți pe octet; " if povesti is not None else "") + f"înghețat „{eticheta}”")
+        if regresii or peste:
             motiv += (f"; REGRESIE ({sl['motiv_oprire']}): modelul nu devine cel principal al liniei (rămâne "
                       f"„{principal}”), linia se oprește și decide omul. Pentru a continua din cel principal: "
                       f"python unelte/ingheata_cod.py --revino {principal} --motiv \"...\"")
         elif len(sl["niveluri_trecute"]) > 1:
             motiv += "; fără regresie pe nivelurile trecute înainte"
-        self.jurnal({"tip": "regresie" if regresii else "nivel_trecut", "linie": linie, "nivel": nivel,
+        self.jurnal({"tip": "regresie" if regresii or peste else "nivel_trecut", "linie": linie, "nivel": nivel,
                      "runda": rand["runda"], "rata_vazut": rand["rata_vazut"], "rata_nevazut": rand["rata_nevazut"],
                      "rata_adversarial": round(adversarial, 3), "rata_sacru": round(sacru, 3), "regresii": regresii,
                      "povesti_bpo": povesti, "inghet": eticheta, "motiv": motiv})
-        return "regresie" if regresii else "trecut"
+        return "regresie" if regresii or peste else "trecut"
+
+    def povesti_peste_prag(self, povesti: float | None) -> bool:
+        """v0.2: biții pe octet pe povești peste prag (0,46: lecția 6a, în oglindă) = regresie."""
+        prag = (self.cfg.get("povesti") or {}).get("prag_regresie")
+        return prag is not None and povesti is not None and povesti > prag
 
     # --- pregătirea și pilotul ---------------------------------------------------------------------------------------
 
     def pregateste(self) -> dict[str, Any]:
-        """Antrenare scurtă pe abecedar, din #252. Liniile A și B pornesc din același model pregătit."""
+        """Antrenare scurtă pe abecedar, din #252. Toate liniile pornesc din același model pregătit. Cu
+        `pierdere_tinta` (v0.2), se oprește când pierderea pe abecedar ajunge la ținta (~0,5, nu pe de rost), măsurată la
+        fiecare `verifica_la` pași, sau la `pasi`."""
         p, c = self.cfg["pregatire"], self.cfg
         if (self.cod / "pregatit.pt").exists():
-            raise RuntimeError("pregătirea e deja făcută (lucru/cod/pregatit.pt); liniile pornesc din ea")
+            raise RuntimeError(f"pregătirea e deja făcută (lucru/{self.dosar}/pregatit.pt); liniile pornesc din ea")
         elev = self.fabrica_elev(self._cale(c["scoala"]["model_pornire"]))
         niveluri = c["pilot"]["niveluri"]
         inainte = {n: round(self.masoara(elev, self.seturi(n).nevazut, "nevazut", n)[0], 3) for n in niveluri}
         povesti_inainte = self.ce_stia(elev)
-        antrenare = elev.antreneaza(self.text_abecedar, p["pasi"], p["rata"], c["runda"]["lot"],
-                                    samanta(c["scoala"]["samanta"], "pregatire"))
+        tinta = p.get("pierdere_tinta")
+        pierderi: list[tuple[int, float]] = []
+        if tinta is None:  # v0.1: toți pașii odată
+            antrenare = self._antreneaza(elev, self.text_abecedar, p["pasi"], p["rata"],
+                                         samanta(c["scoala"]["samanta"], "pregatire"))
+            pasi_facuti = p["pasi"]
+        else:
+            pierderi.append((0, round(elev.pierdere_pe(self.text_abecedar), 4)))
+            pasi_facuti, antrenare = 0, {}
+            while pasi_facuti < p["pasi"] and pierderi[-1][1] > tinta:
+                bucata = min(p.get("verifica_la", 10), p["pasi"] - pasi_facuti)
+                antrenare = self._antreneaza(elev, self.text_abecedar, bucata, p["rata"],
+                                             samanta(c["scoala"]["samanta"], "pregatire", pasi_facuti))
+                pasi_facuti += bucata
+                pierderi.append((pasi_facuti, round(elev.pierdere_pe(self.text_abecedar), 4)))
         dupa = {n: round(self.masoara(elev, self.seturi(n).nevazut, "nevazut", n)[0], 3) for n in niveluri}
         povesti_dupa = self.ce_stia(elev)
         elev.salveaza(self.cod / "pregatit.pt")
-        for linie in ("A", "B"):
+        for linie in c["pilot"]["linii"]:
             self.model_liniei(linie).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(self.cod / "pregatit.pt", self.model_liniei(linie))
         stare = self.stare()
-        stare["pregatire"] = {"pasi": antrenare["pasi"], "rata": p["rata"], "pierdere": antrenare["pierdere_finala"],
+        stare["pregatire"] = {"pasi": pasi_facuti, "rata": p["rata"], "pierdere": antrenare.get("pierdere_finala"),
                               "secunde": antrenare.get("secunde"), "nevazut_inainte": inainte, "nevazut_dupa": dupa,
                               "povesti_bpo_inainte": povesti_inainte, "povesti_bpo_dupa": povesti_dupa,
+                              "pierdere_abecedar": pierderi, "pierdere_tinta": tinta,
+                              "fractie_povesti": (c.get("povesti") or {}).get("fractie", 0),
+                              "regresie_povesti": self.povesti_peste_prag(povesti_dupa),
                               "timp": datetime.now().isoformat(timespec="seconds")}
         self.salveaza_stare(stare)
         self.jurnal({"tip": "pregatire", **stare["pregatire"], "memorie_video_mb": antrenare.get("memorie_video_mb"),
                      "regula": c["mediu"]["regula"],
-                     "motiv": f"pregătirea, din #252: {antrenare['pasi']} de pași pe abecedar, cu "
+                     "motiv": f"pregătirea, din #252: {pasi_facuti} de pași pe abecedar, cu "
                               f"{DESCRIERE_REGULA[c['mediu']['regula']].replace('fără regulă', 'regula lungă')} "
                               f"deasupra exemplelor (rata {p['rata']:g}); "
                               f"nevăzut înainte → după: "
                               + ", ".join(f"{n} {inainte[n]:.0%} → {dupa[n]:.0%}" for n in niveluri)
+                              + (f"; pierderea pe abecedar {pierderi[0][1]} → {pierderi[-1][1]} "
+                                 + ("(ținta " + str(tinta) + " atinsă)" if pierderi[-1][1] <= tinta
+                                    else f"(ținta {tinta} neatinsă în {pasi_facuti} de pași)") if pierderi else "")
+                              + (f"; {stare['pregatire']['fractie_povesti']:.0%} povești în fiecare lot"
+                                 if stare["pregatire"]["fractie_povesti"] else "")
                               + (f"; povești (biți pe octet) {povesti_inainte} → {povesti_dupa}"
                                  if povesti_inainte is not None else "")
-                              + "; liniile A și B pornesc amândouă din acest model"})
+                              + ("; PESTE PRAG: regresie pe povești" if stare["pregatire"]["regresie_povesti"] else "")
+                              + f"; liniile {', '.join(c['pilot']['linii'])} pornesc toate din acest model"})
         return stare["pregatire"]
 
     def pilot(self) -> dict[str, str]:
@@ -570,13 +686,21 @@ class Scoala:
             raise RuntimeError(motiv)
         niveluri, linii = self.cfg["pilot"]["niveluri"], self.cfg["pilot"]["linii"]
         self.jurnal({"tip": "pilot_inceput", "niveluri": niveluri, "linii": linii,
-                     "motiv": f"pilotul pornește (sau se reia): nivelurile {', '.join(niveluri)}, liniile "
+                     "versiune": self.cfg["scoala"].get("versiune", "v0.1"), "dosar": self.dosar,
+                     "fractie_povesti": (self.cfg.get("povesti") or {}).get("fractie", 0),
+                     "motiv": f"pilotul {self.cfg['scoala'].get('versiune', 'v0.1')} pornește (sau se reia), din "
+                              f"{self.cfg['scoala']['model_pornire']}: nivelurile {', '.join(niveluri)}, liniile "
                               f"{' și '.join(linii)} pe rând la fiecare nivel, {self.cfg['buget']['minute_pe_nivel']} de "
                               f"minute pe nivel și linie"})
         if not (self.cod / "pregatit.pt").exists():
             self.pregateste()
-        if not exista(self.lucru, "inainte_de_pilot", self.git_la_inghet, self.radacina):
-            self._ingheata(self.stare(), "inainte_de_pilot", "înainte de pilot (obligatoriu), după pregătire", None)
+        if self.stare().get("pregatire", {}).get("regresie_povesti"):
+            self.jurnal({"tip": "oprit", "motiv": "oprit: pregătirea a dus poveștile peste prag (regresie); liniile nu "
+                                                  "pornesc, decide omul"})
+            return {"pregatire": "regresie"}
+        eticheta = f"{self.prefix}inainte_de_pilot"
+        if not exista(self.lucru, eticheta, self.git_la_inghet, self.radacina, self.dosar):
+            self._ingheata(self.stare(), eticheta, "înainte de pilot (obligatoriu), după pregătire", None)
         rezultate: dict[str, str] = {}
         for nivel in niveluri:
             for linie in linii:
@@ -614,16 +738,25 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     cale_config = Path(args.config) if Path(args.config).is_absolute() else RADACINA / args.config
     cfg = citeste_config(cale_config)
-    if args.genereaza_sacru:
+    if args.genereaza_sacru:  # o singură dată pe nivel: nivelurile care există nu se regenerează niciodată
         cale = RADACINA / cfg["scoala"]["sacru"]
+        e = cfg["examen"]
+        texte = {ep.test for ep in citeste_abecedar(RADACINA / cfg["scoala"]["abecedar"]).episoade}
+        marimi = {n: m["sacru"] for n, m in e.get("marimi", {}).items() if "sacru" in m}
+        niveluri = tuple(cfg["pilot"]["niveluri"])
         if cale.exists():
-            print(f"Setul sacru există deja ({cale}): nu se regenerează.")
-            return 1
-        abecedar = citeste_abecedar(RADACINA / cfg["scoala"]["abecedar"])
-        date = genereaza_sacru({e.test for e in abecedar.episoade}, cfg["examen"]["sacru"])
+            date = json.loads(cale.read_text(encoding="utf-8"))
+            adaugate = adauga_sacru(date, texte, niveluri, e["sacru"], e.get("samanta_sacru", "sacru-v0.1"), marimi)
+            if not adaugate:
+                print(f"Setul sacru există deja pentru toate nivelurile ({cale}): nu se regenerează.")
+                return 1
+        else:
+            date = genereaza_sacru(texte, e["sacru"], e.get("samanta_sacru", "sacru-v0.1"), niveluri, marimi)
+            adaugate = list(niveluri)
         cale.write_text(json.dumps(date, ensure_ascii=False, indent=1), encoding="utf-8")
-        print(f"Setul sacru: {sum(len(v) for v in date['niveluri'].values())} de sarcini în {cale}. Urmează: git add -f "
-              f"{cfg['scoala']['sacru']} și python unelte/scoala_cod.py --aproba-amprente")
+        print(f"Setul sacru: nivelurile {', '.join(adaugate)} ("
+              + ", ".join(f"{n}: {len(date['niveluri'][n])}" for n in adaugate) + f" sarcini) în {cale}. Urmează: "
+              f"git add -f {cfg['scoala']['sacru']} și python unelte/scoala_cod.py --aproba-amprente")
         return 0
     scoala = Scoala(cfg, cale_config=cale_config)
     try:

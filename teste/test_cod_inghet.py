@@ -118,3 +118,33 @@ def test_linia_de_comanda(tmp_path, capsys):
     assert ingheata_cod.main(["--revino", "cli", "--motiv", "proba", "--director-lucru", str(lucru)]) == 0
     assert ingheata_cod.main(["--lista", "--director-lucru", str(lucru)]) == 0
     assert "cli" in capsys.readouterr().out
+
+
+def test_dosarul_versiunii_si_biblioteca_uneltei(tmp_path):
+    lucru = tmp_path / "lucru"
+    cod = lucru / "cod_v02"
+    (cod / "linii" / "D").mkdir(parents=True)
+    (cod / "linii" / "D" / "model.pt").write_bytes(b"model D")
+    (cod / "biblioteca_unealta_D.jsonl").write_text('{"cod": "46"}\n', encoding="utf-8")
+    arhiva = ingheata(lucru, "v02_D_0a", "proba", ["D"], git=False, dosar="cod_v02")
+    assert arhiva.parent == cod / "inghet" and not (lucru / "cod").exists()
+    with zipfile.ZipFile(arhiva) as z:
+        assert {"linii/D/model.pt", "biblioteca_unealta_D.jsonl"} <= set(z.namelist())
+    assert exista(lucru, "v02_D_0a", False, dosar="cod_v02") and not exista(lucru, "v02_D_0a", False)
+    assert [i["eticheta"] for i in lista(lucru, "cod_v02")] == ["v02_D_0a"]
+
+
+def test_rollback_sterge_bibliotecile_aparute_dupa_inghet(tmp_path):
+    """Rollback la un îngheț fără bibliotecă: biblioteca apărută după el se șterge, ca starea să fie exact cea înghețată
+    (altfel linia B ar porni din nou cu reușitele de după îngheț)."""
+    lucru = lucru_cu_linii(tmp_path)
+    cod = lucru / "cod"
+    for f in ("biblioteca_B.txt", "biblioteca_B.jsonl"):
+        (cod / f).unlink()
+    ingheata(lucru, "fara_biblioteca", "înainte de runde", ["B"], git=False)
+    (cod / "biblioteca_B.jsonl").write_text('{"cod": "1"}\n', encoding="utf-8")
+    (cod / "biblioteca_B.txt").write_text("TEST: x\n", encoding="utf-8")
+    revino(lucru, "fara_biblioteca", "proba")
+    assert not (cod / "biblioteca_B.jsonl").exists() and not (cod / "biblioteca_B.txt").exists()
+    assert (cod / "biblioteca_A.txt").exists()  # linia A n-a fost înghețată aici: rămâne
+    assert sorted(jurnal(lucru)[-1]["sterse"]) == ["biblioteca_B.jsonl", "biblioteca_B.txt"]

@@ -2611,6 +2611,56 @@ Pe toată durata pilotului, placa n-a încetinit: 31–34 s pe rundă, 2,3 GB me
 cere --linie A sau B”, la 09:28 și 09:29), înainte de pilot. Nu le-am șters, fiindcă jurnalul nu se editează. Am adăugat
 în jurnal o notă care le explică. Acum, o comandă greșită nu mai ajunge în jurnal, iar testul verifică asta.
 
+### Școala de cod v0.2 (8 octombrie, după pilot)
+
+Cerută de Adrian după pilotul v0.1. Configurarea e `config/scoala_cod_v02.toml`, iar totul se scrie în `lucru/cod_v02/`;
+v0.1 rămâne neatins în `lucru/cod/`, pentru comparație. `kronos/` nu s-a schimbat.
+
+**Punctul de pornire:** pornește din #252 însuși, nu din modelul din înghețul `inainte_de_pilot`. Acela e modelul
+pregătit în v0.1, cu abecedarul învățat pe de rost și poveștile la 0,583, iar schimbarea 2 cere o pregătire nouă.
+
+**Schimbările:**
+1. **Poveștile rămân în lecții.** 70% din fiecare lot, la pregătire și la runde, vine din textul de antrenare al
+   poveștilor (`tinystories_r2/antrenare.txt`, 45,1 milioane de tokeni din memoria lui Kronos, nu din validare). Biții
+   pe octet pe povești se măsoară la fiecare îngheț; peste 0,46 e regresie: linia se oprește. Dacă pregătirea însăși
+   trece de prag, liniile nu pornesc.
+2. **Pregătirea nu mai învață abecedarul pe de rost.** Se oprește când pierderea pe abecedar ajunge la 0,5 (măsurată
+   după fiecare 10 pași) sau la 300 de pași. Proba pe placă: la #252 pierderea e 5,24; după 20 de pași, 1,13.
+3. **Trepte intermediare:**
+   - **0a:** numere de o cifră;
+   - **0b:** numere de două cifre și cuvinte, adică nivelul 0 din v0.1 fără numerele de o cifră;
+   - **1a:** operanzi de o cifră;
+   - **1b:** operanzi de două cifre.
+
+   Tokenizer-ul lui #252 taie orice număr în cifre: o cifră e o bucată, două cifre sunt două bucăți, trei cifre sunt
+   trei, și la fel în sarcină și în cod.
+
+   Numere de o cifră sunt doar 10, iar 4 și 8 sunt în abecedar. Așa că 0a are 4 sarcini văzute, 4 nevăzute și niciun
+   set sacru; trecerea înseamnă 4 din 4.
+
+   Adversarialul rămâne cu numere mari: trei cifre la 0a, 0b și 1b (la 1b, două cifre e mărimea obișnuită) și 30–99 la
+   1a, ca în v0.1.
+4. **Linia D (control).** În fiecare rundă primește tot atâtea soluții corecte câte reușite noi a avut B în aceeași
+   rundă. Soluțiile sunt date de unealtă: sarcini văzute alese la întâmplare, cu soluția noastră
+   (`biblioteca_unealta_D`). Reușitele proprii ale lui D se păstrează, dar nu intră în antrenarea ei. Liniile A, B și D
+   au aceleași semințe și merg pe rând la fiecare nivel, D după B.
+5. **Codul interzis se caută pe cuvinte întregi.** „important” nu mai e „import”, „evaluate” nu e „eval”, „chaos.” nu e
+   „os.”.
+6. **Aceleași bugete:** 30 de minute pe nivel și linie. Nivelurile sunt 0a, 0b, 1a, 1b, 2A, 2B, 2C, 3A, 3B. La picare,
+   se oprește linia aceea.
+
+**Alegerile mele:**
+- **regresia pe cod** cere, pe lângă scăderea de peste 15 puncte, cel puțin 2 sarcini pierdute. La 0a, o singură
+  sarcină înseamnă 25 de puncte, iar la seturile de 20 regula rămâne cea din plan;
+- **abecedarul** rămâne cel puțin 5% din tot lotul (17% din partea școlii);
+- **rollback-ul** șterge acum și bibliotecile apărute după îngheț, ca starea să fie exact cea înghețată.
+
+```
+python unelte/scoala_cod.py --config config/scoala_cod_v02.toml --pilot
+python unelte/raport_cod.py --dosar cod_v02
+python unelte/ingheata_cod.py --dosar cod_v02 --lista
+```
+
 ## Toate comenzile
 
 ```

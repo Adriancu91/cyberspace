@@ -3,6 +3,9 @@
 - **Codul interzis** se caută ÎNAINTE de rulare, fără excepție: `import`, `open(`, `__`, `exec`, `eval`, `os.`, `sys.`,
   `subprocess`, `input(`, `while True`. O apariție = „prins trișând”: încercarea nu se rulează, se șterge și se
   numără separat. Nu e o pedeapsă, e o sită; dar vrem să știm cât de des apare.
+  - Din v0.2, potrivirea e pe cuvinte întregi: „important” nu mai e „import”, „evaluate” nu e „eval”, „chaos.” nu e
+    „os.” (în pilotul v0.1, singura încercare „trișată” a fost „important”).
+  - `__` rămâne prins oriunde.
 - Restul rulează ca Python într-un **proces separat** (interpretorul de bază, `-I`: fără variabilele și pachetele
   utilizatorului), într-un **dosar temporar gol**, cu **mediul curățat**, fără argumente și cu **timeout**. Pe Windows,
   interpretorul din .venv e doar un lansator care pornește alt proces: îl ocolim, ca timeout-ul să oprească chiar
@@ -21,6 +24,7 @@ from __future__ import annotations
 import contextlib
 import io
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -75,9 +79,16 @@ class Rulare:
         return self.eroare is None and self.trisat is None
 
 
+def _model_interzis(bucata: str) -> re.Pattern[str]:
+    """Bucata ca cuvânt întreg: o literă la capăt cere margine de cuvânt („import” nu prinde „important”); spațiile din
+    ea se potrivesc cu oricâte spații („while  True”)."""
+    model = r"\s+".join(re.escape(parte) for parte in bucata.split(" "))
+    return re.compile((r"\b" if bucata[:1].isalpha() else "") + model + (r"\b" if bucata[-1:].isalpha() else ""))
+
+
 def cod_interzis(cod: str, interzis: tuple[str, ...] | list[str] = INTERZIS) -> str | None:
-    """Primul lucru interzis din cod (căutare simplă de text, fără excepție), sau None."""
-    return next((bucata for bucata in interzis if bucata in cod), None)
+    """Primul lucru interzis din cod (pe cuvinte întregi, fără excepție), sau None."""
+    return next((bucata for bucata in interzis if _model_interzis(bucata).search(cod)), None)
 
 
 def interpretor() -> str:

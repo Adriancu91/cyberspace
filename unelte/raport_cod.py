@@ -33,7 +33,7 @@ if str(RADACINA) not in sys.path:
 
 from module.cod import ordinea  # noqa: E402
 
-LINII = ("A", "B")
+LINII = ("A", "B", "D")
 
 
 def citeste_jsonl(cale: Path) -> list[dict[str, Any]]:
@@ -92,6 +92,11 @@ def raport(cod: Path) -> str:
     o: list[str] = [f"# Școala de cod: raportul\n",
                     f"*Scris la {datetime.now():%Y-%m-%d %H:%M}, din lucru/cod/runde.jsonl ({len(jurnal)} rânduri, "
                     f"{sum(len(v) for v in runde.values())} runde) și lucru/cod/stare.json.*\n"]
+    pornire_pilot = next((r for r in reversed(jurnal) if r.get("tip") == "pilot_inceput"), None)
+    if pornire_pilot:
+        o.append(f"Versiunea {pornire_pilot.get('versiune', 'v0.1')}, în lucru/{cod.name}"
+                 + (f"; {pornire_pilot['fractie_povesti']:.0%} povești în fiecare lot de antrenare"
+                    if pornire_pilot.get("fractie_povesti") else "") + ".\n")
     variante = sorted({(r.get("regula"), r.get("episoade")) for r in jurnal if r.get("tip") == "nivel_inceput"},
                       key=str)
     descriere = {"scurta": "regula scurtată", "lunga": "regula lungă (preambulul)", "fara": "fără regulă"}
@@ -153,28 +158,50 @@ def raport(cod: Path) -> str:
         o.append(f"| {nivel} | " + " | ".join(celule) + " |")
     o.append("")
 
-    # --- A față de B, la aceleași runde: singura comparație curată
-    comune = [n for n in niveluri if runde.get(("A", n)) and runde.get(("B", n))]
+    # --- liniile pe aceleași runde: singura comparație curată
+    comune = [n for n in niveluri if sum(bool(runde.get((l, n))) for l in linii) >= 2]
     if comune:
-        o.append("## A față de B, la aceleași runde\n")
+        o.append("## Liniile pe aceleași runde (A, B" + (", D" if "D" in linii else "") + ")\n")
         o.append("La aceeași rundă, liniile au aceleași sarcini, aceleași texte din față și aceleași semințe. Diferă doar "
-                 "textul de antrenare: B se antrenează și pe reușitele ei. Un set de 20 de sarcini are o eroare de "
-                 "aproximativ ±11 puncte pe măsurare (o abatere standard, la 50%).\n")
+                 "textul de antrenare:\n- A: doar abecedarul;\n- B: abecedarul și propriile reușite;"
+                 + ("\n- D: abecedarul și tot atâtea soluții corecte câte a găsit B în aceeași rundă, date de unealtă "
+                    "(sarcini văzute alese la întâmplare), nu descoperite de D." if "D" in linii else "")
+                 + "\n\nUn set de 20 de sarcini are o eroare de aproximativ ±11 puncte pe măsurare (o abatere standard, "
+                   "la 50%); unul de 4 sarcini (0a), de ±25.\n")
         for nivel in comune:
-            a, b = runde[("A", nivel)], runde[("B", nivel)]
-            n = min(len(a), len(b), 12)
-            o.append(f"- Nivelul {nivel}, nevăzut pe runde (A / B): " + ", ".join(
-                f"{i + 1}: {procent(a[i]['rata_nevazut'])} / {procent(b[i]['rata_nevazut'])}" for i in range(n))
-                + (f"; apoi A a mai avut {len(a) - n} runde (cel mai bun: "
-                   f"{procent(max(r['rata_nevazut'] for r in a[n:]))})" if len(a) > n else "")
-                + (f"; apoi B a mai avut {len(b) - n} runde (cel mai bun: "
-                   f"{procent(max(r['rata_nevazut'] for r in b[n:]))})" if len(b) > n else "") + ".")
+            cu = [l for l in linii if runde.get((l, nivel))]
+            lung = max(len(runde[(l, nivel)]) for l in cu)
+            n = min(lung, 12)
+            celule = []
+            for i in range(n):
+                valori = [procent(runde[(l, nivel)][i]["rata_nevazut"]) if i < len(runde[(l, nivel)]) else "—" for l in cu]
+                celule.append(f"{i + 1}: {' / '.join(valori)}")
+            dupa = [f"{l} a mai avut {len(runde[(l, nivel)]) - n} runde (cel mai bun: "
+                    f"{procent(max(r['rata_nevazut'] for r in runde[(l, nivel)][n:]))})"
+                    for l in cu if len(runde[(l, nivel)]) > n]
+            o.append(f"- Nivelul {nivel}, nevăzut pe runde ({' / '.join(cu)}): " + ", ".join(celule)
+                     + (f"; apoi {'; '.join(dupa)}" if dupa else "") + ".")
+            if "B" in cu and "D" in cu:
+                bb, dd = runde[("B", nivel)], runde[("D", nivel)]
+                primite = sum(r.get("de_la_unealta", 0) for r in dd)
+                cerute = sum(r.get("cerute_de_la_unealta", 0) for r in dd)
+                o.append(f"  - B față de D la {nivel}: B a trecut în runda {bb[-1]['runda']} " if
+                         stari.get("B", {}).get("niveluri_trecute", {}).get(nivel) else f"  - B față de D la {nivel}: ")
+                o[-1] += (f"D a primit de la unealtă {primite} soluții din {cerute} câte a găsit B"
+                          + (" (n-au mai rămas sarcini văzute noi pentru restul)" if primite < cerute else "") + ".")
         o.append("")
 
     # --- pregătirea
     pregatire = stare.get("pregatire")
     if pregatire:
         o.append("## Pregătirea (din #252, pe abecedar)\n")
+        if pregatire.get("pierdere_abecedar"):
+            pierderi = pregatire["pierdere_abecedar"]
+            o.append(f"Pierderea pe abecedar (nats pe simbol), măsurată la fiecare câțiva pași: "
+                     + ", ".join(f"{pas}: {v}" for pas, v in pierderi) + f"; ținta {pregatire.get('pierdere_tinta')}"
+                     + (" atinsă." if pierderi[-1][1] <= (pregatire.get("pierdere_tinta") or 0) else " neatinsă.")
+                     + (f" {pregatire['fractie_povesti']:.0%} povești în fiecare lot." if pregatire.get("fractie_povesti")
+                        else ""))
         o.append(f"{pregatire['pasi']} de pași, rata {pregatire['rata']:g}, pierderea la final {pregatire['pierdere']}. "
                  "Nevăzut înainte → după: " + ", ".join(
                      f"{n} {procent(pregatire['nevazut_inainte'][n])} → {procent(pregatire['nevazut_dupa'][n])}"
@@ -255,6 +282,8 @@ def raport(cod: Path) -> str:
         intrari = biblioteci[linie]
         if not intrari and linie not in linii:
             continue
+        if not intrari and linie == "D" and not (cod / "biblioteca_unealta_D.jsonl").exists() and linie not in linii:
+            continue
         prime: dict[str, dict[str, Any]] = {}
         for i in sorted(intrari, key=lambda i: (ordinea(i["nivel"]), i["runda"])):
             if i["forma_noua"] and i["schelet"] not in prime:
@@ -262,6 +291,11 @@ def raport(cod: Path) -> str:
         o.append(f"**Linia {linie}** ({'se antrenează pe ele' if linie == 'B' else 'biblioteca se umple, dar nu se antrenează pe ea'}): "
                  f"{len(intrari)} reușite unice, {sum(i['forma_noua'] for i in intrari)} cu formă nouă, "
                  f"{len(prime)} forme noi diferite.")
+        if linie == "D":
+            unealta = citeste_jsonl(cod / "biblioteca_unealta_D.jsonl")
+            pe_nivel = Counter(i["nivel"] for i in unealta)
+            o.append("Linia D se antrenează pe soluțiile date de unealtă: " + (", ".join(
+                f"{n}: {pe_nivel[n]}" for n in sorted(pe_nivel, key=ordinea)) if unealta else "niciuna") + ".")
         if prime:
             o.append("\n| Nivel | Runda | Sarcina | Codul (formă nouă) |\n|---|---|---|---|")
             for i in list(prime.values())[:15]:
@@ -282,13 +316,15 @@ def raport(cod: Path) -> str:
     randuri = []
     if pregatire and pregatire.get("povesti_bpo_inainte") is not None:
         randuri.append(f"- #252, înainte de școală: {pregatire['povesti_bpo_inainte']}; după pregătire: "
-                       f"{pregatire['povesti_bpo_dupa']}")
+                       f"{pregatire['povesti_bpo_dupa']}" + (" (peste prag: regresie)"
+                                                             if pregatire.get("regresie_povesti") else ""))
     for linie in linii:
         sl = stari.get(linie, {})
         for nivel, info in sorted({**sl.get("niveluri_trecute", {}), **sl.get("niveluri_picate", {})}.items(),
                                   key=lambda kv: ordinea(kv[0])):
             if info.get("povesti_bpo") is not None:
-                randuri.append(f"- {linie}, la înghețul „{info['inghet']}”: {info['povesti_bpo']}")
+                randuri.append(f"- {linie}, la înghețul „{info['inghet']}”: {info['povesti_bpo']}"
+                               + (" (peste prag: regresie)" if info.get("regresie_povesti") else ""))
     o.extend(randuri or ["Nemăsurat încă."])
     o.append("\nBiți pe octet pe aceeași bucată din validarea poveștilor (mai mic = mai bine). Faptele (cele 72 ale lui "
              "#252) nu se măsoară în buclă.\n")
@@ -372,8 +408,9 @@ def main(argv: list[str] | None = None) -> int:
         pass
     parser = argparse.ArgumentParser(description="Raportul școlii de cod.")
     parser.add_argument("--director-lucru", default=str(RADACINA / "lucru"))
+    parser.add_argument("--dosar", default="cod", help="dosarul versiunii școlii, în lucru/ (v0.1: cod, v0.2: cod_v02)")
     args = parser.parse_args(argv)
-    cod = Path(args.director_lucru) / "cod"
+    cod = Path(args.director_lucru) / args.dosar
     text = raport(cod)
     if cod.exists():
         (cod / "raport.md").write_text(text, encoding="utf-8")

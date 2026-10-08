@@ -17,9 +17,11 @@ Sandbox-ul și examenul joacă rolul porturilor „rulare” și „examen” al
 interfețe. Așa nu trebuie atins kronos/.
 """
 
-# Scara v0.1 (planul, secțiunea 5), în ordine. Pilotul: primele 7; restul se activează după pilot, de mână.
-NIVELURI = ("0", "1", "2A", "2B", "2C", "3A", "3B", "4", "4.5", "5", "5.5", "6", "7", "8")
-PILOT = ("0", "1", "2A", "2B", "2C", "3A", "3B")
+# Scara (planul, secțiunea 5), în ordine. v0.2 adaugă trepte intermediare acolo unde s-a rupt lanțul în pilotul v0.1:
+# 0a / 1a cu numere de o cifră, 0b / 1b cu numere de două cifre (0b are și cuvintele nivelului 0).
+NIVELURI = ("0", "0a", "0b", "1", "1a", "1b", "2A", "2B", "2C", "3A", "3B", "4", "4.5", "5", "5.5", "6", "7", "8")
+PILOT = ("0", "1", "2A", "2B", "2C", "3A", "3B")                       # pilotul v0.1
+PILOT_V02 = ("0a", "0b", "1a", "1b", "2A", "2B", "2C", "3A", "3B")     # pilotul v0.2
 
 
 def ordinea(nivel: str) -> int:

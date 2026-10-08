@@ -6,10 +6,14 @@
 - **Antrenarea scurtă:**
   - pași exacți și o rată mică, fixă, fără repornire (lecția 6c);
   - optimizatorul se păstrează de la o rundă la alta;
-  - loturi de ferestre de `context` simboluri din textul dat (abecedarul, plus biblioteca la linia B).
+  - loturi de ferestre de `context` simboluri din textul dat (abecedarul, plus biblioteca la liniile B și D);
+  - din v0.2, poveștile rămân în lecții: o parte fixă din fiecare lot (ex. 70%) vine din textul de antrenare al
+    poveștilor, restul din textul școlii.
 
   Rețeaua din model_gpt.py nu se reconstruiește: antreneaza() de acolo ar porni-o de la zero.
 - **Ce știa:** biți pe octet pe un text de povești, ca să se vadă dacă școala strică povestirile.
+- **Pierderea pe un text** (v0.2): pregătirea se oprește când abecedarul e învățat cât trebuie (~0,5), nu pe de rost
+  (0,02 în v0.1).
 """
 
 from __future__ import annotations
@@ -53,6 +57,36 @@ class ElevCod:
     def numara(self, text: str) -> int:
         return len(self.model.tok.codifica(text))
 
+    def simboluri(self, text: str) -> list[int]:
+        return self.model.tok.codifica(text)
+
+    def tokenizer_ca(self, cale: str | Path) -> bool:
+        """Are elevul exact tokenizer-ul din fișierul dat? (Simbolurile poveștilor din memoria lui Kronos sunt făcute cu el.)"""
+        from module.tokenizer_bpe import TokenizerBPE
+
+        return TokenizerBPE.incarca(cale).ca_dictionar() == self.model.tok.ca_dictionar()
+
+    @torch.no_grad()
+    def pierdere_pe(self, text: str) -> float:
+        """Pierderea medie (nats pe simbol, ca pierderea de la antrenare) pe ferestre de `context` care acoperă textul."""
+        retea, ctx = self.model.retea, self.context
+        date = torch.tensor(self.model.tok.codifica(text), dtype=torch.long)
+        retea.eval()
+        intregi = [s for s in range(0, len(date) - 1, ctx) if s + ctx + 1 <= len(date)]
+        grupuri = [torch.stack([date[s:s + ctx + 1] for s in intregi[i:i + 32]]) for i in range(0, len(intregi), 32)]
+        rest = intregi[-1] + ctx if intregi else 0
+        if len(date) - rest >= 2:
+            grupuri.append(date[rest:].unsqueeze(0))
+        total, n = 0.0, 0
+        for g in grupuri:
+            g = g.to(self.dispozitiv)
+            with self.model._autocast():
+                logits = retea(g[:, :-1])
+            total += F.cross_entropy(logits.float().reshape(-1, logits.size(-1)), g[:, 1:].reshape(-1),
+                                     reduction="sum").item()
+            n += g[:, 1:].numel()
+        return total / max(1, n)
+
     def _optimizator(self, rata: float) -> torch.optim.Optimizer:
         return torch.optim.AdamW(self.model.retea.parameters(), lr=rata, weight_decay=0.1)
 
@@ -83,12 +117,20 @@ class ElevCod:
             torch.cuda.empty_cache()
         return [tok.decodeaza(s) for s in noi]
 
-    def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int) -> dict[str, Any]:
-        """`pasi` pași pe ferestre din `text`, cu rata fixă `rata` (optimizatorul rămâne de la o rundă la alta)."""
+    def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int,
+                   povesti: torch.Tensor | None = None, fractie_povesti: float = 0.0) -> dict[str, Any]:
+        """`pasi` pași pe ferestre din `text`, cu rata fixă `rata` (optimizatorul rămâne de la o rundă la alta).
+
+        Cu `povesti` (simbolurile textului de antrenare al poveștilor, pe procesor) și `fractie_povesti` > 0, din fiecare
+        lot vin din povești fractie × lot ferestre. Când produsul nu e întreg, numărul alternează (ex. 0,7 × 24 = 16,8:
+        16 și 17), ca media să fie exact fracția."""
         retea, ctx = self.model.retea, self.context
         date = torch.tensor(self.model.tok.codifica(text), dtype=torch.long)
         if len(date) <= ctx + 1:
             raise ValueError(f"textul de antrenare are {len(date)} simboluri, sub contextul de {ctx}")
+        cu_povesti = povesti is not None and fractie_povesti > 0
+        if cu_povesti and len(povesti) <= ctx + 1:
+            raise ValueError(f"textul de povești are {len(povesti)} simboluri, sub contextul de {ctx}")
         if self.optimizator is None:
             self.optimizator = self._optimizator(rata)
         for grup in self.optimizator.param_groups:
@@ -98,11 +140,16 @@ class ElevCod:
         if pe_placa:
             torch.cuda.reset_peak_memory_stats()
         retea.train()
-        start, pierdere = time.perf_counter(), math.nan
-        for _ in range(pasi):
-            pozitii = torch.randint(len(date) - ctx - 1, (lot,), generator=generator)
-            x = torch.stack([date[p:p + ctx] for p in pozitii]).to(self.dispozitiv)
-            y = torch.stack([date[p + 1:p + ctx + 1] for p in pozitii]).to(self.dispozitiv)
+        start, pierdere, ferestre_povesti = time.perf_counter(), math.nan, 0
+        for pas in range(pasi):
+            k = (math.floor(fractie_povesti * lot * (pas + 1) + 1e-9) - math.floor(fractie_povesti * lot * pas + 1e-9)
+                 if cu_povesti else 0)
+            surse = [(date, p) for p in torch.randint(len(date) - ctx - 1, (lot - k,), generator=generator)]
+            if k:
+                surse += [(povesti, p) for p in torch.randint(len(povesti) - ctx - 1, (k,), generator=generator)]
+                ferestre_povesti += k
+            x = torch.stack([s[p:p + ctx].long() for s, p in surse]).to(self.dispozitiv)
+            y = torch.stack([s[p + 1:p + ctx + 1].long() for s, p in surse]).to(self.dispozitiv)
             with self.model._autocast():
                 logits = retea(x)
                 loss = F.cross_entropy(logits.float().view(-1, logits.size(-1)), y.view(-1))
@@ -114,7 +161,7 @@ class ElevCod:
         retea.eval()
         self.pasi += pasi
         return {"pasi": pasi, "pierdere_finala": round(pierdere, 4), "secunde": round(time.perf_counter() - start, 2),
-                "simboluri_text": len(date),
+                "simboluri_text": len(date), "ferestre_povesti": ferestre_povesti, "ferestre": pasi * lot,
                 "memorie_video_mb": round(torch.cuda.max_memory_reserved() / 2 ** 20) if pe_placa else 0}
 
     def salveaza(self, cale: str | Path) -> None:

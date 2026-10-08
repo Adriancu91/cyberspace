@@ -247,3 +247,103 @@ def test_linia_de_comanda_refuza_ce_nu_trebuie(capsys):
     assert scoala_cod.main(["--nivel", "0"]) == 1 and "--nivel cere --linie" in capsys.readouterr().out
     assert numara() == inainte
     assert scoala_cod.main(["--genereaza-sacru"]) == 1 and "există deja" in capsys.readouterr().out
+
+
+# --- v0.2 ----------------------------------------------------------------------------------------------------------------
+
+def scoala_v02(tmp_path, schimbari=None, senzori=None) -> Scoala:
+    cale = worktree_de_proba(tmp_path, schimbari, config="config/scoala_cod_v02.toml")
+    rad = cale.parent.parent
+    s = Scoala(citeste_config(cale), radacina=rad, cale_config=cale, senzori=senzori or senzori_linistiti(),
+               git_la_inghet=False, afiseaza=lambda text: None)
+    paznic_cod.aproba(rad, s.lucru)
+    return s
+
+
+def test_v02_pregatirea_se_opreste_la_pierderea_tinta(tmp_path):
+    s = scoala_v02(tmp_path, {"pregatire.pasi": 100})
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    p = s.stare()["pregatire"]
+    assert p["pasi"] == 30 and p["pierdere_abecedar"] == [[0, 2.0], [10, 1.4], [20, 0.9], [30, 0.45]]
+    assert elevi["pornire"].cu_povesti == [(0.7, elevi["pornire"].cu_povesti[0][1])] * 3  # 70% povești, de 3 ori
+    assert elevi["pornire"].cu_povesti[0][1] > 0 and "(ținta 0.5 atinsă)" in jurnal(s)[-1]["motiv"]
+    assert (s.lucru / "cod_v02" / "pregatit.pt").exists() and s.cod == s.lucru / "cod_v02"
+    neatinsa = scoala_v02(tmp_path / "2", {"pregatire.pasi": 20})
+    elevi_de_proba(neatinsa)
+    neatinsa.pregateste()
+    assert neatinsa.stare()["pregatire"]["pasi"] == 20 and "neatinsă în 20 de pași" in jurnal(neatinsa)[-1]["motiv"]
+
+
+def test_v02_povestile_raman_in_lectii_si_regresia_pe_povesti(tmp_path):
+    s = scoala_v02(tmp_path)
+    elevi = elevi_de_proba(s)
+    elevi["pornire"] = ElevDeProba(solutiile(s, ("0a", "0b")))
+    elevi["pornire"].bpo = 0.5  # pregătirea strică poveștile: liniile nu pornesc
+    assert s.pilot() == {"pregatire": "regresie"}
+    assert jurnal(s)[-1]["tip"] == "oprit" and "poveștile peste prag" in jurnal(s)[-1]["motiv"]
+    s = scoala_v02(tmp_path / "2")
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    elevi["A"] = ElevDeProba(solutiile(s, ("0a", "0b")))
+    elevi["A"].bpo = 0.5  # trece nivelul de cod, dar poveștile trec de prag
+    assert s.nivel("A", "0a") == "regresie"
+    sl = s.stare()["linii"]["A"]
+    assert sl["oprita"] and "povești 0.5 biți pe octet, peste pragul de 0.46" in sl["motiv_oprire"]
+    assert sl["niveluri_trecute"]["0a"]["regresie_povesti"] is True and sl["ultimul_inghet"] is None
+    assert elevi["A"].cu_povesti and all(f == 0.7 and n > 0 for f, n in elevi["A"].cu_povesti)
+
+
+def test_v02_linia_D_primeste_cat_a_gasit_B_si_nu_se_antreneaza_pe_ale_ei(tmp_path):
+    s = scoala_v02(tmp_path, {"pilot.niveluri": ["0b"], "buget.runde_pe_nivel": 3})
+    solutii = solutiile(s, ("0b",))
+    nevazut = {x.text for x in s.seturi("0b").nevazut}
+    elevi = {"A": ElevDeProba(solutii), "B": ElevDeProba(solutii),
+             "D": ElevDeProba({k: f"print({v})" for k, v in solutii.items()})}  # D își scrie reușitele altfel
+    for e in elevi.values():
+        e.gresit = set(nevazut)  # nimeni nu trece: trei runde pe fiecare linie
+    s.fabrica_elev = lambda cale: elevi.setdefault(cale.parent.name, ElevDeProba(solutii))
+    assert s.pilot() == {"A 0b": "picat", "B 0b": "picat", "D 0b": "picat"}
+    randuri = jurnal(s)
+    assert [r["linie"] for r in randuri if r["tip"] == "nivel_inceput"] == ["A", "B", "D"]
+    b = {r["runda"]: r["unice_noi"] for r in randuri if r["tip"] == "runda" and r["linie"] == "B"}
+    d = {r["runda"]: (r["de_la_unealta"], r["cerute_de_la_unealta"]) for r in randuri
+         if r["tip"] == "runda" and r["linie"] == "D"}
+    assert sum(b.values()) > 0 and d == {runda: (n, n) for runda, n in b.items()}
+    proprii = [json.loads(r) for r in (s.cod / "biblioteca_D.jsonl").read_text(encoding="utf-8").splitlines()]
+    unealta = [json.loads(r) for r in (s.cod / "biblioteca_unealta_D.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert proprii and all(i["cod"].startswith("print(") for i in proprii)
+    assert all(not i["cod"].startswith("print(") for i in unealta) and len(unealta) == sum(b.values())
+    for i in proprii:  # reușitele lui D nu intră în antrenarea lui
+        assert all(f"WRITE:\n{i['cod']}\nRESULT:" not in t for t in elevi["D"].antrenari)
+    for i in unealta:  # soluțiile uneltei intră
+        assert f"TEST: {i['test']}\nWRITE:\n{i['cod']}\nRESULT:" in elevi["D"].antrenari[-1]
+    assert elevi["A"].fete == elevi["B"].fete == elevi["D"].fete  # aceleași texte, semințe, temperaturi
+    text = raport_cod.raport(s.cod)
+    assert "## Liniile pe aceleași runde (A, B, D)" in text and "B față de D la 0b" in text
+    assert "Linia D se antrenează pe soluțiile date de unealtă: 0b:" in text
+
+
+def test_v02_regresia_pe_cod_cere_doua_sarcini_pierdute(tmp_path):
+    s = scoala_v02(tmp_path)
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    nevazut_0a = [x.text for x in s.seturi("0a").nevazut]  # 4 sarcini: o sarcină = 25 de puncte
+    for linie, gresite, asteptat in (("A", 1, "trecut"), ("B", 2, "regresie")):
+        assert s.nivel(linie, "0a") == "trecut"
+        elevi[linie].gresit = set(nevazut_0a[:gresite])
+        assert s.nivel(linie, "0b") == asteptat
+
+
+def test_v02_dosarul_versiunii_si_etichetele(tmp_path):
+    s = scoala_v02(tmp_path)
+    elevi_de_proba(s)
+    assert s.pilot() == {"A 0a": "trecut", "B 0a": "trecut", "D 0a": "trecut", "A 0b": "trecut", "B 0b": "trecut",
+                         "D 0b": "trecut"}
+    etichete = sorted(f.stem for f in (s.lucru / "cod_v02" / "inghet").glob("*.zip"))
+    assert etichete == ["v02_A_0a", "v02_A_0b", "v02_B_0a", "v02_B_0b", "v02_D_0a", "v02_D_0b", "v02_inainte_de_pilot"]
+    assert not (s.lucru / "cod" / "runde.jsonl").exists() and (s.lucru / "cod_v02" / "runde.jsonl").exists()
+    pornire = next(r for r in jurnal(s) if r["tip"] == "pilot_inceput")
+    assert pornire["versiune"] == "v0.2" and pornire["fractie_povesti"] == 0.7
+    assert raport_cod.main(["--director-lucru", str(s.lucru), "--dosar", "cod_v02"]) == 0
+    assert "Versiunea v0.2, în lucru/cod_v02; 70% povești" in (s.lucru / "cod_v02" / "raport.md").read_text(encoding="utf-8")

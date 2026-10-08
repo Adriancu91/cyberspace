@@ -63,3 +63,19 @@ def test_dosarul_e_gol_si_mediul_curat():
 
 def test_comparatia_exacta():
     assert la_fel(" 5\n", "5") and la_fel("1\n2", "1\n2") and not la_fel("1 2", "1\n2") and not la_fel("5.0", "5")
+
+
+@pytest.mark.parametrize("cod", ['print("important")', '"evaluate"', 'x = "chaos."\nprint(x)', '"reopen("',
+                                 'print("exec2")', '"subprocesses"'])
+def test_cuvintele_care_doar_contin_ceva_interzis_nu_sunt_trisat(cod):
+    """v0.2: potrivire pe cuvinte întregi. În pilotul v0.1, singura încercare „trișată” a fost „important”."""
+    assert cod_interzis(cod) is None
+    rulare = ruleaza(cod)
+    assert rulare.trisat is None and rulare.a_mers
+
+
+@pytest.mark.parametrize("cod, gasit", [("from os import path", "import"), ("x = os.sep", "os."),
+                                        ("while  True:\n    pass", "while True"), ("x = y.__class__", "__"),
+                                        ("eval ('1')", "eval"), ("print(sys.argv)", "sys.")])
+def test_cuvintele_interzise_intregi_sunt_prinse_oriunde(cod, gasit):
+    assert cod_interzis(cod) == gasit and ruleaza(cod).trisat == gasit
