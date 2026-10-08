@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import tomllib
 
 import pytest
 
@@ -56,7 +57,7 @@ def test_configurarea_7():
     assert config.criterii == {"fapte_noi": {"mai_mare_e_mai_bine": True, "prag": 10.0},
                                "nota_profesor": {"mai_mare_e_mai_bine": True, "prag": 1.0}}  # val_bpb rămâne principalul
     assert "--porneste-din 262" in config.cale_fisier.read_text(encoding="utf-8")
-    assert not (RADACINA / "lucru" / "antrenare_lunga_7").exists()  # n-a pornit încă
+    # Până pe 8 octombrie la 13:09 testul cerea și „n-a pornit încă”; atunci a pornit-o Adrian (planul joi–sâmbătă).
 
 
 @pytest.mark.parametrize("fisier", ["laptop_antrenare_lunga_5", "laptop_antrenare_lunga_6b", "laptop_masurare_6c_restart",
@@ -135,3 +136,19 @@ def test_configurarile_vechi_raman_cum_au_fost(fisier):
     assert antrenare_lunga.cu_criterii_implicite(config, tomllib.loads(cale.read_text(encoding="utf-8"))) == []
     assert config.criterii == {} and not antrenare_lunga.cu_hrana_implicita(config)
     assert config.setari_port("model")["hrana"] == ""
+
+
+@pytest.mark.parametrize("fisier, ore, rata, durata, din_zero", [("laptop_antrenare_lunga_8", 7, 0.00005, 7 * 3600, False),
+                                                                 ("laptop_fapte_zero", 7, 0.001, 8 * 3600, True)])
+def test_configurarile_noptii_1(fisier, ore, rata, durata, din_zero):
+    """Planul joi–sâmbătă: antrenarea 8 (lista albă a lui CONTINUUM) și fapte-zero (plasa de siguranță). Amândouă cu
+    hrana 5%, examenele de fiecare oră și criteriile implicite (fără [criterii])."""
+    config = citeste_config(RADACINA / "config" / f"{fisier}.toml")
+    model = config.setari_port("model")
+    assert (config.experimente, model["rata_invatare"], model["durata_scaderii_secunde"]) == (ore, rata, durata)
+    assert model["rata_invatare"] * model["fractie_rata_finala"] == pytest.approx(rata / 10)
+    assert (model["hrana"], model["fractie_hrana"]) == ("date/fapte/povesti.txt", 0.05)
+    assert model["examene_suplimentare"] == ["fapte", "fapte_noi", "profesor"] and model["povesti_profesor"] == 40
+    assert not model.get("de_la_zero")  # „de_la_zero = true” ar porni de la zero în fiecare oră, nu doar în prima
+    assert "criterii" not in tomllib.loads(config.cale_fisier.read_text(encoding="utf-8"))  # deci cele implicite
+    assert ("--porneste-din" in config.cale_fisier.read_text(encoding="utf-8").split("\n#   python")[0]) != din_zero
