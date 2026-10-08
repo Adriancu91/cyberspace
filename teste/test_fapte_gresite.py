@@ -86,9 +86,20 @@ def test_lista_de_verificat_si_aplicarea(tmp_path):
     from unelte import fapte_de_verificat as fv
 
     text = fv.text_doc()
-    assert text.count("\n| ") == 51 and "| 1 | " + SUBIECTE[0][1] in text and "vineri dimineață" in text
-    cu = fv.text_doc(["Fraza " + str(i) for i in range(1, 51)])
-    assert "traducere automată" in cu and "| 2 | " + SUBIECTE[1][1] + " | Fraza 2 |" in cu
+    assert text.count("\n| ") == 51 and "| 1 | " + SUBIECTE[0][1] in text and "Traducere" not in text
+    cu = fv.text_doc(["Prof " + str(i) for i in range(1, 51)], ["Claude " + str(i) for i in range(1, 51)])
+    assert "| 2 | " + SUBIECTE[1][1] + " | Claude 2 | Prof 2 |" in cu and "nu judeca faptele după ea" in cu
+    # traducerile stau într-un fișier: una nouă de la profesor nu o șterge pe a lui Claude
+    traduceri = tmp_path / "traduceri.json"
+    traduceri.write_text(json.dumps({"fapte": [fapt for _, fapt in SUBIECTE], "claude": {"traduceri": ["c"] * 50}}),
+                         encoding="utf-8")
+    fv.salveaza_profesorul(["p"] * 50, traduceri)
+    salvate = fv.citeste_traduceri(traduceri)
+    assert salvate["claude"]["traduceri"] == ["c"] * 50 and salvate["profesor"]["traduceri"] == ["p"] * 50
+    traduceri.write_text(json.dumps({"fapte": ["alt fapt"]}), encoding="utf-8")
+    with pytest.raises(ValueError, match="alte fapte"):
+        fv.citeste_traduceri(traduceri)
+    assert fv.citeste_traduceri(tmp_path / "lipsa.json") == {}
     cale = tmp_path / "fapte_gresite.json"
     date = fv.aplica([17, 3, 3], cale)
     assert date["numere"] == [3, 17] and json.loads(cale.read_text(encoding="utf-8"))["de_la"] == "Adrian"

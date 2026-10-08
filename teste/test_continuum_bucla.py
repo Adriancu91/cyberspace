@@ -255,7 +255,15 @@ def test_configurarea_adevarata():
     config = citeste_config(RADACINA / "config" / "continuum.toml")
     # Fișierul are ordinea din v0; v1 pune singur „repara” prima și „remasoara” după „masoara”.
     assert config["continuum"]["ordinea_nevoilor"] == ["repara", "masoara", "remasoara", "dezvolta", "continua"]
-    assert config["guvernator"]["fereastra_invatare"][0].hour == 0  # laptopul e al lui Kronos toată ziua
+    # Din 8 octombrie seara (planul joi–sâmbătă), placa e una: nopțile sunt ale liniei principale, zilele ale școlii de
+    # cod (până atunci: învățare toată ziua, „00:00-23:59”).
+    assert [(o.hour, o.minute) for o in config["guvernator"]["fereastra_invatare"]] == [(19, 0), (7, 30)]
+    assert [(o.hour, o.minute) for o in config["guvernator"]["fereastra_intretinere"]] == [(7, 30), (19, 0)]
+    # Lista albă a nopții 1: singura antrenare pe care o poate porni CONTINUUM e antrenarea 8; linia de la zero
+    # (fapte-zero, plasa de siguranță) nu e urmărită, ca să nu devină „ultimul model” al liniei vechi.
+    assert config["nevoi"]["continua"]["configurari"] == ["config/laptop_antrenare_lunga_8.toml"]
+    assert config["nevoi"]["dezvolta"]["configurari"] == []
+    assert not any("fapte_zero" in c or "fapte*" in c for c in config["linii"]["configurari"])
     assert config["guvernator"]["minute_fara_om"] == 10 and config["guvernator"]["buget_ore_placa_pe_zi"] == 20
     assert (config["zgomot"], config["zone"], config["stabilitate"], config["eficienta"], config["anti_bucla"]) == (
         {"perechi_minime": 3, "factor": 1.0, "minute_minime": 60}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1},

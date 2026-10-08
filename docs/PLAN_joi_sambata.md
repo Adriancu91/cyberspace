@@ -101,7 +101,28 @@
 ## Stare (actualizată de Claude Code după fiecare fază)
 
 - [x] Faza 0 — v0.2 raportat (13:03); antrenarea 7 pornită 13:09
-- [ ] Faza 1 — lecții, codul v0.3, CONTINUUM pregătit (lista albă: antrenarea 8; plasă: fapte-zero la 00:00), pre-înregistrare, pornit pe bune la ~23:00
+- [x] Faza 1 — lecții, codul v0.3, CONTINUUM pregătit (lista albă: antrenarea 8; plasă: fapte-zero la 00:00), pre-înregistrare, pornit pe bune la ~23:00
+  - **Gata joi, 21:40.**
+  - **Lecțiile SANDBOX-7:**
+    - `docs/fapte_de_verificat.md` are cele 50 de fapte. Traducerea profesorului (21:34) e slabă, deci am adăugat și
+      traducerea lui Claude Code. Mecanismul pentru faptele greșite e inactiv până răspunde Adrian.
+    - Biblioteca școlii se curăță la regresie (`kronos-cod`).
+    - Unealta de pre-înregistrare ia și orele începute înainte, dar terminate după.
+  - **v0.3 pe `kronos-cod`** (69faa04): 0n (numerele 0–99), 0w, forma „doar valoarea”, D exact cât B, curățarea,
+    oprirea la 18:20.
+  - **Antrenarea 7, terminată la 21:30:** 0,4263, R 1,08, sacru 31/50. Nicio oră păstrată: ora 8 bate #262 cu 0,0041,
+    sub pragul de 0,005.
+  - **Simularea v0** e oprită, cu rezumatul în README.
+  - **Proba la uscat:** „saturat” (ultimele ore +0,0039, +0,0013), prima alegere o remăsurare a faptelor.
+  - **CONTINUUM pe bune**, pornit la 21:36 (`lucru/continuum_pe_bune/`).
+    - #1: remăsurarea faptelor pe #262, reușită.
+    - #2: „nu pornesc nimic”.
+    - Plasa rămâne la 00:00.
+  - **Teste:** main 541 trec (490 + 51 cu placa), `kronos-cod` 653 (602 + 51); câte 1 sărit.
+  - **Abateri** de la textul planului:
+    - lista albă stă la `[nevoi.continua]`, nu la `[linii]` (de ce: README, „Noaptea 1”);
+    - văzutul la nivelul 0 e 55, nu 60, pentru că mai multe nu încap în 0–99 (`config/scoala_cod_v03.toml`);
+    - pornirea a fost la 21:36, nu la ~23:00, cu adendum datat în pre-înregistrare.
 - [ ] Faza 2 — noaptea 1 raportată; treapta 5: …
 - [ ] Faza 3 — v0.3 (ramura aleasă: …), verdict: …; pachet de mutare scris; pre-înregistrare noaptea 2
 - [ ] Faza 4 — noaptea 2 raportată (ce a rulat: …)

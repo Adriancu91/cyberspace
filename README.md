@@ -2412,6 +2412,59 @@ Starea fiecărei faze e la sfârșitul planului, în secțiunea „Stare”.
   - Nu se folosește STOP pentru asta, pentru că STOP ar opri și școala.
   - Butonul STOP (`lucru/STOP`) oprește tot, inclusiv CONTINUUM.
 
+### Antrenarea 7 (8 octombrie, 13:09–21:30): din #262, 8 ore, rata 0,0001 → 0,00001, hrană 5%
+
+| Ora | # | val_bpb | Față de ora dinainte | Decizia | Fapte noi (R față de 59) | Nota profesorului |
+|---|---|---|---|---|---|---|
+| 1 | 271 | 0,4547 | — | respinsă | 70 (1,19) | 4,08 |
+| 2 | 272 | 0,4511 | −0,0036 | respinsă | 61 (1,03) | 4,62 |
+| 3 | 273 | 0,4450 | −0,0061 | respinsă | 58 (0,98) | 4,45 |
+| 4 | 274 | 0,4411 | −0,0039 | respinsă | 65 (1,10) | 4,97 |
+| 5 | 275 | 0,4375 | −0,0035 | respinsă | 62 (1,05) | 4,75 |
+| 6 | 276 | 0,4315 | −0,0060 | respinsă | 64 (1,08) | 4,45 |
+| 7 | 277 | 0,4276 | −0,0039 | respinsă (câștig +0,0028 sub pragul de 0,005) | 64 (1,08) | 4,70 |
+| 8 | 278 | 0,4263 | −0,0013 | respinsă (câștig +0,0041 sub pragul de 0,005) | 64 (1,08) | 4,70 |
+
+- **Faptele se țin:**
+  - R = 1,08 la final;
+  - setul sacru pe starea de după ora 8: 31 din 50 (#262: 29, #252: 26), o diferență în zgomot (±3,5 pe 50 de
+    întrebări).
+- **Niciuna din ore nu e păstrată.**
+  - Ora 8 bate #262 (0,4304) cu 0,0041, sub pragul de 0,005. Cel mai bun model păstrat rămâne #262.
+  - Ultimele două ore au câștigat 0,0039 și 0,0013, deci pentru CONTINUUM poveștile sunt „saturate”.
+- **Față de pre-înregistrare:**
+  - val_bpb final între 0,420 și 0,430: da (0,4263);
+  - R ≥ 0,8: da (1,08);
+  - orele 4–8 păstrate: **nu**, nicio oră.
+- **Factor de influență mic:** în ora 3 am rulat testele pe procesor (prioritate minimă), iar ora 3 are cu 2% mai puțini
+  pași (26.608 față de ~27.100 în celelalte).
+
+### Simularea CONTINUUM v0 (7–8 octombrie), oprită la 21:31
+
+- A rulat din 7 octombrie, 01:46, până pe 8 octombrie, 21:16: 155 de cicluri, toate simulate.
+- **108 cicluri:** placa era ocupată de antrenările adevărate, deci doar a observat.
+- **47 de cicluri cu placa liberă:**
+  - de 28 de ori ar fi ales „continua:povesti”: v0 nu avea încă pragul de câștig al lui v1;
+  - de 16 ori n-ar fi pornit nimic: „dezvolta:fapte, nu acum”, ziua;
+  - o dată „dezvolta:fapte”, o dată „masoara:fapte”;
+  - o dată nimic, pentru că toate configurările potrivite erau încheiate.
+- Procesul a fost închis (nu cu STOP); jurnalul lui rămâne în `lucru/continuum/`.
+
+### Noaptea 1, pornirea (8 octombrie, 21:36)
+
+- **Proba la uscat** (`--simuleaza --ca-la 23:05`, placa reală, liberă): ÎNVĂȚARE.
+  - Prima alegere: o remăsurare a faptelor pe #262 (zona galbenă: 59 față de 72).
+  - Poveștile sunt „saturate”, deci antrenarea 8 nu e cerută.
+- **CONTINUUM pe bune** a pornit la 21:36, nu la ~23:00, fiindcă antrenarea 7 s-a terminat la 21:30. Primele cicluri:
+  - #1: remăsurarea faptelor pe #262, reușită (59, deci zona galbenă e confirmată);
+  - #2: „Nu pornesc nimic: dezvolta:fapte — nicio configurare potrivită”.
+- **Plasa de siguranță** rămâne la 00:00.
+- **Traducerea faptelor** (`docs/fapte_de_verificat.md`) a făcut-o profesorul pe placă, la 21:34, înainte de pornire.
+  - A ieșit slabă: „Birds have feathers” → „Păsări au pălării”.
+  - Documentul are de aceea și o traducere a lui Claude Code, pentru citit. Traducerea profesorului rămâne, marcată
+    „nu judeca faptele după ea”.
+  - Ambele stau în `date/fapte/traduceri.json`.
+
 ## Toate comenzile
 
 ```
