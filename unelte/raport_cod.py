@@ -58,6 +58,8 @@ def categoria(respins: dict[str, Any]) -> str:
     for inceput, nume in CATEGORII:
         if respins["motiv"].startswith(inceput):
             return nume
+    if respins["motiv"].startswith("<w>"):  # Python a dat întâi un avertisment (ex. la `9(2)`), apoi eroarea
+        return "eroare la rulare"
     return respins["motiv"].split(":")[0]  # alt fel de eroare (ex. TypeError)
 
 
@@ -90,8 +92,8 @@ def raport(cod: Path) -> str:
                                                 for n in stari.get(l, {}).get(c, {})}, key=ordinea)
     biblioteci = {l: citeste_jsonl(cod / f"biblioteca_{l}.jsonl") for l in LINII}
     o: list[str] = [f"# Școala de cod: raportul\n",
-                    f"*Scris la {datetime.now():%Y-%m-%d %H:%M}, din lucru/cod/runde.jsonl ({len(jurnal)} rânduri, "
-                    f"{sum(len(v) for v in runde.values())} runde) și lucru/cod/stare.json.*\n"]
+                    f"*Scris la {datetime.now():%Y-%m-%d %H:%M}, din lucru/{cod.name}/runde.jsonl ({len(jurnal)} rânduri, "
+                    f"{sum(len(v) for v in runde.values())} runde) și lucru/{cod.name}/stare.json.*\n"]
     pornire_pilot = next((r for r in reversed(jurnal) if r.get("tip") == "pilot_inceput"), None)
     if pornire_pilot:
         o.append(f"Versiunea {pornire_pilot.get('versiune', 'v0.1')}, în lucru/{cod.name}"

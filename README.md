@@ -2661,6 +2661,56 @@ python unelte/raport_cod.py --dosar cod_v02
 python unelte/ingheata_cod.py --dosar cod_v02 --lista
 ```
 
+### Rezultatele pilotului v0.2 (8 octombrie, 11:26–13:03)
+
+Raportul întreg: `lucru/cod_v02/raport.md`. Diagnosticul de după pilot, cu ce scriu modelele înghețate la sarcinile
+lui 0a: `lucru/cod_v02/diagnostic_0a.json`.
+
+Înainte de pornire am verificat:
+- placa era liberă;
+- nu fusese nicio schimbare a alimentării;
+- bateria era la 100%.
+
+Placa n-a încetinit: 26–33 s pe rundă, cu 8 pauze de răcire de câte 30 s, care nu intră în buget.
+
+**Unde se rupe lanțul:** la prima treaptă, 0a, pe toate trei liniile, după câte 30 de minute.
+
+| Nivel | A: văzut / nevăzut / adversarial / sacru | B: văzut / nevăzut / adversarial / sacru | D: văzut / nevăzut / adversarial / sacru |
+|---|---|---|---|
+| 0a | ✗ 54% / 25% / 10% / — | ✗ 96% / 0% / 5% / — | ✗ 95% / 25% / 5% / — |
+
+**Ce a mers:**
+- **Poveștile nu s-au mai pierdut:**
+  - #252 avea 0,434 biți pe octet;
+  - după pregătire, 0,449;
+  - la final, 0,437 pe toate liniile, față de 1,12–1,20 în v0.1.
+
+  Amestecul de 70% povești își face treaba.
+- **Pregătirea s-a oprit singură după 60 de pași:** pierderea pe abecedar a coborât de la 5,24 la 0,42, iar
+  nevăzutul a ajuns la 50% la 0a, 15% la 0b și 25% la 2B.
+- **Nicio încercare „trișată”** din 17.900, cu căutarea pe cuvinte întregi.
+
+**Ce n-a mers:**
+- **Toate liniile au coborât sub modelul pregătit la 0a.** El avea 50% pe nevăzut, adică 2 din 4. După 30 de minute:
+  A 25%, B 0%, D 25%.
+- **Modelul copiază cifra, dar adaugă după ea:** „show 3” → `30`, „show 6” → `6+1`, „show 5” → `51`. Imită
+  abecedarul („show 30”, adunările).
+- **B a învățat pe de rost forme ciudate** pentru cele 4 sarcini văzute: `t = 0 ⏎ print(t+0)`, `"7"`, `2+ 0`. Nivelul 0
+  n-are verificare de formă, așa că trec. Apoi le aplică greșit la cifre noi: „show 1” → `2+ 0`.
+- **B față de D nu se poate compara curat la 0a.** B a găsit 33 de soluții, multe forme pentru aceleași 4 sarcini.
+  Unealta i-a putut da lui D doar 4, câte una pe sarcină văzută. D a avut 25% pe nevăzut, B 0%: o singură sarcină
+  diferență, în zgomot (±25 de puncte la 4 sarcini).
+
+**O limită a designului meu:** 0a are doar 4 sarcini văzute și 4 nevăzute. E un test prea mic, care se învață pe de
+rost, iar o singură sarcină înseamnă 25 de puncte.
+
+**Ce s-ar putea schimba (decide Adrian):**
+1. Nivelul 0 fără 0a: numerele 0–99 împreună, ca în v0.1, unde B l-a trecut în 3 runde. Păstrăm poveștile de 70% și
+   pregătirea scurtă.
+2. Verificare de formă și la nivelul 0 (codul să fie doar numărul sau `print(număr)`), ca bibliotecile să nu se
+   umple de forme ciudate.
+3. Linia D cu repetare sau cu forme alternative ale aceleiași soluții, ca să primească exact cât B.
+
 ## Toate comenzile
 
 ```
