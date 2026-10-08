@@ -2358,6 +2358,60 @@ nu există în dosarele de probă.
 - **Configurările vechi** (1–5 și cele două 6c) au `hrana = ""` și un `[criterii]` gol, ca la o reluare să răspundă la
   aceleași întrebări ca atunci.
 
+## 8–10 octombrie: planul joi–sâmbătă (`docs/PLAN_joi_sambata.md`)
+
+Starea fiecărei faze e la sfârșitul planului, în secțiunea „Stare”.
+
+### Faza 1a: cele trei lecții SANDBOX-7
+
+- **Faptele profesorului le verifică omul.**
+  - `docs/fapte_de_verificat.md` are cele 50 de fapte ale hranei, numerotate, în engleză.
+  - Traducerea automată o face profesorul, pe placă, vineri dimineață (`python unelte/fapte_de_verificat.py --traduce`).
+  - Adrian trimite numerele celor greșite. Doar atunci: `python unelte/fapte_de_verificat.py --aplica 3,17,42`, care
+    scrie `date/fapte/fapte_gresite.json`.
+  - De atunci, faptele marcate ies din hrana generată de acum înainte. În examene se marchează, dar nu se șterg.
+    Fiecare examen de fapte dă și scorul fără ele (`fapte_corecte_fara_gresite`, `fapte_noi_fara_gresite`).
+  - Fără fișier, totul merge exact ca înainte.
+- **Biblioteca școlii se curăță după corectitudine** (ramura `kronos-cod`, școala v0.3):
+  - la fiecare regresie, fiecare soluție din bibliotecă e mutată pe sarcinile nevăzute de aceeași formă ale nivelului ei;
+  - cele care pică ies în `lucru/cod_v03/respinse/curatare_<linie>.jsonl`, cu motivul.
+- **Așteptările se scriu înainte de fiecare noapte.**
+  - `python unelte/preinregistrare.py --nume noaptea1 --titlu "..."` creează `docs/preinregistrari/<data>_noaptea1.md`:
+    întrebarea, așteptările în cifre și ce le-ar infirma.
+  - Dimineața, `python unelte/preinregistrare.py --inchide noaptea1` adaugă „Ce a ieșit”, scos din jurnal. Unealta doar
+    adaugă: nu schimbă nimic din ce era scris.
+
+### Noaptea 1 (joi ~23:00 → vineri 07:30): CONTINUUM pe bune
+
+- **Ce rulează:** `python -m module.continuum.bucla --config config/continuum.toml --stare lucru/continuum_pe_bune`.
+  - Pornește fără `--simuleaza`, ca proces separat.
+  - Are jurnalul lui, `lucru/continuum_pe_bune/`, separat de cel al simulării (`lucru/continuum/`).
+- **Ce are voie să pornească:** doar `config/laptop_antrenare_lunga_8.toml`, adică 7 ore din cel mai bun model păstrat,
+  cu 5% hrană și rata 0,00005 → 0,000005. Nevoia „continuă” o pornește doar dacă:
+  - ultima oră a antrenării 7 a câștigat peste 0,005;
+  - tendința pe 3 ore e bună.
+
+  Altfel, CONTINUUM spune „saturat”. Nimic nu se forțează.
+- **De ce lista albă stă în nevoi, nu în `[linii]`:**
+  - `[linii]` îi spune lui CONTINUUM ce linii măsoară și unde e ultimul model păstrat.
+  - Dacă acolo ar fi doar antrenarea 8, care încă nu există, n-ar vedea nicio istorie și n-ar ști de unde să continue.
+  - De aceea, `[linii]` urmărește liniile adevărate (antrenările lungi și faptele), iar lista albă e în
+    `[nevoi.continua] configurari`. `[nevoi.dezvolta]` e goală.
+- **O singură antrenare pe noapte:** e permisă doar antrenarea 8, de 7 ore.
+- **Plasa de siguranță:** la 00:00, Claude Code verifică dacă a pornit vreo antrenare. Se uită după un proces
+  `antrenare_lunga` sau un jurnal de acțiune `…_antrenare.log` în `lucru/continuum_pe_bune/actiuni/`.
+  - Dacă nu, pornește de mână Kronos-fapte-zero:
+    `python unelte/antrenare_lunga.py --config config/laptop_fapte_zero.toml --ore 7 --inceput "Once upon a time, there was a fearful little dog named Coco"`.
+  - Fapte-zero e un model nou, de la zero, cu aceeași arhitectură și același tokenizer. Învață 7 ore pe TinyStories, cu
+    5% fapte de la început, și dă aceleași examene în fiecare oră.
+  - În jurnalul nopții se notează „CONTINUUM n-a ales”, plus ultimele lui cicluri.
+  - Dacă la 00:00 CONTINUUM e în mijlocul unui examen, se așteaptă alegerea lui următoare (cel mult 30 de minute).
+- **Dacă CONTINUUM cade în timpul nopții**, antrenarea pornită merge mai departe. Se raportează dimineața.
+- **Ziua (07:30–19:00) placa e a școlii.**
+  - La 07:30, Claude Code închide procesul CONTINUUM. Ziua, CONTINUUM ar da examene pe placă, adică s-ar bate cu școala.
+  - Nu se folosește STOP pentru asta, pentru că STOP ar opri și școala.
+  - Butonul STOP (`lucru/STOP`) oprește tot, inclusiv CONTINUUM.
+
 ## Toate comenzile
 
 ```
