@@ -87,6 +87,14 @@ LINII = ("A", "B", "D")
 DESCRIERE_REGULA = {"scurta": "regula scurtată", "lunga": "regula lungă (preambulul)", "fara": "fără regulă"}
 
 
+def procent(x: float | None) -> str:
+    return "—" if x is None else f"{x:.0%}"
+
+
+def rotunjit(x: float | None) -> float | None:
+    return None if x is None else round(x, 3)
+
+
 def samanta(*parti: Any) -> int:
     """O sămânță întreagă, mereu aceeași pentru aceleași părți (ex. nivelul și runda): la fel pentru A și B."""
     return int(hashlib.sha256(":".join(map(str, parti)).encode("utf-8")).hexdigest()[:8], 16)
@@ -303,6 +311,12 @@ class Scoala:
         rezultate = self.incearca(elev, perechi, 1, self.cfg["examen"]["temperatura_examen"],
                                   [samanta("examen", nume_set, nivel, j) for j in range(len(sarcini))])
         return sum(r["verdict"] == "trecut" for r in rezultate) / max(1, len(rezultate)), rezultate
+
+    def masoara_sacru(self, elev: Any, nivel: str) -> float | None:
+        """Setul sacru, doar la îngheț, pentru raport. None la un nivel fără set sacru (0a: toate cele 8 sarcini ale lui
+        sunt deja în văzut și nevăzut)."""
+        sarcini = self.seturi(nivel).sacru
+        return self.masoara(elev, sarcini, "sacru", nivel)[0] if sarcini else None
 
     def ce_stia(self, elev: Any) -> float | None:
         """Biți pe octet pe o bucată fixă din validarea poveștilor: cât din ce știa modelul a rămas."""
@@ -543,7 +557,7 @@ class Scoala:
                ultima: dict[str, Any] | None) -> str:
         sl = stare["linii"][linie]
         adversarial, _ = self.masoara(elev, self.seturi(nivel).adversarial, "adversarial", nivel)
-        sacru, _ = self.masoara(elev, self.seturi(nivel).sacru, "sacru", nivel)
+        sacru = self.masoara_sacru(elev, nivel)
         povesti = self.ce_stia(elev)
         peste = self.povesti_peste_prag(povesti)
         eticheta = self._eticheta_libera(f"{self.prefix}{linie}_{nivel}_picat")
@@ -552,17 +566,16 @@ class Scoala:
         vazut = ultima["rata_vazut"] if ultima else None
         nevazut = ultima["rata_nevazut"] if ultima else None
         sl["niveluri_picate"][nivel] = {"vazut": vazut, "nevazut": nevazut, "adversarial": round(adversarial, 3),
-                                        "sacru": round(sacru, 3), "runde": buget["runde"], "secunde": buget["secunde"],
+                                        "sacru": rotunjit(sacru), "runde": buget["runde"], "secunde": buget["secunde"],
                                         "inghet": eticheta, "povesti_bpo": povesti, "regresie_povesti": peste}
         sl.update(oprita=True, motiv_oprire=motiv)
         self._ingheata(stare, eticheta, motiv, [linie])
-        procent = lambda x: "—" if x is None else f"{x:.0%}"  # noqa: E731
         self.jurnal({"tip": "nivel_picat", "linie": linie, "nivel": nivel, "runde": buget["runde"],
                      "secunde": buget["secunde"], "rata_vazut": vazut, "rata_nevazut": nevazut,
-                     "rata_adversarial": round(adversarial, 3), "rata_sacru": round(sacru, 3), "povesti_bpo": povesti,
+                     "rata_adversarial": round(adversarial, 3), "rata_sacru": rotunjit(sacru), "povesti_bpo": povesti,
                      "inghet": eticheta,
                      "motiv": f"{motiv}; la ultima rundă: văzut {procent(vazut)}, nevăzut {procent(nevazut)}; "
-                              f"adversarial {adversarial:.0%}, sacru {sacru:.0%} (doar pentru raport); povești "
+                              f"adversarial {adversarial:.0%}, sacru {procent(sacru)} (doar pentru raport); povești "
                               f"{povesti} biți pe octet" + (" (PESTE PRAG: regresie)" if peste else "")
                               + f"; înghețat „{eticheta}”. Linia se oprește: nivelul nu se coboară automat, decide omul"})
         return "picat"
@@ -571,7 +584,7 @@ class Scoala:
                 buget: dict[str, Any]) -> str:
         sl = stare["linii"][linie]
         adversarial, _ = self.masoara(elev, self.seturi(nivel).adversarial, "adversarial", nivel)
-        sacru, _ = self.masoara(elev, self.seturi(nivel).sacru, "sacru", nivel)
+        sacru = self.masoara_sacru(elev, nivel)
         povesti = self.ce_stia(elev)
         regresii = {}
         g = self.cfg["regresie"]
@@ -585,7 +598,7 @@ class Scoala:
         principal = sl["ultimul_inghet"]
         eticheta = self._eticheta_libera(f"{self.prefix}{linie}_{nivel}")
         sl["niveluri_trecute"][nivel] = {"vazut": rand["rata_vazut"], "nevazut": rand["rata_nevazut"],
-                                         "adversarial": round(adversarial, 3), "sacru": round(sacru, 3),
+                                         "adversarial": round(adversarial, 3), "sacru": rotunjit(sacru),
                                          "runda": rand["runda"], "secunde": buget["secunde"], "inghet": eticheta,
                                          "regresii": regresii, "povesti_bpo": povesti, "regresie_povesti": peste}
         if regresii or peste:
@@ -599,7 +612,7 @@ class Scoala:
         self._ingheata(stare, eticheta, f"linia {linie} a trecut nivelul {nivel} (nevăzut {rand['rata_nevazut']:.0%})"
                        + (", cu regresie" if regresii or peste else ""), [linie])
         motiv = (f"nivelul {nivel} trecut pe linia {linie} în runda {rand['runda']}: nevăzut {rand['rata_nevazut']:.0%}, "
-                 f"adversarial {adversarial:.0%}, sacru {sacru:.0%} (adversarialul și sacrul doar pentru raport); "
+                 f"adversarial {adversarial:.0%}, sacru {procent(sacru)} (adversarialul și sacrul doar pentru raport); "
                  + (f"povești {povesti} biți pe octet; " if povesti is not None else "") + f"înghețat „{eticheta}”")
         if regresii or peste:
             motiv += (f"; REGRESIE ({sl['motiv_oprire']}): modelul nu devine cel principal al liniei (rămâne "
@@ -609,7 +622,7 @@ class Scoala:
             motiv += "; fără regresie pe nivelurile trecute înainte"
         self.jurnal({"tip": "regresie" if regresii or peste else "nivel_trecut", "linie": linie, "nivel": nivel,
                      "runda": rand["runda"], "rata_vazut": rand["rata_vazut"], "rata_nevazut": rand["rata_nevazut"],
-                     "rata_adversarial": round(adversarial, 3), "rata_sacru": round(sacru, 3), "regresii": regresii,
+                     "rata_adversarial": round(adversarial, 3), "rata_sacru": rotunjit(sacru), "regresii": regresii,
                      "povesti_bpo": povesti, "inghet": eticheta, "motiv": motiv})
         return "regresie" if regresii or peste else "trecut"
 

@@ -347,3 +347,16 @@ def test_v02_dosarul_versiunii_si_etichetele(tmp_path):
     assert pornire["versiune"] == "v0.2" and pornire["fractie_povesti"] == 0.7
     assert raport_cod.main(["--director-lucru", str(s.lucru), "--dosar", "cod_v02"]) == 0
     assert "Versiunea v0.2, în lucru/cod_v02; 70% povești" in (s.lucru / "cod_v02" / "raport.md").read_text(encoding="utf-8")
+
+
+def test_v02_un_nivel_fara_set_sacru_nu_arata_sacru_0(tmp_path):
+    """0a n-are set sacru: la îngheț, sacrul e None („—”), nu 0%."""
+    s = scoala_v02(tmp_path, {"buget.runde_pe_nivel": 1})
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    elevi["A"] = ElevDeProba({})  # nu știe nimic: pică 0a după o rundă
+    assert s.nivel("A", "0a") == "picat"
+    picat = s.stare()["linii"]["A"]["niveluri_picate"]["0a"]
+    assert picat["sacru"] is None and picat["adversarial"] == 0.0
+    assert "sacru — (doar pentru raport)" in jurnal(s)[-1]["motiv"]
+    assert "| 0a | ✗ 0% / 0% / 0% / — |" in raport_cod.raport(s.cod)

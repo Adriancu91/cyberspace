@@ -138,6 +138,9 @@ def raport(cod: Path) -> str:
     o.append("Văzut și nevăzut: la runda în care s-a trecut nivelul, sau la ultima rundă. Adversarial și sacru: doar la "
              "îngheț (nivel trecut sau picat), doar pentru raport, niciodată la selecție. ✓ trecut, ✗ picat, … în lucru."
              "\n")
+    cale_sacru = RADACINA / "date" / "cod" / "sacru.json"
+    fara_sacru = {n for n, lista in json.loads(cale_sacru.read_text(encoding="utf-8"))["niveluri"].items() if not lista} \
+        if cale_sacru.exists() else set()
     o.append("| Nivel | " + " | ".join(f"{l}: văzut / nevăzut / advers. / sacru" for l in linii) + " |")
     o.append("|---|" + "---|" * len(linii))
     for nivel in niveluri:
@@ -148,8 +151,9 @@ def raport(cod: Path) -> str:
             semn = "✓" if nivel in sl.get("niveluri_trecute", {}) else "✗" if nivel in sl.get("niveluri_picate", {}) \
                 else "…" if runde.get((linie, nivel)) else ""
             if info:
+                sacru = None if nivel in fara_sacru else info.get("sacru")  # 0a n-are set sacru (v0.2 a scris 0%)
                 celule.append(f"{semn} {procent(info.get('vazut'))} / {procent(info.get('nevazut'))} / "
-                              f"{procent(info.get('adversarial'))} / {procent(info.get('sacru'))}")
+                              f"{procent(info.get('adversarial'))} / {procent(sacru)}")
             elif runde.get((linie, nivel)):
                 u = runde[(linie, nivel)][-1]
                 celule.append(f"{semn} {procent(u['rata_vazut'])} / {procent(u['rata_nevazut'])} / — / —")
