@@ -72,3 +72,66 @@ def test_pornire_json_e_citit_de_continuum(tmp_path):
     (tmp_path / "pornire.json").write_text(json.dumps({"experiment": 262}), encoding="utf-8")
     assert experimentul_de_pornire(tmp_path / "gpt.pt") == 262
     assert experimentul_de_pornire(tmp_path / "alta" / "gpt.pt") is None and experimentul_de_pornire(None) is None
+
+
+# --- criteriile implicite (8 octombrie 2026): ca în configurarea 7 --------------------------------------------------------
+
+EXAMENE = ', examene_suplimentare = ["fapte", "fapte_noi", "profesor"]'
+
+
+def criterii_puse(tmp_path, setari_model="", coada="", fara_prag=False):
+    import tomllib
+
+    cale = config_cu(tmp_path, setari_model)
+    text = cale.read_text(encoding="utf-8") + coada
+    if fara_prag:
+        text = text.replace("prag_zgomot = 0.002            # câștig minim ca o schimbare să fie păstrată\n", "")
+    cale.write_text(text, encoding="utf-8")
+    config = citeste_config(cale)
+    return antrenare_lunga.cu_criterii_implicite(config, tomllib.loads(text)), config
+
+
+def test_criteriile_implicite_doar_pentru_examenele_de_la_ora(tmp_path):
+    puse, config = criterii_puse(tmp_path, EXAMENE)
+    assert puse == ["fapte_noi", "nota_profesor"] and config.criterii == {
+        "fapte_noi": {"mai_mare_e_mai_bine": True, "prag": 10.0},
+        "nota_profesor": {"mai_mare_e_mai_bine": True, "prag": 1.0}}
+    assert config.criteriu_principal() is None and config.prag_zgomot == 0.002  # pragul spus în fișier rămâne
+    puse, config = criterii_puse(tmp_path, ', examene_suplimentare = ["fapte_noi"]')
+    assert puse == ["fapte_noi"] and list(config.criterii) == ["fapte_noi"]
+    assert criterii_puse(tmp_path)[0] == []  # fără examene la oră: niciun criteriu
+
+
+def test_criteriile_spuse_in_fisier_raman(tmp_path):
+    puse, config = criterii_puse(tmp_path, EXAMENE, "\n[criterii]\n")  # gol = fără criterii, spus explicit
+    assert puse == [] and config.criterii == {}
+    puse, config = criterii_puse(tmp_path, EXAMENE, "\n[criterii.nota_profesor]\nmai_mare_e_mai_bine = true\nprag = 0.3\n")
+    assert puse == [] and config.criterii == {"nota_profesor": {"mai_mare_e_mai_bine": True, "prag": 0.3}}
+
+
+def test_prag_zgomot_implicit(tmp_path):
+    assert criterii_puse(tmp_path, EXAMENE, fara_prag=True)[1].prag_zgomot == 0.005
+
+
+def test_unealta_trimite_criteriile_implicite_lui_kronos(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    config_cu(tmp_path, EXAMENE)
+    primite = []
+    monkeypatch.setattr(antrenare_lunga, "ruleaza", lambda config, *a, **o: primite.append(config.criterii))
+    assert antrenare_lunga.main(["--config", "linie.toml", "--ore", "1"]) == 1
+    assert sorted(primite[0]) == ["fapte_noi", "nota_profesor"] and primite[0]["nota_profesor"]["prag"] == 1.0
+    assert "Criteriile sunt cele implicite (configurarea n-are [criterii]" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("fisier", ["laptop_antrenare_lunga", "laptop_antrenare_lunga_2", "laptop_antrenare_lunga_3",
+                                    "laptop_antrenare_lunga_4", "laptop_antrenare_lunga_5", "laptop_masurare_6c_restart",
+                                    "laptop_masurare_6c_continuare"])
+def test_configurarile_vechi_raman_cum_au_fost(fisier):
+    """Fără hrană și fără criterii, cum au rulat: întrebările vechi rămân aceleași la o reluare."""
+    import tomllib
+
+    cale = RADACINA / "config" / f"{fisier}.toml"
+    config = citeste_config(cale)
+    assert antrenare_lunga.cu_criterii_implicite(config, tomllib.loads(cale.read_text(encoding="utf-8"))) == []
+    assert config.criterii == {} and not antrenare_lunga.cu_hrana_implicita(config)
+    assert config.setari_port("model")["hrana"] == ""

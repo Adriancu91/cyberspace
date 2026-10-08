@@ -30,6 +30,9 @@ Din 8 octombrie 2026:
   până la primul experiment păstrat al liniei.
 - **Hrana e implicită (lecția 6a):** o configurare care nu pomenește deloc `hrana` primește HRANA_IMPLICITA, 5% bucăți
   din poveștile cu fapte în fiecare lot (fișele din jurnal o înregistrează). Fără hrană: `hrana = ""` în configurare.
+- **Criteriile sunt implicite (ca în configurarea 7):** o configurare fără niciun [criterii] primește CRITERII_IMPLICITE
+  (val_bpb rămâne principalul, cu prag_zgomot, implicit 0,005; fapte_noi nu scad cu peste 10; nota nu scade cu peste
+  1,0), doar pentru examenele date la fiecare oră. Fără criterii: un [criterii] gol în configurare.
 """
 
 from __future__ import annotations
@@ -38,6 +41,7 @@ import argparse
 import json
 import statistics
 import sys
+import tomllib
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -62,6 +66,26 @@ ARHITECTURA = ("n_straturi", "n_capete", "n_emb", "context")
 # Din 8 octombrie 2026 (lecția 6a: fără hrană, faptele se uită în prima oră; cu 5% hrană, rămân, cu un cost de ~0,002 la
 # val_bpb): hrana implicită a oricărei antrenări lungi care nu pomenește `hrana` în setările modelului.
 HRANA_IMPLICITA = {"hrana": "date/fapte/povesti.txt", "fractie_hrana": 0.05}
+
+
+# Din 8 octombrie 2026 (ca în configurarea 7; pragul notei 1,0, fiindcă 0,5 a respins #261 din zgomot): criteriul →
+# (regula, examenul de la oră de care are nevoie). val_bpb rămâne principalul, cu prag_zgomot.
+CRITERII_IMPLICITE = {"fapte_noi": ({"mai_mare_e_mai_bine": True, "prag": 10.0}, "fapte_noi"),
+                      "nota_profesor": ({"mai_mare_e_mai_bine": True, "prag": 1.0}, "profesor")}
+PRAG_ZGOMOT_IMPLICIT = 0.005
+
+
+def cu_criterii_implicite(config: Any, brut: dict[str, Any]) -> list[str]:
+    """Criteriile implicite, dacă fișierul n-are deloc [criterii] (un [criterii] gol = fără criterii), doar pentru
+    examenele date la fiecare oră; și prag_zgomot 0,005, dacă fișierul nu-l spune. Întoarce criteriile puse."""
+    if "prag_zgomot" not in (brut.get("platforma") or {}):
+        config.prag_zgomot = PRAG_ZGOMOT_IMPLICIT
+    if "criterii" in brut:
+        return []
+    examene = config.setari_port("model").get("examene_suplimentare") or []
+    puse = [nume for nume, (_, examen) in CRITERII_IMPLICITE.items() if examen in examene]
+    config.criterii = {nume: dict(CRITERII_IMPLICITE[nume][0]) for nume in puse}
+    return puse
 
 
 def cu_hrana_implicita(config: Any) -> bool:
@@ -297,6 +321,7 @@ def main(argv: list[str] | None = None) -> int:
 
     config = citeste_config(args.config)
     hrana_implicita = cu_hrana_implicita(config)
+    criterii_implicite = cu_criterii_implicite(config, tomllib.loads(Path(args.config).read_text(encoding="utf-8")))
     examen = Registru().creeaza("examen", config.porturi["examen"]["modul"], config.setari_port("examen")).instanta
     jurnal = Jurnal(config.director_lucru)
     facute = len(ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal))
@@ -332,6 +357,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"   Fiecare lot: {reteta.get('fractie_hrana', 0):.0%} bucăți din {reteta['hrana']}, restul din "
                   f"textul de antrenare." + (" Hrana e cea implicită (configurarea n-o pomenește; fără ea: hrana = \"\")."
                                              if hrana_implicita else ""), flush=True)
+        if criterii_implicite:
+            print(f"   Criteriile sunt cele implicite (configurarea n-are [criterii]; fără criterii: un [criterii] gol): "
+                  f"val_bpb principal (prag {config.prag_zgomot:g}), "
+                  + ", ".join(f"{n} nu scade cu peste {config.criterii[n]['prag']:g}" for n in criterii_implicite) + ".",
+                  flush=True)
         tine_treaz(True)
         try:
             for ora in range(facute + 1, args.ore + 1):

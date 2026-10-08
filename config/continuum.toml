@@ -57,6 +57,8 @@ configurari = ["config/laptop_antrenare_lunga*.toml", "config/laptop_fapte*.toml
 # --- Capacitățile și examenele lor (secțiunea 5). Linia de bază = cel mai bun experiment PĂSTRAT de Kronos.
 # Pragurile de zgomot, alese de Adrian pe 7 octombrie 2026, după noaptea a patra (faptele sar cu până la ±13 de la o
 # oră la alta; o notă pe 20 de povești are eroarea ±0,3–0,5): 0,005 la val_bpb (ca prag_zgomot), 10 fapte, 0,5 la notă.
+# Din 8 octombrie 2026, nota are pragul 1,0, ca în Kronos: eroarea ei e ±0,35, cu valori extreme (0,5 a respins #261 din
+# zgomot).
 [capacitati.povesti]
 metrica = "val_bpb"                    # examenul oficial, din fișa experimentului
 mai_mare_e_mai_bine = false
@@ -75,7 +77,7 @@ masurare = ["{python}", "unelte/examen_fapte_nou.py", "--experiment", "{experime
 [capacitati.sens]
 metrica = "nota_profesor"              # media notelor profesorului pe aceleași 40 de povești nevăzute
 mai_mare_e_mai_bine = true
-prag_zgomot = 0.5
+prag_zgomot = 1.0                      # din 8 octombrie (înainte 0,5): ca criteriul notei din Kronos
 maxim = 10
 povesti = 40                           # nota se compară doar între măsurători pe 40 de povești: cele pe 20 (până pe
                                        # 7 octombrie, ex. 4,7 la #226) nu intră în linia de bază (8 octombrie 2026)

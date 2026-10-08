@@ -262,7 +262,7 @@ def test_configurarea_adevarata():
         {"fractie_scump": 0.5}, {"racire_cicluri": 6, "max_esecuri": 5})
     assert config["capacitati"]["sens"]["povesti"] == 40
     assert config["nevoi"]["continua"]["ore_tendinta"] == 3
-    assert {n: c["prag_zgomot"] for n, c in config["capacitati"].items()} == {"povesti": 0.005, "fapte": 10, "sens": 0.5}
+    assert {n: c["prag_zgomot"] for n, c in config["capacitati"].items()} == {"povesti": 0.005, "fapte": 10, "sens": 1.0}
     assert "40" in config["capacitati"]["sens"]["masurare"]
 
 

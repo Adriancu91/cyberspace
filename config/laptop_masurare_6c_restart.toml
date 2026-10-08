@@ -59,3 +59,6 @@ modul = "module.jucarii:TraducereIdentitate"
 
 [porturi.memorie]
 modul = "module.jucarii:MemorieGoala"
+
+# Fără criterii, ca în rularea ei (din 8 octombrie 2026, unealta pune altfel criteriile implicite).
+[criterii]

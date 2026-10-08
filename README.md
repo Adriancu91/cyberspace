@@ -2348,6 +2348,16 @@ R = faptele noi ale unui model ÷ faptele noi ale modelului din care a pornit li
 Configurările mici din teste spun acum `hrana = ""`. Fără asta, unealta le-ar fi pus hrana implicită, iar fișierul ei
 nu există în dosarele de probă.
 
+### Trei lucruri mici, înainte de școala de cod (8 octombrie)
+
+- **CONTINUUM:** pragul notei e 1,0, ca în Kronos (înainte 0,5).
+- **Unealta de antrenare lungă:** criteriile din configurarea 7 sunt implicite.
+  - Ele sunt: val_bpb principal (prag_zgomot, implicit 0,005), fapte_noi −10 cel mult, nota −1,0 cel mult.
+  - Se aplică doar dacă fișierul n-are deloc `[criterii]` și doar pentru examenele date la fiecare oră.
+  - Un `[criterii]` gol înseamnă „fără criterii”.
+- **Configurările vechi** (1–5 și cele două 6c) au `hrana = ""` și un `[criterii]` gol, ca la o reluare să răspundă la
+  aceleași întrebări ca atunci.
+
 ## Toate comenzile
 
 ```
