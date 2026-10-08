@@ -41,6 +41,19 @@ CUVINTE = ("ball", "tree", "fish", "milk", "book", "star", "rain", "frog", "cake
            "bus")
 CUVINTE_LUNGI = ("elephant", "rainbow", "dinosaur", "umbrella", "butterfly", "pancake", "giraffe", "mountain", "pumpkin",
                  "treasure")
+# v0.3, nivelul 0w (doar cuvinte): seturile cer cel puțin 100 de cuvinte diferite (60 văzute, 20 nevăzute, 20 sacre)
+# și 20 lungi pentru adversarial. Cuvinte simple, ca în TinyStories, fără cele din abecedar (dog, sun, red).
+CUVINTE_0W = CUVINTE + (
+    "bed", "cap", "car", "cow", "day", "fan", "fig", "gum", "hen", "hut", "ink", "key", "kid", "leg", "lid", "map",
+    "mat", "mop", "mud", "net", "nut", "pan", "pen", "pet", "rat", "rug", "sea", "sky", "toe", "van", "web", "wig",
+    "zoo", "ant", "arm", "bat", "bell", "bike", "bush", "coat", "door", "drum", "farm", "flag", "foot", "game", "gift",
+    "goat", "hand", "hill", "home", "horse", "lake", "leaf", "lion", "mouse", "nose", "park", "pie", "pond", "puppy",
+    "rabbit", "road", "rock", "rose", "sand", "seed", "shoe", "snail", "song", "spoon", "stick", "swing", "tent",
+    "toad", "train", "truck", "wall", "wind", "wolf", "yard", "apple", "bread", "chair", "cloud", "grass")
+CUVINTE_LUNGI_0W = CUVINTE_LUNGI + (
+    "crocodile", "kangaroo", "chocolate", "strawberry", "sunflower", "waterfall", "airplane", "telescope", "hamburger",
+    "spaghetti", "pineapple", "watermelon", "caterpillar", "grasshopper", "playground", "snowflake", "lighthouse",
+    "submarine", "volcano", "trampoline", "blueberry", "dragonfly", "fireworks", "helicopter", "hippopotamus")
 CUTII = tuple("abcdefghijkmnpqrstuvwxyz") + ("box", "bag", "pot", "jar", "can")
 CUTII_LUNGI = ("apples", "basket", "pocket", "number", "counter", "biggest", "total", "candy", "garden", "rocket")
 SETURI = ("vazut", "nevazut", "adversarial", "sacru")
@@ -55,6 +68,7 @@ class Sarcina:
     cu_print: bool = False          # trebuie să conțină „print(”
     operator: str | None = None     # trebuie să conțină operatorul
     cutii: tuple[str, ...] = field(default_factory=tuple)  # trebuie să atribuie fiecare cutie („x = ...”)
+    doar_valoare: bool = False      # v0.3, nivelurile 0n și 0w: codul e doar valoarea sau print(valoarea)
 
     def ca_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -207,8 +221,23 @@ def _nivel_1b(rng: random.Random, mare: bool) -> Sarcina:
     return _aritmetica("1b", rng, *(_intre(100, 999) if mare else _intre(10, 99)))
 
 
+# --- v0.3: nivelul 0 al planului = numerele 0–99 împreună (0n), apoi cuvintele (0w) ----------------------------------
+# „0n” e numele intern al nivelului 0 din v0.3: nivelul „0” rămâne cel din v0.1 (numere și cuvinte), cu setul lui sacru.
+
+def _nivel_0n(rng: random.Random, mare: bool) -> Sarcina:
+    """Numerele 0–99, fără cuvinte. Adversarial: trei cifre. Codul: doar numărul sau print(numărul)."""
+    n = rng.randint(100, 999) if mare else rng.randint(0, 99)
+    return _sarcina("0n", f"show {n}", f"{n}", doar_valoare=True)
+
+
+def _nivel_0w(rng: random.Random, mare: bool) -> Sarcina:
+    """Doar cuvintele. Adversarial: cuvinte lungi. Codul: doar cuvântul între ghilimele sau print(cuvântul)."""
+    w = rng.choice(CUVINTE_LUNGI_0W if mare else CUVINTE_0W)
+    return _sarcina("0w", f"show the word {w}", f'"{w}"', doar_valoare=True)
+
+
 GENERATOARE: dict[str, Callable[[random.Random, bool], Sarcina]] = {
-    "0": _nivel_0, "0a": _nivel_0a, "0b": _nivel_0b, "1": _nivel_1, "1a": _nivel_1a, "1b": _nivel_1b, "2A": _nivel_2a,
+    "0": _nivel_0, "0n": _nivel_0n, "0w": _nivel_0w, "0a": _nivel_0a, "0b": _nivel_0b, "1": _nivel_1, "1a": _nivel_1a, "1b": _nivel_1b, "2A": _nivel_2a,
     "2B": _nivel_2b, "2C": _nivel_2c, "3A": _nivel_3a, "3B": _nivel_3b}
 
 
@@ -291,8 +320,20 @@ def seturi(nivel: str, texte_abecedar: set[str], sacru: list[Sarcina], vazut: in
 
 # --- verificarea și verdictul ---------------------------------------------------------------------------------------
 
+def _doar_valoarea(sarcina: Sarcina, cod: str) -> bool:
+    """v0.3 (0n, 0w): codul e doar valoarea (46, "dog" sau 'dog') sau print(valoarea), cu spații cel mult la margini."""
+    valoare = sarcina.solutie.strip()
+    forme = {valoare}
+    if valoare.startswith('"') and valoare.endswith('"'):
+        forme.add("'" + valoare[1:-1] + "'")
+    literal = "|".join(re.escape(f) for f in sorted(forme))
+    return re.fullmatch(rf"\s*(?:{literal}|print\(\s*(?:{literal})\s*\))\s*", cod) is not None
+
+
 def verifica_forma(sarcina: Sarcina, cod: str) -> str | None:
     """De ce nu are codul forma cerută de nivel, sau None."""
+    if sarcina.doar_valoare and not _doar_valoarea(sarcina, cod):
+        return f"codul trebuie să fie doar valoarea sau print(valoarea), ca {sarcina.solutie} sau print({sarcina.solutie})"
     if sarcina.cu_print and "print(" not in cod:
         return "lipsește „print(”"
     if sarcina.operator and sarcina.operator not in cod:

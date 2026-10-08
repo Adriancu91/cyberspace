@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import json
+import random
 
 import pytest
 
 from module.cod import PILOT
-from module.cod.examen_cod import (CUTII_LUNGI, CUVINTE_LUNGI, Sarcina, adauga_sacru, citeste_sacru, generator,
-                                   genereaza_sacru, judeca, seturi, verifica_forma)
+from module.cod.examen_cod import (CUTII_LUNGI, CUVINTE_0W, CUVINTE_LUNGI, CUVINTE_LUNGI_0W, Sarcina, adauga_sacru,
+                                   citeste_sacru, generator, genereaza_sacru, judeca, seturi, verifica_forma)
 from module.cod.mediu import citeste_abecedar
 from module.cod.sandbox import la_fel, ruleaza, ruleaza_in_proces
 from teste.cod_proba import RADACINA
@@ -149,6 +150,61 @@ def test_setul_sacru_din_proiect_pentru_v02():
         assert len(sacru[nivel]) == marime
         s = seturi(nivel, TEXTE_ABECEDAR, sacru[nivel], samanta="v0.2",
                    **({"vazut": 4, "nevazut": 4} if nivel == "0a" else {}))
+        texte = s.toate_textele()
+        assert not texte["sacru"] & (TEXTE_ABECEDAR | texte["vazut"] | texte["nevazut"] | texte["adversarial"])
+        assert all(la_fel(ruleaza_in_proces(x.solutie), x.asteptat) for x in sacru[nivel])
+
+
+# --- v0.3 ----------------------------------------------------------------------------------------------------------------
+
+def test_v03_nivelurile_0n_si_0w():
+    """0n = numerele 0–99 împreună (adversarial: trei cifre); 0w = doar cuvintele (adversarial: cuvinte lungi)."""
+    gen_n, gen_w, rng = generator("0n"), generator("0w"), random.Random(1)
+    numere = [gen_n(rng, False) for _ in range(1000)]
+    assert {int(s.solutie) for s in numere} == set(range(100))
+    assert all(s.text == f"show {s.solutie}" and s.asteptat == s.solutie and s.doar_valoare for s in numere)
+    assert all(100 <= int(gen_n(rng, True).solutie) <= 999 for _ in range(100))
+    cuvinte = [gen_w(rng, False) for _ in range(3000)]
+    assert {s.asteptat for s in cuvinte} == set(CUVINTE_0W)
+    assert all(s.solutie == f'"{s.asteptat}"' and s.doar_valoare for s in cuvinte)
+    assert {gen_w(rng, True).asteptat for _ in range(1000)} == set(CUVINTE_LUNGI_0W)
+    assert len(set(CUVINTE_0W)) == len(CUVINTE_0W) >= 100 and len(set(CUVINTE_LUNGI_0W)) == len(CUVINTE_LUNGI_0W) >= 20
+    assert not set(CUVINTE_0W) & set(CUVINTE_LUNGI_0W) and not {"dog", "sun", "red"} & set(CUVINTE_0W)  # abecedarul
+
+
+@pytest.mark.parametrize("nivel", ("0n", "0w"))
+def test_v03_solutiile_trec_si_seturile_sunt_separate(nivel):
+    sacru = [Sarcina.din_dict(x) for x in genereaza_sacru(TEXTE_ABECEDAR, 5, "t", niveluri=(nivel,))["niveluri"][nivel]]
+    s = seturi(nivel, TEXTE_ABECEDAR, sacru, **({"vazut": 55} if nivel == "0n" else {}))
+    texte = s.toate_textele()
+    assert not texte["sacru"] & (TEXTE_ABECEDAR | texte["vazut"] | texte["nevazut"] | texte["adversarial"])
+    for sarcina in s.vazut + s.nevazut + s.adversarial + s.sacru:
+        assert la_fel(ruleaza_in_proces(sarcina.solutie), sarcina.asteptat), sarcina
+        assert verifica_forma(sarcina, sarcina.solutie) is None, sarcina
+
+
+def test_v03_forma_doar_valoarea():
+    """La 0n și 0w codul e doar valoarea sau print(valoarea): `t = 0 ⏎ print(t+0)` nu mai trece la „show 0”."""
+    numar = Sarcina("0n", "show 46", "46", "46", doar_valoare=True)
+    cuvant = Sarcina("0w", "show the word kite", "kite", '"kite"', doar_valoare=True)
+    for sarcina, cod, verdict in (
+            (numar, "46", "trecut"), (numar, "print(46)", "trecut"), (numar, "print( 46 )\n", "trecut"),
+            (numar, '"46"', "picat"), (numar, "46+0", "picat"), (numar, "t = 46\nprint(t)", "picat"),
+            (numar, "print(46)\nprint(46)", "picat"),
+            (cuvant, '"kite"', "trecut"), (cuvant, "'kite'", "trecut"), (cuvant, 'print("kite")', "trecut"),
+            (cuvant, 'w = "kite"\nprint(w)', "picat"), (cuvant, '"ki" + "te"', "picat"), (cuvant, "kite", "picat")):
+        assert judeca(sarcina, cod, ruleaza(cod))[0] == verdict, cod
+    assert "doar valoarea" in judeca(numar, "t = 46\nprint(t)", ruleaza("t = 46\nprint(t)"))[1]
+    vechi = Sarcina("0", "show 46", "46", "46")  # nivelurile v0.1 și v0.2: neschimbate
+    assert judeca(vechi, "t = 46\nprint(t)", ruleaza("t = 46\nprint(t)"))[0] == "trecut"
+
+
+def test_setul_sacru_din_proiect_pentru_v03():
+    """0n și 0w, adăugate o dată (20 fiecare), separate de seturile v0.3 și de abecedar."""
+    sacru = citeste_sacru(RADACINA / "date" / "cod" / "sacru.json")
+    for nivel, vazut in (("0n", 55), ("0w", 60)):
+        assert len(sacru[nivel]) == 20 and all(x.doar_valoare for x in sacru[nivel])
+        s = seturi(nivel, TEXTE_ABECEDAR, sacru[nivel], vazut=vazut, samanta="v0.3")
         texte = s.toate_textele()
         assert not texte["sacru"] & (TEXTE_ABECEDAR | texte["vazut"] | texte["nevazut"] | texte["adversarial"])
         assert all(la_fel(ruleaza_in_proces(x.solutie), x.asteptat) for x in sacru[nivel])

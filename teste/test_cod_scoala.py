@@ -8,6 +8,7 @@ ocupată, baterie.
 from __future__ import annotations
 
 import json
+from datetime import datetime
 
 import pytest
 
@@ -16,7 +17,7 @@ from module.cod.elev import model_de_proba
 from teste.cod_proba import ElevDeProba, solutiile, worktree_de_proba
 from unelte import raport_cod, scoala_cod
 from unelte.ingheata_cod import ingheata, revino
-from unelte.scoala_cod import Scoala, citeste_config, text_antrenare
+from unelte.scoala_cod import Biblioteca, Scoala, citeste_config, text_antrenare
 
 
 def senzori_linistiti(**schimbari) -> paznic_cod.Senzori:
@@ -360,3 +361,111 @@ def test_v02_un_nivel_fara_set_sacru_nu_arata_sacru_0(tmp_path):
     assert picat["sacru"] is None and picat["adversarial"] == 0.0
     assert "sacru — (doar pentru raport)" in jurnal(s)[-1]["motiv"]
     assert "| 0a | ✗ 0% / 0% / 0% / — |" in raport_cod.raport(s.cod)
+
+
+# --- v0.3 ----------------------------------------------------------------------------------------------------------------
+
+def scoala_v03(tmp_path, schimbari=None, senzori=None) -> Scoala:
+    cale = worktree_de_proba(tmp_path, schimbari, config="config/scoala_cod_v03.toml")
+    rad = cale.parent.parent
+    s = Scoala(citeste_config(cale), radacina=rad, cale_config=cale, senzori=senzori or senzori_linistiti(),
+               git_la_inghet=False, afiseaza=lambda text: None)
+    paznic_cod.aproba(rad, s.lucru)
+    return s
+
+
+class ElevCuCeas(ElevDeProba):
+    """Elevul de probă care, la prima generare, mută ceasul școlii (ex. peste ora de oprire)."""
+
+    def __init__(self, solutii, la_prima_generare) -> None:
+        super().__init__(solutii)
+        self.la_prima_generare = la_prima_generare
+
+    def genereaza(self, *args, **kwargs):
+        if self.la_prima_generare:
+            self.la_prima_generare()
+            self.la_prima_generare = None
+        return super().genereaza(*args, **kwargs)
+
+
+def test_v03_numerele_apoi_cuvintele_cu_raportul_scris_singur(tmp_path):
+    s = scoala_v03(tmp_path)
+    elevi_de_proba(s)
+    assert s.pilot() == {"A 0n": "trecut", "B 0n": "trecut", "D 0n": "trecut", "A 0w": "trecut", "B 0w": "trecut",
+                         "D 0w": "trecut"}
+    assert s.cod == s.lucru / "cod_v03" and len(s.seturi("0n").vazut) == 55  # 0–99 fără abecedar, sacru și nevăzut
+    etichete = sorted(f.stem for f in (s.cod / "inghet").glob("*.zip"))
+    assert "v03_inainte_de_pilot" in etichete and "v03_D_0w" in etichete
+    text = (s.cod / "raport.md").read_text(encoding="utf-8")  # scris de pilot, la final
+    assert "Versiunea v0.3, în lucru/cod_v03" in text and "| 0n |" in text and "| 0w |" in text
+
+
+def test_v03_la_0n_doar_valoarea_trece(tmp_path):
+    s = scoala_v03(tmp_path, {"buget.runde_pe_nivel": 1})
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    elevi["A"] = ElevDeProba({k: f"t = {v}\nprint(t)" for k, v in solutiile(s, ("0n",)).items()})  # rezultat corect
+    assert s.nivel("A", "0n") == "picat"
+    respinse = [json.loads(r) for r in (s.cod / "respinse" / "A.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert respinse and all(r["verdict"] == "picat" and "doar valoarea" in r["motiv"] and r["aproape"] for r in respinse)
+
+
+def test_v03_linia_D_primeste_exact_cat_B_cu_repetari(tmp_path):
+    for exact, asteptat in ((True, 6), (False, 3)):
+        s = scoala_v03(tmp_path / str(exact), {"examen.vazut": 3, "runda.d_exact_cat_b": exact})
+        vazut = s.seturi("0w").vazut
+        Biblioteca(s.cod, "B", s.schelete_abecedar).adauga(  # B: 6 reușite unice pe 3 sarcini văzute (două forme)
+            [{"test": x.text, "cod": c, "rezultat": x.asteptat} for x in vazut for c in (x.solutie, f"print({x.solutie})")],
+            "0w", 1)
+        unealta = Biblioteca(s.cod, "D", s.schelete_abecedar, "biblioteca_unealta")
+        noi, cate = s.de_la_unealta("0w", 1, unealta)
+        assert cate == 6 and len(noi) == asteptat and {i["test"] for i in noi} == {x.text for x in vazut}
+        solutie = {x.text: x.solutie for x in vazut}
+        assert all(i["cod"] == solutie[i["test"]] for i in noi)  # soluțiile uneltei, nu ale lui B
+        assert unealta.text.read_text(encoding="utf-8").count("TEST: ") == asteptat  # și în textul de antrenare
+
+
+def test_v03_ora_de_oprire_ingheata_si_scrie_raportul(tmp_path):
+    s = scoala_v03(tmp_path, {"buget.oprire_la": "18:20"})
+    ora = {"acum": datetime(2026, 10, 9, 18, 0)}
+    s.ceas = lambda: ora["acum"]
+    elevi = elevi_de_proba(s)
+    elevi["B"] = ElevCuCeas(solutiile(s, ("0n", "0w")), lambda: ora.update(acum=datetime(2026, 10, 9, 18, 21)))
+    assert s.pilot() == {"A 0n": "trecut", "B 0n": "trecut", "D 0n": "oprit"}  # runda începută se termină
+    ultimul = jurnal(s)[-1]
+    assert ultimul["tip"] == "oprit" and ultimul["linie"] == "D" and "ora de oprire (18:20)" in ultimul["motiv"]
+    assert (s.cod / "inghet" / "v03_D_0n_oprit.zip").exists()
+    assert "D" in (s.cod / "raport.md").read_text(encoding="utf-8")  # raportul parțial
+    with pytest.raises(RuntimeError, match="după ora de oprire"):
+        s.pilot()
+    ora["acum"] = datetime(2026, 10, 10, 8, 0)  # a doua zi dimineață se reia de unde a rămas
+    assert s.pilot() == {"D 0n": "trecut", "A 0w": "trecut", "B 0w": "trecut", "D 0w": "trecut"}
+
+
+def test_v03_la_regresie_biblioteca_se_curata_si_ramane_curatata(tmp_path):
+    s = scoala_v03(tmp_path)
+    elevi = elevi_de_proba(s)
+    s.pregateste()
+    rea = {"test": "show 0", "cod": "t = 0\nprint(t+0)", "rezultat": "0"}  # ca în v0.2: trece la „show 0”, dar e greșită
+    Biblioteca(s.cod, "B", s.schelete_abecedar).adauga([rea], "0n", 0)
+    assert s.nivel("B", "0n") == "trecut"
+    bune = [(i["test"], i["cod"]) for i in Biblioteca(s.cod, "B", s.schelete_abecedar).intrari if i["cod"] != rea["cod"]]
+    elevi["B"].gresit = {x.text for x in s.seturi("0n").nevazut}  # „uită” 0n: regresie după 0w
+    assert s.nivel("B", "0w") == "regresie"
+    chei = {(i["test"], i["cod"]) for i in Biblioteca(s.cod, "B", s.schelete_abecedar).intrari}
+    assert (rea["test"], rea["cod"]) not in chei and set(bune) <= chei
+    assert "t = 0\nprint(t+0)" not in (s.cod / "biblioteca_B.txt").read_text(encoding="utf-8")
+    scoase = [json.loads(r) for r in (s.cod / "respinse" / "curatare_B.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert len(scoase) == 1 and scoase[0]["cod"] == rea["cod"] and scoase[0]["la_regresia_dupa"] == "0w"
+    assert "mutată pe sarcina nevăzută „show " in scoase[0]["motiv"]
+    curatare = next(r for r in jurnal(s) if r["tip"] == "curatare")
+    assert curatare["linie"] == "B" and curatare["scoase"] == 1
+    assert "## Biblioteca curățată după corectitudine" in raport_cod.raport(s.cod)
+    assert not (s.cod / "respinse" / "curatare_A.jsonl").exists()  # A n-a avut regresie
+    revino(s.lucru, "v03_B_0n", "după regresie: înapoi la modelul principal", dosar="cod_v03")  # omul decide
+    def coduri_in_fisier() -> list[str]:
+        return [json.loads(r)["cod"] for r in (s.cod / "biblioteca_B.jsonl").read_text(encoding="utf-8").splitlines()]
+
+    assert rea["cod"] in coduri_in_fisier()  # înghețul vechi o avea
+    chei = {(i["test"], i["cod"]) for i in Biblioteca(s.cod, "B", s.schelete_abecedar).intrari}
+    assert (rea["test"], rea["cod"]) not in chei and rea["cod"] not in coduri_in_fisier()  # dar rămâne scoasă

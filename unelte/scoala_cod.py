@@ -35,6 +35,15 @@ După fiecare rundă verifică memoria video. Încercările „trișat” se num
 **Jurnalul:** lucru/cod/runde.jsonl, un rând pe rundă, plus pregătirea, înghețurile, rollback-urile și deciziile,
 fiecare cu motivul în română. Starea: lucru/cod/stare.json.
 
+**v0.3** (config/scoala_cod_v03.toml, în lucru/cod_v03/), pe lângă v0.2:
+- **nivelul 0 = numerele 0–99 împreună** (intern „0n”), apoi cuvintele (0w). La amândouă, codul e doar valoarea sau
+  print(valoarea);
+- **linia D primește exact cât B**, cu repetări când nu mai sunt sarcini văzute noi;
+- **la fiecare regresie, biblioteca se curăță** (lecția SANDBOX-7): soluțiile care, mutate pe sarcinile nevăzute de
+  aceeași formă, pică, ies în respinse/ (module/cod/curatare.py);
+- **oprirea singură la `[buget] oprire_la`** (18:30), cu îngheț, ca placa să fie liberă la 19:00;
+- **raportul** se scrie singur la sfârșitul pilotului.
+
 **v0.2** (config/scoala_cod_v02.toml, în lucru/cod_v02/):
 - **poveștile rămân în lecții:** 70% din fiecare lot vine din textul de antrenare al poveștilor. Biții pe octet pe
   povești se măsoară la fiecare îngheț; peste 0,46 e regresie;
@@ -79,6 +88,7 @@ from module.cod.examen_cod import (Sarcina, Seturi, adauga_sacru, citeste_sacru,
 from module.cod.mediu import (Abecedar, Episod, citeste_abecedar, incercarea, schelet, text_cu_regula,  # noqa: E402
                               text_fata)
 from unelte.ingheata_cod import exista, ingheata, scrie_in_jurnal  # noqa: E402
+from module.cod import curatare  # noqa: E402
 
 SECTIUNI = ("scoala", "mediu", "sandbox", "examen", "runda", "pregatire", "temperatura", "buget", "regresie", "paznic",
             "pilot")
@@ -134,6 +144,15 @@ def regulile(mediu: dict[str, Any], abecedar: Abecedar) -> tuple[str, str]:
 
 # --- biblioteca unei linii --------------------------------------------------------------------------------------------
 
+def scoase_la_curatare(cod: Path, linie: str, nume: str = "biblioteca") -> set[tuple[str, str]]:
+    """(sarcina, codul) scoase din biblioteca `nume` a liniei la curățări (respinse/curatare_<linie>.jsonl)."""
+    fisier = cod / "respinse" / f"curatare_{linie}.jsonl"
+    if not fisier.exists():
+        return set()
+    randuri = [json.loads(r) for r in fisier.read_text(encoding="utf-8").splitlines() if r.strip()]
+    return {(r["test"], r["cod"]) for r in randuri if r.get("biblioteca") == nume}
+
+
 class Biblioteca:
     """Reușitele unei linii (doar cod 100% corect), deduplicate după (sarcină, cod), cu nivelul și runda la care au
     apărut. biblioteca_<linie>.txt = episoadele (pentru antrenare); biblioteca_<linie>.jsonl = aceleași, cu detalii."""
@@ -145,12 +164,17 @@ class Biblioteca:
         self.intrari = [json.loads(r) for r in self.fisier.read_text(encoding="utf-8").splitlines() if r.strip()] \
             if self.fisier.exists() else []
         self.chei = {(i["test"], i["cod"]) for i in self.intrari}
+        scoase = scoase_la_curatare(cod, linie, nume)  # rămân scoase și după un rollback la un îngheț mai vechi
+        if any((i["test"], i["cod"]) in scoase for i in self.intrari):
+            self.scoate([i for i in self.intrari if (i["test"], i["cod"]) in scoase])
 
-    def adauga(self, reusite: list[dict[str, Any]], nivel: str, runda: int) -> list[dict[str, Any]]:
+    def adauga(self, reusite: list[dict[str, Any]], nivel: str, runda: int, repetari: bool = False) -> list[dict[str, Any]]:
+        """Reușitele noi. Cu `repetari` (biblioteca uneltei la linia D, v0.3), și cele care există deja: D primește exact
+        cât B, chiar dacă n-au mai rămas sarcini văzute noi."""
         noi = []
         for r in reusite:
             cheie = (r["test"], r["cod"])
-            if cheie in self.chei:
+            if cheie in self.chei and not repetari:
                 continue
             self.chei.add(cheie)
             forma = schelet(r["cod"])
@@ -167,6 +191,17 @@ class Biblioteca:
 
     def episoade(self) -> str:
         return "".join(Episod(i["test"], i["cod"], i["rezultat"], i["nivel"]).text() + "\n" for i in self.intrari)
+
+    def scoate(self, de_scos: list[dict[str, Any]]) -> None:
+        """Scoate intrările date (curățarea): fișierele bibliotecii se rescriu fără ele, scrise întâi alături."""
+        scoase = {id(i) for i in de_scos}
+        self.intrari = [i for i in self.intrari if id(i) not in scoase]
+        self.chei = {(i["test"], i["cod"]) for i in self.intrari}
+        for fisier, text in ((self.fisier, "".join(json.dumps(i, ensure_ascii=False) + "\n" for i in self.intrari)),
+                             (self.text, self.episoade())):
+            temporar = fisier.with_name(fisier.name + ".tmp")
+            temporar.write_text(text, encoding="utf-8")
+            temporar.replace(fisier)
 
 
 def text_antrenare(abecedar: str, biblioteca: str, fractie_minima: float) -> str:
@@ -190,6 +225,7 @@ class Scoala:
     afiseaza: Callable[[str], None] = field(default=lambda text: print(text, flush=True))
     _seturi: dict[str, Seturi] = field(default_factory=dict, repr=False)
     _povesti: Any = field(default=None, repr=False)
+    ceas: Callable[[], datetime] = field(default=datetime.now, repr=False)
 
     def __post_init__(self) -> None:
         s = self.cfg["scoala"]
@@ -370,7 +406,11 @@ class Scoala:
         vazut = list(self.seturi(nivel).vazut)
         random.Random(samanta(self.cfg["scoala"]["samanta"], "unealta", nivel, numar)).shuffle(vazut)
         alese = [s for s in vazut if (s.text, s.solutie) not in unealta.chei][:cate]
-        noi = unealta.adauga([{"test": s.text, "cod": s.solutie, "rezultat": s.asteptat} for s in alese], nivel, numar)
+        repetari = bool(self.cfg["runda"].get("d_exact_cat_b"))
+        if repetari and len(alese) < cate:  # v0.3: n-au mai rămas sarcini văzute noi, deci se repetă
+            alese += [vazut[i % len(vazut)] for i in range(cate - len(alese))]
+        noi = unealta.adauga([{"test": s.text, "cod": s.solutie, "rezultat": s.asteptat} for s in alese], nivel, numar,
+                             repetari=repetari)
         return noi, cate
 
     # --- runda ---------------------------------------------------------------------------------------------------
@@ -468,6 +508,9 @@ class Scoala:
             return motiv
         if paznic_cod.oprire_ceruta(self.lucru):
             return "butonul STOP (lucru/STOP)"
+        if self.dupa_ora_de_oprire():
+            return (f"ora de oprire ({self.cfg['buget']['oprire_la']}): nicio rundă nouă după ea, ca placa să fie "
+                    f"liberă pentru noapte (19:00)")
         acum = self.amprenta_config()
         if acum and stare.get("config_sha") not in (None, acum) and not stare.get("inghetat_dupa_ultima_runda"):
             return ("configurarea s-a schimbat de la ultima rundă, fără îngheț între ele (planul: îngheț obligatoriu "
@@ -547,7 +590,15 @@ class Scoala:
             if trecut:
                 return self._trecut(stare, linie, nivel, elev, rand, buget)
 
+    def dupa_ora_de_oprire(self) -> bool:
+        """v0.3: după `[buget] oprire_la` (ex. „18:30”), școala nu mai începe nicio rundă."""
+        ora = self.cfg["buget"].get("oprire_la")
+        return bool(ora) and self.ceas().time() >= datetime.strptime(ora, "%H:%M").time()
+
     def _oprit(self, stare: dict[str, Any], linie: str, nivel: str, motiv: str) -> str:
+        if motiv.startswith("ora de oprire"):  # raport parțial: starea liniei se îngheață, ca dimineața să se poată relua
+            self._ingheata(stare, self._eticheta_libera(f"{self.prefix}{linie}_{nivel}_oprit"),
+                           f"oprit la {self.cfg['buget']['oprire_la']}, în mijlocul nivelului {nivel}", [linie])
         self.salveaza_stare(stare)
         self.jurnal({"tip": "oprit", "linie": linie, "nivel": nivel,
                      "motiv": f"oprit: {motiv} (se poate relua de unde a rămas)"})
@@ -601,6 +652,8 @@ class Scoala:
                                          "adversarial": round(adversarial, 3), "sacru": rotunjit(sacru),
                                          "runda": rand["runda"], "secunde": buget["secunde"], "inghet": eticheta,
                                          "regresii": regresii, "povesti_bpo": povesti, "regresie_povesti": peste}
+        if regresii:  # lecția SANDBOX-7: biblioteca liniei se curăță după corectitudine
+            self.curata_biblioteca(linie, nivel)
         if regresii or peste:
             sl.update(oprita=True, motiv_oprire=f"regresie după nivelul {nivel}: " + ", ".join(
                 [f"{n} {r['atunci']:.0%} → {r['acum']:.0%}" for n, r in regresii.items()]
@@ -625,6 +678,45 @@ class Scoala:
                      "rata_adversarial": round(adversarial, 3), "rata_sacru": rotunjit(sacru), "regresii": regresii,
                      "povesti_bpo": povesti, "inghet": eticheta, "motiv": motiv})
         return "regresie" if regresii or peste else "trecut"
+
+    def curata_biblioteca(self, linie: str, la_nivelul: str) -> list[dict[str, Any]]:
+        """La o regresie: fiecare soluție din bibliotecile liniei (reușitele ei; la D și cele de la unealtă), mutată pe
+        sarcinile nevăzute de aceeași formă ale nivelului ei. Cele care pică ies în respinse/, cu motivul."""
+        scoase: list[dict[str, Any]] = []
+        nume = ["biblioteca"] + (["biblioteca_unealta"] if linie == "D" else [])
+        for n in nume:
+            biblioteca = Biblioteca(self.cod, linie, self.schelete_abecedar, n)
+            de_scos = []
+            for nivel in dict.fromkeys(i["nivel"] for i in biblioteca.intrari):
+                ale_nivelului = [i for i in biblioteca.intrari if i["nivel"] == nivel]
+                de_scos += curatare.verifica(ale_nivelului, self.seturi(nivel).nevazut, self.ruleaza_cod)
+            if de_scos:
+                # separat de încercările picate (respinse/<linie>.jsonl), ca statisticile raportului să rămână curate;
+                # scrise înainte de scoatere: dacă procesul cade între ele, încărcarea bibliotecii le scoate oricum
+                respinse = self.cod / "respinse" / f"curatare_{linie}.jsonl"
+                respinse.parent.mkdir(parents=True, exist_ok=True)
+                with respinse.open("a", encoding="utf-8") as f:
+                    f.writelines(json.dumps({"nivel": i["nivel"], "runda": i["runda"], "test": i["test"], "cod": i["cod"],
+                                             "biblioteca": n, "la_regresia_dupa": la_nivelul, "motiv": motiv},
+                                            ensure_ascii=False) + "\n" for i, motiv in de_scos)
+                biblioteca.scoate([i for i, _ in de_scos])
+            scoase += [{"biblioteca": n, "nivel": i["nivel"], "test": i["test"], "cod": i["cod"], "motiv": m}
+                       for i, m in de_scos]
+        self.jurnal({"tip": "curatare", "linie": linie, "nivel": la_nivelul, "scoase": len(scoase),
+                     "exemple": scoase[:5],
+                     "motiv": f"regresie după nivelul {la_nivelul}: biblioteca liniei {linie} curățată după corectitudine "
+                              f"(fiecare soluție, mutată pe sarcinile nevăzute de aceeași formă ale nivelului ei): "
+                              f"{len(scoase)} soluții scoase, în respinse/curatare_{linie}.jsonl"})
+        return scoase
+
+    def scrie_raportul(self) -> None:
+        """Raportul (unelte/raport_cod.py), în lucru/<dosar>/raport.md: la sfârșitul pilotului sau la oprire (parțial)."""
+        try:
+            from unelte.raport_cod import raport
+
+            (self.cod / "raport.md").write_text(raport(self.cod), encoding="utf-8")
+        except Exception as e:  # noqa: BLE001 - raportul nu oprește școala
+            self.jurnal({"tip": "eroare_raport", "motiv": f"raportul n-a putut fi scris: {type(e).__name__}: {e}"})
 
     def povesti_peste_prag(self, povesti: float | None) -> bool:
         """v0.2: biții pe octet pe povești peste prag (0,46: lecția 6a, în oglindă) = regresie."""
@@ -697,6 +789,9 @@ class Scoala:
         motiv = paznic_cod.verifica(self.radacina, self.lucru) or paznic_cod.de_ce_nu_e_libera(self.senzori)
         if motiv:
             raise RuntimeError(motiv)
+        if self.dupa_ora_de_oprire():  # v0.3: după 18:30 nu pornește nimic, nici pregătirea
+            raise RuntimeError(f"e după ora de oprire ({self.cfg['buget']['oprire_la']}): placa e a nopții; pilotul se "
+                               f"pornește a doua zi")
         niveluri, linii = self.cfg["pilot"]["niveluri"], self.cfg["pilot"]["linii"]
         self.jurnal({"tip": "pilot_inceput", "niveluri": niveluri, "linii": linii,
                      "versiune": self.cfg["scoala"].get("versiune", "v0.1"), "dosar": self.dosar,
@@ -722,7 +817,9 @@ class Scoala:
                     continue
                 rezultate[f"{linie} {nivel}"] = rezultat = self.nivel(linie, nivel)
                 if rezultat == "oprit":
+                    self.scrie_raportul()
                     return rezultate
+        self.scrie_raportul()
         self.jurnal({"tip": "pilot_gata", "rezultate": rezultate,
                      "motiv": "pilotul s-a încheiat: " + ", ".join(f"{k} {v}" for k, v in rezultate.items())
                               + ". Raportul: python unelte/raport_cod.py"})

@@ -340,6 +340,18 @@ def raport(cod: Path) -> str:
     if pornire and finale:
         o.append(f"Cel mai rău: {max(finale)}, adică de {max(finale) / pornire:.1f} ori biții lui #252 ({pornire}).\n")
 
+    # --- curățarea bibliotecii (v0.3, lecția SANDBOX-7)
+    curatari = [r for r in jurnal if r.get("tip") == "curatare"]
+    if curatari:
+        o.append("## Biblioteca curățată după corectitudine (la regresie)\n")
+        o.append("Fiecare soluție din bibliotecă, mutată pe sarcinile nevăzute de aceeași formă ale nivelului ei; cele care "
+                 "pică ies în respinse/curatare_<linie>.jsonl.\n")
+        for r in curatari:
+            o.append(f"- {r['timp']} linia {r['linie']}, la regresia după {r['nivel']}: {r['scoase']} soluții scoase"
+                     + ("; de exemplu " + "; ".join(f"„{e['test']}” → `{scurt(e['cod'])}`" for e in r["exemple"][:3])
+                        if r.get("exemple") else "") + ".")
+        o.append("")
+
     # --- înghețuri
     o.append("## Înghețuri și rollback-uri\n")
     evenimente = [r for r in jurnal if r.get("tip") in ("inghet", "rollback")]

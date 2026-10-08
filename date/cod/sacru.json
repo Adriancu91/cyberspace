@@ -1924,6 +1924,410 @@
     "operator": "-",
     "cutii": []
    }
+  ],
+  "0n": [
+   {
+    "nivel": "0n",
+    "text": "show 91",
+    "asteptat": "91",
+    "solutie": "91",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 99",
+    "asteptat": "99",
+    "solutie": "99",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 7",
+    "asteptat": "7",
+    "solutie": "7",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 88",
+    "asteptat": "88",
+    "solutie": "88",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 48",
+    "asteptat": "48",
+    "solutie": "48",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 97",
+    "asteptat": "97",
+    "solutie": "97",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 98",
+    "asteptat": "98",
+    "solutie": "98",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 84",
+    "asteptat": "84",
+    "solutie": "84",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 32",
+    "asteptat": "32",
+    "solutie": "32",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 95",
+    "asteptat": "95",
+    "solutie": "95",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 13",
+    "asteptat": "13",
+    "solutie": "13",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 56",
+    "asteptat": "56",
+    "solutie": "56",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 80",
+    "asteptat": "80",
+    "solutie": "80",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 68",
+    "asteptat": "68",
+    "solutie": "68",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 75",
+    "asteptat": "75",
+    "solutie": "75",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 82",
+    "asteptat": "82",
+    "solutie": "82",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 38",
+    "asteptat": "38",
+    "solutie": "38",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 6",
+    "asteptat": "6",
+    "solutie": "6",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 60",
+    "asteptat": "60",
+    "solutie": "60",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0n",
+    "text": "show 31",
+    "asteptat": "31",
+    "solutie": "31",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   }
+  ],
+  "0w": [
+   {
+    "nivel": "0w",
+    "text": "show the word leg",
+    "asteptat": "leg",
+    "solutie": "\"leg\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word door",
+    "asteptat": "door",
+    "solutie": "\"door\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word wolf",
+    "asteptat": "wolf",
+    "solutie": "\"wolf\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word arm",
+    "asteptat": "arm",
+    "solutie": "\"arm\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word pear",
+    "asteptat": "pear",
+    "solutie": "\"pear\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word web",
+    "asteptat": "web",
+    "solutie": "\"web\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word tree",
+    "asteptat": "tree",
+    "solutie": "\"tree\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word lid",
+    "asteptat": "lid",
+    "solutie": "\"lid\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word lake",
+    "asteptat": "lake",
+    "solutie": "\"lake\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word seed",
+    "asteptat": "seed",
+    "solutie": "\"seed\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word sand",
+    "asteptat": "sand",
+    "solutie": "\"sand\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word farm",
+    "asteptat": "farm",
+    "solutie": "\"farm\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word bed",
+    "asteptat": "bed",
+    "solutie": "\"bed\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word bell",
+    "asteptat": "bell",
+    "solutie": "\"bell\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word milk",
+    "asteptat": "milk",
+    "solutie": "\"milk\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word ring",
+    "asteptat": "ring",
+    "solutie": "\"ring\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word pig",
+    "asteptat": "pig",
+    "solutie": "\"pig\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word foot",
+    "asteptat": "foot",
+    "solutie": "\"foot\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word rose",
+    "asteptat": "rose",
+    "solutie": "\"rose\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0w",
+    "text": "show the word gum",
+    "asteptat": "gum",
+    "solutie": "\"gum\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   }
   ]
  },
  "adaugari": [
@@ -1935,6 +2339,14 @@
     "0b",
     "1a",
     "1b"
+   ]
+  },
+  {
+   "data": "2026-10-08T15:32:51",
+   "samanta": "sacru-v0.3",
+   "niveluri": [
+    "0n",
+    "0w"
    ]
   }
  ]

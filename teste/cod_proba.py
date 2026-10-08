@@ -59,10 +59,12 @@ def worktree_de_proba(tmp: Path, schimbari: dict[str, Any] | None = None, sacre_
               "examen.samanta_seturi": "test", "runda.incercari": 4, "runda.sarcini": 2, "runda.pasi_antrenare": 2,
               "runda.rata": 0.001, "runda.lot": 2, "pregatire.pasi": 2, "pregatire.rata": 0.001,
               "buget.runde_pe_nivel": 2, "pilot.niveluri": ["0", "1"]}
-    if config.endswith("_v02.toml"):
+    if config.endswith(("_v02.toml", "_v03.toml")):
         valori.update({"pilot.niveluri": ["0a", "0b"], "povesti.text_antrenare": "date/povesti_antrenare.txt",
                        "povesti.director_cache": "", "povesti.tokenizer": "", "pregatire.pasi": 30,
                        "pregatire.verifica_la": 10})
+    if config.endswith("_v03.toml"):  # fără oprirea de la 18:30 (testele merg la orice oră; ceasul se dă în test)
+        valori.update({"pilot.niveluri": ["0n", "0w"], "buget.oprire_la": ""})
     valori.update(schimbari or {})
     cale = rad / "config" / Path(config).name
     cale.parent.mkdir(parents=True, exist_ok=True)
