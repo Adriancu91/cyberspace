@@ -133,7 +133,83 @@ La fiecare cifră se adaugă ~10% pentru fragmentare. Ținta e sub 7 GB, ca să 
 
 ## 6. Surse de date în română și pentru traducere (licențe verificate)
 
-*(Se completează: lista cu licențele verificate pe paginile oficiale.)*
+*Verificate pe 8 octombrie 2026 de un agent de cercetare, pe paginile oficiale: fișele Hugging Face, paginile OPUS,
+Wikimedia, JRC, site-urile proiectelor. Două le-am reverificat eu direct: ds-tf3-ro-3m e Apache-2.0, iar OSCAR 23.01
+are accesul suspendat. Nu s-a descărcat nimic. La descărcare, licența se reverifică.*
+
+**Atenție la seturile adunate de pe internet** (FineWeb-2, FuLG, mC4, CulturaX, OSCAR, HPLT, ParaCrawl, NLLB): licența
+acoperă doar împachetarea. Textele rămân ale site-urilor de unde au fost luate.
+
+**Româna (text obișnuit)**
+
+| Sursa | Mărime | Licența | Cum o folosim |
+|---|---|---|---|
+| [Wikipedia în română](https://dumps.wikimedia.org/rowiki/latest/) | 0,78 GB comprimat; ~442.000 de articole | CC BY-SA 4.0 + GFDL ([pagina legală](https://dumps.wikimedia.org/legal.html)) | **da**: cu atribuire, iar ce redistribuim rămâne sub aceeași licență |
+| [Wikisource în română](https://ro.wikisource.org) + 5 titluri pe [Gutenberg](https://www.gutenberg.org/browse/languages/ro) | ~15.800 de texte, 52 MB comprimat | operele sunt mai ales în domeniul public; site-ul e CC BY-SA 4.0 | **da**, cu ortografia veche în vedere |
+| [FineWeb-2, ron_Latn](https://huggingface.co/datasets/HuggingFaceFW/fineweb-2) | 58 de milioane de documente, 85 GB | ODC-By 1.0 + termenii Common Crawl | **da**: o felie de 2–5 GB, cel mai bine filtrat text românesc de pe internet |
+| [FuLG](https://huggingface.co/datasets/faur-ai/fulg) | 150 de miliarde de simboluri | ODC-BY + termenii surselor | da, doar o felie |
+| [mC4, ro](https://huggingface.co/datasets/allenai/c4) | 66,5 milioane de documente | ODC-BY + termenii Common Crawl | da, dar e mai zgomotos |
+| [CulturaX, ro](https://huggingface.co/datasets/uonlp/CulturaX) | 40 de milioane de documente | moștenită de la mC4 și OSCAR; acces cu cerere | nu: conține text OSCAR (vezi mai jos) |
+| [OSCAR 23.01, ro](https://huggingface.co/datasets/oscar-corpus/OSCAR-2301) | 45,6 GB | CC0 doar pentru metadate; textul fără licență | **nu**: accesul e suspendat |
+| [OpenLLM-Ro fineweb2-ro-*](https://huggingface.co/datasets/OpenLLM-Ro/fineweb2-ro-llm) | 5,5 GB / 226 GB | **nicio licență pe fișă** | nu, până răspund autorii |
+
+**Text simplu (pentru un model mic)**
+
+| Sursa | Mărime | Licența | Observații |
+|---|---|---|---|
+| [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories) (engleză, ce folosim acum) | 2,14 milioane de povești | CDLA-Sharing-1.0 | **Nu există o traducere în română pe Hugging Face**: am căutat printre 234 de seturi TinyStories |
+| [klusai/ds-tf3-ro-3m](https://huggingface.co/datasets/klusai/ds-tf3-ro-3m) | 3 milioane de fabule în română, 1,5 GB | Apache-2.0 | generate de alt model; bune pentru un model privat (vezi „de evitat”) |
+| [klusai/ds-tf2-en-ro-3m](https://huggingface.co/datasets/klusai/ds-tf2-en-ro-3m) | 3 milioane de perechi de fabule engleză→română | MIT | traduse automat (Gemma-3-12B), fără verificare umană |
+| Basmele de pe Wikisource (Creangă, Ispirescu, Slavici) | câțiva MB | domeniul public | vocabular de secol XIX |
+| [FairytaleQA-ro](https://huggingface.co/datasets/benjleite/FairytaleQA-translated-romanian) | 232 de povești, 10.600 de întrebări | Apache-2.0 | traduse cu DeepL |
+
+**Engleză–română, pentru traducere**
+
+| Sursa | Perechi | Licența | Observații |
+|---|---|---|---|
+| [Europarl v8](https://www.statmt.org/europarl/) | 400.000 | fără licență formală; Parlamentul European permite reutilizarea cu menționarea sursei | **da**; limbaj oficial |
+| [DGT-TM 2021](https://joint-research-centre.ec.europa.eu/language-technology-resources/dgt-translation-memory_en) + [JRC-Acquis 3.0](https://joint-research-centre.ec.europa.eu/language-technology-resources/jrc-acquis_en) | 4,26 milioane + 455.000 | decizia Comisiei din 12.12.2011: orice folosire, cu sursa menționată | **da**; limbaj juridic, repetitiv |
+| [WikiMatrix v1](https://opus.nlpl.eu/legacy/WikiMatrix.php) | 631.000 | CC BY-SA 4.0 | da, filtrat după scorul alinierii (e zgomotos) |
+| [Tatoeba](https://tatoeba.org/en/terms_of_use) | 19.400 | CC BY 2.0 FR | **da**; propoziții scurte și simple |
+| [NLLB v1](https://huggingface.co/datasets/allenai/nllb) | 55,6 milioane | ODC-BY + termenii surselor | da, cu grijă: unele „traduceri” sunt automate |
+| [ParaCrawl v9](https://opus.nlpl.eu/legacy/ParaCrawl.php) | 25 de milioane | CC0 doar pentru împachetare | doar o felie, filtrată |
+| [ELRC-SHARE](https://www.elrc-share.eu) | de la 77 la 784.000 pe corpus | diferă pe corpus (multe CC BY 4.0) | se verifică fiecare |
+| Pentru evaluare: [WMT16 newstest2016](https://www.statmt.org/wmt16/translation-task.html), [FLORES+](https://huggingface.co/datasets/openlanguagedata/flores_plus) | ~2.000 / ~1.000 | FLORES+: CC BY-SA 4.0 | FLORES+ nu se folosește la antrenare (cere fișa lui) |
+
+**Cod Python**
+
+| Sursa | Mărime | Licența | Observații |
+|---|---|---|---|
+| [The Stack smol](https://huggingface.co/datasets/bigcode/the-stack-smol) / [The Stack dedup](https://huggingface.co/datasets/bigcode/the-stack-dedup) | 10.000 de fișiere / 28,6 GB Python | doar fișiere cu licențe permisive, fiecare cu licența lui; termeni de folosire acceptați pe site | **da**, cu atribuirile păstrate și versiunea cea mai nouă (fără fișierele retrase) |
+| [self-oss-instruct-sc2-50k](https://huggingface.co/datasets/bigcode/self-oss-instruct-sc2-exec-filter-50k) | 50.000 de perechi sarcină–cod | ODC-BY | **da**; codul a fost verificat rulându-l, ca la școala noastră |
+| [opc-annealing-corpus](https://huggingface.co/datasets/OpenCoder-LLM/opc-annealing-corpus) | milioane de fragmente | ODC-BY | da |
+| [tiny-codes](https://huggingface.co/datasets/nampdn-ai/tiny-codes) | 1,6 milioane de fragmente | MIT, acces cu cerere | da |
+| Pentru evaluare: MBPP, HumanEval | — | CC BY 4.0, MIT | doar evaluare |
+
+**De început cu:**
+1. Wikipedia în română și Wikisource.
+2. O felie de 2–5 GB din FineWeb-2 ron_Latn.
+3. Pentru traducere, ~4,7 milioane de perechi: Tatoeba, Europarl v8 și DGT-TM, plus WikiMatrix filtrat. Evaluarea se
+   face pe newstest2016 sau FLORES+.
+4. Pentru textul simplu: TinyStories (engleză) și ds-tf3-ro-3m (română).
+5. Pentru cod: The Stack smol (sau o felie Python din The Stack dedup) și self-oss-instruct 50k.
+
+**De evitat (sau de întrebat un jurist):**
+- **Licențe care nu permit folosirea noastră:**
+  - TED2020: necomercial, fără lucrări derivate;
+  - QED: doar pentru cercetare;
+  - OpenSubtitles: fără licență;
+  - code_exercises: necomercial.
+- **Acces sau licență neclare:**
+  - OSCAR 23.01, cu accesul suspendat, și CulturaX, care conține text OSCAR;
+  - seturile OpenLLM-Ro fineweb2-ro și Romanian-BabyLM: licență lipsă sau neclară;
+  - CCMatrix: fără licență, dar aceleași perechi vin în NLLB, sub ODC-BY.
+- **Cod cu licențe amestecate:**
+  - github-code-clean nefiltrat conține și fișiere GPL/AGPL;
+  - fișierele „fără licență” din The Stack v2: fără licență, toate drepturile rămân ale autorului.
+- **Seturile klusai, doar dacă modelul se publică vreodată:**
+  - termenii Gemma și Llama se pot aplica modelelor antrenate pe ieșirile lor;
+  - pentru un model privat nu e o problemă.
 
 ## 7. Ce depinde de Windows și de laptop, și ce rulează în prima oră
 
