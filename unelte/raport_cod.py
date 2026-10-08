@@ -46,6 +46,26 @@ def procent(x: float | None) -> str:
     return "—" if x is None else f"{x:.0%}"
 
 
+CATEGORII = (("SyntaxError", "nu e Python valid"), ("IndentationError", "nu e Python valid"),
+             ("NameError", "nume necunoscute (de ex. cuvinte din povești)"), ("a ieșit", "alt rezultat"),
+             ("rezultat corect, dar", "rezultat corect, fără forma cerută"), ("a depășit timpul", "timp depășit"))
+
+
+def categoria(respins: dict[str, Any]) -> str:
+    """De ce a picat o încercare, în câteva cuvinte."""
+    if respins["verdict"] == "trișat":
+        return "prinse trișând"
+    for inceput, nume in CATEGORII:
+        if respins["motiv"].startswith(inceput):
+            return nume
+    return respins["motiv"].split(":")[0]  # alt fel de eroare (ex. TypeError)
+
+
+def scurt(cod: str, n: int = 70) -> str:
+    text = cod.replace("\n", " ⏎ ").replace("|", "¦").replace("`", "'")
+    return (text[:n] + "…") if len(text) > n else text
+
+
 def comprima(valori: list[float]) -> str:
     """1,0 1,0 0,7 0,5 0,5 → „1 ×2 → 0.7 ×1 → 0.5 ×2”."""
     grupuri: list[list[Any]] = []
@@ -133,6 +153,24 @@ def raport(cod: Path) -> str:
         o.append(f"| {nivel} | " + " | ".join(celule) + " |")
     o.append("")
 
+    # --- A față de B, la aceleași runde: singura comparație curată
+    comune = [n for n in niveluri if runde.get(("A", n)) and runde.get(("B", n))]
+    if comune:
+        o.append("## A față de B, la aceleași runde\n")
+        o.append("La aceeași rundă, liniile au aceleași sarcini, aceleași texte din față și aceleași semințe. Diferă doar "
+                 "textul de antrenare: B se antrenează și pe reușitele ei. Un set de 20 de sarcini are o eroare de "
+                 "aproximativ ±11 puncte pe măsurare (o abatere standard, la 50%).\n")
+        for nivel in comune:
+            a, b = runde[("A", nivel)], runde[("B", nivel)]
+            n = min(len(a), len(b), 12)
+            o.append(f"- Nivelul {nivel}, nevăzut pe runde (A / B): " + ", ".join(
+                f"{i + 1}: {procent(a[i]['rata_nevazut'])} / {procent(b[i]['rata_nevazut'])}" for i in range(n))
+                + (f"; apoi A a mai avut {len(a) - n} runde (cel mai bun: "
+                   f"{procent(max(r['rata_nevazut'] for r in a[n:]))})" if len(a) > n else "")
+                + (f"; apoi B a mai avut {len(b) - n} runde (cel mai bun: "
+                   f"{procent(max(r['rata_nevazut'] for r in b[n:]))})" if len(b) > n else "") + ".")
+        o.append("")
+
     # --- pregătirea
     pregatire = stare.get("pregatire")
     if pregatire:
@@ -187,14 +225,26 @@ def raport(cod: Path) -> str:
     din = sum(r["incercari"] for rr in runde.values() for r in rr)
     o.append(f"În total: {total} din {din} de încercări ({procent(total / din if din else None)}). Ele nu se rulează și "
              f"nu intră niciodată în antrenare.")
+    respinse = {l: citeste_jsonl(cod / "respinse" / f"{l}.jsonl") for l in LINII}
     for (linie, nivel), rr in sorted(runde.items(), key=lambda k: (ordinea(k[0][1]), k[0][0])):
         t = sum(r["trisate"] for r in rr)
         raportate = [r["runda"] for r in rr if r.get("trisat_raportat")]
         if t:
             motive = Counter(m for r in rr for m in r.get("exemple_trisate", []))
+            exemple = [r["cod"] for r in respinse[linie] if r["nivel"] == nivel and r["verdict"] == "trișat"][:2]
             o.append(f"- {linie} {nivel}: {t} din {sum(r['incercari'] for r in rr)}"
                      + (f"; runde cu peste 50% trișat: {', '.join(map(str, raportate))}" if raportate else "")
-                     + (f"; de exemplu: {'; '.join(m for m, _ in motive.most_common(3))}" if motive else ""))
+                     + (f"; motivele: {'; '.join(m for m, _ in motive.most_common(3))}" if motive else "")
+                     + (f"; de exemplu: {'; '.join(f'`{scurt(c)}`' for c in exemple)}" if exemple else ""))
+    o.append("")
+
+    # --- primele reușite
+    o.append("## Primele reușite pe văzut\n")
+    for (linie, nivel), rr in sorted(runde.items(), key=lambda k: (ordinea(k[0][1]), k[0][0])):
+        prima = next((r for r in rr if r["trecute"]), None)
+        o.append(f"- {linie} {nivel}: " + (f"runda {prima['runda']} ({prima['trecute']} din {prima['incercari']}), de "
+                                           f"exemplu `{scurt(prima['exemple_trecute'][0])}`"
+                                           if prima and prima.get("exemple_trecute") else "niciuna"))
     o.append("")
 
     # --- forme noi
@@ -213,9 +263,18 @@ def raport(cod: Path) -> str:
                  f"{len(intrari)} reușite unice, {sum(i['forma_noua'] for i in intrari)} cu formă nouă, "
                  f"{len(prime)} forme noi diferite.")
         if prime:
-            o.append("\n| Nivel | Runda | Sarcina | Codul |\n|---|---|---|---|")
+            o.append("\n| Nivel | Runda | Sarcina | Codul (formă nouă) |\n|---|---|---|---|")
             for i in list(prime.values())[:15]:
-                o.append(f"| {i['nivel']} | {i['runda']} | {i['test']} | `{i['cod'].replace(chr(10), ' ⏎ ')}` |")
+                o.append(f"| {i['nivel']} | {i['runda']} | {i['test']} | `{scurt(i['cod'])}` |")
+        if intrari:  # sarcinile văzute nu sunt din abecedar: fiecare soluție de aici e găsită de model, nu copiată
+            o.append(f"\nPrimele soluții găsite de linia {linie} (niciuna nu e în abecedar), cu runda:\n\n"
+                     "| Nivel | Runda | Sarcina | Codul |\n|---|---|---|---|")
+            for i in sorted(intrari, key=lambda i: (ordinea(i["nivel"]), i["runda"]))[:8]:
+                o.append(f"| {i['nivel']} | {i['runda']} | {i['test']} | `{scurt(i['cod'])}` |")
+            pe_nivel = Counter(i["nivel"] for i in intrari)
+            ultima_crestere = {n: max(i["runda"] for i in intrari if i["nivel"] == n) for n in pe_nivel}
+            o.append("\nPe niveluri: " + ", ".join(f"{n}: {pe_nivel[n]} soluții, ultima nouă în runda {ultima_crestere[n]}"
+                                                   for n in sorted(pe_nivel, key=ordinea)) + ".")
         o.append("")
 
     # --- ce știa
@@ -233,6 +292,11 @@ def raport(cod: Path) -> str:
     o.extend(randuri or ["Nemăsurat încă."])
     o.append("\nBiți pe octet pe aceeași bucată din validarea poveștilor (mai mic = mai bine). Faptele (cele 72 ale lui "
              "#252) nu se măsoară în buclă.\n")
+    pornire = pregatire.get("povesti_bpo_inainte") if pregatire else None
+    finale = [info["povesti_bpo"] for l in linii for c in ("niveluri_trecute", "niveluri_picate")
+              for info in stari.get(l, {}).get(c, {}).values() if info.get("povesti_bpo") is not None]
+    if pornire and finale:
+        o.append(f"Cel mai rău: {max(finale)}, adică de {max(finale) / pornire:.1f} ori biții lui #252 ({pornire}).\n")
 
     # --- înghețuri
     o.append("## Înghețuri și rollback-uri\n")
@@ -253,12 +317,41 @@ def raport(cod: Path) -> str:
                      f"prinse trișând."
                      + (f" Cel mai bun nevăzut: {procent(cel_mai_bun['rata_nevazut'])}, în runda "
                         f"{cel_mai_bun['runda']}." if cel_mai_bun else ""))
+            picate_aici = [r for r in respinse[linie] if r["nivel"] == nivel]
+            if picate_aici:
+                categorii = Counter(categoria(r) for r in picate_aici)
+                ultima = max(r["runda"] for r in picate_aici)
+                exemple = [r for r in picate_aici if r["runda"] == ultima][:3]
+                o.append("  - De ce au picat încercările: " + ", ".join(
+                    f"{nume} {n / len(picate_aici):.0%}" for nume, n in categorii.most_common(5)) + ".")
+                o.append(f"  - Ce scria modelul în ultima rundă ({ultima}): " + "; ".join(
+                    f"„{r['test']}” → `{scurt(r['cod'])}`" for r in exemple) + ".")
     picate = {n for l in linii for n in stari.get(l, {}).get("niveluri_picate", {})}
     if picate:
-        o.append("- Ce s-ar putea schimba (planul, secțiunea 12; decide omul): un abecedar mai mare la "
-                 + ", ".join(sorted(picate, key=ordinea)) + "; trepte intermediare înainte de "
-                 + ", ".join(sorted(picate, key=ordinea)) + "; un vocabular nou sau o linie de la zero, cu povești și "
-                 "cod (Kronos-Code-Zero); textul din față (varianta 1 sau 2).")
+        variante = ["ce s-ar putea schimba (decide omul):"]
+        if pornire and finale and max(finale) > 1.1 * pornire:
+            variante.append(f"hrană din povești în antrenarea școlii, ca hrana din 6a care a păstrat faptele (poveștile au "
+                            f"ajuns de la {pornire} la {max(finale)} biți pe octet)")
+        for linie in linii:
+            for nivel in stari.get(linie, {}).get("niveluri_picate", {}):
+                rr = runde.get((linie, nivel), [])
+                if len(rr) >= 6:
+                    cel_mai_bun = max(rr, key=lambda r: r["rata_nevazut"])
+                    final = sum(r["rata_nevazut"] for r in rr[-5:]) / 5
+                    if cel_mai_bun["runda"] <= len(rr) // 3 and cel_mai_bun["rata_nevazut"] - final >= 0.1:
+                        variante.append(f"mai puțini pași pe rundă sau o rată mai mică la {linie} {nivel} (cel mai bun "
+                                        f"nevăzut, {procent(cel_mai_bun['rata_nevazut'])}, a fost în runda "
+                                        f"{cel_mai_bun['runda']}; în ultimele 5 runde, în medie {procent(final)})")
+                    vazut = sum(r["rata_vazut"] for r in rr[-5:]) / 5
+                    if vazut - final >= 0.25:
+                        variante.append(f"sarcini văzute mai multe și mai variate la {linie} {nivel} (în ultimele 5 "
+                                        f"runde: văzut {procent(vazut)}, nevăzut {procent(final)}: a învățat sarcinile "
+                                        f"văzute, nu regula)")
+        variante.append("un abecedar mai mare la " + ", ".join(sorted(picate, key=ordinea)) + "; trepte intermediare "
+                        "(de ex. numere mici, apoi mari); un vocabular nou sau o linie de la zero, cu povești și cod "
+                        "(Kronos-Code-Zero); liniile C și D din plan (D: contează descoperirea sau doar expunerea "
+                        "la mai multe exemple?)")
+        o.append("- " + variante[0].capitalize() + "\n" + ";\n".join(f"  - {v}" for v in variante[1:]) + ".")
     trecute = {l: stari.get(l, {}).get("niveluri_trecute", {}) for l in linii}
     if len(linii) == 2:
         comune = sorted(set(trecute["A"]) & set(trecute["B"]), key=ordinea)

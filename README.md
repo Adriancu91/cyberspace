@@ -2554,7 +2554,62 @@ Am adăugat:
 - după fiecare generare se golește memoria video rezervată (pe 6 octombrie urcase încet peste 5,5 GB);
 - o eroare care oprește școala intră și ea în jurnal.
 
-Pilotul pornește după acest commit, cu placa liberă și alimentarea verificată.
+### Rezultatele pilotului (8 octombrie, 09:33–10:39, 65 de minute)
+
+Raportul întreg: `lucru/cod/raport.md` (`python unelte/raport_cod.py`).
+
+Înainte de pornire am verificat:
+- placa era liberă;
+- laptopul era pe încărcător, cu bateria la 100%;
+- de la 07:08 nu mai fusese nicio schimbare a alimentării;
+- o probă de un minut pe placă a mers.
+
+Pe toată durata pilotului, placa n-a încetinit: 31–34 s pe rundă, 2,3 GB memorie video.
+
+**Unde se rupe lanțul:** linia A, la nivelul 0; linia B, la nivelul 1, după ce a trecut nivelul 0.
+
+| Nivel | A: văzut / nevăzut / adversarial / sacru | B: văzut / nevăzut / adversarial / sacru |
+|---|---|---|
+| 0 | ✗ 32% / 30% / 0% / 10% (56 de runde, 30 de minute) | ✓ 64% / 80% / 10% / 85% (3 runde, 1,6 minute) |
+| 1 | — | ✗ 71% / 55% / 0% / 70% (56 de runde, 30 de minute) |
+
+**Pregătirea** (300 de pași pe abecedar, din #252) a ridicat nevăzutul de la 0% la:
+- 45% la nivelul 0;
+- 10% la 1;
+- 40% la 2A;
+- 55% la 2B;
+- 5% la 2C;
+- 0% la 3A și 3B.
+
+**Verdict cinstit:**
+- **La nivelul 0, reușitele proprii au ajutat.**
+  - La aceleași runde, nevăzutul a fost: A 45%, 35%, 45%; B 55%, 70%, 80%. Liniile aveau aceleași sarcini, texte și semințe; diferea doar antrenarea.
+  - A, antrenată doar pe abecedar, n-a mai trecut de 45% în 56 de runde și a coborât spre 30%.
+  - Rezerve:
+    - e o singură sămânță;
+    - un set de 20 de sarcini are un zgomot de ±11 puncte. Diferența de la runda 3 (35 de puncte) e totuși mai mare, iar setul sacru al lui B (85%, alte 20 de sarcini) o confirmă;
+    - nu știm dacă a contat descoperirea sau doar expunerea la mai multe exemple. Asta e întrebarea liniei D din plan.
+- **La nivelul 1, B a învățat sarcinile văzute, nu regula.**
+  - Pe văzut a ajuns la 70–95%, dar pe nevăzut a stat la 30–55%.
+  - Biblioteca a crescut tot mai încet: ultima reușită nouă a apărut în runda 53.
+  - Exemplu: „add 10 and 8” → `1+9`. Forma e bună, numerele nu.
+- **Adversarial** (numere mari, cuvinte lungi): 0–10% peste tot. Modelul nu se descurcă cu numere pe care nu le-a văzut.
+- **Ce știa s-a pierdut:**
+  - poveștile au trecut de la 0,434 biți pe octet (#252) la 0,583 după pregătire;
+  - la final au ajuns la 1,12 (A) și 1,20 (B), adică de ~2,8 ori mai rău;
+  - cauza: școala se antrenează doar pe abecedar (~6.100 de tokeni) și pe bibliotecă, fără povești, iar în 56 de runde × 200 de pași modelul vede abecedarul de mii de ori.
+- **Prins trișând:** 1 din 11.500 de încercări, și acela fals: cuvântul „important” dintr-un text de poveste conține „import”.
+
+**Ce s-ar putea schimba** (decide Adrian):
+- hrană din povești în antrenarea școlii, ca la fapte în 6a;
+- mai puțini pași pe rundă sau o rată mai mică (A s-a stricat cu cât s-a antrenat mai mult);
+- sarcini văzute mai multe și mai variate;
+- un abecedar mai mare la nivelurile 0–1 și trepte intermediare;
+- liniile C și D din plan.
+
+**O greșeală a mea, reparată:** testul liniei de comandă a scris în jurnalul adevărat două rânduri false („oprit: --nivel
+cere --linie A sau B”, la 09:28 și 09:29), înainte de pilot. Nu le-am șters, fiindcă jurnalul nu se editează. Am adăugat
+în jurnal o notă care le explică. Acum, o comandă greșită nu mai ajunge în jurnal, iar testul verifică asta.
 
 ## Toate comenzile
 

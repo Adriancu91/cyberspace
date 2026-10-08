@@ -609,6 +609,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--motiv", default="", help="la --aproba-amprente: de ce (intră în jurnal)")
     parser.add_argument("--config", default="config/scoala_cod.toml")
     args = parser.parse_args(argv)
+    if args.nivel and not args.linie:  # o comandă greșită nu e o oprire a școlii: nu intră în jurnal
+        print("Oprit: --nivel cere --linie A sau B")
+        return 1
     cale_config = Path(args.config) if Path(args.config).is_absolute() else RADACINA / args.config
     cfg = citeste_config(cale_config)
     if args.genereaza_sacru:
@@ -634,8 +637,6 @@ def main(argv: list[str] | None = None) -> int:
         if args.stare:
             print(json.dumps(scoala.stare(), ensure_ascii=False, indent=1))
             return 0
-        if args.nivel and not args.linie:
-            raise RuntimeError("--nivel cere --linie A sau B")
         import torch
 
         if cfg["scoala"].get("dispozitiv", "") != "cpu" and not torch.cuda.is_available():

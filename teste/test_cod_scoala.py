@@ -240,5 +240,10 @@ def test_raportul_spune_unde_se_rupe_lantul(tmp_path):
 
 
 def test_linia_de_comanda_refuza_ce_nu_trebuie(capsys):
+    """O comandă greșită nu ajunge în jurnalul adevărat al școlii (pe 8 octombrie ajunsese de două ori, din acest test)."""
+    jurnal_adevarat = scoala_cod.RADACINA / "lucru" / "cod" / "runde.jsonl"
+    numara = lambda: jurnal_adevarat.read_text(encoding="utf-8").count("--nivel cere") if jurnal_adevarat.exists() else 0  # noqa: E731
+    inainte = numara()
     assert scoala_cod.main(["--nivel", "0"]) == 1 and "--nivel cere --linie" in capsys.readouterr().out
+    assert numara() == inainte
     assert scoala_cod.main(["--genereaza-sacru"]) == 1 and "există deja" in capsys.readouterr().out
