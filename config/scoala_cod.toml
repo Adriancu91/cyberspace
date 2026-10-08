@@ -17,13 +17,20 @@ samanta = 0
 dispozitiv = ""                                       # gol: placa video, dacă există
 
 [mediu]
-# Contextul lui #252 e de 256 de simboluri. Preambulul + „EXAMPLES:” are singur 129, un episod din abecedar are în medie
-# 58 (36 la nivelul 0, 70 la 3B), iar cea mai lungă soluție a pilotului + „RESULT:” are 39. Măsurat cu tokenizer-ul lui #252:
-#   varianta 1 (preambul_la_test = true):  preambulul + 1 episod în față (planul cerea 2–3: nu încap);
-#   varianta 2 (preambul_la_test = false): 3 episoade, fără preambul (preambulul rămâne în pregătire și în antrenare).
-# Pilotul nu pornește până nu alege Adrian varianta.
-preambul_la_test = true
-max_episoade = 3                   # cel mult atâtea episoade din abecedar în față (planul: 2–3), cât încap
+# Contextul lui #252 e de 256 de simboluri. Preambulul lung + „EXAMPLES:” are singur 129, un episod din abecedar are în
+# medie 58 (36 la nivelul 0, 70 la 3B), iar cea mai lungă soluție a pilotului + „RESULT:” are 39. Măsurat cu
+# tokenizer-ul lui #252:
+#   regula = "lunga": preambulul întreg la test și în antrenare (varianta 1): încape doar 1 episod;
+#   regula = "fara":  fără regulă la test, preambulul în antrenare (varianta 2): încap 3 episoade;
+#   regula = "scurta": regula scurtată de mai jos, cuvânt cu cuvânt, la test ȘI în pregătire și antrenare (varianta 3,
+#                     aleasă de Adrian pe 8 octombrie: ce vede la test e ce a văzut la antrenare). Regula lungă rămâne
+#                     în abecedar, ca document.
+regula = "scurta"
+regula_scurta = """
+RULE: Survive.
+PLACE: Here, what you write happens. If you do not pass the test, you are deleted.
+"""
+episoade = 2                       # exact atâtea exemple din abecedar în față; dacă nu încap, școala se oprește
 max_simboluri = 48                 # cât poate scrie modelul la o încercare; sub 40, soluțiile lungi de la 3B nu încap
 
 [sandbox]

@@ -21,7 +21,7 @@ from unelte.scoala_cod import Scoala, citeste_config, text_antrenare
 
 def senzori_linistiti(**schimbari) -> paznic_cod.Senzori:
     valori = dict(temperatura=lambda: None, alte_procese=lambda: [], memorie_ocupata_mb=lambda: 0,
-                  pe_baterie=lambda: False, asteapta=lambda secunde: None)
+                  pe_baterie=lambda: False, placa=lambda: {"treapta": "P0", "mhz": 1425}, asteapta=lambda secunde: None)
     return paznic_cod.Senzori(**{**valori, **schimbari})
 
 
@@ -59,9 +59,10 @@ def test_pilot_cap_coada_cu_modelul_minuscul(tmp_path):
     runda = randuri[4]
     for cheie in ("linie", "nivel", "runda", "temperatura", "incercari", "trecute", "unice_noi", "trisate",
                   "marime_biblioteca", "pasi_antrenare", "rata_vazut", "rata_nevazut", "secunde", "memorie_video_mb",
-                  "temperatura_placa"):
+                  "temperatura_placa", "placa"):
         assert cheie in runda, cheie
-    assert runda["incercari"] == 4 and runda["pasi_antrenare"] == 2 and runda["episoade_in_fata"] > 0
+    assert runda["incercari"] == 4 and runda["pasi_antrenare"] == 2 and runda["episoade_in_fata"] == 2
+    assert randuri[3]["regula"] == "scurta" and "regula scurtată + 2 exemple" in randuri[3]["motiv"]
     pregatire = randuri[1]
     assert set(pregatire["nevazut_inainte"]) == {"0"} and pregatire["povesti_bpo_inainte"] > 0
     for linie in "AB":
@@ -85,9 +86,14 @@ def test_elevul_care_stie_trece_nivelurile_pe_ambele_linii(tmp_path):
         assert all(i["adversarial"] == 1.0 and i["sacru"] == 1.0 and i["runda"] == 1
                    for i in sl["niveluri_trecute"].values())
     assert sorted(p.stem for p in (s.cod / "inghet").glob("*.zip")) == ["A_0", "A_1", "B_0", "B_1", "inainte_de_pilot"]
+    # varianta 3: regula scurtată + 2 exemple + sarcina în față; aceeași regulă în pregătire și în antrenare
+    scurta = "RULE: Survive.\nPLACE: Here, what you write happens. If you do not pass the test, you are deleted.\n"
+    assert all(f.startswith(scurta + "\nEXAMPLES:\n\n") and f.count("TEST: ") == 3 for f, _, _ in elevi["A"].fete)
+    assert elevi["pornire"].antrenari == [s.text_abecedar] and s.text_abecedar.startswith(scurta)
+    assert "Here are some simple pieces of code" not in s.text_abecedar  # regula lungă rămâne doar în abecedar
     # A se antrenează doar pe abecedar; B pe abecedar și pe biblioteca ei
-    assert elevi["A"].antrenari and all(t == s.abecedar.text for t in elevi["A"].antrenari)
-    assert all(s.abecedar.text in t and "\nTEST: " in t[len(s.abecedar.text):] for t in elevi["B"].antrenari)
+    assert elevi["A"].antrenari and all(t == s.text_abecedar for t in elevi["A"].antrenari)
+    assert all(s.text_abecedar in t and "\nTEST: " in t[len(s.text_abecedar):] for t in elevi["B"].antrenari)
     # amândouă bibliotecile s-au umplut cu aceleași reușite, în format episod
     citeste = lambda l: [json.loads(r) for r in (s.cod / f"biblioteca_{l}.jsonl").read_text(encoding="utf-8").splitlines()]  # noqa: E731
     assert citeste("A") and [(i["test"], i["cod"]) for i in citeste("A")] == [(i["test"], i["cod"]) for i in citeste("B")]
@@ -98,6 +104,20 @@ def test_elevul_care_stie_trece_nivelurile_pe_ambele_linii(tmp_path):
     assert [(r["linie"], r["nivel"], r["temperatura"], r["temperatura_urmatoare"]) for r in runde] == \
         [("A", "0", 1.0, 0.5), ("B", "0", 1.0, 0.5), ("A", "1", 1.0, 0.5), ("B", "1", 1.0, 0.5)]
     assert "fără regresie" in [r for r in jurnal(s) if r["tip"] == "nivel_trecut"][-1]["motiv"]
+
+
+def test_celelalte_variante_si_prea_putine_exemple(tmp_path):
+    lunga = scoala(tmp_path / "1", {"mediu.regula": "lunga"})
+    assert lunga.regula_test == lunga.abecedar.preambul and lunga.text_abecedar == lunga.abecedar.text
+    fara = scoala(tmp_path / "2", {"mediu.regula": "fara"})
+    assert fara.regula_test == "" and fara.text_abecedar == fara.abecedar.text
+    # mai multe exemple decât există la nivelul 0: școala se oprește, nu dă testul cu mai puține fără să spună
+    prea_multe = scoala(tmp_path / "3", {"mediu.episoade": 50})
+    elevi_de_proba(prea_multe)
+    with pytest.raises(RuntimeError, match="încap doar 8 exemple din 50"):  # nivelul 0 are 8 episoade în abecedar
+        prea_multe.pregateste()
+    with pytest.raises(ValueError, match="regula"):
+        citeste_config(worktree_de_proba(tmp_path / "4", {"mediu.regula": "alta"}))
 
 
 def test_trisorul_e_prins_numarat_si_raportat(tmp_path):

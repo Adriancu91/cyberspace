@@ -66,11 +66,14 @@ if str(RADACINA) not in sys.path:
 
 from module.cod import ordinea, paznic_cod, sandbox  # noqa: E402
 from module.cod.examen_cod import Sarcina, Seturi, citeste_sacru, genereaza_sacru, judeca, seturi  # noqa: E402
-from module.cod.mediu import Abecedar, Episod, citeste_abecedar, incercarea, schelet, text_fata  # noqa: E402
+from module.cod.mediu import (Abecedar, Episod, citeste_abecedar, incercarea, schelet, text_cu_regula,  # noqa: E402
+                              text_fata)
 from unelte.ingheata_cod import exista, ingheata, scrie_in_jurnal  # noqa: E402
 
 SECTIUNI = ("scoala", "mediu", "sandbox", "examen", "runda", "pregatire", "temperatura", "buget", "regresie", "paznic",
             "pilot")
+REGULI = ("scurta", "lunga", "fara")
+DESCRIERE_REGULA = {"scurta": "regula scurtată", "lunga": "regula lungă (preambulul)", "fara": "fără regulă"}
 
 
 def samanta(*parti: Any) -> int:
@@ -90,7 +93,19 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
         raise ValueError("[pilot] linii: doar A și B în v0.1")
     if cfg["runda"]["incercari"] % cfg["runda"]["sarcini"]:
         raise ValueError("[runda] incercari trebuie să se împartă exact la sarcini (ex. 100 = 20 × 5)")
+    if cfg["mediu"]["regula"] not in REGULI:
+        raise ValueError(f"[mediu] regula: una din {', '.join(REGULI)}")
     return cfg
+
+
+def regulile(mediu: dict[str, Any], abecedar: Abecedar) -> tuple[str, str]:
+    """(regula din fața modelului la test, regula din textul de pregătire și antrenare), după `[mediu] regula`:
+    - „scurta”: regula scurtată, cuvânt cu cuvânt, în ambele (varianta 3);
+    - „lunga”: preambulul abecedarului în ambele (varianta 1);
+    - „fara”: nimic la test, preambulul în antrenare (varianta 2)."""
+    scurta = mediu.get("regula_scurta", "").replace("\r\n", "\n").strip("\n") + "\n"
+    return {"scurta": (scurta, scurta), "lunga": (abecedar.preambul, abecedar.preambul),
+            "fara": ("", abecedar.preambul)}[mediu["regula"]]
 
 
 # --- biblioteca unei linii --------------------------------------------------------------------------------------------
@@ -156,6 +171,8 @@ class Scoala:
         self.lucru = self._cale(s["director_lucru"])
         self.cod = self.lucru / "cod"
         self.abecedar: Abecedar = citeste_abecedar(self._cale(s["abecedar"]))
+        self.regula_test, regula_antrenare = regulile(self.cfg["mediu"], self.abecedar)
+        self.text_abecedar = text_cu_regula(self.abecedar, regula_antrenare)  # pregătirea și antrenarea
         self.texte_abecedar = {e.test for e in self.abecedar.episoade}
         self.schelete_abecedar = {schelet(e.cod) for e in self.abecedar.episoade}
         cale_sacru = self._cale(s["sacru"])
@@ -224,9 +241,14 @@ class Scoala:
         return self._seturi[nivel]
 
     def fata(self, elev: Any, sarcina: Sarcina, nivel: str, rng: random.Random) -> tuple[str, int]:
+        """Textul din fața modelului, cu exact `[mediu] episoade` exemple: dacă nu încap, școala se oprește, nu dă
+        testul cu mai puține exemple fără să spună."""
         m = self.cfg["mediu"]
         text, puse = text_fata(self.abecedar, sarcina.text, nivel, rng, elev.numara, elev.context, m["max_simboluri"],
-                               m["preambul_la_test"], m["max_episoade"])
+                               self.regula_test, m["episoade"])
+        if len(puse) < m["episoade"]:
+            raise RuntimeError(f"în fața modelului încap doar {len(puse)} exemple din {m['episoade']} la „{sarcina.text}” "
+                               f"(nivelul {nivel}); varianta textului din față trebuie schimbată de om")
         return text, len(puse)
 
     def ruleaza_cod(self, coduri: list[str]) -> list[sandbox.Rulare]:
@@ -291,7 +313,7 @@ class Scoala:
             f.writelines(json.dumps({"nivel": nivel, "runda": numar, **{k: i[k] for k in ("test", "cod", "verdict",
                                      "motiv", "aproape")}}, ensure_ascii=False) + "\n"
                          for i in incercari if i["verdict"] != "trecut")
-        text = text_antrenare(self.abecedar.text, biblioteca.episoade() if linie == "B" else "",
+        text = text_antrenare(self.text_abecedar, biblioteca.episoade() if linie == "B" else "",
                               r["fractie_abecedar_minima"])
         antrenare = elev.antreneaza(text, r["pasi_antrenare"], r["rata"], r["lot"], samanta(baza, "antrenare", nivel, numar))
         inceput_masurare = time.perf_counter()
@@ -310,6 +332,7 @@ class Scoala:
             "secunde_antrenare": antrenare.get("secunde"),
             "secunde_masurare": round(time.perf_counter() - inceput_masurare, 1),
             "memorie_video_mb": antrenare.get("memorie_video_mb"), "temperatura_placa": self.senzori.temperatura(),
+            "placa": self.senzori.placa(),
             "trisat_raportat": len(trisate) / max(1, len(incercari)) > self.cfg["paznic"]["trisat_raportat_peste"],
             "exemple_trecute": [i["cod"] for i in trecute[:3]],
             "exemple_trisate": sorted({i["motiv"] for i in trisate})[:3],
@@ -398,13 +421,13 @@ class Scoala:
         sl["nivel_curent"], sl["temperatura"] = nivel, temperatura
         self.salveaza_stare(stare)
         self.jurnal({"tip": "nivel_inceput", "linie": linie, "nivel": nivel, "temperatura": temperatura, "reluat": reluat,
-                     "preambul_la_test": m["preambul_la_test"], "max_simboluri": m["max_simboluri"],
+                     "regula": m["regula"], "episoade": m["episoade"], "max_simboluri": m["max_simboluri"],
                      "motiv": f"{'reiau' if reluat else 'încep'} nivelul {nivel} pe linia {linie}: temperatura "
                               f"{temperatura:g}, buget {b['minute_pe_nivel']} de minute sau {b['runde_pe_nivel']} de runde"
                               + (f" (consumat: {buget['runde']} runde, {buget['secunde'] / 60:.1f} minute)"
                                  if reluat else "")
-                              + f"; în față: {'preambulul și ' if m['preambul_la_test'] else ''}episoade din "
-                                f"abecedar, cât încap"})
+                              + f"; în față: {DESCRIERE_REGULA[m['regula']]} + {m['episoade']} exemple din abecedar "
+                                f"+ sarcina"})
         ultima: dict[str, Any] | None = None
         while True:
             oprire = self.de_ce_nu_continui(stare, linie, nivel)
@@ -514,7 +537,7 @@ class Scoala:
         niveluri = c["pilot"]["niveluri"]
         inainte = {n: round(self.masoara(elev, self.seturi(n).nevazut, "nevazut", n)[0], 3) for n in niveluri}
         povesti_inainte = self.ce_stia(elev)
-        antrenare = elev.antreneaza(self.abecedar.text, p["pasi"], p["rata"], c["runda"]["lot"],
+        antrenare = elev.antreneaza(self.text_abecedar, p["pasi"], p["rata"], c["runda"]["lot"],
                                     samanta(c["scoala"]["samanta"], "pregatire"))
         dupa = {n: round(self.masoara(elev, self.seturi(n).nevazut, "nevazut", n)[0], 3) for n in niveluri}
         povesti_dupa = self.ce_stia(elev)
@@ -529,7 +552,10 @@ class Scoala:
                               "timp": datetime.now().isoformat(timespec="seconds")}
         self.salveaza_stare(stare)
         self.jurnal({"tip": "pregatire", **stare["pregatire"], "memorie_video_mb": antrenare.get("memorie_video_mb"),
-                     "motiv": f"pregătirea, din #252: {antrenare['pasi']} de pași pe abecedar (rata {p['rata']:g}); "
+                     "regula": c["mediu"]["regula"],
+                     "motiv": f"pregătirea, din #252: {antrenare['pasi']} de pași pe abecedar, cu "
+                              f"{DESCRIERE_REGULA[c['mediu']['regula']].replace('fără regulă', 'regula lungă')} "
+                              f"deasupra exemplelor (rata {p['rata']:g}); "
                               f"nevăzut înainte → după: "
                               + ", ".join(f"{n} {inainte[n]:.0%} → {dupa[n]:.0%}" for n in niveluri)
                               + (f"; povești (biți pe octet) {povesti_inainte} → {povesti_dupa}"
@@ -630,6 +656,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if rezultate and all(v == "trecut" for v in rezultate.values()) else 1
     except (RuntimeError, FileExistsError, FileNotFoundError, ValueError) as eroare:
         print(f"Oprit: {eroare}")
+        if args.pilot or args.nivel or args.pregateste:
+            scoala.jurnal({"tip": "oprit", "motiv": f"oprit: {eroare}"})
         return 1
 
 

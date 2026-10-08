@@ -3,12 +3,18 @@
 - **Abecedarul** (date/cod/abecedar.txt, scris de unelte/fa_abecedar.py): preambulul, cu regula lui Adrian cuvânt cu
   cuvânt, apoi 105 episoade TEST → WRITE → RESULT → passed. Fiecare episod primește nivelul lui pe scară, după cod
   (nivelul_codului).
-- **Textul din față** la un test: [preambulul] + câteva episoade din abecedar (de la nivelul testului sau mai jos,
-  alese aleator, niciodată sarcina testată) + „TEST: <sarcina>\\nWRITE:\\n”.
-  - Modelul vede cel mult `context` simboluri (256 la #252), iar preambulul are singur 127.
+- **Textul din față** la un test: [regula] + câteva episoade din abecedar (de la nivelul testului sau mai jos, alese
+  aleator, niciodată sarcina testată) + „TEST: <sarcina>\\nWRITE:\\n”.
+  - Modelul vede cel mult `context` simboluri (256 la #252), iar preambulul lung are singur 129.
   - De aceea episoadele se pun doar cât încap, lăsând loc pentru ce generează modelul (max_simboluri).
   - Câte au încăput se scrie în jurnal.
-  - Fără preambul la test (varianta 2): doar episoadele și sarcina.
+- **Regula** din față poate fi:
+  - regula scurtată (varianta 3, aleasă de Adrian): aceeași și în textul de pregătire și antrenare (text_cu_regula),
+    ca modelul să vadă la test ce a văzut la antrenare;
+  - preambulul lung (varianta 1);
+  - niciuna (varianta 2).
+
+  Regula lungă rămâne oricum în fișierul abecedarului, ca document.
 - **Încercarea** e textul dintre „WRITE:” și „RESULT:”. Dacă modelul n-a ajuns la „RESULT:”, se taie la primul „TEST:”
   sau „passed” nou, ori la final.
 - **Scheletul** unui cod: numerele, cuvintele dintre ghilimele și numele cutiilor puse deoparte („x = 7” → „V = N”).
@@ -90,12 +96,22 @@ def citeste_abecedar(cale: str | Path) -> Abecedar:
     return Abecedar(preambul.rstrip("\n") + "\n", episoade, text)
 
 
+def _cap(regula: str) -> str:
+    return (regula.rstrip("\n") + "\n\n" + CAP_EXEMPLE) if regula else CAP_EXEMPLE
+
+
+def text_cu_regula(abecedar: Abecedar, regula: str) -> str:
+    """Abecedarul cu `regula` în locul preambulului, în același format ca fișierul: textul de pregătire și antrenare.
+    Cu preambulul lui, e exact fișierul."""
+    return _cap(regula) + "\n".join(e.text() for e in abecedar.episoade)
+
+
 def text_fata(abecedar: Abecedar, sarcina: str, nivel: str, rng: random.Random, numara: Callable[[str], int],
-              context: int, max_simboluri: int, preambul_la_test: bool = True,
-              max_episoade: int = 3) -> tuple[str, list[Episod]]:
-    """(textul din fața modelului, episoadele puse). `numara(text)` = câte simboluri are textul (tokenizer-ul
-    modelului). Episoadele (cel mult max_episoade) se pun doar dacă textul + max_simboluri încap în context."""
-    cap = (abecedar.preambul.rstrip("\n") + "\n\n" + CAP_EXEMPLE) if preambul_la_test else CAP_EXEMPLE
+              context: int, max_simboluri: int, regula: str, max_episoade: int = 2) -> tuple[str, list[Episod]]:
+    """(textul din fața modelului, episoadele puse). `regula` = textul de deasupra exemplelor („” = fără regulă).
+    `numara(text)` = câte simboluri are textul (tokenizer-ul modelului). Episoadele (cel mult max_episoade) se pun doar
+    dacă textul + max_simboluri încap în context; unul prea lung se sare și se încearcă următorul."""
+    cap = _cap(regula)
     coada = f"TEST: {sarcina}\nWRITE:\n"
     candidati = [e for e in abecedar.episoade if ordinea(e.nivel) <= ordinea(nivel) and e.test != sarcina]
     rng.shuffle(candidati)

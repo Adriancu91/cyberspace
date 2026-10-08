@@ -2386,15 +2386,36 @@ eficient pe cod decât pe povești:
 - cea mai lungă soluție a pilotului, cu „RESULT:”, are 39.
 
 Problema e contextul: #252 vede doar 256 de tokeni. Planul cere preambul + 2–3 episoade + sarcina + cât scrie modelul,
-adică peste 256. De aceea, textul din față are două variante, alese în `config/scoala_cod.toml` (`preambul_la_test`):
+adică peste 256. Variantele, alese în `config/scoala_cod.toml` (`[mediu] regula`):
 
-| Varianta | În fața modelului, la un test | Episoade din abecedar |
-|---|---|---|
-| 1 | preambulul întreg, cuvânt cu cuvânt + episoade cât încap + sarcina | 1 |
-| 2 | episoade + sarcina, fără preambul (preambulul rămâne în pregătire și în antrenare) | 3 |
+| Varianta | În fața modelului, la un test | În pregătire și antrenare | Exemple |
+|---|---|---|---|
+| 1 (`lunga`) | preambulul întreg + exemple cât încap + sarcina | preambulul întreg | 1 |
+| 2 (`fara`) | exemple + sarcina, fără regulă | preambulul întreg | 3 |
+| **3 (`scurta`)** | **regula scurtată + 2 exemple + sarcina** | **aceeași regulă scurtată** | **2** |
+
+**Adrian a ales varianta 3** (8 octombrie). Regula scurtată, cuvânt cu cuvânt:
+
+```
+RULE: Survive.
+PLACE: Here, what you write happens. If you do not pass the test, you are deleted.
+```
+
+Aceeași regulă stă deasupra exemplelor și în textul de pregătire și antrenare, ca modelul să vadă la test ce a văzut la
+antrenare. Regula lungă rămâne în `date/cod/abecedar.txt`, ca document, iar fișierul nu s-a schimbat.
+
+Am verificat, cu tokenizer-ul lui #252, toate textele pe care le poate da pilotul: 1.260 pe nivel (60 de runde × 20 de
+sarcini + seturile nevăzut, adversarial și sacru), deci 8.820 în total. Rezultatul:
+- **toate au exact 2 exemple**, deci nu e nevoie de varianta 2;
+- regula scurtată cu „EXAMPLES:” are 53 de tokeni;
+- cel mai lung text, plus cei 48 de tokeni pe care îi poate scrie modelul, ajunge la 195 din 256 la nivelul 0 și la
+  exact 256 din 256 la 3B: la limită, dar încape.
+
+Când un exemplu lung nu încape, se sare și se ia următorul exemplu ales la întâmplare. Dacă vreodată n-ar încăpea 2
+exemple, școala se oprește și spune de ce; nu dă testul cu mai puține exemple fără să anunțe.
 
 Modelul poate scrie până la 48 de tokeni. Sub 40, soluțiile lungi de la 3B nu încap: la 32, toate cele 20 de sarcini
-adversariale de la 3B ar fi fost imposibile. **Pilotul nu pornește până nu alege Adrian varianta.**
+adversariale de la 3B ar fi fost imposibile.
 
 ### Piesele
 
@@ -2496,15 +2517,15 @@ python unelte/raport_cod.py
   gol. E destul pentru cod de 1–5 linii, nu pentru cod necunoscut în general.
 - **Lista interzisă caută bucăți de text:** de exemplu, un cuvânt ca „important” într-un șir de caractere ar fi prins
   ca „import”. Asta e regula planului, aplicată exact; raportul arată motivele.
-- **Contextul de 256 de tokeni** (vezi pasul 0): în varianta 1, modelul vede un singur exemplu.
+- **Contextul de 256 de tokeni** (vezi pasul 0): în varianta 3, la 3B, textul din față umple contextul până la capăt.
 - **Ce a rămas din ce știa:** se măsoară doar poveștile (biți pe octet, pe aceeași bucată din validare). Faptele
   (cele 72 ale lui #252) nu se măsoară în buclă.
 - **Bugetul:** se verifică înainte de fiecare rundă. Un nivel poate depăși 30 de minute cu cel mult o rundă (~1 minut).
 
 ### Starea, 8 octombrie
 
-Totul e construit și testat: 78 de teste noi, pe un model minuscul și pe un elev scris de mână, pe procesor, plus testele
-vechi (609 trec, 1 sărit). Setul sacru e generat, iar amprentele sunt aprobate.
+Totul e construit și testat: 80 de teste noi, pe un model minuscul și pe un elev scris de mână, pe procesor, plus testele
+vechi. Setul sacru e generat, iar amprentele sunt aprobate.
 
 **Proba pe bune a înghețului**, în acest worktree, cu modelul adevărat al lui #252:
 - **Prima încercare a găsit o problemă reală.** Un tag Git cu mesaj cere un nume și un email în Git, iar laptopul nu
@@ -2521,8 +2542,19 @@ vechi (609 trec, 1 sărit). Setul sacru e generat, iar amprentele sunt aprobate.
 „sacru”. Școala are propriul set sacru, de **cod**, cerut de plan. Acum, în `module/cod/` cuvântul e voie, dar setul
 sacru de fapte rămâne interzis și acolo, iar în restul proiectului testul a rămas neschimbat.
 
-**Pilotul nu a pornit.** Așteaptă alegerea variantei de text din față (1 sau 2). Apoi pornește doar cu placa liberă și
-alimentarea verificată.
+**Varianta 3 și pilotul.** Adrian a ales varianta 3 și a aprobat alegerile mele:
+- linia care pică se oprește, iar cealaltă continuă;
+- îngheț și la nivelul picat;
+- temperatura de start 0,7 la 3A și 3B;
+- pe baterie, 10 minute de așteptare, apoi oprire.
+
+Am adăugat:
+- fiecare rundă scrie în jurnal starea plăcii (treapta de putere și frecvența), iar raportul arată rundele cu placa
+  încetinită;
+- după fiecare generare se golește memoria video rezervată (pe 6 octombrie urcase încet peste 5,5 GB);
+- o eroare care oprește școala intră și ea în jurnal.
+
+Pilotul pornește după acest commit, cu placa liberă și alimentarea verificată.
 
 ## Toate comenzile
 

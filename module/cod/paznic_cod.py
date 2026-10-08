@@ -98,6 +98,17 @@ def alte_procese_pe_placa() -> list[str] | None:
     return alte
 
 
+def stare_placa() -> dict[str, object] | None:
+    """Treapta de putere și frecvența plăcii (ex. P0, 1425 MHz). Pe 8 octombrie, cu alimentarea care sărea, placa a stat
+    în P8 la 210 MHz: rundele de atunci ar fi fost mult mai lente, iar bugetul de timp, nedrept."""
+    randuri = _nvidia_smi("--query-gpu=pstate,clocks.sm", "--format=csv,noheader,nounits")
+    try:
+        treapta, mhz = (p.strip() for p in randuri[0].split(","))
+        return {"treapta": treapta, "mhz": int(mhz)}
+    except (TypeError, IndexError, ValueError):
+        return None
+
+
 def memorie_ocupata_mb() -> int | None:
     randuri = _nvidia_smi("--query-gpu=memory.used", "--format=csv,noheader,nounits")
     try:
@@ -130,6 +141,7 @@ class Senzori:
     alte_procese: Callable[[], list[str] | None] = alte_procese_pe_placa
     memorie_ocupata_mb: Callable[[], int | None] = memorie_ocupata_mb
     pe_baterie: Callable[[], bool | None] = pe_baterie
+    placa: Callable[[], dict[str, object] | None] = stare_placa
     asteapta: Callable[[float], None] = time.sleep
 
 

@@ -72,6 +72,12 @@ def raport(cod: Path) -> str:
     o: list[str] = [f"# Școala de cod: raportul\n",
                     f"*Scris la {datetime.now():%Y-%m-%d %H:%M}, din lucru/cod/runde.jsonl ({len(jurnal)} rânduri, "
                     f"{sum(len(v) for v in runde.values())} runde) și lucru/cod/stare.json.*\n"]
+    variante = sorted({(r.get("regula"), r.get("episoade")) for r in jurnal if r.get("tip") == "nivel_inceput"},
+                      key=str)
+    descriere = {"scurta": "regula scurtată", "lunga": "regula lungă (preambulul)", "fara": "fără regulă"}
+    if variante:
+        o.append("Textul din fața modelului: " + "; ".join(
+            f"{descriere.get(regula, regula)} + {episoade} exemple + sarcina" for regula, episoade in variante) + ".\n")
 
     def oprire(linie: str) -> dict[str, Any] | None:
         """Ultima oprire de paznic/STOP a liniei, dacă a venit după ultima ei rundă."""
@@ -154,6 +160,25 @@ def raport(cod: Path) -> str:
     o.append("## Temperatura pe runde\n")
     for (linie, nivel), rr in sorted(runde.items(), key=lambda k: (ordinea(k[0][1]), k[0][0])):
         o.append(f"- {linie} {nivel}: {comprima([r['temperatura'] for r in rr])}")
+    o.append("")
+
+    # --- placa: rundele în care a mers mai încet (ex. alimentarea care sare: P8, 210 MHz pe 8 octombrie)
+    o.append("## Placa video\n")
+    toate = [r for rr in runde.values() for r in rr]
+    citite = [r for r in toate if r.get("placa")]
+    incete = [r for r in citite if r["placa"].get("treapta") != "P0" or (r["placa"].get("mhz") or 0) < 1000]
+    durate = [r["secunde"] for r in toate]
+    if citite:
+        o.append(f"Citită după {len(citite)} din {len(toate)} runde: frecvența între "
+                 f"{min(r['placa']['mhz'] for r in citite)} și {max(r['placa']['mhz'] for r in citite)} MHz; "
+                 f"o rundă a durat între {min(durate):.0f} și {max(durate):.0f} s. "
+                 + (f"**{len(incete)} runde cu placa încetinită** (nu în P0 sau sub 1000 MHz): "
+                    + ", ".join(f"{r['linie']} {r['nivel']} runda {r['runda']}" for r in incete[:10])
+                    if incete else "Nicio rundă cu placa încetinită."))
+    else:
+        o.append("Necitită.")
+    alimentare = [r for r in jurnal if r.get("tip") in ("alimentare", "racire")]
+    o.extend(f"- {r['timp']} {r['tip']}: {r['motiv']}" for r in alimentare)
     o.append("")
 
     # --- trișatul

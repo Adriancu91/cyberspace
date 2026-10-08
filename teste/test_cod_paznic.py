@@ -80,3 +80,5 @@ def test_senzorii_adevarati_se_pot_citi():
     assert paznic_cod.pe_baterie() in (True, False, None)
     memorie = paznic_cod.memorie_ocupata_mb()
     assert memorie is None or memorie >= 0
+    placa = paznic_cod.stare_placa()
+    assert placa is None or (str(placa["treapta"]).startswith("P") and placa["mhz"] >= 0)

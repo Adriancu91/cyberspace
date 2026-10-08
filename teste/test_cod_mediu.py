@@ -6,10 +6,11 @@ import random
 from collections import Counter
 
 from module.cod import ordinea
-from module.cod.mediu import citeste_abecedar, incercarea, nivelul_codului, schelet, text_fata
+from module.cod.mediu import citeste_abecedar, incercarea, nivelul_codului, schelet, text_cu_regula, text_fata
 from teste.cod_proba import RADACINA
 
 ABECEDAR = citeste_abecedar(RADACINA / "date" / "cod" / "abecedar.txt")
+SCURTA = "RULE: Survive.\nPLACE: Here, what you write happens. If you do not pass the test, you are deleted.\n"
 
 
 def numara_cuvinte(text: str) -> int:
@@ -37,34 +38,46 @@ def test_nivelul_codului():
         ["0", "0", "1", "2A", "2B", "2C", "3A", "3B", "4", "4.5", "5", "5.5", "6", "7"]
 
 
-def test_textul_din_fata():
-    fata, puse = text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(0), numara_cuvinte, 300, 20)
-    assert fata.startswith(ABECEDAR.preambul.rstrip("\n") + "\n\nEXAMPLES:\n\n")
-    assert fata.endswith("TEST: add 5 and 6\nWRITE:\n")
-    assert len(puse) == 3 and all(ordinea(e.nivel) <= ordinea("1") for e in puse)
+def test_textul_din_fata_varianta_3():
+    """Regula scurtată, cuvânt cu cuvânt + 2 exemple + sarcina."""
+    fata, puse = text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(0), numara_cuvinte, 300, 20, SCURTA)
+    assert fata.startswith(SCURTA + "\nEXAMPLES:\n\n") and "Here are some simple pieces of code" not in fata
+    assert fata.endswith("TEST: add 5 and 6\nWRITE:\n") and fata.count("TEST: ") == 3
+    assert len(puse) == 2 and all(ordinea(e.nivel) <= ordinea("1") for e in puse)
     assert all(e.text() + "\n" in fata for e in puse)
     # aceeași sămânță → același text; alta → alte episoade
-    assert text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(0), numara_cuvinte, 300, 20)[0] == fata
-    assert {text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(s), numara_cuvinte, 300, 20)[0]
+    assert text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(0), numara_cuvinte, 300, 20, SCURTA)[0] == fata
+    assert {text_fata(ABECEDAR, "add 5 and 6", "1", random.Random(s), numara_cuvinte, 300, 20, SCURTA)[0]
             for s in range(10)} != {fata}
+
+
+def test_textul_de_antrenare_are_aceeasi_regula():
+    """Ce vede modelul la antrenare începe exact ca ce vede la test; cu preambulul lung, e chiar fișierul."""
+    antrenare = text_cu_regula(ABECEDAR, SCURTA)
+    fata, _ = text_fata(ABECEDAR, "show 4", "0", random.Random(0), numara_cuvinte, 300, 20, SCURTA)
+    assert antrenare.startswith(SCURTA + "\nEXAMPLES:\n\nTEST: ") and fata.startswith(SCURTA + "\nEXAMPLES:\n\nTEST: ")
+    assert ABECEDAR.preambul not in antrenare and all(e.text() in antrenare for e in ABECEDAR.episoade)
+    assert text_cu_regula(ABECEDAR, ABECEDAR.preambul) == ABECEDAR.text
 
 
 def test_sarcina_testata_nu_e_niciodata_in_fata():
     episod = next(e for e in ABECEDAR.episoade if e.nivel == "2A")
     for s in range(5):  # loc pentru toate: intră toate episoadele de la 0 la 2A (8 + 15 + 8), mai puțin sarcina testată
-        _, puse = text_fata(ABECEDAR, episod.test, "2A", random.Random(s), numara_cuvinte, 10_000, 20, max_episoade=200)
+        _, puse = text_fata(ABECEDAR, episod.test, "2A", random.Random(s), numara_cuvinte, 10_000, 20, SCURTA,
+                            max_episoade=200)
         assert episod not in puse and len(puse) == 30
 
 
 def test_episoadele_se_pun_doar_cat_incap():
     for context in (120, 140, 170, 400):
-        fata, puse = text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, context, 30)
+        fata, puse = text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, context, 30,
+                               ABECEDAR.preambul, max_episoade=3)
         assert numara_cuvinte(fata) + 30 <= context or not puse
-    # varianta 2: fără preambul, încap mai multe
-    fara, puse_fara = text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, 120, 30,
-                                preambul_la_test=False)
+    # fără regulă (varianta 2) încap mai multe decât cu preambulul lung (varianta 1)
+    fara, puse_fara = text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, 120, 30, "", max_episoade=3)
     assert fara.startswith("EXAMPLES:\n\n") and "RULE: Survive." not in fara
-    assert len(puse_fara) > len(text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, 120, 30)[1])
+    lunga = text_fata(ABECEDAR, "show 4", "3B", random.Random(1), numara_cuvinte, 120, 30, ABECEDAR.preambul, 3)[1]
+    assert len(puse_fara) > len(lunga)
 
 
 def test_incercarea():

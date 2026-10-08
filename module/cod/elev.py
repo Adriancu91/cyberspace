@@ -79,6 +79,8 @@ class ElevCod:
                     gata[i] = "RESULT:" in tok.decodeaza(noi[i])
             if all(gata):
                 break
+        if self.dispozitiv.type == "cuda":  # texte de lungimi diferite: fără asta, memoria rezervată urcă încet
+            torch.cuda.empty_cache()
         return [tok.decodeaza(s) for s in noi]
 
     def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int) -> dict[str, Any]:
