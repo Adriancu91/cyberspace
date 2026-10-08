@@ -77,6 +77,8 @@ metrica = "nota_profesor"              # media notelor profesorului pe aceleași
 mai_mare_e_mai_bine = true
 prag_zgomot = 0.5
 maxim = 10
+povesti = 40                           # nota se compară doar între măsurători pe 40 de povești: cele pe 20 (până pe
+                                       # 7 octombrie, ex. 4,7 la #226) nu intră în linia de bază (8 octombrie 2026)
 module = ["profesor"]
 unealta = { linie = "examen_profesor", scor = "nota_medie" }
 masurare = ["{python}", "unelte/examen_profesor.py", "--experiment", "{experiment}", "--povesti", "40", "--doar-local"]
@@ -120,6 +122,8 @@ timeout_ore = 10
 # aceleiași configurări. Pragul folosit = max(prag_zgomot de la capacitate, care rămâne podea; zgomotul învățat).
 perechi_minime = 3                     # sub atâtea perechi rămâne podeaua, iar jurnalul spune „neînvățat încă”
 factor = 1.0                           # zgomotul = factor × cât diferă de obicei două măsurători (rădăcina mediei pătratelor)
+minute_minime = 60                     # doar din experimente de cel puțin atâtea minute: cele scurte de căutare diferă
+                                       # mult mai mult între semințe și umflau pragul (8 octombrie 2026)
 
 [zone]
 # Față de linia de bază, în praguri (pragul folosit al capacității). Deasupra lui „galben”: zona verde.

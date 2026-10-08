@@ -61,9 +61,10 @@ def ruleaza(radacina, cicluri, lume=None, simuleaza=True, dupa_ciclu=(), **setar
     return bucla, randuri
 
 
-def seminte(radacina, valori, linie="cautare", id_de_la=101):
-    """Aceeași configurare, semințe diferite (pe o linie neurmărită: doar zgomotul le folosește)."""
-    scrie_jurnal(radacina, [fisa(id_de_la + i, linie, v, decizie="respins", samanta=i + 1) for i, v in enumerate(valori)])
+def seminte(radacina, valori, linie="cautare", id_de_la=101, minute=60):
+    """Aceeași configurare, semințe diferite (pe o linie neurmărită: doar zgomotul le folosește), câte `minute`."""
+    scrie_jurnal(radacina, [fisa(id_de_la + i, linie, v, decizie="respins", samanta=i + 1, minute=minute)
+                            for i, v in enumerate(valori)])
 
 
 def linia_4(radacina, *ore, id_de_la=11):
@@ -403,8 +404,9 @@ def test_configurarea_veche_merge_neschimbata(tmp_path):
     config = citeste_config(config_continuum(tmp_path))
     assert config["continuum"]["ordinea_nevoilor"] == ["repara", "masoara", "remasoara", "continua", "dezvolta"]
     assert (config["zgomot"], config["zone"], config["stabilitate"], config["eficienta"], config["anti_bucla"]) == (
-        {"perechi_minime": 3, "factor": 1.0}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1}, {"fractie_scump": 0.5},
-        {"racire_cicluri": 6, "max_esecuri": 5})
+        {"perechi_minime": 3, "factor": 1.0, "minute_minime": 60}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1},
+        {"fractie_scump": 0.5}, {"racire_cicluri": 6, "max_esecuri": 5})
+    assert config["capacitati"]["sens"]["povesti"] is None  # configurarea veche: orice notă se compară
     assert config["guvernator"]["buget_ore_placa_pe_zi"] == 20 and config["nevoi"]["continua"]["ore_tendinta"] == 3
     assert config["nevoi"]["repara"]["nivel"] == REPAUS
     assert config["nevoi"]["remasoara"] == config["nevoi"]["masoara"]
@@ -467,3 +469,69 @@ def test_candidat_fara_linie_de_baza_in_memorie_la_val_bpb():
             {"id": 12, "linie": "l", "decizie": "pastrat", "scoruri": {"val_bpb": 0.42}}]
     assert stabilitate.actualizeaza(memorie, fise, config, "t")[0]["stare"] == "confirmat"
     assert memorie["capacitati"]["povesti"]["linie_de_baza"] == 0.43  # cea mai slabă dintre 0,43 și 0,42
+
+
+# --- corecturile din 8 octombrie: zgomotul doar din experimentele lungi; nota doar pe 40 de povești -------------------
+
+def test_zgomotul_se_invata_doar_din_experimente_de_cel_putin_60_de_minute(proiect):
+    noaptea_3(proiect)
+    seminte(proiect, [0.50, 0.53, 0.49, 0.52], minute=30)  # căutare scurtă: semințele diferă mult
+    c = evaluat(proiect)[1].capacitati["povesti"]
+    assert (c.perechi_zgomot, c.stare_zgomot, c.prag_zgomot) == (0, "neînvățat încă", 0.02)
+    seminte(proiect, [0.500, 0.505, 0.500, 0.505], linie="lunga", id_de_la=201, minute=60)
+    c = evaluat(proiect)[1].capacitati["povesti"]
+    assert (c.perechi_zgomot, c.zgomot_invatat) == (3, 0.005)  # doar perechile de 60 de minute
+    c = evaluat(proiect, inlocuiri={"[comenzi]": "[zgomot]\nminute_minime = 30\n\n[comenzi]"})[1].capacitati["povesti"]
+    assert c.perechi_zgomot == 6  # pragul e în configurare
+
+
+def test_remasurarile_unui_experiment_scurt_nu_invata_zgomotul(proiect):
+    scrie_jurnal(proiect, [fisa(1, "cautare", 0.5, minute=5)] + [
+        fisa_unealta(2 + i, "examen_profesor", 1, {"nota_medie": n}) for i, n in enumerate([4.2, 4.9, 4.4, 4.0])])
+    assert evaluat(proiect)[1].capacitati["sens"].perechi_zgomot == 0
+
+
+POVESTI_40 = {"maxim = 10\n": "maxim = 10\npovesti = 40\n"}
+
+
+def test_nota_se_compara_doar_pe_40_de_povesti(proiect):
+    noaptea_3(proiect)  # nota 4,7 pe #8 e din unealta veche, fără „povesti”: nu e pe 40
+    _, stare = evaluat(proiect, inlocuiri=POVESTI_40)
+    sens = stare.capacitati["sens"]
+    assert (sens.curent, sens.linie_de_baza, sens.zona) == (None, None, None)
+    assert "masoara:fapte+sens" not in nevoile(proiect, inlocuiri=POVESTI_40)  # faptele sunt măsurate
+    assert "masoara:sens" in nevoile(proiect, inlocuiri=POVESTI_40)  # ultimul model n-are o notă pe 40
+    scrie_jurnal(proiect, [fisa_unealta(11, "examen_profesor", 8, {"nota_medie": 4.4, "povesti": 40})])
+    sens = evaluat(proiect, inlocuiri=POVESTI_40)[1].capacitati["sens"]
+    assert (sens.curent, sens.linie_de_baza, sens.experiment_baza) == (4.4, 4.4, 8)
+
+
+def test_nota_de_la_ora_pe_20_de_povesti_nu_intra_in_linia_de_baza(proiect):
+    linia_4(proiect, (0.50, 41, 5.0))  # #11: nota 5,0 la oră, pe 20 de povești (implicit)
+    scrie_jurnal(proiect, [fisa(12, "antrenare_lunga_4", 0.49, povesti_profesor=40,
+                                criterii={"fapte_corecte": 41, "nota_profesor": 4.2})])
+    sens = evaluat(proiect, inlocuiri=POVESTI_40)[1].capacitati["sens"]
+    assert (sens.curent, sens.linie_de_baza, sens.experiment_baza, sens.zona) == (4.2, 4.2, 12, VERDE)
+    fara_regula = evaluat(proiect)[1].capacitati["sens"]  # fără „povesti”, 5,0 ar fi fost linia de bază: zona roșie
+    assert (fara_regula.linie_de_baza, fara_regula.zona) == (5.0, ROSIE)
+
+
+def test_retentia_r_ajunge_in_stare_json(proiect):
+    """R = faptele de acum ÷ faptele modelului din care a pornit linia (pornire.json); doar raportată."""
+    noaptea_3(proiect)  # #8: 41 de fapte (unealta de examen)
+    config_kronos(proiect, "laptop_antrenare_lunga_4.toml", "antrenare_lunga_4",
+                  model=', cale_stare = "lucru/antrenare_lunga_4/gpt.pt"')
+    (proiect / "lucru" / "antrenare_lunga_4").mkdir(parents=True)
+    (proiect / "lucru" / "antrenare_lunga_4" / "pornire.json").write_text(json.dumps({"experiment": 8}), encoding="utf-8")
+    scrie_jurnal(proiect, [fisa(11, "antrenare_lunga_4", 0.45, criterii={"fapte_corecte": 30, "nota_profesor": 4.7})])
+    bucla, _ = ruleaza(proiect, 1)
+    fapte = bucla.memorie["capacitati"]["fapte"]
+    assert (fapte["retentie"], fapte["retentie_fata_de"]) == (0.732, 8)  # 30 din 41
+    assert bucla.memorie["vector_capacitati"]["fapte"]["retentie"] == 0.732
+    assert bucla.memorie["capacitati"]["sens"]["retentie"] == 1.0  # 4,7 ca la #8
+    assert bucla.memorie["capacitati"]["povesti"]["retentie"] is None  # val_bpb: mai mic = mai bine, fără R
+
+
+def test_fara_pornire_json_nu_e_retentie(proiect):
+    noaptea_3(proiect)
+    assert evaluat(proiect)[1].capacitati["fapte"].retentie is None

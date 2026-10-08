@@ -22,6 +22,14 @@ dintre semințe).
 Rezultatul: pe ecran și în lucru/<linia>/rezultat.json: scorul pe ore, pașii și textul văzut (în total și de câte ori a
 trecut prin tot textul de antrenare), o poveste scrisă de modelul de la final (din starea salvată, dacă Kronos n-a salvat
 separat ultima oră, fiind sub pragul de zgomot).
+
+Din 8 octombrie 2026:
+- **Retenția R** = faptele noi ale orei ÷ faptele noi la plecare (ale modelului din --porneste-din), la fiecare oră, pe
+  ecran, în tabel și în rezultat.json. E doar raportată, nu e criteriu.
+- **Prima oră nu mai e păstrată din oficiu:** kronos o judecă cu regula 4 față de modelul de pornire (porneste_din),
+  până la primul experiment păstrat al liniei.
+- **Hrana e implicită (lecția 6a):** o configurare care nu pomenește deloc `hrana` primește HRANA_IMPLICITA, 5% bucăți
+  din poveștile cu fapte în fiecare lot (fișele din jurnal o înregistrează). Fără hrană: `hrana = ""` în configurare.
 """
 
 from __future__ import annotations
@@ -51,6 +59,18 @@ ZECIMALE_CRITERII = (0, 2)
 COLOANE_NOI = (("fapte_noi", "fapte noi", 9),)
 ZECIMALE_NOI = (0,)
 ARHITECTURA = ("n_straturi", "n_capete", "n_emb", "context")
+# Din 8 octombrie 2026 (lecția 6a: fără hrană, faptele se uită în prima oră; cu 5% hrană, rămân, cu un cost de ~0,002 la
+# val_bpb): hrana implicită a oricărei antrenări lungi care nu pomenește `hrana` în setările modelului.
+HRANA_IMPLICITA = {"hrana": "date/fapte/povesti.txt", "fractie_hrana": 0.05}
+
+
+def cu_hrana_implicita(config: Any) -> bool:
+    """Pune HRANA_IMPLICITA în setările modelului, dacă ele nu pomenesc `hrana` (nici goală). True dacă a pus-o."""
+    setari = config.porturi["model"].setdefault("setari", {})
+    if "hrana" in setari or setari.get("memorie"):  # hrana nu merge (încă) cu memoria ierarhică
+        return False
+    setari.update(HRANA_IMPLICITA)
+    return True
 
 
 def tine_treaz(da: bool) -> None:
@@ -109,6 +129,23 @@ def masuratori_examene(jurnal: Any, experiment: int) -> dict[str, float]:
     return rezultat
 
 
+def punct_de_plecare(jurnal: Any, inainte: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Scorurile modelului din care pornește linia: scorul oficial, criteriile din fișa lui (examenele de la oră) și,
+    peste ele, măsurătorile uneltelor de examen (mai noi). None fără --porneste-din."""
+    if not inainte:
+        return None
+    fisa = next((f for f in jurnal.istoric() if f.get("id") == inainte["experiment"]), {})
+    return {"scor": inainte["scor"], **criterii_din(fisa), **masuratori_examene(jurnal, inainte["experiment"])}
+
+
+def retentia(criterii: dict[str, Any], pornire: dict[str, Any] | None) -> float | None:
+    """R = faptele noi acum ÷ faptele noi la plecare (doar raportat, nu e criteriu); None dacă lipsește una."""
+    acum, la_plecare = criterii.get("fapte_noi"), (pornire or {}).get("fapte_noi")
+    if not isinstance(acum, (int, float)) or not isinstance(la_plecare, (int, float)) or la_plecare <= 0:
+        return None
+    return round(acum / la_plecare, 3)
+
+
 def coloanele(ore: list[dict[str, Any]], pornire: dict[str, Any] | None) -> list[tuple[str, str, int, int]]:
     """Coloanele criteriilor (nume, titlu, lățime, zecimale): faptele și nota mereu; fapte_noi doar dacă e măsurat."""
     puncte = [o["criterii"] for o in ore] + ([pornire] if pornire else [])
@@ -142,9 +179,11 @@ def tabel(ore: list[dict[str, Any]], alaturi: dict[int, float] | None = None,
     coloane = coloanele(ore, pornire)
     cu_criterii = any(nume in o["criterii"] for o in ore for nume, _, _, _ in coloane) or bool(
         pornire and any(nume in pornire for nume, _, _, _ in coloane))
+    cu_r = any(retentia(o["criterii"], pornire) is not None for o in ore)
     cap = f"{'ora':>3}  {'val_bpb':>7}"
     if cu_criterii:
         cap += "".join(f"  {titlu:>{latime}}" for _, titlu, latime, _ in coloane)
+    cap += f"  {'R':>5}" if cu_r else ""
     cap += f"  {'alături':>7}  {'diferența':>9}" if alaturi is not None else ""
     linii = [cap + f"  {'pași':>7}  {'pași total':>10}  {'text văzut':>10}  {'treceri':>7}  {'rata la final':>13}  "
                    f"{'memorie':>8}"]
@@ -152,12 +191,15 @@ def tabel(ore: list[dict[str, Any]], alaturi: dict[int, float] | None = None,
         rand = f"{0:>3}  {pornire['scor']:>7.4f}"
         if cu_criterii:
             rand += "".join(f"  {_celula(pornire.get(nume), latime, zecimale)}" for nume, _, latime, zecimale in coloane)
+        rand += f"  {1:>5.2f}" if cu_r else ""
         linii.append(rand + "  (punctul de plecare)")
     for o in ore:
         rand = f"{o['ora']:>3}  {o['scor']:>7.4f}"
         if cu_criterii:
             rand += "".join(f"  {_celula(o['criterii'].get(nume), latime, zecimale)}"
                             for nume, _, latime, zecimale in coloane)
+        if cu_r:
+            rand += f"  {_celula(retentia(o['criterii'], pornire), 5, 2)}"
         if alaturi is not None:
             ref = alaturi.get(o["ora"])
             rand += f"  {ref:>7.4f}  {o['scor'] - ref:>+9.4f}" if ref is not None else f"  {'–':>7}  {'–':>9}"
@@ -254,6 +296,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     config = citeste_config(args.config)
+    hrana_implicita = cu_hrana_implicita(config)
     examen = Registru().creeaza("examen", config.porturi["examen"]["modul"], config.setari_port("examen")).instanta
     jurnal = Jurnal(config.director_lucru)
     facute = len(ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal))
@@ -269,8 +312,12 @@ def main(argv: list[str] | None = None) -> int:
         salveaza_atomic(stare, cale_stare)
         fisier_pornire.write_text(json.dumps(inainte, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"Pornesc din modelul experimentului #{inainte['experiment']} (linia „{inainte['linie']}”, ora "
-              f"{inainte['ore']}, val_bpb {inainte['scor']:.4f}): optimizatorul și rata pornesc din nou.", flush=True)
+              f"{inainte['ore']}, val_bpb {inainte['scor']:.4f}): optimizatorul și rata pornesc din nou. Până la primul "
+              f"experiment păstrat al liniei, regula 4 o judecă față de el.", flush=True)
     inainte = json.loads(fisier_pornire.read_text(encoding="utf-8")) if fisier_pornire.exists() else None
+    if inainte:  # kronos: până la primul experiment păstrat al liniei, regula 4 o judecă față de modelul de pornire
+        config.porneste_din = inainte["experiment"]
+    pornire = punct_de_plecare(jurnal, inainte)
     alaturi = ({o["ora"]: o["scor"] for o in ore_din_jurnal(jurnal.istoric(args.alaturi_de), examen.scor_principal)}
                if args.alaturi_de else None)
     if not args.raport and facute < args.ore:
@@ -283,7 +330,8 @@ def main(argv: list[str] | None = None) -> int:
                   f"(cu examenele după el).", flush=True)
         if reteta.get("hrana"):
             print(f"   Fiecare lot: {reteta.get('fractie_hrana', 0):.0%} bucăți din {reteta['hrana']}, restul din "
-                  f"textul de antrenare.", flush=True)
+                  f"textul de antrenare." + (" Hrana e cea implicită (configurarea n-o pomenește; fără ea: hrana = \"\")."
+                                             if hrana_implicita else ""), flush=True)
         tine_treaz(True)
         try:
             for ora in range(facute + 1, args.ore + 1):
@@ -295,10 +343,12 @@ def main(argv: list[str] | None = None) -> int:
                     break
                 criterii = criterii_din(rulare.pop("fisa"))
                 ref = (alaturi or {}).get(ora)
+                r = retentia(criterii, pornire)
                 print(f"   ora {ora}: val_bpb {rulare['scor']:.4f}"
                       + (f" (alături, „{args.alaturi_de}”: {ref:.4f}, diferența {rulare['scor'] - ref:+.4f})" if ref else "")
                       + (f", fapte {criterii['fapte_corecte']:g}" if "fapte_corecte" in criterii else "")
                       + (f", fapte noi {criterii['fapte_noi']:g}" if "fapte_noi" in criterii else "")
+                      + (f" (R {r:.2f})" if r is not None else "")
                       + (f", nota profesorului {criterii['nota_profesor']:g}" if "nota_profesor" in criterii else "")
                       + f", {rulare['pasi']:,} de pași ({rulare['pasi_pe_secunda']} pași/s), la {datetime.now():%H:%M}",
                       flush=True)
@@ -312,7 +362,8 @@ def main(argv: list[str] | None = None) -> int:
     print("\n=== Antrenarea lungă: scorul pe ore (val_bpb, mai mic = mai bine) ===")
     if alaturi is not None:
         print(f"„alături” = scorul antrenării „{args.alaturi_de}” la aceeași oră; diferența = acum − alături.")
-    pornire = {"scor": inainte["scor"], **masuratori_examene(jurnal, inainte["experiment"])} if inainte else None
+    for o in ore:
+        o["retentie"] = retentia(o["criterii"], pornire)
     print("\n".join(tabel(ore, alaturi, pornire)))
     legaturi = corelatii(ore, pornire)
     if any(v is not None for v in legaturi.values()):
@@ -339,6 +390,12 @@ def main(argv: list[str] | None = None) -> int:
             text, ora_povestii = poveste(config, fisa, args.inceput, args.lungime), cu_model[-1]["ora"]
         else:  # ultima oră n-a fost salvată separat (sub pragul de zgomot): povestea o scrie starea de la final
             text, ora_povestii = poveste_din_stare(config, fisa, cale_stare, args.inceput, args.lungime), ore[-1]["ora"]
+    elif inainte and cale_stare.exists():
+        # Nicio oră păstrată (din 8 octombrie, prima oră se judecă față de modelul de pornire): povestea o scrie starea
+        # de la final, cu rețeaua construită după modelul de pornire (aceeași arhitectură, verificată la pornire).
+        fisa = fisa_experimentului(jurnal, inainte["experiment"])
+        text, ora_povestii = poveste_din_stare(config, fisa, cale_stare, args.inceput, args.lungime), ore[-1]["ora"]
+    if text is not None:
         print(f"\nPovestea modelului de după ora {ora_povestii}:\n{text}")
     comparatie = None
     if args.compara_cu is not None:

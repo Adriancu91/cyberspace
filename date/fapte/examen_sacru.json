@@ -1,0 +1,599 @@
+{
+ "versiune": 1,
+ "data": "2026-10-08T07:48:24",
+ "profesor": "Qwen/Qwen3-4B-Instruct-2507",
+ "fragment_cuvinte": 5,
+ "verificat_in": {
+  "povestile cu fapte": [
+   "date/fapte/povesti.txt"
+  ],
+  "TinyStories": [
+   "date/tinystories_tot/antrenare.txt",
+   "date/tinystories_tot/validare.txt"
+  ]
+ },
+ "numere": {
+  "propozitii": 50,
+  "regenerate": 41,
+  "incercari_total": 429,
+  "runde": 39,
+  "esuate": 0,
+  "respingeri_povestile_cu_fapte": 57,
+  "respingeri_tinystories": 56,
+  "respingeri_forma": 214,
+  "respingeri_sens": 27,
+  "respingeri_gol_neclar": 25,
+  "memorie_gpu_rezervata_mb": 4250
+ },
+ "etape_anterioare": [],
+ "sacru": true,
+ "diferit_de": "date/fapte/examen_nou.json",
+ "nota": "Setul sacru: se dă doar manual (examen_fapte_nou.py --sacru --experiment N). Nu intră în examene_suplimentare, nu-l vede CONTINUUM, nu-l folosește nicio decizie automată; scorul lui nu se folosește la selecție.",
+ "intrebari": [
+  {
+   "subiect": "snow",
+   "fapt": "Water freezes into ice when it is very cold.",
+   "propozitie": "When it's below freezing, liquid water becomes ___.",
+   "propozitie_intreaga": "When it's below freezing, liquid water becomes ice.",
+   "raspuns": "ice",
+   "acceptate": [
+    "ice"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "birds",
+   "fapt": "Birds have feathers.",
+   "propozitie": "Birds' bodies are covered with soft ___.",
+   "propozitie_intreaga": "Birds' bodies are covered with soft feathers.",
+   "raspuns": "feathers",
+   "acceptate": [
+    "feathers"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "the Sun",
+   "fapt": "The Sun is a star.",
+   "propozitie": "Our Sun has a glow, it’s a ___",
+   "propozitie_intreaga": "Our Sun has a glow, it’s a star",
+   "raspuns": "star",
+   "acceptate": [
+    "star"
+   ],
+   "incercari": 12
+  },
+  {
+   "subiect": "plants",
+   "fapt": "Plants need water and sunlight to grow.",
+   "propozitie": "With water and sunlight, green things ___",
+   "propozitie_intreaga": "With water and sunlight, green things grow",
+   "raspuns": "grow",
+   "acceptate": [
+    "grow"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "the Moon",
+   "fapt": "The Moon goes around the Earth.",
+   "propozitie": "When the Moon shines, it orbits the ___.",
+   "propozitie_intreaga": "When the Moon shines, it orbits the Earth.",
+   "raspuns": "earth",
+   "acceptate": [
+    "earth"
+   ],
+   "incercari": 17
+  },
+  {
+   "subiect": "bees",
+   "fapt": "Bees make honey from the nectar of flowers.",
+   "propozitie": "Sweet flower liquid is transformed by bees into ___.",
+   "propozitie_intreaga": "Sweet flower liquid is transformed by bees into honey.",
+   "raspuns": "honey",
+   "acceptate": [
+    "honey"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "fish",
+   "fapt": "Fish breathe through their gills.",
+   "propozitie": "Water enters a fish’s mouth and travels to the ___.",
+   "propozitie_intreaga": "Water enters a fish’s mouth and travels to the gills.",
+   "raspuns": "gills",
+   "acceptate": [
+    "gills"
+   ],
+   "incercari": 6
+  },
+  {
+   "subiect": "rain",
+   "fapt": "Rain falls from clouds.",
+   "propozitie": "Rain comes down from big floating ___.",
+   "propozitie_intreaga": "Rain comes down from big floating clouds.",
+   "raspuns": "clouds",
+   "acceptate": [
+    "clouds"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "spiders",
+   "fapt": "Spiders have eight legs.",
+   "propozitie": "Spiders stand on eight tiny ___",
+   "propozitie_intreaga": "Spiders stand on eight tiny legs",
+   "raspuns": "legs",
+   "acceptate": [
+    "legs"
+   ],
+   "incercari": 11
+  },
+  {
+   "subiect": "frogs",
+   "fapt": "Frogs start their lives as tadpoles in the water.",
+   "propozitie": "Tiny frogs start their lives in water as little fish-like creatures called ___",
+   "propozitie_intreaga": "Tiny frogs start their lives in water as little fish-like creatures called tadpoles",
+   "raspuns": "tadpoles",
+   "acceptate": [
+    "tadpoles"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "butterflies",
+   "fapt": "A caterpillar changes into a butterfly.",
+   "propozitie": "After a caterpillar grows, it transforms into a ___",
+   "propozitie_intreaga": "After a caterpillar grows, it transforms into a butterfly",
+   "raspuns": "butterfly",
+   "acceptate": [
+    "butterfly"
+   ],
+   "incercari": 51
+  },
+  {
+   "subiect": "cows",
+   "fapt": "Cows give milk.",
+   "propozitie": "Cows make a soft substance that babies drink ___.",
+   "propozitie_intreaga": "Cows make a soft substance that babies drink milk.",
+   "raspuns": "milk",
+   "acceptate": [
+    "milk"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "teeth",
+   "fapt": "Brushing your teeth helps keep them healthy.",
+   "propozitie": "Teeth that are brushed every day stay ___.",
+   "propozitie_intreaga": "Teeth that are brushed every day stay healthy.",
+   "raspuns": "healthy",
+   "acceptate": [
+    "healthy",
+    "clean"
+   ],
+   "incercari": 5
+  },
+  {
+   "subiect": "rainbows",
+   "fapt": "A rainbow can appear when sunlight shines through raindrops.",
+   "propozitie": "Sunlight bounces off tiny drops in the rain and makes a rainbow when there are ___.",
+   "propozitie_intreaga": "Sunlight bounces off tiny drops in the rain and makes a rainbow when there are raindrops.",
+   "raspuns": "raindrops",
+   "acceptate": [
+    "raindrops",
+    "rain"
+   ],
+   "incercari": 110
+  },
+  {
+   "subiect": "autumn",
+   "fapt": "Many trees lose their leaves in autumn.",
+   "propozitie": "Trees drop their leaves in the ___",
+   "propozitie_intreaga": "Trees drop their leaves in the autumn",
+   "raspuns": "autumn",
+   "acceptate": [
+    "autumn",
+    "fall"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "the sea",
+   "fapt": "Sea water is salty.",
+   "propozitie": "The taste of ocean water is ___",
+   "propozitie_intreaga": "The taste of ocean water is salty",
+   "raspuns": "salty",
+   "acceptate": [
+    "salty"
+   ],
+   "incercari": 23
+  },
+  {
+   "subiect": "magnets",
+   "fapt": "Magnets pull things made of iron.",
+   "propozitie": "A magnet can pull on a metal made of ___.",
+   "propozitie_intreaga": "A magnet can pull on a metal made of iron.",
+   "raspuns": "iron",
+   "acceptate": [
+    "iron",
+    "metal"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "the heart",
+   "fapt": "The heart pumps blood around the body.",
+   "propozitie": "What goes from the heart to your body is ___.",
+   "propozitie_intreaga": "What goes from the heart to your body is blood.",
+   "raspuns": "blood",
+   "acceptate": [
+    "blood"
+   ],
+   "incercari": 12
+  },
+  {
+   "subiect": "bats",
+   "fapt": "Bats are mammals that can fly.",
+   "propozitie": "Even though they look like mice, bats can move through the air and can ___.",
+   "propozitie_intreaga": "Even though they look like mice, bats can move through the air and can fly.",
+   "raspuns": "fly",
+   "acceptate": [
+    "fly"
+   ],
+   "incercari": 5
+  },
+  {
+   "subiect": "penguins",
+   "fapt": "Penguins are birds that cannot fly, but they swim very well.",
+   "propozitie": "Birds like penguins swim really well and can't ___",
+   "propozitie_intreaga": "Birds like penguins swim really well and can't fly",
+   "raspuns": "fly",
+   "acceptate": [
+    "fly"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "volcanoes",
+   "fapt": "Hot melted rock called lava comes out of volcanoes.",
+   "propozitie": "When a volcano opens, it spews out ___.",
+   "propozitie_intreaga": "When a volcano opens, it spews out lava.",
+   "raspuns": "lava",
+   "acceptate": [
+    "lava"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "shadows",
+   "fapt": "A shadow forms when something blocks the light.",
+   "propozitie": "A block in the sunlight creates a shadow by hiding the ___.",
+   "propozitie_intreaga": "A block in the sunlight creates a shadow by hiding the light.",
+   "raspuns": "light",
+   "acceptate": [
+    "light",
+    "sun",
+    "sunlight"
+   ],
+   "incercari": 10
+  },
+  {
+   "subiect": "boiling water",
+   "fapt": "Water boils when it gets very hot.",
+   "propozitie": "When water turns into steam, it has gotten very ___",
+   "propozitie_intreaga": "When water turns into steam, it has gotten very hot",
+   "raspuns": "hot",
+   "acceptate": [
+    "hot"
+   ],
+   "incercari": 6
+  },
+  {
+   "subiect": "owls",
+   "fapt": "Many owls hunt at night.",
+   "propozitie": "Owls find their food while it's dark because they hunt in the ___",
+   "propozitie_intreaga": "Owls find their food while it's dark because they hunt in the night",
+   "raspuns": "night",
+   "acceptate": [
+    "night"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "camels",
+   "fapt": "Camels can go a long time without drinking water.",
+   "propozitie": "In the desert, camels stay strong for days without ___",
+   "propozitie_intreaga": "In the desert, camels stay strong for days without water",
+   "raspuns": "water",
+   "acceptate": [
+    "water"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "elephants",
+   "fapt": "Elephants use their trunks to drink water and to pick things up.",
+   "propozitie": "To pick up food, elephants reach with their ___",
+   "propozitie_intreaga": "To pick up food, elephants reach with their trunks",
+   "raspuns": "trunks",
+   "acceptate": [
+    "trunks"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "stars",
+   "fapt": "Stars are very far away from the Earth.",
+   "propozitie": "The distance between Earth and stars is huge, so they're ___",
+   "propozitie_intreaga": "The distance between Earth and stars is huge, so they're far",
+   "raspuns": "far",
+   "acceptate": [
+    "far"
+   ],
+   "incercari": 5
+  },
+  {
+   "subiect": "wind",
+   "fapt": "Wind is moving air.",
+   "propozitie": "The wind you feel is made of ___.",
+   "propozitie_intreaga": "The wind you feel is made of air.",
+   "raspuns": "air",
+   "acceptate": [
+    "air"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "ants",
+   "fapt": "Ants live and work together in big groups called colonies.",
+   "propozitie": "When ants live together, they form big groups known as ___.",
+   "propozitie_intreaga": "When ants live together, they form big groups known as colonies.",
+   "raspuns": "colonies",
+   "acceptate": [
+    "colonies",
+    "colony"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "seeds",
+   "fapt": "A big tree can grow from a small seed.",
+   "propozitie": "When a tree is small, it grew from a single ___.",
+   "propozitie_intreaga": "When a tree is small, it grew from a single seed.",
+   "raspuns": "seed",
+   "acceptate": [
+    "seed"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "snakes",
+   "fapt": "Snakes have no legs.",
+   "propozitie": "Even when moving, snakes don't have ___.",
+   "propozitie_intreaga": "Even when moving, snakes don't have legs.",
+   "raspuns": "legs",
+   "acceptate": [
+    "legs"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "whales",
+   "fapt": "Whales breathe air through a blowhole on top of their heads.",
+   "propozitie": "When whales breathe, they use a top opening on their heads, which is the ___",
+   "propozitie_intreaga": "When whales breathe, they use a top opening on their heads, which is the blowhole",
+   "raspuns": "blowhole",
+   "acceptate": [
+    "blowhole"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "ice cream",
+   "fapt": "Ice cream melts when it gets warm.",
+   "propozitie": "Cold dessert turns runny when the temperature goes to ___.",
+   "propozitie_intreaga": "Cold dessert turns runny when the temperature goes to warm.",
+   "raspuns": "warm",
+   "acceptate": [
+    "warm",
+    "hot"
+   ],
+   "incercari": 6
+  },
+  {
+   "subiect": "night",
+   "fapt": "It gets dark at night because our side of the Earth turns away from the Sun.",
+   "propozitie": "In the dark, Earth's side is not pointing toward the ___.",
+   "propozitie_intreaga": "In the dark, Earth's side is not pointing toward the sun.",
+   "raspuns": "sun",
+   "acceptate": [
+    "sun"
+   ],
+   "incercari": 5
+  },
+  {
+   "subiect": "sleep",
+   "fapt": "Our bodies need sleep to stay healthy.",
+   "propozitie": "When we rest, our body stays strong and ___.",
+   "propozitie_intreaga": "When we rest, our body stays strong and healthy.",
+   "raspuns": "healthy",
+   "acceptate": [
+    "healthy"
+   ],
+   "incercari": 11
+  },
+  {
+   "subiect": "bread",
+   "fapt": "Bread is made from flour.",
+   "propozitie": "The main ingredient in bread is a white powder called ___",
+   "propozitie_intreaga": "The main ingredient in bread is a white powder called flour",
+   "raspuns": "flour",
+   "acceptate": [
+    "flour",
+    "wheat"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "chickens",
+   "fapt": "Hens lay eggs.",
+   "propozitie": "A hen's job is to make and put down ___.",
+   "propozitie_intreaga": "A hen's job is to make and put down eggs.",
+   "raspuns": "eggs",
+   "acceptate": [
+    "eggs"
+   ],
+   "incercari": 2
+  },
+  {
+   "subiect": "turtles",
+   "fapt": "A turtle carries its shell with it everywhere.",
+   "propozitie": "A turtle's hard part on its back is called ___.",
+   "propozitie_intreaga": "A turtle's hard part on its back is called shell.",
+   "raspuns": "shell",
+   "acceptate": [
+    "shell"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "thunderstorms",
+   "fapt": "We see lightning before we hear the thunder.",
+   "propozitie": "Lightning jumps out, and after that comes the big ___.",
+   "propozitie_intreaga": "Lightning jumps out, and after that comes the big thunder.",
+   "raspuns": "thunder",
+   "acceptate": [
+    "thunder"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "mountains",
+   "fapt": "It is usually colder at the top of a high mountain.",
+   "propozitie": "The further you go from sea level, the weather gets ___.",
+   "propozitie_intreaga": "The further you go from sea level, the weather gets colder.",
+   "raspuns": "colder",
+   "acceptate": [
+    "colder",
+    "cold"
+   ],
+   "incercari": 16
+  },
+  {
+   "subiect": "dogs",
+   "fapt": "Dogs have a very good sense of smell.",
+   "propozitie": "Dogs can find hidden things using their powerful sense of ___.",
+   "propozitie_intreaga": "Dogs can find hidden things using their powerful sense of smell.",
+   "raspuns": "smell",
+   "acceptate": [
+    "smell"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "cats",
+   "fapt": "Cats can see well when there is little light.",
+   "propozitie": "In the night, cats can find things even with very little ___.",
+   "propozitie_intreaga": "In the night, cats can find things even with very little light.",
+   "raspuns": "light",
+   "acceptate": [
+    "light"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "apples",
+   "fapt": "Apples grow on trees.",
+   "propozitie": "Apples fall down from ___.",
+   "propozitie_intreaga": "Apples fall down from trees.",
+   "raspuns": "trees",
+   "acceptate": [
+    "trees"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "the Earth",
+   "fapt": "The Earth goes around the Sun once every year.",
+   "propozitie": "When we say a year has passed, the Earth has gone around the ___.",
+   "propozitie_intreaga": "When we say a year has passed, the Earth has gone around the sun.",
+   "raspuns": "sun",
+   "acceptate": [
+    "sun"
+   ],
+   "incercari": 38
+  },
+  {
+   "subiect": "squirrels",
+   "fapt": "Squirrels hide nuts to eat in the winter.",
+   "propozitie": "In winter, squirrels bury little pieces of food called ___.",
+   "propozitie_intreaga": "In winter, squirrels bury little pieces of food called nuts.",
+   "raspuns": "nuts",
+   "acceptate": [
+    "nuts",
+    "acorns"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "bears",
+   "fapt": "Some bears sleep through most of the winter.",
+   "propozitie": "Bears stay still and asleep during ___.",
+   "propozitie_intreaga": "Bears stay still and asleep during winter.",
+   "raspuns": "winter",
+   "acceptate": [
+    "winter"
+   ],
+   "incercari": 1
+  },
+  {
+   "subiect": "carrots",
+   "fapt": "Carrots grow under the ground.",
+   "propozitie": "A carrot begins under the soil and stays in the ___",
+   "propozitie_intreaga": "A carrot begins under the soil and stays in the ground",
+   "raspuns": "ground",
+   "acceptate": [
+    "ground",
+    "soil",
+    "dirt"
+   ],
+   "incercari": 3
+  },
+  {
+   "subiect": "clouds",
+   "fapt": "Clouds are made of tiny drops of water.",
+   "propozitie": "Rain forms from little bits of ___.",
+   "propozitie_intreaga": "Rain forms from little bits of water.",
+   "raspuns": "water",
+   "acceptate": [
+    "water"
+   ],
+   "incercari": 4
+  },
+  {
+   "subiect": "sand",
+   "fapt": "Sand is made of tiny pieces of rock and shells.",
+   "propozitie": "The grains in the sand are bits of old ___",
+   "propozitie_intreaga": "The grains in the sand are bits of old rock",
+   "raspuns": "rock",
+   "acceptate": [
+    "rock",
+    "stone",
+    "shells"
+   ],
+   "incercari": 8
+  },
+  {
+   "subiect": "washing hands",
+   "fapt": "Washing your hands with soap helps wash away germs.",
+   "propozitie": "Soap on your hands helps get rid of ___",
+   "propozitie_intreaga": "Soap on your hands helps get rid of germs",
+   "raspuns": "germs",
+   "acceptate": [
+    "germs"
+   ],
+   "incercari": 1
+  }
+ ]
+}

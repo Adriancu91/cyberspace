@@ -29,10 +29,18 @@ ele ar măsura mai ales memorarea.
 exact cuvântul din fapt; se raportează și cu sinonime, și câte fapte știe. În jurnal intră doar numere, pe liniile
 „examen_fapte_nou_generare” și „examen_fapte_nou”.
 
+**Setul sacru (8 octombrie 2026, --sacru).** O a patra formulare pentru fiecare din cele 50 de fapte, cu aceleași
+verificări, diferită de cele 3 ale examenului nou (cel mult 60% cuvinte comune cu fiecare), în
+date/fapte/examen_sacru.json. Nu intră în examene_suplimentare, nu-l vede CONTINUUM și nu-l folosește nicio decizie
+automată: se dă doar manual, iar scorul lui nu se folosește la selecție. De aceea nici nu intră în jurnalul Kronos:
+rezultatele stau în lucru/examen_sacru/ (rezultate.jsonl, câte un rând pe examen, plus răspunsurile).
+
     python unelte/examen_fapte_nou.py --genereaza                        # profesorul, pe placa video (~4,5 GB)
     python unelte/examen_fapte_nou.py --completeaza                      # doar propozițiile care lipsesc
     python unelte/examen_fapte_nou.py --experiment 239                   # examenul nou pe un model salvat
     python unelte/examen_fapte_nou.py --experiment 226 --dispozitiv cpu  # pe procesor, cât placa video lucrează
+    python unelte/examen_fapte_nou.py --genereaza --sacru                # setul sacru (a patra formulare)
+    python unelte/examen_fapte_nou.py --sacru --experiment 262           # setul sacru, doar manual
 """
 
 from __future__ import annotations
@@ -59,6 +67,8 @@ from module.profesor_qwen import FAPTE, ProfesorQwen  # noqa: E402
 TEXTE_VERIFICATE = {"povestile cu fapte": ["date/fapte/povesti.txt"],
                     "TinyStories": ["date/tinystories_tot/antrenare.txt", "date/tinystories_tot/validare.txt"]}
 PROPOZITII_PE_FAPT = 3
+CALE_EXAMEN_SACRU = "date/fapte/examen_sacru.json"  # doar aici: nu în module/, ca niciun examen automat să nu-l ia
+DOSAR_SACRU = "examen_sacru"                        # în directorul de lucru, nu în jurnalul Kronos
 SISTEM = "You write short, simple English sentences for a quiz for young children."
 
 
@@ -168,12 +178,13 @@ REGULI = (
 )
 
 
-def cerere_trei(subiect: str) -> list[dict[str, str]]:
+def cerere_trei(subiect: str, existente: list[str] | None = None) -> list[dict[str, str]]:
     raspuns = raspunsul_faptului(subiect)
+    diferite = f"They must be different from these sentences: {' / '.join(existente)}\n" if existente else ""
     return [{"role": "system", "content": SISTEM}, {"role": "user", "content": (
         f'Fact: "{FAPTE[subiect]}"\nAnswer word: "{raspuns}"\n\n'
         f"Write 3 different quiz sentences that say the same fact in other words. Rules:\n"
-        + REGULI.format(raspuns=raspuns)
+        + REGULI.format(raspuns=raspuns) + diferite
         + 'Example for the fact "Birds have feathers." with the missing word "feathers": "A bird\'s body is covered '
           'with ___."\nWrite only the 3 sentences, one per line.')}]
 
@@ -267,18 +278,22 @@ def verifica(propozitie: str, subiect: str, celelalte: list[str],
 
 
 def genereaza(profesor: Any, indexuri: dict[str, IndexFragmente], runde: int,
-              pastrate: dict[str, list[str]] | None = None) -> dict[str, Any]:
+              pastrate: dict[str, list[str]] | None = None, pe_fapt: int = PROPOZITII_PE_FAPT,
+              existente: dict[str, list[str]] | None = None) -> dict[str, Any]:
     """Cele 150 de propoziții. Întâi câte 3 pe fapt. Apoi, rundă după rundă, pentru fiecare respinsă profesorul scrie 3
     variante noi (știind ce a fost respins și de ce); se păstrează prima care trece de formă și de fragmente, iar la final
-    profesorul spune, fără întâmplare, dacă ea spune același fapt."""
+    profesorul spune, fără întâmplare, dacă ea spune același fapt.
+    Setul sacru: pe_fapt = 1, iar `existente` (cele 3 ale examenului nou) contează ca „celelalte propoziții ale
+    faptului”: noua formulare trebuie să difere de ele. Cele 3 variante ale primei cereri sunt toate încercate."""
+    existente = existente or {}
     subiecte = list(INTREBARI)
-    sloturi = [(s, k) for s in subiecte for k in range(PROPOZITII_PE_FAPT)]
+    sloturi = [(s, k) for s in subiecte for k in range(pe_fapt)]
     alese: dict[tuple[str, int], str | None] = {}
     istoric: dict[tuple[str, int], list[dict[str, Any]]] = {cheie: [] for cheie in sloturi}
     variante: dict[tuple[str, int], list[str]] = {}
     if pastrate is not None:  # completare: propozițiile deja bune rămân; cele care lipsesc se scriu de la capăt
         for s in subiecte:
-            for k, propozitie in enumerate(pastrate.get(s, [])[:PROPOZITII_PE_FAPT]):
+            for k, propozitie in enumerate(pastrate.get(s, [])[:pe_fapt]):
                 alese[(s, k)] = propozitie
         lipsa = [cheie for cheie in sloturi if alese.get(cheie) is None]
         for cheie in sloturi:
@@ -288,17 +303,22 @@ def genereaza(profesor: Any, indexuri: dict[str, IndexFragmente], runde: int,
         subiecte_noi: list[str] = []
     else:
         subiecte_noi = subiecte
-    primele = profesor.raspunde_mai_multe([cerere_trei(s) for s in subiecte_noi], max_simboluri=160) if subiecte_noi else []
+    primele = profesor.raspunde_mai_multe([cerere_trei(s, existente.get(s)) for s in subiecte_noi],
+                                          max_simboluri=160) if subiecte_noi else []
     for s, raspuns in zip(subiecte_noi, primele):
         linii = [umple(linie, raspunsul_faptului(s)) for linie in linii_curate(raspuns)]
-        for k in range(PROPOZITII_PE_FAPT):
+        if pe_fapt == 1:  # setul sacru: toate cele 3 variante, pentru singura propoziție a faptului
+            variante[(s, 0)] = linii[:PROPOZITII_PE_FAPT]
+            continue
+        for k in range(pe_fapt):
             variante[(s, k)] = [linii[k]] if k < len(linii) else []
 
     def celelalte(cheie: tuple[str, int], doar_dinainte: bool) -> list[str]:
         """Celelalte propoziții bune ale aceluiași fapt (la prima judecată, doar cele dinainte: dintre două la fel, a
         doua se regenerează)."""
         s, k = cheie
-        return [p for (t, j), p in alese.items() if t == s and j != k and p and (j < k or not doar_dinainte)]
+        return list(existente.get(s, [])) + [p for (t, j), p in alese.items()
+                                             if t == s and j != k and p and (j < k or not doar_dinainte)]
 
     def judeca(chei: list[tuple[str, int]], prima: bool) -> list[tuple[str, int]]:
         verdicte: dict[tuple[str, int], tuple[str | None, str | None]] = {}
@@ -385,7 +405,19 @@ def construieste_indexuri(texte: dict[str, list[str]], n: int) -> dict[str, Inde
 
 # --- linia de comandă ------------------------------------------------------------------------------------------------------
 
+def propozitiile_examenului(cale: str | Path) -> dict[str, list[str]]:
+    """Propozițiile întregi ale unui examen (subiect → listă), ex. cele 3 pe fapt ale examenului nou."""
+    pe_subiect: dict[str, list[str]] = {}
+    for intrebare in json.loads(Path(cale).read_text(encoding="utf-8"))["intrebari"]:
+        pe_subiect.setdefault(intrebare["subiect"], []).append(intrebare["propozitie_intreaga"])
+    return pe_subiect
+
+
 def main_genereaza(args: argparse.Namespace) -> int:
+    existente = propozitiile_examenului(CALE_EXAMEN_NOU) if args.sacru else None
+    if args.sacru:
+        print(f"Setul sacru: o a patra formulare pentru fiecare fapt, diferită de cele "
+              f"{sum(len(p) for p in existente.values())} ale examenului nou ({CALE_EXAMEN_NOU}).", flush=True)
     print(f"Fragmentele de {args.fragment} cuvinte din textele de antrenare (o singură dată):", flush=True)
     indexuri = construieste_indexuri(TEXTE_VERIFICATE, args.fragment)
     profesor = ProfesorQwen(lot=args.lot, doar_local=args.doar_local, samanta=args.samanta, temperatura=0.9)
@@ -396,7 +428,8 @@ def main_genereaza(args: argparse.Namespace) -> int:
         for intrebare in vechi["intrebari"]:
             pastrate.setdefault(intrebare["subiect"], []).append(intrebare["propozitie_intreaga"])
         print(f"Completare: păstrez cele {len(vechi['intrebari'])} propoziții din {args.iesire}.", flush=True)
-    rezultat = genereaza(profesor, indexuri, args.runde, pastrate)
+    rezultat = genereaza(profesor, indexuri, args.runde, pastrate, pe_fapt=1 if args.sacru else PROPOZITII_PE_FAPT,
+                         existente=existente)
     memorie = profesor.memorie_video_mb()
     profesor.elibereaza()
     numere = {**rezultat["numere"], "memorie_gpu_rezervata_mb": memorie.get("rezervata")}
@@ -406,24 +439,32 @@ def main_genereaza(args: argparse.Namespace) -> int:
         "versiune": 1, "data": datetime.now().isoformat(timespec="seconds"), "profesor": profesor.model,
         "fragment_cuvinte": args.fragment, "verificat_in": TEXTE_VERIFICATE, "numere": numere,
         "etape_anterioare": ((vechi.get("etape_anterioare") or []) + [vechi["numere"]]) if vechi else [],
+        **({"sacru": True, "diferit_de": CALE_EXAMEN_NOU,
+            "nota": "Setul sacru: se dă doar manual (examen_fapte_nou.py --sacru --experiment N). Nu intră în "
+                    "examene_suplimentare, nu-l vede CONTINUUM, nu-l folosește nicio decizie automată; scorul lui nu "
+                    "se folosește la selecție."} if args.sacru else {}),
         "intrebari": rezultat["intrebari"],
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     eticheta = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dosar = Path(args.director_lucru) / "examen_fapte_nou"
+    dosar = Path(args.director_lucru) / (DOSAR_SACRU if args.sacru else "examen_fapte_nou")
     dosar.mkdir(parents=True, exist_ok=True)
     (dosar / f"generare_{eticheta}.json").write_text(json.dumps(rezultat["istoric"], ensure_ascii=False, indent=1),
                                                        encoding="utf-8")
-    jurnal = Jurnal(Path(args.director_lucru))
-    jurnal.adauga({
-        "id": jurnal.urmatorul_id(), "linie": "examen_fapte_nou_generare",
-        "inceput": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "propunere": {"descriere": f"examenul de fapte nou: propozițiile reformulate ale profesorului ({cale.as_posix()})",
-                      "modificari": {}},
-        "module": {"profesor": {**ProfesorQwen.MANIFEST, "model": profesor.model}}, "decizie": "masurat",
-        "scoruri": numere,
-    })
-    print(f"\n=== Examenul de fapte nou: {numere['propozitii']} propoziții în {cale} ===")
-    print(f"Regenerate: {numere['regenerate']} din {len(INTREBARI) * PROPOZITII_PE_FAPT} (în total "
+    if args.sacru:  # nimic în jurnalul Kronos: doar numerele, lângă istoric
+        (dosar / f"generare_{eticheta}_numere.json").write_text(json.dumps(numere, ensure_ascii=False, indent=1),
+                                                                  encoding="utf-8")
+    else:
+        jurnal = Jurnal(Path(args.director_lucru))
+        jurnal.adauga({
+            "id": jurnal.urmatorul_id(), "linie": "examen_fapte_nou_generare",
+            "inceput": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "propunere": {"descriere": f"examenul de fapte nou: propozițiile reformulate ale profesorului "
+                                       f"({cale.as_posix()})", "modificari": {}},
+            "module": {"profesor": {**ProfesorQwen.MANIFEST, "model": profesor.model}}, "decizie": "masurat",
+            "scoruri": numere,
+        })
+    print(f"\n=== {'Setul sacru' if args.sacru else 'Examenul de fapte nou'}: {numere['propozitii']} propoziții în {cale} ===")
+    print(f"Regenerate: {numere['regenerate']} din {len(INTREBARI) * (1 if args.sacru else PROPOZITII_PE_FAPT)} (în total "
           f"{numere['incercari_total']} de încercări, {numere['runde']} runde; nereușite: {numere['esuate']}).")
     print(f"Respingeri: {numere['respingeri_povestile_cu_fapte']} cu un fragment din poveștile cu fapte, "
           f"{numere['respingeri_tinystories']} din TinyStories, {numere['respingeri_forma']} pentru formă, "
@@ -434,6 +475,27 @@ def main_genereaza(args: argparse.Namespace) -> int:
     return 0 if numere["esuate"] == 0 else 1
 
 
+def main_examen_sacru(args: argparse.Namespace, fisa: dict[str, Any], rezultate: list[dict[str, Any]]) -> int:
+    """Setul sacru: rezultatele doar în lucru/examen_sacru/, nu în jurnalul Kronos (nicio decizie automată nu-l citește)."""
+    scor = scor_fapte_noi(rezultate)
+    numere = {"fapte_sacre": scor["fapte_noi"], "fapte_sacre_cu_sinonime": scor["fapte_noi_cu_sinonime"],
+              "intrebari": len(rezultate)}
+    eticheta = datetime.now().strftime("%Y%m%d_%H%M%S")
+    dosar = Path(args.director_lucru) / DOSAR_SACRU
+    dosar.mkdir(parents=True, exist_ok=True)
+    iesire = dosar / f"experiment_{fisa['id']}_{eticheta}.json"
+    rand = {"data": datetime.now().isoformat(timespec="seconds"), "experiment": fisa["id"], "linie": fisa["linie"],
+            "examen": Path(args.examen).as_posix(), **numere}
+    iesire.write_text(json.dumps({**rand, "rezultate": rezultate}, ensure_ascii=False, indent=1), encoding="utf-8")
+    with (dosar / "rezultate.jsonl").open("a", encoding="utf-8") as f:
+        f.write(json.dumps(rand, ensure_ascii=False) + "\n")
+    print(f"=== Setul sacru: modelul experimentului #{fisa['id']} (linia „{fisa['linie']}”) ===")
+    print(f"fapte_sacre (doar cu cuvântul din fapt): {numere['fapte_sacre']} din {len(rezultate)}; cu sinonime: "
+          f"{numere['fapte_sacre_cu_sinonime']}. Nu se folosește la selecție; nu intră în jurnalul Kronos.")
+    print(f"Toate răspunsurile: {iesire}", flush=True)
+    return 0
+
+
 def main_examen(args: argparse.Namespace) -> int:
     from unelte.modele_salvate import fisa_modelului, incarca_modelul
 
@@ -441,6 +503,8 @@ def main_examen(args: argparse.Namespace) -> int:
     fisa = fisa_modelului(jurnal, args.experiment, args.linie)
     elev = incarca_modelul(fisa, args.dispozitiv)
     rezultate = examineaza_fapte_noi(elev, args.examen)
+    if args.sacru:
+        return main_examen_sacru(args, fisa, rezultate)
     numere = {**scor_fapte_noi(rezultate), "intrebari": len(rezultate)}
     eticheta = datetime.now().strftime("%Y%m%d_%H%M%S")
     dosar = Path(args.director_lucru) / "examen_fapte_nou"
@@ -477,8 +541,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="ca --genereaza, dar păstrează propozițiile bune din --iesire și le scrie doar pe cele care lipsesc")
     ce.add_argument("--experiment", type=int, help="examenul pe modelul acestui experiment")
     ce.add_argument("--linie", help="examenul pe ultimul model salvat de pe această linie de jurnal")
-    parser.add_argument("--examen", default=CALE_EXAMEN_NOU, help="fișierul cu întrebările")
-    parser.add_argument("--iesire", default=CALE_EXAMEN_NOU, help="unde scrie --genereaza întrebările")
+    parser.add_argument("--sacru", action="store_true",
+                        help="setul sacru (date/fapte/examen_sacru.json): doar manual, nu se folosește la selecție")
+    parser.add_argument("--examen", default=None, help="fișierul cu întrebările (implicit: examenul nou sau setul sacru)")
+    parser.add_argument("--iesire", default=None, help="unde scrie --genereaza întrebările (implicit: la fel)")
     parser.add_argument("--runde", type=int, default=60, help="de câte ori se regenerează, cel mult, cele respinse")
     parser.add_argument("--fragment", type=int, default=5, help="câte cuvinte consecutive are un fragment căutat")
     parser.add_argument("--lot", type=int, default=16, help="câte cereri trimite profesorului deodată")
@@ -487,6 +553,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--director-lucru", default="lucru")
     parser.add_argument("--dispozitiv", default="", help="ex. cpu: elevul pe procesor")
     args = parser.parse_args(argv)
+    implicit = CALE_EXAMEN_SACRU if args.sacru else CALE_EXAMEN_NOU
+    args.examen, args.iesire = args.examen or implicit, args.iesire or implicit
     return main_genereaza(args) if args.genereaza or args.completeaza else main_examen(args)
 
 

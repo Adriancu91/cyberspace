@@ -219,15 +219,20 @@ def config_kronos(radacina: Path, fisier: str, linie: str, ore: int = 8, stratur
 
 def fisa(id: int, linie: str, val_bpb: float, decizie: str = "pastrat", criterii: dict[str, Any] | None = None,
          straturi: int = 10, inceput: str = "2026-10-06T20:00:00+00:00", samanta: int | None = None,
-         durata: float | None = None) -> dict[str, Any]:
+         durata: float | None = None, minute: float | None = None, povesti_profesor: int | None = None) -> dict[str, Any]:
     """O oră Kronos. `samanta` intră în setările modelului (perechi de semințe, pentru zgomotul învățat); `durata` e
-    durata_totala_secunde (bugetul zilnic de ore pe placă)."""
+    durata_totala_secunde (bugetul zilnic de ore pe placă); `minute`, cât a antrenat (zgomotul se învață doar din
+    experimentele lungi); `povesti_profesor`, pe câte povești e nota de la oră (implicit 20)."""
     f: dict[str, Any] = {"id": id, "linie": linie, "inceput": inceput, "decizie": decizie, "scoruri": {"val_bpb": val_bpb},
                          "setari": {"model": {"n_straturi": straturi, "n_capete": 8, "n_emb": 512, "context": 256}}}
     if samanta is not None:
         f["setari"]["model"]["samanta"] = samanta
     if durata is not None:
         f["durata_totala_secunde"] = durata
+    if minute is not None:
+        f["consum"] = {"durata_antrenare_secunde": minute * 60}
+    if povesti_profesor is not None:
+        f["setari"]["model"]["povesti_profesor"] = povesti_profesor
     if decizie == "pastrat":
         f["model_salvat"] = f"lucru/stocare/modele/experiment_{id}.pt"
     if criterii:
@@ -256,7 +261,7 @@ def noaptea_3(radacina: Path, masurat: bool = True) -> None:
     """Ca a treia antrenare lungă: 8 ore păstrate (#1–#8), val_bpb încă scade; ultimul model măsurat cu uneltele
     (#9: 41 de fapte din 150, #10: nota 4,7)."""
     config_kronos(radacina, "laptop_antrenare_lunga_3.toml", "antrenare_lunga_3")
-    fise = [fisa(i, "antrenare_lunga_3", s) for i, s in enumerate(SCORURI_NOAPTEA_3, start=1)]
+    fise = [fisa(i, "antrenare_lunga_3", s, minute=60) for i, s in enumerate(SCORURI_NOAPTEA_3, start=1)]
     if masurat:
         fise += [fisa_unealta(9, "examen_fapte", 8, {"corecte_doar_cuvantul_din_fapt": 41, "corecte": 50}),
                  fisa_unealta(10, "examen_profesor", 8, {"nota_medie": 4.7})]

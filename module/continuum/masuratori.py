@@ -5,6 +5,9 @@ O valoare a unei capacități pe modelul unei fișe vine, în ordine:
 2. din fișa unei unelte de examen care pomenește experimentul (ex. unelte/examen_profesor.py). E mai nouă decât ora
    lui și poate fi mai precisă (ex. nota pe 40 de povești, nu pe 20);
 3. din criteriile fișei (examene_suplimentare, date la sfârșitul orei).
+
+O capacitate cu „povesti” (ex. nota: 40) primește doar măsurătorile pe atâtea povești: la unealta de examen, scorul
+„povesti” al fișei; la oră, povesti_profesor din setările modelului (implicit 20). Celelalte nu se compară cu ele.
 """
 
 from __future__ import annotations
@@ -13,10 +16,21 @@ import math
 from typing import Any
 
 REUSITE = ("pastrat", "respins")  # ca la unelte/antrenare_lunga.py: o oră făcută = un experiment reușit
+POVESTI_LA_ORA = 20  # nota de la oră, fără povesti_profesor în setări (ca în module/model_gpt.py)
 
 
 def numar(valoare: Any) -> bool:
     return isinstance(valoare, (int, float)) and not isinstance(valoare, bool) and math.isfinite(valoare)
+
+
+def povesti_la_ora(fisa: dict[str, Any]) -> Any:
+    """Pe câte povești e nota de la oră (examene_suplimentare): povesti_profesor din setările modelului."""
+    return ((fisa.get("setari") or {}).get("model") or {}).get("povesti_profesor", POVESTI_LA_ORA)
+
+
+def comparabila(cap: dict[str, Any], povesti: Any) -> bool:
+    """O măsurătoare intră doar pe numărul de povești cerut de capacitate; fără cerință, oricare."""
+    return cap.get("povesti") is None or povesti == cap["povesti"]
 
 
 def criterii_din(fisa: dict[str, Any]) -> dict[str, Any]:
@@ -27,11 +41,11 @@ def criterii_din(fisa: dict[str, Any]) -> dict[str, Any]:
 def masuratori_unelte(fise: list[dict[str, Any]], config: dict[str, Any]) -> dict[tuple[str, int], dict[str, Any]]:
     """(linia uneltei, experimentul) → scorurile fișelor ei pentru acel experiment (o fișă mai nouă le înlocuiește pe
     cele pe care le are și le păstrează pe rest)."""
-    linii = {cap["unealta"]["linie"] for cap in config["capacitati"].values() if cap["unealta"]}
+    capacitati = {cap["unealta"]["linie"]: cap for cap in config["capacitati"].values() if cap["unealta"]}
     rezultat: dict[tuple[str, int], dict[str, Any]] = {}
-    for fisa in sorted((f for f in fise if f.get("linie") in linii), key=lambda f: f.get("id", 0)):
+    for fisa in sorted((f for f in fise if f.get("linie") in capacitati), key=lambda f: f.get("id", 0)):
         experiment = ((fisa.get("module") or {}).get("elev") or {}).get("experiment")
-        if isinstance(experiment, int):
+        if isinstance(experiment, int) and comparabila(capacitati[fisa["linie"]], (fisa.get("scoruri") or {}).get("povesti")):
             rezultat.setdefault((fisa["linie"], experiment), {}).update(fisa.get("scoruri") or {})
     return rezultat
 
@@ -46,4 +60,4 @@ def valoare(fisa: dict[str, Any], cap: dict[str, Any], unelte: dict[tuple[str, i
         if numar(scor):
             return float(scor)
     criteriu = criterii_din(fisa).get(cap["metrica"])
-    return float(criteriu) if numar(criteriu) else None
+    return float(criteriu) if numar(criteriu) and comparabila(cap, povesti_la_ora(fisa)) else None

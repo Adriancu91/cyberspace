@@ -24,9 +24,10 @@ memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
 pauza_racire_secunde = 120
 porturi_modificabile = ["model"]
 
+# hrana = "": fără hrană, ca în rularea ei (din 8 octombrie 2026, hrana e implicită în antrenările lungi).
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_5/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40 }
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.0002, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 18000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_5/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "" }
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"

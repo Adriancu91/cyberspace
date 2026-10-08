@@ -23,9 +23,10 @@ timp_max_secunde = 120
 timp_test_secunde = 60
 porturi_modificabile = ["model"]
 
+# hrana = "": fără hrană (din 8 octombrie 2026 unealta de antrenare lungă o pune implicit, iar aici nu există)
 [porturi.model]
 modul = "module.model_continuu:ModelGPTContinuu"
-setari = {{ n_straturi = 1, n_capete = 2, n_emb = 32, context = 16, lot = 4, rata_invatare = 0.002, dispozitiv = "cpu", tokenizer = "bpe", cale_tokenizer = "{tokenizer}", rata_care_scade = true, incalzire_pasi = 2, director_cache = "lucru/cache", samanta = 0{model} }}
+setari = {{ n_straturi = 1, n_capete = 2, n_emb = 32, context = 16, lot = 4, rata_invatare = 0.002, dispozitiv = "cpu", tokenizer = "bpe", cale_tokenizer = "{tokenizer}", rata_care_scade = true, incalzire_pasi = 2, director_cache = "lucru/cache", samanta = 0, hrana = ""{model} }}
 
 [porturi.date]
 modul = "module.date_tinystories:DateTinyStories"

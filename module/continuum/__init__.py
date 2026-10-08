@@ -41,7 +41,7 @@ VERDE, GALBENA, ROSIE = "verde", "galbenă", "roșie"
 # Valorile implicite ale pragurilor din v1, folosite doar când o configurare mai veche nu le are (config/continuum.toml
 # le are pe toate, scrise și explicate). Așa, o configurare din v0 merge neschimbată.
 IMPLICITE_V1: dict[str, Any] = {
-    "zgomot": {"perechi_minime": 3, "factor": 1.0},
+    "zgomot": {"perechi_minime": 3, "factor": 1.0, "minute_minime": 60},
     "zone": {"galben": 1.0, "rosu": 2.0},
     "stabilitate": {"confirmari": 1},
     "eficienta": {"fractie_scump": 0.5},
@@ -204,6 +204,8 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
             "module": _texte(cap, "module", unde, obligatoriu=False) or [],
             "masurare": _texte(cap, "masurare", unde, obligatoriu=False),
             "unealta": unealta,
+            # ex. nota: comparabilă doar pe același număr de povești; celelalte măsurători nu intră nicăieri
+            "povesti": int(_numar(cap, "povesti", unde, 2, intreg=True)) if "povesti" in cap else None,
         }
 
     hrana = {}

@@ -258,8 +258,9 @@ def test_configurarea_adevarata():
     assert config["guvernator"]["fereastra_invatare"][0].hour == 0  # laptopul e al lui Kronos toată ziua
     assert config["guvernator"]["minute_fara_om"] == 10 and config["guvernator"]["buget_ore_placa_pe_zi"] == 20
     assert (config["zgomot"], config["zone"], config["stabilitate"], config["eficienta"], config["anti_bucla"]) == (
-        {"perechi_minime": 3, "factor": 1.0}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1}, {"fractie_scump": 0.5},
-        {"racire_cicluri": 6, "max_esecuri": 5})
+        {"perechi_minime": 3, "factor": 1.0, "minute_minime": 60}, {"galben": 1.0, "rosu": 2.0}, {"confirmari": 1},
+        {"fractie_scump": 0.5}, {"racire_cicluri": 6, "max_esecuri": 5})
+    assert config["capacitati"]["sens"]["povesti"] == 40
     assert config["nevoi"]["continua"]["ore_tendinta"] == 3
     assert {n: c["prag_zgomot"] for n, c in config["capacitati"].items()} == {"povesti": 0.005, "fapte": 10, "sens": 0.5}
     assert "40" in config["capacitati"]["sens"]["masurare"]

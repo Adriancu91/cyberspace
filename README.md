@@ -2244,6 +2244,110 @@ pragul de 0,005.
   nouă pornește de acolo.
 - **Antrenările de dinainte nu par atinse** (6a, 6c-restart: 7,7–8,2 pași pe secundă, ca de obicei).
 
+## 8 octombrie, dimineața: setul sacru, retenția R, hrana implicită, configurarea 7 și prima oră judecată
+
+### Setul sacru de fapte (`date/fapte/examen_sacru.json`)
+
+O a patra formulare pentru fiecare din cele 50 de fapte, scrisă de profesor. Verificările sunt aceleași ca la examenul
+nou:
+- niciun fragment de 5 cuvinte comun cu hrana sau cu TinyStories;
+- profesorul confirmă că propoziția spune același fapt;
+- profesorul completează singur golul cu răspunsul.
+
+În plus, fiecare propoziție trebuie să difere de cele 3 ale examenului nou: cel mult 60% cuvinte comune cu fiecare.
+
+```
+python unelte/examen_fapte_nou.py --genereaza --sacru --doar-local     # setul (o singură dată, cu profesorul)
+python unelte/examen_fapte_nou.py --sacru --experiment N               # examenul, doar manual
+```
+
+**Scorul pe setul sacru nu se folosește la selecție.**
+- Setul nu intră în `examene_suplimentare`, nu-l vede CONTINUUM și nu-l folosește nicio decizie automată.
+- Rezultatele nu intră nici măcar în jurnalul Kronos: stau în `lucru/examen_sacru/rezultate.jsonl`.
+- Un test verifică că nici modelele, nici `kronos/`, nici CONTINUUM, nici unealta de antrenare nu pomenesc setul sacru.
+
+**Cum s-a făcut** (8 octombrie, 07:41–07:48):
+- 50 de propoziții, niciuna nereușită; 41 au avut nevoie de mai multe încercări (429 în total, în 39 de runde).
+- Respingeri:
+  - 57 pentru un fragment din poveștile cu fapte, 56 pentru unul din TinyStories;
+  - 214 pentru formă;
+  - 27 pentru că nu spuneau clar același fapt;
+  - 25 pentru că golul era neclar.
+- Ca la examenul nou, câteva rămân stângace, deși trec toate verificările. De exemplu: „Cows make a soft substance that
+  babies drink ___.” sau „Cold dessert turns runny when the temperature goes to ___.”.
+- 18 n-au punct la final (ca 6 din cele 150 ale examenului nou). Nu contează: elevul primește doar textul dinaintea
+  golului.
+
+**Punctul de plecare**, dat o singură dată:
+
+| Modelul | Setul sacru (din 50) | Cu sinonime | Examenul nou (din 150), pentru comparație |
+| --- | --- | --- | --- |
+| #252 (sfârșitul etapei pe fapte) | 26 | 26 | 72 |
+| #257 (sfârșitul antrenării 5, fără hrană) | 11 | 13 | 37 |
+| #262 (sfârșitul lui 6a, cu hrană) | 29 | 29 | 59 |
+
+Pe 50 de întrebări, eroarea e cam ±3,5. #252 și #262 sunt deci la egalitate, iar #257 e clar mai jos, ca la examenul
+nou. Ordinea confirmă, pe întrebări pe care nicio decizie nu le-a văzut, că hrana păstrează faptele.
+
+### Retenția R
+
+R = faptele noi ale unui model ÷ faptele noi ale modelului din care a pornit linia lui. E doar raportată, nu e criteriu.
+- **Unealta de antrenare lungă** o arată la fiecare oră, în tabel (coloana R) și în `rezultat.json`. Punctul de plecare
+  ia acum și criteriile din fișa modelului de pornire: la 6a, ora 0 are în sfârșit 72 de fapte noi.
+- **CONTINUUM** o scrie în `stare.json`, la capacitate și în vector. Pe jurnalul de azi, la #262: R = 0,82 față de #252.
+
+### Hrana implicită și configurarea 7
+
+- **Hrana cu fapte, 5% din fiecare lot, e implicită** în orice antrenare lungă (lecția 6a).
+  - Unealta o adaugă singură când configurarea nu pomenește `hrana`; fișele din jurnal o înregistrează.
+  - Pentru o antrenare fără hrană: `hrana = ""`. Așa le-am marcat pe 5, 6b și cele două 6c, ca o reluare să răspundă la
+    aceeași întrebare.
+- **`config/laptop_antrenare_lunga_7.toml`**, pentru diseară:
+  - din #262, 8 ore, hrană 5%;
+  - rata 0,0001 → 0,00001, fără repornire la 0,0002 (lecția 6c);
+  - criteriile: val_bpb principal (0,005), fapte_noi −10 cel mult, nota −1,0 cel mult (eroarea notei e ±0,35, cu
+    valori extreme; 0,5 a respins #261 din zgomot).
+
+  N-a pornit încă. Comanda e în antetul configurării.
+
+### CONTINUUM v1: două corecturi
+
+- **Zgomotul se învață doar din experimente de cel puțin 60 de minute** (`[zgomot] minute_minime`).
+  - Pe jurnalul real nu rămâne nicio pereche: toate cele 42 de ore lungi au sămânța 0.
+  - Pragul la val_bpb revine de la 0,0144 la podeaua de 0,005.
+- **Nota se compară doar pe 40 de povești** (`povesti = 40` la „sens”).
+  - Linia de bază a notei nu mai e 4,7 (#226, pe 20 de povești), ci 5,08 (#260, pe 40).
+  - Orele de dinainte de 7 octombrie (nota pe 20) nu mai contează nici la scorul de acum, nici la zgomot.
+
+### kronos: prima oră a unei linii pornite dintr-un model păstrat nu mai e păstrată din oficiu (aprobat de Adrian)
+
+- **Ce face.** Cu `porneste_din` (unealta îl pune din `pornire.json` la `--porneste-din`), regula 4 judecă primul
+  experiment al liniei față de scorurile acelui model: val_bpb și criteriile.
+- **Ce rămâne la fel.**
+  - Rețeta liniei rămâne cea din configurare.
+  - Din primul experiment păstrat încolo, referința e linia însăși.
+  - Fără `porneste_din`, totul e ca înainte.
+- **Ce se vede în fișă.** O fișă judecată astfel are `fata_de_pornire`, iar motivul pomenește modelul de pornire.
+- **Cât s-a schimbat.** 30 de rânduri în `kronos/config.py` și `kronos/orchestrator.py`, cu 10 teste noi
+  (`teste/test_porneste_din.py`). Toate testele vechi trec.
+- **Povestea de la final.** Când nicio oră a liniei nu e păstrată, o scrie starea de la final, cu rețeaua construită după
+  modelul de pornire. Până acum era nevoie de o oră păstrată.
+- **Ce înseamnă pentru diseară.** Prima oră din 7 e păstrată doar dacă val_bpb coboară sub 0,4254 (0,4304 − 0,005), cu
+  fapte_noi peste 49 și nota peste 3,67. Altfel, linia merge mai departe fără niciun model păstrat, până când o oră bate
+  #262.
+
+### Testele: 36 noi; toată suita, cu placa: 521 trec
+
+- `teste/test_porneste_din.py`: kronos, prima oră judecată față de modelul de pornire, inclusiv cap-coadă cu unealta.
+- `teste/test_retentie.py`: retenția R și punctul de plecare în unealta de antrenare lungă.
+- `teste/test_reteta_implicita.py`: hrana implicită, configurarea 7 și rulările gândite fără hrană.
+- `teste/test_examen_sacru.py`: setul sacru, plus verificarea că nicio parte automată nu-l pomenește.
+- `teste/test_continuum_v1.py`: zgomotul doar din experimentele lungi, nota doar pe 40 de povești și R în
+  `stare.json`.
+
+Configurările mici din teste spun acum `hrana = ""`. Fără asta, unealta le-ar fi pus hrana implicită, iar fișierul ei
+nu există în dosarele de probă.
+
 ## Toate comenzile
 
 ```
@@ -2260,6 +2364,7 @@ python -m module.continuum.bucla --config config/continuum.toml --jurnal [N]    
 python -m module.continuum.bucla --config config/continuum.toml --simuleaza [--placa-libera] [--stare DOSAR]
 python unelte/lant_antrenare.py                                  # fapte, apoi a cincea antrenare (7 octombrie)
 python unelte/lant_antrenare.py --plan config/lant_6.toml        # etapele dintr-un plan (noaptea 7–8 octombrie)
+python unelte/examen_fapte_nou.py --sacru --experiment N         # setul sacru de fapte: doar manual, nu la selecție
 ```
 
 ## Ce urmează

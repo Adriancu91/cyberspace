@@ -77,7 +77,7 @@ def actualizeaza_capacitati(memorie: dict[str, Any], stare: StareaOrganismului, 
             m.update(linie_de_baza=c.linie_de_baza, experiment_baza=c.experiment_baza)
         m.update({"metrica": c.metrica, "mai_mare_e_mai_bine": c.mai_mare_e_mai_bine, "ultimul_scor": c.curent,
                   "pe_modelul": model, "procent": c.procent, "disponibila": c.disponibila, "zona": c.zona,
-                  "prag_folosit": c.prag_zgomot})
+                  "prag_folosit": c.prag_zgomot, "retentie": c.retentie, "retentie_fata_de": c.retentie_fata_de})
     memorie["vector_capacitati"] = stare.vector()
     for raport in memorie["rapoarte"]:  # zona roșie s-a dus: raportul se închide, iar o recădere aduce unul nou
         c = stare.capacitati.get(raport.get("capacitate"))

@@ -12,6 +12,10 @@ bun experiment păstrat; altfel e „respins”, cu motivul „a pierdut <criter
 Criteriul principal (principal = true la un criteriu, cel mult unul): atunci el hotărăște. Păstrat = principalul e mai
 bun cu peste pragul lui ȘI niciun alt criteriu, inclusiv scorul examenului (pragul lui e prag_zgomot), nu scade peste
 pragul lui. Referința e cel mai bun experiment păstrat după criteriul principal. Fără „principal”, totul e ca înainte.
+
+Pornirea dintr-un model păstrat (config.porneste_din, ex. --porneste-din la antrenarea lungă): până la primul experiment
+păstrat al liniei, referința regulii 4 (scorul examenului și criteriile) e fișa acelui model. Fără ea, primul experiment
+al liniei e păstrat din oficiu, ca înainte. Rețeta liniei rămâne cea din configurare.
 """
 
 from __future__ import annotations
@@ -22,7 +26,7 @@ import time
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from .config import Config
+from .config import Config, EroareConfig
 from .contracte import PORTURI, Propunere
 from .jurnal import Jurnal
 from .paznic import Paznic
@@ -67,6 +71,11 @@ class Orchestrator:
             self.cel_mai_bun = self._cel_mai_bun_dupa(principal) or self.cel_mai_bun
         if self.cel_mai_bun is not None:
             self.setari_curente = copy.deepcopy(self.cel_mai_bun["setari"])
+        # O linie care pornește dintr-un model păstrat: până la primul ei experiment păstrat, el e referința.
+        self.pornire: dict[str, Any] | None = None
+        if self.cel_mai_bun is None and config.porneste_din is not None:
+            self.pornire = self._fisa_de_pornire(config.porneste_din)
+            self.cel_mai_bun = self.pornire
 
     # ------------------------------------------------------------------
 
@@ -84,7 +93,7 @@ class Orchestrator:
         fise: list[dict[str, Any]] = []
         if self._opreste():
             numar = 0
-        elif self.cel_mai_bun is None:
+        elif self.cel_mai_bun is None or self.cel_mai_bun is self.pornire:
             fise.append(self.experiment(Propunere("punct de plecare (setările din configurare)")))
 
         for i in range(numar):
@@ -125,6 +134,14 @@ class Orchestrator:
             self.interfata.anunta("oprit", {"motiv": motiv + " (nu s-a răcit)"})
             return True
         return False
+
+    def _fisa_de_pornire(self, id_experiment: int) -> dict[str, Any]:
+        """Fișa modelului păstrat din care pornește linia (config.porneste_din)."""
+        fisa = next((f for f in self.jurnal.istoric() if f.get("id") == id_experiment), None)
+        if fisa is None or fisa.get("decizie") != "pastrat" or not isinstance(self._scor(fisa), (int, float)):
+            raise EroareConfig(f"porneste_din = {id_experiment}: în jurnal nu e un experiment păstrat cu scorul "
+                               f"„{self.examen.scor_principal}”")
+        return fisa
 
     def _scor(self, fisa: dict[str, Any] | None) -> float | None:
         if fisa is None:
@@ -222,6 +239,8 @@ class Orchestrator:
 
         # 7. Decis
         anterior = self._scor(self.cel_mai_bun)
+        if self.pornire is not None and self.cel_mai_bun is self.pornire:
+            fisa["fata_de_pornire"] = self.pornire["id"]  # primul experiment păstrat al liniei încă nu există
         if anterior is None:
             castig = None
             mai_bun = True

@@ -20,6 +20,9 @@
   - „saturat”, când două ore la rând au câștigat sub prag.
   Pragul regulii „continuă” e castig_minim din [nevoi.continua], ridicat doar de zgomotul de remăsurare (același model
   examinat de două ori), dacă e învățat. Zgomotul dintre semințe nu se aplică între două ore ale aceleiași antrenări.
+- **Retenția R** (8 octombrie 2026, doar raportată, nu criteriu): la capacitățile unde „mai mare e mai bine”, scorul
+  ultimului model ÷ scorul modelului din care a pornit linia lui (pornire.json, --porneste-din). La fapte: faptele noi
+  rămase din cele de la plecare.
 - **Configurările Kronos**, **hrana** și **nivelul** permis de guvernator, ca în v0.
 
 Valorile vin din măsurători (masuratori.py): scorurile fișei, apoi uneltele de examen, apoi criteriile de la oră.
@@ -63,6 +66,8 @@ class Capacitate:
     zona: str | None = None
     baza_confirmata: bool = False  # linia de bază vine din memorie, confirmată; altfel e cea mai bună din jurnal
     masuratori: int = 0            # de câte ori a fost măsurat ultimul model (oră, unelte): 2+ = remăsurat
+    retentie: float | None = None  # R = scorul de acum ÷ scorul modelului de pornire al liniei (doar raportat)
+    retentie_fata_de: int | None = None
 
     def castig(self, nou: float, vechi: float) -> float:
         """Cât e nou mai bun decât vechi, în direcția capacității (negativ = mai rău)."""
@@ -74,6 +79,7 @@ class Capacitate:
                 "zona": self.zona or NEMASURATA, "prag_folosit": self.prag_zgomot, "podea": self.podea,
                 "zgomot_invatat": self.zgomot_invatat, "stare_zgomot": self.stare_zgomot,
                 "perechi_zgomot": self.perechi_zgomot, "masuratori_ultimul_model": self.masuratori,
+                "retentie": self.retentie, "retentie_fata_de": self.retentie_fata_de,
                 "procent": self.procent, "disponibila": self.disponibila,
                 "motiv_indisponibila": self.motiv_indisponibila}
 
@@ -229,6 +235,15 @@ def evalueaza(observat: Any, config: dict[str, Any], memorie: dict[str, Any] | N
         c.zona = zona(c, config["zone"])
         c.degradata = c.zona in (GALBENA, ROSIE)
         stare.capacitati[nume] = c
+
+    if ultimul:  # retenția R: față de modelul din care a pornit linia ultimului model (doar raportată)
+        pornire = next((l.get("pornire") for l in linii.values()
+                        if l.get("stare") == "ok" and l.get("linie") == ultimul["linie"]), None)
+        fisa_pornire = next((f for f in fise if f.get("id") == pornire), None) if pornire is not None else None
+        for nume, c in stare.capacitati.items():
+            la_plecare = valoare(fisa_pornire, config["capacitati"][nume], unelte) if fisa_pornire else None
+            if c.mai_mare_e_mai_bine and c.curent is not None and la_plecare:
+                c.retentie, c.retentie_fata_de = round(c.curent / la_plecare, 3), pornire
 
     continua = config["nevoi"].get("continua")
     if continua and continua["capacitate"] in stare.capacitati and reusite:

@@ -33,6 +33,9 @@ class Config:
     # Unul singur poate avea și "principal": True: atunci el hotărăște (trebuie să crească peste pragul lui), iar
     # scorul examenului devine un criteriu ca celelalte, cu pragul prag_zgomot.
     criterii: dict[str, dict[str, Any]] = field(default_factory=dict)
+    # Linia pornește din modelul păstrat al acestui experiment (ex. --porneste-din la antrenarea lungă): până la primul ei
+    # experiment păstrat, regula 4 o judecă față de scorurile acelui model, nu păstrează din oficiu primul experiment.
+    porneste_din: int | None = None
 
     def setari_port(self, port: str) -> dict[str, Any]:
         return dict(self.porturi[port].get("setari", {}))
@@ -82,6 +85,11 @@ def citeste_config(cale: str | Path) -> Config:
     if len(principale) > 1:
         raise EroareConfig(f"În „{cale}”, un singur criteriu poate fi principal (acum: {', '.join(principale)})")
 
+    porneste_din = platforma.get("porneste_din")
+    if porneste_din is not None and (isinstance(porneste_din, bool) or not isinstance(porneste_din, int)
+                                     or porneste_din < 1):
+        raise EroareConfig(f"În „{cale}”, porneste_din e numărul unui experiment din jurnal (un întreg ≥ 1)")
+
     director = Path(platforma.get("director_lucru", "lucru"))
     if not director.is_absolute():
         director = Path.cwd() / director
@@ -98,4 +106,5 @@ def citeste_config(cale: str | Path) -> Config:
         criterii={nume: {"mai_mare_e_mai_bine": r["mai_mare_e_mai_bine"], "prag": float(r["prag"]),
                          **({"principal": True} if r.get("principal") else {})}
                   for nume, r in criterii.items()},
+        porneste_din=porneste_din,
     )

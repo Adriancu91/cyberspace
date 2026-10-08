@@ -188,6 +188,17 @@ def _texte_din(valoare: Any) -> set[str]:
     return set()
 
 
+def experimentul_de_pornire(cale_stare: Any) -> int | None:
+    """Din ce experiment a pornit linia (--porneste-din): pornire.json, scris de unealta de antrenare lângă stare."""
+    if not cale_stare:
+        return None
+    try:
+        experiment = json.loads(Path(cale_stare).with_name("pornire.json").read_text(encoding="utf-8")).get("experiment")
+    except (OSError, ValueError, AttributeError):
+        return None
+    return experiment if isinstance(experiment, int) and not isinstance(experiment, bool) else None
+
+
 def citeste_configurari(globuri: list[str]) -> dict[str, dict[str, Any]]:
     """Configurările Kronos care se potrivesc cu globurile date (ex. config/laptop_antrenare_lunga*.toml)."""
     rezultat = {}
@@ -205,6 +216,7 @@ def citeste_configurari(globuri: list[str]) -> dict[str, dict[str, Any]]:
                                    "buget_secunde": kronos.buget_antrenare_secunde,
                                    "arhitectura": {k: model[k] for k in ARHITECTURA if k in model},
                                    "de_la_zero": bool(model.get("de_la_zero", False)),
+                                   "pornire": experimentul_de_pornire(model.get("cale_stare")),
                                    "texte": sorted(_texte_din(brut.get("porturi", {})))}
             except Exception as e:  # noqa: BLE001 - o configurare stricată nu oprește observarea
                 rezultat[cheie] = {"stare": "indisponibil", "eroare": f"{type(e).__name__}: {e}"}

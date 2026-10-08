@@ -289,8 +289,18 @@ ALEGE spune pentru fiecare nevoie sărită de ce, în ordinea asta: nivelul; ce 
 - `--stare DOSAR`: alt dosar pentru `stare.json` și `cicluri.jsonl`, ca o probă să nu amestece memoria;
 - `--placa-libera`: doar cu `--simuleaza`, ca și cum placa ar fi liberă (ce ar alege după antrenarea de acum).
 
-**Ce n-a intrat în v1:** întoarcerea automată la modelul păstrat (o decide omul, din raport), oscilația, explorarea,
-cererea externă și setul sacru. Rămân pentru v2–v3.
+**Corecturi din 8 octombrie 2026 (cerute de Adrian):**
+- **Zgomotul se învață doar din experimente de cel puțin `[zgomot] minute_minime` minute (60).** Experimentele scurte
+  de căutare diferă mult mai mult între semințe și umflau pragul (0,0144 la val_bpb). Pe jurnalul real, nu rămâne
+  nicio pereche (toate cele 42 de ore lungi au sămânța 0): pragurile revin la podea.
+- **Nota se compară doar pe același număr de povești** (`povesti = 40` la capacitatea „sens”). Măsurătorile pe 20 de
+  povești (de ex. 4,7 la #226) nu intră în linia de bază, în scorul de acum sau în zgomot.
+- **Retenția R** (doar raportată): la capacitățile unde „mai mare e mai bine”, scorul ultimului model ÷ scorul modelului
+  din care a pornit linia lui (pornire.json). Apare în vector și în `stare.json` (la fapte: faptele noi rămase).
+
+**Ce n-a intrat în v1:** întoarcerea automată la modelul păstrat (o decide omul, din raport), oscilația, explorarea și
+cererea externă. Rămân pentru v2–v3. Setul sacru de fapte există din 8 octombrie (`date/fapte/examen_sacru.json`), dar
+CONTINUUM nu-l vede: se dă doar manual.
 
 ### v2 — Setul sacru și promovarea
 - A doua bucată de validare, invizibilă deciziilor automate.
