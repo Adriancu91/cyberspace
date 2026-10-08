@@ -12,6 +12,8 @@ Niciuna și niciun fragment de 5 cuvinte din ele nu apare în poveștile cu fapt
 cine a înțeles faptul, nu cine a memorat propozițiile din antrenare. Scorul principal: fapte_noi (doar cu cuvântul din fapt).
 Nota profesorului: elevul pornește din prima propoziție a unor povești din validarea R2 (alese mereu la fel) și scrie cam
 cât povestea originală; profesorul notează fără întâmplare.
+Faptele marcate greșite de om (module/fapte_gresite.py, date/fapte/fapte_gresite.json) nu se scot din examene: se
+marchează („fapt_gresit”), iar scorurile vin și fără ele (…_fara_gresite). Fără fișier, nimic nu se schimbă.
 """
 
 from __future__ import annotations
@@ -23,6 +25,7 @@ import statistics
 from pathlib import Path
 from typing import Any
 
+from module.fapte_gresite import subiectele_gresite
 from module.profesor_qwen import SUBIECTE
 
 SEPARATOR = "<|endoftext|>"
@@ -112,7 +115,7 @@ def e_corect(completare: str, acceptate: tuple[str, ...]) -> bool:
 def examineaza_fapte(model: Any) -> list[dict[str, Any]]:
     """Cele 150 de întrebări (50 de fapte × 3 propoziții), cu completarea elevului și dacă e corectă."""
     max_simboluri = 4 if getattr(model, "tokenizer", "") == "bpe" else 16  # pe litere: un cuvânt are mai multe semne
-    rezultate = []
+    rezultate, gresite = [], subiectele_gresite()
     for subiect, fapt in SUBIECTE:
         inceput, acceptate = INTREBARI[subiect]
         for k, cadru in enumerate(CADRE, start=1):
@@ -121,17 +124,28 @@ def examineaza_fapte(model: Any) -> list[dict[str, Any]]:
             rezultate.append({"subiect": subiect, "fapt": fapt, "propozitie": k, "intrebare": propozitie,
                               "completare": completare, "raspuns": raspunsul(completare),
                               "acceptate": list(acceptate), "corect": e_corect(completare, acceptate),
-                              "corect_cuvantul_din_fapt": e_corect(completare, acceptate[:1])})
+                              "corect_cuvantul_din_fapt": e_corect(completare, acceptate[:1]),
+                              **({"fapt_gresit": True} if subiect in gresite else {})})
     return rezultate
 
 
 def scor_fapte(rezultate: list[dict[str, Any]]) -> dict[str, int]:
     """Numerele examenului de fapte: corecte doar cu cuvântul din fapt, cu sinonime, și câte fapte au măcar unul corect."""
-    return {
+    scor = {
         "fapte_corecte": sum(r["corect_cuvantul_din_fapt"] for r in rezultate),
         "fapte_corecte_cu_sinonime": sum(r["corect"] for r in rezultate),
         "fapte_stiute": sum(1 for s, _ in SUBIECTE if any(r["corect"] for r in rezultate if r["subiect"] == s)),
     }
+    return {**scor, **_fara_gresite(rezultate, "fapte_corecte")}
+
+
+def _fara_gresite(rezultate: list[dict[str, Any]], nume: str) -> dict[str, int]:
+    """Doar dacă omul a marcat fapte greșite: scorul fără ele și câte fapte sunt marcate."""
+    marcate = {r["subiect"] for r in rezultate if r.get("fapt_gresit")}
+    if not marcate:
+        return {}
+    return {f"{nume}_fara_gresite": sum(r["corect_cuvantul_din_fapt"] for r in rezultate if not r.get("fapt_gresit")),
+            "fapte_gresite_marcate": len(marcate)}
 
 
 # --- examenul de fapte nou: propoziții reformulate, care nu apar în textele de antrenare ------------------------
@@ -152,24 +166,26 @@ def citeste_examen_nou(cale: str | Path = CALE_EXAMEN_NOU) -> list[dict[str, Any
 def examineaza_fapte_noi(model: Any, cale: str | Path = CALE_EXAMEN_NOU) -> list[dict[str, Any]]:
     """Cele 150 de propoziții reformulate, cu completarea elevului (fără întâmplare) și dacă e corectă."""
     max_simboluri = 4 if getattr(model, "tokenizer", "") == "bpe" else 16
-    rezultate = []
+    rezultate, gresite = [], subiectele_gresite()
     for intrebare in citeste_examen_nou(cale):
         completare = model.completeaza(intrebare["propozitie"].split(" ___")[0], max_simboluri)
         rezultate.append({"subiect": intrebare["subiect"], "fapt": intrebare["fapt"], "intrebare": intrebare["propozitie"],
                           "completare": completare, "raspuns": raspunsul(completare),
                           "acceptate": list(intrebare["acceptate"]),
                           "corect": e_corect(completare, tuple(intrebare["acceptate"])),
-                          "corect_cuvantul_din_fapt": e_corect(completare, (intrebare["raspuns"],))})
+                          "corect_cuvantul_din_fapt": e_corect(completare, (intrebare["raspuns"],)),
+                          **({"fapt_gresit": True} if intrebare["subiect"] in gresite else {})})
     return rezultate
 
 
 def scor_fapte_noi(rezultate: list[dict[str, Any]]) -> dict[str, int]:
     """Numerele examenului nou, ca la cel vechi: doar cu cuvântul din fapt (fapte_noi), cu sinonime, fapte știute."""
-    return {
+    scor = {
         "fapte_noi": sum(r["corect_cuvantul_din_fapt"] for r in rezultate),
         "fapte_noi_cu_sinonime": sum(r["corect"] for r in rezultate),
         "fapte_noi_stiute": len({r["subiect"] for r in rezultate if r["corect"]}),
     }
+    return {**scor, **_fara_gresite(rezultate, "fapte_noi")}
 
 
 # --- nota profesorului pe povești nevăzute ---------------------------------------------------------------------
