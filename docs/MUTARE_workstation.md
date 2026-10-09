@@ -30,8 +30,10 @@ modelele nopților 1–2 se adaugă sâmbătă dimineață.*
 | Modelul #252 (punctul de plecare al școlii și al faptelor) | `lucru/stocare/modele/experiment_252.pt` + `.json` | 129 MB | copiere |
 | Modelul #257 (cel mai bun pe povești) | `lucru/stocare/modele/experiment_257.pt` + `.json` | 129 MB | copiere |
 | Modelul #262 (din care a pornit antrenarea 7) | `lucru/stocare/modele/experiment_262.pt` + `.json` | 129 MB | copiere |
-| Cel mai bun model al nopților 1–2 | *(se completează sâmbătă)* | ~129 MB | copiere |
-| Starea liniilor lungi (`gpt.pt` + `pornire.json`), pentru reluare | `lucru/antrenare_lunga_7/`, `_8/`, `fapte_zero/` | ~390 MB fiecare | copiere (doar ultimele) |
+| Antrenarea 7 după ora 8 (#278: 0,4263, 64 de fapte noi, sacru 31/50; nepăstrat de Kronos, deci fără `experiment_278.pt`) | `lucru/antrenare_lunga_7/gpt.pt` (greutăți + optimizator) | 405 MB | copiere |
+| Fapte-zero, ora 7 (#286: de la zero cu 5% fapte, 0,4686, 65 de fapte noi, sacru 25/50) | `lucru/stocare/modele/experiment_286.pt` + `.json` | 129 MB | copiere |
+| Cel mai bun model al nopții 2 | *(se completează sâmbătă)* | ~129 MB | copiere |
+| Starea liniilor lungi (`gpt.pt` + `pornire.json`), pentru reluare | `lucru/antrenare_lunga_8/`, `lucru/fapte_zero/` | ~405 MB fiecare | copiere (doar ultimele) |
 | Jurnalul Kronos | `lucru/jurnal/` | 0,9 MB | copiere (niciodată editat) |
 | Jurnalele CONTINUUM | `lucru/continuum/`, `lucru/continuum_pe_bune/` | ~1 MB | copiere |
 | Examenele date (fapte, sacru, profesor) | `lucru/examen_fapte_nou/`, `examen_sacru/`, `examen_fapte/`, `profesor/` | ~2,5 MB | copiere |
@@ -43,8 +45,12 @@ modelele nopților 1–2 se adaugă sâmbătă dimineață.*
 | Validarea oficială (examenul) | `date/tinystories_r2/validare.txt` | parte din 175 MB | **copiere obligatorie**: aceiași octeți, ca val_bpb să rămână comparabil |
 | Profesorul (Qwen3-4B-Instruct-2507) | `%USERPROFILE%\.cache\huggingface\hub\models--Qwen--Qwen3-4B-Instruct-2507` | 7,6 GB | copiere (la fel de mare ca descărcarea, dar fără rețea) |
 
-**Fără înghețurile școlii:** cam 1,5 GB. **Cu ele:** cam 10 GB. **Cu profesorul:** cam 17 GB. Încape pe un stick USB 3
-de 32 GB.
+**Mărimile, adunate:**
+- fără înghețurile școlii și fără profesor: cam 2 GB, plus 2,1 GB TinyStories întreg (secțiunea 3);
+- înghețurile școlii: ~8–12 GB în plus;
+- profesorul: 7,6 GB.
+
+În total, ~20 GB, deci încape pe un stick USB 3 de 32 GB.
 
 **Ce nu se copiază** (experimente vechi, de arhivat pe un disc extern, dacă vrea Adrian):
 - `lucru/stocare/modele/`: 45 GB, 158 de fișiere, mai ales modelele mari m3 de 1,3 GB; se copiază doar cele din tabel;
