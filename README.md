@@ -2372,6 +2372,9 @@ Starea fiecărei faze e la sfârșitul planului, în secțiunea „Stare”.
   - De atunci, faptele marcate ies din hrana generată de acum înainte. În examene se marchează, dar nu se șterg.
     Fiecare examen de fapte dă și scorul fără ele (`fapte_corecte_fara_gresite`, `fapte_noi_fara_gresite`).
   - Fără fișier, totul merge exact ca înainte.
+  - **Verificate de om pe 9 octombrie 2026:** Adrian a citit toate cele 50 de fapte și niciunul nu e greșit.
+    - Hrana și examenele rămân neschimbate.
+    - `date/fapte/fapte_gresite.json` nu s-a scris, deci mecanismul rămâne inactiv.
 - **Biblioteca școlii se curăță după corectitudine** (ramura `kronos-cod`, școala v0.3):
   - la fiecare regresie, fiecare soluție din bibliotecă e mutată pe sarcinile nevăzute de aceeași formă ale nivelului ei;
   - cele care pică ies în `lucru/cod_v03/respinse/curatare_<linie>.jsonl`, cu motivul.
