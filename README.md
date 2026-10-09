@@ -2512,6 +2512,36 @@ Detaliile, cu verdictul, sunt în `docs/preinregistrari/2026-10-08_noaptea1.md` 
   cu hrană, iar pe setul sacru 31/50, cel mai bun. Kronos n-a păstrat-o, pentru că bate #262 cu doar 0,0041, sub
   pragul de 0,005. Ca model păstrat, treapta 4 nu e atinsă.
 
+### Faza 3 (vineri, 9 octombrie): școala v0.3, verdictul și ce știe un model de la zero fără fapte
+
+**Școala de cod v0.3, pilotul** (07:38–09:17, pe ramura `kronos-cod`; detalii în README-ul de acolo și în
+`../cyberspace-cod/lucru/cod_v03/raport.md`):
+- **0n (numerele 0–99):**
+  - B și D l-au trecut în 3 runde (nevăzut 80% și 85%, sacru 75%);
+  - A, doar cu abecedarul, nu: cel mai bun nevăzut 65% în 55 de runde.
+- **0w (cuvintele):** B și D au picat, cu 0% tot timpul.
+  - Modelul repetă cuvintele din exemplele puse în fața lui: „moon” → `"sun"`.
+  - Cauza e tokenizer-ul: ` moon` e o singură bucată, iar `"moon"` sunt 4 (`"`, `m`, `oon`, `"`).
+- **B și D au mers la fel pe aceleași runde:** ajută exemplele în plus, nu descoperirea.
+- **Poveștile:** cel mult 0,4383, sub 0,46.
+- **Verdictul: PARCATĂ.**
+  - B n-a ajuns la 2A, deci, după plan, școala se reia pe workstation cu un model mai mare și un tokenizer nou.
+  - Tokenizer-ul nou nu trebuie să taie nici numerele în cifre, nici cuvintele după ghilimele.
+  - Înghețul final e `v03_final`.
+
+**Ce știe un model de la zero fără fapte** (pentru comparația de sâmbătă): aceeași rețetă, aceleași 7 ore, singura
+diferență fiind hrana.
+
+| Modelul | val_bpb | Fapte noi (din 150) | Setul sacru (din 50) |
+|---|---|---|---|
+| Noaptea 3, ora 7 (#225): de la zero, fără fapte | 0,4636 | 34 | 11 |
+| Fapte-zero, ora 7 (#286): de la zero, 5% fapte | 0,4686 | 65 | 25 |
+| #252: fapte prin injectare (referință) | 0,434 | 72 | 26 |
+
+- 5% fapte de la început aproape dublează faptele (34 → 65) și dublează setul sacru (11 → 25). Costul e +0,005 la
+  val_bpb.
+- Faptele ajung cât prin injectare: 65 față de 72 (zgomotul e ±13) și 25 față de 26.
+
 ## Toate comenzile
 
 ```

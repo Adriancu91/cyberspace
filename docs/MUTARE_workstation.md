@@ -111,6 +111,11 @@ La fiecare cifră se adaugă ~10% pentru fragmentare. Ținta e sub 7 GB, ca să 
 **De ce:**
 - tokenizer-ul de acum (BPE 4.096, învățat pe TinyStories în engleză) taie orice număr în cifre: „46” = două bucăți.
   Școala de cod v0.1–v0.2 s-a rupt chiar la numere;
+- în școala v0.3 (9 octombrie), numerele 0–99 au trecut, cu exemple în plus, dar lanțul s-a rupt la cuvintele între
+  ghilimele:
+  - ` moon` e o singură bucată, dar `"moon"` sunt 4 (`"`, `m`, `oon`, `"`), deci modelul nu poate copia cuvântul pe
+    care îl vede;
+  - tokenizer-ul nou trebuie să țină cuvintele întregi și după ghilimele sau paranteze;
 - nu știe româna: „ăâîșț” și cuvintele românești s-ar tăia în bucăți foarte mici.
 
 **Propunerea:**
