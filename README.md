@@ -2711,6 +2711,64 @@ rost, iar o singură sarcină înseamnă 25 de puncte.
    umple de forme ciudate.
 3. Linia D cu repetare sau cu forme alternative ale aceleiași soluții, ca să primească exact cât B.
 
+### Școala de cod v0.3 (planul joi–sâmbătă, faza 1b; pilotul vineri, 9 octombrie, 07:38–09:17)
+
+**Ce s-a schimbat față de v0.2** (`config/scoala_cod_v03.toml`, totul în `lucru/cod_v03/`):
+- **Nivelul 0 = numerele 0–99 împreună, fără cuvinte.** Intern se numește 0n, ca nivelul 0 din v0.1 să rămână
+  neschimbat. Seturile sunt: văzut 55 (mai multe nu încap în 0–99), nevăzut 20, adversarial cu trei cifre, sacru 20.
+- **Cuvintele sunt nivelul 0w**, imediat după: 116 cuvinte scurte și 35 lungi pentru adversarial.
+- **La 0n și 0w, codul e doar valoarea** (`46`, `"dog"`) sau `print(valoarea)`.
+- **Linia D primește exact cât B**, cu repetări când e nevoie.
+- **Biblioteca se curăță la regresie** (lecția SANDBOX-7).
+- **Școala se oprește singură:** nicio rundă nouă după 18:20.
+- **STOP-ul comun** (`../cyberspace/lucru/STOP`) oprește și școala.
+- **Din v0.2 rămân:** 70% povești, pregătirea până la pierderea 0,5, regresia pe povești la 0,46.
+
+**Pilotul.**
+- Pornit la 07:34, oprit la 07:34:54, încă în pregătire, ca să primească STOP-ul comun. Repornit la 07:38.
+- Înainte de pornire am verificat placa (liberă, 59 °C) și alimentarea (pe încărcător).
+- Raportul întreg e în `lucru/cod_v03/raport.md`, iar înghețul final e `v03_final` (tag-ul `cod/v03_final`).
+
+| Nivel | A: văzut / nevăzut / adversarial / sacru | B: văzut / nevăzut / adversarial / sacru | D: văzut / nevăzut / adversarial / sacru |
+|---|---|---|---|
+| 0n | ✗ 73% / 45% / 0% / 45% (55 de runde, 31 min) | ✓ 66% / **80%** / 15% / 75% (runda 3) | ✓ 82% / **85%** / 10% / 75% (runda 3) |
+| 0w | — | ✗ 0% / 0% / 0% / 0% (54 de runde, 30 min) | ✗ 0% / 0% / 0% / 0% (53 de runde, 30 min) |
+
+**Ce a mers:**
+- **Numerele 0–99:** B și D le-au trecut în 3 runde, cu 75% pe setul sacru. În v0.2, lanțul se rupea chiar aici.
+- **Poveștile s-au păstrat:** #252 avea 0,434, iar pe parcurs au fost cel mult 0,4383, sub pragul de 0,46.
+- **Linia D a primit exact cât B:** 30 de soluții la 0n și 5 la 0w.
+- **B față de D:** la fel, pe aceleași runde. La 0n, nevăzutul a fost 45/70/80% la B și 50/70/85% la D, iar la 0w 0%
+  la amândouă. Ce le-a ajutat sunt **exemplele în plus** (sarcini cu soluții corecte în antrenare), nu faptul că B și
+  le-a descoperit singur.
+- **A**, doar cu abecedarul, n-a trecut 0n în 55 de runde. Cel mai bun nevăzut a fost 65%. În ultima rundă scria „show
+  85” → `8`, adică doar prima cifră.
+
+**Unde se rupe lanțul: la cuvinte (0w), pe B și pe D.**
+- Modelul **repetă cuvintele din exemplele de abecedar** puse în fața lui, în loc de cuvântul cerut: „show the word
+  moon” → `"sun"`, `"dog"`, `"red"`.
+  - Exact aceste trei cuvinte sunt 44% (B) și 52% (D) din încercările picate la 0w.
+  - Cu alte cuvinte greșite, 73–77% din încercări au dat alt rezultat.
+- Doar 7% (B) și 5% (D) din încercări au avut cuvântul bun. Și atunci, adesea, cu un spațiu în plus între ghilimele
+  (`" rock"`), pe care forma strictă îl respinge.
+- Chiar fără verificarea de formă, ar fi fost mult sub 80%.
+
+**Curățarea bibliotecii** nu s-a declanșat: n-a fost nicio regresie.
+
+**Verdictul (planul, faza 3a): PARCATĂ.**
+- B n-a ajuns la nivelul 2A (s-a oprit la 0w). Școala se reia pe workstation, cu un model mai mare și un tokenizer care
+  nu taie numerele în cifre.
+- **De adăugat la tokenizer**, după v0.3:
+  - numerele trec acum, cu exemple în plus;
+  - ce rupe lanțul e copierea unui cuvânt între ghilimele.
+- **Dovada, cu tokenizer-ul de acum (BPE 4.096):**
+  - ` moon` e o singură bucată, iar `"moon"` sunt 4: `"`, `m`, `oon`, `"`. La fel, `"rock"` = `"`, `ro`, `ck`, `"`.
+  - Ca să scrie `"moon"`, modelul trebuie să refacă din bucăți diferite cuvântul pe care îl vede întreg în sarcină.
+    Când îl copiază întreg, iese `" rock"`, cu spațiu.
+  - Tokenizer-ul nou trebuie să țină cuvintele întregi și după ghilimele, sau școala să ceară forma `print(cuvânt)` cu
+    alt fel de citat.
+- Raport complet, îngheț final (`v03_final`), B față de A și D pe aceleași runde: mai sus și în raport.
+
 ## Toate comenzile
 
 ```
