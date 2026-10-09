@@ -123,7 +123,15 @@
     - lista albă stă la `[nevoi.continua]`, nu la `[linii]` (de ce: README, „Noaptea 1”);
     - văzutul la nivelul 0 e 55, nu 60, pentru că mai multe nu încap în 0–99 (`config/scoala_cod_v03.toml`);
     - pornirea a fost la 21:36, nu la ~23:00, cu adendum datat în pre-înregistrare.
-- [ ] Faza 2 — noaptea 1 raportată; treapta 5: …
+- [x] Faza 2 — noaptea 1 raportată; treapta 5: **a ales singur: NU**
+  - **CONTINUUM pe bune** (21:36–07:30, 180 de cicluri, oprit la 07:30):
+    - o remăsurare a faptelor pe #262, aleasă singur;
+    - 133 de „nu pornesc nimic”: poveștile sunt saturate, iar lista albă n-are altceva;
+    - 46 de REPAUS.
+  - **Plasa de siguranță:** fapte-zero, la 00:00:27.
+  - **Răspunsul 1b: da.** La ora 7, fapte-zero are 0,4686 (noaptea 3: 0,4636, deci +0,0050), 65 de fapte noi
+    (#252: 72, sub zgomot) și sacru 25/50 (#252: 26).
+  - **Pre-înregistrarea** e închisă, cu verdictul. README e actualizat.
 - [ ] Faza 3 — v0.3 (ramura aleasă: …), verdict: …; pachet de mutare scris; pre-înregistrare noaptea 2
 - [ ] Faza 4 — noaptea 2 raportată (ce a rulat: …)
 - [ ] Faza 5 — închidere
