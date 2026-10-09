@@ -138,11 +138,12 @@ def test_configurarile_vechi_raman_cum_au_fost(fisier):
     assert config.setari_port("model")["hrana"] == ""
 
 
-@pytest.mark.parametrize("fisier, ore, rata, durata, din_zero", [("laptop_antrenare_lunga_8", 7, 0.00005, 7 * 3600, False),
+@pytest.mark.parametrize("fisier, ore, rata, durata, din_zero", [("laptop_antrenare_lunga_8", 8, 0.00005, 8 * 3600, False),
                                                                  ("laptop_fapte_zero", 7, 0.001, 8 * 3600, True)])
 def test_configurarile_noptii_1(fisier, ore, rata, durata, din_zero):
     """Planul joi–sâmbătă: antrenarea 8 (lista albă a lui CONTINUUM) și fapte-zero (plasa de siguranță). Amândouă cu
-    hrana 5%, examenele de fiecare oră și criteriile implicite (fără [criterii])."""
+    hrana 5%, examenele de fiecare oră și criteriile implicite (fără [criterii]). Antrenarea 8 are 8 ore din noaptea 2
+    (faza 3c); în noaptea 1 n-a rulat."""
     config = citeste_config(RADACINA / "config" / f"{fisier}.toml")
     model = config.setari_port("model")
     assert (config.experimente, model["rata_invatare"], model["durata_scaderii_secunde"]) == (ore, rata, durata)
