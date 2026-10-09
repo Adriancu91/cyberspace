@@ -64,7 +64,7 @@ def worktree_de_proba(tmp: Path, schimbari: dict[str, Any] | None = None, sacre_
                        "povesti.director_cache": "", "povesti.tokenizer": "", "pregatire.pasi": 30,
                        "pregatire.verifica_la": 10})
     if config.endswith("_v03.toml"):  # fără oprirea de la 18:30 (testele merg la orice oră; ceasul se dă în test)
-        valori.update({"pilot.niveluri": ["0n", "0w"], "buget.oprire_la": ""})
+        valori.update({"pilot.niveluri": ["0n", "0w"], "buget.oprire_la": "", "buget.stop_comun": "stop_comun/STOP"})
     valori.update(schimbari or {})
     cale = rad / "config" / Path(config).name
     cale.parent.mkdir(parents=True, exist_ok=True)

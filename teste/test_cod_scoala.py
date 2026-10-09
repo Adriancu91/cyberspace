@@ -469,3 +469,17 @@ def test_v03_la_regresie_biblioteca_se_curata_si_ramane_curatata(tmp_path):
     assert rea["cod"] in coduri_in_fisier()  # înghețul vechi o avea
     chei = {(i["test"], i["cod"]) for i in Biblioteca(s.cod, "B", s.schelete_abecedar).intrari}
     assert (rea["test"], rea["cod"]) not in chei and rea["cod"] not in coduri_in_fisier()  # dar rămâne scoasă
+
+
+def test_v03_stop_comun_opreste_si_scoala(tmp_path):
+    """Planul joi–sâmbătă: STOP-ul comun (lucru/STOP din proiectul principal) oprește tot, și școala din worktree."""
+    s = scoala_v03(tmp_path)
+    elevi_de_proba(s)
+    s.pregateste()
+    stop = s.radacina / "stop_comun" / "STOP"  # în probă, „buget.stop_comun” = stop_comun/STOP
+    stop.parent.mkdir(parents=True, exist_ok=True)
+    stop.write_text("", encoding="utf-8")
+    assert s.nivel("A", "0n") == "oprit"
+    assert "butonul STOP comun (stop_comun/STOP)" in jurnal(s)[-1]["motiv"]
+    stop.unlink()
+    assert s.nivel("A", "0n") == "trecut"  # se reia de unde a rămas

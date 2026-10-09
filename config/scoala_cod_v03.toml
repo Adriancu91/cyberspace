@@ -86,6 +86,7 @@ minute_pe_nivel = 30
 runde_pe_nivel = 60
 oprire_la = "18:20"                # v0.3: nicio rundă nouă după 18:20 (îngheț + raport parțial), ca placa să fie liberă
                                    # la 18:30; la 19:00 e a nopții
+stop_comun = "../cyberspace/lucru/STOP"   # STOP-ul proiectului principal (python -m kronos opreste) oprește și școala
 
 [regresie]
 scadere_maxima = 0.15

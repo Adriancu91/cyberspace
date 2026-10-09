@@ -508,6 +508,9 @@ class Scoala:
             return motiv
         if paznic_cod.oprire_ceruta(self.lucru):
             return "butonul STOP (lucru/STOP)"
+        comun = self.cfg["buget"].get("stop_comun")
+        if comun and (self.radacina / comun).exists():  # planul joi–sâmbătă: STOP-ul comun oprește tot, și școala
+            return f"butonul STOP comun ({comun})"
         if self.dupa_ora_de_oprire():
             return (f"ora de oprire ({self.cfg['buget']['oprire_la']}): nicio rundă nouă după ea, ca placa să fie "
                     f"liberă pentru noapte (19:00)")
