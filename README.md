@@ -2465,6 +2465,50 @@ Starea fiecărei faze e la sfârșitul planului, în secțiunea „Stare”.
     „nu judeca faptele după ea”.
   - Ambele stau în `date/fapte/traduceri.json`.
 
+### Noaptea 1, rezultatul (9 octombrie, 07:30)
+
+Detaliile, cu verdictul, sunt în `docs/preinregistrari/2026-10-08_noaptea1.md` („Ce a ieșit”) și în
+`docs/noaptea1_plasa.md`.
+
+**CONTINUUM pe bune** (21:36–07:30, 180 de cicluri, oprit la 07:30 prin închiderea procesului):
+
+| Ciclurile | Ora | Ce a văzut și ce a ales |
+|---|---|---|
+| #1 | 21:36 | ÎNVĂȚARE, placa liberă. **A ales remasoara:fapte**: zona galbenă, 59 de fapte noi pe #262 față de 72 la #252. Examenul, 6 s, a confirmat 59. |
+| #2–#3, #5–#135 | 21:37–00:00 | ÎNVĂȚARE, placa liberă. **„Nu pornesc nimic”**: „dezvolta:fapte” n-are nicio configurare permisă. „continua” nu e cerută: poveștile sunt saturate (+0,0039, +0,0013). |
+| #4 | 21:39 | REPAUS: placa ocupată de testele mele. |
+| #136–#180 | 00:01–07:21 | REPAUS: placa ocupată de fapte-zero. |
+
+- **Treapta 5: a ales singur: NU.**
+  - Fiecare decizie a fost a lui, cu motiv, după regulile scrise.
+  - N-a pornit nimic din afara listei albe.
+  - Antrenarea nopții a pornit-o însă plasa de siguranță, nu el.
+- **Plasa de siguranță:** fapte-zero, pornit de Claude Code la 00:00:27.
+
+**Fapte-zero** (model nou de la zero, 10×512, 5% fapte din prima oră; alături, noaptea 3: aceeași rețetă, fără fapte):
+
+| Ora | # | val_bpb | Noaptea 3 | Diferența | Fapte noi | Nota |
+|---|---|---|---|---|---|---|
+| 1 | 280 | 0,5834 | 0,5762 | +0,0072 | 43 | 3,42 |
+| 2 | 281 | 0,5530 | 0,5501 | +0,0029 | 51 | 3,12 |
+| 3 | 282 | 0,5347 | 0,5285 | +0,0062 | 59 | 3,55 |
+| 4 | 283 | 0,5133 | 0,5102 | +0,0031 | 66 | 3,55 |
+| 5 | 284 | 0,5012 | 0,4941 | +0,0071 | 60 | 3,83 |
+| 6 | 285 | 0,4816 | 0,4771 | +0,0045 | 69 | 3,55 |
+| 7 | 286 | 0,4686 | 0,4636 | +0,0050 | 65 | 4,03 |
+
+- **Setul sacru pe #286:** 25 din 50 (26 cu sinonime). #252, prin injectare, avea 26; #262 29; antrenarea 7 după ora 8,
+  31.
+- **Răspunsul nopții (1b): da.**
+  - De la zero, cu 5% fapte de la început, modelul ajunge în 7 ore la fapte comparabile cu injectarea: 65 față de 72 pe
+    examenul nou (zgomotul e ±13) și 25 față de 26 pe setul sacru.
+  - Nu are ce uita, iar costul pe povești e ~0,005 față de aceeași rețetă fără fapte.
+  - 7 ore nu ajung însă pentru povești (0,4686 față de 0,4304 la #262). Comparația la ore egale cu injectarea vine
+    sâmbătă.
+- **Treapta 4, observație:** starea antrenării 7 după ora 8 (#278) are val_bpb 0,4263 ≤ 0,428 și 64 de fapte noi ≥ 60,
+  cu hrană, iar pe setul sacru 31/50, cel mai bun. Kronos n-a păstrat-o, pentru că bate #262 cu doar 0,0041, sub
+  pragul de 0,005. Ca model păstrat, treapta 4 nu e atinsă.
+
 ## Toate comenzile
 
 ```
