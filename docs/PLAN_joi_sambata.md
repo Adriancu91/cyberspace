@@ -132,6 +132,20 @@
   - **Răspunsul 1b: da.** La ora 7, fapte-zero are 0,4686 (noaptea 3: 0,4636, deci +0,0050), 65 de fapte noi
     (#252: 72, sub zgomot) și sacru 25/50 (#252: 26).
   - **Pre-înregistrarea** e închisă, cu verdictul. README e actualizat.
-- [ ] Faza 3 — v0.3 (ramura aleasă: …), verdict: …; pachet de mutare scris; pre-înregistrare noaptea 2
+- [x] Faza 3 — v0.3 (ramura aleasă: `kronos-cod`), verdict: **parcată**; pachet de mutare scris; pre-înregistrare noaptea 2
+  - **Gata vineri, ~09:45.**
+  - **v0.3 pe `kronos-cod`**, pilotul 07:38–09:17:
+    - 0n trecut de B și D în 3 runde (80% / 85%), A pică;
+    - 0w picat de B și D (0%): modelul copiază cuvintele exemplelor, iar `"moon"` se taie în 4 bucăți;
+    - poveștile ≤ 0,4383.
+  - **Verdict: PARCATĂ** (B n-a ajuns la 2A). Înghețul final e `v03_final`.
+  - **Pachetul de mutare** e scris (`docs/MUTARE_workstation.md`, cu licențele verificate). Modelul nopții 2 se adaugă
+    sâmbătă.
+  - **Pre-înregistrarea nopții 2** e scrisă: CONTINUUM cu lista albă antrenarea 8 (8 ore); plasa la 20:00 pornește tot
+    antrenarea 8.
+  - **Comparația pentru sâmbătă:** de la zero, fără fapte, 7 ore (#225): 34 de fapte noi și sacru 11, față de 65 și 25
+    cu 5% fapte (#286).
+  - **Adrian** a verificat faptele: niciunul greșit.
+  - **STOP-ul comun** oprește și școala.
 - [ ] Faza 4 — noaptea 2 raportată (ce a rulat: …)
 - [ ] Faza 5 — închidere
