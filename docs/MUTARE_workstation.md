@@ -242,6 +242,14 @@ acoperă doar împachetarea. Textele rămân ale site-urilor de unde au fost lua
 - pe workstation se rulează cu placa liberă, ca acum.
 
 **Prima oră pe workstation (lista de verificat):**
+0. **Arhiva de mutare**, înainte de orice: `cyberspace_mutare_2026-10-10.zip`, **24,40 GB** (cum arată Windows;
+   26.203.365.970 de octeți, 221 de fișiere). Făcută pe laptop sâmbătă, 10 octombrie; se trimite prin Tailscale
+   (Taildrop) către `desktop-br58s2c`, unde ajunge în Descărcări.
+   - Amprenta SHA256: `4bee9729767c57de4b1fd79866bd258406b6284f3dd43c32926e39fd87f34e42`.
+   - Verificarea, în PowerShell: `Get-FileHash -Algorithm SHA256 cyberspace_mutare_2026-10-10.zip`. Trebuie să iasă
+     exact amprenta de mai sus (literele mari sau mici nu contează). Dacă nu iese, arhiva s-a stricat pe drum și se
+     trimite din nou.
+   - `CITESTE.txt` din arhivă spune unde se pune fiecare folder.
 1. `python unelte/verifica_mediu.py`: driverul, CUDA, PyTorch, placa.
 2. `python -m pytest` în ambele foldere (main și `cyberspace-cod`): toate trebuie să treacă. Se notează numărul
    (pe laptop, joi: 490 + 602, fără cele 5 de mai sus).
