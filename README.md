@@ -2542,6 +2542,45 @@ diferență fiind hrana.
   val_bpb.
 - Faptele ajung cât prin injectare: 65 față de 72 (zgomotul e ±13) și 25 față de 26.
 
+### Noaptea 2 (10 octombrie, 02:41–12:11): CONTINUUM cu lista albă „antrenarea 8”; antrenarea 8 → #295, treapta 4
+
+Detaliile sunt în `docs/preinregistrari/2026-10-09_noaptea2.md` (adendum, „Ce a ieșit”, verdict) și în
+`docs/noaptea2_plasa.md`.
+
+- **Pornirea întârziată:** vineri, încărcătorul s-a deconectat de 1.732 de ori (09:42–11:01), iar laptopul a dormit
+  11:01–02:38. CONTINUUM a pornit la 02:41, nu la 18:45.
+- **CONTINUUM:** 41 de cicluri, fără nicio acțiune. **A ales singur: NU**, ca în noaptea 1: tendința e saturată, iar
+  „dezvolta” n-are nicio configurare. La 07:30 a fost închis.
+- **Plasa de siguranță** a pornit antrenarea 8 la 03:03:30, după 20 de minute de alimentare stabilă.
+  - La 09:53, cineva de la laptop i-a închis fereastra.
+  - Adrian a ales reluarea, iar orele 7–8 au rulat 10:06–12:11, din starea de după ora 6. De acum, rulările lungi pornesc
+    cu fereastra ascunsă.
+
+**Antrenarea 8** (din #262, 8 ore, rata 0,00005 → 0,000005, 5% hrană):
+
+| Ora | # | val_bpb | Decizia | Fapte noi (R) | Nota |
+|---|---|---|---|---|---|
+| 1 | 288 | 0,4404 | respinsă | 59 (1,00) | 4,55 |
+| 2 | 289 | 0,4387 | respinsă | 61 (1,03) | 4,75 |
+| 3 | 290 | 0,4372 | respinsă | 67 (1,14) | 4,38 |
+| 4 | 291 | 0,4344 | respinsă | 60 (1,02) | 4,70 |
+| 5 | 292 | 0,4307 | respinsă | 59 (1,00) | 4,78 |
+| 6 | 293 | 0,4281 | respinsă (+0,0023 sub prag) | 63 (1,07) | 4,62 |
+| 7 | 294 | 0,4259 | respinsă (+0,0045 sub prag) | 61 (1,03) | 4,17 |
+| 8 | **295** | **0,4249** | **păstrată** (+0,0055) | 64 (1,08) | **5,35** |
+
+- **Răspunsul la 1a: da, la limită.** Continuarea cu pași mici mai câștigă +0,0055 în 8 ore și bate repornirea cu rată
+  dublă (antrenarea 7: 0,4263).
+  - Am greșit în pre-înregistrare: mă așteptam la sub 0,005.
+  - Ultimele două ore au adus doar +0,0022 și +0,0010.
+- **Setul sacru pe #295:** 30 din 50.
+- **Treapta 4 e atinsă de #295:** povești 0,4249 ≤ 0,428, 64 de fapte noi ≥ 60, cu 5% hrană, păstrat de Kronos,
+  confirmat pe setul sacru. E și cel mai bun model păstrat la povești (înainte, #257: 0,4281) și la notă (înainte,
+  #260: 5,08).
+
+**Bilanțul săptămânii:** `docs/UNDE_AM_AJUNS_2026-10-10.md` (scara, cel mai bun model pe fiecare criteriu, cifrele,
+deciziile pentru Adrian).
+
 ## Toate comenzile
 
 ```

@@ -32,7 +32,7 @@ modelele nopților 1–2 se adaugă sâmbătă dimineață.*
 | Modelul #262 (din care a pornit antrenarea 7) | `lucru/stocare/modele/experiment_262.pt` + `.json` | 129 MB | copiere |
 | Antrenarea 7 după ora 8 (#278: 0,4263, 64 de fapte noi, sacru 31/50; nepăstrat de Kronos, deci fără `experiment_278.pt`) | `lucru/antrenare_lunga_7/gpt.pt` (greutăți + optimizator) | 405 MB | copiere |
 | Fapte-zero, ora 7 (#286: de la zero cu 5% fapte, 0,4686, 65 de fapte noi, sacru 25/50) | `lucru/stocare/modele/experiment_286.pt` + `.json` | 129 MB | copiere |
-| Cel mai bun model al nopții 2 | *(se completează sâmbătă)* | ~129 MB | copiere |
+| **#295, cel mai bun model** (antrenarea 8, ora 8: 0,4249, 64 de fapte noi, sacru 30/50, nota 5,35; treapta 4) | `lucru/stocare/modele/experiment_295.pt` + `.json` | 129 MB | **copiere: modelul de luat mai departe** |
 | Starea liniilor lungi (`gpt.pt` + `pornire.json`), pentru reluare | `lucru/antrenare_lunga_8/`, `lucru/fapte_zero/` | ~405 MB fiecare | copiere (doar ultimele) |
 | Jurnalul Kronos | `lucru/jurnal/` | 0,9 MB | copiere (niciodată editat) |
 | Jurnalele CONTINUUM | `lucru/continuum/`, `lucru/continuum_pe_bune/` | ~1 MB | copiere |
