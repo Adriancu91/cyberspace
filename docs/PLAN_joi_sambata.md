@@ -147,5 +147,23 @@
     cu 5% fapte (#286).
   - **Adrian** a verificat faptele: niciunul greșit.
   - **STOP-ul comun** oprește și școala.
-- [ ] Faza 4 — noaptea 2 raportată (ce a rulat: …)
-- [ ] Faza 5 — închidere
+- [x] Faza 4 — noaptea 2 raportată (ce a rulat: CONTINUUM fără alegere, apoi antrenarea 8 pornită de plasă)
+  - **Întârziere:** încărcătorul a căzut vineri (1.732 de deconectări), iar laptopul a dormit 11:01–02:38. CONTINUUM a
+    pornit la 02:41, cu adendum datat.
+  - **CONTINUUM:** 41 de cicluri, fără nicio acțiune, deci treapta 5 rămâne „a ales singur: NU”.
+  - **Antrenarea 8:** pornită de plasă la 03:03.
+    - Fereastra ei a fost închisă de cineva la 09:53; Adrian a ales reluarea.
+    - Orele 7–8 au rulat 10:06–12:11.
+    - **#295:** 0,4249 (+0,0055 față de #262, păstrat), 64 de fapte noi, sacru 30/50, nota 5,35, deci **treapta 4
+      e atinsă**.
+  - **Răspunsul 1a: da, la limită** (așteptarea mea, „sub 0,005”, a fost infirmată în bine).
+  - Comparațiile noaptea 1 / noaptea 2 și de la zero (#225, #286) față de injectare (#252) sunt în README și în
+    pre-înregistrări.
+- [x] Faza 5 — închidere
+  - `docs/UNDE_AM_AJUNS_2026-10-10.md`:
+    - treapta 4 🟢, treapta 5 🟡 (NU, NU), treapta 7 ⚪ parcată;
+    - lecțiile SANDBOX-7 ✅;
+    - #295 e modelul de luat mai departe;
+    - 5 decizii pentru Adrian.
+  - README și pachetul de mutare sunt actualizate. Toate ramurile și tag-urile școlii sunt trimise. Testele trec în
+    ambele foldere.
