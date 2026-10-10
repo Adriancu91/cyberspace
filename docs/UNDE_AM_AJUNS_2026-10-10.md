@@ -63,4 +63,27 @@ nu în proiect. Aici sunt treptele pe care le-a țintit planul joi–sâmbătă.
 
 ## Deciziile pentru Adrian (weekend)
 
-*(se completează după noaptea 2; cel mult 5)*
+1. **Alimentarea (înainte de orice noapte nouă).**
+   - Încărcătorul a cedat de două ori. Pe 8 octombrie, sub sarcină, a trecut de sute de ori între baterie și încărcător.
+     Pe 9 octombrie s-a deconectat de 1.732 de ori, iar laptopul a dormit 15,5 ore.
+   - Verifică încărcătorul, mufa, cablul și priza sau prelungitorul. Până atunci, laptopul nu rămâne singur noaptea.
+   - Pe workstation, un UPS ar rezolva problema de tot.
+2. **CONTINUUM și treapta 5.** Cu regulile de acum, după o antrenare „saturată” nu mai cere nimic. Cu o singură
+   variantă în lista albă n-are ce alege, așa că a ieșit „a ales singur: NU” în ambele nopți.
+   - **(a), recomandat:** lista albă cu cel puțin două variante, de exemplu continuarea liniei vechi și o linie nouă de
+     la zero cu fapte, ca fapte-zero.
+   - **(b):** „dezvolta” poate porni singură o linie de la zero când poveștile sunt saturate.
+3. **Pragul lui Kronos (0,005) și #278.** #278 e mai bun ca #262 la toate criteriile (0,4263 față de 0,4304, 64 față de
+   59 de fapte noi, sacru 31 față de 29), dar sub prag, deci nepăstrat.
+   - **(a):** păstrăm regula strictă.
+   - **(b), recomandat:** confirmăm #278 cu o a doua măsurare, pe o bucată de validare mai mare. Dacă ține, îl păstrăm
+     de mână, cu motivul scris.
+4. **Mutarea pe workstation** (`docs/MUTARE_workstation.md`). Aprobi:
+   - configurarea W2: 12×768, context 512, ~98 M parametri, ~5,6 GB;
+   - tokenizer-ul nou: numerele 0–999 întregi, cuvintele întregi și după ghilimele, engleză + română + cod;
+   - sursele de date cu licență verificată;
+   - regula din CLAUDE.md pentru memoria video: 5,5 → 7 GB pe workstation.
+5. **Școala de cod.**
+   - Rămâne parcată până la workstation, cum spune planul, sau încercăm o zi de v0.4 pe laptop, cu mai multe cuvinte în
+     abecedar?
+   - Ramura `kronos-cod` rămâne separată sau se unește cu main?
