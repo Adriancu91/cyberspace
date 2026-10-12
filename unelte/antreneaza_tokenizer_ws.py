@@ -44,7 +44,7 @@ AMESTEC: dict[str, tuple[float, dict[str, float]]] = {
 }
 ESANTION_MO = 400.0   # cel mult atâția megaocteți numărați din fiecare sursă
 FELIE = 8 << 20       # o felie de numărat (8 MB)
-FARA_SPATIU = 0.10    # cât din aparițiile lui „ cuvânt” primește forma „cuvânt”
+FARA_SPATIU = 0.30    # cât din aparițiile lui „ cuvânt” primește forma „cuvânt” (ales pe 12 octombrie: 0,1 rupe „moon”)
 FRECVENTA_MINIMA = 2.0
 
 

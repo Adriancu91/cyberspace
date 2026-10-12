@@ -152,6 +152,10 @@ def gb(octeti: float) -> str:
     return f"{octeti / 1e9:.2f} GB".replace(".", ",") if octeti >= 1e8 else f"{octeti / 1e6:.1f} MB".replace(".", ",")
 
 
+def mii(n: int) -> str:
+    return f"{n:,}".replace(",", ".")
+
+
 def raport(cale: Path) -> None:
     """docs/DATE_surse.md: ce s-a descărcat (din surse.json) și ce a rămas după curățare (din info.json)."""
     notate = json.loads((BRUT / "surse.json").read_text(encoding="utf-8")) if (BRUT / "surse.json").exists() else {}
@@ -182,9 +186,9 @@ def raport(cale: Path) -> None:
     for fisier in sorted(CURAT.glob("*/info.json")):
         i = json.loads(fisier.read_text(encoding="utf-8"))
         total_a, total_v = total_a + i["octeti_antrenare"], total_v + i["octeti_validare"]
-        randuri.append(f"| {i['sursa']} | {i['citite']:,} | {i['prea_scurte']:,} | {i['stricate']:,} | {i['duplicate']:,} | "
-                       f"{i['sedile_inlocuite']:,} | {i['texte_antrenare']:,} texte, {gb(i['octeti_antrenare'])} | "
-                       f"{i['texte_validare']:,} texte, {gb(i['octeti_validare'])} |".replace(",", "."))
+        randuri.append(f"| {i['sursa']} | {mii(i['citite'])} | {mii(i['prea_scurte'])} | {mii(i['stricate'])} | "
+                       f"{mii(i['duplicate'])} | {mii(i['sedile_inlocuite'])} | {mii(i['texte_antrenare'])} texte, "
+                       f"{gb(i['octeti_antrenare'])} | {mii(i['texte_validare'])} texte, {gb(i['octeti_validare'])} |")
     randuri += [f"| **Total** | | | | | | **{gb(total_a)}** | **{gb(total_v)}** |", "",
                 "- Curățarea: ş/ţ cu sedilă → ș/ț cu virgulă; fără duplicate; fără texte prea scurte sau stricate "
                 "(codificare greșită, semnul „�”, prea puține litere la proză).",

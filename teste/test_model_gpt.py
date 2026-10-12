@@ -243,3 +243,19 @@ def test_completeaza_alege_mereu_continuarea_cea_mai_probabila(tokenizer_mic):
     assert pe_litere.completeaza("ab", 4) == "cabc"
     with pytest.raises(RuntimeError):
         ModelGPT(**MIC).completeaza("ab")
+
+
+def test_examenul_evalueaza_mai_putine_bucati_deodata_la_modelele_mari(monkeypatch):
+    """La context și vocabular mari (W2), biti_pentru ia mai puține bucăți deodată, ca să nu umple placa; la modelele
+    de până acum rămân 64, iar scorul nu depinde de câte bucăți se iau deodată."""
+    assert ModelGPT.bucati_deodata(256, 4096) == 64    # linia de pe laptop și W1: neschimbat
+    assert ModelGPT.bucati_deodata(128, 97) == 64
+    assert ModelGPT.bucati_deodata(512, 16384) == 8    # W2
+    assert ModelGPT.bucati_deodata(4096, 65536) == 1
+    model = ModelGPT(n_straturi=1, n_capete=2, n_emb=16, context=8, lot=4, dispozitiv="cpu", samanta=0)
+    date = DateMostra(propozitii=200)
+    model.antreneaza(date, 0.5)
+    text = date.text_validare()[:600]
+    toate = model.biti_pentru(text)
+    monkeypatch.setattr(ModelGPT, "bucati_deodata", staticmethod(lambda context, vocabular: 3))
+    assert model.biti_pentru(text) == pytest.approx(toate, rel=1e-6)
