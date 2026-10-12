@@ -26,6 +26,7 @@ import time
 from datetime import datetime, timezone
 from typing import Any, Callable
 
+from .cai import relativ_la_proiect
 from .config import Config, EroareConfig
 from .contracte import PORTURI, Propunere
 from .jurnal import Jurnal
@@ -268,7 +269,8 @@ class Orchestrator:
         if mai_bun:
             fisa["decizie"] = "pastrat"
             try:
-                fisa["model_salvat"] = model.salveaza(self.stocare.cale_pentru(f"modele/experiment_{fisa['id']}"))
+                fisa["model_salvat"] = relativ_la_proiect(
+                    model.salveaza(self.stocare.cale_pentru(f"modele/experiment_{fisa['id']}")))
             except Exception as e:  # noqa: BLE001 - salvarea nu trebuie să piardă experimentul
                 fisa["eroare_salvare"] = f"{type(e).__name__}: {e}"
             self.setari_curente = setari_noi

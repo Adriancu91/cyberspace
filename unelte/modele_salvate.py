@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from kronos.cai import gaseste_model
 from kronos.registru import Registru
 
 
@@ -26,5 +27,5 @@ def incarca_modelul(fisa: dict[str, Any], dispozitiv: str = "") -> Any:
     „cpu”), pe acela: un model mic se poate examina pe procesor cât placa video lucrează la altceva."""
     setari = {**fisa["setari"]["model"], **({"dispozitiv": dispozitiv} if dispozitiv else {})}
     model = Registru().creeaza("model", fisa["module"]["model"]["cale"], setari).instanta
-    model.incarca(fisa["model_salvat"])
+    model.incarca(gaseste_model(fisa["model_salvat"]))
     return model

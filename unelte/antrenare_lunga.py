@@ -50,6 +50,7 @@ RADACINA = Path(__file__).resolve().parent.parent
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
+from kronos.cai import gaseste_model  # noqa: E402
 from kronos.config import citeste_config  # noqa: E402
 from kronos.jurnal import Jurnal  # noqa: E402
 from kronos.registru import Registru  # noqa: E402
@@ -251,7 +252,7 @@ def verdict_alaturi(ore: list[dict[str, Any]], alaturi: dict[int, float], linie:
 def poveste(config: Any, fisa: dict[str, Any], inceput: str, lungime: int) -> str:
     """O poveste scrisă de modelul salvat la experimentul dat (ca python -m kronos scrie)."""
     model = Registru().creeaza("model", config.porturi["model"]["modul"], fisa["setari"]["model"]).instanta
-    model.incarca(fisa["model_salvat"])
+    model.incarca(gaseste_model(fisa["model_salvat"], config.director_lucru))
     return inceput + model.genereaza(inceput, lungime)
 
 
@@ -261,7 +262,7 @@ def poveste_din_stare(config: Any, fisa: dict[str, Any], cale_stare: Path, incep
     import torch
 
     model = Registru().creeaza("model", config.porturi["model"]["modul"], fisa["setari"]["model"]).instanta
-    model.incarca(fisa["model_salvat"])
+    model.incarca(gaseste_model(fisa["model_salvat"], config.director_lucru))
     model.retea.load_state_dict(torch.load(cale_stare, map_location=model.dispozitiv, weights_only=True)["retea"])
     return inceput + model.genereaza(inceput, lungime)
 
@@ -282,7 +283,7 @@ def stare_de_pornire(config: Any, jurnal: Any, id_experiment: int, scor_principa
     setari = config.setari_port("model")
     model = Registru().creeaza("model", config.porturi["model"]["modul"], {**setari, "dispozitiv": "cpu"}).instanta
     asteptat = {k: setari[k] for k in ARHITECTURA}
-    model.incarca(fisa["model_salvat"])
+    model.incarca(gaseste_model(fisa["model_salvat"], config.director_lucru))
     if {k: model.setari[k] for k in ARHITECTURA} != asteptat:
         raise ValueError(f"Modelul experimentului #{id_experiment} are altă arhitectură ({model.setari}) decât rețeta "
                          f"din configurare ({asteptat}).")
