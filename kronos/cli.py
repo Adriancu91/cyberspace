@@ -15,6 +15,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from .cai import gaseste_model
 from .config import EroareConfig, citeste_config
 from .contracte import PORTURI
 from .jurnal import Jurnal
@@ -96,7 +97,7 @@ def cmd_scrie(args: argparse.Namespace) -> int:
         model.conecteaza_memorie(
             registru.creeaza("memorie", config.porturi["memorie"]["modul"], config.setari_port("memorie")).instanta
         )
-    model.incarca(cel_mai_bun["model_salvat"])
+    model.incarca(gaseste_model(cel_mai_bun["model_salvat"], config.director_lucru))
     print(f"Modelul din experimentul {cel_mai_bun['id']} (scor {cel_mai_bun['scoruri'][examen.scor_principal]:.4f}):\n")
     print(args.inceput + model.genereaza(args.inceput, args.lungime))
     return 0

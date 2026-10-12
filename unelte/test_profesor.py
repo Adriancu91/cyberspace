@@ -29,6 +29,7 @@ RADACINA = Path(__file__).resolve().parent.parent
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
+from kronos.cai import gaseste_model  # noqa: E402
 from kronos.config import citeste_config  # noqa: E402
 from kronos.jurnal import Jurnal  # noqa: E402
 from kronos.registru import Registru  # noqa: E402
@@ -55,7 +56,7 @@ def model_elev(config: Any, jurnal: Jurnal, linie: str) -> tuple[Any, dict[str, 
         raise ValueError(f"Linia „{linie}” n-are niciun model salvat de Kronos.")
     fisa = fise[-1]
     model = Registru().creeaza("model", config.porturi["model"]["modul"], fisa["setari"]["model"]).instanta
-    model.incarca(fisa["model_salvat"])
+    model.incarca(gaseste_model(fisa["model_salvat"], config.director_lucru))
     return model, fisa
 
 
