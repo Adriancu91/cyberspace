@@ -1,8 +1,8 @@
 # Școala de cod v0.4: pregătirea pe tokenizer-ul nou (luni, 12 octombrie 2026, seara)
 
 *Doar pregătire și teste, pe procesor. Școala NU a pornit și placa video n-a fost atinsă (pe ea rula noaptea W1).
-Dintre fișierele cu amprentă s-a schimbat doar generatorul de teste (nivelul nou 0q, aprobat de Adrian); abecedarul,
-setul sacru și sandbox-ul sunt neatinse, iar paznicul școlii nu are nimic de zis. Rezultatele negative sunt trecute la fel ca cele bune.*
+Dintre fișierele cu amprentă s-au schimbat generatorul de teste și setul sacru, amândouă doar cu nivelul nou 0q,
+aprobate de Adrian; abecedarul și sandbox-ul sunt neatinse, iar paznicul școlii nu are nimic de zis. Rezultatele negative sunt trecute la fel ca cele bune.*
 
 ## Ce s-a făcut
 
@@ -143,8 +143,58 @@ cuvinte din povești și e testat pe cuvintele nivelului 0w, pe care nu le-a vă
 4. **Pragul de regresie pe povești** (acum provizoriu 0,60): după noaptea W2.
 5. **Câte exemple în față:** rămân 2 (ca v0.3) sau urcăm la 4, acum că e loc.
 
+## Setul sacru al lui 0q: generat luni, 12 octombrie, 22:36 (aprobat de Adrian)
+
+- **Cele 20 de sarcini** (`show the word "…"`): van, fig, bike, tree, tent, owl, zoo, egg, web, car, fan, puppy, pig,
+  foot, cloud, book, hen, rose, cake, goat. Sămânța: `sacru-v0.3`, ca la 0n și 0w.
+- **Amprenta setului sacru a fost aprobată** la 22:36, cu motivul „v0.4: sacru pentru nivelul 0q, aprobat de Adrian
+  12 oct” (`81b03acb…` → `2482f5ad…`). Celelalte trei amprente sunt neschimbate.
+- **Condițiile lui Adrian, verificate:**
+
+| Condiția | Rezultat |
+|---|---|
+| niciun cuvânt sacru în abecedar | respectată (0 din 20) |
+| niciun cuvânt sacru printre sarcinile de antrenare ale lui 0q (cele 60 văzute) | respectată; nici în nevăzut sau adversarial |
+| niciun cuvânt sacru într-o sarcină „show the word …”, în hrană sau în amestecul lui W2 | respectată |
+| niciun cuvânt sacru între ghilimele în hrană | respectată |
+
+- **Limită cunoscută, acceptată de Adrian:** în amestecul pe care învață W2 (4,89 GB), cele 20 de cuvinte apar rar
+  între ghilimele, din codul Python și din povești: **717 apariții la 1,34 miliarde de simboluri** („tree” 151,
+  „car” 146, „web” 96, „cloud” 95, „book” 68, „cake” 52, fig 18, egg 18, pig 12, foot 10, rose 9, fan 8, owl 7,
+  zoo 6, bike 6, tent 4, goat 4, van 3, puppy 3, hen 1). Nu se putea ocoli: 114 din cele 116 cuvinte ale nivelului
+  apar așa. Ca vorbe obișnuite, fără ghilimele, cuvintele apar peste tot în povești și în hrană (17 din 20 în hrană).
+- **Sarcinile sacre ale nivelurilor vechi sunt identice octet cu octet.** Dovada (fișierul din Git dinainte, față de
+  cel de acum):
+  - primii 44.247 de octeți ai fișierului, adică tot până la sfârșitul nivelului 0w, sunt aceiași; după ei, în
+    fișierul vechi mai era doar lista „adaugari”;
+  - Git numără 209 rânduri adăugate și 0 șterse;
+  - octeții fiecărui nivel, tăiați direct din fișier, au aceeași amprentă înainte și după:
+
+| Nivel | Sarcini | Octeți | sha256 (început), înainte = după |
+|---|---|---|---|
+| 0 | 20 | 3.198 | `672deb110ff5` |
+| 1 | 20 | 3.223 | `7934e3768a53` |
+| 2A | 20 | 3.653 | `8a840f369892` |
+| 2B | 20 | 3.661 | `8de47f7970a5` |
+| 2C | 20 | 3.697 | `a720e60fb297` |
+| 3A | 20 | 4.243 | `79d296c06113` |
+| 3B | 20 | 4.794 | `8b8bd2f0316b` |
+| 0a | 0 | – | lista goală, ca înainte |
+| 0b | 20 | 3.257 | `7ea5aa9aa65a` |
+| 1a | 20 | 3.216 | `697fbd58a8d2` |
+| 1b | 20 | 3.324 | `87c06017ee10` |
+| 0n | 20 | 3.666 | `99a66cb177f3` |
+| 0w | 20 | 4.031 | `2d161e0a69c1` |
+
+  - în afara nivelului 0q, singurul lucru nou în fișier e un rând în lista „adaugari” (data, sămânța, „0q”);
+  - testul `test_setul_sacru_al_lui_0q_respecta_conditiile_iar_nivelurile_vechi_sunt_octet_cu_octet` păzește aceste
+    amprente de acum înainte.
+- Unealta a scris fișierul cu sfârșituri de rând de Windows; le-am trecut înapoi pe cele din Git (LF), ca octeții să
+  fie aceiași. Amprenta paznicului nu ține seama de sfârșitul de rând.
+- 5 dintre cuvinte sunt și în setul sacru al lui 0w (foot, pig, rose, tree, web). Setul sacru nu intră în antrenare.
+
 ## Ce nu s-a făcut
 
 - Școala nu a rulat deloc (nici pregătirea pe abecedar): nu există încă modelul W2 din care pornește.
-- Abecedarul și setul sacru n-au fost rescrise: „împărțirea refăcută” înseamnă doar felul în care tokenizer-ul nou
+- Abecedarul n-a fost rescris, iar setul sacru a primit doar nivelul 0q: „împărțirea refăcută” înseamnă doar felul în care tokenizer-ul nou
   taie aceleași texte. Pilotul nu a pornit și nu pornește cât rulează W1.

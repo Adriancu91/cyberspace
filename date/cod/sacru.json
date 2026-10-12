@@ -2328,6 +2328,208 @@
     "cutii": [],
     "doar_valoare": true
    }
+  ],
+  "0q": [
+   {
+    "nivel": "0q",
+    "text": "show the word \"van\"",
+    "asteptat": "van",
+    "solutie": "\"van\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"fig\"",
+    "asteptat": "fig",
+    "solutie": "\"fig\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"bike\"",
+    "asteptat": "bike",
+    "solutie": "\"bike\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"tree\"",
+    "asteptat": "tree",
+    "solutie": "\"tree\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"tent\"",
+    "asteptat": "tent",
+    "solutie": "\"tent\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"owl\"",
+    "asteptat": "owl",
+    "solutie": "\"owl\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"zoo\"",
+    "asteptat": "zoo",
+    "solutie": "\"zoo\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"egg\"",
+    "asteptat": "egg",
+    "solutie": "\"egg\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"web\"",
+    "asteptat": "web",
+    "solutie": "\"web\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"car\"",
+    "asteptat": "car",
+    "solutie": "\"car\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"fan\"",
+    "asteptat": "fan",
+    "solutie": "\"fan\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"puppy\"",
+    "asteptat": "puppy",
+    "solutie": "\"puppy\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"pig\"",
+    "asteptat": "pig",
+    "solutie": "\"pig\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"foot\"",
+    "asteptat": "foot",
+    "solutie": "\"foot\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"cloud\"",
+    "asteptat": "cloud",
+    "solutie": "\"cloud\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"book\"",
+    "asteptat": "book",
+    "solutie": "\"book\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"hen\"",
+    "asteptat": "hen",
+    "solutie": "\"hen\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"rose\"",
+    "asteptat": "rose",
+    "solutie": "\"rose\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"cake\"",
+    "asteptat": "cake",
+    "solutie": "\"cake\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   },
+   {
+    "nivel": "0q",
+    "text": "show the word \"goat\"",
+    "asteptat": "goat",
+    "solutie": "\"goat\"",
+    "cu_print": false,
+    "operator": null,
+    "cutii": [],
+    "doar_valoare": true
+   }
   ]
  },
  "adaugari": [
@@ -2347,6 +2549,13 @@
    "niveluri": [
     "0n",
     "0w"
+   ]
+  },
+  {
+   "data": "2026-10-12T22:36:21",
+   "samanta": "sacru-v0.3",
+   "niveluri": [
+    "0q"
    ]
   }
  ]

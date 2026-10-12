@@ -1,12 +1,13 @@
 # Școala de cod v0.4 (12 octombrie 2026, workstation): PREGĂTITĂ, NEPORNITĂ. Aceeași școală ca v0.3, pe tokenizer-ul nou
 # (date/ws/bpe_16384.json: numerele 0–999 simboluri întregi, cuvintele întregi și fără spațiu în față) și pornind din
 # modelul liniei noi W2 (când va exista: lucru/cod_v04/pornire/model_w2.pt, copiat din modelul păstrat de Kronos).
-# Abecedarul, setul sacru, generatorul de teste și sandbox-ul NU s-au schimbat (aceleași amprente).
+# Abecedarul și sandbox-ul NU s-au schimbat; generatorul de teste și setul sacru au primit doar nivelul nou 0q.
 # Pasul 0 (vocabularul, fără model): python unelte/vocabular_cod_ws.py
 # Hotărât de Adrian (12 octombrie, seara): nivelul nou 0q, lângă 0w (docs/SCOALA_v04_pregatire.md).
 # Pilotul: cel mai devreme miercuri, 14 octombrie, ziua, din modelul W2 (docs/preinregistrari/2026-10-14_pilot_v04_0q.md).
-# DE HOTĂRÂT înainte de pilot: prag_regresie (după ce se știe val_bpb al lui W2); setul sacru al lui 0q (cere
-# aprobarea amprentei setului sacru); dacă 0w mai rămâne în pilot (dacă pică, școala se oprește acolo).
+# Setul sacru al lui 0q: generat și aprobat de Adrian pe 12 octombrie, 22:36 (nivelurile vechi, octet cu octet).
+# ÎNAINTE de pilot: prag_regresie = biții pe octet ai lui W2 la pornire + 0,03 (regulă acceptată de Adrian).
+# DE HOTĂRÂT: dacă 0w mai rămâne în pilot (dacă pică, școala se oprește acolo).
 # Ce urmează e textul v0.3, din care s-a pornit. Față de v0.2:
 #   - nivelul 0 = numerele 0–99 împreună, ca nivelul 0 din v0.1, dar fără cuvinte (intern „0n”, ca nivelul „0” din v0.1 să
 #     rămână neschimbat, cu setul lui sacru); cuvintele devin nivelul 0w, imediat după;

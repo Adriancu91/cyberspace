@@ -84,6 +84,37 @@ def test_setul_sacru_si_abecedarul_nu_s_au_schimbat_pentru_v04():
     assert schimbate == ""
 
 
+# sha256 pe octeții fiecărui nivel vechi din date/cod/sacru.json, așa cum erau înainte de adăugarea lui 0q (8 octombrie)
+SACRU_VECHI = {"0": "672deb110ff5", "1": "7934e3768a53", "2A": "8a840f369892", "2B": "8de47f7970a5", "2C": "a720e60fb297",
+               "3A": "79d296c06113", "3B": "8b8bd2f0316b", "0b": "7ea5aa9aa65a", "1a": "697fbd58a8d2",
+               "1b": "87c06017ee10", "0n": "99a66cb177f3", "0w": "2d161e0a69c1"}
+
+
+def test_setul_sacru_al_lui_0q_respecta_conditiile_iar_nivelurile_vechi_sunt_octet_cu_octet():
+    """Aprobat de Adrian pe 12 octombrie: 20 de sarcini sacre la 0q; cuvintele lor nu sunt în abecedar și nici în
+    celelalte seturi ale lui 0q; nivelurile vechi au exact octeții dinainte."""
+    import hashlib
+    import re
+
+    from module.cod.mediu import citeste_abecedar
+
+    brut = (RADACINA / "date/cod/sacru.json").read_bytes().replace(b"\r\n", b"\n")
+    for nivel, amprenta in SACRU_VECHI.items():
+        inceput = brut.index(f'\n  "{nivel}": [\n'.encode()) + 1
+        bucata = brut[inceput: brut.index(b"\n  ]", inceput) + 4]
+        assert hashlib.sha256(bucata).hexdigest()[:12] == amprenta, nivel
+    assert b'\n  "0a": [],\n' in brut
+    sacre = examen_cod.citeste_sacru(RADACINA / "date/cod/sacru.json")["0q"]
+    cuvinte = [re.fullmatch(r'show the word "(\w+)"', s.text).group(1) for s in sacre]
+    assert len(set(cuvinte)) == 20 and all(s.asteptat == c and s.doar_valoare for s, c in zip(sacre, cuvinte))
+    abecedar = (RADACINA / "date/cod/abecedar.txt").read_text(encoding="utf-8")
+    assert not [c for c in cuvinte if re.search(rf"(?<![A-Za-z]){c}(?![A-Za-z])", abecedar)]
+    texte = {e.test for e in citeste_abecedar(RADACINA / "date/cod/abecedar.txt").episoade}
+    s = examen_cod.seturi("0q", texte, sacre, samanta="v0.3")
+    for nume in ("vazut", "nevazut", "adversarial"):
+        assert not {x.text for x in getattr(s, nume)} & {x.text for x in sacre}, nume
+
+
 def test_cuvantul_din_raspuns_se_poate_copia_doar_daca_sarcina_il_arata_la_fel():
     tok = tokenizer_ws()
     acum = vocabular_cod_ws.cuvant_in_sarcina_si_raspuns(tok, "moon", "show the word {w}")
