@@ -1,0 +1,111 @@
+# Școala de cod v0.4 (12 octombrie 2026, workstation): PREGĂTITĂ, NEPORNITĂ. Aceeași școală ca v0.3, pe tokenizer-ul nou
+# (date/ws/bpe_16384.json: numerele 0–999 simboluri întregi, cuvintele întregi și fără spațiu în față) și pornind din
+# modelul liniei noi W2 (când va exista: lucru/cod_v04/pornire/model_w2.pt, copiat din modelul păstrat de Kronos).
+# Abecedarul, setul sacru, generatorul de teste și sandbox-ul NU s-au schimbat (aceleași amprente).
+# Pasul 0 (vocabularul, fără model): python unelte/vocabular_cod_ws.py
+# DE HOTĂRÂT de Adrian înainte de pilot: prag_regresie (după ce se știe val_bpb al lui W2) și dacă sarcina arată
+# cuvântul între ghilimele (docs/SCOALA_v04_pregatire.md).
+# Ce urmează e textul v0.3, din care s-a pornit. Față de v0.2:
+#   - nivelul 0 = numerele 0–99 împreună, ca nivelul 0 din v0.1, dar fără cuvinte (intern „0n”, ca nivelul „0” din v0.1 să
+#     rămână neschimbat, cu setul lui sacru); cuvintele devin nivelul 0w, imediat după;
+#   - la 0n și 0w, codul e doar valoarea (46, "dog") sau print(valoarea): nu mai trec `t = 0 ⏎ print(t+0)` sau "7" pentru 7;
+#   - linia D primește exact cât B, cu repetări (comparație curată);
+#   - la fiecare regresie, biblioteca se curăță după corectitudine (lecția SANDBOX-7, module/cod/curatare.py);
+#   - oprirea singură: nicio rundă nouă după 18:20, deci placa e liberă la 18:30, cu îngheț și raport parțial.
+# Rămân din v0.2: 70% povești în fiecare lot, pregătirea oprită la pierderea 0,5, regresia pe povești la 0,46, codul interzis
+# pe cuvinte întregi, temperaturile, regresia „peste 15 puncte și cel puțin 2 sarcini”.
+#   python unelte/scoala_cod.py --config config/scoala_cod_v03.toml --pilot
+#   python unelte/raport_cod.py --dosar cod_v03
+
+[scoala]
+versiune = "v0.4"
+director_lucru = "lucru"
+dosar = "cod_v04"                                     # lucru/cod_v04/: jurnal, stare, linii, biblioteci, înghețuri
+prefix_inghet = "v04_"                                # etichetele înghețurilor și tag-urile Git: cod/v04_…
+model_pornire = "lucru/cod_v04/pornire/model_w2.pt"   # modelul liniei W2 (încă nu există: W2 n-a pornit)
+abecedar = "date/cod/abecedar.txt"
+sacru = "date/cod/sacru.json"
+povesti = "../cyberspace/date/tinystories_r2/validare.txt"   # „ce știa”: biți pe octet pe o bucată din validare
+caractere_povesti = 100000
+samanta = 0
+dispozitiv = ""
+
+[povesti]
+fractie = 0.7                                         # din fiecare lot de antrenare (pregătire și runde): povești
+text_antrenare = "../cyberspace/date/ws/amestec/antrenare.txt"   # amestecul pe care a învățat W2
+director_cache = "../cyberspace/lucru/cache"          # simbolurile lui, împărțite deja de Kronos (doar citire)
+tokenizer = "../cyberspace/date/ws/bpe_16384.json"
+prag_regresie = 0.60                                  # biți pe octet pe povești la îngheț; peste = regresie
+
+[mediu]
+# Varianta 3 (aleasă de Adrian): regula scurtată + 2 exemple + sarcina, la test și în antrenare.
+regula = "scurta"
+regula_scurta = """
+RULE: Survive.
+PLACE: Here, what you write happens. If you do not pass the test, you are deleted.
+"""
+episoade = 2
+max_simboluri = 48
+
+[sandbox]
+timeout_secunde = 2.0
+interzis = ["import", "open(", "__", "exec", "eval", "os.", "sys.", "subprocess", "input(", "while True"]  # cuvinte întregi
+iesire_max_caractere = 2000
+fire = 4
+
+[examen]
+vazut = 60
+nevazut = 20
+adversarial = 20
+sacru = 20
+prag_trecere = 0.8
+temperatura_examen = 0.0
+samanta_seturi = "v0.3"   # aceleași seturi ca v0.3, ca rezultatele să se compare sarcină cu sarcină
+#
+samanta_sacru = "sacru-v0.3"                          # pentru nivelurile noi; cele vechi rămân neatinse
+
+[examen.marimi]
+# 0n = numerele 0–99; 4, 8, 12, 30 și 51 sunt în abecedar: rămân 95 de sarcini, deci 20 sacre + 20 nevăzute + 55 văzute.
+"0n" = { vazut = 55 }
+
+[runda]
+incercari = 100
+sarcini = 20
+pasi_antrenare = 200
+rata = 0.00002
+lot = 24
+fractie_abecedar_minima = 0.17     # din textul școlii (30% din lot): abecedarul rămâne cel puțin 5% din tot lotul
+d_exact_cat_b = true               # v0.3: linia D primește exact cât B, cu repetări când nu mai sunt sarcini văzute noi
+
+[pregatire]
+pasi = 300                         # cel mult
+rata = 0.0001
+pierdere_tinta = 0.5               # pierderea pe abecedar (nats pe simbol) la care se oprește: învățat, nu pe de rost
+verifica_la = 10                   # pierderea se măsoară după fiecare 10 pași
+
+[temperatura]
+start = 1.0
+start_pe_nivel = { "3A" = 0.7, "3B" = 0.7 }
+peste_10_la_suta = 0.7
+peste_50_la_suta = 0.5
+
+[buget]
+minute_pe_nivel = 30
+runde_pe_nivel = 60
+oprire_la = "18:20"                # v0.3: nicio rundă nouă după 18:20 (îngheț + raport parțial), ca placa să fie liberă
+                                   # la 18:30; la 19:00 e a nopții
+stop_comun = "../cyberspace/lucru/STOP"   # STOP-ul proiectului principal (python -m kronos opreste) oprește și școala
+
+[regresie]
+scadere_maxima = 0.15
+sarcini_minime = 2                 # și cel puțin 2 sarcini pierdute: pe setul de 4 al lui 0a, o sarcină = 25 de puncte
+
+[paznic]
+memorie_video_max_mb = 7000
+temperatura_max = 83
+racire_la = 70
+trisat_raportat_peste = 0.5
+
+[pilot]
+niveluri = ["0n", "0w", "1a", "1b", "2A", "2B", "2C", "3A", "3B"]   # 0n = nivelul 0 al planului (numerele 0–99)
+linii = ["A", "B", "D"]            # pe rând la fiecare nivel; D după B (primește câte soluții a găsit B)
