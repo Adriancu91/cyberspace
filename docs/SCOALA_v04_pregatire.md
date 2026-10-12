@@ -123,6 +123,18 @@ cuvinte din povești și e testat pe cuvintele nivelului 0w, pe care nu le-a vă
    de mai sus o respectă); (b) set sacru de doar 15 sarcini, din cuvintele care lipsesc din hrană, ceea ce cere o
    schimbare în generatorul de teste și o nouă aprobare a amprentei lui; (c) cuvinte noi, pe care W2 nu le-a văzut
    nicăieri, tot cu schimbarea generatorului. Și cele 15 cuvinte de la (b) apar în poveștile din amestecul lui W2.
+
+   **Luni, 22:00: Adrian a ales (a), cu condiția scrisă mai precis: niciun cuvânt sacru între ghilimele sau într-o
+   sarcină „show the word …”, nici în hrană, nici în antrenare. Setul tot NU a fost generat:** în textul pe care
+   învață W2 (amestecul de 4,89 GB) toate cele 20 de cuvinte apar și între ghilimele, rar: „tree” de 151 de ori,
+   „car” 146, „web” 96, „cloud” 95, „book” 68, „cake” 52, fig 18, egg 18, pig 12, foot 10, rose 9, fan 8, owl 7,
+   zoo 6, bike 6, tent 4, goat 4, van 3, puppy 3, hen 1 (în total 717 apariții la 1,34 miliarde de simboluri; vin
+   din codul Python și din povești). Din toate cele 116 cuvinte ale nivelului, 114 apar între ghilimele în amestec,
+   deci nicio alegere de 20 nu ar respecta condiția. Ce se respectă: niciun cuvânt sacru nu apare într-o sarcină
+   „show the word …” (nici în amestec, nici în hrană); niciunul între ghilimele în hrană; niciunul în abecedar;
+   niciunul în sarcinile de antrenare ale lui 0q.
+
+   **Pragul de regresie pe povești:** Adrian a acceptat regula „W2 la pornire + 0,03” (luni, 22:00).
 2. **Abecedarul nu are niciun exemplu cu ghilimele în sarcină.** Exemplele din fața modelului vin din abecedar, deci la
    0q modelul va vedea exemple de alt fel (numere, cuvinte fără ghilimele în sarcină). Liniile B și D își adaugă singure
    reușitele; linia A, nu. Câteva episoade de felul 0q în abecedar ar ajuta, dar abecedarul are și el amprentă.
