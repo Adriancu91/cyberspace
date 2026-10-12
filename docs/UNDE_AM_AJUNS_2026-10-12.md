@@ -79,6 +79,26 @@ ca cele bune.*
 5. **Ordinea lui CONTINUUM v2:** „continuă” înaintea „liniei noi” (cum e acum) sau invers.
 6. **Ramura `kronos-cod`:** se unește cu main (ca școala de cod să primească tokenizer-ul nou) sau rămâne separată.
 
+## Opririle bruște de după-amiază (aflate la 17:15, doar din jurnalele Windows)
+
+- **Două opriri fără închidere curată**, amândouă cu placa și procesorul în repaus (nu rula nimic):
+  1. între 14:01 (ultimul semn de viață) și 15:50, când calculatorul a pornit din nou. Nimeni nu s-a logat după
+     pornirea de la 15:50;
+  2. între 16:09 și ~17:00; Adrian l-a repornit la 17:04.
+- **Ce nu a fost:** nu Windows Update (azi doar definiții de antivirus, fără nicio cerere de repornire); nu un ecran
+  albastru (cod de eroare 0, niciun fișier de avarie); nicio eroare de componentă raportată de Windows (WHEA: zero);
+  nu supraîncălzire de la lucru (nu rula nimic; placa e la 31 °C); discul e sănătos.
+- **Ce rămâne:** curentul s-a întrerupt de la priză (pană, prelungitor, cablu) sau calculatorul s-a oprit singur
+  (sursa lui de curent sau placa de bază). **Din Windows nu se pot deosebi.** Înainte de azi, calculatorul mersese
+  4 zile fără oprire.
+- **Nimic stricat:** Git curat și la zi în ambele foldere; jurnalul Kronos are 300 de rânduri întregi, primele 295
+  neschimbate; modelele, simbolurile și tokenizer-ul sunt la locul lor; sarcinile din Task Scheduler au rămas.
+- **Hotărât de Claude Code, după regula lui Adrian:** pornirea de la 19:00 și reluarea la logare sunt **dezactivate**
+  (nu șterse) până hotărăște Adrian. Oprirea de la 07:30 rămâne.
+- **Ce ar lămuri cauza:** dacă în casă a căzut curentul (lumini, router, ceasuri); jurnalul din BIOS-ul Dell
+  (F2 la pornire → System Logs → Power Events); ce putere are sursa (eticheta din carcasă: Precision 5820 vine cu
+  425, 685 sau 950 W, iar placa video singură cere până la 290 W).
+
 ## Pornirea nopții
 
 *Se completează după 19:15, cu ora pornirii, memoria și temperatura din primele 15 minute.*
