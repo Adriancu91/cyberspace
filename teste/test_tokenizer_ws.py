@@ -106,4 +106,4 @@ def test_calculele_din_textul_cu_numere_sunt_corecte():
             a, semn, b, c = int(m[1]), m[2], int(m[3]), int(m[4])
             assert c == (a + b if semn == "+" else a - b if semn == "-" else a * b if semn == "*" else a // b)
             verificate += 1
-    assert verificate > 500
+    assert verificate > 60  # adunările, scăderile, înmulțirile și împărțirile simple sunt doar unul din multe feluri

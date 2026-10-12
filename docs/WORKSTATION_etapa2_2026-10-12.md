@@ -179,3 +179,17 @@ simplă, 35% română, 15% cod, 5% numere și calcule, doar din textele de antre
   vocabularului nu s-au schimbat, deci memoria și viteza rămân valabile; scorurile liniei de probă „ws_w2_proba” nu
   mai au legătură cu tokenizer-ul de acum.
 - În `lucru/cache` au rămas simbolurile amestecurilor vechi (~4,5 GB), nefolosite. Nu le-am șters.
+
+## Adăugat seara (18:10–18:30): numerele mai variate; fabulele
+
+- **Fabulele:** duplicatele exacte (664.231 din 3.000.000, adică 22%) erau deja scoase la curățarea de dimineață; în
+  `date/ws/curat/fabule_ro/` sunt doar cele 2.310.788 de fabule diferite (plus 23.522 în validare). Nu a mai fost
+  nimic de scos. Repetitive rămân în alt sens: sunt diferite ca text, dar folosesc aceleași ~4.000 de cuvinte.
+- **Numerele** (`unelte/numere_ws.py`, generator nou): în loc de 14 tipare, șase feluri de text amestecate în bucăți
+  mici: calcule (și cu paranteze, procente, resturi, pătrate), date (cu ziua săptămânii adevărată), prețuri, măsuri
+  cu transformări, ordine și șiruri, numere în propoziții și scrise în litere, în română și engleză. În 600 KB sunt
+  1.332 de forme diferite de rânduri. Tot ce scrie e adevărat (verificat în `teste/test_numere_ws.py`).
+- **Amestecul W2 refăcut** cu numerele noi: procentele au rămas **45,9 / 33,9 / 15,1 / 5,1** (în ±1 față de
+  45/35/15/5), 4,89 GB, 1,34 miliarde de simboluri.
+- **Tokenizer-ul nu a fost refăcut** după schimbarea numerelor: numerele 0–999 sunt simboluri fixe, iar cuvintele din
+  propozițiile noi vin oricum din textele în română și engleză. Verificările lui rămân cele de la 17:45.

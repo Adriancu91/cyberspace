@@ -19,7 +19,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import random
 import sys
 import time
 from collections import Counter
@@ -32,6 +31,7 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from module.tokenizer_bpe import TokenizerBPE, antreneaza_din_frecvente, frecvente_bucati  # noqa: E402
+from unelte.numere_ws import text_numere  # noqa: E402
 
 CURAT = Path("date/ws/curat")
 # categoria → (partea din amestec, {sursa: partea ei din categorie})
@@ -49,59 +49,11 @@ FARA_SPATIU = 0.30    # cât din aparițiile lui „ cuvânt” primește forma 
 FRECVENTA_MINIMA = 2.0
 
 
-def text_numere(octeti: int, samanta: int = 0) -> str:
-    """Numere și calcule scrise în text, în engleză și română: adunări, scăderi, înmulțiri, liste, prețuri, ore, ani,
-    numere mari cu grupe de trei cifre. Calculele sunt corecte."""
-    r = random.Random(samanta)
-    lucruri = [("apples", "mere"), ("books", "cărți"), ("cats", "pisici"), ("stars", "stele"), ("days", "zile"),
-               ("children", "copii"), ("trees", "copaci"), ("birds", "păsări")]
-    randuri: list[str] = []
-    marime = 0
-    while marime < octeti:
-        a, b = r.randint(0, 999), r.randint(0, 999)
-        en, ro = r.choice(lucruri)
-        fel = r.randrange(14)
-        if fel == 0:
-            rand = f"{a} + {b} = {a + b}"
-        elif fel == 1:
-            a, b = max(a, b), min(a, b)
-            rand = f"{a} - {b} = {a - b}"
-        elif fel == 2:
-            a, b = r.randint(0, 99), r.randint(0, 99)
-            rand = f"{a} * {b} = {a * b}"
-        elif fel == 3:
-            b = r.randint(1, 99)
-            rand = f"{a * b} / {b} = {a}"
-        elif fel == 4:
-            rand = f"x = {a}\ny = {b}\nprint(x + y)  # {a + b}"
-        elif fel == 5:
-            rand = f"There are {a} {en} and {b} more {en}. Now there are {a + b} {en}."
-        elif fel == 6:
-            rand = f"Sunt {a} {ro} și încă {b} {ro}. Acum sunt {a + b} {ro}."
-        elif fel == 7:
-            start, pas = r.randint(0, 50), r.randint(1, 12)
-            rand = ", ".join(str(start + pas * k) for k in range(r.randint(4, 10)))
-        elif fel == 8:
-            rand = f"{r.randint(1, 500)}.{r.randint(0, 99):02d} lei, {r.randint(1, 500)},{r.randint(0, 99):02d} kg, {r.randint(1, 100)}%"
-        elif fel == 9:
-            rand = f"{r.randint(0, 23):02d}:{r.randint(0, 59):02d}, {r.randint(1, 28)}.{r.randint(1, 12):02d}.{r.randint(1900, 2030)}"
-        elif fel == 10:
-            mare = r.randint(1000, 99_999_999)
-            rand = f"{mare} = {mare:,} = " + f"{mare:,}".replace(",", ".")
-        elif fel == 11:
-            rand = f"({a} + {b}) * 2 = {(a + b) * 2}; [{a}, {b}, {a + b}]; f({a}) = {a * 2}"
-        elif fel == 12:
-            rand = f"In {r.randint(1500, 2026)}, {a} {en} cost {b} coins. În {r.randint(1500, 2026)} erau {a} {ro}."
-        else:
-            rand = f"{a} < {a + b + 1}, {a + b + 1} > {b}, {a} == {a}, {a} != {a + 1}"
-        randuri.append(rand)
-        marime += len(rand.encode("utf-8")) + 1
-    return "\n".join(randuri) + "\n"
-
-
 def scrie_numere(fisier: Path) -> None:
-    """Textul cu numere, generat o singură dată (aceeași sămânță, deci același text); refăcut dacă e prea mic."""
-    if not fisier.exists() or fisier.stat().st_size < NUMERE_OCTETI:
+    """Textul cu numere (unelte/numere_ws.py), generat o singură dată (aceeași sămânță, deci același text); refăcut
+    dacă e prea mic sau dacă e făcut de generatorul vechi (fără despărțitoare între bucăți)."""
+    vechi = fisier.exists() and b"<|endoftext|>" not in fisier.open("rb").read(200_000)
+    if not fisier.exists() or vechi or fisier.stat().st_size < NUMERE_OCTETI:
         fisier.parent.mkdir(parents=True, exist_ok=True)
         fisier.write_text(text_numere(NUMERE_OCTETI), encoding="utf-8", newline="\n")
 
