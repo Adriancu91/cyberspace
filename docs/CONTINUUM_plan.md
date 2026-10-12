@@ -302,6 +302,48 @@ ALEGE spune pentru fiecare nevoie sărită de ce, în ordinea asta: nivelul; ce 
 cererea externă. Rămân pentru v2–v3. Setul sacru de fapte există din 8 octombrie (`date/fapte/examen_sacru.json`), dar
 CONTINUUM nu-l vede: se dă doar manual.
 
+### v2 pe workstation — Variante adevărate la alegere (făcut pe 12 octombrie 2026, cerut de Adrian)
+
+*Scris și testat, nepornit. Nu e „v2” din lista de mai jos (setul sacru și promovarea), care rămâne de făcut: Adrian
+a cerut întâi ce bloca treapta 5.*
+
+**De ce.** În ambele nopți pe bune de pe laptop a ieșit „a ales singur: NU”: lista albă avea o singură antrenare, iar
+după o linie „saturată” CONTINUUM nu mai cerea nimic. Nu avea între ce alege.
+
+**Ce e nou** (`config/continuum_ws.toml`; o configurare din v1 merge neschimbată):
+1. **Nevoia „linie_noua”:** în lista ei albă (`[nevoi.linie_noua] configurari`, acum `config/ws_w2.toml`) e o
+   configurare care n-a pornit niciodată. Acțiunea: o antrenare lungă, de la zero, cu ea. Motivul spune și cum stă
+   linia de acum (saturată, încă învață, sau nicio linie cu ore).
+2. **„continua” prelungește:** dacă linia care încă învață și-a făcut toate orele plănuite, primește încă
+   `prelungire_ore` (acum 8). Rata rămâne la capătul scăderii, adică pași mici, ca antrenarea 8 de pe laptop. O linie
+   neterminată (de exemplu după o repornire de Windows) se reia de unde a rămas, ca în v1.
+3. **„continua” nu mai pornește linii neîncepute** când există `[nevoi.linie_noua]`: asta e treaba nevoii noi.
+4. **Regula de alegere** e tot ordinea din `[continuum] ordinea_nevoilor` (acum: măsoară, remăsoară, continuă, linie
+   nouă, dezvoltă). E simplă intenționat: se poate citi și schimba dintr-un rând.
+5. **Jurnalul ciclului notează variantele nealese** („alternative”: ce altceva se putea porni atunci), deci se vede că
+   alegerea a fost între variante adevărate. Pe scurt: „Aleg continua… Se putea și: linie_noua…”.
+6. **Ferestrele workstation-ului** (`docs/MUTARE_workstation.md`, secțiunea 8): învățare la orice oră
+   (`00:00-23:59`), temperatura maximă 83 °C, 20 de ore pe placă pe zi, 4.500 MB liberi ceruți. Cât rulează o
+   antrenare, CONTINUUM stă în REPAUS („o singură sarcină grea pe placă odată”).
+7. **Liniile urmărite** sunt doar cele noi (`config/ws_w*.toml`). Liniile de pe laptop nu: #295 ar fi linia de bază,
+   iar o linie nouă, de la zero, ar sta nopți întregi în „zona roșie” față de el.
+8. **Starea și jurnalul** stau în `lucru/continuum_ws/` (opțiunea `--stare`); jurnalele de pe laptop rămân neatinse.
+
+**Ce variante are, după caz:**
+
+| Starea liniei de acum | Ce cere | Ce altceva se poate |
+|---|---|---|
+| încă învață (ultima oră peste 0,005, tendința bună) | continuă (o reia sau o prelungește cu 8 ore) | linie nouă (W2), dacă e neîncepută |
+| saturată (două ore la rând sub 0,005) | linie nouă | remăsurare, dacă un candidat așteaptă |
+| nicio linie cu ore | linie nouă | — |
+| un model păstrat fără examene, sau un candidat de confirmat | măsoară / remăsoară | celelalte, în ordinea de mai sus |
+
+**Ce nu face încă:** nu compară singur „cât ar câștiga” fiecare variantă (alege după ordine, nu după un calcul); nu
+scrie configurări noi; setul sacru și promovarea (v2 de mai jos) nu sunt făcute.
+
+**Testele:** `teste/test_continuum_v2.py` (13), fără placă video. Pe starea adevărată, doar simulat:
+`python -m module.continuum.bucla --config config/continuum_ws.toml --simuleaza --ca-la 19:00 --placa-libera --stare lucru/continuum_ws`.
+
 ### v2 — Setul sacru și promovarea
 - A doua bucată de validare, invizibilă deciziilor automate.
 - „Versiune oficială” a modelului: propusă de CONTINUUM, aprobată de om, cu rollback.

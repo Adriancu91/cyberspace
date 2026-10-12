@@ -8,6 +8,9 @@ celelalte, jurnalul spune de ce nu, în ordinea asta:
 - e în **răcire** (v1, anti-buclă): o nevoie tratată nu se reia [anti_bucla] racire_cicluri cicluri; „repara” nu are
   răcire;
 - strategia ei e **blocată** (v1, anti-buclă): după prea multe eșecuri la rând, omul a primit un raport.
+
+v2: după ce a ales, trece și prin nevoile rămase și notează în „alternative” pe cele care se puteau face și ele acum
+(cu ce ar fi pornit). Așa, jurnalul arată că alegerea a fost între variante adevărate, nu singura posibilă.
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ class Alegere:
     nevoie: Nevoie | None = None
     plan: Plan | None = None
     sarite: list[dict[str, str]] = field(default_factory=list)  # [{"nevoie", "de_ce_nu"}]
+    alternative: list[dict[str, str]] = field(default_factory=list)  # v2: [{"nevoie", "actiune"}], posibile, dar nealese
 
 
 def alege(nevoi: list[Nevoie], stare: StareaOrganismului, config: dict[str, Any], memorie: dict[str, Any] | None = None,
@@ -34,26 +38,30 @@ def alege(nevoi: list[Nevoie], stare: StareaOrganismului, config: dict[str, Any]
     racire = (memorie or {}).get("racire") or {}
     strategii = (memorie or {}).get("strategii") or {}
     for nevoie in sorted(nevoi, key=lambda n: n.urgenta):
+        # după alegere, restul nevoilor doar se încearcă: cele posibile intră în „alternative”, restul nu se notează
+        sarite: list[dict[str, str]] = alegere.sarite if alegere.plan is None else []
         cerut = config["nevoi"][nevoie.tip]["nivel"]
         if not guvernator.permite(stare.nivel, cerut):
-            alegere.sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": f"nivelul {stare.nivel} nu o permite (cere {cerut})"})
+            sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": f"nivelul {stare.nivel} nu o permite (cere {cerut})"})
             continue
         plan = planifica(nevoie, stare, config, memorie)
         if isinstance(plan, Refuz):
             eticheta = "capacitate_indisponibila: " if plan.indisponibila else "nu acum: "
-            alegere.sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": eticheta + plan.motiv})
+            sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": eticheta + plan.motiv})
             continue
         pana_la = racire.get(nevoie.cheie)
         if nevoie.tip != "repara" and ciclu is not None and pana_la is not None and ciclu <= pana_la:
-            alegere.sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": f"în răcire până la ciclul {pana_la} (a fost "
-                                                                       f"tratată de curând)"})
+            sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": f"în răcire până la ciclul {pana_la} (a fost "
+                                                               f"tratată de curând)"})
             continue
         strategie = strategii.get(plan.strategie) or {}
         if strategie.get("stare") == "blocată":
-            alegere.sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": (
+            sarite.append({"nevoie": nevoie.cheie, "de_ce_nu": (
                 f"strategia {plan.strategie} e blocată după {strategie.get('esecuri_la_rand')} eșecuri la rând; omul "
                 f"a primit un raport")})
             continue
-        alegere.nevoie, alegere.plan = nevoie, plan
-        break
+        if alegere.plan is None:
+            alegere.nevoie, alegere.plan = nevoie, plan
+        else:
+            alegere.alternative.append({"nevoie": nevoie.cheie, "actiune": plan.descriere})
     return alegere

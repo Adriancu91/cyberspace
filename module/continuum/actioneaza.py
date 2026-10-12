@@ -11,6 +11,12 @@ CONTINUUM nu face el munca și nu antrenează direct. Pentru fiecare nevoie:
   - Ziua (ÎNTREȚINERE): hrană nouă de la profesor ([hrana] „comanda”), doar dacă nu există deja hrană nefolosită
     destulă.
 
+v2:
+- **linie_noua**: o antrenare lungă, de la zero, cu o configurare neîncepută din lista albă a nevoii.
+- **continua**, când toate configurările potrivite și-au făcut orele: linia tendinței se **prelungește** cu
+  [nevoi.continua] prelungire_ore (aceeași comandă, cu „--ore” = orele făcute + prelungirea). Cu [nevoi.linie_noua]
+  în configurare, „continua” ia doar liniile începute.
+
 `planifica` doar pregătește comanda; dacă lipsește ceva, dă un refuz cu motiv. Un refuz e:
 - „capacitate_indisponibila”, dacă lipsește un modul, o unealtă sau o configurare;
 - „nu acum”, dacă nu e cazul.
@@ -116,7 +122,9 @@ def _model_de_pornire(linie: dict[str, Any], stare: StareaOrganismului) -> int |
 
 
 def plan_antrenare(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any], globuri: list[str],
-                   potrivita: Any, strategie: str) -> Plan | Refuz:
+                   potrivita: Any, strategie: str, prelungire: int = 0, de_la_zero: bool = False) -> Plan | Refuz:
+    """prelungire (v2): dacă toate configurările potrivite sunt încheiate, linia tendinței primește încă atâtea ore.
+    de_la_zero (v2, linie nouă): fără „--porneste-din”, chiar dacă există un model cu aceeași arhitectură."""
     sablon = config["comenzi"]["antrenare"]
     if not sablon:
         return Refuz("lipsește [comenzi] „antrenare” (cum pornește o antrenare lungă)")
@@ -125,26 +133,34 @@ def plan_antrenare(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, 
     if not toate:
         return Refuz(f"nu există nicio configurare potrivită ({', '.join(globuri)})")
     neterminate = {cale: l for cale, l in toate.items() if not l["terminata"]}
+    linia_tendintei = (stare.tendinta or {}).get("linie")
+    prelungita = False
+    if not neterminate and prelungire > 0:
+        # v2: toate și-au făcut orele plănuite; linia tendinței (cea care încă învață) primește încă `prelungire` ore
+        neterminate = {cale: l for cale, l in toate.items() if l["linie"] == linia_tendintei}
+        prelungita = bool(neterminate)
     if not neterminate:
         incheiate = ", ".join(f"{cale} ({l['ore_facute']} din {l['ore_planificate']})" for cale, l in toate.items())
         return Refuz(f"toate configurările potrivite sunt încheiate: {incheiate}; pentru încă o noapte trebuie "
                      f"pregătită una nouă")
-    linia_tendintei = (stare.tendinta or {}).get("linie")
     cale, linie = min(neterminate.items(), key=lambda p: (p[1]["linie"] != linia_tendintei, p[0]))
-    model = _model_de_pornire(linie, stare)
-    comanda = completeaza(sablon, {"config": cale, "ore": linie["ore_planificate"], "ultimul_model": model})
+    model = None if de_la_zero else _model_de_pornire(linie, stare)
+    ore = linie["ore_facute"] + prelungire if prelungita else linie["ore_planificate"]
+    comanda = completeaza(sablon, {"config": cale, "ore": ore, "ultimul_model": model})
     lipsa = fisiere_lipsa(comanda)
     if lipsa:
         return Refuz(f"lipsește {lipsa[0]}")
-    if linie["ore_facute"]:
+    if prelungita:
+        cum = f"prelungită cu {prelungire} ore, de la ora {linie['ore_facute'] + 1}"
+    elif linie["ore_facute"]:
         cum = f"reluată de la ora {linie['ore_facute'] + 1}"
     else:
         cum = f"din modelul #{model}" if model else "de la zero"
     return Plan(nevoie.cheie, "antrenare", strategie,
-                f"antrenare lungă cu {cale} (linia {linie['linie']}, {linie['ore_planificate']} × "
+                f"antrenare lungă cu {cale} (linia {linie['linie']}, {ore} × "
                 f"{ro_scurt(linie['buget_secunde'] / 60)} min, {cum})",
                 [comanda], config["nevoi"][nevoie.tip]["timeout_secunde"], linie=linie["linie"],
-                detalii={"config": cale, "model_de_pornire": model})
+                detalii={"config": cale, "model_de_pornire": model, "ore": ore, "prelungita": prelungita})
 
 
 def plan_dezvolta(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any]) -> Plan | Refuz:
@@ -244,8 +260,16 @@ def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any],
                                   f"{', '.join(plan.detalii['capacitati'])} din nou pe modelul #{plan.detalii['experiment']}")
             return plan
         if nevoie.tip == "continua":
-            return plan_antrenare(nevoie, stare, config, config["nevoi"]["continua"]["configurari"], lambda l: True,
-                                  f"continua:{nevoie.capacitate}:antrenare")
+            reguli = config["nevoi"]["continua"]
+            # v2: cu „linie_noua” configurată, liniile neîncepute sunt ale ei; „continua” ia doar liniile începute
+            doar_incepute = "linie_noua" in config["nevoi"]
+            return plan_antrenare(nevoie, stare, config, reguli["configurari"],
+                                  (lambda l: l["ore_facute"] > 0) if doar_incepute else (lambda l: True),
+                                  f"continua:{nevoie.capacitate}:antrenare", prelungire=reguli.get("prelungire_ore", 0))
+        if nevoie.tip == "linie_noua":
+            return plan_antrenare(nevoie, stare, config, config["nevoi"]["linie_noua"]["configurari"],
+                                  lambda l: l["ore_facute"] == 0, f"linie_noua:{nevoie.capacitate}:antrenare",
+                                  de_la_zero=True)
         return plan_dezvolta(nevoie, stare, config)
     except KeyError as e:
         return Refuz(str(e).strip("'\""))

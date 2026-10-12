@@ -58,6 +58,9 @@ def pe_scurt(rand: dict[str, Any]) -> str:
         text += f" Candidat: {schimbare}."
     if rand.get("nevoie"):
         text += f" Aleg {rand['nevoie']}: {rand['motiv']}."
+        if rand.get("alternative"):
+            text += (" Se putea și: " + "; ".join(f"{a['nevoie']} ({a['actiune']})" for a in rand["alternative"])
+                     + "; am ales după ordinea din configurare.")
         if rand.get("simulat"):
             return text + f" [simulat] Aș {'scrie' if rand.get('fel') == 'raport' else 'porni'}: {rand['actiune']}."
         if rand.get("fel") == "raport":
@@ -132,6 +135,8 @@ class Bucla:
                 etapa = "alege"
                 alegere = alege(lista, inainte, self.config, self.memorie, numar)
                 rand["sarite"] = alegere.sarite
+                if alegere.alternative:  # v2: ce altceva se putea face acum (variante adevărate, nealese)
+                    rand["alternative"] = alegere.alternative
                 if alegere.plan:
                     rand.update(nevoie=alegere.nevoie.cheie, motiv=alegere.nevoie.motiv, actiune=alegere.plan.descriere,
                                 comenzi=[text_comanda(c) for c in alegere.plan.comenzi], fel=alegere.plan.fel)
