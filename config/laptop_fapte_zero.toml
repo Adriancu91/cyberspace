@@ -1,0 +1,60 @@
+# Kronos-fapte-zero (planul joi–sâmbătă, faza 1c: plasa de siguranță a nopții 1). Model nou, DE LA ZERO: aceeași
+# arhitectură (10×512) și același tokenizer, 7 ore pe TinyStories întreg + 5% povești cu fapte din prima oră, cu aceleași
+# examene la fiecare oră (fapte, fapte_noi, nota pe 40 de povești).
+# Întrebarea: ajunge la fapte comparabile cu injectarea (#252: 72 fapte noi) fără să plătească uitarea poveștilor?
+# Rețeta, ca a treia antrenare lungă de la zero (noaptea 3: ~0,46 după 7 ore): lot 24, rata 0,001 care scade pe 8 ore
+# (durata_scaderii 28.800 s, la fel ca acolo, ca ora 7 să se compare cu ora 7), plus hrana 5%.
+# Nu e „de_la_zero = true”: aia ar porni de la zero în FIECARE oră. Pornește de la zero doar fiindcă linia n-are încă
+# stare, apoi continuă. Nu e urmărită de CONTINUUM ([linii] din config/continuum.toml): modelele ei nu devin „ultimul
+# model” al liniei vechi.
+#   python unelte/antrenare_lunga.py --config config/laptop_fapte_zero.toml --ore 7 --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/laptop_fapte_zero.toml)
+
+[platforma]
+nume = "fapte_zero"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 7
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.001, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 28800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/fapte_zero/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # TinyStories întreg; poveștile cu fapte vin prin hrana modelului (5% din fiecare lot)
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

@@ -14,6 +14,9 @@ Urgența e locul tipului în [continuum] „ordinea_nevoilor” („repara” e 
 - **dezvolta**: cea mai slabă capacitate din vectorul capacităților (cel mai mic procent din maxim, dintre cele
   măsurate), cu ce se știe despre hrana ei.
 
+- **linie_noua** (v2): în lista ei albă e o configurare neîncepută (nicio oră în jurnal). E o variantă adevărată
+  lângă „continua”: care se alege o spune ordinea din configurare. Motivul spune și cum stă linia de acum.
+
 Nevoile nu țin cont de nivel, de module, de răcire sau de configurările care lipsesc. Asta o face ALEGE: sare peste
 ce nu se poate face acum și spune de ce.
 """
@@ -24,7 +27,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from module.continuum import GALBENA, ROSIE, cate, peste, ro, ro_scurt
-from module.continuum.evalueaza import StareaOrganismului
+from module.continuum.evalueaza import StareaOrganismului, se_potriveste
 from module.continuum.stabilitate import in_asteptare
 
 
@@ -130,8 +133,28 @@ def nevoie_dezvolta(stare: StareaOrganismului, config: dict[str, Any], urgenta: 
     return Nevoie("dezvolta", slaba, urgenta, motiv, {"procent": c.procent})
 
 
+def nevoie_linie_noua(stare: StareaOrganismului, config: dict[str, Any], urgenta: float,
+                      memorie: dict[str, Any] | None = None) -> Nevoie | None:
+    reguli = config["nevoi"]["linie_noua"]
+    neincepute = sorted(cale for cale, l in stare.linii.items() if l.get("stare") == "ok" and l["ore_facute"] == 0
+                        and se_potriveste(cale, reguli["configurari"]))
+    if not neincepute:
+        return None
+    t = stare.tendinta
+    if not t:
+        context = "nicio linie urmărită n-are încă ore"
+    elif t.get("saturat"):
+        context = f"linia {t['linie']} e saturată (două ore la rând sub pragul de {ro_scurt(t['prag'])})"
+    elif t["castig"] is not None and peste(t["castig"], t["prag"]):
+        context = f"linia {t['linie']} încă învață (ultima oră: {ro(t['castig'], 4)}), deci e o variantă lângă continuare"
+    else:
+        context = f"linia {t['linie']} a câștigat puțin în ultima oră"
+    motiv = f"în lista albă sunt configurări care n-au pornit niciodată ({', '.join(neincepute)}); {context}"
+    return Nevoie("linie_noua", reguli["capacitate"], urgenta, motiv, {"configurari": neincepute})
+
+
 NEVOI = {"repara": nevoie_repara, "masoara": nevoie_masoara, "remasoara": nevoie_remasoara,
-         "continua": nevoie_continua, "dezvolta": nevoie_dezvolta}
+         "continua": nevoie_continua, "dezvolta": nevoie_dezvolta, "linie_noua": nevoie_linie_noua}
 
 
 def nevoi(stare: StareaOrganismului, config: dict[str, Any], memorie: dict[str, Any] | None = None) -> list[Nevoie]:

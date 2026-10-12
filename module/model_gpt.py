@@ -485,6 +485,12 @@ class ModelGPT:
             statistici["acoperire_memorie"] = self._memoria().statistici().get("acoperire")
         return statistici
 
+    @staticmethod
+    def bucati_deodata(context: int, vocabular: int) -> int:
+        """Câte bucăți de text evaluează biti_pentru deodată: 64, cât timp răspunsurile unui grup au cel mult 2^26
+        numere (64 × 256 × 4.096, modelele de până la W1: neschimbat); altfel, atâtea câte încap în 2^26."""
+        return max(1, min(64, 2**26 // (context * vocabular)))
+
     @torch.no_grad()
     def biti_pentru(self, text: str) -> float:
         if self.retea is None:
@@ -501,11 +507,13 @@ class ModelGPT:
         nats = 0.0
         # primul simbol nu are context: îl socotim cu probabilitate uniformă
         biti_primul = math.log2(self._marime_vocabular())
-        # bucăți de ctx+1 simboluri (ultima poate fi mai scurtă), câte 64 deodată
+        # bucăți de ctx+1 simboluri (ultima poate fi mai scurtă), câte 64 deodată; mai puține când contextul și
+        # vocabularul sunt mari (W2: 512 × 16.384), ca răspunsurile unui grup să nu ceară gigaocteți de memorie video
+        deodata = self.bucati_deodata(ctx, self._marime_vocabular())
         starturi = range(0, len(idx) - 1, ctx)
         intregi = [s for s in starturi if s + ctx + 1 <= len(idx)]
         rest = [s for s in starturi if s + ctx + 1 > len(idx)]
-        grupuri = [intregi[i : i + 64] for i in range(0, len(intregi), 64)] + [[s] for s in rest]
+        grupuri = [intregi[i : i + deodata] for i in range(0, len(intregi), deodata)] + [[s] for s in rest]
         for grup in grupuri:
             n = min(ctx, len(idx) - 1 - grup[0])
             x = torch.stack([idx[s : s + n] for s in grup])

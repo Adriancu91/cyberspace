@@ -2769,6 +2769,229 @@ rost, iar o singură sarcină înseamnă 25 de puncte.
     alt fel de citat.
 - Raport complet, îngheț final (`v03_final`), B față de A și D pe aceleași runde: mai sus și în raport.
 
+## 8–10 octombrie: planul joi–sâmbătă (`docs/PLAN_joi_sambata.md`)
+
+Starea fiecărei faze e la sfârșitul planului, în secțiunea „Stare”.
+
+### Faza 1a: cele trei lecții SANDBOX-7
+
+- **Faptele profesorului le verifică omul.**
+  - `docs/fapte_de_verificat.md` are cele 50 de fapte ale hranei, numerotate, în engleză.
+  - Traducerea automată o face profesorul, pe placă, vineri dimineață (`python unelte/fapte_de_verificat.py --traduce`).
+  - Adrian trimite numerele celor greșite. Doar atunci: `python unelte/fapte_de_verificat.py --aplica 3,17,42`, care
+    scrie `date/fapte/fapte_gresite.json`.
+  - De atunci, faptele marcate ies din hrana generată de acum înainte. În examene se marchează, dar nu se șterg.
+    Fiecare examen de fapte dă și scorul fără ele (`fapte_corecte_fara_gresite`, `fapte_noi_fara_gresite`).
+  - Fără fișier, totul merge exact ca înainte.
+  - **Verificate de om pe 9 octombrie 2026:** Adrian a citit toate cele 50 de fapte și niciunul nu e greșit.
+    - Hrana și examenele rămân neschimbate.
+    - `date/fapte/fapte_gresite.json` nu s-a scris, deci mecanismul rămâne inactiv.
+- **Biblioteca școlii se curăță după corectitudine** (ramura `kronos-cod`, școala v0.3):
+  - la fiecare regresie, fiecare soluție din bibliotecă e mutată pe sarcinile nevăzute de aceeași formă ale nivelului ei;
+  - cele care pică ies în `lucru/cod_v03/respinse/curatare_<linie>.jsonl`, cu motivul.
+- **Așteptările se scriu înainte de fiecare noapte.**
+  - `python unelte/preinregistrare.py --nume noaptea1 --titlu "..."` creează `docs/preinregistrari/<data>_noaptea1.md`:
+    întrebarea, așteptările în cifre și ce le-ar infirma.
+  - Dimineața, `python unelte/preinregistrare.py --inchide noaptea1` adaugă „Ce a ieșit”, scos din jurnal. Unealta doar
+    adaugă: nu schimbă nimic din ce era scris.
+
+### Noaptea 1 (joi ~23:00 → vineri 07:30): CONTINUUM pe bune
+
+- **Ce rulează:** `python -m module.continuum.bucla --config config/continuum.toml --stare lucru/continuum_pe_bune`.
+  - Pornește fără `--simuleaza`, ca proces separat.
+  - Are jurnalul lui, `lucru/continuum_pe_bune/`, separat de cel al simulării (`lucru/continuum/`).
+- **Ce are voie să pornească:** doar `config/laptop_antrenare_lunga_8.toml`, adică 7 ore din cel mai bun model păstrat,
+  cu 5% hrană și rata 0,00005 → 0,000005. Nevoia „continuă” o pornește doar dacă:
+  - ultima oră a antrenării 7 a câștigat peste 0,005;
+  - tendința pe 3 ore e bună.
+
+  Altfel, CONTINUUM spune „saturat”. Nimic nu se forțează.
+- **De ce lista albă stă în nevoi, nu în `[linii]`:**
+  - `[linii]` îi spune lui CONTINUUM ce linii măsoară și unde e ultimul model păstrat.
+  - Dacă acolo ar fi doar antrenarea 8, care încă nu există, n-ar vedea nicio istorie și n-ar ști de unde să continue.
+  - De aceea, `[linii]` urmărește liniile adevărate (antrenările lungi și faptele), iar lista albă e în
+    `[nevoi.continua] configurari`. `[nevoi.dezvolta]` e goală.
+- **O singură antrenare pe noapte:** e permisă doar antrenarea 8, de 7 ore.
+- **Plasa de siguranță:** la 00:00, Claude Code verifică dacă a pornit vreo antrenare. Se uită după un proces
+  `antrenare_lunga` sau un jurnal de acțiune `…_antrenare.log` în `lucru/continuum_pe_bune/actiuni/`.
+  - Dacă nu, pornește de mână Kronos-fapte-zero:
+    `python unelte/antrenare_lunga.py --config config/laptop_fapte_zero.toml --ore 7 --inceput "Once upon a time, there was a fearful little dog named Coco"`.
+  - Fapte-zero e un model nou, de la zero, cu aceeași arhitectură și același tokenizer. Învață 7 ore pe TinyStories, cu
+    5% fapte de la început, și dă aceleași examene în fiecare oră.
+  - În jurnalul nopții se notează „CONTINUUM n-a ales”, plus ultimele lui cicluri.
+  - Dacă la 00:00 CONTINUUM e în mijlocul unui examen, se așteaptă alegerea lui următoare (cel mult 30 de minute).
+- **Dacă CONTINUUM cade în timpul nopții**, antrenarea pornită merge mai departe. Se raportează dimineața.
+- **Ziua (07:30–19:00) placa e a școlii.**
+  - La 07:30, Claude Code închide procesul CONTINUUM. Ziua, CONTINUUM ar da examene pe placă, adică s-ar bate cu școala.
+  - Nu se folosește STOP pentru asta, pentru că STOP ar opri și școala.
+  - Butonul STOP (`lucru/STOP`) oprește tot, inclusiv CONTINUUM.
+
+### Antrenarea 7 (8 octombrie, 13:09–21:30): din #262, 8 ore, rata 0,0001 → 0,00001, hrană 5%
+
+| Ora | # | val_bpb | Față de ora dinainte | Decizia | Fapte noi (R față de 59) | Nota profesorului |
+|---|---|---|---|---|---|---|
+| 1 | 271 | 0,4547 | — | respinsă | 70 (1,19) | 4,08 |
+| 2 | 272 | 0,4511 | −0,0036 | respinsă | 61 (1,03) | 4,62 |
+| 3 | 273 | 0,4450 | −0,0061 | respinsă | 58 (0,98) | 4,45 |
+| 4 | 274 | 0,4411 | −0,0039 | respinsă | 65 (1,10) | 4,97 |
+| 5 | 275 | 0,4375 | −0,0035 | respinsă | 62 (1,05) | 4,75 |
+| 6 | 276 | 0,4315 | −0,0060 | respinsă | 64 (1,08) | 4,45 |
+| 7 | 277 | 0,4276 | −0,0039 | respinsă (câștig +0,0028 sub pragul de 0,005) | 64 (1,08) | 4,70 |
+| 8 | 278 | 0,4263 | −0,0013 | respinsă (câștig +0,0041 sub pragul de 0,005) | 64 (1,08) | 4,70 |
+
+- **Faptele se țin:**
+  - R = 1,08 la final;
+  - setul sacru pe starea de după ora 8: 31 din 50 (#262: 29, #252: 26), o diferență în zgomot (±3,5 pe 50 de
+    întrebări).
+- **Niciuna din ore nu e păstrată.**
+  - Ora 8 bate #262 (0,4304) cu 0,0041, sub pragul de 0,005. Cel mai bun model păstrat rămâne #262.
+  - Ultimele două ore au câștigat 0,0039 și 0,0013, deci pentru CONTINUUM poveștile sunt „saturate”.
+- **Față de pre-înregistrare:**
+  - val_bpb final între 0,420 și 0,430: da (0,4263);
+  - R ≥ 0,8: da (1,08);
+  - orele 4–8 păstrate: **nu**, nicio oră.
+- **Factor de influență mic:** în ora 3 am rulat testele pe procesor (prioritate minimă), iar ora 3 are cu 2% mai puțini
+  pași (26.608 față de ~27.100 în celelalte).
+
+### Simularea CONTINUUM v0 (7–8 octombrie), oprită la 21:31
+
+- A rulat din 7 octombrie, 01:46, până pe 8 octombrie, 21:16: 155 de cicluri, toate simulate.
+- **108 cicluri:** placa era ocupată de antrenările adevărate, deci doar a observat.
+- **47 de cicluri cu placa liberă:**
+  - de 28 de ori ar fi ales „continua:povesti”: v0 nu avea încă pragul de câștig al lui v1;
+  - de 16 ori n-ar fi pornit nimic: „dezvolta:fapte, nu acum”, ziua;
+  - o dată „dezvolta:fapte”, o dată „masoara:fapte”;
+  - o dată nimic, pentru că toate configurările potrivite erau încheiate.
+- Procesul a fost închis (nu cu STOP); jurnalul lui rămâne în `lucru/continuum/`.
+
+### Noaptea 1, pornirea (8 octombrie, 21:36)
+
+- **Proba la uscat** (`--simuleaza --ca-la 23:05`, placa reală, liberă): ÎNVĂȚARE.
+  - Prima alegere: o remăsurare a faptelor pe #262 (zona galbenă: 59 față de 72).
+  - Poveștile sunt „saturate”, deci antrenarea 8 nu e cerută.
+- **CONTINUUM pe bune** a pornit la 21:36, nu la ~23:00, fiindcă antrenarea 7 s-a terminat la 21:30. Primele cicluri:
+  - #1: remăsurarea faptelor pe #262, reușită (59, deci zona galbenă e confirmată);
+  - #2: „Nu pornesc nimic: dezvolta:fapte — nicio configurare potrivită”.
+- **Plasa de siguranță** rămâne la 00:00.
+- **Traducerea faptelor** (`docs/fapte_de_verificat.md`) a făcut-o profesorul pe placă, la 21:34, înainte de pornire.
+  - A ieșit slabă: „Birds have feathers” → „Păsări au pălării”.
+  - Documentul are de aceea și o traducere a lui Claude Code, pentru citit. Traducerea profesorului rămâne, marcată
+    „nu judeca faptele după ea”.
+  - Ambele stau în `date/fapte/traduceri.json`.
+
+### Noaptea 1, rezultatul (9 octombrie, 07:30)
+
+Detaliile, cu verdictul, sunt în `docs/preinregistrari/2026-10-08_noaptea1.md` („Ce a ieșit”) și în
+`docs/noaptea1_plasa.md`.
+
+**CONTINUUM pe bune** (21:36–07:30, 180 de cicluri, oprit la 07:30 prin închiderea procesului):
+
+| Ciclurile | Ora | Ce a văzut și ce a ales |
+|---|---|---|
+| #1 | 21:36 | ÎNVĂȚARE, placa liberă. **A ales remasoara:fapte**: zona galbenă, 59 de fapte noi pe #262 față de 72 la #252. Examenul, 6 s, a confirmat 59. |
+| #2–#3, #5–#135 | 21:37–00:00 | ÎNVĂȚARE, placa liberă. **„Nu pornesc nimic”**: „dezvolta:fapte” n-are nicio configurare permisă. „continua” nu e cerută: poveștile sunt saturate (+0,0039, +0,0013). |
+| #4 | 21:39 | REPAUS: placa ocupată de testele mele. |
+| #136–#180 | 00:01–07:21 | REPAUS: placa ocupată de fapte-zero. |
+
+- **Treapta 5: a ales singur: NU.**
+  - Fiecare decizie a fost a lui, cu motiv, după regulile scrise.
+  - N-a pornit nimic din afara listei albe.
+  - Antrenarea nopții a pornit-o însă plasa de siguranță, nu el.
+- **Plasa de siguranță:** fapte-zero, pornit de Claude Code la 00:00:27.
+
+**Fapte-zero** (model nou de la zero, 10×512, 5% fapte din prima oră; alături, noaptea 3: aceeași rețetă, fără fapte):
+
+| Ora | # | val_bpb | Noaptea 3 | Diferența | Fapte noi | Nota |
+|---|---|---|---|---|---|---|
+| 1 | 280 | 0,5834 | 0,5762 | +0,0072 | 43 | 3,42 |
+| 2 | 281 | 0,5530 | 0,5501 | +0,0029 | 51 | 3,12 |
+| 3 | 282 | 0,5347 | 0,5285 | +0,0062 | 59 | 3,55 |
+| 4 | 283 | 0,5133 | 0,5102 | +0,0031 | 66 | 3,55 |
+| 5 | 284 | 0,5012 | 0,4941 | +0,0071 | 60 | 3,83 |
+| 6 | 285 | 0,4816 | 0,4771 | +0,0045 | 69 | 3,55 |
+| 7 | 286 | 0,4686 | 0,4636 | +0,0050 | 65 | 4,03 |
+
+- **Setul sacru pe #286:** 25 din 50 (26 cu sinonime). #252, prin injectare, avea 26; #262 29; antrenarea 7 după ora 8,
+  31.
+- **Răspunsul nopții (1b): da.**
+  - De la zero, cu 5% fapte de la început, modelul ajunge în 7 ore la fapte comparabile cu injectarea: 65 față de 72 pe
+    examenul nou (zgomotul e ±13) și 25 față de 26 pe setul sacru.
+  - Nu are ce uita, iar costul pe povești e ~0,005 față de aceeași rețetă fără fapte.
+  - 7 ore nu ajung însă pentru povești (0,4686 față de 0,4304 la #262). Comparația la ore egale cu injectarea vine
+    sâmbătă.
+- **Treapta 4, observație:** starea antrenării 7 după ora 8 (#278) are val_bpb 0,4263 ≤ 0,428 și 64 de fapte noi ≥ 60,
+  cu hrană, iar pe setul sacru 31/50, cel mai bun. Kronos n-a păstrat-o, pentru că bate #262 cu doar 0,0041, sub
+  pragul de 0,005. Ca model păstrat, treapta 4 nu e atinsă.
+
+### Faza 3 (vineri, 9 octombrie): școala v0.3, verdictul și ce știe un model de la zero fără fapte
+
+**Școala de cod v0.3, pilotul** (07:38–09:17, pe ramura `kronos-cod`; detalii în README-ul de acolo și în
+`../cyberspace-cod/lucru/cod_v03/raport.md`):
+- **0n (numerele 0–99):**
+  - B și D l-au trecut în 3 runde (nevăzut 80% și 85%, sacru 75%);
+  - A, doar cu abecedarul, nu: cel mai bun nevăzut 65% în 55 de runde.
+- **0w (cuvintele):** B și D au picat, cu 0% tot timpul.
+  - Modelul repetă cuvintele din exemplele puse în fața lui: „moon” → `"sun"`.
+  - Cauza e tokenizer-ul: ` moon` e o singură bucată, iar `"moon"` sunt 4 (`"`, `m`, `oon`, `"`).
+- **B și D au mers la fel pe aceleași runde:** ajută exemplele în plus, nu descoperirea.
+- **Poveștile:** cel mult 0,4383, sub 0,46.
+- **Verdictul: PARCATĂ.**
+  - B n-a ajuns la 2A, deci, după plan, școala se reia pe workstation cu un model mai mare și un tokenizer nou.
+  - Tokenizer-ul nou nu trebuie să taie nici numerele în cifre, nici cuvintele după ghilimele.
+  - Înghețul final e `v03_final`.
+
+**Ce știe un model de la zero fără fapte** (pentru comparația de sâmbătă): aceeași rețetă, aceleași 7 ore, singura
+diferență fiind hrana.
+
+| Modelul | val_bpb | Fapte noi (din 150) | Setul sacru (din 50) |
+|---|---|---|---|
+| Noaptea 3, ora 7 (#225): de la zero, fără fapte | 0,4636 | 34 | 11 |
+| Fapte-zero, ora 7 (#286): de la zero, 5% fapte | 0,4686 | 65 | 25 |
+| #252: fapte prin injectare (referință) | 0,434 | 72 | 26 |
+
+- 5% fapte de la început aproape dublează faptele (34 → 65) și dublează setul sacru (11 → 25). Costul e +0,005 la
+  val_bpb.
+- Faptele ajung cât prin injectare: 65 față de 72 (zgomotul e ±13) și 25 față de 26.
+
+### Noaptea 2 (10 octombrie, 02:41–12:11): CONTINUUM cu lista albă „antrenarea 8”; antrenarea 8 → #295, treapta 4
+
+Detaliile sunt în `docs/preinregistrari/2026-10-09_noaptea2.md` (adendum, „Ce a ieșit”, verdict) și în
+`docs/noaptea2_plasa.md`.
+
+- **Pornirea întârziată:** vineri, încărcătorul s-a deconectat de 1.732 de ori (09:42–11:01), iar laptopul a dormit
+  11:01–02:38. CONTINUUM a pornit la 02:41, nu la 18:45.
+- **CONTINUUM:** 41 de cicluri, fără nicio acțiune. **A ales singur: NU**, ca în noaptea 1: tendința e saturată, iar
+  „dezvolta” n-are nicio configurare. La 07:30 a fost închis.
+- **Plasa de siguranță** a pornit antrenarea 8 la 03:03:30, după 20 de minute de alimentare stabilă.
+  - La 09:53, cineva de la laptop i-a închis fereastra.
+  - Adrian a ales reluarea, iar orele 7–8 au rulat 10:06–12:11, din starea de după ora 6. De acum, rulările lungi pornesc
+    cu fereastra ascunsă.
+
+**Antrenarea 8** (din #262, 8 ore, rata 0,00005 → 0,000005, 5% hrană):
+
+| Ora | # | val_bpb | Decizia | Fapte noi (R) | Nota |
+|---|---|---|---|---|---|
+| 1 | 288 | 0,4404 | respinsă | 59 (1,00) | 4,55 |
+| 2 | 289 | 0,4387 | respinsă | 61 (1,03) | 4,75 |
+| 3 | 290 | 0,4372 | respinsă | 67 (1,14) | 4,38 |
+| 4 | 291 | 0,4344 | respinsă | 60 (1,02) | 4,70 |
+| 5 | 292 | 0,4307 | respinsă | 59 (1,00) | 4,78 |
+| 6 | 293 | 0,4281 | respinsă (+0,0023 sub prag) | 63 (1,07) | 4,62 |
+| 7 | 294 | 0,4259 | respinsă (+0,0045 sub prag) | 61 (1,03) | 4,17 |
+| 8 | **295** | **0,4249** | **păstrată** (+0,0055) | 64 (1,08) | **5,35** |
+
+- **Răspunsul la 1a: da, la limită.** Continuarea cu pași mici mai câștigă +0,0055 în 8 ore și bate repornirea cu rată
+  dublă (antrenarea 7: 0,4263).
+  - Am greșit în pre-înregistrare: mă așteptam la sub 0,005.
+  - Ultimele două ore au adus doar +0,0022 și +0,0010.
+- **Setul sacru pe #295:** 30 din 50.
+- **Treapta 4 e atinsă de #295:** povești 0,4249 ≤ 0,428, 64 de fapte noi ≥ 60, cu 5% hrană, păstrat de Kronos,
+  confirmat pe setul sacru. E și cel mai bun model păstrat la povești (înainte, #257: 0,4281) și la notă (înainte,
+  #260: 5,08).
+
+**Bilanțul săptămânii:** `docs/UNDE_AM_AJUNS_2026-10-10.md` (scara, cel mai bun model pe fiecare criteriu, cifrele,
+deciziile pentru Adrian).
+
 ## Toate comenzile
 
 ```

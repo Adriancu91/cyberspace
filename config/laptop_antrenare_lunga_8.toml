@@ -1,0 +1,59 @@
+# A opta antrenare lungă (planul joi–sâmbătă, faza 1c): lista albă a nopții 1, pornită de CONTINUUM pe bune, nu de om.
+# Noaptea 1 n-a rulat-o: CONTINUUM a spus „saturat”, iar plasa de siguranță a pornit fapte-zero. După regula din faza 3c,
+# noaptea 2 e tot ea, cu 8 ore în loc de 7 (9 octombrie, înainte de pornire; pre-înregistrarea 2026-10-09_noaptea2.md).
+# Continuare din cel mai bun model păstrat după antrenarea 7: CONTINUUM pune singur --porneste-din {ultimul_model}.
+# 8 ore (noaptea 2 începe la 19:00, deci se termină până la 07:30), hrana 5%, rata 0,00005 care scade la 0,000005 pe
+# 8 ore, fără repornire mare.
+# Întrebarea rămasă de la 6b: mai câștigă ceva continuarea cu pași mici? Câștig total peste 0,005 = „merită”; sub = „saturat”.
+# Criteriile: cele implicite ale uneltei (fără [criterii]): val_bpb principal 0,005, fapte_noi −10, nota −1,0.
+#   cum o pornește CONTINUUM: python unelte/antrenare_lunga.py --config config/laptop_antrenare_lunga_8.toml --ore 8 --porneste-din <ultimul_model> --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/laptop_antrenare_lunga_8.toml)
+
+[platforma]
+nume = "antrenare_lunga_8"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 8               # 8 ore (noaptea 2, de la 19:00): se termină până la 07:30
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 85
+memorie_gpu_max_mb = 5500      # din 6 GB, lăsăm loc pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 10, n_capete = 8, n_emb = 512, context = 256, lot = 24, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 28800.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/antrenare_lunga_8/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # TinyStories întreg; poveștile cu fapte vin prin hrana modelului (5% din fiecare lot)
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

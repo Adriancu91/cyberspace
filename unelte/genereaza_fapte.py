@@ -38,18 +38,21 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from kronos.jurnal import Jurnal  # noqa: E402
+from module.fapte_gresite import subiectele_gresite  # noqa: E402
 from module.profesor_qwen import FAPTE, PERSONAJE, STILURI, SUBIECTE, ProfesorQwen  # noqa: E402
 
 SEPARATOR = "\n<|endoftext|>\n"
 NOTA_MINIMA = 8
 
 
-def cererea(k: int) -> tuple[str, str, str]:
-    """A k-a cerere: toate subiectele pe rând; apoi alt stil; după toate stilurile, alt personaj (apoi de la capăt)."""
+def cererea(k: int, subiecte: list[tuple[str, str]] | None = None) -> tuple[str, str, str]:
+    """A k-a cerere: toate subiectele pe rând; apoi alt stil; după toate stilurile, alt personaj (apoi de la capăt).
+    `subiecte`: fără cele marcate greșite de om (implicit: toate)."""
+    subiecte = SUBIECTE if subiecte is None else subiecte
     stiluri = list(STILURI)
-    subiect = SUBIECTE[k % len(SUBIECTE)][0]
-    stil = stiluri[k // len(SUBIECTE) % len(stiluri)]
-    personaj = PERSONAJE[k // (len(SUBIECTE) * len(stiluri)) % len(PERSONAJE)]
+    subiect = subiecte[k % len(subiecte)][0]
+    stil = stiluri[k // len(subiecte) % len(stiluri)]
+    personaj = PERSONAJE[k // (len(subiecte) * len(stiluri)) % len(PERSONAJE)]
     return subiect, stil, personaj
 
 
@@ -81,16 +84,18 @@ def citeste_toate(fisier: Path) -> list[dict[str, Any]]:
     return [json.loads(r) for r in fisier.read_text(encoding="utf-8").splitlines() if r.strip()]
 
 
-def scrie_rezultatele(dosar: Path, toate: list[dict[str, Any]], secunde: float) -> dict[str, Any]:
-    """povesti.txt, fapte.json și info.json, din toate poveștile scrise până acum."""
-    ramase = [r for r in toate if r["ramane"]]
+def scrie_rezultatele(dosar: Path, toate: list[dict[str, Any]], secunde: float,
+                      gresite: set[str] | frozenset[str] = frozenset()) -> dict[str, Any]:
+    """povesti.txt, fapte.json și info.json, din toate poveștile scrise până acum. Poveștile cu fapte marcate greșite de
+    om (`gresite`, subiecte) nu intră în hrană; în toate.jsonl rămân."""
+    ramase = [r for r in toate if r["ramane"] and r["subiect"] not in gresite]
     (dosar / "povesti.txt").write_text(SEPARATOR.join(r["poveste"].strip() for r in ramase) + "\n", encoding="utf-8")
     fapte: dict[str, list[int]] = {fapt: [] for fapt in FAPTE.values()}
     for i, r in enumerate(ramase):
         fapte[r["fapt"]].append(i)
     (dosar / "fapte.json").write_text(json.dumps(fapte, ensure_ascii=False, indent=1), encoding="utf-8")
     note = Counter(r["nota"] for r in toate if r["nota"] is not None)
-    pe_fapt = [len(v) for v in fapte.values()]
+    pe_fapt = [len(v) for fapt, v in fapte.items() if fapt not in {FAPTE[s] for s in gresite}]
     info = {
         "data": datetime.now().isoformat(timespec="seconds"),
         "scrise": len(toate),
@@ -99,6 +104,8 @@ def scrie_rezultatele(dosar: Path, toate: list[dict[str, Any]], secunde: float) 
         "distributie_note": {str(n): note.get(n, 0) for n in range(1, 11)},
         "nota_medie": round(statistics.mean(r["nota"] for r in toate if r["nota"] is not None), 2) if note else None,
         "ramase_cu_faptul_spus_altfel": sum(1 for r in ramase if r["aparitii_fapt"] == 0),
+        **({"scoase_ca_gresite": sum(1 for r in toate if r["ramane"] and r["subiect"] in gresite),
+            "fapte_gresite": sorted(gresite)} if gresite else {}),
         "cuvinte_ramase": sum(len(r["poveste"].split()) for r in ramase),
         "cuvinte_scrise": sum(len(r["poveste"].split()) for r in toate),
         "povesti_pe_fapt_min": min(pe_fapt),
@@ -129,11 +136,15 @@ def main(argv: list[str] | None = None) -> int:
     toate = citeste_toate(fisier)
     inceput = time.perf_counter()
     secunde_inainte = json.loads((dosar / "info.json").read_text(encoding="utf-8"))["secunde"] if toate else 0.0
+    gresite = subiectele_gresite(dosar / "fapte_gresite.json")  # marcate de om: nu mai intră în hrana viitoare
+    permise = [(s, f) for s, f in SUBIECTE if s not in gresite]
+    if gresite:
+        print(f"Faptele marcate greșite de om nu se mai scriu și ies din hrană: {', '.join(sorted(gresite))}.", flush=True)
     profesor = ProfesorQwen(lot=args.lot, doar_local=args.doar_local, samanta=len(toate))
     print(f"Profesorul scrie povești cu fapte: de la a {len(toate) + 1}-a, până la {args.povesti} sau {args.ore:g} ore "
           f"(câte {args.lot} deodată; în {dosar}).", flush=True)
     while len(toate) < args.povesti and time.perf_counter() - inceput < args.ore * 3600:
-        cereri = [cererea(k) for k in range(len(toate), min(len(toate) + args.bucata, args.povesti))]
+        cereri = [cererea(k, permise) for k in range(len(toate), min(len(toate) + args.bucata, args.povesti))]
         povesti = profesor.genereaza_mai_multe(cereri)
         note = profesor.noteaza_mai_multe(povesti)
         noi = []
@@ -146,11 +157,11 @@ def main(argv: list[str] | None = None) -> int:
         with fisier.open("a", encoding="utf-8") as f:
             f.write("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in noi))
         toate += noi
-        info = scrie_rezultatele(dosar, toate, secunde_inainte + time.perf_counter() - inceput)
+        info = scrie_rezultatele(dosar, toate, secunde_inainte + time.perf_counter() - inceput, gresite)
         print(f"   {len(toate)} scrise, {info['ramase']} rămase ({info['nota_medie']} în medie), la {datetime.now():%H:%M}",
               flush=True)
 
-    info = scrie_rezultatele(dosar, toate, secunde_inainte + time.perf_counter() - inceput)
+    info = scrie_rezultatele(dosar, toate, secunde_inainte + time.perf_counter() - inceput, gresite)
     info["povesti_pe_minut"] = round(info["scrise"] / (info["secunde"] / 60), 1) if info["secunde"] else None
     info["memorie_gpu_rezervata_mb"] = profesor.memorie_video_mb().get("rezervata")
     (dosar / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
