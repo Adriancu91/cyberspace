@@ -1,7 +1,8 @@
 # Pornirea automată pe workstation (12 octombrie 2026)
 
-*Ce e făcut, ce se întâmplă la o repornire de Windows și ce variante sunt pentru restul. Logarea automată în Windows
-NU e activată: o hotărăște Adrian.*
+*Ce e făcut, ce se întâmplă la o repornire de Windows și ce variante sunt pentru restul. Adrian a aprobat logarea
+automată (varianta B) luni seara; totul e pregătit, dar ea se activează abia când își scrie el parola în Autologon,
+la workstation (vezi la sfârșit).*
 
 ## Ce e făcut
 
@@ -59,8 +60,56 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
   Task Scheduler.
 - Cu A sau C, după o repornire Claude Code se pornește de mână. Cu B, pornește singur.
 
-## Ce trebuie să hotărască Adrian
+## Hotărât de Adrian (12 octombrie, 19:30): varianta B, logare automată cu ecranul blocat imediat
 
-1. A, B sau C (și D, pe care îl recomand oricum).
-2. Dacă B: îmi dă „da”-ul și e de față la prima încercare.
-3. Dacă vrea un UPS (pe laptop, alimentarea a stricat o noapte întreagă).
+**Ce am făcut eu (fără parolă, fără drepturi de administrator):**
+- Am descărcat **Autologon** de la Microsoft Sysinternals în `C:\Kronos\unelte_windows\Autologon64.exe` (în afara
+  proiectului și a Git-ului). Verificat: semnătura digitală e validă, „Microsoft Corporation”; versiunea 3.10;
+  sha256 `5d96bbc4e5b726d8…`. **Nu l-am rulat**: cere parola ta și drepturi de administrator.
+- Am pus în Task Scheduler două sarcini care pornesc la fiecare logare (`unelte/programeaza_dupa_logare_ws.ps1`):
+
+| Sarcina | Ce face |
+|---|---|
+| Kronos blocare ecran | blochează ecranul, dar doar dacă logarea e la cel mult 5 minute după pornirea calculatorului (adică logarea automată); când te loghezi tu mai târziu, nu te blochează |
+| Kronos Claude Code | la 30 de secunde după logare pornește `claude --continue --remote-control "Kronos"` în `C:\Kronos`, într-o fereastră de terminal; nu pornește a doua oară dacă rulează deja |
+
+- Reluarea antrenării la logare („Kronos reluare …”) exista deja; se pune pentru fiecare noapte, odată cu pornirea ei.
+- Ce fac aceste sarcini se notează în `lucru/dupa_logare.log`.
+
+**Ce mai ai tu de făcut, când ajungi la workstation (5 minute):**
+1. Click dreapta pe `C:\Kronos\unelte_windows\Autologon64.exe` → „Run as administrator” → Yes. La prima pornire apare
+   licența: „Agree”.
+2. În fereastră: **Username** `Computer`, **Domain** `DESKTOP-BR58S2C`, **Password** parola ta de Windows → **Enable**.
+   Trebuie să apară „Autologon successfully configured”. Parola o scrii doar acolo: unealta o ține criptată în
+   Windows (secret LSA), nu în clar în registru. Nu mi-o scrie mie și nu o pune în niciun fișier.
+3. **Încearcă o dată, cât ești de față:** repornește Windows. Ar trebui să vezi, fără să atingi nimic: logarea, ecranul
+   blocat după câteva secunde, iar pe telefon, după ~1 minut, sesiunea „Kronos” la Remote Control. Deblochezi cu
+   parola și te uiți în `lucru\dupa_logare.log`.
+4. **În BIOS (F2 la pornire): AC Recovery = Power On**, ca workstation-ul să pornească singur când revine curentul.
+   Fără asta, după o pană de curent rămâne oprit și nimic din cele de mai sus nu apucă să ruleze. **Încă nefăcut.**
+5. Tot în BIOS, cât ești acolo: System Logs → Power Events, ca să vedem de ce s-a oprit de două ori luni după-amiază.
+
+**Ce NU am putut încerca:**
+- Autologon însuși (cere parola și drepturi de administrator).
+- Pornirea lui Claude Code din sarcină: ar fi pornit a doua sesiune peste cea în care lucrez. Comanda și opțiunile
+  există în Claude Code 2.1.296 (`--continue`, `--remote-control [name]`), dar prima rulare adevărată e cea de la pasul 3.
+- Blocarea ecranului am încercat-o doar pe ramura „nu blochez” (calculatorul era pornit de 154 de minute).
+
+**De știut:**
+- Pe acest Windows e activă opțiunea „doar conectare cu Windows Hello” (valoarea 2). Autologon scrie direct setările
+  de logare automată și de obicei merge și așa; dacă la pasul 3 rămâne totuși la ecranul de logare, se oprește acea
+  opțiune din Setări → Conturi → Opțiuni de conectare și se încearcă din nou.
+- **Riscurile, așa cum le-ai acceptat:** oricine pornește calculatorul ajunge într-o sesiune logată (blocată după câteva
+  secunde, dar logată); parola stă criptată pe disc și poate fi scoasă de cineva cu drepturi de administrator pe acest
+  calculator; discul nu pare criptat cu BitLocker, deci cine îl scoate poate citi tot.
+- **Cum se oprește:** rulezi Autologon din nou și apeși „Disable”. Sarcinile de după logare se șterg cu
+  `powershell -ExecutionPolicy Bypass -File unelte\programeaza_dupa_logare_ws.ps1 -Sterge`. Ca să sari o singură dată
+  peste logarea automată, ții apăsat Shift în timpul pornirii.
+- Dacă schimbi parola de Windows, Autologon trebuie rulat din nou cu parola nouă.
+
+## Ce a rămas de făcut de Adrian
+
+1. Pașii 1–3 de mai sus (Autologon, cu parola scrisă direct pe workstation, și o repornire de probă).
+2. **BIOS: AC Recovery = Power On** (pasul 4). Până atunci, o pană de curent oprește tot până vine cineva.
+3. Dacă vrei un UPS (pe laptop, alimentarea a stricat o noapte întreagă; aici au fost două opriri nelămurite luni).
+4. Mai puține reporniri: orele active și pauza actualizărilor în Windows Update.
