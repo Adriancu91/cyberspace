@@ -4,6 +4,11 @@
 cea așteptată; dacă diferă, sau dacă sursa cere cont, nu se descarcă nimic din ea. Pentru sursele OPUS (fără fișă cu
 licență care să se poată citi automat) licența e cea verificată de om și notată aici.
 
+Surse cu licență pe fișier (The Stack): fișa nu are o licență unică, fiecare fișier de cod are licența lui, iar
+accesul cere cont și termeni acceptați pe site. Se descarcă doar dacă pe acest calculator e logat un cont Hugging Face
+care a acceptat termenii (hf auth login; cheia NU se scrie în proiect). La curățare se păstrează doar fișierele cu
+licențe permisive (unelte/curata_date_ws.py), iar atribuirile lor (depozit, cale, licență) se scriu alături.
+
 Totul ajunge în date/ws/brut/<sursa>/ (date/ nu intră în Git), iar ce s-a descărcat se notează în
 date/ws/brut/surse.json: sursa, licența, data, revizia, mărimea și amprenta sha256 a fiecărui fișier. Din el se scrie
 docs/DATE_surse.md (unelte/curata_date_ws.py).
@@ -61,9 +66,18 @@ SURSE: dict[str, dict[str, Any]] = {
         "obligatii": "atribuire",
     },
     "cod_stack_smol": {
-        "hf": "bigcode/the-stack-smol", "fisiere": ["data/python/data.json"], "licenta": None,
-        "descriere": "The Stack smol, Python: 10.000 de fișiere cu licențe permisive",
-        "obligatii": "termenii de folosire se acceptă pe site, cu cont; atribuirile fișierelor se păstrează",
+        "hf": "bigcode/the-stack-smol", "fisiere": ["data/python/data.json"], "licenta": "pe-fisier",
+        "licenta_pe_fisier": True,
+        "descriere": "The Stack smol, Python: 10.000 de fișiere de cod, fiecare cu licența lui",
+        "obligatii": "termenii The Stack, acceptați de Adrian cu contul lui; se păstrează doar fișierele cu licențe "
+                     "permisive, cu atribuirea lor (depozit, cale, licență)",
+    },
+    "cod_stack_dedup": {
+        "hf": "bigcode/the-stack-dedup", "licenta": "pe-fisier", "licenta_pe_fisier": True,
+        "fisiere": [f"data/python/data-{k:05d}-of-00144.parquet" for k in range(3)],
+        "descriere": "The Stack dedup, Python: 3 fișiere din 144 (din ele se taie o felie de cod curat)",
+        "obligatii": "termenii The Stack, acceptați de Adrian cu contul lui; se păstrează doar fișierele cu licențe "
+                     "permisive, cu atribuirea lor (depozit, cale, licență)",
     },
     "tatoeba_en_ro": {
         "url": "https://object.pouta.csc.fi/OPUS-Tatoeba/v2023-04-12/moses/en-ro.txt.zip", "licenta": "cc-by-2.0-fr",
@@ -100,6 +114,13 @@ def verifica_hf(sursa: dict[str, Any]) -> tuple[str | None, dict[str, Any]]:
     licenta = (info.card_data.to_dict() if info.card_data else {}).get("license")
     fisa = {"licenta_pe_fisa": licenta, "cere_cont": bool(info.gated), "revizie": info.sha,
             "fisiere": {s.rfilename: s.size or 0 for s in info.siblings}}
+    if sursa.get("licenta_pe_fisier"):
+        # fiecare fișier are licența lui (filtrată la curățare); accesul cere un cont logat aici, cu termenii acceptați
+        from huggingface_hub import get_token
+
+        if not get_token():
+            return "sursa cere cont și termeni acceptați pe site (niciun cont logat: hf auth login)", fisa
+        return None, fisa
     if info.gated:
         return "sursa cere cont și termeni acceptați pe site", fisa
     if licenta is None or licenta != sursa["licenta"]:

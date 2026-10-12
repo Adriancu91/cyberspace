@@ -1,15 +1,18 @@
 # Workstation, W2 „principal” (docs/MUTARE_workstation.md, secțiunea 4): linia nouă, DE LA ZERO, cu tokenizer-ul nou.
 # 12 straturi × 768 (12 capete), context 512, lot 12, vocabular 16.384 (date/ws/bpe_16384.json, regulile „ws”:
 # numerele 0–999 simboluri întregi). 98,0 milioane de parametri. Rata 0,0006 care scade la 0,00006 pe 10 ore.
-# Datele: amestecul din date/ws/amestec/antrenare.txt (engleză simplă + română + cod + numere; părțile reale sunt în
-# date/ws/amestec/info.json), făcut de unelte/pregateste_amestec_ws.py, care împarte și simbolurile.
+# Datele: amestecul din date/ws/amestec/antrenare.txt, făcut de unelte/pregateste_amestec_ws.py, care împarte și
+# simbolurile. Din 12 octombrie, seara (cu codul din The Stack): 4,89 GB = 45,9% engleză simplă, 33,9% română,
+# 15,1% cod Python cu licențe permisive, 5,1% numere și calcule (părțile reale: date/ws/amestec/info.json).
 # Hrana: 6% din fiecare lot vine din date/ws/hrana_fapte_abecedar.txt = 5% povești cu fapte + 1% abecedarul școlii
 # de cod (abecedarul e repetat în fișier cât să fie 1 parte la 5 părți de fapte).
 # Examenul oficial rămâne val_bpb pe validarea TinyStories R2 (biți pe octet, deci comparabil cu liniile vechi, deși
 # tokenizer-ul e altul). Examenele de la oră: fapte, fapte_noi, nota profesorului pe 40 de povești.
 # Paznicul are limitele workstation-ului (aprobate de Adrian, 12 octombrie 2026): 7.000 MB și 83 °C.
 # Lotul rămâne 12 (hotărât de Adrian); noaptea placa nu e folosită pentru altceva.
-# NEPORNITĂ ca antrenare lungă: doar proba de 5 minute din 12 octombrie (docs/WORKSTATION_etapa2_2026-10-12.md).
+# NEPORNITĂ ca antrenare lungă. Proba de 5 minute din 12 octombrie (docs/WORKSTATION_etapa2_2026-10-12.md) a fost
+# cu tokenizer-ul și amestecul de dinaintea codului din The Stack; cu cele de acum nu s-a mai făcut probă pe placă
+# (placa era a nopții W1). Mărimea rețelei și a vocabularului sunt aceleași, deci memoria și viteza rămân valabile.
 #   python unelte/pregateste_amestec_ws.py --config config/ws_w2.toml        # o singură dată, pe procesor
 #   python unelte/antrenare_lunga.py --config config/ws_w2.toml --ore 10 --inceput "Once upon a time, there was a fearful little dog named Coco"
 #   (oprire: python -m kronos opreste --config config/ws_w2.toml)

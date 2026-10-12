@@ -125,3 +125,57 @@ simplă, 35% română, 15% cod, 5% numere și calcule, doar din textele de antre
 - Cât din fabule intră în antrenare, știind că sunt repetitive (acum: 20% din partea de română a amestecului).
 - Cerința „`"moon"` în cel mult 2 bucăți” cu ghilimele cu tot: se poate doar lipind ghilimeaua de cuvânt, ceea ce ar
   face din nou „moon” și „"moon” simboluri diferite. Nu am făcut asta.
+
+## Adăugat seara (17:35–18:00): codul din The Stack, tokenizer-ul și amestecul refăcute
+
+*Cerut de Adrian după-amiază. Totul pe procesor, cu 16 din cele 36 de fire; placa video n-a fost atinsă.*
+
+- **Accesul:** Adrian a acceptat termenii The Stack cu contul lui Hugging Face și a făcut o cheie doar de citire.
+  Cheia e doar în folderul utilizatorului Windows (`hf auth login`); nu e în proiect, în Git sau în jurnale (verificat
+  prin căutare).
+- **Descărcat:** The Stack smol (Python, 87 MB) și 3 fișiere din 144 din The Stack dedup (Python, 0,60 GB).
+- **Curățat** (sursa „cod_stack”): din 162.085 de fișiere, s-au aruncat 5.511 fără licență permisivă, 11.573 prea mici
+  sau prea mari (sub 200 de octeți sau peste 100.000), 4.179 generate automat, 875 cu rânduri prea lungi, 104 cu prea
+  puține litere, 90 duplicate. **Rămân 138.096 de fișiere, 0,67 GB**, plus 1.454 (6,9 MB) puse deoparte ca validare.
+  - Licențe păstrate: MIT (cele mai multe), Apache-2.0, BSD, Unlicense, CC0, ISC, 0BSD, Zlib. Un fișier cu mai multe
+    licențe rămâne doar dacă toate sunt permisive.
+  - Atribuirea fiecărui fișier păstrat (depozit, cale, licențe): `date/ws/brut/cod_stack_atribuiri.jsonl`.
+  - În cod nu se schimbă literele (nici sedilele): doar sfârșiturile de rând.
+
+**Tokenizer-ul refăcut** (`date/ws/bpe_16384.json`, sha256 `2fcb9937a02ae3fb…`; cel de dimineață e păstrat ca
+`bpe_16384_fara_stack.json`). Partea de cod a amestecului de învățare e acum 90% The Stack și 10% self-oss-instruct.
+
+| Verificarea | Acum (cu The Stack) | Dimineață |
+|---|---|---|
+| „46” e o bucată; toate numerele 0–999 | da | da |
+| `"moon"` între ghilimele | 3 bucăți: `"`, `moon`, `"` (cuvântul întreg) | la fel |
+| Româna: mai puține bucăți decât cu tokenizer-ul vechi | **53,4%** | 53,5% |
+| Cod Python din The Stack (validare): mai puține bucăți | **50,6%** (3,12 octeți pe bucată, față de 1,54) | nemăsurat |
+| Cod self-oss-instruct: mai puține bucăți | 39,0% | 41,0% |
+| Engleza simplă (TinyStories): mai puține bucăți | 2,1% | 2,2% |
+| Cuvinte englezești dese întregi fără spațiu (din 2.000) | 1.290 | 1.308 |
+| Cuvinte românești dese întregi cu spațiu (din 2.000) | 1.139 | 1.175 |
+
+- Pe cod adevărat, tokenizer-ul nou folosește **jumătate din bucățile celui vechi**. Exemple: `print(moon)` are 4
+  bucăți (vechi: 8); `def aduna(a, b):` + `return a + b` are 13 (vechi: 19).
+- **Costul:** codul a luat puțin din vocabularul limbilor. „Pisica” nu mai e o singură bucată („P” + „isica”), iar
+  propoziția românească de probă are 16 bucăți în loc de 15. Pe ansamblu, româna pierde 0,1 puncte.
+- Cerința „`"moon"` în cel mult 2 bucăți” rămâne neîndeplinită cuvânt cu cuvânt (3, cu ghilimelele).
+
+**Amestecul W2 refăcut** (`date/ws/amestec/antrenare.txt`): 4,89 GB, 1,35 miliarde de simboluri (3,60 octeți pe simbol).
+
+| Categoria | Cerut | Acum | Dimineață |
+|---|---|---|---|
+| Engleză simplă (TinyStories întreg) | 45% | **45,9%** | 56,0% |
+| Română | 35% | **33,9%** | 41,4% |
+| Cod Python | 15% | **15,1%** | 1,6% |
+| Numere și calcule | 5% | **5,1%** | 1,0% |
+
+- **Greșeală găsită și reparată pe drum:** la prima refacere numerele au intrat cu 0%, pentru că fișierul lor nu are
+  despărțitoare între texte, iar tăierea se făcea doar la despărțitoare. Acum se taie și la sfârșit de rând (cu test).
+- Numerele sunt text generat (14 feluri de rânduri, calcule corecte), deci foarte repetitiv: 5% din amestec înseamnă
+  249 MB din același fel de text. E cum s-a cerut; de urmărit dacă modelul le învață pe de rost.
+- **Fără probă nouă pe placă:** proba W2 de dimineață a fost cu tokenizer-ul și amestecul vechi. Mărimea rețelei și a
+  vocabularului nu s-au schimbat, deci memoria și viteza rămân valabile; scorurile liniei de probă „ws_w2_proba” nu
+  mai au legătură cu tokenizer-ul de acum.
+- În `lucru/cache` au rămas simbolurile amestecurilor vechi (~4,5 GB), nefolosite. Nu le-am șters.

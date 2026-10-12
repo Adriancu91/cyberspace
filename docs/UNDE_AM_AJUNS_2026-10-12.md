@@ -73,8 +73,8 @@ ca cele bune.*
    - **(b)** W1 mai departe, încă 8 ore, dacă noaptea asta arată că încă învață.
    - **(c)** îl lași pe CONTINUUM v2 să aleagă între (a) și (b). Cu ordinea de acum alege (b) dacă W1 încă învață,
      altfel (a).
-3. **The Stack smol:** accepți termenii cu contul tău Hugging Face (și îmi dai un token), rămânem cu 1,6% cod, sau
-   căutăm altă sursă de cod cu licență bună.
+3. ~~The Stack smol~~ **rezolvat seara:** Adrian a acceptat termenii și a dat o cheie de citire. Amestecul W2 are acum
+   15,1% cod Python cu licențe permisive (`docs/WORKSTATION_etapa2_2026-10-12.md`, la sfârșit).
 4. **Fabulele:** cât din ele intră în antrenare (acum 20% din partea de română), știind că sunt repetitive.
 5. **Ordinea lui CONTINUUM v2:** „continuă” înaintea „liniei noi” (cum e acum) sau invers.
 6. **Ramura `kronos-cod`:** se unește cu main (ca școala de cod să primească tokenizer-ul nou) sau rămâne separată.
@@ -93,8 +93,10 @@ ca cele bune.*
   4 zile fără oprire.
 - **Nimic stricat:** Git curat și la zi în ambele foldere; jurnalul Kronos are 300 de rânduri întregi, primele 295
   neschimbate; modelele, simbolurile și tokenizer-ul sunt la locul lor; sarcinile din Task Scheduler au rămas.
-- **Hotărât de Claude Code, după regula lui Adrian:** pornirea de la 19:00 și reluarea la logare sunt **dezactivate**
-  (nu șterse) până hotărăște Adrian. Oprirea de la 07:30 rămâne.
+- **Hotărât de Claude Code, după regula lui Adrian:** pornirea de la 19:00 și reluarea la logare au fost dezactivate
+  (nu șterse) la 17:25, până hotărăște Adrian.
+- **Hotărât de Adrian la 17:34: noaptea pornește.** Opririle au fost în repaus, nu sub efort. Sarcinile sunt din nou
+  active. Dacă se mai oprește în timpul nopții, se notează ora și se reia de unde a rămas.
 - **Ce ar lămuri cauza:** dacă în casă a căzut curentul (lumini, router, ceasuri); jurnalul din BIOS-ul Dell
   (F2 la pornire → System Logs → Power Events); ce putere are sursa (eticheta din carcasă: Precision 5820 vine cu
   425, 685 sau 950 W, iar placa video singură cere până la 290 W).

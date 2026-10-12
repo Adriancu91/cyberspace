@@ -39,10 +39,11 @@ AMESTEC: dict[str, tuple[float, dict[str, float]]] = {
     "engleza_simpla": (0.45, {"date/tinystories_tot/antrenare.txt": 1.0}),
     "romana": (0.35, {"wikipedia_ro": 0.30, "fineweb2_ro": 0.30, "fabule_ro": 0.20, "wikisource_ro": 0.10,
                       "europarl_en_ro": 0.08, "tatoeba_en_ro": 0.02}),
-    "cod": (0.15, {"cod_instruct": 1.0}),
+    "cod": (0.15, {"cod_stack": 0.90, "cod_instruct": 0.10}),
     "numere": (0.05, {"numere": 1.0}),
 }
 ESANTION_MO = 400.0   # cel mult atâția megaocteți numărați din fiecare sursă
+NUMERE_OCTETI = 260_000_000  # cât text cu numere se generează (5% din amestecul de antrenare de ~5 GB)
 FELIE = 8 << 20       # o felie de numărat (8 MB)
 FARA_SPATIU = 0.30    # cât din aparițiile lui „ cuvânt” primește forma „cuvânt” (ales pe 12 octombrie: 0,1 rupe „moon”)
 FRECVENTA_MINIMA = 2.0
@@ -98,6 +99,13 @@ def text_numere(octeti: int, samanta: int = 0) -> str:
     return "\n".join(randuri) + "\n"
 
 
+def scrie_numere(fisier: Path) -> None:
+    """Textul cu numere, generat o singură dată (aceeași sămânță, deci același text); refăcut dacă e prea mic."""
+    if not fisier.exists() or fisier.stat().st_size < NUMERE_OCTETI:
+        fisier.parent.mkdir(parents=True, exist_ok=True)
+        fisier.write_text(text_numere(NUMERE_OCTETI), encoding="utf-8", newline="\n")
+
+
 def cale_sursa(sursa: str) -> Path:
     return Path(sursa) if sursa.endswith(".txt") else CURAT / sursa / "antrenare.txt"
 
@@ -126,8 +134,7 @@ def numara_amestecul(procese: int) -> tuple[dict[str, float], dict[str, Any]]:
     """Tabelul bucată → apariții (înmulțite cu partea fiecărei categorii) și ce a intrat în el."""
     (CURAT / "numere").mkdir(parents=True, exist_ok=True)
     fisier_numere = CURAT / "numere" / "antrenare.txt"
-    if not fisier_numere.exists():
-        fisier_numere.write_text(text_numere(40_000_000), encoding="utf-8", newline="\n")
+    scrie_numere(fisier_numere)
     frecvente: dict[str, float] = {}
     info: dict[str, Any] = {}
     with ProcessPoolExecutor(procese) as grup:
@@ -204,7 +211,7 @@ def verifica(cale: Path, cale_vechi: Path, iesire: Path | None) -> int:
         "cuvantul_moon_fara_spatiu_bucati": bucati(nou, "moon"),
     }
     for sursa in ["wikipedia_ro", "wikisource_ro", "fineweb2_ro", "fabule_ro", "europarl_en_ro", "tatoeba_en_ro",
-                  "cod_instruct", "date/tinystories_r2/validare.txt"]:
+                  "cod_instruct", "cod_stack", "date/tinystories_r2/validare.txt"]:
         fisier = Path(sursa) if sursa.endswith(".txt") else CURAT / sursa / "validare.txt"
         if not fisier.exists():
             continue
@@ -248,7 +255,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--marime", type=int, default=16384)
     parser.add_argument("--destinatie", default="date/ws/bpe_16384.json")
     parser.add_argument("--vechi", default="date/tinystories/bpe_4096.json", help="tokenizer-ul cu care se compară")
-    parser.add_argument("--procese", type=int, default=24)
+    parser.add_argument("--procese", type=int, default=16)
     parser.add_argument("--fara-spatiu", type=float, default=FARA_SPATIU,
                         help="cât din aparițiile lui „ cuvânt” primește forma fără spațiu „cuvânt”")
     parser.add_argument("--verifica", action="store_true", help="doar verificările, pe tokenizer-ul deja făcut")

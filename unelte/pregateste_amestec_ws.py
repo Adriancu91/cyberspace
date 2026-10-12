@@ -29,32 +29,34 @@ if str(RADACINA) not in sys.path:
 
 from kronos.config import citeste_config  # noqa: E402
 from module.tokenizer_bpe import TokenizerBPE  # noqa: E402
-from unelte.antreneaza_tokenizer_ws import AMESTEC, cale_sursa  # noqa: E402
+from unelte.antreneaza_tokenizer_ws import AMESTEC, CURAT, cale_sursa, scrie_numere  # noqa: E402
 
 SEPARATOR = "<|endoftext|>"
-PARTE_NUMERE = 0.01  # numerele sunt text generat, repetitiv: în antrenare intră mai puțin decât la tokenizer
 _TOK: TokenizerBPE | None = None
 
 
 def inceputul(cale: Path, octeti: int) -> bytes:
-    """Începutul fișierului, cel mult `octeti`, tăiat după ultimul text întreg."""
+    """Începutul fișierului, cel mult `octeti`, tăiat după ultimul text întreg (sau, fără despărțitoare, după ultimul
+    rând întreg)."""
     with cale.open("rb") as f:
         date = f.read(octeti + 1)
     if len(date) <= octeti:
         return date
     capat = date.rfind(SEPARATOR.encode() + b"\n", 0, octeti)
-    return date[: capat + len(SEPARATOR) + 1] if capat >= 0 else b""
+    if capat >= 0:
+        return date[: capat + len(SEPARATOR) + 1]
+    # un text fără despărțitoare (ex. numerele generate): se taie la ultimul sfârșit de rând
+    return date[: date.rfind(b"\n", 0, octeti) + 1]
 
 
 def scrie_amestecul(director: Path) -> dict[str, Any]:
     director.mkdir(parents=True, exist_ok=True)
+    scrie_numere(CURAT / "numere" / "antrenare.txt")
     baza = cale_sursa("date/tinystories_tot/antrenare.txt")
     total = baza.stat().st_size / AMESTEC["engleza_simpla"][0]
     info: dict[str, Any] = {"surse": {}}
     with (director / "antrenare.txt").open("wb") as iesire:
         for categorie, (parte, surse) in AMESTEC.items():
-            if categorie == "numere":
-                parte = PARTE_NUMERE
             for sursa, parte_sursa in surse.items():
                 cale = cale_sursa(sursa)
                 if not cale.exists():
@@ -133,7 +135,8 @@ def main(argv: list[str] | None = None) -> int:
         pass
     parser = argparse.ArgumentParser(description="Amestecul liniei noi de pe workstation și simbolurile lui.")
     parser.add_argument("--config", default="config/ws_w2.toml")
-    parser.add_argument("--procese", type=int, default=24)
+    parser.add_argument("--procese", type=int, default=16)
+    parser.add_argument("--reface", action="store_true", help="rescrie amestecul chiar dacă există (ex. după surse noi)")
     parser.add_argument("--fapte", default="date/fapte/povesti.txt")
     parser.add_argument("--abecedar", default="date/cod/abecedar.txt")
     args = parser.parse_args(argv)
@@ -142,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
     start = time.perf_counter()
 
     fisier = Path(date["cale_antrenare"])
-    if fisier.exists():
+    if fisier.exists() and not args.reface:
         print(f"Amestecul există deja: {fisier} ({fisier.stat().st_size / 1e9:.2f} GB). Nu-l rescriu.", flush=True)
     else:
         info = scrie_amestecul(fisier.parent)
