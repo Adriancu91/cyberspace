@@ -3,8 +3,9 @@
 # modelul liniei noi W2 (când va exista: lucru/cod_v04/pornire/model_w2.pt, copiat din modelul păstrat de Kronos).
 # Abecedarul, setul sacru, generatorul de teste și sandbox-ul NU s-au schimbat (aceleași amprente).
 # Pasul 0 (vocabularul, fără model): python unelte/vocabular_cod_ws.py
-# DE HOTĂRÂT de Adrian înainte de pilot: prag_regresie (după ce se știe val_bpb al lui W2) și dacă sarcina arată
-# cuvântul între ghilimele (docs/SCOALA_v04_pregatire.md).
+# Hotărât de Adrian (12 octombrie, seara): nivelul nou 0q, lângă 0w (docs/SCOALA_v04_pregatire.md).
+# DE HOTĂRÂT înainte de pilot: prag_regresie (după ce se știe val_bpb al lui W2); setul sacru al lui 0q (cere
+# aprobarea amprentei setului sacru); dacă 0w mai rămâne în pilot (dacă pică, școala se oprește acolo).
 # Ce urmează e textul v0.3, din care s-a pornit. Față de v0.2:
 #   - nivelul 0 = numerele 0–99 împreună, ca nivelul 0 din v0.1, dar fără cuvinte (intern „0n”, ca nivelul „0” din v0.1 să
 #     rămână neschimbat, cu setul lui sacru); cuvintele devin nivelul 0w, imediat după;
@@ -107,5 +108,6 @@ racire_la = 70
 trisat_raportat_peste = 0.5
 
 [pilot]
-niveluri = ["0n", "0w", "1a", "1b", "2A", "2B", "2C", "3A", "3B"]   # 0n = nivelul 0 al planului (numerele 0–99)
+niveluri = ["0n", "0q", "0w", "1a", "1b", "2A", "2B", "2C", "3A", "3B"]   # 0n = numerele 0–99; 0q = cuvintele, cu
+                                   # sarcina care arată cuvântul între ghilimele (v0.4, aprobat de Adrian); 0w = cum era
 linii = ["A", "B", "D"]            # pe rând la fiecare nivel; D după B (primește câte soluții a găsit B)

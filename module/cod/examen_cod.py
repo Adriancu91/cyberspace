@@ -6,6 +6,11 @@ cu alte valori. Rezultatul așteptat se calculează rulând soluția noastră (c
 fața modelului. Singura excepție e linia D (control, v0.2): ea primește în antrenare soluțiile noastre la sarcini
 văzute, nu propriile descoperiri.
 
+**v0.4 (12 octombrie 2026, aprobat de Adrian):** nivelul nou 0q, lângă 0w. Aceleași cuvinte, dar sarcina arată
+cuvântul gata pus între ghilimele (`show the word "moon"`), exact cum trebuie scris în răspuns: în v0.3 școala s-a rupt
+la 0w, unde cuvântul din sarcină (cu spațiu în față) și cel din răspuns (între ghilimele) sunt bucăți diferite pentru
+model. Nivelurile vechi, cu seturile lor, nu s-au schimbat.
+
 **Seturile.** Patru pe nivel, cu semințe diferite, fără nicio sarcină comună între ele sau cu abecedarul:
 - **văzut:** sarcinile rundelor de antrenare;
 - **nevăzut:** aceleași forme, alte valori. Aici se decide trecerea nivelului;
@@ -236,8 +241,15 @@ def _nivel_0w(rng: random.Random, mare: bool) -> Sarcina:
     return _sarcina("0w", f"show the word {w}", f'"{w}"', doar_valoare=True)
 
 
+def _nivel_0q(rng: random.Random, mare: bool) -> Sarcina:
+    """v0.4: cuvintele lui 0w, cu sarcina care arată cuvântul între ghilimele. Codul: tot cuvântul între ghilimele sau
+    print(cuvântul). Modelul are în față exact bucățile pe care trebuie să le scrie."""
+    w = rng.choice(CUVINTE_LUNGI_0W if mare else CUVINTE_0W)
+    return _sarcina("0q", f'show the word "{w}"', f'"{w}"', doar_valoare=True)
+
+
 GENERATOARE: dict[str, Callable[[random.Random, bool], Sarcina]] = {
-    "0": _nivel_0, "0n": _nivel_0n, "0w": _nivel_0w, "0a": _nivel_0a, "0b": _nivel_0b, "1": _nivel_1, "1a": _nivel_1a, "1b": _nivel_1b, "2A": _nivel_2a,
+    "0": _nivel_0, "0n": _nivel_0n, "0w": _nivel_0w, "0q": _nivel_0q, "0a": _nivel_0a, "0b": _nivel_0b, "1": _nivel_1, "1a": _nivel_1a, "1b": _nivel_1b, "2A": _nivel_2a,
     "2B": _nivel_2b, "2C": _nivel_2c, "3A": _nivel_3a, "3B": _nivel_3b}
 
 

@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import random
 from pathlib import Path
 
 import pytest
 
-from module.cod import paznic_cod
+from module.cod import PILOT_V03, PILOT_V04, examen_cod, ordinea, paznic_cod
+from module.cod.sandbox import ruleaza_in_proces
 from module.cod.examen_cod import CUVINTE_0W
 from module.tokenizer_bpe import TokenizerBPE, antreneaza_bpe, antreneaza_din_frecvente, frecvente_bucati
 from unelte import proba_copiere_cod, vocabular_cod_ws
@@ -34,14 +36,50 @@ def test_configurarea_v04_se_citeste_si_foloseste_tokenizer_ul_nou():
     # aceleași fișiere cu amprentă și aceleași seturi ca v0.3: rezultatele se compară sarcină cu sarcină
     for cheie in ("abecedar", "sacru"):
         assert cfg["scoala"][cheie] == v03["scoala"][cheie]
-    assert cfg["examen"] == v03["examen"] and cfg["pilot"] == v03["pilot"] and cfg["mediu"] == v03["mediu"]
+    assert cfg["examen"] == v03["examen"] and cfg["mediu"] == v03["mediu"] and cfg["pilot"]["linii"] == v03["pilot"]["linii"]
+    # singura schimbare în pilot: nivelul nou 0q, înaintea lui 0w (aprobat de Adrian pe 12 octombrie)
+    assert cfg["pilot"]["niveluri"] == list(PILOT_V04) and [n for n in PILOT_V04 if n != "0q"] == list(PILOT_V03)
 
 
-def test_fisierele_cu_amprenta_nu_s_au_schimbat_pentru_v04():
-    """v0.4 schimbă doar tokenizer-ul: abecedarul, setul sacru, generatorul de teste și sandbox-ul sunt cele din Git."""
+def test_nivelul_0q_arata_cuvantul_intre_ghilimele_iar_0w_ramane_cum_era():
+    rng = random.Random(0)
+    q = examen_cod.generator("0q")(rng, False)
+    cuvant = q.solutie.strip('"')
+    assert q.nivel == "0q" and q.text == f'show the word "{cuvant}"' and q.asteptat == ruleaza_in_proces(q.solutie)
+    assert cuvant in examen_cod.CUVINTE_0W and q.doar_valoare
+    lung = examen_cod.generator("0q")(rng, True)
+    assert lung.solutie.strip('"') in examen_cod.CUVINTE_LUNGI_0W
+    w = examen_cod.generator("0w")(random.Random(0), False)
+    assert w.text.startswith("show the word ") and '"' not in w.text  # nivelul vechi: fără ghilimele în sarcină
+    assert ordinea("0n") < ordinea("0w") < ordinea("0q") < ordinea("1a")
+
+
+def test_la_0q_trece_doar_cuvantul_cerut():
+    from module.cod.sandbox import ruleaza
+
+    s = examen_cod._sarcina("0q", 'show the word "moon"', '"moon"', doar_valoare=True)
+    for cod, verdict in (('"moon"', "trecut"), ("'moon'", "trecut"), ('print("moon")', "trecut"), ('"sun"', "picat"),
+                         ('x = "moon"\nx', "picat"), ("moon", "picat")):
+        assert examen_cod.judeca(s, cod, ruleaza(cod, 2.0, ("import",), 2000))[0] == verdict, cod
+
+
+def test_seturile_lui_0q_sunt_despartite_si_au_ghilimele():
+    cfg = citeste_config(RADACINA / "config" / "scoala_cod_v04.toml")
+    e = cfg["examen"]
+    seturi = examen_cod.seturi("0q", set(), [], e["vazut"], e["nevazut"], e["adversarial"], e["samanta_seturi"])
+    texte = seturi.toate_textele()
+    assert len(texte["vazut"]) == 60 and len(texte["nevazut"]) == 20 and len(texte["adversarial"]) == 20
+    assert not texte["vazut"] & texte["nevazut"] and not texte["nevazut"] & texte["adversarial"]
+    assert all(t.startswith('show the word "') and t.endswith('"') for nume in texte for t in texte[nume])
+
+
+def test_setul_sacru_si_abecedarul_nu_s_au_schimbat_pentru_v04():
+    """v0.4 schimbă generatorul de teste (nivelul 0q, aprobat de Adrian); setul sacru, abecedarul și sandbox-ul sunt
+    cele din Git."""
     import subprocess
 
-    schimbate = subprocess.run(["git", "status", "--porcelain", "--", *paznic_cod.AMPRENTATE.values()], cwd=RADACINA,
+    neschimbate = [cale for nume, cale in paznic_cod.AMPRENTATE.items() if nume != "generatorul de teste"]
+    schimbate = subprocess.run(["git", "status", "--porcelain", "--", *neschimbate], cwd=RADACINA,
                                capture_output=True, text=True).stdout.strip()
     assert schimbate == ""
 
@@ -77,6 +115,10 @@ def test_vocabularul_adevarat_al_scolii_v04():
     for nivel in cfg["pilot"]["niveluri"]:
         assert r["incape"][nivel]["exemple_minime"] == cfg["mediu"]["episoade"]
         assert r["incape"][nivel]["cel_mai_lung_text_cu_raspuns"] <= 512
+    # problema veche, exact: la 0w nimic nu se poate copia din sarcină; la 0q și la numere, tot
+    assert r["incape"]["0w"]["raspunsul_se_poate_copia_din_sarcina"] == 0
+    assert r["incape"]["0q"]["raspunsul_se_poate_copia_din_sarcina"] == r["incape"]["0q"]["sarcini"]
+    assert r["incape"]["0n"]["raspunsul_se_poate_copia_din_sarcina"] == r["incape"]["0n"]["sarcini"]
     assert "solutii_care_nu_incap" not in r["incape"]
 
 

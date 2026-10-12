@@ -1,8 +1,8 @@
 # Școala de cod v0.4: pregătirea pe tokenizer-ul nou (luni, 12 octombrie 2026, seara)
 
 *Doar pregătire și teste, pe procesor. Școala NU a pornit și placa video n-a fost atinsă (pe ea rula noaptea W1).
-Fișierele cu amprentă (abecedarul, setul sacru, generatorul de teste, sandbox-ul) NU s-au schimbat: paznicul școlii
-nu are nimic de zis. Rezultatele negative sunt trecute la fel ca cele bune.*
+Dintre fișierele cu amprentă s-a schimbat doar generatorul de teste (nivelul nou 0q, aprobat de Adrian); abecedarul,
+setul sacru și sandbox-ul sunt neatinse, iar paznicul școlii nu are nimic de zis. Rezultatele negative sunt trecute la fel ca cele bune.*
 
 ## Ce s-a făcut
 
@@ -17,7 +17,8 @@ nu are nimic de zis. Rezultatele negative sunt trecute la fel ca cele bune.*
 3. **`unelte/vocabular_cod_ws.py`** (pasul 0, fără model): reface împărțirea în bucăți a abecedarului, a setului sacru
    și a seturilor de examen și verifică problema veche. Cifrele: `lucru/cod_v04/vocabular_ws.json`.
 4. **`unelte/proba_copiere_cod.py`**: o încercare pe un model de jucărie, pe procesor (mai jos).
-5. **Teste:** `teste/test_cod_v04.py` (7), între care: elevul școlii încarcă, scrie și antrenează un model cu tokenizer-ul nou.
+5. **Teste:** `teste/test_cod_v04.py` (10), între care: elevul școlii încarcă, scrie și antrenează un model cu tokenizer-ul nou;
+   nivelul 0q și verdictele lui; seturile vechi neschimbate.
 
 ## Împărțirea refăcută (tokenizer-ul nou față de cel vechi)
 
@@ -74,23 +75,46 @@ cuvinte din povești și e testat pe cuvintele nivelului 0w, pe care nu le-a vă
   încercarea folosește 3.000.
 - E un model de jucărie, nu Kronos: arată mecanismul, nu rezultatul școlii.
 
-## Ce trebuie să hotărască Adrian (înainte de pilotul v0.4)
+## Hotărât de Adrian (12 octombrie, 19:30): varianta (c), un nivel nou lângă cel vechi
 
-1. **Sarcina nivelului 0w.** Variantele:
-   - **(a) rămâne „show the word moon”** (nicio amprentă schimbată). După cifrele de mai sus, modelul trebuie să învețe
-     pentru fiecare cuvânt legătura dintre ` moon` și `moon`; pe cuvinte nevăzute, încercarea a dat 0–2 din 116.
-   - **(b) devine `show the word "moon"`** (recomandat de mine). Cere schimbarea generatorului de teste
-     (`module/cod/examen_cod.py`), a episoadelor cu cuvinte din abecedar și a setului sacru pentru nivelurile cu cuvinte.
-     **Toate trei au amprentă: nu le-am atins și nu le ating fără „da”-ul tău.** După schimbare, amprentele se aprobă
-     din nou (`python unelte/scoala_cod.py --aproba-amprente --motiv "..."`), iar rezultatele la 0w nu se mai compară
-     direct cu v0.3.
-   - **(c)** un nivel nou, „0q” (cuvântul arătat între ghilimele), lângă 0w, care rămâne cum e. Cere tot schimbarea
-     generatorului de teste (deci aprobare), dar nivelurile vechi și setul lor sacru rămân neatinse.
-2. **Pragul de regresie pe povești** pentru v0.4 (acum provizoriu 0,60): după noaptea W2.
-3. **Câte exemple în față:** rămân 2 (ca v0.3, pentru comparație) sau urcăm la 4, acum că e loc.
+- **Nivelul nou „0q”**: aceleași cuvinte ca 0w, dar sarcina arată cuvântul gata pus între ghilimele
+  (`show the word "moon"`), exact cum trebuie scris în răspuns. Răspunsul cerut e același: `"moon"` sau `print("moon")`.
+- **0w rămâne cum era**, cu seturile și setul lui sacru. Verificat: toate cele 27 de seturi ale nivelurilor vechi (din
+  v0.1, v0.2 și v0.3) sunt identice, sarcină cu sarcină, înainte și după schimbare; setul sacru și abecedarul au
+  aceleași amprente.
+- **Amprenta generatorului de teste a fost aprobată** la 19:37, cu motivul „v0.4: nivel nou cu ghilimele, tokenizer
+  ws, aprobat de Adrian 12 oct” (în jurnalul școlii v0.4). Doar ea s-a schimbat (`4f74bed7…` → `62927c4a…`); celelalte
+  trei amprente sunt cele din 8 octombrie.
+- **În pilotul v0.4, 0q stă înaintea lui 0w:** 0n, 0q, 0w, 1a, 1b, 2A, 2B, 2C, 3A, 3B.
+- Cu tokenizer-ul nou, la 0q răspunsul se poate copia din sarcină la toate cele 100 de sarcini (60 văzute, 20
+  nevăzute, 20 adversariale); la 0w, la niciuna din 120; la numere (0n), la toate 115.
+
+### Rezultatul negativ al probei de jucărie (de ținut minte)
+
+- La modelul de jucărie, **cu sarcina cu ghilimele, tokenizer-ul nou a copiat mai slab decât cel vechi: 28 din 116
+  cuvinte nevăzute, față de 81 din 116.** La cuvintele lungi: 0 din 35, față de 4 din 35.
+- Deci nivelul 0q rezolvă ce se putea rezolva din formularea sarcinii, dar **nu e dovedit că W2 va trece de el**. Proba
+  spune doar că sarcina veche nu se putea învăța prin copiere (0–2 din 116) și că cea nouă se poate.
+- Dacă W2 pică la 0q, prima bănuială e aceasta: cuvintele întregi sunt bucăți rare, mai greu de copiat decât bucățile
+  mici. Atunci merită încercat același pilot cu tokenizer-ul vechi, pe un model de aceeași mărime, înainte de alte
+  schimbări.
+
+## Ce a rămas de hotărât (înainte de pilotul v0.4)
+
+1. **Setul sacru al lui 0q.** Nivelul nou nu are încă cele 20 de sarcini sacre, iar școala nu pornește un nivel fără
+   ele. Se adaugă cu `python unelte/scoala_cod.py --genereaza-sacru --config config/scoala_cod_v04.toml` (nivelurile
+   vechi rămân neatinse, sarcină cu sarcină), dar fișierul `date/cod/sacru.json` are amprentă, deci **cere aprobarea
+   ta pentru amprenta setului sacru**. Nu l-am atins: ai aprobat doar generatorul de teste.
+2. **Abecedarul nu are niciun exemplu cu ghilimele în sarcină.** Exemplele din fața modelului vin din abecedar, deci la
+   0q modelul va vedea exemple de alt fel (numere, cuvinte fără ghilimele în sarcină). Liniile B și D își adaugă singure
+   reușitele; linia A, nu. Câteva episoade de felul 0q în abecedar ar ajuta, dar abecedarul are și el amprentă.
+3. **0w mai rămâne în pilot?** Dacă pică (probabil, după cifrele de mai sus), școala se oprește acolo și nu ajunge la
+   1a. Variantele: îl scoatem din pilotul v0.4 (se schimbă doar configurarea) sau îl lăsăm ca martor.
+4. **Pragul de regresie pe povești** (acum provizoriu 0,60): după noaptea W2.
+5. **Câte exemple în față:** rămân 2 (ca v0.3) sau urcăm la 4, acum că e loc.
 
 ## Ce nu s-a făcut
 
 - Școala nu a rulat deloc (nici pregătirea pe abecedar): nu există încă modelul W2 din care pornește.
-- Nu s-a refăcut textul niciunui fișier cu amprentă: „împărțirea refăcută” înseamnă doar felul în care tokenizer-ul
-  nou taie aceleași texte.
+- Abecedarul și setul sacru n-au fost rescrise: „împărțirea refăcută” înseamnă doar felul în care tokenizer-ul nou
+  taie aceleași texte. Pilotul nu a pornit și nu pornește cât rulează W1.

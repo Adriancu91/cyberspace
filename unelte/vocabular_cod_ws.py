@@ -103,7 +103,7 @@ def incape(tok: TokenizerBPE, cfg: dict[str, Any], context: int) -> dict[str, An
         seturi = examen_cod.seturi(nivel, texte_abecedar, sacru.get(nivel, []), marimi["vazut"], marimi["nevazut"],
                                    marimi["adversarial"], e["samanta_seturi"])
         rng = random.Random(f"vocabular:{nivel}")
-        exemple_minime, cel_mai_lung, sarcini = m["episoade"], 0, 0
+        exemple_minime, cel_mai_lung, sarcini, se_copiaza = m["episoade"], 0, 0, 0
         for nume in examen_cod.SETURI:
             for sarcina in getattr(seturi, nume):
                 text, puse = text_fata(abecedar, sarcina.text, nivel, rng, numara, context, m["max_simboluri"], regula,
@@ -111,11 +111,15 @@ def incape(tok: TokenizerBPE, cfg: dict[str, Any], context: int) -> dict[str, An
                 exemple_minime = min(exemple_minime, len(puse))
                 cel_mai_lung = max(cel_mai_lung, numara(text) + m["max_simboluri"])
                 sarcini += 1
+                raspuns, in_fata = tok.codifica(sarcina.solutie.strip('"')), tok.codifica(sarcina.text)
+                se_copiaza += any(in_fata[i: i + len(raspuns)] == raspuns for i in range(len(in_fata) - len(raspuns) + 1))
                 cel_mai_lunga_solutie = numara(sarcina.solutie + "\nRESULT:")
                 if cel_mai_lunga_solutie > m["max_simboluri"]:
                     rezultat.setdefault("solutii_care_nu_incap", []).append(sarcina.text)
         rezultat[nivel] = {"sarcini": sarcini, "exemple_minime": exemple_minime, "cel_mai_lung_text_cu_raspuns": cel_mai_lung,
                            "context": context, "sacre": len(seturi.sacru)}
+        if nivel in ("0n", "0w", "0q"):  # nivelurile unde răspunsul e chiar valoarea din sarcină
+            rezultat[nivel]["raspunsul_se_poate_copia_din_sarcina"] = se_copiaza
     return rezultat
 
 
@@ -178,7 +182,10 @@ def main(argv: list[str] | None = None) -> int:
     for nivel, i in r["incape"].items():
         if isinstance(i, dict):
             print(f"Nivelul {nivel}: {i['sarcini']} sarcini, cel puțin {i['exemple_minime']} exemple în față, cel mai lung "
-                  f"text cu răspuns {i['cel_mai_lung_text_cu_raspuns']} din {i['context']}.")
+                  f"text cu răspuns {i['cel_mai_lung_text_cu_raspuns']} din {i['context']}."
+                  + (f" Răspunsul se poate copia din sarcină la {i['raspunsul_se_poate_copia_din_sarcina']}."
+                     if "raspunsul_se_poate_copia_din_sarcina" in i else "")
+                  + (" FĂRĂ set sacru încă." if not i["sacre"] else ""))
     print(f"Toate cifrele: {iesire}")
     return 0
 
