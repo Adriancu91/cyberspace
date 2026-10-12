@@ -69,6 +69,7 @@ MODULE = [
     ),
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
+    ("date", "module.date_amestec:DateAmestec", {"cale_antrenare": "__amestec_temporar__", "cale_validare": ""}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
@@ -97,6 +98,10 @@ def _setari_reale(setari, tmp_path):
         fisier = tmp_path / "text.txt"
         fisier.write_text("To be, or not to be, that is the question.\n" * 100, encoding="utf-8")
         setari["cale"] = str(fisier)
+    if setari.get("cale_antrenare") == "__amestec_temporar__":
+        (tmp_path / "antrenare.txt").write_text("the cat sat on the mat.\n" * 100, encoding="utf-8")
+        (tmp_path / "validare.txt").write_text("the dog ran to the tree.\n" * 20, encoding="utf-8")
+        setari.update(cale_antrenare=str(tmp_path / "antrenare.txt"), cale_validare=str(tmp_path / "validare.txt"))
     if setari.get("cale_tokenizer") == "__tokenizer_mic__":
         from module.date_mostra import DateMostra
         from module.tokenizer_bpe import antreneaza_bpe

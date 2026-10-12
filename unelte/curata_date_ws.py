@@ -1,0 +1,219 @@
+"""Curăță sursele descărcate de unelte/descarca_date_ws.py și pune deoparte 1% din fiecare ca validare.
+
+Din date/ws/brut/<sursa>/ scrie date/ws/curat/<sursa>/antrenare.txt, validare.txt și info.json. Textele sunt despărțite
+de o linie „<|endoftext|>”, ca la TinyStories.
+
+Ce se face cu fiecare text:
+- ş/ţ cu sedilă devin ș/ț cu virgulă (amândouă apar pe internet); literele se scriu în forma compusă (NFC);
+  sfârșiturile de rând devin „\\n”; caracterele de control și „<|endoftext|>” din text se scot;
+- se aruncă textele prea scurte și cele stricate (cu semnul „�”, cu litere stricate de o codificare greșită, de ex.
+  „Ã®” în loc de „î”, sau, la proză, cu prea puține litere);
+- se aruncă duplicatele (același text, fără să conteze spațiile și literele mari);
+- 1% din texte, alese după amprenta textului (deci mereu aceleași), merg în validare.txt. Pe ele nu se antrenează
+  nimic: nici modelele, nici tokenizer-ul.
+
+    python unelte/curata_date_ws.py                       # toate sursele descărcate
+    python unelte/curata_date_ws.py --doar wikipedia_ro   # una singură
+    python unelte/curata_date_ws.py --raport              # doar scrie docs/DATE_surse.md din ce e deja curățat
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+import unicodedata
+import zipfile
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Iterator
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except (AttributeError, ValueError):
+    pass
+
+BRUT, CURAT = Path("date/ws/brut"), Path("date/ws/curat")
+SEPARATOR = "<|endoftext|>"
+SEDILE = str.maketrans({"ş": "ș", "ţ": "ț", "Ş": "Ș", "Ţ": "Ț"})
+CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f​﻿]")
+RANDURI_GOALE = re.compile(r"\n{3,}")
+SPATII_LA_CAPAT = re.compile(r"[ \t]+\n")
+# Urmele unei codificări greșite (UTF-8 citit ca Latin-1/Windows-1252): „Ã®”, „Äƒ”, „È™”, „â€ž”...
+STRICATE = re.compile(r"Ã[\x80-\xbf®¢£ª]|Ä[ƒ‚]|È[™›˜š]|Å[£Ÿžş]|â€[œžš™˜¦”]")
+
+# felul: „proza” (se verifică și câte litere are), „cod” sau „perechi” (engleză–română, rând cu rând).
+SURSE: dict[str, dict[str, Any]] = {
+    "wikipedia_ro": {"fel": "proza", "coloane": ["text"], "minim": 300},
+    "wikisource_ro": {"fel": "proza", "coloane": ["text"], "minim": 200},
+    "fineweb2_ro": {"fel": "proza", "coloane": ["text"], "minim": 300, "limita_gb": 3.0},
+    "fabule_ro": {"fel": "proza", "coloane": ["fable"], "minim": 200},
+    "cod_instruct": {"fel": "cod", "coloane": ["instruction", "response"], "minim": 80},
+    "tatoeba_en_ro": {"fel": "perechi", "minim": 3},
+    "europarl_en_ro": {"fel": "perechi", "minim": 15},
+}
+
+
+def normalizeaza(text: str) -> tuple[str, int]:
+    """(textul curățat, câte litere cu sedilă s-au înlocuit)."""
+    text = unicodedata.normalize("NFC", text.replace("\r\n", "\n").replace("\r", "\n"))
+    sedile = sum(text.count(c) for c in "şţŞŢ")
+    text = CONTROL.sub("", text.translate(SEDILE)).replace(SEPARATOR, "")
+    return RANDURI_GOALE.sub("\n\n", SPATII_LA_CAPAT.sub("\n", text)).strip(), sedile
+
+
+def e_stricat(text: str, fel: str) -> bool:
+    if "�" in text or len(STRICATE.findall(text)) * 500 > len(text):
+        return True
+    if fel == "proza":
+        litere = sum(c.isalpha() or c.isspace() for c in text[:5000])
+        return litere < 0.75 * min(len(text), 5000)
+    return False
+
+
+def amprenta(text: str) -> bytes:
+    return hashlib.blake2b(" ".join(text.lower().split()).encode("utf-8"), digest_size=8).digest()
+
+
+def texte_parquet(director: Path, coloane: list[str]) -> Iterator[str]:
+    import pyarrow.parquet as pq
+
+    for fisier in sorted(director.rglob("*.parquet")):
+        tabel = pq.ParquetFile(fisier)
+        for grupa in range(tabel.metadata.num_row_groups):
+            date = tabel.read_row_group(grupa, columns=coloane).to_pydict()
+            for rand in zip(*(date[c] for c in coloane)):
+                if all(isinstance(v, str) for v in rand):
+                    yield "\n\n".join(v.strip() for v in rand)
+
+
+def texte_perechi(director: Path) -> Iterator[str]:
+    """Fișierul OPUS (format moses): două texte cu același număr de rânduri, unul în engleză și unul în română."""
+    for arhiva in sorted(director.glob("*.zip")):
+        with zipfile.ZipFile(arhiva) as z:
+            en = next(n for n in z.namelist() if n.endswith(".en"))
+            ro = next(n for n in z.namelist() if n.endswith(".ro"))
+            with z.open(en) as f_en, z.open(ro) as f_ro:
+                for rand_en, rand_ro in zip(f_en, f_ro):
+                    a, b = rand_en.decode("utf-8", "replace").strip(), rand_ro.decode("utf-8", "replace").strip()
+                    if a and b and 0.3 < len(a) / len(b) < 3.3:  # o pereche cu lungimi foarte diferite e aliniată greșit
+                        yield f"EN: {a}\nRO: {b}"
+
+
+def sha256(cale: Path) -> str:
+    h = hashlib.sha256()
+    with cale.open("rb") as f:
+        while bucata := f.read(1 << 24):
+            h.update(bucata)
+    return h.hexdigest()
+
+
+def curata(nume: str) -> dict[str, Any]:
+    sursa, brut, tinta = SURSE[nume], BRUT / nume, CURAT / nume
+    tinta.mkdir(parents=True, exist_ok=True)
+    texte = texte_perechi(brut) if sursa["fel"] == "perechi" else texte_parquet(brut, sursa["coloane"])
+    limita = sursa.get("limita_gb", 0) * 1e9
+    n = {"citite": 0, "prea_scurte": 0, "stricate": 0, "duplicate": 0, "sedile_inlocuite": 0,
+         "texte_antrenare": 0, "texte_validare": 0, "octeti_antrenare": 0, "octeti_validare": 0}
+    vazute: set[bytes] = set()
+    with (tinta / "antrenare.txt").open("w", encoding="utf-8", newline="\n") as antrenare, \
+            (tinta / "validare.txt").open("w", encoding="utf-8", newline="\n") as validare:
+        for brut_text in texte:
+            n["citite"] += 1
+            text, sedile = normalizeaza(brut_text)
+            if len(text) < sursa["minim"]:
+                n["prea_scurte"] += 1
+                continue
+            if e_stricat(text, sursa["fel"]):
+                n["stricate"] += 1
+                continue
+            cheie = amprenta(text)
+            if cheie in vazute:
+                n["duplicate"] += 1
+                continue
+            vazute.add(cheie)
+            n["sedile_inlocuite"] += sedile
+            care = "validare" if int.from_bytes(cheie[:4], "big") % 100 == 0 else "antrenare"
+            (validare if care == "validare" else antrenare).write(f"{text}\n{SEPARATOR}\n")
+            n[f"texte_{care}"] += 1
+            n[f"octeti_{care}"] += len(text.encode("utf-8")) + len(SEPARATOR) + 2
+            if limita and n["octeti_antrenare"] + n["octeti_validare"] >= limita:
+                break
+    info = {"sursa": nume, "fel": sursa["fel"], "curatat": datetime.now().isoformat(timespec="seconds"), **n,
+            "minim_caractere": sursa["minim"], "limita_gb": sursa.get("limita_gb"),
+            "sha256_antrenare": sha256(tinta / "antrenare.txt"), "sha256_validare": sha256(tinta / "validare.txt")}
+    (tinta / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
+    return info
+
+
+def gb(octeti: float) -> str:
+    return f"{octeti / 1e9:.2f} GB".replace(".", ",") if octeti >= 1e8 else f"{octeti / 1e6:.1f} MB".replace(".", ",")
+
+
+def raport(cale: Path) -> None:
+    """docs/DATE_surse.md: ce s-a descărcat (din surse.json) și ce a rămas după curățare (din info.json)."""
+    notate = json.loads((BRUT / "surse.json").read_text(encoding="utf-8")) if (BRUT / "surse.json").exists() else {}
+    randuri = ["# Sursele de date ale workstation-ului", "",
+               "*Scris de `unelte/curata_date_ws.py --raport` din `date/ws/brut/surse.json` (ce s-a descărcat) și din "
+               "`date/ws/curat/*/info.json` (ce a rămas după curățare). Licența se citește de pe fișa oficială a "
+               "sursei înainte de fiecare descărcare (`unelte/descarca_date_ws.py`). Datele nu intră în Git.*", "",
+               "## Ce s-a descărcat", "",
+               "| Sursa | De unde | Licența | Obligații | Verificat și descărcat | Mărime | Amprenta sha256 (primul fișier) |",
+               "|---|---|---|---|---|---|---|"]
+    lipsa = []
+    for nume, r in notate.items():
+        if r.get("stare") != "descarcat":
+            lipsa.append(f"- **{nume}** ({r.get('descriere', '')}): {r.get('stare')}: {r.get('motiv', '')}")
+            continue
+        licenta = r["licenta"] if isinstance(r["licenta"], str) else " + ".join(r["licenta"])
+        amprenta_f = r["fisiere"][0]["sha256"][:16] + "…" + (f" (+{len(r['fisiere']) - 1} fișiere)" if len(r["fisiere"]) > 1 else "")
+        revizie = f", revizia `{r['revizie'][:10]}`" if r.get("revizie") else ""
+        randuri.append(f"| **{nume}**: {r['descriere']} | {r['de_unde']}{revizie} | {licenta} | {r['obligatii']} | "
+                       f"{r['descarcat'][:10]} | {gb(r['octeti'])} | `{amprenta_f}` |")
+    if lipsa:
+        randuri += ["", "**Nedescărcate:**", *lipsa]
+    randuri += ["", "Amprentele tuturor fișierelor sunt în `date/ws/brut/surse.json`.", "",
+                "## Ce a rămas după curățare", "",
+                "| Sursa | Texte citite | Prea scurte | Stricate | Duplicate | Sedile înlocuite | Antrenare | Validare (1%, pusă deoparte) |",
+                "|---|---|---|---|---|---|---|---|"]
+    total_a = total_v = 0
+    for fisier in sorted(CURAT.glob("*/info.json")):
+        i = json.loads(fisier.read_text(encoding="utf-8"))
+        total_a, total_v = total_a + i["octeti_antrenare"], total_v + i["octeti_validare"]
+        randuri.append(f"| {i['sursa']} | {i['citite']:,} | {i['prea_scurte']:,} | {i['stricate']:,} | {i['duplicate']:,} | "
+                       f"{i['sedile_inlocuite']:,} | {i['texte_antrenare']:,} texte, {gb(i['octeti_antrenare'])} | "
+                       f"{i['texte_validare']:,} texte, {gb(i['octeti_validare'])} |".replace(",", "."))
+    randuri += [f"| **Total** | | | | | | **{gb(total_a)}** | **{gb(total_v)}** |", "",
+                "- Curățarea: ş/ţ cu sedilă → ș/ț cu virgulă; fără duplicate; fără texte prea scurte sau stricate "
+                "(codificare greșită, semnul „�”, prea puține litere la proză).",
+                "- Validarea: 1% din textele fiecărei surse, alese după amprenta textului. Nu se antrenează nimic pe ea, "
+                "nici tokenizer-ul.",
+                "- TinyStories (CDLA-Sharing-1.0) era deja în `date/tinystories_tot/`, cu validarea lui.", ""]
+    cale.write_text("\n".join(randuri), encoding="utf-8", newline="\n")
+    print(f"Am scris {cale}.")
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Curăță sursele workstation-ului și pune deoparte 1% ca validare.")
+    parser.add_argument("--doar", nargs="*", choices=list(SURSE))
+    parser.add_argument("--raport", action="store_true", help="doar scrie docs/DATE_surse.md")
+    parser.add_argument("--iesire-raport", default="docs/DATE_surse.md")
+    args = parser.parse_args(argv)
+    if not args.raport:
+        for nume in args.doar or list(SURSE):
+            if not (BRUT / nume).exists():
+                print(f"{nume}: nu e descărcată, o sar.")
+                continue
+            i = curata(nume)
+            print(f"{nume}: {i['citite']:,} citite; scoase: {i['prea_scurte']:,} prea scurte, {i['stricate']:,} stricate, "
+                  f"{i['duplicate']:,} duplicate; rămân {i['texte_antrenare']:,} de antrenare ({gb(i['octeti_antrenare'])}) "
+                  f"și {i['texte_validare']:,} de validare ({gb(i['octeti_validare'])}).", flush=True)
+    if args.raport or not args.doar:
+        raport(Path(args.iesire_raport))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

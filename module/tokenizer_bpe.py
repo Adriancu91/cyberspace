@@ -13,8 +13,17 @@ Simbolurile speciale (ex. „<|endoftext|>”) primesc câte un număr propriu �
 Pentru memoria ierarhică: capete_caractere() spune, pentru fiecare simbol, câte litere COMPLETE
 s-au scris până la el inclusiv, ca memoria să dea codul ultimului cuvânt terminat per simbol.
 
+Regulile „ws” (tokenizer-ul workstation-ului, 12 octombrie 2026; docs/MUTARE_workstation.md, secțiunea 5):
+- numerele 0–999 (și formele cu zerouri în față: „07”, „007”) sunt simboluri întregi, puse în vocabular de la început;
+  un număr mai lung se taie în grupe de cel mult 3 cifre, de la stânga („1234” = „123” + „4”). Spațiul dinaintea unui
+  număr nu se lipește de el: „46” e același simbol oriunde ar sta (după „=”, după „(”, la început de rând);
+- restul bucăților sunt ca la regulile vechi. Ca un cuvânt să rămână întreg și fără spațiu în față (după ghilimele sau
+  paranteze), la antrenare forma fără spațiu primește o parte din numărul de apariții al formei cu spațiu.
+Regulile vechi („gpt2”) și fișierele lor rămân exact cum erau.
+
 Nu e un modul de port: îl folosește GPT-ul (setarea tokenizer = "bpe"). Se antrenează cu:
-    python unelte/antreneaza_tokenizer.py
+    python unelte/antreneaza_tokenizer.py        # regulile vechi, pe TinyStories
+    python unelte/antreneaza_tokenizer_ws.py     # regulile „ws”, pe amestecul engleză + română + cod + numere
 """
 
 from __future__ import annotations
@@ -33,7 +42,27 @@ SPECIALE_IMPLICITE = ("<|endoftext|>",)
 # Bucățile, ca la GPT-2: terminații ('s, 't, 're...), cuvânt cu spațiul dinainte, număr, semne, spații.
 # Fiecare literă din text intră în exact o bucată (testul test_bucatile_acopera_tot_textul verifică).
 BUCATI = re.compile(r"""'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+| ?\d+| ?(?:[^\s\w]|_)+|\s+(?!\S)|\s+""")
+# Regulile „ws”: la fel, dar un număr e o grupă de cel mult 3 cifre, fără spațiul dinainte.
+BUCATI_WS = re.compile(r"""'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+|\d{1,3}| ?(?:[^\s\w]|_)+|\s+(?!\S)|\s+""")
+REGULI = {"gpt2": BUCATI, "ws": BUCATI_WS}
+VERSIUNI = {"gpt2": 1, "ws": 2}
+_CIFRE = "0123456789"
 _FARA_RANG = float("inf")
+
+
+def imbinari_numere() -> list[tuple[int, int]]:
+    """Lipirile fixe ale regulilor „ws”, primele din vocabular: cele 100 de perechi de cifre („00”–„99”, simbolurile
+    256–355), apoi cele 1.000 de grupe de trei („000”–„999”, simbolurile 356–1355)."""
+    doua = [(ord(a), ord(b)) for a in _CIFRE for b in _CIFRE]
+    return doua + [(256 + k, ord(c)) for k in range(100) for c in _CIFRE]
+
+
+def _tabel_numere() -> dict[str, list[int]]:
+    """Fiecare grupă de 1–3 cifre → simbolul ei (direct, fără lipiri: „123” nu poate ieși „1” + „23”)."""
+    tabel = {c: [ord(c)] for c in _CIFRE}
+    tabel.update({f"{k:02d}": [256 + k] for k in range(100)})
+    tabel.update({f"{k:03d}": [356 + k] for k in range(1000)})
+    return tabel
 
 
 def _imbina(simboluri: list[int], pereche: tuple[int, int], nou: int) -> list[int]:
@@ -57,8 +86,15 @@ def _taietor(speciale: Iterable[str]) -> re.Pattern[str] | None:
 
 
 class TokenizerBPE:
-    def __init__(self, imbinari: Iterable[Iterable[int]], speciale: Iterable[str] = SPECIALE_IMPLICITE) -> None:
+    def __init__(self, imbinari: Iterable[Iterable[int]], speciale: Iterable[str] = SPECIALE_IMPLICITE,
+                 reguli: str = "gpt2") -> None:
+        if reguli not in REGULI:
+            raise ValueError(f"reguli trebuie să fie una din: {', '.join(REGULI)}")
+        self.reguli = reguli
+        self._bucati = REGULI[reguli]
         self.imbinari: list[tuple[int, int]] = [(int(a), int(b)) for a, b in imbinari]
+        if reguli == "ws" and self.imbinari[:1100] != imbinari_numere():
+            raise ValueError("Tokenizerul cu regulile „ws” trebuie să înceapă cu lipirile fixe ale numerelor")
         self.speciale: dict[str, int] = {s: 256 + len(self.imbinari) + k for k, s in enumerate(speciale)}
         self.marime = 256 + len(self.imbinari) + len(self.speciale)
         self._rang = {p: k for k, p in enumerate(self.imbinari)}
@@ -68,6 +104,8 @@ class TokenizerBPE:
         self._octeti += [s.encode("utf-8") for s in self.speciale]
         self._taietor = _taietor(self.speciale)
         self._memorie: dict[str, list[int]] = {}  # bucăți deja codificate
+        if reguli == "ws":
+            self._memorie.update(_tabel_numere())
 
     # --- codificare ---------------------------------------------------------------
 
@@ -91,7 +129,7 @@ class TokenizerBPE:
             if segment in self.speciale:
                 simboluri.append(self.speciale[segment])
             elif segment:
-                for bucata in BUCATI.findall(segment):
+                for bucata in self._bucati.findall(segment):
                     simboluri.extend(self._bucata(bucata))
         return simboluri
 
@@ -139,13 +177,17 @@ class TokenizerBPE:
     # --- salvare -----------------------------------------------------------------
 
     def ca_dictionar(self) -> dict[str, Any]:
-        return {"versiune": VERSIUNE, "imbinari": [list(p) for p in self.imbinari], "speciale": list(self.speciale)}
+        baza = {"versiune": VERSIUNI[self.reguli], "imbinari": [list(p) for p in self.imbinari],
+                "speciale": list(self.speciale)}
+        return baza if self.reguli == "gpt2" else {**baza, "reguli": self.reguli}  # fișierele vechi rămân la fel
 
     @classmethod
     def din_dictionar(cls, date: dict[str, Any]) -> TokenizerBPE:
-        if date.get("versiune") != VERSIUNE:
-            raise ValueError(f"Tokenizerul are versiunea {date.get('versiune')}, aștept {VERSIUNE}")
-        return cls(date["imbinari"], date["speciale"])
+        reguli = date.get("reguli", "gpt2")
+        if reguli not in REGULI or date.get("versiune") != VERSIUNI[reguli]:
+            raise ValueError(f"Tokenizerul are versiunea {date.get('versiune')} și regulile „{reguli}”; "
+                             f"știu: {VERSIUNI}")
+        return cls(date["imbinari"], date["speciale"], reguli)
 
     def salveaza(self, cale: str | Path, info: dict[str, Any] | None = None) -> None:
         fisier = Path(cale)
@@ -162,19 +204,35 @@ class TokenizerBPE:
         return cls.din_dictionar(json.loads(fisier.read_text(encoding="utf-8")))
 
 
-def antreneaza_bpe(text: str, marime: int = 4096, speciale: Iterable[str] = SPECIALE_IMPLICITE) -> TokenizerBPE:
-    """Învață lipirile din text, până la `marime` simboluri (256 de octeți + lipiri + speciale)."""
+def frecvente_bucati(text: str, speciale: Iterable[str] = SPECIALE_IMPLICITE, reguli: str = "gpt2") -> Counter[str]:
+    """Bucățile textului (fără simbolurile speciale) și de câte ori apare fiecare."""
     speciale = list(speciale)
-    numar_imbinari = marime - 256 - len(speciale)
-    if numar_imbinari < 0:
-        raise ValueError(f"marime trebuie să fie cel puțin {256 + len(speciale)}")
-
-    # 1. Bucățile textului (fără simbolurile speciale) și de câte ori apare fiecare.
     taietor = _taietor(speciale)
     frecvente: Counter[str] = Counter()
     for segment in taietor.split(text) if taietor else [text]:
         if segment not in speciale:
-            frecvente.update(BUCATI.findall(segment))
+            frecvente.update(REGULI[reguli].findall(segment))
+    return frecvente
+
+
+def antreneaza_bpe(text: str, marime: int = 4096, speciale: Iterable[str] = SPECIALE_IMPLICITE) -> TokenizerBPE:
+    """Învață lipirile din text, până la `marime` simboluri (256 de octeți + lipiri + speciale)."""
+    return antreneaza_din_frecvente(frecvente_bucati(text, speciale), marime, speciale)
+
+
+def antreneaza_din_frecvente(frecvente: dict[str, float], marime: int = 4096,
+                             speciale: Iterable[str] = SPECIALE_IMPLICITE, reguli: str = "gpt2") -> TokenizerBPE:
+    """Învață lipirile dintr-un tabel bucată → de câte ori apare (pentru texte mari, numărate pe bucăți, în paralel).
+    Cu regulile „ws”, lipirile fixe ale numerelor sunt primele, iar grupele de cifre nu intră în învățare."""
+    speciale = list(speciale)
+    fixe = imbinari_numere() if reguli == "ws" else []
+    numar_imbinari = marime - 256 - len(speciale)
+    if numar_imbinari < len(fixe):
+        raise ValueError(f"marime trebuie să fie cel puțin {256 + len(fixe) + len(speciale)}")
+    if fixe:
+        frecvente = {b: n for b, n in frecvente.items() if not (b.isascii() and b.isdigit())}
+
+    # 1. Bucățile, scrise ca octeți, și de câte ori apare fiecare.
     cuvinte = [list(bucata.encode("utf-8")) for bucata in frecvente]
     numar = list(frecvente.values())
 
@@ -189,7 +247,7 @@ def antreneaza_bpe(text: str, marime: int = 4096, speciale: Iterable[str] = SPEC
     heapq.heapify(coada)
 
     # 3. Lipim, pe rând, perechea cea mai deasă și actualizăm doar bucățile atinse.
-    imbinari: list[tuple[int, int]] = []
+    imbinari: list[tuple[int, int]] = list(fixe)
     while len(imbinari) < numar_imbinari and coada:
         minus_n, pereche = heapq.heappop(coada)
         if minus_n == 0 or -minus_n != perechi.get(pereche, 0):
@@ -210,4 +268,4 @@ def antreneaza_bpe(text: str, marime: int = 4096, speciale: Iterable[str] = SPEC
         for p in atinse:
             if perechi[p] > 0:
                 heapq.heappush(coada, (-perechi[p], p))
-    return TokenizerBPE(imbinari, speciale)
+    return TokenizerBPE(imbinari, speciale, reguli)
