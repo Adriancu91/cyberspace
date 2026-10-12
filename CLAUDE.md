@@ -20,4 +20,5 @@
 - După fiecare schimbare: `python -m pytest`. Nu spune „gata” dacă testele nu trec.
 - Fă un commit Git după fiecare pas reușit, cu mesaj în română.
 - Laptopul: ASUS TUF F15, RTX 3060 Laptop 6 GB, 64 GB RAM, Windows 11. Ține memoria video sub ~5,5 GB.
+- Workstation-ul: RTX 3070 Ti 8 GB, 128 GB RAM, Windows 11. Ține memoria video sub ~7 GB (aprobat de Adrian, 12 octombrie 2026).
 - Dacă ceva nu merge, explică ce s-a întâmplat și propune 1–2 variante; nu ocoli în tăcere testele sau paznicul.
