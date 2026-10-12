@@ -103,4 +103,8 @@ ca cele bune.*
 
 ## Pornirea nopții
 
-*Se completează după 19:15, cu ora pornirii, memoria și temperatura din primele 15 minute.*
+- **W1 a pornit singură la 19:00:01**, din Task Scheduler, fără fereastră (`lucru/noapte_ws_w1.log`).
+- **Primele 15 minute** (`lucru/placa_noapte_w1.csv`, o măsurătoare la 5 secunde): temperatura maximă **63 °C**, stabilă
+  de la minutul 3; toată placa **5.131 MB** din 8.192 (cu Windows cu tot); placa lucrează la 97%; ~241 W.
+- Procesul antrenării folosește un singur nucleu de procesor; restul lucrului de seară e pe cel mult 12 fire, fără placă.
+- Oprirea de siguranță e programată la 07:30; cele 10 ore ar trebui să se încheie pe la 05:30.
