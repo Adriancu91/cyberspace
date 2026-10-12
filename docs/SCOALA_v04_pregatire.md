@@ -105,6 +105,24 @@ cuvinte din povești și e testat pe cuvintele nivelului 0w, pe care nu le-a vă
    ele. Se adaugă cu `python unelte/scoala_cod.py --genereaza-sacru --config config/scoala_cod_v04.toml` (nivelurile
    vechi rămân neatinse, sarcină cu sarcină), dar fișierul `date/cod/sacru.json` are amprentă, deci **cere aprobarea
    ta pentru amprenta setului sacru**. Nu l-am atins: ai aprobat doar generatorul de teste.
+
+   **Luni, 21:00: Adrian a aprobat amprenta, cu condiții. Setul NU a fost generat, fiindcă o condiție nu se poate
+   respecta cuvânt cu cuvânt.** Proba, fără nicio scriere în fișier:
+   - cele 20 de cuvinte pe care le-ar alege unealta: van, fig, bike, tree, tent, owl, zoo, egg, web, car, fan, puppy,
+     pig, foot, cloud, book, hen, rose, cake, goat;
+   - **în abecedar: niciunul** (din toate cele 116 cuvinte ale nivelului, doar „apple” apare în abecedar);
+   - **în sarcinile de antrenare ale lui 0q (cele 60 văzute): niciunul**; nici în cele 20 nevăzute sau 20 adversariale;
+   - **în hrana lui W2** (`date/ws/hrana_fapte_abecedar.txt`: povești cu fapte + abecedarul): **17 din 20 apar**, ca
+     orice cuvânt obișnuit dintr-o poveste („tree” de 1.731 de ori, „puppy” de 1.088). Lipsesc doar van, fig și bike;
+   - din toate cele 116 cuvinte, doar 15 nu apar deloc în hrană: nu ajung pentru 20 de sarcini, oricum le-am alege;
+   - **între ghilimele sau într-o sarcină „show the word …”: niciunul din cele 20 nu apare în hrană.** Singurele
+     sarcini „show the word” din hrană sunt cele ale abecedarului (cat, dog, red, big, hi, yes…);
+   - sarcinile sacre ale nivelurilor vechi: neatinse, fișierul are aceeași amprentă (`81b03acb…`).
+
+   De hotărât de Adrian: (a) condiția se citește „niciunul între ghilimele sau într-o sarcină, în hrană” (atunci setul
+   de mai sus o respectă); (b) set sacru de doar 15 sarcini, din cuvintele care lipsesc din hrană, ceea ce cere o
+   schimbare în generatorul de teste și o nouă aprobare a amprentei lui; (c) cuvinte noi, pe care W2 nu le-a văzut
+   nicăieri, tot cu schimbarea generatorului. Și cele 15 cuvinte de la (b) apar în poveștile din amestecul lui W2.
 2. **Abecedarul nu are niciun exemplu cu ghilimele în sarcină.** Exemplele din fața modelului vin din abecedar, deci la
    0q modelul va vedea exemple de alt fel (numere, cuvinte fără ghilimele în sarcină). Liniile B și D își adaugă singure
    reușitele; linia A, nu. Câteva episoade de felul 0q în abecedar ar ajuta, dar abecedarul are și el amprentă.

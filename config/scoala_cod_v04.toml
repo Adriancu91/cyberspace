@@ -4,6 +4,7 @@
 # Abecedarul, setul sacru, generatorul de teste și sandbox-ul NU s-au schimbat (aceleași amprente).
 # Pasul 0 (vocabularul, fără model): python unelte/vocabular_cod_ws.py
 # Hotărât de Adrian (12 octombrie, seara): nivelul nou 0q, lângă 0w (docs/SCOALA_v04_pregatire.md).
+# Pilotul: cel mai devreme miercuri, 14 octombrie, ziua, din modelul W2 (docs/preinregistrari/2026-10-14_pilot_v04_0q.md).
 # DE HOTĂRÂT înainte de pilot: prag_regresie (după ce se știe val_bpb al lui W2); setul sacru al lui 0q (cere
 # aprobarea amprentei setului sacru); dacă 0w mai rămâne în pilot (dacă pică, școala se oprește acolo).
 # Ce urmează e textul v0.3, din care s-a pornit. Față de v0.2:
