@@ -87,7 +87,9 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
    parola și te uiți în `lucru\dupa_logare.log`.
 4. **În BIOS (F2 la pornire): AC Recovery = Power On**, ca workstation-ul să pornească singur când revine curentul.
    Fără asta, după o pană de curent rămâne oprit și nimic din cele de mai sus nu apucă să ruleze. **Încă nefăcut.**
-5. Tot în BIOS, cât ești acolo: System Logs → Power Events, ca să vedem de ce s-a oprit de două ori luni după-amiază.
+5. ~~Tot în BIOS: System Logs → Power Events.~~ Nu mai trebuie: cauza celor două opriri de luni e cunoscută (un
+   angajat a închis workstation-ul de mână). De luni seara, pe priză, butonul de pornire și capacul sunt pe „Nu face
+   nimic” în Windows; butonul ținut apăsat ~4 secunde oprește în continuare calculatorul.
 
 **Ce NU am putut încerca:**
 - Autologon însuși (cere parola și drepturi de administrator).

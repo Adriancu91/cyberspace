@@ -100,6 +100,14 @@ ca cele bune.*
 - **Ce ar lămuri cauza:** dacă în casă a căzut curentul (lumini, router, ceasuri); jurnalul din BIOS-ul Dell
   (F2 la pornire → System Logs → Power Events); ce putere are sursa (eticheta din carcasă: Precision 5820 vine cu
   425, 685 sau 950 W, iar placa video singură cere până la 290 W).
+- **CAUZA, aflată de Adrian luni seara (~21:00): un angajat a închis workstation-ul de mână, de două ori, crezând că
+  stă degeaba.** Adrian a vorbit cu el. Nu e nici curentul, nici vreo componentă: bănuielile de mai sus cad, iar
+  jurnalul din BIOS și puterea sursei nu mai trebuie verificate pentru asta. Se potrivește cu ce arătau jurnalele
+  Windows (oprire fără închidere curată, fără nicio eroare).
+- **Ce s-a schimbat în Windows (21:15, fără drepturi de administrator):** pe priză, butonul de pornire și închiderea
+  capacului sunt puse pe „Nu face nimic” (planul de alimentare „Balanced”). Verificat cu `powercfg`: amândouă 0.
+  **Ce nu oprește asta:** butonul ținut apăsat ~4 secunde (oprire forțată, ține de placa de bază), scosul din priză
+  și „Shut down” din meniul Start.
 
 ## Pornirea nopții
 
