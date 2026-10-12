@@ -1,0 +1,60 @@
+# Workstation, W1 „continuitate” (docs/MUTARE_workstation.md, secțiunea 4): 12 straturi × 768 (12 capete), context 256,
+# lot 24, pe tokenizer-ul de acum (BPE 4.096). 88,4 milioane de parametri, de 2,6 ori cât linia de pe laptop (10×512).
+# Rețeta e a lui fapte-zero (config/laptop_fapte_zero.toml): DE LA ZERO pe TinyStories întreg + 5% povești cu fapte din
+# prima oră, cu aceleași examene la fiecare oră (fapte, fapte_noi, nota pe 40 de povești). Rata 0,0006 care scade la
+# 0,00006 pe 10 ore (o noapte: 19:00–07:30).
+# Paznicul are limitele workstation-ului, aprobate de Adrian pe 12 octombrie 2026: memoria video 7.000 MB (pe laptop,
+# 5.500) și temperatura 83 °C (pe laptop, 85).
+# Proba de memorie din 12 octombrie (5 minute, simboluri la întâmplare): vezi docs/WORKSTATION_prima_ora_2026-10-12.md.
+# NEPORNITĂ: prima rulare cere pre-înregistrare și acordul lui Adrian. La prima antrenare se regenerează lucru/cache.
+#   python unelte/antrenare_lunga.py --config config/ws_w1.toml --ore 10 --inceput "Once upon a time, there was a fearful little dog named Coco"
+#   (oprire: python -m kronos opreste --config config/ws_w1.toml)
+
+[platforma]
+nume = "ws_w1"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600   # o oră de antrenare pe experiment (pregătirea și examenele nu intră)
+experimente = 10
+prag_zgomot = 0.005
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83       # RTX 3070 Ti își reduce singură viteza pe la 83 °C
+memorie_gpu_max_mb = 7000      # din 8 GB, lăsăm ~1 GB pentru Windows
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_continuu:ModelGPTContinuu"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 256, lot = 24, rata_invatare = 0.0006, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 0.1, durata_scaderii_secunde = 36000.0, tokenizer = "bpe", cale_tokenizer = "date/tinystories/bpe_4096.json", cale_stare = "lucru/ws_w1/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05 }
+
+[porturi.date]
+modul = "module.date_tinystories:DateTinyStories"
+setari = { director = "date/tinystories_tot", megaocteti = 2230.0, procent_validare = 0.011, validare_din = "date/tinystories_r2" }   # TinyStories întreg; poveștile cu fapte vin prin hrana modelului (5% din fiecare lot)
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [24] } } }   # nu schimbă nimic: rețeta e fixă
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
