@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyberspace: chat cu Kronos</title>
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+<header>
+  <h1>Cyberspace</h1>
+  <p id="cine">Răspunde: …</p>
+</header>
+
+<section id="zona-module" aria-label="Module">
+  <h2>Module <span id="configurare"></span></h2>
+  <div id="module"></div>
+  <p id="detalii-modul" hidden></p>
+</section>
+
+<main>
+  <aside aria-label="Conversații">
+    <button type="button" id="conversatie-noua">Conversație nouă</button>
+    <ul id="conversatii"></ul>
+  </aside>
+
+  <section id="chat" aria-label="Chat">
+    <div id="mesaje" aria-live="polite"></div>
+    <p id="anunt" role="status"></p>
+    <form id="formular">
+      <label for="text">Scrie-i lui Kronos</label>
+      <textarea id="text" rows="3" placeholder="Scrie aici și apasă Trimite (sau Ctrl+Enter)"></textarea>
+      <button type="submit" id="trimite">Trimite</button>
+    </form>
+  </section>
+</main>
+
+<noscript>Pagina are nevoie de JavaScript ca să meargă.</noscript>
+<script src="aplicatie.js"></script>
+</body>
+</html>
