@@ -33,16 +33,27 @@ Din 8 octombrie 2026:
 - **Criteriile sunt implicite (ca în configurarea 7):** o configurare fără niciun [criterii] primește CRITERII_IMPLICITE
   (val_bpb rămâne principalul, cu prag_zgomot, implicit 0,005; fapte_noi nu scad cu peste 10; nota nu scade cu peste
   1,0), doar pentru examenele date la fiecare oră. Fără criterii: un [criterii] gol în configurare.
+
+Din 13 octombrie 2026 (rețeta liniei W2: rata constantă, cu o copie răcită la sfârșitul nopții). Secțiunea
+[antrenare_lunga] din configurare, toată opțională (Kronos nu o citește):
+- `pana_la = "06:45"`: antrenarea propriu-zisă nu trece de ora asta (prima de după pornire). Ultima oră se scurtează cât
+  să încapă; dacă ar rămâne sub 10 minute, nu mai începe. La fel `--pana-la` din comandă; dintre cele două, cea mai
+  apropiată.
+- `copie_racita = true` (cu `minute_racire`, implicit 30, și `rata_finala_racire`, implicit 0,00005): după ultima oră a
+  rulării, unelte/copie_racita.py face „modelul zilei” dintr-o copie; starea liniei rămâne cea de dinainte de răcire.
+  Nu se face dacă rularea a fost oprită (butonul de oprire, paznicul) sau cu `--fara-copie-racita`.
+- `eticheta = "nerăcit"`: se scrie în descrierea fiecărei ore din jurnal (examenele orare sunt pe modelul nerăcit).
 """
 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import statistics
 import sys
 import tomllib
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -96,6 +107,60 @@ def cu_hrana_implicita(config: Any) -> bool:
         return False
     setari.update(HRANA_IMPLICITA)
     return True
+
+
+MINUTE_MINIME_ORA = 10  # o oră scurtată de limita „pana_la” sub atât nu mai începe
+PREGATIRE_SECUNDE = 180  # cât trece, cel mult, de la pornirea unui experiment până începe antrenarea lui
+
+
+def limita_urmatoare(ora: str, acum: datetime) -> datetime:
+    """Prima oră „HH:MM” de după `acum` (azi sau mâine)."""
+    h, m = (int(x) for x in ora.split(":"))
+    limita = acum.replace(hour=h, minute=m, second=0, microsecond=0)
+    return limita if limita > acum else limita + timedelta(days=1)
+
+
+def buget_pana_la(limita: datetime | None, acum: datetime, buget: float, pauza: float = 0.0) -> float | None:
+    """Bugetul orei care ar începe acum (după pauză și pregătire), ca antrenarea ei să se încheie până la limită:
+    întreg, scurtat sau None (n-ar mai rămâne nici MINUTE_MINIME_ORA)."""
+    if limita is None:
+        return buget
+    ramas = (limita - acum).total_seconds() - pauza - PREGATIRE_SECUNDE
+    if ramas >= buget:
+        return buget
+    return float(int(ramas)) if ramas >= MINUTE_MINIME_ORA * 60 else None
+
+
+def reguli_rulare(brut: dict[str, Any]) -> dict[str, Any]:
+    """Secțiunea [antrenare_lunga] din configurare, cu valorile implicite."""
+    r = brut.get("antrenare_lunga") or {}
+    necunoscute = sorted(set(r) - {"pana_la", "copie_racita", "minute_racire", "rata_finala_racire", "eticheta"})
+    if necunoscute:
+        raise ValueError(f"[antrenare_lunga]: nu știu {', '.join(necunoscute)}")
+    return {"pana_la": r.get("pana_la") or "", "copie_racita": bool(r.get("copie_racita", False)),
+            "minute_racire": float(r.get("minute_racire", 30)),
+            "rata_finala_racire": float(r.get("rata_finala_racire", 0.00005)), "eticheta": str(r.get("eticheta") or "")}
+
+
+def tine_linia(dosar: Path) -> Any:
+    """Un singur proces de antrenare pe linie: ține un zăvor pe lucru/<linia>/ruleaza.lock cât rulează (sistemul îl
+    eliberează singur dacă procesul moare). None dacă linia e deja ținută de alt proces (ex. două porniri deodată)."""
+    dosar.mkdir(parents=True, exist_ok=True)
+    fisier = (dosar / "ruleaza.lock").open("a+")
+    try:
+        fisier.seek(0)
+        if sys.platform == "win32":
+            import msvcrt
+
+            msvcrt.locking(fisier.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(fisier, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        fisier.close()
+        return None
+    return fisier
 
 
 def tine_treaz(da: bool) -> None:
@@ -318,11 +383,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--compara-cu", type=int, default=None, help="povestea se scrie și de modelul acestui experiment")
     parser.add_argument("--alaturi-de", default="", help="linia altei antrenări: scorul ei la aceeași oră, alături")
     parser.add_argument("--prag-alaturi", type=float, default=0.02, help="pragul verdictului față de cealaltă antrenare")
+    parser.add_argument("--pana-la", default="", help="ex. 18:20: antrenarea nu trece de ora asta (ultima oră se scurtează)")
+    parser.add_argument("--fara-copie-racita", action="store_true", help="fără copia răcită cerută de configurare")
     args = parser.parse_args(argv)
 
     config = citeste_config(args.config)
+    brut = tomllib.loads(Path(args.config).read_text(encoding="utf-8"))
     hrana_implicita = cu_hrana_implicita(config)
-    criterii_implicite = cu_criterii_implicite(config, tomllib.loads(Path(args.config).read_text(encoding="utf-8")))
+    criterii_implicite = cu_criterii_implicite(config, brut)
+    reguli = reguli_rulare(brut)
+    pornit_la = datetime.now()
+    limite = [limita_urmatoare(o, pornit_la) for o in (reguli["pana_la"], args.pana_la) if o]
+    limita = min(limite) if limite else None
+    oprita = False  # rularea s-a oprit înainte de vreme (butonul de oprire, paznicul, un experiment anulat)
     examen = Registru().creeaza("examen", config.porturi["examen"]["modul"], config.setari_port("examen")).instanta
     jurnal = Jurnal(config.director_lucru)
     facute = len(ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal))
@@ -340,6 +413,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Pornesc din modelul experimentului #{inainte['experiment']} (linia „{inainte['linie']}”, ora "
               f"{inainte['ore']}, val_bpb {inainte['scor']:.4f}): optimizatorul și rata pornesc din nou. Până la primul "
               f"experiment păstrat al liniei, regula 4 o judecă față de el.", flush=True)
+    zavor = None
+    if not args.raport:
+        zavor = tine_linia(config.director_lucru / config.nume)
+        if zavor is None:
+            print(f"Nu pornesc: linia „{config.nume}” e deja antrenată de alt proces (lucru/{config.nume}/ruleaza.lock).",
+                  flush=True)
+            return 1
     inainte = json.loads(fisier_pornire.read_text(encoding="utf-8")) if fisier_pornire.exists() else None
     if inainte:  # kronos: până la primul experiment păstrat al liniei, regula 4 o judecă față de modelul de pornire
         config.porneste_din = inainte["experiment"]
@@ -349,8 +429,10 @@ def main(argv: list[str] | None = None) -> int:
     if not args.raport and facute < args.ore:
         reteta = config.setari_port("model")
         print(f"Antrenarea lungă: orele {facute + 1}–{args.ore}, rețeta {reteta['n_straturi']}×{reteta['n_emb']}, context "
-              f"{reteta['context']}, lot {reteta['lot']}, rata {reteta['rata_invatare']:g} care scade pe "
-              f"{reteta.get('durata_scaderii_secunde', 0) / 3600:g} ore (linia „{config.nume}”).", flush=True)
+              f"{reteta['context']}, lot {reteta['lot']}, rata {reteta['rata_invatare']:g} "
+              + ("constantă, după încălzire" if reteta.get("fractie_rata_finala") == 1 else
+                 f"care scade pe {reteta.get('durata_scaderii_secunde', 0) / 3600:g} ore")
+              + f" (linia „{config.nume}”).", flush=True)
         if config.buget_antrenare_secunde != 3600:
             print(f"   Aici o „oră” e un experiment de {config.buget_antrenare_secunde / 60:g} minute de antrenare "
                   f"(cu examenele după el).", flush=True)
@@ -358,6 +440,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"   Fiecare lot: {reteta.get('fractie_hrana', 0):.0%} bucăți din {reteta['hrana']}, restul din "
                   f"textul de antrenare." + (" Hrana e cea implicită (configurarea n-o pomenește; fără ea: hrana = \"\")."
                                              if hrana_implicita else ""), flush=True)
+        if limita:
+            print(f"   Antrenarea nu trece de {limita:%H:%M}: ultima oră se scurtează cât să încapă.", flush=True)
+        if reguli["copie_racita"] and not args.fara_copie_racita:
+            print(f"   La sfârșit: copia răcită ({reguli['minute_racire']:g} minute, rata scade liniar la "
+                  f"{reguli['rata_finala_racire']:g}) dă toate examenele; linia rămâne nerăcită.", flush=True)
         if criterii_implicite:
             print(f"   Criteriile sunt cele implicite (configurarea n-are [criterii]; fără criterii: un [criterii] gol): "
                   f"val_bpb principal (prag {config.prag_zgomot:g}), "
@@ -366,11 +453,25 @@ def main(argv: list[str] | None = None) -> int:
         tine_treaz(True)
         try:
             for ora in range(facute + 1, args.ore + 1):
+                pauza = 0 if ora == facute + 1 else args.pauza
+                buget = buget_pana_la(limita, datetime.now(), config.buget_antrenare_secunde, pauza)
+                if buget is None:
+                    print(f"   Ora {ora} nu mai începe: până la {limita:%H:%M} nu mai încap {MINUTE_MINIME_ORA} minute "
+                          f"de antrenare.", flush=True)
+                    break
+                descriere = f"antrenare lungă, ora {ora} din {args.ore}" + (f" ({reguli['eticheta']})" if reguli["eticheta"] else "")
+                config_orei = config
+                if buget < config.buget_antrenare_secunde:
+                    config_orei = copy.copy(config)
+                    config_orei.buget_antrenare_secunde = buget
+                    descriere += f", scurtată la {buget / 60:.0f} minute (limita {limita:%H:%M})"
+                    print(f"   Ora {ora} e scurtată la {buget / 60:.0f} minute (limita {limita:%H:%M}).", flush=True)
                 rulare = ruleaza(
-                    config, config.nume, f"antrenare lungă, ora {ora} din {args.ore}", {"samanta": reteta.get("samanta", 0)},
-                    pauza=0 if ora == facute + 1 else args.pauza, racire=args.racire, cu_fisa=True,
+                    config_orei, config.nume, descriere, {"samanta": reteta.get("samanta", 0)},
+                    pauza=pauza, racire=args.racire, cu_fisa=True,
                 )
                 if rulare is None:
+                    oprita = True
                     break
                 criterii = criterii_din(rulare.pop("fisa"))
                 ref = (alaturi or {}).get(ora)
@@ -385,6 +486,22 @@ def main(argv: list[str] | None = None) -> int:
                       flush=True)
         finally:
             tine_treaz(False)
+
+    if not args.raport and reguli["copie_racita"] and not args.fara_copie_racita and not oprita:
+        # „modelul zilei”: o copie răcită, din starea de acum a liniei (care rămâne neschimbată). Dacă există deja pentru
+        # ora asta, unealta dă doar examenele care lipsesc.
+        from unelte import copie_racita
+
+        tine_treaz(True)
+        try:
+            cod = copie_racita.main(["--config", args.config, "--minute", f"{reguli['minute_racire']:g}",
+                                     "--rata-finala", f"{reguli['rata_finala_racire']:g}", "--racire", f"{args.racire:g}"])
+        finally:
+            tine_treaz(False)
+        if cod != 0:
+            print("Copia răcită nu s-a încheiat cum trebuie (vezi mai sus); orele liniei sunt neatinse.", flush=True)
+    if zavor is not None:
+        zavor.close()
 
     ore = ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal)
     if not ore:

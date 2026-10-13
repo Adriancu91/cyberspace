@@ -30,7 +30,8 @@ from typing import Any, Callable
 
 import module.continuum.observa as senzori_reali
 from kronos.paznic import Paznic
-from module.continuum import NECONCLUDENT, REPAUS, SUCCES, EroareContinuum, citeste_config, ro_scurt, stabilitate
+from module.continuum import (NECONCLUDENT, REPAUS, SUCCES, EroareContinuum, citeste_config, guvernator, ro_scurt,
+                              stabilitate)
 from module.continuum import stare as memorie_continuum
 from module.continuum.actioneaza import actioneaza, text_comanda
 from module.continuum.alege import alege
@@ -257,6 +258,8 @@ class Bucla:
             pauza = self.pauza_minute
             if pauza is None:
                 pauza = self.config["guvernator"]["pauza_minute"][rand.get("nivel") or REPAUS]
+                # v3: ciclul următor nu sare peste începutul unei ferestre (ex. 19:00, când începe noaptea)
+                pauza = min(pauza, (guvernator.secunde_pana_la_fereastra(self.senzori.acum(), self.config) + 2) / 60)
             self.dormi(60 * pauza)
         return 0
 

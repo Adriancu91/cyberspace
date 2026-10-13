@@ -16,6 +16,15 @@ Regula de alegere rămâne ordinea din [continuum] ordinea_nevoilor; jurnalul ci
 puteau face atunci („alternative”). Cu [nevoi.linie_noua] în configurare, „continua” nu mai pornește linii neîncepute:
 asta e treaba lui „linie_noua”. O configurare din v1 (fără linie_noua și fără prelungire_ore) merge neschimbată.
 
+v3 (13 octombrie 2026, hotărât de Adrian), pe lângă v2:
+- **deprinde** (nevoie nouă): o capacitate cu „prag_deprins” (ex. româna și codul, biți pe octet, pragul 3,0) pe care
+  ultimul model păstrat n-a trecut-o încă. Se învață doar pe o linie din lista albă a nevoii ([nevoi.deprinde]
+  configurari, ex. config/ws_w2.toml): neîncepută, pornește de la zero; începută, se reia sau se prelungește. Cât de
+  urgentă e o spune tot ordinea_nevoilor;
+- la o nevoie cu antrenare, `zi_pana_la = "18:20"`: ziua (nivelul ÎNTREȚINERE) antrenarea primește „--pana-la 18:20”
+  și nu mai pornește dacă nu mai încape o oră întreagă până atunci;
+- pauza dintre cicluri nu sare peste începutul unei ferestre (ex. 19:00): ciclul următor e chiar atunci.
+
 CONTINUUM decide ce face Kronos când nimeni nu-i spune. Nu antrenează și nu dă examene singur: la fiecare ciclu
 observă, alege o singură nevoie și, dacă nivelul o permite, pornește un experiment Kronos cu o configurare existentă
 (sau o unealtă de examene), apoi citește fișa din jurnalul Kronos.
@@ -46,6 +55,7 @@ NIVELURI = (REPAUS, INTRETINERE, INVATARE)
 NEVOI_V0 = ("masoara", "continua", "dezvolta")
 NEVOI_V1 = ("repara", "masoara", "remasoara", "continua", "dezvolta")
 NEVOI_V2 = NEVOI_V1 + ("linie_noua",)  # v2: o linie nouă, de la zero, dintr-o configurare neîncepută
+NEVOI_V3 = NEVOI_V2 + ("deprinde",)  # v3: o capacitate sub „prag_deprins”, învățată pe o linie din lista albă
 SUCCES, ESEC, NECONCLUDENT = "SUCCES", "EȘEC", "NECONCLUDENT"
 SUCCES_SCUMP = "SUCCES SCUMP"  # un câștig prea mic pentru orele pe placă: încrederea nu urcă
 VERDE, GALBENA, ROSIE = "verde", "galbenă", "roșie"
@@ -156,8 +166,8 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
 
     c = sectiune("continuum")
     ordinea = _texte(c, "ordinea_nevoilor", "[continuum]")
-    if len(set(ordinea)) != len(ordinea) or any(n not in NEVOI_V2 for n in ordinea):
-        raise EroareContinuum(f"În [continuum], „ordinea_nevoilor” poate avea, o singură dată, doar: {', '.join(NEVOI_V2)}")
+    if len(set(ordinea)) != len(ordinea) or any(n not in NEVOI_V3 for n in ordinea):
+        raise EroareContinuum(f"În [continuum], „ordinea_nevoilor” poate avea, o singură dată, doar: {', '.join(NEVOI_V3)}")
     # v1: „repara” e mereu prima (urgența 1); „remasoara” vine după „masoara”, dacă ordinea n-o pomenește.
     ordinea = ["repara"] + [n for n in ordinea if n != "repara"]
     if "remasoara" not in ordinea and "masoara" in ordinea:
@@ -218,6 +228,8 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
             "unealta": unealta,
             # ex. nota: comparabilă doar pe același număr de povești; celelalte măsurători nu intră nicăieri
             "povesti": int(_numar(cap, "povesti", unde, 2, intreg=True)) if "povesti" in cap else None,
+            # v3: până când ultimul model păstrat nu trece de pragul ăsta, capacitatea e „nedeprinsă” (nevoia „deprinde”)
+            "prag_deprins": _numar(cap, "prag_deprins", unde) if "prag_deprins" in cap else None,
         }
 
     hrana = {}
@@ -239,8 +251,8 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
     nevoi = {}
     for tip, n in sectiune("nevoi", obligatorie=False).items():
         unde = f"[nevoi.{tip}]"
-        if tip not in NEVOI_V2:
-            raise EroareContinuum(f"{unde}: nevoile sunt doar {', '.join(NEVOI_V2)}")
+        if tip not in NEVOI_V3:
+            raise EroareContinuum(f"{unde}: nevoile sunt doar {', '.join(NEVOI_V3)}")
         if tip not in ordinea:
             raise EroareContinuum(f"{unde} e configurată, dar lipsește din [continuum] „ordinea_nevoilor”")
         if not isinstance(n, dict):
@@ -260,6 +272,18 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
             nevoie["prelungire_ore"] = _numar({"prelungire_ore": 0, **n}, "prelungire_ore", unde, 0, intreg=True)
         if tip == "linie_noua":
             nevoie["capacitate"] = str(_cere(n, "capacitate", unde))
+        if tip == "deprinde":
+            nevoie["capacitati"] = _texte(n, "capacitati", unde)
+            fara_prag = [c for c in nevoie["capacitati"] if (capacitati.get(c) or {}).get("prag_deprins") is None]
+            if fara_prag:
+                raise EroareContinuum(f"În {unde}, capacitățile trebuie să aibă „prag_deprins” în [capacitati]: "
+                                      f"{', '.join(fara_prag)}")
+            nevoie["prelungire_ore"] = _numar({"prelungire_ore": 0, **n}, "prelungire_ore", unde, 0, intreg=True)
+        if "zi_pana_la" in n and tip in ("continua", "linie_noua", "deprinde", "dezvolta"):
+            try:
+                nevoie["zi_pana_la"] = Ora.fromisoformat(str(n["zi_pana_la"]))
+            except ValueError:
+                raise EroareContinuum(f"În {unde}, „zi_pana_la” e de forma „18:20”") from None
         nevoi[tip] = nevoie
     # v1: „repara” (raport către om) merge oricând; „remasoara” folosește setările lui „masoara”, dacă n-are ale ei.
     nevoi.setdefault("repara", {"nivel": IMPLICITE_V1["nivel_repara"]})

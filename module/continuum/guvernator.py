@@ -37,6 +37,16 @@ def in_fereastra(ora: Ora, fereastra: tuple[Ora, Ora]) -> bool:
     return ora >= inceput or ora < sfarsit
 
 
+def secunde_pana_la_fereastra(acum: datetime, config: dict[str, Any]) -> float:
+    """Câte secunde mai sunt până la cel mai apropiat început de fereastră (de învățare sau de întreținere)."""
+    g = config["guvernator"]
+    asteptari = []
+    for inceput, _ in (g["fereastra_invatare"], g["fereastra_intretinere"]):
+        secunde = (datetime.combine(acum.date(), inceput) - acum).total_seconds()
+        asteptari.append(secunde if secunde > 0 else secunde + 86400)
+    return min(asteptari)
+
+
 def text_fereastra(fereastra: tuple[Ora, Ora]) -> str:
     return f"{fereastra[0]:%H:%M}–{fereastra[1]:%H:%M}"
 

@@ -26,7 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from module.continuum import GALBENA, ROSIE, cate, peste, ro, ro_scurt
+from module.continuum import GALBENA, ROSIE, cate, peste, ro, ro_scurt  # noqa: F401
 from module.continuum.evalueaza import StareaOrganismului, se_potriveste
 from module.continuum.stabilitate import in_asteptare
 
@@ -153,7 +153,32 @@ def nevoie_linie_noua(stare: StareaOrganismului, config: dict[str, Any], urgenta
     return Nevoie("linie_noua", reguli["capacitate"], urgenta, motiv, {"configurari": neincepute})
 
 
-NEVOI = {"repara": nevoie_repara, "masoara": nevoie_masoara, "remasoara": nevoie_remasoara,
+def nevoie_deprinde(stare: StareaOrganismului, config: dict[str, Any], urgenta: float,
+                    memorie: dict[str, Any] | None = None) -> Nevoie | None:
+    """v3: capacitățile din lista nevoii pe care ultimul model păstrat le are măsurate și sub „prag_deprins”. Ținta e
+    cea mai departe de pragul ei; celelalte sunt pomenite în motiv."""
+    reguli = config["nevoi"]["deprinde"]
+    departe: list[tuple[float, str, str]] = []
+    for nume in reguli["capacitati"]:
+        c, prag = stare.capacitati.get(nume), (config["capacitati"].get(nume) or {}).get("prag_deprins")
+        if c is None or prag is None or c.curent is None:
+            continue
+        lipsa = -c.castig(c.curent, prag)  # cât e sub prag, în direcția capacității
+        if peste(lipsa, 0):
+            departe.append((lipsa / abs(prag) if prag else lipsa, nume,
+                            f"{nume} = {ro_scurt(c.curent)} ({c.metrica}; deprins înseamnă "
+                            f"{'peste' if c.mai_mare_e_mai_bine else 'sub'} {ro_scurt(prag)})"))
+    if not departe:
+        return None
+    departe.sort(key=lambda d: (-d[0], d[1]))
+    model = stare.ultimul_model or {}
+    motiv = (f"ultimul model păstrat (#{model.get('experiment')}, linia {model.get('linie')}) n-a deprins încă: "
+             + "; ".join(d[2] for d in departe) + f". Se învață doar pe o linie din lista albă "
+             f"({', '.join(reguli['configurari'])})")
+    return Nevoie("deprinde", departe[0][1], urgenta, motiv, {"capacitati": [d[1] for d in departe]})
+
+
+NEVOI = {"deprinde": nevoie_deprinde, "repara": nevoie_repara, "masoara": nevoie_masoara, "remasoara": nevoie_remasoara,
          "continua": nevoie_continua, "dezvolta": nevoie_dezvolta, "linie_noua": nevoie_linie_noua}
 
 

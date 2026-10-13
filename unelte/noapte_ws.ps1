@@ -51,6 +51,19 @@ if ($Opreste) {
 
 if (Test-Path (Join-Path $radacina "lucru\STOP")) { Scrie "Nu pornesc: exista butonul STOP (lucru/STOP)."; exit 0 }
 if (Ruleaza-Deja) { Scrie "Nu pornesc: antrenarea ruleaza deja."; exit 0 }
+# O singura sarcina grea pe placa odata: daca ruleaza alta antrenare lunga (pornita de om sau de CONTINUUM), nu pornesc.
+$altele = Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
+    Where-Object { $_.CommandLine -and ($_.CommandLine -like "*antrenare_lunga.py*" -or $_.CommandLine -like "*copie_racita.py*") }
+if (@($altele).Count -gt 0) { Scrie "Nu pornesc: pe placa ruleaza deja alta antrenare lunga."; exit 0 }
+# Daca un alt program Python foloseste placa acum (ex. un examen pornit de CONTINUUM), astept sa termine, cel mult 15 minute.
+$asteptat = 0
+while ($asteptat -lt 900 -and ((& nvidia-smi --query-compute-apps=name --format=csv,noheader 2>$null) -match "python")) {
+    if ($asteptat -eq 0) { Scrie "Astept: un alt program Python foloseste placa video." }
+    Start-Sleep -Seconds 20
+    $asteptat += 20
+}
+if ($asteptat -ge 900) { Scrie "Nu pornesc: placa a ramas ocupata 15 minute de alt program Python."; exit 0 }
+if (Ruleaza-Deja) { Scrie "Nu pornesc: antrenarea ruleaza deja (a pornit-o altcineva cat am asteptat)."; exit 0 }
 if ($PanaLa -and ((Get-Date) -ge [datetime]::ParseExact($PanaLa, "HH:mm", $null)) -and ((Get-Date).Hour -lt 18)) {
     Scrie "Nu pornesc: a trecut de $PanaLa (noaptea s-a incheiat)."
     exit 0

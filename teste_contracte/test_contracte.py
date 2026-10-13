@@ -58,6 +58,10 @@ MODULE = [
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
     pytest.param(
+        "model", "module.model_racit:ModelGPTRacit", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
+    pytest.param(
         "model", "module.model_plasa_mare:ModelPlasaMare",
         {**GPT_MIC, "n_ascuns_nod": 16, "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),

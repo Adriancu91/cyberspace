@@ -93,5 +93,5 @@ Kronos (`lucru/jurnal/`) nu e atins: interfața doar îl citește, ca să găsea
 ## Teste
 
 ```
-$env:CUDA_VISIBLE_DEVICES=''; .venv\Scripts\python.exe -m pytest teste/test_interfata.py -q -p no:cacheprovider
+$env:CUDA_VISIBLE_DEVICES='-1'; .venv\Scripts\python.exe -m pytest teste/test_interfata.py -q -p no:cacheprovider
 ```

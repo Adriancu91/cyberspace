@@ -396,3 +396,33 @@ cyberspace/
 5. Construiește și testează **fără placă video** (module de probă); prima rulare reală doar în `--simuleaza`, când nu rulează altceva pe placă.
 6. După fiecare pas: `python -m pytest` (toate testele), commit în română, push.
 7. La final explică, în română, pe scurt: cum pornesc, cum opresc (același STOP), cum citesc jurnalul ciclurilor și cum văd ce ar fi ales în modul simulat.
+
+## 16. v3 pe workstation: româna și codul ca nevoi; pornit pe bune (13 octombrie 2026)
+
+*Hotărât de Adrian marți, 13 octombrie. Configurarea: `config/continuum_ws.toml`; starea și jurnalul:
+`lucru/continuum_ws/`; testele: `teste/test_continuum_v3.py`.*
+
+- **Două capacități noi:** `romana` și `cod`, în biți pe octet pe validările puse deoparte
+  (`unelte/examen_validari_ws.py`). Linia veche (W1) nu le știe deloc: 6,42 și 4,77.
+- **Nevoia nouă „deprinde”:** cât timp ultimul model păstrat are o capacitate măsurată peste pragul ei
+  (`prag_deprins = 3.0`), CONTINUUM cere linia care o învață (lista albă a nevoii: `config/ws_w2.toml`). Neîncepută,
+  linia pornește de la zero; începută, se reia sau se prelungește cu 10 ore.
+- **Greutatea:** „deprinde” stă înaintea lui „continua” în `ordinea_nevoilor`. Fără ea, ordinea veche ar alege
+  „W1 încă 8 ore” cât timp W1 mai câștigă peste 0,005 pe oră. E o hotărâre a omului, scrisă în configurare.
+- **Ziua și noaptea:**
+  - ziua (07:45–18:40): examene și, dacă e cazul, continuarea unei linii vechi, cel mult până la 18:20
+    (`zi_pana_la`); dacă nu mai încape o oră întreagă, nu mai pornește;
+  - noaptea: o antrenare de noapte se poate porni doar între 19:00 și 21:00. După ce se termină, CONTINUUM nu mai
+    pornește alta până seara următoare;
+  - în rest, doar observă. Pauza dintre cicluri nu sare peste 19:00.
+- **Ce NU mai face singur:** hrană nouă de la profesor (`[hrana.fapte]` nu mai are „comanda”): ar ține placa o oră
+  și ar schimba datele din care învață liniile.
+- **Plasa de siguranță:** dacă CONTINUUM nu pornește W2 la 19:00, o pornește Windows la 19:03
+  (`unelte/noapte_ws.ps1`), care așteaptă dacă placa e folosită de alt program Python. Două porniri deodată ale
+  aceleiași linii sunt oprite de un zăvor (`lucru/<linia>/ruleaza.lock`).
+- **De știut:**
+  - când ultimul model păstrat devine unul al lui W2, poveștile lui vor fi mult sub linia de bază a lui W1 (0,4273),
+    deci CONTINUUM va scrie un raport „zona roșie” (o singură dată; e doar un raport);
+  - copiile răcite (`ws_w2_racit_*`) nu sunt linii urmărite: CONTINUUM judecă după orele nerăcite;
+  - butonul STOP (`lucru/STOP`) oprește și CONTINUUM, și antrenarea. După el: `python -m kronos porneste --config
+    config/proba.toml`, apoi sarcina „Kronos continuum ws” din Task Scheduler.

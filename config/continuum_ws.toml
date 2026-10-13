@@ -3,7 +3,13 @@
 # variante adevărate: continuă linia care încă învață (o prelungește, dacă și-a făcut orele), remăsoară, sau pornește
 # o linie nouă dintr-o configurare ws_* neîncepută. Care se alege o spune „ordinea_nevoilor”; jurnalul ciclului notează
 # și variantele nealese („alternative”). Nu antrenează și nu dă examene singur: pornește uneltele lui Kronos.
-# SCRIS ȘI TESTAT, NEPORNIT: prima noapte în care alege el e hotărâtă de Adrian.
+# PE BUNE din 13 octombrie 2026 (hotărât de Adrian), cu jurnalul în lucru/continuum_ws/. Tot atunci (v3):
+# - româna și codul sunt capacități, măsurate cu unelte/examen_validari_ws.py; cât timp ultimul model păstrat le are
+#   peste 3,0 biți pe octet, nevoia „deprinde” cere linia care le învață (W2) și stă înaintea lui „continua”;
+# - ziua (07:45–18:40) se pot da examene și se poate continua o linie veche, cel mult până la 18:20; o antrenare
+#   de noapte (linie nouă, deprindere) pornește doar între 19:00 și 21:00. În rest, doar observă.
+# - hrana nouă de la profesor nu se mai cere singură (vezi [hrana.fapte]).
+# Pornirea fără fereastră: unelte/continuum_ws.ps1 (o pornește Task Scheduler: unelte/programeaza_continuum_ws.ps1).
 #
 #   python -m module.continuum.bucla --config config/continuum_ws.toml --simuleaza --stare lucru/continuum_ws   # doar spune ce ar alege
 #   python -m module.continuum.bucla --config config/continuum_ws.toml --stare lucru/continuum_ws               # pornește și experimentele
@@ -16,18 +22,20 @@
 director_lucru = "lucru"               # ca la Kronos: același STOP (lucru/STOP), același jurnal (doar citit)
 redescopera_la_cicluri = 6             # la câte cicluri recitește acest fișier și reverifică modulele
 jurnal_max_mb = 20                     # peste atât, cicluri.jsonl se mută deoparte și se începe altul
-# Urgența: măsurarea întâi (și remăsurarea, pusă singură după ea); apoi continuarea liniei care încă învață; apoi o
+# Urgența: măsurarea întâi (și remăsurarea, pusă singură după ea); apoi deprinderea (româna și codul, cât sunt peste
+# pragul lor: greutate mare, hotărâtă de Adrian pe 13 octombrie); apoi continuarea liniei care încă învață; apoi o
 # linie nouă; la urmă hrana. „repara” (zona roșie) e mereu prima. Ordinea folosită:
-# repara, masoara, remasoara, continua, linie_noua, dezvolta.
-# REGULA DE ALEGERE E ACEASTĂ ORDINE: dacă și „continua”, și „linie_noua” se pot face, se alege prima de aici. Ca
-# linia nouă să aibă întâietate, Adrian le schimbă între ele.
-ordinea_nevoilor = ["masoara", "continua", "linie_noua", "dezvolta"]
+# repara, masoara, remasoara, deprinde, continua, linie_noua, dezvolta.
+# REGULA DE ALEGERE E ACEASTĂ ORDINE: dintre nevoile care se pot face acum, se alege prima de aici.
+ordinea_nevoilor = ["masoara", "deprinde", "continua", "linie_noua", "dezvolta"]
 
 [guvernator]
-# Workstation doar al lui Kronos (docs/MUTARE_workstation.md, secțiunea 8): învățarea poate fi la orice oră. O singură
-# sarcină grea pe placă odată rămâne regula: cât rulează o antrenare, CONTINUUM stă în REPAUS.
-fereastra_invatare = "00:00-23:59"     # antrenări lungi (ÎNVĂȚARE), oricând
-fereastra_intretinere = "00:00-23:59"  # fără efect: fereastra de învățare acoperă toată ziua
+# O singură sarcină grea pe placă odată rămâne regula: cât rulează o antrenare, CONTINUUM stă în REPAUS.
+# Din 13 octombrie 2026: noaptea e a liniei principale, care pornește la 19:00. O antrenare de noapte se poate porni
+# doar între 19:00 și 21:00 (mai târziu n-ar mai încăpea până dimineață); după ce se termină, CONTINUUM nu mai
+# pornește alta până seara următoare. Ziua, între 07:45 și 18:40: examene și, dacă e cazul, continuarea unei linii.
+fereastra_invatare = "19:00-21:00"     # când se poate PORNI o antrenare de noapte (ÎNVĂȚARE)
+fereastra_intretinere = "07:45-18:40"  # ziua (ÎNTREȚINERE): examene și nevoile cu nivel = "ÎNTREȚINERE"
 minute_fara_om = 10                    # dacă cineva lucrează la workstation (tastatură sau mouse), CONTINUUM așteaptă
 temperatura_max = 83                   # peste: coboară un nivel (aceeași limită ca paznicul de pe workstation)
 memorie_video_libera_min_mb = 4500     # sub atât, placa e ocupată de altceva (profesorul cere ~4.500 MB)
@@ -37,7 +45,7 @@ procese_grele = ["python"]             # dacă un astfel de program folosește p
 buget_ore_placa_pe_zi = 20
 
 [guvernator.pauza_minute]              # cât așteaptă între două cicluri, pe nivel (secțiunea 3)
-REPAUS = 10
+REPAUS = 5
 "ÎNTREȚINERE" = 3
 "ÎNVĂȚARE" = 1
 
@@ -92,13 +100,36 @@ module = ["profesor"]
 unealta = { linie = "examen_profesor", scor = "nota_medie" }
 masurare = ["{python}", "unelte/examen_profesor.py", "--experiment", "{experiment}", "--povesti", "40", "--doar-local"]
 
+# Româna și codul (13 octombrie 2026): biți pe octet pe validările puse deoparte (media pe Wikipedia, web și cărți,
+# respectiv pe cod și sarcini de cod). Linia veche (W1) nu le știe deloc: 6,42 și 4,77 la #312. „prag_deprins”: cât
+# timp ultimul model păstrat e peste 3,0, nevoia „deprinde” cere linia care le învață.
+[capacitati.romana]
+metrica = "bpb_romana"
+mai_mare_e_mai_bine = false
+prag_zgomot = 0.05                     # estimare de pornire: nu avem încă două măsurători pe același fel de model
+prag_deprins = 3.0
+module = ["model"]
+unealta = { linie = "examen_validari_ws", scor = "bpb_romana" }
+masurare = ["{python}", "unelte/examen_validari_ws.py", "--experiment", "{experiment}"]
+
+[capacitati.cod]
+metrica = "bpb_cod"
+mai_mare_e_mai_bine = false
+prag_zgomot = 0.05
+prag_deprins = 3.0
+module = ["model"]
+unealta = { linie = "examen_validari_ws", scor = "bpb_cod" }
+masurare = ["{python}", "unelte/examen_validari_ws.py", "--experiment", "{experiment}"]
+
 # --- Hrana: textele noi pe care învață o capacitate (le scrie profesorul).
 [hrana.fapte]
 dosar = "date/fapte"                   # info.json spune câte povești au rămas
 minima_povesti = 5000                  # sub atât, prea puțină pentru o noapte (prima hrană: 7.520 de povești)
-comanda = ["{python}", "unelte/genereaza_fapte.py", "--povesti", "{tinta_povesti}", "--ore", "1", "--doar-local"]
-adaos_povesti = 2000                   # câte povești în plus cere ziua, când hrana s-a terminat
-timeout_ore = 1.5
+# Fără „comanda” din 13 octombrie 2026 (pornirea pe bune): hrana nouă ar ține placa o oră cu profesorul și ar
+# schimba date/fapte, din care învață liniile. O pornește doar Adrian. Cu ea, „dezvolta” devine din nou posibilă ziua:
+# comanda = ["{python}", "unelte/genereaza_fapte.py", "--povesti", "{tinta_povesti}", "--ore", "1", "--doar-local"]
+# adaos_povesti = 2000                 # câte povești în plus cere ziua, când hrana s-a terminat
+# timeout_ore = 1.5
 
 # --- Nevoile. v0: masoara, continua, dezvolta. v1 adaugă două, fără secțiunea lor aici (planul, secțiunea 13):
 # „repara” (zona roșie: un raport către om, oricând, chiar și în REPAUS) și „remasoara” (zona galbenă sau un candidat
@@ -110,17 +141,28 @@ timeout_minute = 30                    # pentru fiecare examen
 
 [nevoi.continua]
 # Povestirile încă învață: încă o antrenare lungă, cu o configurare existentă și neterminată.
-nivel = "ÎNVĂȚARE"                     # doar noaptea
+nivel = "ÎNTREȚINERE"                  # și ziua (13 octombrie 2026: permis de Adrian), și seara
+zi_pana_la = "18:20"                   # ziua: antrenarea se încheie până atunci; la 19:00 placa e a nopții
 capacitate = "povesti"
 castig_minim = 0.005                   # v1: ultima oră trebuie să coboare val_bpb cu PESTE atât (pragul regulii)
 ore_tendinta = 3                       # v1: ȘI tendința pe ultimele atâtea ore trebuie să fie bună (val_bpb scade);
                                        # două ore la rând cu câștig sub prag = „saturat”: „dezvolta” trece în față
 # LISTA ALBĂ: liniile pe care le poate continua. Cu [nevoi.linie_noua] mai jos, „continua” ia doar liniile începute.
-configurari = ["config/ws_w*.toml"]
+# Din 13 octombrie: doar W1. Linia principală W2 are nevoia ei („deprinde”) și rulează doar noaptea.
+configurari = ["config/ws_w1.toml"]
 # v2: dacă linia și-a făcut toate orele plănuite și încă învață, o prelungește cu atâtea ore (rata rămâne la capătul
 # scăderii: pași mici, ca antrenarea 8 de pe laptop). 0 = nu prelungește.
 prelungire_ore = 8
 timeout_ore = 12                       # 10 ore cu examenele lor durează ~10,5 ore
+
+# v3 (13 octombrie 2026): româna și codul, cât timp ultimul model păstrat le are peste „prag_deprins”. Se învață doar
+# pe liniile din lista albă: W2 (neîncepută: de la zero; începută: reluată sau prelungită cu prelungire_ore).
+[nevoi.deprinde]
+nivel = "ÎNVĂȚARE"                     # doar ca antrenare de noapte (pornită între 19:00 și 21:00)
+capacitati = ["romana", "cod"]
+configurari = ["config/ws_w2.toml"]
+prelungire_ore = 10                    # nopțile următoare: încă 10 ore, din starea nerăcită
+timeout_ore = 13                       # 10 ore cu examenele lor (~10,7 ore), copia răcită și examenele ei (~0,7 ore)
 
 # v2: o linie nouă, DE LA ZERO, dintr-o configurare care n-a pornit niciodată. Lista albă e mai jos; fără nimic
 # neînceput în ea, nevoia nu apare.
@@ -128,7 +170,7 @@ timeout_ore = 12                       # 10 ore cu examenele lor durează ~10,5 
 nivel = "ÎNVĂȚARE"
 capacitate = "povesti"                 # pe ce se judecă rezultatul (val_bpb, comparabil între linii)
 configurari = ["config/ws_w2.toml"]    # LISTA ALBĂ a liniilor noi
-timeout_ore = 12
+timeout_ore = 13
 
 [nevoi.dezvolta]
 # Cea mai slabă capacitate. Noaptea: antrenare pe hrana ei (o configurare existentă, neterminată, care pomenește
@@ -160,7 +202,8 @@ confirmari = 1                         # câte măsurători independente (a doua
 fractie_scump = 0.5
 
 [anti_bucla]
-racire_cicluri = 6                     # o nevoie tratată pe bune nu se reia atâtea cicluri („repara” n-are răcire)
+racire_cicluri = 20                    # o nevoie tratată pe bune nu se reia atâtea cicluri („repara” n-are răcire);
+                                       # ziua, 20 de cicluri la 3 minute = o oră
 max_esecuri = 5                        # după atâtea eșecuri la rând: strategia „blocată”, raport către om
 
 [comenzi]

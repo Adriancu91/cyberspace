@@ -35,7 +35,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from module.continuum import INVATARE, cate, ro_scurt
+from datetime import datetime, timedelta
+
+from module.continuum import INTRETINERE, INVATARE, cate, ro_scurt
 from module.continuum.evalueaza import StareaOrganismului, se_potriveste, pomeneste
 from module.continuum.nevoi import Nevoie
 
@@ -150,6 +152,17 @@ def plan_antrenare(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, 
     lipsa = fisiere_lipsa(comanda)
     if lipsa:
         return Refuz(f"lipsește {lipsa[0]}")
+    limita = config["nevoi"][nevoie.tip].get("zi_pana_la")
+    pana_la = ""
+    if limita is not None and stare.nivel == INTRETINERE:
+        # v3: ziua, antrenarea se încheie până la ora dată; dacă nu mai încape o oră întreagă, nu mai pornește
+        acum = datetime.fromisoformat(stare.timp)
+        ramas = (datetime.combine(acum.date(), limita) - acum).total_seconds()
+        if ramas < linie["buget_secunde"] + 600:
+            return Refuz(f"până la {limita:%H:%M} nu mai încape o oră întreagă de antrenare (cu examenele ei)",
+                         indisponibila=False)
+        comanda += ["--pana-la", f"{limita:%H:%M}"]
+        pana_la = f", cel mult până la {limita:%H:%M}"
     if prelungita:
         cum = f"prelungită cu {prelungire} ore, de la ora {linie['ore_facute'] + 1}"
     elif linie["ore_facute"]:
@@ -158,7 +171,7 @@ def plan_antrenare(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, 
         cum = f"din modelul #{model}" if model else "de la zero"
     return Plan(nevoie.cheie, "antrenare", strategie,
                 f"antrenare lungă cu {cale} (linia {linie['linie']}, {ore} × "
-                f"{ro_scurt(linie['buget_secunde'] / 60)} min, {cum})",
+                f"{ro_scurt(linie['buget_secunde'] / 60)} min, {cum}{pana_la})",
                 [comanda], config["nevoi"][nevoie.tip]["timeout_secunde"], linie=linie["linie"],
                 detalii={"config": cale, "model_de_pornire": model, "ore": ore, "prelungita": prelungita})
 
@@ -266,6 +279,11 @@ def planifica(nevoie: Nevoie, stare: StareaOrganismului, config: dict[str, Any],
             return plan_antrenare(nevoie, stare, config, reguli["configurari"],
                                   (lambda l: l["ore_facute"] > 0) if doar_incepute else (lambda l: True),
                                   f"continua:{nevoie.capacitate}:antrenare", prelungire=reguli.get("prelungire_ore", 0))
+        if nevoie.tip == "deprinde":
+            reguli = config["nevoi"]["deprinde"]
+            return plan_antrenare(nevoie, stare, config, reguli["configurari"], lambda l: True,
+                                  f"deprinde:{nevoie.capacitate}:antrenare", prelungire=reguli.get("prelungire_ore", 0),
+                                  de_la_zero=True)
         if nevoie.tip == "linie_noua":
             return plan_antrenare(nevoie, stare, config, config["nevoi"]["linie_noua"]["configurari"],
                                   lambda l: l["ore_facute"] == 0, f"linie_noua:{nevoie.capacitate}:antrenare",
