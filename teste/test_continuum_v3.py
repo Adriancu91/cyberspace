@@ -166,3 +166,14 @@ def test_configurarea_adevarata_v3():
     c = config["nevoi"]["continua"]
     assert c["nivel"] == "ÎNTREȚINERE" and f"{c['zi_pana_la']:%H:%M}" == "18:20"
     assert config["anti_bucla"]["racire_cicluri"] == 20
+    assert "greutățile date de Adrian" in d["nota"] and "nu dintr-o reglare a lui CONTINUUM" in d["nota"]
+
+
+def test_nota_omului_intra_in_motivul_din_jurnal(tmp_path, monkeypatch):
+    lume(tmp_path, monkeypatch, inlocuiri={'capacitati = ["romana", "cod"]':
+                                           'nota = "greutatea e dată de om"\ncapacitati = ["romana", "cod"]'})
+    b = bucla()
+    rand = b.ciclu()
+    assert rand["nevoie"] == "deprinde:romana" and rand["motiv"].endswith(". Notă: greutatea e dată de om")
+    assert "Notă: greutatea e dată de om" in rand["pe_scurt"]
+    assert all("Notă" not in n["motiv"] for n in rand["nevoi"] if not n["nevoie"].startswith("deprinde"))

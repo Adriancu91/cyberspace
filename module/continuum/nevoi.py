@@ -194,5 +194,9 @@ def nevoi(stare: StareaOrganismului, config: dict[str, Any], memorie: dict[str, 
     for urgenta, tip in enumerate(ordinea, start=1):
         if tip in config["nevoi"]:
             gasite = NEVOI[tip](stare, config, urgenta, memorie)
-            rezultat += gasite if isinstance(gasite, list) else [gasite] if gasite is not None else []
+            gasite = gasite if isinstance(gasite, list) else [gasite] if gasite is not None else []
+            for nevoie in gasite:  # v3: nota omului din configurare intră în motiv, deci în jurnalul fiecărui ciclu
+                if config["nevoi"][tip].get("nota"):
+                    nevoie.motiv += f". Notă: {config['nevoi'][tip]['nota']}"
+            rezultat += gasite
     return rezultat

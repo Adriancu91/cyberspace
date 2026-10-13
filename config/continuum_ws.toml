@@ -159,6 +159,8 @@ timeout_ore = 12                       # 10 ore cu examenele lor durează ~10,5 
 # pe liniile din lista albă: W2 (neîncepută: de la zero; începută: reluată sau prelungită cu prelungire_ore).
 [nevoi.deprinde]
 nivel = "ÎNVĂȚARE"                     # doar ca antrenare de noapte (pornită între 19:00 și 21:00)
+# Scrisă în motivul nevoii, la fiecare ciclu din jurnal (cerut de Adrian pe 13 octombrie):
+nota = "locul acestei nevoi înaintea lui „continua” și pragul 3,0 vin din greutățile date de Adrian pentru română și cod (13 octombrie 2026), nu dintr-o reglare a lui CONTINUUM; cu ordinea veche ar fi ales continuarea lui W1"
 capacitati = ["romana", "cod"]
 configurari = ["config/ws_w2.toml"]
 prelungire_ore = 10                    # nopțile următoare: încă 10 ore, din starea nerăcită

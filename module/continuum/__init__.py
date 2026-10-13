@@ -258,6 +258,8 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
         if not isinstance(n, dict):
             raise EroareContinuum(f"{unde} trebuie să fie o secțiune")
         nevoie: dict[str, Any] = {"nivel": _nivel(n, "nivel", unde)}
+        if "nota" in n:  # v3: o lămurire a omului, scrisă în motivul nevoii la fiecare ciclu (jurnalul nu se editează)
+            nevoie["nota"] = str(n["nota"])
         if tip in ("masoara", "remasoara"):
             nevoie["timeout_secunde"] = _numar(n, "timeout_minute", unde, 1e-6) * 60
         elif tip != "repara":
