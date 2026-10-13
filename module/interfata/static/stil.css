@@ -52,3 +52,4 @@ textarea { width: 100%; font: inherit; color: var(--text); background: var(--har
   main { grid-template-columns: minmax(0, 1fr); }
   aside ul { max-height: 20vh; }
 }
+#ce-stie { margin: 0 0 12px; padding: 8px 12px; border-left: 3px solid #888; background: rgba(128, 128, 128, 0.12); font-size: 0.95em; }
