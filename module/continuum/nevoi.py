@@ -158,6 +158,8 @@ def nevoie_deprinde(stare: StareaOrganismului, config: dict[str, Any], urgenta: 
     """v3: capacitățile din lista nevoii pe care ultimul model păstrat le are măsurate și sub „prag_deprins”. Ținta e
     cea mai departe de pragul ei; celelalte sunt pomenite în motiv."""
     reguli = config["nevoi"]["deprinde"]
+    if "scadere_minima" in reguli:
+        return nevoi_deprinde_dupa_scadere(stare, config, urgenta)
     departe: list[tuple[float, str, str]] = []
     for nume in reguli["capacitati"]:
         c, prag = stare.capacitati.get(nume), (config["capacitati"].get(nume) or {}).get("prag_deprins")
@@ -176,6 +178,28 @@ def nevoie_deprinde(stare: StareaOrganismului, config: dict[str, Any], urgenta: 
              + "; ".join(d[2] for d in departe) + f". Se învață doar pe o linie din lista albă "
              f"({', '.join(reguli['configurari'])})")
     return Nevoie("deprinde", departe[0][1], urgenta, motiv, {"capacitati": [d[1] for d in departe]})
+
+
+def nevoi_deprinde_dupa_scadere(stare: StareaOrganismului, config: dict[str, Any], urgenta: float) -> list[Nevoie]:
+    """v3, din 14 octombrie 2026 (Adrian): o nevoie pe capacitate, cât timp ultima noapte a scăzut-o (pe copiile răcite)
+    cu cel puțin scadere_minima față de cea dinainte. Fără două nopți măsurate, nevoia nu apare (nu se ghicește)."""
+    reguli = config["nevoi"]["deprinde"]
+    gasite: list[tuple[float, Nevoie]] = []
+    for nume in reguli["capacitati"]:
+        sir = [(e, v) for e, v in stare.nopti.get(nume, [])]
+        if len(sir) < 2 or sir[-1][1] is None or sir[-2][1] is None:
+            continue
+        c = stare.capacitati[nume]
+        (e0, v0), (e1, v1) = sir[-2], sir[-1]
+        castig = c.castig(v1, v0)  # cât a scăzut (la biți pe octet, mai mic = mai bine)
+        if round(castig - reguli["scadere_minima"], 9) < 0:
+            continue
+        motiv = (f"{nume} ({c.metrica}) a scăzut în ultima noapte {ro_scurt(v0)} → {ro_scurt(v1)} (#{e0} → #{e1}, "
+                 f"{'modelul de pornire → ' if e0 == reguli['pornire'] else ''}copia răcită), cu {ro_scurt(castig)}, "
+                 f"cel puțin {ro_scurt(reguli['scadere_minima'])}: linia încă o învață. Se învață doar pe o linie din "
+                 f"lista albă ({', '.join(reguli['configurari'])})")
+        gasite.append((castig, Nevoie("deprinde", nume, urgenta, motiv, {"capacitati": [nume], "noaptea": [e0, e1]})))
+    return [n for _, n in sorted(gasite, key=lambda g: -g[0])]
 
 
 NEVOI = {"deprinde": nevoie_deprinde, "repara": nevoie_repara, "masoara": nevoie_masoara, "remasoara": nevoie_remasoara,

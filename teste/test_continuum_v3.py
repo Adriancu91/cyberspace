@@ -158,15 +158,16 @@ def test_configurarea_gresita_e_refuzata(tmp_path, monkeypatch):
 
 def test_configurarea_adevarata_v3():
     config = citeste_config(RADACINA / "config" / "continuum_ws.toml")
-    assert config["capacitati"]["romana"]["prag_deprins"] == 3.0 == config["capacitati"]["cod"]["prag_deprins"]
     assert config["capacitati"]["romana"]["unealta"] == {"linie": "examen_validari_ws", "scor": "bpb_romana"}
     d = config["nevoi"]["deprinde"]
     assert (d["nivel"], d["capacitati"], d["configurari"], d["prelungire_ore"]) == (
         "ÎNVĂȚARE", ["romana", "cod"], ["config/ws_w2.toml"], 10)
-    c = config["nevoi"]["continua"]
-    assert c["nivel"] == "ÎNTREȚINERE" and f"{c['zi_pana_la']:%H:%M}" == "18:20"
+    assert (d["scadere_minima"], d["copii"], d["pornire"]) == (0.05, "ws_w2_racit_*", 312)
+    c = config["nevoi"]["continua"]  # din 14 octombrie: W1 nu mai primește ore; continuarea e doar W2, doar noaptea
+    assert c["nivel"] == "ÎNVĂȚARE" and "zi_pana_la" not in c and c["configurari"] == ["config/ws_w2.toml"]
     assert config["anti_bucla"]["racire_cicluri"] == 20
     assert "greutățile date de Adrian" in d["nota"] and "nu dintr-o reglare a lui CONTINUUM" in d["nota"]
+    assert "0,05" in d["nota"]
 
 
 def test_nota_omului_intra_in_motivul_din_jurnal(tmp_path, monkeypatch):
@@ -177,3 +178,58 @@ def test_nota_omului_intra_in_motivul_din_jurnal(tmp_path, monkeypatch):
     assert rand["nevoie"] == "deprinde:romana" and rand["motiv"].endswith(". Notă: greutatea e dată de om")
     assert "Notă: greutatea e dată de om" in rand["pe_scurt"]
     assert all("Notă" not in n["motiv"] for n in rand["nevoi"] if not n["nevoie"].startswith("deprinde"))
+
+
+# --- regula din 14 octombrie 2026: „deprinde” cât timp ultima noapte a scăzut nota cu cel puțin 0,05 (copiile răcite) ---
+
+SCADERE = {'capacitati = ["romana", "cod"]\nconfigurari = ["config/ws_w2.toml"]':
+           'capacitati = ["romana", "cod"]\nscadere_minima = 0.05\ncopii = "ws_w2_racit_*"\npornire = 10\n'
+           'configurari = ["config/ws_w2.toml"]'}
+
+
+def nopti_w2(tmp_path, copii):
+    """W2 cu 10 ore pe noapte și, după fiecare noapte, copia răcită (pe linia ei) cu româna și codul măsurate."""
+    fise, id_ = [], 20
+    for noapte, (romana, cod) in enumerate(copii, start=1):
+        for ora in range(10):
+            fise.append(fisa(id_, "ws_w2", 0.43 - 0.001 * (10 * noapte + ora), criterii=CRITERII, straturi=12,
+                             minute=60, inceput="2026-10-07T00:00:00+00:00"))
+            id_ += 1
+        fise.append(fisa(id_, f"ws_w2_racit_{10 * noapte:03d}", 0.46, criterii=CRITERII, straturi=12, minute=30))
+        scoruri = {k: v for k, v in (("bpb_romana", romana), ("bpb_cod", cod)) if v is not None}
+        if scoruri:
+            fise.append(fisa_unealta(id_ + 1, "examen_validari_ws", id_, scoruri))
+        id_ += 2
+    scrie_jurnal(tmp_path, fise)
+
+
+def test_dupa_prima_noapte_amandoua_au_scazut_mult_iar_w2_se_prelungeste(tmp_path, monkeypatch):
+    lume(tmp_path, monkeypatch, inlocuiri=SCADERE)
+    nopti_w2(tmp_path, [(1.38, 0.78)])
+    rand = bucla().ciclu()
+    assert [n["nevoie"] for n in rand["nevoi"] if n["nevoie"].startswith("deprinde")] == ["deprinde:romana",
+                                                                                          "deprinde:cod"]
+    assert rand["nevoie"] == "deprinde:romana"
+    assert "6,42 → 1,38" in rand["motiv"] and "cel puțin 0,05" in rand["motiv"] and "#10 → #30" in rand["motiv"]
+    assert "prelungită cu 10 ore, de la ora 11" in rand["actiune"] and "--ore 20" in rand["comenzi"][0]
+    assert [list(p) for p in rand["organism"]["nopti"]["cod"]] == [[10, 4.77], [30, 0.78]]
+
+
+@pytest.mark.parametrize("a_doua, asteptat", [
+    ((1.35, 0.70), ["deprinde:cod"]),                      # româna doar −0,03: nu; codul −0,08: da
+    ((1.33, 0.73), ["deprinde:romana", "deprinde:cod"]),   # exact 0,05 la amândouă: „cel puțin”
+    ((1.36, 0.77), []),                                    # amândouă aproape de plafon
+    ((1.50, 0.90), []),                                    # au crescut
+    ((None, None), []),                                    # copia nu e măsurată încă: nu se ghicește
+])
+def test_a_doua_noapte_cere_cel_putin_0_05(tmp_path, monkeypatch, a_doua, asteptat):
+    lume(tmp_path, monkeypatch, inlocuiri=SCADERE)
+    nopti_w2(tmp_path, [(1.38, 0.78), a_doua])
+    rand = bucla().ciclu()
+    assert sorted(n["nevoie"] for n in rand["nevoi"] if n["nevoie"].startswith("deprinde")) == sorted(asteptat)
+
+
+def test_fara_nicio_noapte_nevoia_nu_apare(tmp_path, monkeypatch):
+    lume(tmp_path, monkeypatch, inlocuiri=SCADERE)  # doar măsurătoarea de pornire, nicio copie răcită
+    rand = bucla().ciclu()
+    assert all(not n["nevoie"].startswith("deprinde") for n in rand["nevoi"])

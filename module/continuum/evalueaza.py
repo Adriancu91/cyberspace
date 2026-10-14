@@ -97,6 +97,9 @@ class StareaOrganismului:
     linii: dict[str, dict[str, Any]] = field(default_factory=dict)  # configurare → linia ei, ore făcute / planificate
     hrana: dict[str, dict[str, Any]] = field(default_factory=dict)
     module: dict[str, dict[str, Any]] = field(default_factory=dict)
+    # v3 (14 octombrie 2026): pentru „deprinde” cu scadere_minima, capacitate → [(experiment, valoare)], întâi modelul de
+    # pornire, apoi copiile răcite (modelele zilei), în ordine; valoarea e None dacă n-a fost măsurată
+    nopti: dict[str, list[tuple[int, float | None]]] = field(default_factory=dict)
 
     def vector(self) -> dict[str, dict[str, Any]]:
         """Vectorul capacităților (v1 punctul 5): toate, cu scor, linie de bază, zonă, prag folosit și procent."""
@@ -107,7 +110,7 @@ class StareaOrganismului:
         return {
             "nivel": self.nivel, "de_ce_nivelul": self.motiv_nivel, "ultimul_id": self.ultimul_id,
             "ultimul_model": self.ultimul_model, "capacitati": self.vector(), "tendinta": self.tendinta,
-            "hrana": self.hrana,
+            "hrana": self.hrana, **({"nopti": self.nopti} if self.nopti else {}),
             "linii": {cale: {k: v for k, v in l.items() if k != "texte"} for cale, l in self.linii.items()},
         }
 
@@ -252,6 +255,16 @@ def evalueaza(observat: Any, config: dict[str, Any], memorie: dict[str, Any] | N
         puncte = [(f["id"], v) for f in reusite if f["linie"] == linie and (v := valoare(f, cap, unelte)) is not None]
         if puncte:
             stare.tendinta = tendinta(puncte, stare.capacitati[continua["capacitate"]], continua, linie)
+
+    deprinde = config["nevoi"].get("deprinde") or {}
+    if "scadere_minima" in deprinde:
+        copii = sorted((f for f in fise if fnmatch.fnmatchcase(str(f.get("linie", "")), deprinde["copii"])
+                        and f.get("decizie") == "pastrat"), key=lambda f: f.get("id", 0))
+        pornire = next((f for f in fise if f.get("id") == deprinde["pornire"]), None)
+        for nume in deprinde["capacitati"]:
+            cap = config["capacitati"][nume]
+            stare.nopti[nume] = ([(deprinde["pornire"], valoare(pornire, cap, unelte) if pornire else None)]
+                                 + [(f["id"], valoare(f, cap, unelte)) for f in copii])
 
     for capacitate, h in observat.hrana.items():
         minima = config["hrana"][capacitate]["minima_povesti"]

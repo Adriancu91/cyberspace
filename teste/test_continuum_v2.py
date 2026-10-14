@@ -161,12 +161,12 @@ def test_configurarea_adevarata_a_workstation_ului():
     g = config["guvernator"]
     # din 13 octombrie 2026 (v3, teste/test_continuum_v3.py): noaptea se pornește între 19:00 și 21:00, ziua 07:45–18:50
     assert f"{g['fereastra_invatare'][0]:%H:%M}-{g['fereastra_invatare'][1]:%H:%M}" == "19:00-21:00"
-    assert f"{g['fereastra_intretinere'][0]:%H:%M}-{g['fereastra_intretinere'][1]:%H:%M}" == "07:45-18:40"
+    assert f"{g['fereastra_intretinere'][0]:%H:%M}-{g['fereastra_intretinere'][1]:%H:%M}" == "07:45-18:15"
     assert g["temperatura_max"] == 83 and g["memorie_video_libera_min_mb"] == 4500 and g["buget_ore_placa_pe_zi"] == 20
     assert config["continuum"]["ordinea_nevoilor"] == ["repara", "masoara", "remasoara", "deprinde", "continua",
                                                        "linie_noua", "dezvolta"]
     assert config["linii"]["configurari"] == ["config/ws_w*.toml"]
-    assert config["nevoi"]["continua"]["prelungire_ore"] == 8 and config["nevoi"]["continua"]["configurari"] == ["config/ws_w1.toml"]
+    assert config["nevoi"]["continua"]["prelungire_ore"] == 10 and config["nevoi"]["continua"]["configurari"] == ["config/ws_w2.toml"]
     assert config["nevoi"]["linie_noua"]["configurari"] == ["config/ws_w2.toml"]
     assert config["nevoi"]["dezvolta"]["configurari"] == []
     for cale in ("config/ws_w1.toml", "config/ws_w2.toml"):

@@ -276,10 +276,20 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
             nevoie["capacitate"] = str(_cere(n, "capacitate", unde))
         if tip == "deprinde":
             nevoie["capacitati"] = _texte(n, "capacitati", unde)
-            fara_prag = [c for c in nevoie["capacitati"] if (capacitati.get(c) or {}).get("prag_deprins") is None]
-            if fara_prag:
-                raise EroareContinuum(f"În {unde}, capacitățile trebuie să aibă „prag_deprins” în [capacitati]: "
-                                      f"{', '.join(fara_prag)}")
+            necunoscute = [c for c in nevoie["capacitati"] if c not in capacitati]
+            if necunoscute:
+                raise EroareContinuum(f"În {unde}, capacitățile nu sunt în [capacitati]: {', '.join(necunoscute)}")
+            if "scadere_minima" in n:
+                # v3, din 14 octombrie 2026 (Adrian): activă cât timp ultima noapte a scăzut nota (pe copiile răcite) cu
+                # cel puțin scadere_minima față de noaptea dinainte; „pornire” = măsurătoarea dinaintea primei nopți
+                nevoie["scadere_minima"] = _numar(n, "scadere_minima", unde)
+                nevoie["copii"] = str(_cere(n, "copii", unde))
+                nevoie["pornire"] = _numar(n, "pornire", unde, 1, intreg=True)
+            else:
+                fara_prag = [c for c in nevoie["capacitati"] if capacitati[c].get("prag_deprins") is None]
+                if fara_prag:
+                    raise EroareContinuum(f"În {unde}, capacitățile trebuie să aibă „prag_deprins” în [capacitati] "
+                                          f"(sau nevoia, „scadere_minima”): {', '.join(fara_prag)}")
             nevoie["prelungire_ore"] = _numar({"prelungire_ore": 0, **n}, "prelungire_ore", unde, 0, intreg=True)
         if "zi_pana_la" in n and tip in ("continua", "linie_noua", "deprinde", "dezvolta"):
             try:

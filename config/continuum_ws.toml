@@ -4,8 +4,9 @@
 # o linie nouă dintr-o configurare ws_* neîncepută. Care se alege o spune „ordinea_nevoilor”; jurnalul ciclului notează
 # și variantele nealese („alternative”). Nu antrenează și nu dă examene singur: pornește uneltele lui Kronos.
 # PE BUNE din 13 octombrie 2026 (hotărât de Adrian), cu jurnalul în lucru/continuum_ws/. Tot atunci (v3):
-# - româna și codul sunt capacități, măsurate cu unelte/examen_validari_ws.py; cât timp ultimul model păstrat le are
-#   peste 3,0 biți pe octet, nevoia „deprinde” cere linia care le învață (W2) și stă înaintea lui „continua”;
+# - româna și codul sunt capacități, măsurate cu unelte/examen_validari_ws.py; nevoia „deprinde” cere linia care le
+#   învață (W2) și stă înaintea lui „continua”. Din 14 octombrie (Adrian): cât timp ultima noapte le-a scăzut cu cel
+#   puțin 0,05 pe copiile răcite (nu după pragul fix de 3,0);
 # - ziua (07:45–18:40) se pot da examene și se poate continua o linie veche, cel mult până la 18:20; o antrenare
 #   de noapte (linie nouă, deprindere) pornește doar între 19:00 și 21:00. În rest, doar observă.
 # - hrana nouă de la profesor nu se mai cere singură (vezi [hrana.fapte]).
@@ -35,7 +36,8 @@ ordinea_nevoilor = ["masoara", "deprinde", "continua", "linie_noua", "dezvolta"]
 # doar între 19:00 și 21:00 (mai târziu n-ar mai încăpea până dimineață); după ce se termină, CONTINUUM nu mai
 # pornește alta până seara următoare. Ziua, între 07:45 și 18:40: examene și, dacă e cazul, continuarea unei linii.
 fereastra_invatare = "19:00-21:00"     # când se poate PORNI o antrenare de noapte (ÎNVĂȚARE)
-fereastra_intretinere = "07:45-18:40"  # ziua (ÎNTREȚINERE): examene și nevoile cu nivel = "ÎNTREȚINERE"
+fereastra_intretinere = "07:45-18:15"  # ziua (ÎNTREȚINERE): examene; din 14 oct până la 18:15, ca un examen
+                                       # pornit seara să nu țină placa la 19:00
 minute_fara_om = 10                    # dacă cineva lucrează la workstation (tastatură sau mouse), CONTINUUM așteaptă
 temperatura_max = 83                   # peste: coboară un nivel (aceeași limită ca paznicul de pe workstation)
 memorie_video_libera_min_mb = 4500     # sub atât, placa e ocupată de altceva (profesorul cere ~4.500 MB)
@@ -101,8 +103,9 @@ unealta = { linie = "examen_profesor", scor = "nota_medie" }
 masurare = ["{python}", "unelte/examen_profesor.py", "--experiment", "{experiment}", "--povesti", "40", "--doar-local"]
 
 # Româna și codul (13 octombrie 2026): biți pe octet pe validările puse deoparte (media pe Wikipedia, web și cărți,
-# respectiv pe cod și sarcini de cod). Linia veche (W1) nu le știe deloc: 6,42 și 4,77 la #312. „prag_deprins”: cât
-# timp ultimul model păstrat e peste 3,0, nevoia „deprinde” cere linia care le învață.
+# respectiv pe cod și sarcini de cod). Linia veche (W1) nu le știe deloc: 6,42 și 4,77 la #312. „prag_deprins”
+# (pragul fix 3,0) a fost regula din 13 octombrie; din 14 octombrie nevoia „deprinde” folosește „scadere_minima” și
+# pragul nu mai e citit.
 [capacitati.romana]
 metrica = "bpb_romana"
 mai_mare_e_mai_bine = false
@@ -141,27 +144,31 @@ timeout_minute = 30                    # pentru fiecare examen
 
 [nevoi.continua]
 # Povestirile încă învață: încă o antrenare lungă, cu o configurare existentă și neterminată.
-nivel = "ÎNTREȚINERE"                  # și ziua (13 octombrie 2026: permis de Adrian), și seara
-zi_pana_la = "18:20"                   # ziua: antrenarea se încheie până atunci; la 19:00 placa e a nopții
+nivel = "ÎNVĂȚARE"                     # din 14 octombrie: doar noaptea (W1 nu mai primește ore; W2 doar noaptea)
 capacitate = "povesti"
 castig_minim = 0.005                   # v1: ultima oră trebuie să coboare val_bpb cu PESTE atât (pragul regulii)
 ore_tendinta = 3                       # v1: ȘI tendința pe ultimele atâtea ore trebuie să fie bună (val_bpb scade);
                                        # două ore la rând cu câștig sub prag = „saturat”: „dezvolta” trece în față
 # LISTA ALBĂ: liniile pe care le poate continua. Cu [nevoi.linie_noua] mai jos, „continua” ia doar liniile începute.
-# Din 13 octombrie: doar W1. Linia principală W2 are nevoia ei („deprinde”) și rulează doar noaptea.
-configurari = ["config/ws_w1.toml"]
+# Din 14 octombrie (Adrian): W1 rămâne reper și nu mai primește ore de placă; doar linia principală W2.
+configurari = ["config/ws_w2.toml"]
 # v2: dacă linia și-a făcut toate orele plănuite și încă învață, o prelungește cu atâtea ore (rata rămâne la capătul
 # scăderii: pași mici, ca antrenarea 8 de pe laptop). 0 = nu prelungește.
-prelungire_ore = 8
-timeout_ore = 12                       # 10 ore cu examenele lor durează ~10,5 ore
+prelungire_ore = 10
+timeout_ore = 13                       # 10 ore cu examenele lor (~10,7 ore), copia răcită și examenele ei (~0,7 ore)
 
-# v3 (13 octombrie 2026): româna și codul, cât timp ultimul model păstrat le are peste „prag_deprins”. Se învață doar
-# pe liniile din lista albă: W2 (neîncepută: de la zero; începută: reluată sau prelungită cu prelungire_ore).
+# v3: româna și codul. Din 14 octombrie 2026 (Adrian): nevoia rămâne activă cât timp ultima noapte a scăzut nota cu
+# cel puțin 0,05 față de cea dinainte, pe copiile răcite (liniile de jurnal ws_w2_racit_*); înaintea primei nopți se
+# socotește măsurătoarea modelului #312 (W1: 6,42 și 4,77). Se învață doar pe liniile din lista albă: W2 (neîncepută:
+# de la zero; începută: reluată sau prelungită cu prelungire_ore, din starea nerăcită).
 [nevoi.deprinde]
 nivel = "ÎNVĂȚARE"                     # doar ca antrenare de noapte (pornită între 19:00 și 21:00)
 # Scrisă în motivul nevoii, la fiecare ciclu din jurnal (cerut de Adrian pe 13 octombrie):
-nota = "locul acestei nevoi înaintea lui „continua” și pragul 3,0 vin din greutățile date de Adrian pentru română și cod (13 octombrie 2026), nu dintr-o reglare a lui CONTINUUM; cu ordinea veche ar fi ales continuarea lui W1"
+nota = "locul acestei nevoi înaintea lui „continua” și regula ei (cel puțin 0,05 scădere pe noapte) vin din greutățile date de Adrian pentru română și cod (13 și 14 octombrie 2026), nu dintr-o reglare a lui CONTINUUM"
 capacitati = ["romana", "cod"]
+scadere_minima = 0.05
+copii = "ws_w2_racit_*"                # liniile de jurnal ale copiilor răcite (modelele zilei)
+pornire = 312                          # măsurătoarea dinaintea primei nopți (W1, ora 10)
 configurari = ["config/ws_w2.toml"]
 prelungire_ore = 10                    # nopțile următoare: încă 10 ore, din starea nerăcită
 timeout_ore = 13                       # 10 ore cu examenele lor (~10,7 ore), copia răcită și examenele ei (~0,7 ore)
