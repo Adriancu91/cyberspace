@@ -118,12 +118,17 @@ class ElevCod:
         return [tok.decodeaza(s) for s in noi]
 
     def antreneaza(self, text: str, pasi: int, rata: float, lot: int, samanta: int,
-                   povesti: torch.Tensor | None = None, fractie_povesti: float = 0.0) -> dict[str, Any]:
+                   povesti: torch.Tensor | None = None, fractie_povesti: float = 0.0,
+                   micro_lot: int | None = None) -> dict[str, Any]:
         """`pasi` pași pe ferestre din `text`, cu rata fixă `rata` (optimizatorul rămâne de la o rundă la alta).
 
         Cu `povesti` (simbolurile textului de antrenare al poveștilor, pe procesor) și `fractie_povesti` > 0, din fiecare
         lot vin din povești fractie × lot ferestre. Când produsul nu e întreg, numărul alternează (ex. 0,7 × 24 = 16,8:
-        16 și 17), ca media să fie exact fracția."""
+        16 și 17), ca media să fie exact fracția.
+
+        Cu `micro_lot` (14 octombrie 2026, W2 pe workstation: lot 24 × context 512 cere ~9 GB), lotul se trece prin rețea
+        pe bucăți de câte micro_lot ferestre, iar gradienții se adună înainte de pas: același lot, aceleași ferestre,
+        același pas (până la rotunjiri), cu memoria unei bucăți."""
         retea, ctx = self.model.retea, self.context
         date = torch.tensor(self.model.tok.codifica(text), dtype=torch.long)
         if len(date) <= ctx + 1:
@@ -150,18 +155,22 @@ class ElevCod:
                 ferestre_povesti += k
             x = torch.stack([s[p:p + ctx].long() for s, p in surse]).to(self.dispozitiv)
             y = torch.stack([s[p + 1:p + ctx + 1].long() for s, p in surse]).to(self.dispozitiv)
-            with self.model._autocast():
-                logits = retea(x)
-                loss = F.cross_entropy(logits.float().view(-1, logits.size(-1)), y.view(-1))
             self.optimizator.zero_grad(set_to_none=True)
-            loss.backward()
+            pierdere = 0.0
+            for i in range(0, len(x), micro_lot or len(x)):
+                xb, yb = x[i:i + (micro_lot or len(x))], y[i:i + (micro_lot or len(x))]
+                with self.model._autocast():
+                    logits = retea(xb)
+                    loss = F.cross_entropy(logits.float().view(-1, logits.size(-1)), yb.view(-1))
+                (loss * len(xb) / len(x)).backward()  # media pe tot lotul, ca la o singură trecere
+                pierdere += loss.item() * len(xb) / len(x)
             torch.nn.utils.clip_grad_norm_(retea.parameters(), 1.0)
             self.optimizator.step()
-            pierdere = loss.item()
         retea.eval()
         self.pasi += pasi
         return {"pasi": pasi, "pierdere_finala": round(pierdere, 4), "secunde": round(time.perf_counter() - start, 2),
                 "simboluri_text": len(date), "ferestre_povesti": ferestre_povesti, "ferestre": pasi * lot,
+                **({"micro_lot": micro_lot} if micro_lot else {}),
                 "memorie_video_mb": round(torch.cuda.max_memory_reserved() / 2 ** 20) if pe_placa else 0}
 
     def salveaza(self, cale: str | Path) -> None:

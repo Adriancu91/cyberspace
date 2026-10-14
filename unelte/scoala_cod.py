@@ -390,10 +390,12 @@ class Scoala:
     def _antreneaza(self, elev: Any, text: str, pasi: int, rata: float, seed: int) -> dict[str, Any]:
         """Antrenarea școlii: textul școlii, plus poveștile (v0.2: 70% din fiecare lot), dacă sunt în configurare."""
         povesti = self.povesti_antrenare(elev)
+        # v0.4: lotul trecut pe bucăți (micro_lot), doar dacă e în configurare: același lot, mai puțină memorie video
+        bucati = {"micro_lot": self.cfg["runda"]["micro_lot"]} if self.cfg["runda"].get("micro_lot") else {}
         if povesti is None:
-            return elev.antreneaza(text, pasi, rata, self.cfg["runda"]["lot"], seed)
+            return elev.antreneaza(text, pasi, rata, self.cfg["runda"]["lot"], seed, **bucati)
         return elev.antreneaza(text, pasi, rata, self.cfg["runda"]["lot"], seed, povesti=povesti,
-                               fractie_povesti=self.cfg["povesti"]["fractie"])
+                               fractie_povesti=self.cfg["povesti"]["fractie"], **bucati)
 
     def de_la_unealta(self, nivel: str, numar: int, unealta: Biblioteca) -> tuple[list[dict[str, Any]], int]:
         """Linia D: tot atâtea soluții corecte câte reușite noi a avut linia B în aceeași rundă a nivelului, date de

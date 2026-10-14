@@ -66,6 +66,17 @@ def test_salvarea_pastreaza_optimizatorul_si_ramane_model_kronos(model_mic, tmp_
     assert not (tmp_path / "linie.pt.tmp").exists()
 
 
+def test_lotul_pe_bucati_face_acelasi_pas(model_mic):
+    """v0.4: micro_lot trece lotul prin rețea pe bucăți; greutățile ies (aproape) la fel ca dintr-o singură trecere."""
+    intreg, pe_bucati = ElevCod(model_mic, "cpu"), ElevCod(model_mic, "cpu")
+    a = intreg.antreneaza(ABECEDAR.text, 3, 1e-3, 8, samanta=0)
+    b = pe_bucati.antreneaza(ABECEDAR.text, 3, 1e-3, 8, samanta=0, micro_lot=3)  # 3 + 3 + 2
+    assert b["micro_lot"] == 3 and "micro_lot" not in a and a["ferestre"] == b["ferestre"] == 24
+    assert math.isclose(a["pierdere_finala"], b["pierdere_finala"], rel_tol=1e-3)
+    for k, v in greutati(intreg).items():
+        assert torch.allclose(v, greutati(pe_bucati)[k], atol=1e-4), k  # Adam mărește rotunjirile la gradienți ~0
+
+
 def test_textul_prea_scurt_e_refuzat(model_mic):
     with pytest.raises(ValueError, match="sub contextul"):
         ElevCod(model_mic, "cpu").antreneaza("print(1)", 1, 1e-3, 2, samanta=0)

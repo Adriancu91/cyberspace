@@ -25,7 +25,7 @@ versiune = "v0.4"
 director_lucru = "lucru"
 dosar = "cod_v04"                                     # lucru/cod_v04/: jurnal, stare, linii, biblioteci, înghețuri
 prefix_inghet = "v04_"                                # etichetele înghețurilor și tag-urile Git: cod/v04_…
-model_pornire = "lucru/cod_v04/pornire/model_w2.pt"   # modelul liniei W2 (încă nu există: W2 n-a pornit)
+model_pornire = "lucru/cod_v04/pornire/model_w2.pt"   # o COPIE a lui #337 (copia răcită W2, 14 octombrie)
 abecedar = "date/cod/abecedar.txt"
 sacru = "date/cod/sacru.json"
 povesti = "../cyberspace/date/tinystories_r2/validare.txt"   # „ce știa”: biți pe octet pe o bucată din validare
@@ -38,7 +38,7 @@ fractie = 0.7                                         # din fiecare lot de antre
 text_antrenare = "../cyberspace/date/ws/amestec/antrenare.txt"   # amestecul pe care a învățat W2
 director_cache = "../cyberspace/lucru/cache"          # simbolurile lui, împărțite deja de Kronos (doar citire)
 tokenizer = "../cyberspace/date/ws/bpe_16384.json"
-prag_regresie = 0.60                                  # biți pe octet pe povești la îngheț; peste = regresie
+prag_regresie = 0.50                                  # 14 oct: W2 (#337) la pornire 0,4668 + 0,03 = 0,4968 → 0,50
 
 [mediu]
 # Varianta 3 (aleasă de Adrian): regula scurtată + 2 exemple + sarcina, la test și în antrenare.
@@ -77,6 +77,9 @@ sarcini = 20
 pasi_antrenare = 200
 rata = 0.00002
 lot = 24
+micro_lot = 8                      # v0.4 (14 octombrie): lotul de 24 trecut în trei bucăți de 8 (același pas); lot 24
+                                   # dintr-odată, pe W2 (context 512, vocabular 16.384), cere 9.104 MB: nu încape; cu 8:
+                                   # 4.504 MB (paznicul), 5.414 MB toată placa (proba din 14 octombrie, 08:35)
 fractie_abecedar_minima = 0.17     # din textul școlii (30% din lot): abecedarul rămâne cel puțin 5% din tot lotul
 d_exact_cat_b = true               # v0.3: linia D primește exact cât B, cu repetări când nu mai sunt sarcini văzute noi
 
