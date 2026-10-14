@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import shutil
 
+import pytest
+
 from module.cod import paznic_cod
 from module.cod.paznic_cod import (AMPRENTATE, Senzori, aproba, asteapta_incarcatorul, asteapta_racirea,
                                    de_ce_nu_e_libera, verifica)
@@ -71,6 +73,18 @@ def test_placa_libera():
     assert de_ce_nu_e_libera(senzori()[0]) is None
     assert "1234 python.exe" in de_ce_nu_e_libera(senzori(alte=("1234 python.exe 3000 MiB",))[0])
     assert "3000 MB" in de_ce_nu_e_libera(senzori(memorie=3000)[0])
+
+
+@pytest.mark.parametrize("rand, grea", [
+    ("9396, C:\\Windows\\explorer.exe, [N/A]", False),        # programele de pe ecranul Windows: nu ocupă placa
+    ("3272, C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe, [N/A]", False),
+    ("1234, C:\\Kronos\\.venv\\Scripts\\python.exe, [N/A]", True),   # Python: Kronos, profesorul, altă școală
+    ("1234, python.exe, 3000 MiB", True),
+    ("777, joc.exe, 1500 MiB", True),                              # alt program care ține peste 1.000 MB
+    ("777, joc.exe, 900 MiB", False),
+])
+def test_doar_sarcinile_grele_ocupa_placa(rand, grea):
+    assert paznic_cod.e_sarcina_grea([p.strip() for p in rand.split(",")]) is grea
 
 
 def test_senzorii_adevarati_se_pot_citi():

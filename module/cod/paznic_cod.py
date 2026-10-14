@@ -85,15 +85,28 @@ def _nvidia_smi(*argumente: str) -> list[str] | None:
     return [r.strip() for r in rezultat.stdout.splitlines() if r.strip()] if rezultat.returncode == 0 else None
 
 
+MEMORIE_ALT_PROGRAM_MB = 1000
+
+
+def e_sarcina_grea(parti: list[str]) -> bool:
+    """Un rând din lista plăcii (pid, nume, memorie) e altă sarcină grea? Da, dacă e un program Python (Kronos,
+    profesorul, altă școală) sau dacă ține peste MEMORIE_ALT_PROGRAM_MB. Pe workstation (14 octombrie 2026, aprobat de
+    Adrian), Windows trece în listă și programele de pe ecran (explorer, meniul Start), fără memorie măsurată ([N/A]):
+    ele nu ocupă placa. Aceeași regulă ca la CONTINUUM („procese_grele”)."""
+    nume = parti[1].lower() if len(parti) > 1 else ""
+    memorie = parti[2].split()[0] if len(parti) > 2 and parti[2] else ""
+    return "python" in nume or (memorie.isdigit() and int(memorie) > MEMORIE_ALT_PROGRAM_MB)
+
+
 def alte_procese_pe_placa() -> list[str] | None:
-    """Procesele care calculează pe placa video, în afară de acesta (sau None, dacă nu se poate afla)."""
+    """Sarcinile grele de pe placa video, în afară de acesta (sau None, dacă nu se poate afla)."""
     randuri = _nvidia_smi("--query-compute-apps=pid,process_name,used_memory", "--format=csv,noheader")
     if randuri is None:
         return None
     alte = []
     for rand in randuri:
         parti = [p.strip() for p in rand.split(",")]
-        if parti[0].isdigit() and int(parti[0]) != os.getpid():
+        if parti[0].isdigit() and int(parti[0]) != os.getpid() and e_sarcina_grea(parti):
             alte.append(" ".join(parti))
     return alte
 
