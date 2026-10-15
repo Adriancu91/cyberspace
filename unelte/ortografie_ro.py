@@ -11,6 +11,8 @@ Un cuvânt dintr-o pereche românească e necunoscut dacă nu e în listă (cu l
 - o excepție din date/conversatie/exceptii_ortografie.txt (termeni tehnici, câte unul pe rând);
 - un număr.
 Cuvintele cu cratimă („s-a”, „într-o”) se verifică pe bucăți.
+Din 15 octombrie, 11:40: un cuvânt fără diacritice e socotit necunoscut și dacă aceeași formă cu diacritice e de cel
+puțin 20 de ori mai deasă (ex. „si” față de „și”, „mananca” față de „mănâncă”): textele traduse automat le pierd uneori.
 
     python unelte/ortografie_ro.py --construieste      # o singură dată: date/conversatie/cuvinte_ro.txt
     python unelte/ortografie_ro.py --verifica "Iarna are temperaturi frisoase."
@@ -41,8 +43,33 @@ def construieste(surse: list[Path], minim: int = 3, bucata: int = 64 * 2**20) ->
     return {c: n for c, n in numarate.items() if n >= minim}
 
 
-def citeste_lista(cale: str | Path = RADACINA / LISTA) -> set[str]:
-    return {r.split("\t")[0] for r in Path(cale).read_text(encoding="utf-8").splitlines() if r.strip()}
+FARA_DIACRITICE = str.maketrans("ăâîșțĂÂÎȘȚ", "aaistAAIST")
+
+
+class Cunoscute(set):
+    """Cuvintele cunoscute, plus cele fără diacritice care sunt de fapt o formă cu diacritice scrisă greșit."""
+
+    def __init__(self, numarate: dict[str, int], raport: int = 20) -> None:
+        super().__init__(numarate)
+        cele_mai_dese: dict[str, int] = {}
+        for c, n in numarate.items():
+            if c != c.translate(FARA_DIACRITICE):
+                cheie = c.translate(FARA_DIACRITICE)
+                cele_mai_dese[cheie] = max(cele_mai_dese.get(cheie, 0), n)
+        self.fara_diacritice_gresit = {c for c, n in numarate.items() if c == c.translate(FARA_DIACRITICE)
+                                       and cele_mai_dese.get(c, 0) >= raport * n}
+
+    def __contains__(self, cuvant: object) -> bool:
+        return super().__contains__(cuvant) and cuvant not in self.fara_diacritice_gresit
+
+
+def citeste_lista(cale: str | Path = RADACINA / LISTA) -> Cunoscute:
+    numarate = {}
+    for r in Path(cale).read_text(encoding="utf-8").splitlines():
+        if r.strip():
+            c, _, n = r.partition("\t")
+            numarate[c] = int(n or 1)
+    return Cunoscute(numarate)
 
 
 def citeste_exceptii(cale: str | Path = RADACINA / EXCEPTII) -> set[str]:

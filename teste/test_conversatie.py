@@ -150,3 +150,22 @@ def test_ortografia_scoate_cuvintele_necunoscute(tmp_path):
     assert gc.de_ce_se_scoate(pereche(q="Iarna este rece?", r="Apa se răcosește."), set(), set(),
                               ortografie) == "cuvânt necunoscut: se, răcosește"
     assert gc.de_ce_se_scoate(pereche(limba="en", q="Is it cold?", r="Yes, it is."), set(), set(), ortografie) is None
+
+
+def test_sursele_noi_si_traducerea_nu_se_despart_de_original(tmp_path):
+    en = [{**pereche(limba="en", q=f"What is thing {i}?", r="It is a thing."), "ramane": True, "motiv_scos": None,
+           "cerere": i, "profesor": "Qwen/Qwen3-4B-Instruct-2507"} for i in range(400)]
+    (tmp_path / "toate.jsonl").write_text("\n".join(json.dumps(p) for p in en), encoding="utf-8")
+    trad = [{"fel": "zi", "limba": "ro", "intrebare": f"Ce este lucrul {i}?", "raspuns": "Este un lucru.",
+             "grup": gc.grup(en[i])} for i in range(400)]
+    wiki = [{"fel": "wiki", "limba": "ro", "intrebare": "Ce este lucrul 1?", "raspuns": "Repetat.", "grup": "wiki_0"},
+            {"fel": "wiki", "limba": "ro", "intrebare": "Ce este frisoasa?", "raspuns": "Frisoasă.", "grup": "wiki_1"}]
+    (tmp_path / "traduceri.jsonl").write_text("\n".join(json.dumps(p, ensure_ascii=False) for p in trad), encoding="utf-8")
+    (tmp_path / "wikipedia.jsonl").write_text("\n".join(json.dumps(p, ensure_ascii=False) for p in wiki), encoding="utf-8")
+    cunoscute = {"ce", "este", "lucrul", "un", "lucru", "repetat"}
+    toate, bune = gc.toate_bune(tmp_path, interzise=set(), ortografie=(cunoscute, set()))
+    scoase = {p["intrebare"]: p["motiv_scos"] for p in toate if not p["ramane"]}
+    assert scoase == {"Ce este lucrul 1?": "întrebare repetată", "Ce este frisoasa?": "cuvânt necunoscut: frisoasa, Frisoasă"}
+    examen, antrenare = gc.imparte(bune)
+    in_examen = {gc.grup(p) for p in examen}
+    assert len(examen) == 300 and not in_examen & {gc.grup(p) for p in antrenare}  # originalul și traducerea: împreună

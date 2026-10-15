@@ -36,3 +36,17 @@ Amprentele tuturor fișierelor sunt în `date/ws/brut/surse.json`.
 - Curățarea: ş/ţ cu sedilă → ș/ț cu virgulă; fără duplicate; fără texte prea scurte sau stricate (codificare greșită, semnul „�”, prea puține litere la proză).
 - Validarea: 1% din textele fiecărei surse, alese după amprenta textului. Nu se antrenează nimic pe ea, nici tokenizer-ul.
 - TinyStories (CDLA-Sharing-1.0) era deja în `date/tinystories_tot/`, cu validarea lui.
+
+
+<!-- de aici, scris de mână; --raport nu-l atinge -->
+## Școala de conversație (15 octombrie 2026)
+
+Perechile întrebare → răspuns din `date/conversatie/` (nu intră în Git), hotărâte de Adrian:
+
+| Sursa | Ce e | Licența | Obligații |
+|---|---|---|---|
+| **Wikipedia în română** (aceeași copie ca mai sus, `wikipedia_ro`, partea de antrenare) | perechi „Ce este X?” / „Cine a fost X?” / „Unde se află X?”; răspunsul = primele 1–3 propoziții ale articolului, scrise de editorii Wikipedia (`unelte/conversatie_wikipedia.py`) | CC BY-SA 3.0 + GFDL (articolele noi: CC BY-SA 4.0) | **atribuire**: textele sunt ale contribuitorilor Wikipedia în română (ro.wikipedia.org); orice redistribuire a perechilor rămâne sub CC BY-SA |
+| **Qwen3-4B-Instruct-2507** (profesorul) | perechi în engleză și perechi despre cele 50 de fapte; din 15 octombrie, nu și româna liberă (rezultat negativ) | Apache 2.0 | atribuire (Qwen) |
+| **Helsinki-NLP/opus-mt-en-ro**, revizia `96e8fea9e4` | traducerea în română a perechilor în engleză ale profesorului, pe procesor (`unelte/traduce_conversatie.py`) | Apache 2.0 (fișa modelului; verificată pe 15 octombrie) | atribuire (OPUS-MT, Universitatea din Helsinki) |
+| **Întrebări „nu știu” în română** | scrise de Claude Code din șabloane (`unelte/nu_stiu_ro.py`) | ale proiectului | – |
+| **Lista de cuvinte pentru ortografie** | cuvintele care apar de cel puțin 3 ori în Wikipedia și Wikisource în română (`unelte/ortografie_ro.py`); dicționarul hunspell ro_RO nu e folosit (GPL-2.0 / LGPL-2.1 / MPL-1.1, nu e pe lista lui Adrian) | derivată din CC BY-SA | doar folosită local, nu se redistribuie |

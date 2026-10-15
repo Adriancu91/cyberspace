@@ -239,8 +239,53 @@ def text_antrenare(p: dict[str, Any]) -> str:
     return f"Întrebare: {p['intrebare']}\nRăspuns: {p['raspuns']}"
 
 
+# Din 15 octombrie, 11:20 (Adrian): sursele românești noi, lângă perechile profesorului (doar engleză și fapte).
+SURSE_EXTRA = ["wikipedia.jsonl", "traduceri.jsonl", "nu_stiu_ro.jsonl"]
+
+
+def grup(p: dict[str, Any]) -> str:
+    """O pereche și traducerea ei au același grup (nu se despart între examen și antrenare)."""
+    if p.get("grup"):
+        return p["grup"]
+    if p["limba"] == "en" and p["fel"] == "zi":
+        return "en:" + normalizat(p["intrebare"])
+    return f"{p.get('profesor', '')}:{p.get('cerere')}:{normalizat(p['intrebare'])}"
+
+
+def surse_extra(dosar: Path, vazute: set[str], interzise: set[str],
+                ortografie: tuple[set[str], set[str]] | None) -> list[dict[str, Any]]:
+    """Perechile din SURSE_EXTRA (Wikipedia, traduceri, „nu știu” în română), cu filtrele: întrebările repetate,
+    bucățile din examene și validări, ortografia. Fiecare primește „ramane” și „motiv_scos”, ca în toate.jsonl."""
+    rezultat: list[dict[str, Any]] = []
+    for nume in SURSE_EXTRA:
+        fisier = dosar / nume
+        if not fisier.exists():
+            continue
+        for rand in fisier.read_text(encoding="utf-8").splitlines():
+            if not rand.strip():
+                continue
+            p = json.loads(rand)
+            motiv = None
+            if normalizat(p["intrebare"]) in vazute:
+                motiv = "întrebare repetată"
+            elif bucati(p["intrebare"] + " " + p["raspuns"]) & interzise:
+                motiv = "bucată dintr-un examen sau dintr-o validare"
+            elif ortografie is not None and p["limba"] == "ro":
+                from unelte.ortografie_ro import necunoscute
+
+                gresite = necunoscute(p["intrebare"] + chr(10) + p["raspuns"], *ortografie)
+                if gresite:
+                    motiv = "cuvânt necunoscut: " + ", ".join(gresite[:3])
+            p.update(ramane=motiv is None, motiv_scos=motiv, sursa_fisier=nume)
+            if motiv is None:
+                vazute.add(normalizat(p["intrebare"]))
+            rezultat.append(p)
+    return rezultat
+
+
 def imparte(bune: list[dict[str, Any]], samanta: int = 0) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """(examen, antrenare): EXAMEN perechi nevăzute, dintre care EXAMEN_NU_STIU „nu știu” (dacă sunt), restul la întâmplare."""
+    """(examen, antrenare): EXAMEN perechi nevăzute, dintre care EXAMEN_NU_STIU „nu știu” (dacă sunt), restul la
+    întâmplare. Tot grupul unei perechi din examen (ex. originalul ei în engleză) iese din antrenare."""
     rng = random.Random(samanta)
     nu_stiu = [p for p in bune if p["fel"] == "nu_stiu"]
     altele = [p for p in bune if p["fel"] != "nu_stiu"]
@@ -248,18 +293,19 @@ def imparte(bune: list[dict[str, Any]], samanta: int = 0) -> tuple[list[dict[str
     rng.shuffle(altele)
     k = min(EXAMEN_NU_STIU, len(nu_stiu))
     examen = nu_stiu[:k] + altele[: max(0, EXAMEN - k)]
+    grupuri = {grup(p) for p in examen}
     in_examen = {id(p) for p in examen}
-    return examen, [p for p in bune if id(p) not in in_examen]
+    return examen, [p for p in bune if id(p) not in in_examen and grup(p) not in grupuri]
 
 
-def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0) -> str:
-    alese = random.Random(samanta).sample(antrenare, min(VERIFICAT, len(antrenare)))
+def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0, titlu: str | None = None) -> str:
+    alese = antrenare if titlu else random.Random(samanta).sample(antrenare, min(VERIFICAT, len(antrenare)))
     randuri = ["# Conversația de verificat (pentru Adrian)", "",
-               f"*{len(alese)} perechi alese la întâmplare din cele {len(antrenare)} de antrenare (date/conversatie/), "
-               f"scrise și notate de profesor (Qwen). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau "
-               f"forma).*", ""]
+               f"*{titlu or f'{len(alese)} perechi alese la întâmplare din cele {len(antrenare)} de antrenare'} "
+               f"(date/conversatie/). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau forma).*", ""]
     for i, p in enumerate(alese, start=1):
-        randuri += [f"**{i}.** ({p['fel']}, {'română' if p['limba'] == 'ro' else 'engleză'}, nota {p['nota']})", "",
+        sursa = p.get("sursa") or p.get("profesor") or "profesor"
+        randuri += [f"**{i}.** ({p['fel']}, {'română' if p['limba'] == 'ro' else 'engleză'}, {sursa})", "",
                     f"- Întrebare: {p['intrebare']}", f"- Răspuns: {p['raspuns']}", ""]
     return "\n".join(randuri)
 
@@ -285,18 +331,40 @@ def refiltreaza(dosar: Path, interzise: set[str], ortografie: tuple[set[str], se
     return dict(iesite)
 
 
-def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0) -> int:
-    """Fișa pentru Adrian: 30 de perechi bune de acum, alese la întâmplare (după toate filtrele)."""
-    bune = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
-    bune = [p for p in bune if p.get("ramane")]
+def toate_bune(dosar: Path, interzise: set[str] | None = None,
+               ortografie: tuple[set[str], set[str]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """(toate perechile, cele bune): ale profesorului (toate.jsonl, filtrate deja) și ale surselor noi (filtrate acum)."""
+    if interzise is None:
+        interzise = bucati_interzise()
+    if ortografie is None:
+        from unelte.ortografie_ro import citeste_exceptii, citeste_lista
+
+        ortografie = (citeste_lista(), citeste_exceptii())
+    toate = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
+    vazute = {normalizat(p["intrebare"]) for p in toate if p.get("ramane")}
+    toate += surse_extra(dosar, vazute, interzise, ortografie)
+    return toate, [p for p in toate if p.get("ramane")]
+
+
+def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0, interzise: set[str] | None = None,
+               ortografie: tuple[set[str], set[str]] | None = None) -> dict[str, int]:
+    """Fișa pentru Adrian (15 octombrie, 16:00): 30 de perechi românești bune, la întâmplare, 15 din Wikipedia și 15
+    din traducere (după toate filtrele)."""
+    _, bune = toate_bune(dosar, interzise, ortografie)
+    rng = random.Random(samanta)
+    wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl"]
+    trad = [p for p in bune if p.get("sursa_fisier") == "traduceri.jsonl"]
+    alese = rng.sample(wiki, min(15, len(wiki))) + rng.sample(trad, min(15, len(trad)))
     docs.parent.mkdir(parents=True, exist_ok=True)
-    docs.write_text(fisa_de_verificat(bune, samanta), encoding="utf-8")
-    return len(bune)
+    docs.write_text(fisa_de_verificat(alese, samanta, titlu=(
+        f"30 de perechi românești alese la întâmplare după toate filtrele: 1–{min(15, len(wiki))} din Wikipedia (din "
+        f"{len(wiki)} bune), apoi {min(15, len(trad))} traduse din engleză cu opus-mt-en-ro (din {len(trad)} bune)")),
+        encoding="utf-8")
+    return {"wikipedia": len(wiki), "traduceri": len(trad)}
 
 
 def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
-    toate = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
-    bune = [p for p in toate if p.get("ramane")]
+    toate, bune = toate_bune(dosar)
     examen, antrenare = imparte(bune)
     (dosar / "examen.json").write_text(json.dumps({
         "nota": "examenul de conversație: nevăzut la antrenare; nu intră în nicio altă hrană",
@@ -309,7 +377,7 @@ def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str,
     if not docs.exists():  # fișa scrisă mai devreme (ex. la 13:00, pentru Adrian) nu se înlocuiește
         docs.parent.mkdir(parents=True, exist_ok=True)
         docs.write_text(fisa_de_verificat(antrenare), encoding="utf-8")
-    numere = lambda lista: dict(Counter(f"{p['fel']}_{p['limba']}" for p in lista))  # noqa: E731
+    numere = lambda lista: dict(Counter(f"{p.get('sursa_fisier', 'profesor')}_{p['fel']}_{p['limba']}" for p in lista))  # noqa: E731
     info = {"data": datetime.now().isoformat(timespec="seconds"), "scrise": len(toate), "bune": len(bune),
             "antrenare": len(antrenare), "examen": len(examen), "pe_feluri_antrenare": numere(antrenare),
             "pe_feluri_examen": numere(examen),
@@ -358,7 +426,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(info, ensure_ascii=False), flush=True)
         return 0
     if args.fisa:
-        print(f"Fișa: 30 de perechi din cele {scrie_fisa(dosar, docs)} bune de acum, în {docs}", flush=True)
+        print(f"Fișa: 30 de perechi românești (bune de acum: {scrie_fisa(dosar, docs)}), în {docs}", flush=True)
         return 0
     from unelte.ortografie_ro import citeste_exceptii, citeste_lista
 

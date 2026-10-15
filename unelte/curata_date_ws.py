@@ -299,8 +299,14 @@ def raport(cale: Path) -> None:
                 "- Validarea: 1% din textele fiecărei surse, alese după amprenta textului. Nu se antrenează nimic pe ea, "
                 "nici tokenizer-ul.",
                 "- TinyStories (CDLA-Sharing-1.0) era deja în `date/tinystories_tot/`, cu validarea lui.", ""]
-    cale.write_text("\n".join(randuri), encoding="utf-8", newline="\n")
+    # partea scrisă de mână de la sfârșit (după SEMN_MANA, ex. sursele conversației) rămâne la fiecare rescriere
+    vechi = cale.read_text(encoding="utf-8") if cale.exists() else ""
+    coada = vechi[vechi.index(SEMN_MANA):] if SEMN_MANA in vechi else ""
+    cale.write_text("\n".join(randuri) + ("\n\n" + coada if coada else ""), encoding="utf-8", newline="\n")
     print(f"Am scris {cale}.")
+
+
+SEMN_MANA = "<!-- de aici, scris de mână; --raport nu-l atinge -->"
 
 
 def main(argv: list[str] | None = None) -> int:
