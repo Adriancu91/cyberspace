@@ -1,0 +1,368 @@
+"""Școala de conversație (15 octombrie 2026, cerută de Adrian): profesorul scrie perechi întrebare → răspuns pentru Kronos,
+le notează pe loc și le păstrează doar pe cele bune.
+
+Trei feluri de perechi (~80% în română, ~20% în engleză):
+- **zi**: întrebări simple de zi cu zi și explicații scurte („Ce este fotosinteza?”, „Cum fac o omletă?”), pe temele din
+  TEME, cu răspunsuri de 1–4 propoziții, corecte și simple;
+- **fapte**: întrebări despre cele 50 de fapte ale hranei (date/fapte/), doar cele nemarcate greșite de om
+  (module/fapte_gresite.py), ca modelul să le lege de răspunsuri;
+- **nu_stiu**: întrebări la care răspunsul corect e „Nu știu sigur.” (în engleză: „I don't know for sure.”): oameni sau
+  locuri inventate, amănunte prea mărunte, lucruri despre azi și acum. Așa nu învață să inventeze.
+Profesorul notează fiecare pereche 1–10 (corectitudine și limbă corectă); rămân doar cele cu cel puțin 8.
+
+Se scot și (rămân în toate.jsonl, cu motivul):
+- întrebările repetate (aceeași întrebare, fără să conteze majusculele și semnele);
+- perechile care au o bucată de 8 cuvinte la rând din examenul de fapte nou, din setul sacru sau din validările puse
+  deoparte (poveștile, româna, traducerea, codul): examenele rămân nevăzute.
+
+La sfârșit (sau cu --finalizeaza): 300 de perechi bune puse deoparte ca examen de conversație nevăzut (cu ~10% „nu
+știu”), restul pentru antrenare, și 30 alese la întâmplare în docs/conversatie_de_verificat.md, pentru Adrian.
+Fișierele, în date/conversatie/: toate.jsonl (fiecare pereche scrisă), antrenare.jsonl, examen.json, antrenare.txt
+(„Întrebare: … / Răspuns: …”, despărțite de „<|endoftext|>”), info.json. În jurnalul Kronos, o fișă doar cu numere.
+
+    python unelte/genereaza_conversatie.py --pana-la 18:20 --perechi 15000 --doar-local
+    python unelte/genereaza_conversatie.py --cereri 16 --doar-local          # probă
+    python unelte/genereaza_conversatie.py --finalizeaza                      # doar împărțirea și fișierele de la sfârșit
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import random
+import re
+import sys
+import time
+import unicodedata
+from collections import Counter
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any
+
+RADACINA = Path(__file__).resolve().parent.parent
+if str(RADACINA) not in sys.path:
+    sys.path.insert(0, str(RADACINA))
+
+from kronos.jurnal import Jurnal  # noqa: E402
+
+DOSAR = "date/conversatie"
+NOTA_MINIMA = 8
+PERECHI_PE_CERERE = 5
+EXAMEN, EXAMEN_NU_STIU, VERIFICAT = 300, 30, 30
+NU_STIU = {"ro": "Nu știu sigur.", "en": "I don't know for sure."}
+FRAGMENT = 8  # cuvinte la rând: o pereche cu o astfel de bucată dintr-un examen sau dintr-o validare e scoasă
+SEPARATOR = "\n<|endoftext|>\n"
+# Textele care trebuie să rămână nevăzute (din ele se iau toate bucățile de FRAGMENT cuvinte).
+INTERZISE_JSON = ["date/fapte/examen_nou.json", "date/fapte/examen_sacru.json"]
+INTERZISE_TEXT = ["date/tinystories_r2/validare.txt", "date/ws/curat/wikipedia_ro/validare.txt",
+                  "date/ws/curat/fineweb2_ro/validare.txt", "date/ws/curat/wikisource_ro/validare.txt",
+                  "date/ws/curat/fabule_ro/validare.txt", "date/ws/curat/europarl_en_ro/validare.txt",
+                  "date/ws/curat/cod_stack/validare.txt", "date/ws/curat/cod_instruct/validare.txt"]
+CARACTERE_VALIDARE = 400_000  # din fiecare validare (examenele folosesc primele 100.000)
+
+# Ordinea cererilor, pe cicluri de 20: 15 „zi”, 4 „fapte”, 1 „nu_stiu”; în fiecare fel, 4 din 5 în română.
+CICLU = ["zi"] * 15 + ["fapte"] * 4 + ["nu_stiu"]
+TEME = [
+    "vremea și anotimpurile", "plantele", "animalele de companie", "animalele sălbatice", "corpul omenesc", "sănătatea",
+    "igiena", "mâncarea sănătoasă", "gătitul simplu", "bucătăria românească", "fructele și legumele", "apa",
+    "focul și siguranța", "electricitatea în casă", "casa și curățenia", "grădinăritul", "școala și învățatul",
+    "cititul și cărțile", "matematica de zi cu zi", "banii și cumpărăturile", "timpul și ceasul", "calendarul",
+    "transportul", "bicicleta", "mașinile", "trenurile și avioanele", "orașul", "satul", "munții", "marea și râurile",
+    "cerul, Soarele și Luna", "stelele și planetele", "pământul și rocile", "vulcanii și cutremurele", "ploaia și norii",
+    "zăpada și gheața", "lumina și culorile", "sunetul și muzica", "sportul", "jocurile copiilor", "prietenia",
+    "politețea", "emoțiile", "somnul", "îmbrăcămintea", "meseriile", "medicul și farmacia", "dinții", "ochii și vederea",
+    "insectele", "păsările", "peștii și apa", "pădurea", "reciclarea și natura", "energia", "magneții",
+    "telefonul și calculatorul", "internetul în siguranță", "geografia simplă", "România", "Europa", "limbile lumii",
+    "istoria pe scurt", "inventatori și invenții", "corpul și mișcarea", "primul ajutor simplu", "animalele de fermă",
+    "pâinea și grâul", "laptele și brânza", "ouăle", "cafeaua și ceaiul", "zahărul", "sarea", "căldura și frigul",
+    "vântul", "curcubeul", "umbra", "oglinda", "roata", "hârtia",
+]
+UNGHIURI = ["ce este", "de ce", "cum se face", "care e diferența dintre două lucruri", "un sfat practic", "cum funcționează"]
+FELURI_NU_STIU = [
+    "despre o persoană inventată, cu nume și prenume, care nu e cunoscută (ex. ce a mâncat ieri)",
+    "despre un loc inventat (un sat, o stradă, un magazin) și amănunte despre el",
+    "despre azi și acum (vremea de azi dintr-un oraș, prețul de azi al unui lucru, ce oră e acum)",
+    "despre amănunte prea mărunte, pe care nu le știe nimeni sigur (ex. câte frunze are un anume copac)",
+    "despre viitor (cine va câștiga un meci, ce număr va ieși)",
+    "despre cel care întreabă (cum îl cheamă, ce are în buzunar, unde locuiește)",
+]
+
+SISTEM_RO = ("Ești un profesor răbdător care scrie întrebări și răspunsuri pentru un copil isteț. Scrii într-o română "
+             "corectă, cu diacritice (ă, â, î, ș, ț), în propoziții simple. Răspunsurile sunt adevărate.")
+SISTEM_EN = ("You are a patient teacher who writes questions and answers for a bright child, in simple, correct English. "
+             "The answers are true.")
+SISTEM_NOTA = "You are a strict but fair teacher who checks question-and-answer pairs written for children."
+_PERECHE = re.compile(r"^\s*(?:\d+[.)]\s*)?(Î|I|Q|Întrebare|Question)\s*:\s*(.+?)\s*\n\s*(R|A|Răspuns|Answer)\s*:\s*(.+?)\s*$",
+                      re.IGNORECASE | re.MULTILINE)
+_NOTA = re.compile(r"(?:GRADE|NOTA|NOTĂ)\s*:\s*(\d+)", re.IGNORECASE)
+_MOTIV = re.compile(r"(?:REASON|MOTIV)\s*:\s*(.+)", re.IGNORECASE)
+
+
+# --- cererile -------------------------------------------------------------------------------------------------------
+
+def cererea(k: int, fapte: list[tuple[str, str]]) -> dict[str, Any]:
+    """A k-a cerere (de la 0): felul (după CICLU), limba (4 din 5 în română) și ce se cere."""
+    fel = CICLU[k % len(CICLU)]
+    limba = "en" if (k // len(CICLU) + k) % 5 == 4 else "ro"
+    runda = k // len(CICLU)
+    if fel == "zi":
+        tema = TEME[(k * 7 + runda) % len(TEME)]
+        return {"fel": fel, "limba": limba, "tema": tema, "unghi": UNGHIURI[(k + runda) % len(UNGHIURI)]}
+    if fel == "fapte":
+        subiect, fapt = fapte[(k // len(CICLU) * 4 + CICLU[: k % len(CICLU)].count("fapte")) % len(fapte)]
+        return {"fel": fel, "limba": limba, "subiect": subiect, "fapt": fapt}
+    return {"fel": fel, "limba": limba, "tip": FELURI_NU_STIU[runda % len(FELURI_NU_STIU)]}
+
+
+def mesaje_cerere(c: dict[str, Any], n: int = PERECHI_PE_CERERE) -> list[dict[str, str]]:
+    ro = c["limba"] == "ro"
+    forma = (f"Scrie exact {n} perechi, fiecare pe două rânduri:\nÎ: <întrebarea>\nR: <răspunsul>\nFără numerotare și "
+             "fără alt text." if ro else
+             f"Write exactly {n} pairs, each on two lines:\nQ: <the question>\nA: <the answer>\nNo numbering and no other "
+             "text.")
+    if c["fel"] == "zi":
+        cerinta = (f"Scrie {n} întrebări diferite, simple, de zi cu zi, despre: {c['tema']} (mai ales „{c['unghi']}”). "
+                   "Răspunsul are 1–4 propoziții scurte, corecte și ușor de înțeles." if ro else
+                   f"Write {n} different simple everyday questions about this topic (in English): {c['tema']} (mostly "
+                   f"„{c['unghi']}”). Each answer has 1–4 short sentences, correct and easy to understand.")
+    elif c["fel"] == "fapte":
+        cerinta = (f"Faptul adevărat: „{c['fapt']}” Scrie {n} întrebări diferite, puse în feluri diferite, la care "
+                   "răspunsul e acest fapt, spus în română în 1–2 propoziții simple (traducere fidelă, fără alte fapte)."
+                   if ro else
+                   f"The true fact: \"{c['fapt']}\" Write {n} different questions, asked in different ways, whose answer "
+                   "is this fact, said in 1–2 simple sentences (no other facts).")
+    else:
+        cerinta = (f"Scrie {n} întrebări la care nimeni nu poate ști sigur răspunsul, {c['tip']}. La toate, răspunsul "
+                   f"este exact: {NU_STIU['ro']}" if ro else
+                   f"Write {n} questions that nobody can answer for sure, {c['tip']} (write them in English). For all of "
+                   f"them the answer is exactly: {NU_STIU['en']}")
+    return [{"role": "system", "content": SISTEM_RO if ro else SISTEM_EN}, {"role": "user", "content": cerinta + "\n\n" + forma}]
+
+
+def citeste_perechi(text: str) -> list[tuple[str, str]]:
+    return [(m.group(2).strip(), m.group(4).strip()) for m in _PERECHE.finditer(text)]
+
+
+def mesaje_nota(p: dict[str, Any]) -> list[dict[str, str]]:
+    limba = "Romanian" if p["limba"] == "ro" else "English"
+    nu_stiu = (f" This is a question nobody can answer for sure; the expected answer is \"{NU_STIU[p['limba']]}\". Give a "
+               "high grade only if the question really cannot be known for sure." if p["fel"] == "nu_stiu" else "")
+    return [{"role": "system", "content": SISTEM_NOTA}, {"role": "user", "content": (
+        f"Grade this question-and-answer pair (in {limba}) from 1 to 10.{nu_stiu}\n"
+        "Check: is the answer true and does it answer the question? Is it short and simple (1–4 sentences)? Is the "
+        f"{limba} correct (grammar, spelling" + (", diacritics ă â î ș ț" if p["limba"] == "ro" else "") + ")?\n"
+        "Be strict. Give 8 or more ONLY if every sentence is true and the language is natural, as a careful native "
+        "speaker writes it. Any false or doubtful statement, any made-up or wrong word, any grammar or agreement "
+        "mistake, or an answer that does not really answer the question: at most 6.\n"
+        "10 = perfect. 8 = correct and natural, only a tiny stylistic flaw. 5 = partly wrong or clumsy. 1 = wrong.\n\n"
+        f"Question: {p['intrebare']}\nAnswer: {p['raspuns']}\n\n"
+        "Answer in exactly two lines:\nGRADE: <a whole number from 1 to 10>\nREASON: <one short sentence>")}]
+
+
+def citeste_nota(text: str) -> dict[str, Any]:
+    nota, motiv = _NOTA.search(text), _MOTIV.search(text)
+    return {"nota": min(10, max(1, int(nota.group(1)))) if nota else None,
+            "motiv": motiv.group(1).strip() if motiv else text.strip()[:200]}
+
+
+# --- filtrele -------------------------------------------------------------------------------------------------------
+
+def normalizat(text: str) -> str:
+    """Litere mici, fără semne și fără diacritice, cu spațiile strânse."""
+    text = unicodedata.normalize("NFKD", text.lower())
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    return " ".join(re.sub(r"[^a-z0-9 ]+", " ", text).split())
+
+
+def bucati(text: str, n: int = FRAGMENT) -> set[str]:
+    cuvinte = normalizat(text).split()
+    return {" ".join(cuvinte[i:i + n]) for i in range(len(cuvinte) - n + 1)}
+
+
+def texte_din_json(valoare: Any) -> list[str]:
+    if isinstance(valoare, str):
+        return [valoare]
+    if isinstance(valoare, dict):
+        return [t for v in valoare.values() for t in texte_din_json(v)]
+    if isinstance(valoare, list):
+        return [t for v in valoare for t in texte_din_json(v)]
+    return []
+
+
+def bucati_interzise(radacina: Path = RADACINA) -> set[str]:
+    interzise: set[str] = set()
+    for cale in INTERZISE_JSON:
+        fisier = radacina / cale
+        if fisier.exists():
+            for t in texte_din_json(json.loads(fisier.read_text(encoding="utf-8"))):
+                interzise |= bucati(t)
+    for cale in INTERZISE_TEXT:
+        fisier = radacina / cale
+        if fisier.exists():
+            with fisier.open(encoding="utf-8") as f:
+                interzise |= bucati(f.read(CARACTERE_VALIDARE))
+    return interzise
+
+
+def de_ce_se_scoate(p: dict[str, Any], vazute: set[str], interzise: set[str]) -> str | None:
+    if p.get("nota") is None:
+        return "fără notă"
+    if p["nota"] < NOTA_MINIMA:
+        return "nota sub 8"
+    if p["fel"] == "nu_stiu" and normalizat(p["raspuns"]) != normalizat(NU_STIU[p["limba"]]):
+        return "„nu știu” cu alt răspuns"
+    if p["fel"] != "nu_stiu" and normalizat(p["raspuns"]) in {normalizat(x) for x in NU_STIU.values()}:
+        return "„nu știu” la o întrebare care se știe"
+    if normalizat(p["intrebare"]) in vazute:
+        return "întrebare repetată"
+    if bucati(p["intrebare"] + " " + p["raspuns"]) & interzise:
+        return "bucată dintr-un examen sau dintr-o validare"
+    return None
+
+
+# --- sfârșitul: examenul, antrenarea, fișa de verificat ---------------------------------------------------------------
+
+def text_antrenare(p: dict[str, Any]) -> str:
+    return f"Întrebare: {p['intrebare']}\nRăspuns: {p['raspuns']}"
+
+
+def imparte(bune: list[dict[str, Any]], samanta: int = 0) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """(examen, antrenare): EXAMEN perechi nevăzute, dintre care EXAMEN_NU_STIU „nu știu” (dacă sunt), restul la întâmplare."""
+    rng = random.Random(samanta)
+    nu_stiu = [p for p in bune if p["fel"] == "nu_stiu"]
+    altele = [p for p in bune if p["fel"] != "nu_stiu"]
+    rng.shuffle(nu_stiu)
+    rng.shuffle(altele)
+    k = min(EXAMEN_NU_STIU, len(nu_stiu))
+    examen = nu_stiu[:k] + altele[: max(0, EXAMEN - k)]
+    in_examen = {id(p) for p in examen}
+    return examen, [p for p in bune if id(p) not in in_examen]
+
+
+def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0) -> str:
+    alese = random.Random(samanta).sample(antrenare, min(VERIFICAT, len(antrenare)))
+    randuri = ["# Conversația de verificat (pentru Adrian)", "",
+               f"*{len(alese)} perechi alese la întâmplare din cele {len(antrenare)} de antrenare (date/conversatie/), "
+               f"scrise și notate de profesor (Qwen). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau "
+               f"forma).*", ""]
+    for i, p in enumerate(alese, start=1):
+        randuri += [f"**{i}.** ({p['fel']}, {'română' if p['limba'] == 'ro' else 'engleză'}, nota {p['nota']})", "",
+                    f"- Întrebare: {p['intrebare']}", f"- Răspuns: {p['raspuns']}", ""]
+    return "\n".join(randuri)
+
+
+def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+    toate = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
+    bune = [p for p in toate if p.get("ramane")]
+    examen, antrenare = imparte(bune)
+    (dosar / "examen.json").write_text(json.dumps({
+        "nota": "examenul de conversație: nevăzut la antrenare; nu intră în nicio altă hrană",
+        "perechi": examen}, ensure_ascii=False, indent=1), encoding="utf-8")
+    with (dosar / "antrenare.jsonl").open("w", encoding="utf-8") as f:
+        for p in antrenare:
+            f.write(json.dumps(p, ensure_ascii=False) + "\n")
+    (dosar / "antrenare.txt").write_text(SEPARATOR.join(text_antrenare(p) for p in antrenare) + SEPARATOR,
+                                         encoding="utf-8")
+    docs.parent.mkdir(parents=True, exist_ok=True)
+    docs.write_text(fisa_de_verificat(antrenare), encoding="utf-8")
+    numere = lambda lista: dict(Counter(f"{p['fel']}_{p['limba']}" for p in lista))  # noqa: E731
+    info = {"data": datetime.now().isoformat(timespec="seconds"), "scrise": len(toate), "bune": len(bune),
+            "antrenare": len(antrenare), "examen": len(examen), "pe_feluri_antrenare": numere(antrenare),
+            "pe_feluri_examen": numere(examen),
+            "scoase": dict(Counter(p["motiv_scos"] for p in toate if not p.get("ramane"))),
+            "note": dict(sorted(Counter(p.get("nota") for p in toate if p.get("nota")).items())), **(extra or {})}
+    (dosar / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
+    if jurnal is not None:
+        jurnal.adauga({"id": jurnal.urmatorul_id(), "linie": "conversatie",
+                       "inceput": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                       "propunere": {"descriere": "școala de conversație: perechi întrebare → răspuns scrise și notate "
+                                                  "de profesor (date/conversatie/)", "modificari": {}},
+                       "decizie": "masurat", "scoruri": {k: v for k, v in info.items() if isinstance(v, (int, float))}})
+    return info
+
+
+# --- bucla ----------------------------------------------------------------------------------------------------------
+
+def main(argv: list[str] | None = None) -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+    parser = argparse.ArgumentParser(description="Perechi întrebare → răspuns pentru Kronos, scrise și notate de profesor.")
+    parser.add_argument("--perechi", type=int, default=15000, help="se oprește la atâtea perechi bune")
+    parser.add_argument("--pana-la", default="", help="ex. 18:20: nicio cerere nouă după ora asta")
+    parser.add_argument("--cereri", type=int, default=0, help="cel mult atâtea cereri în rularea asta (probă)")
+    parser.add_argument("--lot", type=int, default=8)
+    parser.add_argument("--samanta", type=int, default=0)
+    parser.add_argument("--doar-local", action="store_true")
+    parser.add_argument("--finalizeaza", action="store_true", help="doar examenul, antrenarea și fișa de verificat")
+    parser.add_argument("--dosar", default=DOSAR)
+    parser.add_argument("--director-lucru", default="lucru")
+    args = parser.parse_args(argv)
+
+    dosar = Path(args.dosar)
+    dosar.mkdir(parents=True, exist_ok=True)
+    jurnal = Jurnal(Path(args.director_lucru))
+    docs = RADACINA / "docs" / "conversatie_de_verificat.md"
+    if args.finalizeaza:
+        info = finalizeaza(dosar, docs, jurnal)
+        print(json.dumps(info, ensure_ascii=False), flush=True)
+        return 0
+
+    from module.fapte_gresite import subiectele_gresite
+    from module.profesor_qwen import SUBIECTE, ProfesorQwen
+
+    gresite = subiectele_gresite()
+    fapte = [(s, f) for s, f in SUBIECTE if s not in gresite]
+    toate_f = dosar / "toate.jsonl"
+    vechi = [json.loads(r) for r in toate_f.read_text(encoding="utf-8").splitlines() if r.strip()] if toate_f.exists() else []
+    k = max((p["cerere"] for p in vechi), default=-1) + 1
+    bune = sum(1 for p in vechi if p.get("ramane"))
+    vazute = {normalizat(p["intrebare"]) for p in vechi if p.get("ramane")}
+    print(f"Pornesc de la cererea {k} ({bune} perechi bune deja). Citesc textele care trebuie să rămână nevăzute…", flush=True)
+    interzise = bucati_interzise()
+    limita = None
+    if args.pana_la:
+        h, m = (int(x) for x in args.pana_la.split(":"))
+        limita = datetime.now().replace(hour=h, minute=m, second=0, microsecond=0)
+        if limita <= datetime.now():
+            limita += timedelta(days=1)
+    profesor = ProfesorQwen(lot=args.lot, max_simboluri=600, max_simboluri_nota=60, temperatura=0.6,
+                            samanta=args.samanta, doar_local=args.doar_local)
+    start, facute = time.monotonic(), 0
+    while bune < args.perechi and (limita is None or datetime.now() < limita) and (not args.cereri or facute < args.cereri):
+        if (RADACINA / args.director_lucru / "STOP").exists():
+            print("Oprit: butonul STOP (lucru/STOP).", flush=True)
+            break
+        cereri = [cererea(k + i, fapte) for i in range(args.lot)]
+        texte = profesor.raspunde_mai_multe([mesaje_cerere(c) for c in cereri], 600)
+        perechi = [{**c, "cerere": k + i, "intrebare": q, "raspuns": r}
+                   for i, (c, t) in enumerate(zip(cereri, texte)) for q, r in citeste_perechi(t)]
+        note = [citeste_nota(t) for t in profesor.raspunde_mai_multe([mesaje_nota(p) for p in perechi], 60,
+                                                                   cu_intamplare=False)] if perechi else []
+        with toate_f.open("a", encoding="utf-8") as f:
+            for p, n in zip(perechi, note):
+                p.update(n)
+                motiv = de_ce_se_scoate(p, vazute, interzise)
+                p.update(ramane=motiv is None, motiv_scos=motiv)
+                if motiv is None:
+                    vazute.add(normalizat(p["intrebare"]))
+                    bune += 1
+                f.write(json.dumps(p, ensure_ascii=False) + "\n")
+        k += args.lot
+        facute += args.lot
+        if facute % (args.lot * 10) == 0 or args.cereri:
+            minute = (time.monotonic() - start) / 60
+            print(f"[{datetime.now():%H:%M}] cererea {k}: {bune} perechi bune; {facute} cereri în {minute:.1f} minute; "
+                  f"memorie video {profesor.memorie_video_mb()}", flush=True)
+    extra = {"secunde_rulare": round(time.monotonic() - start), "cereri_rulare": facute, **profesor.statistici(),
+             "memorie_video_mb": profesor.memorie_video_mb().get("rezervata")}
+    profesor.elibereaza()
+    info = finalizeaza(dosar, docs, jurnal, extra)
+    print(f"Gata: {info['bune']} perechi bune din {info['scrise']}; examen {info['examen']}, antrenare {info['antrenare']}. "
+          f"Scoase: {info['scoase']}. Fișa pentru Adrian: {docs}", flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

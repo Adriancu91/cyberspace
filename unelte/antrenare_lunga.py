@@ -43,6 +43,10 @@ Din 13 octombrie 2026 (rețeta liniei W2: rata constantă, cu o copie răcită l
   rulării, unelte/copie_racita.py face „modelul zilei” dintr-o copie; starea liniei rămâne cea de dinainte de răcire.
   Nu se face dacă rularea a fost oprită (butonul de oprire, paznicul) sau cu `--fara-copie-racita`.
 - `eticheta = "nerăcit"`: se scrie în descrierea fiecărei ore din jurnal (examenele orare sunt pe modelul nerăcit).
+
+Din 15 octombrie 2026 (Adrian): **urmărirea plăcii pornește și se oprește odată cu antrenarea**, oricine o pornește
+(Windows, CONTINUUM, omul): toată placa, la 10 secunde, în lucru/<linia>/placa_<data>.csv (unelte/urmareste_placa.py,
+doar citește). Fără ea: --fara-urmarire. Nu pornește dacă procesul nu vede placa video.
 """
 
 from __future__ import annotations
@@ -161,6 +165,24 @@ def tine_linia(dosar: Path) -> Any:
         fisier.close()
         return None
     return fisier
+
+
+def porneste_urmarirea(dosar: Path) -> Any:
+    """Urmărirea plăcii (un proces separat, care doar citește nvidia-smi), legată de antrenarea asta: o pornește ea și
+    o oprește tot ea, la sfârșit. None dacă procesul nu vede placa video."""
+    import subprocess
+
+    import torch
+
+    if not torch.cuda.is_available():
+        return None
+    dosar.mkdir(parents=True, exist_ok=True)
+    iesire = dosar / f"placa_{datetime.now():%Y%m%d_%H%M}.csv"
+    proces = subprocess.Popen([sys.executable, "-X", "utf8", str(RADACINA / "unelte" / "urmareste_placa.py"), "--minute",
+                               "1440", "--la-secunde", "10", "--iesire", str(iesire)],
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    print(f"   Urmărirea plăcii: {iesire} (pornită și oprită odată cu antrenarea).", flush=True)
+    return proces
 
 
 def tine_treaz(da: bool) -> None:
@@ -385,6 +407,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prag-alaturi", type=float, default=0.02, help="pragul verdictului față de cealaltă antrenare")
     parser.add_argument("--pana-la", default="", help="ex. 18:20: antrenarea nu trece de ora asta (ultima oră se scurtează)")
     parser.add_argument("--fara-copie-racita", action="store_true", help="fără copia răcită cerută de configurare")
+    parser.add_argument("--fara-urmarire", action="store_true", help="fără urmărirea plăcii pe durata antrenării")
     args = parser.parse_args(argv)
 
     config = citeste_config(args.config)
@@ -420,6 +443,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Nu pornesc: linia „{config.nume}” e deja antrenată de alt proces (lucru/{config.nume}/ruleaza.lock).",
                   flush=True)
             return 1
+    urmarire = None if args.raport or args.fara_urmarire else porneste_urmarirea(config.director_lucru / config.nume)
     inainte = json.loads(fisier_pornire.read_text(encoding="utf-8")) if fisier_pornire.exists() else None
     if inainte:  # kronos: până la primul experiment păstrat al liniei, regula 4 o judecă față de modelul de pornire
         config.porneste_din = inainte["experiment"]
@@ -500,6 +524,8 @@ def main(argv: list[str] | None = None) -> int:
             tine_treaz(False)
         if cod != 0:
             print("Copia răcită nu s-a încheiat cum trebuie (vezi mai sus); orele liniei sunt neatinse.", flush=True)
+    if urmarire is not None:
+        urmarire.terminate()
     if zavor is not None:
         zavor.close()
 

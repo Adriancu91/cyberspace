@@ -150,3 +150,23 @@ def test_configurarea_w2_are_reteta_noua():
     reguli = antrenare_lunga.reguli_rulare(tomllib.loads(cale.read_text(encoding="utf-8")))
     assert reguli == {"pana_la": "06:45", "copie_racita": True, "minute_racire": 30.0, "rata_finala_racire": 0.00005,
                       "eticheta": "nerăcit"}
+
+
+def test_urmarirea_placii_e_legata_de_antrenare(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    cale = config_mic(tmp_path, "linie")
+    pornite, oprite = [], []
+
+    class Proces:
+        def terminate(self):
+            oprite.append(True)
+
+    monkeypatch.setattr(antrenare_lunga, "porneste_urmarirea", lambda dosar: pornite.append(dosar) or Proces())
+    monkeypatch.setattr(antrenare_lunga, "ruleaza", lambda *a, **o: None)
+    antrenare_lunga.main(["--config", str(cale), "--ore", "1"] + ARGUMENTE)
+    assert pornite == [tmp_path / "lucru" / "linie"] and oprite == [True]  # pornită și oprită de aceeași rulare
+    antrenare_lunga.main(["--config", str(cale), "--ore", "1", "--fara-urmarire"] + ARGUMENTE)
+    antrenare_lunga.main(["--config", str(cale), "--raport"])
+    assert len(pornite) == 1
+    pytest.importorskip("torch")
+    assert antrenare_lunga.__dict__["porneste_urmarirea"] is not None

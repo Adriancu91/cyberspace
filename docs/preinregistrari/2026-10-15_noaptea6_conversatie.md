@@ -1,0 +1,68 @@
+# Pre-înregistrare: Noaptea 6 (15–16 octombrie): W2-conv. Învață Kronos să răspundă la întrebări simple?
+
+<!-- scrisa: 2026-10-15T08:28:53 -->
+*Scrisă la 2026-10-15 08:28, înainte de rulare. După ce rularea a început, textul de mai jos nu se mai schimbă; la închidere
+se adaugă doar secțiunea „Ce a ieșit” (python unelte/preinregistrare.py --inchide noaptea6_conversatie).*
+
+## Cine a ales
+
+**Alegerea de azi și de la noapte e a lui Adrian, nu a lui CONTINUUM.** CONTINUUM e pus să doar observe până joi la
+07:45 (`config/continuum_ws.toml`, `om_decide_pana_la`); fiecare ciclu din jurnalul lui scrie asta.
+
+## Întrebarea
+
+**Învață Kronos să răspundă la întrebări simple, în română și engleză, fără să uite ce știa?** Linia nouă „w2_conv”
+pornește dintr-o copie a lui #353 (W2 după 20 de ore, răcită) și învață 3 ore pe perechi întrebare → răspuns scrise de
+profesor.
+
+## Datele (scrise ziua, 08:15–18:20, de profesor; `unelte/genereaza_conversatie.py`)
+
+- Perechi întrebare → răspuns, ~80% română, ~20% engleză: întrebări de zi cu zi și explicații scurte (80 de teme),
+  întrebări despre faptele hranei (doar cele nemarcate greșite) și câteva sute de „nu știu” (răspunsul: „Nu știu
+  sigur.” / „I don't know for sure.”).
+- Profesorul notează fiecare pereche 1–10 (adevărul și limba); rămân cele cu cel puțin 8. Se scot și întrebările repetate
+  și orice pereche cu 8 cuvinte la rând din examenul de fapte nou, setul sacru sau validări.
+- **300 de perechi puse deoparte ca examen de conversație nevăzut**, dintre care 30 „nu știu”. Restul, pentru antrenare.
+- **De știut, văzut dimineață la probă:** româna profesorului (Qwen3-4B) e slabă. Cu notarea strictă, rămân ~50% din
+  perechi, dar trec și unele cu greșeli (ex. „Ce este vară?”, „temperaturi frisoase”). Adrian verifică 30 de perechi
+  (`docs/conversatie_de_verificat.md`) **după** noapte: antrenarea de la noapte se face înainte de verificarea omului.
+- Același profesor scrie datele și notează examenul: nota lui e un examen cu limite (nu un om).
+
+## Ce rulează
+
+- `config/conv_w2.toml`, linia „w2_conv”, **3 ore**, pornită de Windows la 19:00 (`unelte/noapte_conversatie.ps1`).
+- **Antrenare doar pe răspunsuri:** din fiecare lot (12 × 512), 75% perechi „Întrebare: … / Răspuns: …”, cu pierderea
+  socotită doar pe răspunsuri (`module/model_conversatie.py`); 5% hrană (poveștile cu fapte); 20% amestecul lui W2.
+- **Rata 0,0001**, constantă după 100 de pași de încălzire (optimizatorul pornește din nou din #353).
+- La fiecare oră: val_bpb, fapte, fapte noi, nota profesorului pe 40 de povești. Kronos păstrează fiecare oră
+  (`prag_zgomot = -1`, fără criterii): linia nu se judecă la oră după povești, ci la sfârșit, după pragurile de mai jos.
+- **După ora 3, pe ultimul model păstrat:** examenul de conversație (`unelte/examen_conversatie.py`: modelul răspunde
+  fără întâmplare, profesorul notează 1–10 față de răspunsul de referință) și examenele de română și cod.
+- Apoi, restul nopții, școala de cod (pre-înregistrarea ei, în ramura școlii). Urmărirea plăcii: toată noaptea, pornită
+  și oprită de scriptul nopții (`lucru/placa_noapte_2026-10-15.csv`), plus cea a antrenării, pe orele ei.
+
+## Ce înseamnă confirmat sau infirmat (date de Adrian)
+
+- **Confirmat:** pe cele 300 de întrebări nevăzute, nota medie ≥ 5,0 **și** „nu știu” corect pe cel puțin jumătate din
+  întrebările de tip „nu știu” (cel puțin 15 din 30).
+- **Infirmat:** nota medie < 3,5.
+- Între ele: „a început, dar nu ajunge”.
+- **Regresia (pe ultimul model):** povești (val_bpb) ≤ 0,47, română ≤ 1,38, cod ≤ 0,78, fapte noi ≥ 65. **Peste oricare
+  = linia nu se păstrează** (nu intră în interfață), oricum ar ieși examenul de conversație.
+- **Dacă trece** (confirmat și fără regresie): intră în interfață, pe procesor, ca model implicit, cu rândul de sus
+  „Răspunde la întrebări simple, în română sau engleză; poate greși.”
+
+## Așteptările mele, în cifre (Claude Code, scrise înainte)
+
+- Nota medie: între 4,0 și 5,5 (forma o învață repede; adevărul răspunsurilor, mai greu, la 98 de milioane de
+  parametri). Fără „nu știu”: puțin mai mică.
+- „Nu știu” corecte: 20–28 din 30 (forma e foarte regulată). Dar și „nu știu” spus la întrebări care se știu: 5–15%.
+- Povești: 0,46–0,47 (#353: 0,4552), deci aproape de prag. Română 1,35–1,40 și cod 0,75–0,80 (#353: 1,349 și 0,753):
+  **cel puțin unul dintre ele poate trece de prag**. Fapte noi: 65–80 (#353: 75).
+- Viteza ~5,9 pași pe secundă; toată placa sub 6.500 MB; sub 70 °C; nicio oprire.
+
+## Ce ar infirma așteptările
+
+- nota medie peste 6,0 sau sub 3,5;
+- poveștile peste 0,48 (amestecul de 20% nu ajunge ca să nu uite);
+- „nu știu” la mai mult de 30% din întrebările care se știu (a învățat să se ferească).

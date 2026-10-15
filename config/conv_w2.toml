@@ -1,0 +1,67 @@
+# Școala de conversație (15 octombrie 2026, hotărâtă de Adrian; nu de CONTINUUM): linia „w2_conv”, o COPIE a lui #353
+# (copia răcită a lui W2 după ora 20). Linia W2 nu se atinge. Pre-înregistrarea:
+# docs/preinregistrari/2026-10-15_noaptea6_conversatie.md.
+# - Antrenare doar pe răspunsuri (module/model_conversatie.py): 75% din lot perechi „Întrebare: … / Răspuns: …” din
+#   date/conversatie/antrenare.jsonl (pierderea doar pe răspunsuri), 5% hrană (poveștile cu fapte), 20% amestecul lui
+#   W2 (ca să nu uite).
+# - Rata mică: 0,0001 constantă, după 100 de pași de încălzire (optimizatorul pornește din nou, din #353).
+# - 3 ore (experimente Kronos de câte o oră), cu examenele de la oră: val_bpb, fapte, fapte noi, nota profesorului.
+# - prag_zgomot = -1 și [criterii] gol: Kronos păstrează (și salvează) fiecare oră, oricât de puțin s-ar schimba
+#   poveștile. Linia nu se judecă la oră după povești: se judecă la sfârșit, după examenul de conversație și pragurile
+#   de regresie ale lui Adrian (povești ≤ 0,47, română ≤ 1,38, cod ≤ 0,78, fapte noi ≥ 65).
+# Numele fișierului nu începe cu „ws_w”, ca CONTINUUM să n-o urmărească.
+#   python unelte/antrenare_lunga.py --config config/conv_w2.toml --ore 3 --porneste-din 353
+
+[platforma]
+nume = "w2_conv"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_conversatie:ModelGPTConversatie"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.0001, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_conv/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "date/conversatie/antrenare.jsonl", fractie_conversatie = 0.75 }
+
+[antrenare_lunga]
+eticheta = "conversație"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [12] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
