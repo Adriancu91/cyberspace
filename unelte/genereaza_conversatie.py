@@ -13,7 +13,10 @@ Profesorul notează fiecare pereche 1–10 (corectitudine și limbă corectă); 
 Se scot și (rămân în toate.jsonl, cu motivul):
 - întrebările repetate (aceeași întrebare, fără să conteze majusculele și semnele);
 - perechile care au o bucată de 8 cuvinte la rând din examenul de fapte nou, din setul sacru sau din validările puse
-  deoparte (poveștile, româna, traducerea, codul): examenele rămân nevăzute.
+  deoparte (poveștile, româna, traducerea, codul): examenele rămân nevăzute;
+- din 15 octombrie, 10:50 (Adrian): perechile românești cu un cuvânt necunoscut (unelte/ortografie_ro.py: lista din
+  Wikipedia și Wikisource; nume proprii și excepții permise). Cu --refiltreaza, filtrul se aplică și perechilor deja
+  scrise (toate.jsonl se rescrie; cel vechi rămâne alături, cu data).
 
 La sfârșit (sau cu --finalizeaza): 300 de perechi bune puse deoparte ca examen de conversație nevăzut (cu ~10% „nu
 știu”), restul pentru antrenare, și 30 alese la întâmplare în docs/conversatie_de_verificat.md, pentru Adrian.
@@ -204,7 +207,8 @@ def bucati_interzise(radacina: Path = RADACINA) -> set[str]:
     return interzise
 
 
-def de_ce_se_scoate(p: dict[str, Any], vazute: set[str], interzise: set[str]) -> str | None:
+def de_ce_se_scoate(p: dict[str, Any], vazute: set[str], interzise: set[str],
+                    ortografie: tuple[set[str], set[str]] | None = None) -> str | None:
     if p.get("nota") is None:
         return "fără notă"
     if p["nota"] < NOTA_MINIMA:
@@ -217,6 +221,12 @@ def de_ce_se_scoate(p: dict[str, Any], vazute: set[str], interzise: set[str]) ->
         return "întrebare repetată"
     if bucati(p["intrebare"] + " " + p["raspuns"]) & interzise:
         return "bucată dintr-un examen sau dintr-o validare"
+    if ortografie is not None and p["limba"] == "ro":
+        from unelte.ortografie_ro import necunoscute
+
+        gresite = necunoscute(p["intrebare"] + chr(10) + p["raspuns"], *ortografie)
+        if gresite:
+            return "cuvânt necunoscut: " + ", ".join(gresite[:3])
     return None
 
 
@@ -251,6 +261,35 @@ def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0) -> str:
     return "\n".join(randuri)
 
 
+def refiltreaza(dosar: Path, interzise: set[str], ortografie: tuple[set[str], set[str]]) -> dict[str, int]:
+    """Filtrele de acum, pe toate perechile scrise, în ordinea lor (o întrebare repetată rămâne prima oară). Fișierul
+    vechi rămâne alături. Întoarce câte au ieșit, pe motive (doar cele care rămâneau înainte)."""
+    fisier = dosar / "toate.jsonl"
+    randuri = [json.loads(r) for r in fisier.read_text(encoding="utf-8").splitlines() if r.strip()]
+    fisier.replace(dosar / f"toate_inainte_{datetime.now():%Y%m%d_%H%M%S}.jsonl")
+    vazute: set[str] = set()
+    iesite: Counter[str] = Counter()
+    with fisier.open("w", encoding="utf-8") as f:
+        for p in randuri:
+            motiv = de_ce_se_scoate(p, vazute, interzise, ortografie)
+            if p.get("ramane") and motiv is not None:
+                iesite[motiv.split(":")[0]] += 1
+            p.update(ramane=motiv is None, motiv_scos=motiv)
+            if motiv is None:
+                vazute.add(normalizat(p["intrebare"]))
+            f.write(json.dumps(p, ensure_ascii=False) + chr(10))
+    return dict(iesite)
+
+
+def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0) -> int:
+    """Fișa pentru Adrian: 30 de perechi bune de acum, alese la întâmplare (după toate filtrele)."""
+    bune = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
+    bune = [p for p in bune if p.get("ramane")]
+    docs.parent.mkdir(parents=True, exist_ok=True)
+    docs.write_text(fisa_de_verificat(bune, samanta), encoding="utf-8")
+    return len(bune)
+
+
 def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
     toate = [json.loads(r) for r in (dosar / "toate.jsonl").read_text(encoding="utf-8").splitlines() if r.strip()]
     bune = [p for p in toate if p.get("ramane")]
@@ -263,8 +302,9 @@ def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str,
             f.write(json.dumps(p, ensure_ascii=False) + "\n")
     (dosar / "antrenare.txt").write_text(SEPARATOR.join(text_antrenare(p) for p in antrenare) + SEPARATOR,
                                          encoding="utf-8")
-    docs.parent.mkdir(parents=True, exist_ok=True)
-    docs.write_text(fisa_de_verificat(antrenare), encoding="utf-8")
+    if not docs.exists():  # fișa scrisă mai devreme (ex. la 13:00, pentru Adrian) nu se înlocuiește
+        docs.parent.mkdir(parents=True, exist_ok=True)
+        docs.write_text(fisa_de_verificat(antrenare), encoding="utf-8")
     numere = lambda lista: dict(Counter(f"{p['fel']}_{p['limba']}" for p in lista))  # noqa: E731
     info = {"data": datetime.now().isoformat(timespec="seconds"), "scrise": len(toate), "bune": len(bune),
             "antrenare": len(antrenare), "examen": len(examen), "pe_feluri_antrenare": numere(antrenare),
@@ -296,6 +336,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--samanta", type=int, default=0)
     parser.add_argument("--doar-local", action="store_true")
     parser.add_argument("--finalizeaza", action="store_true", help="doar examenul, antrenarea și fișa de verificat")
+    parser.add_argument("--refiltreaza", action="store_true", help="filtrele de acum, pe toate perechile scrise")
+    parser.add_argument("--fisa", action="store_true", help="doar fișa de verificat (30 de perechi bune de acum)")
+    parser.add_argument("--profesor", default="Qwen/Qwen3-4B-Instruct-2507")
+    parser.add_argument("--fara-ortografie", action="store_true")
     parser.add_argument("--dosar", default=DOSAR)
     parser.add_argument("--director-lucru", default="lucru")
     args = parser.parse_args(argv)
@@ -307,6 +351,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.finalizeaza:
         info = finalizeaza(dosar, docs, jurnal)
         print(json.dumps(info, ensure_ascii=False), flush=True)
+        return 0
+    if args.fisa:
+        print(f"Fișa: 30 de perechi din cele {scrie_fisa(dosar, docs)} bune de acum, în {docs}", flush=True)
+        return 0
+    from unelte.ortografie_ro import citeste_exceptii, citeste_lista
+
+    ortografie = None if args.fara_ortografie else (citeste_lista(), citeste_exceptii())
+    if args.refiltreaza:
+        iesite = refiltreaza(dosar, bucati_interzise(), ortografie)
+        print(f"Refiltrat: au ieșit {sum(iesite.values())} perechi care rămăseseră înainte: {iesite}", flush=True)
         return 0
 
     from module.fapte_gresite import subiectele_gresite
@@ -327,7 +381,7 @@ def main(argv: list[str] | None = None) -> int:
         limita = datetime.now().replace(hour=h, minute=m, second=0, microsecond=0)
         if limita <= datetime.now():
             limita += timedelta(days=1)
-    profesor = ProfesorQwen(lot=args.lot, max_simboluri=600, max_simboluri_nota=60, temperatura=0.6,
+    profesor = ProfesorQwen(model=args.profesor, lot=args.lot, max_simboluri=600, max_simboluri_nota=60, temperatura=0.6,
                             samanta=args.samanta, doar_local=args.doar_local)
     start, facute = time.monotonic(), 0
     while bune < args.perechi and (limita is None or datetime.now() < limita) and (not args.cereri or facute < args.cereri):
@@ -336,14 +390,14 @@ def main(argv: list[str] | None = None) -> int:
             break
         cereri = [cererea(k + i, fapte) for i in range(args.lot)]
         texte = profesor.raspunde_mai_multe([mesaje_cerere(c) for c in cereri], 600)
-        perechi = [{**c, "cerere": k + i, "intrebare": q, "raspuns": r}
+        perechi = [{**c, "cerere": k + i, "intrebare": q, "raspuns": r, "profesor": args.profesor}
                    for i, (c, t) in enumerate(zip(cereri, texte)) for q, r in citeste_perechi(t)]
         note = [citeste_nota(t) for t in profesor.raspunde_mai_multe([mesaje_nota(p) for p in perechi], 60,
                                                                    cu_intamplare=False)] if perechi else []
         with toate_f.open("a", encoding="utf-8") as f:
             for p, n in zip(perechi, note):
                 p.update(n)
-                motiv = de_ce_se_scoate(p, vazute, interzise)
+                motiv = de_ce_se_scoate(p, vazute, interzise, ortografie)
                 p.update(ramane=motiv is None, motiv_scos=motiv)
                 if motiv is None:
                     vazute.add(normalizat(p["intrebare"]))

@@ -133,3 +133,20 @@ def test_examenul_taie_raspunsul_si_recunoaste_nu_stiu():
     s = ex.scoruri(intrebari)
     assert s["nota_medie"] == round((8 + 2 + 10) / 3, 3) and s["nota_medie_fara_nu_stiu"] == 5.0
     assert (s["nu_stiu_corecte"], s["nu_stiu_fractie"], s["nu_stiu_la_stiute"], s["note_neciteite"]) == (1, 0.5, 0.5, 1)
+
+
+def test_ortografia_scoate_cuvintele_necunoscute(tmp_path):
+    from unelte import ortografie_ro as orto
+
+    (tmp_path / "ro.txt").write_text("Iarna este rece. Apa îngheață când e frig. Vara e cald. " * 5, encoding="utf-8")
+    cunoscute = set(orto.construieste([tmp_path / "ro.txt"], minim=3))
+    assert {"iarna", "îngheață", "vara"} <= cunoscute
+    # „Ana” la început de propoziție nu se poate deosebi de un cuvânt obișnuit: e verificat (și iese)
+    assert orto.necunoscute("Iarna este frisoasă. Ana spune că vara e cald.", cunoscute) == ["frisoasă", "Ana", "spune", "că"]
+    assert orto.necunoscute("Iarna e rece, spune Ana.", cunoscute) == ["spune"]  # „Ana” în mijloc: nume propriu
+    assert orto.necunoscute("Iarna este frisoasă.", cunoscute, {"frisoasă"}) == []  # excepție
+    ortografie = (cunoscute, set())
+    assert gc.de_ce_se_scoate(pereche(q="Iarna este rece?", r="Apa îngheață."), set(), set(), ortografie) is None
+    assert gc.de_ce_se_scoate(pereche(q="Iarna este rece?", r="Apa se răcosește."), set(), set(),
+                              ortografie) == "cuvânt necunoscut: se, răcosește"
+    assert gc.de_ce_se_scoate(pereche(limba="en", q="Is it cold?", r="Yes, it is."), set(), set(), ortografie) is None

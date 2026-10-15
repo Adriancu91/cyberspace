@@ -66,3 +66,25 @@ profesor.
 - nota medie peste 6,0 sau sub 3,5;
 - poveștile peste 0,48 (amestecul de 20% nu ajunge ca să nu uite);
 - „nu știu” la mai mult de 30% din întrebările care se știu (a învățat să se ferească).
+
+## Adendum 1 (scris joi, 15 octombrie, 10:48, înainte de pornire; cerut de Adrian la ~10:40)
+
+- **Profesorul:** rămâne **Qwen3-4B**. Qwen3-8B (Apache 2.0, licența verificată pe fișa oficială, revizia
+  `b968826d…`) n-a putut fi încercat azi: rețeta merge cu ~0,4 MB/s spre Hugging Face, deci cei 16,4 GB ar dura ~11
+  ore. Descărcarea merge mai departe în fundal, pentru mâine. Comparația 50 + 50 nu s-a făcut.
+- **Filtrul de ortografie** (`unelte/ortografie_ro.py`): orice pereche românească cu un cuvânt necunoscut iese.
+  - **Dicționarul hunspell ro_RO nu e folosit:** licența lui e GPL-2.0 / LGPL-2.1 / MPL-1.1, nu e pe lista lui Adrian.
+    În locul lui: cuvintele care apar de cel puțin 3 ori în Wikipedia și Wikisource în română (date pe care le avem
+    deja), 615.020 de forme. Nume proprii (cu literă mare, nu la început de propoziție) și excepții din
+    `date/conversatie/exceptii_ortografie.txt` sunt permise.
+  - Aplicat și pe perechile deja scrise: **au ieșit 286 din 2.593** (rămân 2.307). Exemple de cuvinte prinse:
+    „anturile”, „camelușii”, „magneț”, „păsăre”, „pâina”, „mănâncăm”, „frisoase”, „răcosește”. Scoate și câteva forme
+    corecte, dar rare („reciclăm”, „becele”): e preferat așa.
+  - **Ce NU prinde:** greșelile de gramatică sau de sens cu cuvinte existente („Ce este vară?”, „ploaia apare des
+    iarna”). Pe acestea le vede doar verificarea lui Adrian.
+- **Ținta:** 4.000–8.000 de perechi bune (calitatea, nu numărul); generarea se oprește la 8.000 sau la 18:20.
+- **Poarta de dinaintea nopții (regula lui Adrian):** la 13:00, 30 de perechi alese la întâmplare după filtru, în
+  `docs/conversatie_de_verificat.md`. **Dacă Adrian găsește peste 3 greșite din 30, W2-conv nu pornește** la noapte
+  (rămâne doar școala de cod), iar perechile se refac mâine. Scriptul nopții pornește W2-conv doar dacă există
+  `lucru/conversatie_aprobata.txt`, scris de Claude Code după răspunsul lui. Fără răspuns: nu pornește.
+- Restul pre-înregistrării (rețeta, examenul, pragurile, așteptările) nu se schimbă.

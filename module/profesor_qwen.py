@@ -225,7 +225,10 @@ class ProfesorQwen:
         import torch
 
         self.pregateste()
-        texte = [self._tok.apply_chat_template(c, tokenize=False, add_generation_prompt=True) for c in conversatii]
+        # enable_thinking=False: Qwen3-8B (15 octombrie 2026) ar scrie altfel întâi un „<think>…”; șablonul lui
+        # Qwen3-4B-Instruct-2507 nu-l folosește, deci pentru el nu se schimbă nimic.
+        texte = [self._tok.apply_chat_template(c, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+                 for c in conversatii]
         intrare = self._tok(texte, return_tensors="pt", padding=True).to(self._llm.device)
         if cu_intamplare:  # aceeași sămânță și aceleași cereri = aceleași povești
             torch.manual_seed(self.samanta * 100_003 + self._loturi)
