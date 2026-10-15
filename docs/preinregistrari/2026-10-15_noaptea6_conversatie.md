@@ -88,3 +88,18 @@ profesor.
   (rămâne doar școala de cod), iar perechile se refac mâine. Scriptul nopții pornește W2-conv doar dacă există
   `lucru/conversatie_aprobata.txt`, scris de Claude Code după răspunsul lui. Fără răspuns: nu pornește.
 - Restul pre-înregistrării (rețeta, examenul, pragurile, așteptările) nu se schimbă.
+
+## Adendum 2 (scris joi, 15 octombrie, 11:10, înainte de pornire): Qwen3-8B față de Qwen3-4B
+
+- Descărcarea lui Qwen3-8B s-a terminat totuși la 11:05 (rețeaua s-a îndreptat). Comparația cerută de Adrian s-a
+  făcut: aceleași 10 cereri românești „zi” (aceleași teme), câte 50 de perechi, fără filtre. Perechile:
+  `docs/conversatie/comparatie_qwen3_8b.json` și `comparatie_qwen3_4b.json`.
+- **Greșelile, numărate de Claude Code** (o pereche e greșită dacă are o greșeală de română sau un lucru fals ori
+  fără sens): **Qwen3-8B: ~40 din 50; Qwen3-4B: ~30 din 50.** La 8B: „Ce este păsăre?”, „mânâncă”, „Se se cade pe
+  spate”, „Înțepă aerul”, „plăcintă” în loc de placă dentară. La 4B: „un jucărie”, „a zboara”, „vaselor sanguine”,
+  „pătrunjel de foc”.
+- Qwen3-8B în 4 biți, cu lotul de 8: 6.624 MB la paznic, dar **7.533 MB pe toată placa**.
+- **Rămâne Qwen3-4B**, cum a hotărât Adrian pentru cazul în care 8B e mai slab.
+- **Cât curăță filtrele:** pe cele 50 de perechi ale lui 4B, nota ≥ 8 și ortografia lasă să treacă 18, dintre care
+  **10 sunt tot greșite** (după Claude Code). Deci e foarte probabil ca la verificarea de la 13:00 să fie peste 3
+  greșite din 30, iar W2-conv să nu pornească la noapte.

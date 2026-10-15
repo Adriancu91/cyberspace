@@ -1,0 +1,302 @@
+[
+ {
+  "tema": "păsările",
+  "unghi": "ce este",
+  "intrebare": "Ce este păsăre?",
+  "raspuns": "Păsăre este un animal cu pălărie, aripi și picioare. Învață să zboară."
+ },
+ {
+  "tema": "păsările",
+  "unghi": "ce este",
+  "intrebare": "Ce mânâncă păsările?",
+  "raspuns": "Păsările mânâncă semințe, frunze, păianjeni. Unele mânâncă pește."
+ },
+ {
+  "tema": "păsările",
+  "unghi": "ce este",
+  "intrebare": "Ce face păsările în zăpadă?",
+  "raspuns": "Păsările se ascund în zăpadă. Nu se mai zboară."
+ },
+ {
+  "tema": "păsările",
+  "unghi": "ce este",
+  "intrebare": "Ce este un șoarece?",
+  "raspuns": "Șoarece este un animal mic, cu coarne. Îl mănâncă unele păsări."
+ },
+ {
+  "tema": "păsările",
+  "unghi": "ce este",
+  "intrebare": "Ce face păsările cu puii lor?",
+  "raspuns": "Păsările îngrijește puii lor. Le dă mâncare."
+ },
+ {
+  "tema": "internetul în siguranță",
+  "unghi": "de ce",
+  "intrebare": "De ce trebuie să verificăm linkurile înainte de a le apăsa?",
+  "raspuns": "Pentru a evita să intrăm în site-uri periculoase."
+ },
+ {
+  "tema": "internetul în siguranță",
+  "unghi": "de ce",
+  "intrebare": "De ce nu trebuie să împărtășim datele personale online?",
+  "raspuns": "Pentru a proteja confidențialitatea noastră."
+ },
+ {
+  "tema": "internetul în siguranță",
+  "unghi": "de ce",
+  "intrebare": "De ce este important să folosim parolă puternică?",
+  "raspuns": "Pentru a ne proteja conturile de acces neautorizat."
+ },
+ {
+  "tema": "internetul în siguranță",
+  "unghi": "de ce",
+  "intrebare": "De ce nu trebuie să răspundem la mesaje neștiute?",
+  "raspuns": "Pentru a nu fi victime de fraude sau spam."
+ },
+ {
+  "tema": "internetul în siguranță",
+  "unghi": "de ce",
+  "intrebare": "De ce este important să avem un antivirus?",
+  "raspuns": "Pentru a proteja computerul de virusi și malware."
+ },
+ {
+  "tema": "corpul și mișcarea",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face exercițiul de întindere?",
+  "raspuns": "Se ia un scaun. Se se cade pe spate. Se ține 5 secunde."
+ },
+ {
+  "tema": "corpul și mișcarea",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face exercițiul de flexiune?",
+  "raspuns": "Se ia un scaun. Se se cade pe genunchi. Se ține 10 secunde."
+ },
+ {
+  "tema": "corpul și mișcarea",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face exercițiul de trăncușit?",
+  "raspuns": "Se ia un scaun. Se se cade pe genunchi. Se ține 10 secunde."
+ },
+ {
+  "tema": "corpul și mișcarea",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face exercițiul de întindere a piciorului?",
+  "raspuns": "Se ia un scaun. Se se cade pe un picior. Se ține 10 secunde."
+ },
+ {
+  "tema": "corpul și mișcarea",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face exercițiul de întindere a brațului?",
+  "raspuns": "Se ia un scaun. Se se cade pe un braț. Se ține 10 secunde."
+ },
+ {
+  "tema": "zahărul",
+  "unghi": "care e diferența dintre două lucruri",
+  "intrebare": "Ce e diferenta între zahăr și sirop?",
+  "raspuns": "Zahărul e solid, siropul e lichid."
+ },
+ {
+  "tema": "zahărul",
+  "unghi": "care e diferența dintre două lucruri",
+  "intrebare": "De ce e mai dulce zahărul decât fructele?",
+  "raspuns": "Zahărul are mai multe calorii. Fructele au și vitamine."
+ },
+ {
+  "tema": "zahărul",
+  "unghi": "care e diferența dintre două lucruri",
+  "intrebare": "Ce se întâmplă dacă mănânc prea mult zahăr?",
+  "raspuns": "Înțepătura se face mai mare. Poate fi rău pentru dinți."
+ },
+ {
+  "tema": "zahărul",
+  "unghi": "care e diferența dintre două lucruri",
+  "intrebare": "De ce zahărul e alb?",
+  "raspuns": "Zahărul e făcut din suc de cană. Are un proces special."
+ },
+ {
+  "tema": "zahărul",
+  "unghi": "care e diferența dintre două lucruri",
+  "intrebare": "Ce e zahărul făcut din?",
+  "raspuns": "Zahărul e făcut din cană. Are un proces special."
+ },
+ {
+  "tema": "sănătatea",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este sângele și ce face?",
+  "raspuns": "Sângele este lichid care circulă în corp. Aduce oxigen și nutrienți la toate celule. Înțepă și curăță toxine."
+ },
+ {
+  "tema": "sănătatea",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este sistemul respirator?",
+  "raspuns": "Sistemul respirator este format din plămâni și nas. Înțepă aerul și îi dă oxigen corpului. Expelează dioxid de carbon."
+ },
+ {
+  "tema": "sănătatea",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este sistemul digestiv?",
+  "raspuns": "Sistemul digestiv este format din stomac și intestin. Însumește mâncarea și o face mai ușor de absorbit. Păstrează nutrienții."
+ },
+ {
+  "tema": "sănătatea",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este sistemul imunitar?",
+  "raspuns": "Sistemul imunitar este format din celule și organe. Închide infecțiile și protejează corpul. Funcționează cu ajutorul anticorpilor."
+ },
+ {
+  "tema": "sănătatea",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este sistemul nervos?",
+  "raspuns": "Sistemul nervos este format din creier și nervi. Transmite mesaje între organe. Ajută la gândire și mișcare."
+ },
+ {
+  "tema": "focul și siguranța",
+  "unghi": "ce este",
+  "intrebare": "Ce este focul?",
+  "raspuns": "Focul este o lumină și căldură. Focul se face cu flacără. Focul poate arde lucrurile."
+ },
+ {
+  "tema": "focul și siguranța",
+  "unghi": "ce este",
+  "intrebare": "Ce este un bec?",
+  "raspuns": "Becul este o sursă de lumină. Becul este într-o lampă. Becul nu arde."
+ },
+ {
+  "tema": "focul și siguranța",
+  "unghi": "ce este",
+  "intrebare": "Ce este un extintor?",
+  "raspuns": "Extintorul este un aparat. Extintorul extinge focul. Extintorul are aer comprimat."
+ },
+ {
+  "tema": "focul și siguranța",
+  "unghi": "ce este",
+  "intrebare": "Ce este un mănușar?",
+  "raspuns": "Mănușarul este un obiect. Mănușarul protejează mâinile. Mănușarul se folosește la foc."
+ },
+ {
+  "tema": "focul și siguranța",
+  "unghi": "ce este",
+  "intrebare": "Ce este un păianjen?",
+  "raspuns": "Păianjenul este un animal. Păianjenul are picioare. Păianjenul nu are șoarece."
+ },
+ {
+  "tema": "banii și cumpărăturile",
+  "unghi": "de ce",
+  "intrebare": "De ce oamenii folosesc bani?",
+  "raspuns": "Pentru că bani pot cumpăra lucruri. Bani sunt recunoscute de toți. Bani sunt ușor de schimbat."
+ },
+ {
+  "tema": "banii și cumpărăturile",
+  "unghi": "de ce",
+  "intrebare": "De ce cumpărăm produse?",
+  "raspuns": "Pentru că avem nevoie de ele. Produsele sunt utile. Unele produse sunt gustate."
+ },
+ {
+  "tema": "banii și cumpărăturile",
+  "unghi": "de ce",
+  "intrebare": "De ce nu cumpărăm tot ce vrem?",
+  "raspuns": "Pentru că nu avem bani. Bani sunt limitați. Cumpărăm doar ceea ce putem plăti."
+ },
+ {
+  "tema": "banii și cumpărăturile",
+  "unghi": "de ce",
+  "intrebare": "De ce e important să economisim?",
+  "raspuns": "Pentru că avem nevoie de bani. Bani economisiți pot fi folosiți mai târziu. Economisirea ajută la cumpărături."
+ },
+ {
+  "tema": "banii și cumpărăturile",
+  "unghi": "de ce",
+  "intrebare": "De ce cumpărăturile sunt importante?",
+  "raspuns": "Pentru că ne ajută să trăim. Cumpărăturile includ mâncare. Cumpărăturile includ haine."
+ },
+ {
+  "tema": "orașul",
+  "unghi": "cum se face",
+  "intrebare": "Cum se face un oraș din pietre?",
+  "raspuns": "Se pune pietra pe alta. Se face drum pentru mașini. Se adaugă case și străzi."
+ },
+ {
+  "tema": "orașul",
+  "unghi": "cum se face",
+  "intrebare": "Ce se face cu pietrele în oraș?",
+  "raspuns": "Se folosesc pentru case. Se folosesc pentru străzi. Se folosesc pentru pășuni."
+ },
+ {
+  "tema": "orașul",
+  "unghi": "cum se face",
+  "intrebare": "De ce se face orașul?",
+  "raspuns": "Pentru a locui. Pentru a merge la școală. Pentru a avea prieteni."
+ },
+ {
+  "tema": "orașul",
+  "unghi": "cum se face",
+  "intrebare": "Ce se mai face în oraș?",
+  "raspuns": "Se face un magazin. Se face un parc. Se face o școală."
+ },
+ {
+  "tema": "orașul",
+  "unghi": "cum se face",
+  "intrebare": "Ce este un oraș?",
+  "raspuns": "Este loc unde locuim. Are case și străzi. Are oameni și mașini."
+ },
+ {
+  "tema": "prietenia",
+  "unghi": "un sfat practic",
+  "intrebare": "Ce trebuie să faci dacă prietenul tău te cheamă la cap?",
+  "raspuns": "Spune-i că nu ești de acord. Nu te supăra. Spune-i că ești într-o zi grea."
+ },
+ {
+  "tema": "prietenia",
+  "unghi": "un sfat practic",
+  "intrebare": "Ce să faci dacă prietenul tău nu te cheamă la joc?",
+  "raspuns": "Nu te supăra. Spune-i că ești ocupat. Sărbătoresc cu alții."
+ },
+ {
+  "tema": "prietenia",
+  "unghi": "un sfat practic",
+  "intrebare": "Ce să faci dacă prietenul tău te pune la încercare?",
+  "raspuns": "Nu te supăra. Spune-i că nu ești pregătit. Încearcă mai târziu."
+ },
+ {
+  "tema": "prietenia",
+  "unghi": "un sfat practic",
+  "intrebare": "Ce să faci dacă prietenul tău te cheamă la cap?",
+  "raspuns": "Spune-i că nu ești de acord. Nu te supăra. Spune-i că ești într-o zi grea."
+ },
+ {
+  "tema": "prietenia",
+  "unghi": "un sfat practic",
+  "intrebare": "Ce să faci dacă prietenul tău nu te cheamă la joc?",
+  "raspuns": "Nu te supăra. Spune-i că ești ocupat. Sărbătoresc cu alții."
+ },
+ {
+  "tema": "dinții",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este un dinte?",
+  "raspuns": "Dinte este o parte dințată din piele. Ajută la măcina mâncarea. Se află în gură."
+ },
+ {
+  "tema": "dinții",
+  "unghi": "cum funcționează",
+  "intrebare": "De ce sunt dinții albi?",
+  "raspuns": "Dinții sunt albi pentru că au o suprafață lucioasă. Se curăță cu pasta și bărbierul. Astfel rămân albi."
+ },
+ {
+  "tema": "dinții",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce se întâmplă când mănâncăm?",
+  "raspuns": "Mâncarea se taie în bucăți mici. Dinții o măcina. Astfel se pregătește pentru a fi înghițită."
+ },
+ {
+  "tema": "dinții",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce se întâmplă dacă nu se curăță dinții?",
+  "raspuns": "Se adună plăcintă pe dinți. Plăcinta face rău gurii. Se pot face bolile."
+ },
+ {
+  "tema": "dinții",
+  "unghi": "cum funcționează",
+  "intrebare": "Ce este plăcinta?",
+  "raspuns": "Plăcinta este o substanță albă. Se adună pe dinți. Se face cu bărbierul și pasta."
+ }
+]
