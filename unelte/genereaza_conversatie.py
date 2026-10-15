@@ -103,10 +103,11 @@ _MOTIV = re.compile(r"(?:REASON|MOTIV)\s*:\s*(.+)", re.IGNORECASE)
 
 # --- cererile -------------------------------------------------------------------------------------------------------
 
-def cererea(k: int, fapte: list[tuple[str, str]]) -> dict[str, Any]:
-    """A k-a cerere (de la 0): felul (după CICLU), limba (4 din 5 în română) și ce se cere."""
+def cererea(k: int, fapte: list[tuple[str, str]], doar_engleza: bool = False) -> dict[str, Any]:
+    """A k-a cerere (de la 0): felul (după CICLU), limba (4 din 5 în română; cu doar_engleza, toate în engleză) și ce se
+    cere."""
     fel = CICLU[k % len(CICLU)]
-    limba = "en" if (k // len(CICLU) + k) % 5 == 4 else "ro"
+    limba = "en" if doar_engleza or (k // len(CICLU) + k) % 5 == 4 else "ro"
     runda = k // len(CICLU)
     if fel == "zi":
         tema = TEME[(k * 7 + runda) % len(TEME)]
@@ -213,6 +214,8 @@ def de_ce_se_scoate(p: dict[str, Any], vazute: set[str], interzise: set[str],
         return "fără notă"
     if p["nota"] < NOTA_MINIMA:
         return "nota sub 8"
+    if p.get("profesor", "").startswith("Qwen/") and p["limba"] == "ro" and p["fel"] in ("zi", "nu_stiu"):
+        return "română liberă de la Qwen (scoasă de Adrian, 15 octombrie)"
     if p["fel"] == "nu_stiu" and normalizat(p["raspuns"]) != normalizat(NU_STIU[p["limba"]]):
         return "„nu știu” cu alt răspuns"
     if p["fel"] != "nu_stiu" and normalizat(p["raspuns"]) in {normalizat(x) for x in NU_STIU.values()}:
@@ -271,6 +274,7 @@ def refiltreaza(dosar: Path, interzise: set[str], ortografie: tuple[set[str], se
     iesite: Counter[str] = Counter()
     with fisier.open("w", encoding="utf-8") as f:
         for p in randuri:
+            p.setdefault("profesor", "Qwen/Qwen3-4B-Instruct-2507")  # perechile scrise înainte de câmpul „profesor”
             motiv = de_ce_se_scoate(p, vazute, interzise, ortografie)
             if p.get("ramane") and motiv is not None:
                 iesite[motiv.split(":")[0]] += 1
@@ -340,6 +344,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fisa", action="store_true", help="doar fișa de verificat (30 de perechi bune de acum)")
     parser.add_argument("--profesor", default="Qwen/Qwen3-4B-Instruct-2507")
     parser.add_argument("--fara-ortografie", action="store_true")
+    parser.add_argument("--doar-engleza", action="store_true", help="din 15 octombrie, 11:20: profesorul scrie doar în engleză")
     parser.add_argument("--dosar", default=DOSAR)
     parser.add_argument("--director-lucru", default="lucru")
     args = parser.parse_args(argv)
@@ -388,7 +393,7 @@ def main(argv: list[str] | None = None) -> int:
         if (RADACINA / args.director_lucru / "STOP").exists():
             print("Oprit: butonul STOP (lucru/STOP).", flush=True)
             break
-        cereri = [cererea(k + i, fapte) for i in range(args.lot)]
+        cereri = [cererea(k + i, fapte, args.doar_engleza) for i in range(args.lot)]
         texte = profesor.raspunde_mai_multe([mesaje_cerere(c) for c in cereri], 600)
         perechi = [{**c, "cerere": k + i, "intrebare": q, "raspuns": r, "profesor": args.profesor}
                    for i, (c, t) in enumerate(zip(cereri, texte)) for q, r in citeste_perechi(t)]

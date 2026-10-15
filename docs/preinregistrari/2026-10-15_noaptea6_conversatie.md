@@ -103,3 +103,26 @@ profesor.
 - **Cât curăță filtrele:** pe cele 50 de perechi ale lui 4B, nota ≥ 8 și ortografia lasă să treacă 18, dintre care
   **10 sunt tot greșite** (după Claude Code). Deci e foarte probabil ca la verificarea de la 13:00 să fie peste 3
   greșite din 30, iar W2-conv să nu pornească la noapte.
+
+## Adendum 3 (scris joi, 15 octombrie, 11:18, înainte de orice antrenare): rezultat negativ și surse noi pentru română
+
+- **Rezultat negativ, notat ca atare:** profesorul Qwen nu scrie o română destul de bună pentru Kronos. Qwen3-8B (~40
+  de perechi greșite din 50) e mai slab decât Qwen3-4B (~30 din 50), iar filtrele (nota și ortografia) nu ajung: din
+  perechile lui 4B care le trec, ~10 din 18 sunt tot greșite (Adendumul 2).
+- **Hotărârea lui Adrian (~11:15):** nu luăm româna liberă de la Qwen, nici de la 4B, nici de la 8B.
+  - Generarea în română a lui Qwen e oprită: de acum scrie doar în engleză (`--doar-engleza`).
+  - Perechile lui românești „zi” și „nu știu” deja scrise ies toate (**1.479**). Rămân perechile lui în engleză și cele
+    despre fapte (în română și engleză).
+- **Sursele noi pentru română:**
+  1. **Wikipedia în română** (o avem în `date/ws/`): perechi „Ce este X?” / „Cine a fost X?” / „Unde se află X?”;
+     răspunsul = primele 1–3 propoziții ale articolului, scrise de oameni. Doar articole cu început curat; niciun
+     articol din validări sau din examene. Ținta: 5.000–10.000. Atribuire CC BY-SA în `docs/DATE_surse.md`.
+  2. **Traducere:** perechile lui Qwen în engleză (deja notate ≥ 8), traduse în română de Helsinki-NLP/opus-mt-en-ro
+     (licența pe fișa lui: Apache 2.0; revizia `96e8fea9…`), pe procesor. Ținta: 2.000–4.000.
+  3. Câteva sute de „Nu știu sigur.” în română, scrise de Claude Code (șabloane scurte, verificate).
+  4. Filtrul de ortografie pe toate perechile românești.
+- **Fișa pentru Adrian: la 16:00** (nu la 13:00): 30 de perechi românești la întâmplare, 15 din Wikipedia și 15 din
+  traducere. Regula rămâne: peste 3 greșite din 30 → W2-conv nu pornește la noapte.
+- Proporția română / engleză nu mai e fixată la 80 / 20: iese din câte perechi bune dă fiecare sursă (se raportează).
+- Restul pre-înregistrării (rețeta, examenul, pragurile, așteptările) nu se schimbă. Examenul de 300 se ia din același
+  amestec de surse; o pereche tradusă și originalul ei englezesc nu se despart între examen și antrenare.
