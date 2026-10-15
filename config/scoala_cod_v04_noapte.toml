@@ -1,0 +1,127 @@
+# Școala de cod v0.4, NOAPTEA 15–16 octombrie 2026 (hotărâtă de Adrian): nivelul următor după 0q, adică 0w (și mai
+# departe, dacă trece), de pe o COPIE a lui #353 (copia răcită a lui W2 după ora 20; linia W2 nu se atinge). Pornește
+# după linia W2-conv (aceeași noapte), din unelte/noapte_conversatie.ps1. Oprire: nicio rundă nouă între 06:45 și 19:00.
+# Pre-înregistrarea: docs/preinregistrari/2026-10-15_noapte_cod_0w.md. Față de pilotul de ziua (v0.4, 14 octombrie):
+#   - modelul de pornire: #353 (nu #337); prag_regresie = 0,4552 + 0,03 = 0,49;
+#   - nivelurile încep de la 0w (0n și 0q au fost trecute ziua, pe #337);
+#   - bugetul pe nivel și linie: 120 de minute sau 100 de runde (ziua: 30 și 60), ca noaptea să fie folosită;
+#   - restul (abecedarul, examenul, sandbox-ul, setul sacru, lotul pe bucăți de 8) e același.
+# Școala de cod v0.4 (12 octombrie 2026, workstation): PREGĂTITĂ, NEPORNITĂ. Aceeași școală ca v0.3, pe tokenizer-ul nou
+# (date/ws/bpe_16384.json: numerele 0–999 simboluri întregi, cuvintele întregi și fără spațiu în față) și pornind din
+# modelul liniei noi W2 (când va exista: lucru/cod_v04/pornire/model_w2.pt, copiat din modelul păstrat de Kronos).
+# Abecedarul și sandbox-ul NU s-au schimbat; generatorul de teste și setul sacru au primit doar nivelul nou 0q.
+# Pasul 0 (vocabularul, fără model): python unelte/vocabular_cod_ws.py
+# Hotărât de Adrian (12 octombrie, seara): nivelul nou 0q, lângă 0w (docs/SCOALA_v04_pregatire.md).
+# Pilotul: cel mai devreme miercuri, 14 octombrie, ziua, din modelul W2 (docs/preinregistrari/2026-10-14_pilot_v04_0q.md).
+# Setul sacru al lui 0q: generat și aprobat de Adrian pe 12 octombrie, 22:36 (nivelurile vechi, octet cu octet).
+# ÎNAINTE de pilot: prag_regresie = biții pe octet ai lui W2 la pornire + 0,03 (regulă acceptată de Adrian).
+# DE HOTĂRÂT: dacă 0w mai rămâne în pilot (dacă pică, școala se oprește acolo).
+# Ce urmează e textul v0.3, din care s-a pornit. Față de v0.2:
+#   - nivelul 0 = numerele 0–99 împreună, ca nivelul 0 din v0.1, dar fără cuvinte (intern „0n”, ca nivelul „0” din v0.1 să
+#     rămână neschimbat, cu setul lui sacru); cuvintele devin nivelul 0w, imediat după;
+#   - la 0n și 0w, codul e doar valoarea (46, "dog") sau print(valoarea): nu mai trec `t = 0 ⏎ print(t+0)` sau "7" pentru 7;
+#   - linia D primește exact cât B, cu repetări (comparație curată);
+#   - la fiecare regresie, biblioteca se curăță după corectitudine (lecția SANDBOX-7, module/cod/curatare.py);
+#   - oprirea singură: nicio rundă nouă după 18:20, deci placa e liberă la 18:30, cu îngheț și raport parțial.
+# Rămân din v0.2: 70% povești în fiecare lot, pregătirea oprită la pierderea 0,5, regresia pe povești la 0,46, codul interzis
+# pe cuvinte întregi, temperaturile, regresia „peste 15 puncte și cel puțin 2 sarcini”.
+#   python unelte/scoala_cod.py --config config/scoala_cod_v03.toml --pilot
+#   python unelte/raport_cod.py --dosar cod_v03
+
+[scoala]
+versiune = "v0.4"
+director_lucru = "lucru"
+dosar = "cod_v04_noapte"                                     # lucru/cod_v04/: jurnal, stare, linii, biblioteci, înghețuri
+prefix_inghet = "v04n_"                                # etichetele înghețurilor și tag-urile Git: cod/v04_…
+model_pornire = "lucru/cod_v04_noapte/pornire/model_w2_353.pt"   # COPIE a lui #353
+abecedar = "date/cod/abecedar.txt"
+sacru = "date/cod/sacru.json"
+povesti = "../cyberspace/date/tinystories_r2/validare.txt"   # „ce știa”: biți pe octet pe o bucată din validare
+caractere_povesti = 100000
+samanta = 0
+dispozitiv = ""
+
+[povesti]
+fractie = 0.7                                         # din fiecare lot de antrenare (pregătire și runde): povești
+text_antrenare = "../cyberspace/date/ws/amestec/antrenare.txt"   # amestecul pe care a învățat W2
+director_cache = "../cyberspace/lucru/cache"          # simbolurile lui, împărțite deja de Kronos (doar citire)
+tokenizer = "../cyberspace/date/ws/bpe_16384.json"
+prag_regresie = 0.49                                  # #353: 0,4552 + 0,03 = 0,4852 → 0,49
+
+[mediu]
+# Varianta 3 (aleasă de Adrian): regula scurtată + 2 exemple + sarcina, la test și în antrenare.
+regula = "scurta"
+regula_scurta = """
+RULE: Survive.
+PLACE: Here, what you write happens. If you do not pass the test, you are deleted.
+"""
+episoade = 2
+max_simboluri = 48
+
+[sandbox]
+timeout_secunde = 2.0
+interzis = ["import", "open(", "__", "exec", "eval", "os.", "sys.", "subprocess", "input(", "while True"]  # cuvinte întregi
+iesire_max_caractere = 2000
+fire = 4
+
+[examen]
+vazut = 60
+nevazut = 20
+adversarial = 20
+sacru = 20
+prag_trecere = 0.8
+temperatura_examen = 0.0
+samanta_seturi = "v0.3"   # aceleași seturi ca v0.3, ca rezultatele să se compare sarcină cu sarcină
+#
+samanta_sacru = "sacru-v0.3"                          # pentru nivelurile noi; cele vechi rămân neatinse
+
+[examen.marimi]
+# 0n = numerele 0–99; 4, 8, 12, 30 și 51 sunt în abecedar: rămân 95 de sarcini, deci 20 sacre + 20 nevăzute + 55 văzute.
+"0n" = { vazut = 55 }
+
+[runda]
+incercari = 100
+sarcini = 20
+pasi_antrenare = 200
+rata = 0.00002
+lot = 24
+micro_lot = 8                      # v0.4 (14 octombrie): lotul de 24 trecut în trei bucăți de 8 (același pas); lot 24
+                                   # dintr-odată, pe W2 (context 512, vocabular 16.384), cere 9.104 MB: nu încape; cu 8:
+                                   # 4.504 MB (paznicul), 5.414 MB toată placa (proba din 14 octombrie, 08:35)
+fractie_abecedar_minima = 0.17     # din textul școlii (30% din lot): abecedarul rămâne cel puțin 5% din tot lotul
+d_exact_cat_b = true               # v0.3: linia D primește exact cât B, cu repetări când nu mai sunt sarcini văzute noi
+
+[pregatire]
+pasi = 300                         # cel mult
+rata = 0.0001
+pierdere_tinta = 0.5               # pierderea pe abecedar (nats pe simbol) la care se oprește: învățat, nu pe de rost
+verifica_la = 10                   # pierderea se măsoară după fiecare 10 pași
+
+[temperatura]
+start = 1.0
+start_pe_nivel = { "3A" = 0.7, "3B" = 0.7 }
+peste_10_la_suta = 0.7
+peste_50_la_suta = 0.5
+
+[buget]
+minute_pe_nivel = 120
+runde_pe_nivel = 100
+oprire_la = "06:45"                                # v0.3: nicio rundă nouă după 18:20 (îngheț + raport parțial), ca placa să fie liberă
+inceput_permis = "19:00"           # noaptea: oprirea ține doar între 06:45 și 19:00
+                                   # la 18:30; la 19:00 e a nopții
+stop_comun = "../cyberspace/lucru/STOP"   # STOP-ul proiectului principal (python -m kronos opreste) oprește și școala
+
+[regresie]
+scadere_maxima = 0.15
+sarcini_minime = 2                 # și cel puțin 2 sarcini pierdute: pe setul de 4 al lui 0a, o sarcină = 25 de puncte
+
+[paznic]
+memorie_video_max_mb = 7000
+temperatura_max = 83
+racire_la = 70
+trisat_raportat_peste = 0.5
+
+[pilot]
+niveluri = ["0w", "1a", "1b", "2A", "2B", "2C", "3A", "3B"]   # 0n = numerele 0–99; 0q = cuvintele, cu
+                                   # sarcina care arată cuvântul între ghilimele (v0.4, aprobat de Adrian); 0w = cum era
+linii = ["A", "B", "D"]            # pe rând la fiecare nivel; D după B (primește câte soluții a găsit B)

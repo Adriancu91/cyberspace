@@ -483,3 +483,12 @@ def test_v03_stop_comun_opreste_si_scoala(tmp_path):
     assert "butonul STOP comun (stop_comun/STOP)" in jurnal(s)[-1]["motiv"]
     stop.unlink()
     assert s.nivel("A", "0n") == "trecut"  # se reia de unde a rămas
+
+
+@pytest.mark.parametrize("ora, dupa", [((22, 30), False), ((2, 0), False), ((6, 44), False), ((6, 45), True),
+                                       ((12, 0), True), ((18, 59), True), ((19, 0), False)])
+def test_v04_noaptea_oprirea_tine_doar_intre_oprire_si_inceputul_permis(tmp_path, ora, dupa):
+    s = scoala_v03(tmp_path, {"buget.oprire_la": "06:45"})
+    s.cfg["buget"]["inceput_permis"] = "19:00"
+    s.ceas = lambda: datetime(2026, 10, 15, *ora)
+    assert s.dupa_ora_de_oprire() is dupa

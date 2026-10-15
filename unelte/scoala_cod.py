@@ -596,9 +596,17 @@ class Scoala:
                 return self._trecut(stare, linie, nivel, elev, rand, buget)
 
     def dupa_ora_de_oprire(self) -> bool:
-        """v0.3: după `[buget] oprire_la` (ex. „18:30”), școala nu mai începe nicio rundă."""
+        """v0.3: după `[buget] oprire_la` (ex. „18:30”), școala nu mai începe nicio rundă. v0.4, noaptea (15 octombrie
+        2026): cu `[buget] inceput_permis` (ex. „19:00”), oprirea ține doar între oprire_la și inceput_permis (ex. 06:45 →
+        19:00), deci o rulare pornită seara merge peste miezul nopții, până dimineață."""
         ora = self.cfg["buget"].get("oprire_la")
-        return bool(ora) and self.ceas().time() >= datetime.strptime(ora, "%H:%M").time()
+        if not ora:
+            return False
+        acum, oprire = self.ceas().time(), datetime.strptime(ora, "%H:%M").time()
+        inceput = self.cfg["buget"].get("inceput_permis")
+        if inceput:
+            return oprire <= acum < datetime.strptime(inceput, "%H:%M").time()
+        return acum >= oprire
 
     def _oprit(self, stare: dict[str, Any], linie: str, nivel: str, motiv: str) -> str:
         if motiv.startswith("ora de oprire"):  # raport parțial: starea liniei se îngheață, ca dimineața să se poată relua
