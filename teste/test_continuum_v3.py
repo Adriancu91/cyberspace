@@ -149,6 +149,15 @@ def test_pauza_nu_sare_peste_inceputul_ferestrei(tmp_path, monkeypatch):
     assert bucla(ora="21:30").ciclu()["nivel"] == "REPAUS"  # după 21:00 nu se mai pornește o antrenare de noapte
 
 
+def test_cand_alegerea_e_a_omului_doar_observa_si_spune_de_ce(tmp_path, monkeypatch):
+    lume(tmp_path, monkeypatch, inlocuiri={'procese_grele = ["python"]': 'procese_grele = ["python"]\n'
+                                           'om_decide_pana_la = "2026-10-08T07:45"\nom_decide_motiv = "azi alege Adrian"'})
+    rand = bucla(ora="23:30").ciclu()  # Lume: 7 octombrie
+    assert rand["nivel"] == "REPAUS" and "nevoie" not in rand
+    assert rand["de_ce_nivelul"].startswith("azi alege Adrian (până la 08.10 07:45)")
+    assert "deprinde:romana" in [n["nevoie"] for n in rand["nevoi"]]  # nevoile se văd, dar nu se aleg
+
+
 def test_configurarea_gresita_e_refuzata(tmp_path, monkeypatch):
     lume(tmp_path, monkeypatch, inlocuiri={'prag_deprins = 3.0\nmodule = ["model"]\nunealta = { linie = "examen_validari_ws", scor = "bpb_cod" }':
                                            'module = ["model"]\nunealta = { linie = "examen_validari_ws", scor = "bpb_cod" }'})

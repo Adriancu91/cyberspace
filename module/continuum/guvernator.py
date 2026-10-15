@@ -89,6 +89,9 @@ def nivel(observat: Any, config: dict[str, Any]) -> tuple[str, str]:
     """(nivelul, de ce) din ce s-a observat: ora, omul, placa. Motivul e o propoziție în română, pentru jurnal."""
     g = config["guvernator"]
     ora = observat.timp.time()
+    if g.get("om_decide_pana_la") and observat.timp < g["om_decide_pana_la"]:
+        return REPAUS, (f"{g['om_decide_motiv']} (până la {g['om_decide_pana_la']:%d.%m %H:%M}): nu pornesc nimic, doar "
+                        f"observ")
     if in_fereastra(ora, g["fereastra_invatare"]):
         nivel_ferestrei, fereastra = INVATARE, f"e fereastra de învățare ({text_fereastra(g['fereastra_invatare'])})"
     elif in_fereastra(ora, g["fereastra_intretinere"]):

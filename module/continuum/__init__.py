@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import math
 import tomllib
+from datetime import datetime
 from datetime import time as Ora
 from pathlib import Path
 from typing import Any
@@ -195,6 +196,12 @@ def citeste_config(cale: str | Path) -> dict[str, Any]:
         "buget_ore_placa_pe_zi": _numar({"buget_ore_placa_pe_zi": IMPLICITE_V1["buget_ore_placa_pe_zi"], **g},
                                         "buget_ore_placa_pe_zi", "[guvernator]"),
     }
+    if "om_decide_pana_la" in g:  # v3: până atunci alegerea e a omului; CONTINUUM doar observă și spune de ce
+        try:
+            guvernator["om_decide_pana_la"] = datetime.fromisoformat(str(g["om_decide_pana_la"]))
+        except ValueError:
+            raise EroareContinuum("În [guvernator], „om_decide_pana_la” e de forma „2026-10-16T07:45”") from None
+        guvernator["om_decide_motiv"] = str(g.get("om_decide_motiv") or "alegerea e a omului")
 
     i = sectiune("invatare")
     invatare = {"incredere_initiala": _numar(i, "incredere_initiala", "[invatare]"),
