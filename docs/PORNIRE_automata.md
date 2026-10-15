@@ -1,8 +1,8 @@
 # Pornirea automată pe workstation (12 octombrie 2026)
 
 *Ce e făcut, ce se întâmplă la o repornire de Windows și ce variante sunt pentru restul. Adrian a aprobat logarea
-automată (varianta B) luni seara; totul e pregătit, dar ea se activează abia când își scrie el parola în Autologon,
-la workstation (vezi la sfârșit).*
+automată (varianta B) luni seara. **Joi, 15 octombrie, seara, Adrian a activat Autologon** (contul `Computer`, cu
+parola locală). Rămân setarea din BIOS și o repornire de probă (vezi la sfârșit).*
 
 ## Ce e făcut
 
@@ -76,15 +76,18 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
 - Reluarea antrenării la logare („Kronos reluare …”) exista deja; se pune pentru fiecare noapte, odată cu pornirea ei.
 - Ce fac aceste sarcini se notează în `lucru/dupa_logare.log`.
 
-**Ce mai ai tu de făcut, când ajungi la workstation (5 minute):**
+**Pașii, pentru Adrian (1 și 2 sunt făcuți: joi, 15 octombrie, seara):**
 1. Click dreapta pe `C:\Kronos\unelte_windows\Autologon64.exe` → „Run as administrator” → Yes. La prima pornire apare
    licența: „Agree”.
 2. În fereastră: **Username** `Computer`, **Domain** `DESKTOP-BR58S2C`, **Password** parola ta de Windows → **Enable**.
    Trebuie să apară „Autologon successfully configured”. Parola o scrii doar acolo: unealta o ține criptată în
    Windows (secret LSA), nu în clar în registru. Nu mi-o scrie mie și nu o pune în niciun fișier.
+   **Făcut (15 octombrie).** Verificat de Claude Code, doar citind registrul: logarea automată e pornită, pentru
+   `DESKTOP-BR58S2C\Computer`, iar parola **nu** e în registru în clar (valoarea `DefaultPassword` nu există).
 3. **Încearcă o dată, cât ești de față:** repornește Windows. Ar trebui să vezi, fără să atingi nimic: logarea, ecranul
    blocat după câteva secunde, iar pe telefon, după ~1 minut, sesiunea „Kronos” la Remote Control. Deblochezi cu
-   parola și te uiți în `lucru\dupa_logare.log`.
+   parola și te uiți în `lucru\dupa_logare.log`. **Încă nefăcut:** se face într-o dimineață, după 06:45, când nu
+   rulează nimic noaptea pe placă (nu acum).
 4. **În BIOS (F2 la pornire): AC Recovery = Power On**, ca workstation-ul să pornească singur când revine curentul.
    Fără asta, după o pană de curent rămâne oprit și nimic din cele de mai sus nu apucă să ruleze. **Încă nefăcut.**
 5. ~~Tot în BIOS: System Logs → Power Events.~~ Nu mai trebuie: cauza celor două opriri de luni e cunoscută (un
@@ -111,7 +114,13 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
 
 ## Ce a rămas de făcut de Adrian
 
-1. Pașii 1–3 de mai sus (Autologon, cu parola scrisă direct pe workstation, și o repornire de probă).
-2. **BIOS: AC Recovery = Power On** (pasul 4). Până atunci, o pană de curent oprește tot până vine cineva.
-3. Dacă vrei un UPS (pe laptop, alimentarea a stricat o noapte întreagă; aici au fost două opriri nelămurite luni).
-4. Mai puține reporniri: orele active și pauza actualizărilor în Windows Update.
+1. ~~Autologon~~: **făcut** joi, 15 octombrie, seara.
+2. **Repornirea de probă** (pasul 3): într-o dimineață, după 06:45, cu nimic pe placă.
+3. **BIOS: AC Recovery = Power On** (pasul 4). Până atunci, o pană de curent oprește tot până vine cineva.
+4. Dacă vrei un UPS (pe laptop, alimentarea a stricat o noapte întreagă; aici, opririle de luni au fost un om, nu
+   curentul; joi seara, la pana de curent din oraș, workstation-ul n-a fost atins).
+5. Mai puține reporniri: orele active și pauza actualizărilor în Windows Update.
+
+**De știut (15 octombrie):** după o repornire, logarea automată pornește sarcinile „după logare” (Claude Code,
+blocarea ecranului) și CONTINUUM, dar nu reia singură școala de cod de la noapte: scriptul nopții
+(`unelte/noapte_conversatie.ps1`) pornește doar la 19:00. Școala se reia de unde a rămas cu aceeași comandă.
