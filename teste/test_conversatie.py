@@ -169,3 +169,20 @@ def test_sursele_noi_si_traducerea_nu_se_despart_de_original(tmp_path):
     examen, antrenare = gc.imparte(bune)
     in_examen = {gc.grup(p) for p in examen}
     assert len(examen) == 300 and not in_examen & {gc.grup(p) for p in antrenare}  # originalul și traducerea: împreună
+
+
+def test_o_sursa_scoasa_de_adrian_nu_mai_intra(tmp_path):
+    (tmp_path / "toate.jsonl").write_text("", encoding="utf-8")
+    for nume, q in (("wikipedia.jsonl", "Ce este lucrul?"), ("traduceri.jsonl", "Ce este un lucru?")):
+        (tmp_path / nume).write_text(json.dumps({"fel": "zi", "limba": "ro", "intrebare": q, "raspuns": "Este un lucru."},
+                                                ensure_ascii=False), encoding="utf-8")
+    ortografie = ({"ce", "este", "lucrul", "un", "lucru"}, set())
+    assert len(gc.toate_bune(tmp_path, set(), ortografie)[1]) == 2
+    (tmp_path / "surse_excluse.txt").write_text("traduceri.jsonl\n", encoding="utf-8")
+    bune = gc.toate_bune(tmp_path, set(), ortografie)[1]
+    assert [p["sursa_fisier"] for p in bune] == ["wikipedia.jsonl"]
+    docs = tmp_path / "fisa.md"
+    (tmp_path / "surse_excluse.txt").unlink()
+    gc.scrie_fisa(tmp_path, docs, interzise=set(), ortografie=ortografie)
+    text = docs.read_text(encoding="utf-8")
+    assert "**1. W**" in text and "**2. T**" in text and "peste 2 greșite din 15" in text

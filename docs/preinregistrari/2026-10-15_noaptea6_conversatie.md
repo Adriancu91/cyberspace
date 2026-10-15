@@ -126,3 +126,15 @@ profesor.
 - Proporția română / engleză nu mai e fixată la 80 / 20: iese din câte perechi bune dă fiecare sursă (se raportează).
 - Restul pre-înregistrării (rețeta, examenul, pragurile, așteptările) nu se schimbă. Examenul de 300 se ia din același
   amestec de surse; o pereche tradusă și originalul ei englezesc nu se despart între examen și antrenare.
+
+## Adendum 4 (scris joi, 15 octombrie, 11:43, înainte de fișa de la 16:00 și înainte de orice antrenare)
+
+**Regula verificării, ajustată de Adrian:** fiecare sursă românească se judecă separat, pe cele 15 perechi ale ei din
+fișă (W = Wikipedia, T = tradusă; litera e scrisă lângă fiecare pereche).
+- O sursă cu **peste 2 greșite din 15** iese din antrenarea de la noapte (și din examenul de conversație): numele ei se
+  scrie în `date/conversatie/surse_excluse.txt`, iar împărțirea examen / antrenare se face fără ea.
+- **W2-conv pornește cu ce rămâne** (Wikipedia + engleză + fapte + „nu știu”), **dacă rămâne cel puțin Wikipedia**. Dacă
+  iese Wikipedia, W2-conv nu pornește la noapte (rămâne doar școala de cod).
+- Scriptul nopții pornește W2-conv doar dacă există `lucru/conversatie_aprobata.txt`, scris de Claude Code după
+  răspunsul lui Adrian, cu sursele păstrate. Fără răspuns: nu pornește.
+- Restul pre-înregistrării nu se schimbă.

@@ -257,9 +257,13 @@ def surse_extra(dosar: Path, vazute: set[str], interzise: set[str],
     """Perechile din SURSE_EXTRA (Wikipedia, traduceri, „nu știu” în română), cu filtrele: întrebările repetate,
     bucățile din examene și validări, ortografia. Fiecare primește „ramane” și „motiv_scos”, ca în toate.jsonl."""
     rezultat: list[dict[str, Any]] = []
+    # 15 octombrie, 15:00 (Adrian): o sursă cu peste 2 greșite din 15 la verificare iese din antrenare; numele ei se
+    # scrie în surse_excluse.txt (câte unul pe rând), după răspunsul lui
+    excluse_f = dosar / "surse_excluse.txt"
+    excluse = {r.strip() for r in excluse_f.read_text(encoding="utf-8").splitlines() if r.strip()} if excluse_f.exists() else set()
     for nume in SURSE_EXTRA:
         fisier = dosar / nume
-        if not fisier.exists():
+        if not fisier.exists() or nume in excluse:
             continue
         for rand in fisier.read_text(encoding="utf-8").splitlines():
             if not rand.strip():
@@ -305,7 +309,9 @@ def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0, titlu: 
                f"(date/conversatie/). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau forma).*", ""]
     for i, p in enumerate(alese, start=1):
         sursa = p.get("sursa") or p.get("profesor") or "profesor"
-        randuri += [f"**{i}.** ({p['fel']}, {'română' if p['limba'] == 'ro' else 'engleză'}, {sursa})", "",
+        litera = {"wikipedia.jsonl": "W", "traduceri.jsonl": "T"}.get(p.get("sursa_fisier", ""), "")
+        randuri += [f"**{i}. {litera}**" if litera else f"**{i}.**", "",
+                    f"({p['fel']}, {'română' if p['limba'] == 'ro' else 'engleză'}, {sursa})", "",
                     f"- Întrebare: {p['intrebare']}", f"- Răspuns: {p['raspuns']}", ""]
     return "\n".join(randuri)
 
@@ -357,8 +363,9 @@ def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0, interzise: set[str] | 
     alese = rng.sample(wiki, min(15, len(wiki))) + rng.sample(trad, min(15, len(trad)))
     docs.parent.mkdir(parents=True, exist_ok=True)
     docs.write_text(fisa_de_verificat(alese, samanta, titlu=(
-        f"30 de perechi românești alese la întâmplare după toate filtrele: 1–{min(15, len(wiki))} din Wikipedia (din "
-        f"{len(wiki)} bune), apoi {min(15, len(trad))} traduse din engleză cu opus-mt-en-ro (din {len(trad)} bune)")),
+        f"30 de perechi românești alese la întâmplare după toate filtrele: W = din Wikipedia ({min(15, len(wiki))}, din "
+        f"{len(wiki)} bune), T = traduse din engleză cu opus-mt-en-ro ({min(15, len(trad))}, din {len(trad)} bune). Se "
+        f"judecă fiecare sursă separat: peste 2 greșite din 15 = sursa iese din antrenarea de la noapte")),
         encoding="utf-8")
     return {"wikipedia": len(wiki), "traduceri": len(trad)}
 
