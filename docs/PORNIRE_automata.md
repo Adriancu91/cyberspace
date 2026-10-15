@@ -117,6 +117,9 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
 1. ~~Autologon~~: **făcut** joi, 15 octombrie, seara.
 2. **Repornirea de probă** (pasul 3): într-o dimineață, după 06:45, cu nimic pe placă.
 3. **BIOS: AC Recovery = Power On** (pasul 4). Până atunci, o pană de curent oprește tot până vine cineva.
+   Valoarea de acum nu se poate citi din Windows fără o unealtă Dell în plus (WMI-ul Dell lipsește pe acest
+   Precision 5820, BIOS 2.44.0; verificat pe 15 octombrie). Hotărât de Adrian: se citește și se pune din BIOS (F2),
+   într-o dimineață după 06:45, odată cu repornirea de probă; nu se instalează nimic.
 4. Dacă vrei un UPS (pe laptop, alimentarea a stricat o noapte întreagă; aici, opririle de luni au fost un om, nu
    curentul; joi seara, la pana de curent din oraș, workstation-ul n-a fost atins).
 5. Mai puține reporniri: orele active și pauza actualizărilor în Windows Update.
