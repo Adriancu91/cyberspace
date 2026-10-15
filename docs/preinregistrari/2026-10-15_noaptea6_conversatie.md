@@ -138,3 +138,19 @@ fișă (W = Wikipedia, T = tradusă; litera e scrisă lângă fiecare pereche).
 - Scriptul nopții pornește W2-conv doar dacă există `lucru/conversatie_aprobata.txt`, scris de Claude Code după
   răspunsul lui Adrian, cu sursele păstrate. Fără răspuns: nu pornește.
 - Restul pre-înregistrării nu se schimbă.
+
+## Verdictul verificării de la 16:00 (scris joi, 15 octombrie, 17:50): W2-conv NU pornește la noapte
+
+- Fișa (`docs/conversatie_de_verificat.md`), judecată pe surse, numărătoarea lui Claude Code acceptată de Adrian:
+  - **W (Wikipedia): 5 greșite din 15** (3: „ComitatulWestchester”; 4: „realizat de soții și după povestirea … a lui”,
+    nume scoase la curățare; 6: „Aceast film”; 7: „Ce este Sandu Florea?” pentru un om; 9: „scene maritime din.”);
+  - **T (tradusă cu opus-mt-en-ro): ~7 greșite din 15** (ex. „Împărtășesc jucării… Nu împinge sau striga”, „este de
+    mulți munți”, „Lacurile pot fi încă și clar”, „Se păstrează pomparea de sânge”).
+- Amândouă sunt peste 2 din 15, deci ies amândouă. Fără Wikipedia, **W2-conv nu pornește la noapte**: rulează doar
+  școala de cod (`lucru/conversatie_aprobata.txt` nu se scrie). Nu s-a antrenat nimic pe conversație.
+- **Rezultate negative, notate ca atare:** (1) româna liberă a lui Qwen (4B și 8B); (2) traducerea automată cu
+  opus-mt-en-ro iese definitiv din conversație (hotărârea lui Adrian); (3) curățarea mea a Wikipedia lasă propoziții
+  rupte, iar alegerea „Ce / Cine” greșește la oameni.
+- **Mâine (Adrian):** curățarea Wikipedia reparată (propoziții rupte, oameni, cel mult 10% sate, comune și sportivi
+  obscuri, articole lungi), 8.000 de perechi noi, o fișă nouă de 30 doar din Wikipedia la 11:00; cel mult 3 greșite din
+  30 → W2-conv pornește la noapte cu Wikipedia + engleză + „nu știu”. Asta va fi o pre-înregistrare nouă.
