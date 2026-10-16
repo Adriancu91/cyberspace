@@ -37,3 +37,14 @@ patru ori mai mult timp decât ziua? Ziua, pe #337, după 30 de minute: B 15%, D
 - **Infirmat:** 0w pică pe toate trei. Atunci pasul următor e o schimbare a felului de sarcină (nu mai mult timp).
 - **Parțial:** pică, dar D sau B ajunge peste 50% (atunci timpul ajută, dar nu ajunge).
 - **Ar strica rularea:** regresie pe povești, paznicul oprește școala, sau nu pornește până la 06:45.
+
+## Adendum 1 (scris vineri, 16 octombrie, 09:52, înainte de reluare)
+
+- **Rularea a fost întreruptă la 00:26** de o repornire făcută singură de Windows Update (nu de pană). Linia A și linia
+  B terminaseră 0w (picat amândouă, bugetul de 120 de minute epuizat). Linia D era la runda 60 din 0w (75 de minute
+  din 120); ultima rundă, la 00:25:30: văzut 85%, nevăzut 30%.
+- **Reluarea, cerută de Adrian:** linia D continuă 0w ziua, până la 12:00 sau până trece. Pornește din starea salvată
+  după runda 60 (aceeași cu înghețul nou `v04n_D_0w_dupa_repornire`, făcut înainte de schimbarea configurării, cum
+  cere școala); bugetul rămas: 45 de minute sau 40 de runde.
+- **Singura schimbare în configurare:** `oprire_la` 06:45 → **12:00** (nicio rundă nouă între 12:00 și 19:00).
+- Așteptările și ce înseamnă confirmat sau infirmat nu se schimbă.
