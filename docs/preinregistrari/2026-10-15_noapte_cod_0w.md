@@ -48,3 +48,27 @@ patru ori mai mult timp decât ziua? Ziua, pe #337, după 30 de minute: B 15%, D
   cere școala); bugetul rămas: 45 de minute sau 40 de runde.
 - **Singura schimbare în configurare:** `oprire_la` 06:45 → **12:00** (nicio rundă nouă între 12:00 și 19:00).
 - Așteptările și ce înseamnă confirmat sau infirmat nu se schimbă.
+
+## Ce a ieșit și verdictul (scris vineri, 16 octombrie, 10:41)
+
+Rularea: 19:00–00:25 (întreruptă de Windows Update la 00:26), apoi linia D reluată 09:53–10:40. Fiecare linie a avut
+tot bugetul de 120 de minute pe 0w. Jurnalul: `lucru/cod_v04_noapte/runde.jsonl`; raportul școlii:
+`lucru/cod_v04_noapte/raport.md`.
+
+| Linia | Runde | Văzut (cel mai bun / la sfârșit) | Nevăzut (cel mai bun / la sfârșit) | Povești la îngheț |
+|---|---|---|---|---|
+| A (martorul) | 93 | 9% / 6% | 5% / 5% | 0,4405 |
+| B | 97 | 65% / 54% | 35% / 35% | 0,4402 |
+| D | 97 | 85% / 69% | 35% / 30% | 0,4402 |
+
+- **Verdictul: INFIRMAT.** 0w pică pe toate trei liniile (cel mult 35% pe nevăzut, față de 80% cerut), deci nici
+  „parțial” (peste 50%). **Mai mult timp nu ajunge:** ziua, în 30 de minute, B avea 15% și D 25%; în 120 de minute, 35%.
+  Pasul următor, cum scria dinainte, e o schimbare a felului de sarcină, nu mai mult timp.
+- **Văzut urcă, nevăzut nu:** D trece până la 85% din sarcinile văzute, dar rămâne la ~30% pe cele nevăzute: învață
+  sarcinile, nu regula (cuvântul care nu apare în sarcină).
+- **Așteptările:** A sub 20% (5%): da. D între 35% și 50%: la margine (35% cel mai bun, 30% la sfârșit). Poveștile sub
+  0,49: da, chiar mai bune decât la pornire (0,4402 față de 0,4552), din cauza poveștilor din lot. Placa: cel mult
+  5.193 MB pe toată placa (reluarea; noaptea, ~5.170 MB), 62 °C. Nicio oprire de la paznic.
+- **De știut:** înainte de orice lecție, #353 trecea deja pe nevăzut 70% la 1a, 70% la 1b, 75% la 2A, 100% la 2B, 90%
+  la 2C și 75% la 3A (doar 0w, 5%, și 3B, 5%, rămân jos). Codul din amestecul lui W2 i-a învățat cea mai mare parte din
+  școală; 0w e piedica.
