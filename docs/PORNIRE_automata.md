@@ -130,3 +130,22 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
 **De știut (15 octombrie):** după o repornire, logarea automată pornește sarcinile „după logare” (Claude Code,
 blocarea ecranului) și CONTINUUM, dar nu reia singură școala de cod de la noapte: scriptul nopții
 (`unelte/noapte_conversatie.ps1`) pornește doar la 19:00. Școala se reia de unde a rămas cu aceeași comandă.
+
+## Testul de pană de curent (vineri, 16 octombrie, ~09:45, făcut de Adrian)
+
+- Adrian a scos workstation-ul din priză și l-a băgat la loc. **A pornit singur** (deci **în BIOS, AC Recovery e deja
+  pornit**), a trecut singur de meniul de pornire și s-a logat singur: oprire bruscă la 09:46 (Windows: evenimentele 41
+  și 6008), pornit la 09:46:34, Claude Code cu Remote Control la 09:47:20.
+- **Nimic stricat** (verificat la 09:49): jurnalul Kronos (362 de rânduri) și ciclurile lui CONTINUUM (623 de rânduri)
+  se citesc rând cu rând, fără niciun rând rupt; `stare.json` al lui CONTINUUM e întreg; `git status` curat și
+  `git fsck` fără erori în ambele foldere (`cyberspace` și `cyberspace-cod`; un „dangling tree” rămas de la un stash
+  vechi, fără importanță).
+- **Meniul de pornire** (două Windows 11): verificat cu `bcdedit`, ca administrator. Acest Windows (`partition=C:`, cu
+  C:\Kronos) e implicit (`default {current}`), iar timpul de așteptare e **5 secunde**. Nu s-a schimbat nimic; a doua
+  intrare (`device unknown`) a rămas neatinsă.
+- **Windows Update** (16 octombrie, setat ca administrator): **orele active 18:00–12:00** (în ele nu repornește singur;
+  ghicirea automată a orelor active e oprită) și **actualizările amânate 5 săptămâni**, până pe **20 noiembrie 2026**.
+  Actualizările le facem noi, ziua, între 12:00 și 18:00, cu repornire de mână. Motivul: azi-noapte la 00:26 Windows
+  Update a repornit singur calculatorul și a oprit școala de cod.
+- **Regula lui Adrian (16 octombrie):** dacă se oprește și nu revine, vine Adrian și îl pornește; la pornire, Claude
+  Code reia singur ce era programat și îi scrie un raport scurt.
