@@ -47,8 +47,8 @@ procese_grele = ["python"]             # dacă un astfel de program folosește p
 buget_ore_placa_pe_zi = 20
 # 15 octombrie 2026: azi și la noapte alegerea e a lui Adrian (școala de conversație, W2-conv, școala de cod), nu a lui
 # CONTINUUM. Până atunci doar observă, iar fiecare ciclu din jurnal spune de ce.
-om_decide_pana_la = "2026-10-16T07:45"
-om_decide_motiv = "azi alegerea e a lui Adrian, nu a lui CONTINUUM: școala de conversație ziua, apoi W2-conv și școala de cod noaptea"
+om_decide_pana_la = "2026-10-17T07:45"
+om_decide_motiv = "azi alegerea e a lui Adrian, nu a lui CONTINUUM (16 octombrie: repornirea de probă; nimic pe placă fără el)"
 
 [guvernator.pauza_minute]              # cât așteaptă între două cicluri, pe nivel (secțiunea 3)
 REPAUS = 5
