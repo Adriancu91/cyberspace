@@ -192,6 +192,7 @@ def test_o_sursa_scoasa_de_adrian_nu_mai_intra(tmp_path):
     ("A fost dezvoltat în ComitatulWestchester, New York.", True),
     ("Este un film realizat de soții și după povestirea „Casa” a lui.", True),
     ("S-a specializat în scene maritime din.", True),
+    ("În, a devenit campion mondial în Formula 1.", True),
     ("Are o culoare albă: .", True),
     ("A fost distins cu Ordinul „Sf.", True),
     ("Matcha, ceaiul verde ( ), e preparat așa.", True),

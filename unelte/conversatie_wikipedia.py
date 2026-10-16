@@ -77,7 +77,7 @@ luptătoare halterofil halterofilă schior schioare patinator patinatoare arbitr
 voleibalist voleibalistă hocheist pilot bober jucătoare""".split())
 LOCURI_MICI = set("""sat comună localitate cătun cartier așezare raion district comitat""".split())
 _LIPITE = re.compile(r"[a-zăâîșț][A-ZĂÂÎȘȚ]")
-_PREP_SEMN = re.compile(r"\b(de|din|la|cu|în|pe|lui|al|ale|ai|după|pentru|prin|către|despre|între|și|sau|ca|decât|iar)"
+_PREP_SEMN = re.compile(r"(?i)\b(de|din|la|cu|în|pe|lui|al|ale|ai|după|pentru|prin|către|despre|între|și|sau|ca|decât|iar)"
                         r"\s*[.,;:!?)]")
 _PREP_SI = re.compile(r"\b(de|din|la|cu|în|pe|după|pentru|prin|către|despre|între)\s+(și|sau|iar)\b")
 _GOALE = re.compile(r"\(\s*\)|„\s*”|\"\s*\"|«\s*»")
