@@ -154,3 +154,24 @@ fișă (W = Wikipedia, T = tradusă; litera e scrisă lângă fiecare pereche).
 - **Mâine (Adrian):** curățarea Wikipedia reparată (propoziții rupte, oameni, cel mult 10% sate, comune și sportivi
   obscuri, articole lungi), 8.000 de perechi noi, o fișă nouă de 30 doar din Wikipedia la 11:00; cel mult 3 greșite din
   30 → W2-conv pornește la noapte cu Wikipedia + engleză + „nu știu”. Asta va fi o pre-înregistrare nouă.
+
+## Verdictul fișei de la 12:00 din 16 octombrie (scris vineri, 16 octombrie, 17:07): W2-conv NU pornește nici la noapte
+
+- Fișa: 30 de perechi doar din Wikipedia v2 (`docs/conversatie_de_verificat.md`, commit `9e700b1`), verificată de Adrian.
+- **Greșite: 4 din 30, deci peste pragul de 3:**
+  - **10 (formă):** „În, a devenit campion mondial”, anul scos la curățare (găsită și de Claude Code înainte);
+  - **19 (fapt):** „Povestea jucăriilor” (1995) a fost regizat doar de John Lasseter, nu și de Lee Unkrich și Ash Brannon;
+  - **11 (formă):** „Ce a fost Konrad Bercovici?” pentru un om; trebuia „Cine”;
+  - **5 (română):** „unul dintre cele 8 multinaționale” fără substantiv, iar lista e incompletă.
+- **Mici, nenumărate:** 1 („cincizeci turnee”, fără „de”), 7 („sezon a celei”, acord greșit), 18 (cifră învechită).
+- `lucru/conversatie_aprobata.txt` nu se scrie. Nu s-a antrenat nimic pe conversație.
+- **Rezultat negativ, notat ca atare:** Wikipedia v2, cu primele 1–3 propoziții, încă are prea multe greșeli: alegerea
+  „Ce / Cine” la oameni, fraze a doua care adaugă fapte greșite sau învechite, numerale și acorduri greșite.
+- **Mâine, 17 octombrie, pe procesor (cerut de Adrian):** (1) răspunsul = doar prima propoziție, cel mult ~30 de
+  cuvinte, fără liste; (2) oamenii după ani de naștere/moarte, „născut”, „decedat” sau „a fost un/o [profesie]” →
+  „Cine este / a fost”; (3) ies numeralele de peste 20 fără „de” și acordul „al/a” greșit care se poate prinde simplu;
+  (4) se refac cele 8.000 și se face o fișă nouă de 30 la 11:00, cu aceeași regulă: cel mult 3 greșite.
+- **Placa la noapte (16–17 octombrie): liberă.** Hotărârea lui Claude Code (Adrian a lăsat alegerea): școala de cod
+  pe 0w a fost INFIRMATĂ azi, cu 120 de minute pe linie, iar pasul spus dinainte e „schimbăm felul sarcinii, nu mai
+  mult timp”. Încă o noapte pe linia A sau B ar fi tocmai „mai mult timp”, iar o sarcină nouă pentru 0w nu e încă
+  gândită și pre-înregistrată.
