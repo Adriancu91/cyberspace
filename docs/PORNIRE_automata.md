@@ -115,7 +115,10 @@ singura care repornește și Claude Code. Dacă nu, C pentru antrenare și Claud
 ## Ce a rămas de făcut de Adrian
 
 1. ~~Autologon~~: **făcut** joi, 15 octombrie, seara.
-2. **Repornirea de probă** (pasul 3): într-o dimineață, după 06:45, cu nimic pe placă.
+2. ~~Repornirea de probă~~: **făcută** vineri, 16 octombrie, 09:34 (de Adrian). Lanțul complet a mers: pornit la
+   09:35:30, logarea automată, ecranul blocat la 09:37:58, CONTINUUM la 09:37:58 (doar observă), Claude Code cu
+   Remote Control „Kronos” la 09:38:27. Înainte, la repornirea făcută de Windows Update la 00:26, Claude Code nu
+   pornise: o greșeală în `unelte/dupa_logare_ws.ps1`, reparată pe 16 octombrie, dimineața.
 3. **BIOS: AC Recovery = Power On** (pasul 4). Până atunci, o pană de curent oprește tot până vine cineva.
    Valoarea de acum nu se poate citi din Windows fără o unealtă Dell în plus (WMI-ul Dell lipsește pe acest
    Precision 5820, BIOS 2.44.0; verificat pe 15 octombrie). Hotărât de Adrian: se citește și se pune din BIOS (F2),
