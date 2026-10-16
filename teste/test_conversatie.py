@@ -186,3 +186,32 @@ def test_o_sursa_scoasa_de_adrian_nu_mai_intra(tmp_path):
     gc.scrie_fisa(tmp_path, docs, interzise=set(), ortografie=ortografie)
     text = docs.read_text(encoding="utf-8")
     assert "**1. W**" in text and "**2. T**" in text and "peste 2 greșite din 15" in text
+
+
+@pytest.mark.parametrize("propozitie, rupta", [
+    ("A fost dezvoltat în ComitatulWestchester, New York.", True),
+    ("Este un film realizat de soții și după povestirea „Casa” a lui.", True),
+    ("S-a specializat în scene maritime din.", True),
+    ("Are o culoare albă: .", True),
+    ("A fost distins cu Ordinul „Sf.", True),
+    ("Matcha, ceaiul verde ( ), e preparat așa.", True),
+    ("Libretul a fost scris de Alfred Maria Willner.", False),
+    ("Bergen este un oraș în provincia Vestland, din vestul Norvegiei.", False),
+    ("Orașul are aproximativ 239.209 de locuitori.", False),
+])
+def test_wikipedia_propozitiile_rupte_ies(propozitie, rupta):
+    from unelte.conversatie_wikipedia import propozitie_rupta
+
+    assert (propozitie_rupta(propozitie) is not None) is rupta
+
+
+def test_wikipedia_greselile_de_tipar_si_oamenii():
+    from unelte.conversatie_wikipedia import greseala_de_tipar, pereche_din
+
+    assert greseala_de_tipar("Aceast film e bun.", {"aceast": 231, "această": 104618, "film": 9000}) == "aceast"
+    assert greseala_de_tipar("Acest film e bun.", {"acest": 112196, "această": 104618}) is None
+    om = pereche_din("Ion Voicu (n. 1923 – d. 1997) a fost un violonist român, elev al lui George Enescu.\nCorp.")
+    assert om["tip"] == "om" and om["intrebare"] == "Cine a fost Ion Voicu?" and om["raspuns"].startswith("Ion Voicu a fost")
+    emisiune = pereche_din("Cronica este o emisiune de televiziune, difuzată miercurea. Au prezentat-o mai mulți (2001-2010).\nX")
+    assert emisiune is None or emisiune["tip"] != "om"
+    assert pereche_din("Un cookie este un text trimis de un server unui navigator web.\nCorp.") is None

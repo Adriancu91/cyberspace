@@ -352,6 +352,18 @@ def toate_bune(dosar: Path, interzise: set[str] | None = None,
     return toate, [p for p in toate if p.get("ramane")]
 
 
+def scrie_fisa_wikipedia(dosar: Path, docs: Path, samanta: int = 1, cate: int = 30) -> int:
+    """Fișa din 16 octombrie, 12:00 (Adrian): 30 de perechi doar din Wikipedia (după toate filtrele), toate „W”."""
+    _, bune = toate_bune(dosar)
+    wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl"]
+    alese = random.Random(samanta).sample(wiki, min(cate, len(wiki)))
+    docs.parent.mkdir(parents=True, exist_ok=True)
+    docs.write_text(fisa_de_verificat(alese, samanta, titlu=(
+        f"{len(alese)} de perechi alese la întâmplare doar din Wikipedia (W), din {len(wiki)} bune, după curățarea "
+        f"reparată pe 16 octombrie. Regula: cel mult 3 greșite din 30 → W2-conv pornește la noapte")), encoding="utf-8")
+    return len(wiki)
+
+
 def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0, interzise: set[str] | None = None,
                ortografie: tuple[set[str], set[str]] | None = None) -> dict[str, int]:
     """Fișa pentru Adrian (15 octombrie, 16:00): 30 de perechi românești bune, la întâmplare, 15 din Wikipedia și 15
@@ -417,6 +429,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--finalizeaza", action="store_true", help="doar examenul, antrenarea și fișa de verificat")
     parser.add_argument("--refiltreaza", action="store_true", help="filtrele de acum, pe toate perechile scrise")
     parser.add_argument("--fisa", action="store_true", help="doar fișa de verificat (30 de perechi bune de acum)")
+    parser.add_argument("--fisa-wikipedia", action="store_true", help="fișa din 16 octombrie: 30 doar din Wikipedia")
     parser.add_argument("--profesor", default="Qwen/Qwen3-4B-Instruct-2507")
     parser.add_argument("--fara-ortografie", action="store_true")
     parser.add_argument("--doar-engleza", action="store_true", help="din 15 octombrie, 11:20: profesorul scrie doar în engleză")
@@ -431,6 +444,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.finalizeaza:
         info = finalizeaza(dosar, docs, jurnal)
         print(json.dumps(info, ensure_ascii=False), flush=True)
+        return 0
+    if args.fisa_wikipedia:
+        print(f"Fișa: 30 de perechi din Wikipedia (bune: {scrie_fisa_wikipedia(dosar, docs)}), în {docs}", flush=True)
         return 0
     if args.fisa:
         print(f"Fișa: 30 de perechi românești (bune de acum: {scrie_fisa(dosar, docs)}), în {docs}", flush=True)

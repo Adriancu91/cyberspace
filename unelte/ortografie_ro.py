@@ -51,6 +51,7 @@ class Cunoscute(set):
 
     def __init__(self, numarate: dict[str, int], raport: int = 20) -> None:
         super().__init__(numarate)
+        self.numarate = numarate
         cele_mai_dese: dict[str, int] = {}
         for c, n in numarate.items():
             if c != c.translate(FARA_DIACRITICE):
