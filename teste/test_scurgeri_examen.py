@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 import numpy as np
+import pytest
 
 from unelte import scurgeri_examen as se
 
@@ -16,6 +17,25 @@ def test_amprentele_sunt_ale_bucatilor_nu_ale_pozitiei():
     assert len(a) == 7 and a[0] == a[6] and len(set(a.tolist())) == 6
     assert len(se.amprente(se.coduri("abc"), 5)) == 0
     assert se.amprente(se.coduri("ăîșțâ"), 5)[0] != se.amprente(se.coduri("aisța"), 5)[0]
+
+
+def test_amprentele_compuse_sunt_cele_ale_bucatilor_lungi():
+    litere = se.coduri("Vulpea și corbul stăteau sub un copac bătrân, departe de sat, într-o zi de vară." * 3)
+    assert (se.compune(se.amprente(litere, 10), 10, 4) == se.amprente(litere, 40)).all()
+    assert len(se.compune(se.amprente(se.coduri("abc" * 5), 10), 10, 4)) == 0
+
+
+def test_mai_multe_lungimi_intr_o_singura_trecere(tmp_path):
+    comun = "Once upon a time, there was a little girl named Lily. "
+    copiat = comun + "She found a shiny red ball under the old oak tree near her small house by the river."
+    tipar = comun + "Something entirely different happened next, and nobody had ever written this before."
+    antrenare = tmp_path / "antrenare.txt"
+    antrenare.write_text(f"{copiat}\n{SEP}\n", encoding="utf-8")
+    r = se.cauta_lungimi({"v": [copiat, tipar]}, [antrenare], [20, 60], litere_pe_bucata=41, spune=lambda *a, **k: None)
+    assert r[20]["v"]["acoperire_pe_text"][0] == 1.0 and r[60]["v"]["acoperire_pe_text"][0] == 1.0
+    assert 0 < r[20]["v"]["acoperire_pe_text"][1] < 1 and r[60]["v"]["acoperire_pe_text"][1] == 0.0  # tiparul scurt nu e copiere
+    with pytest.raises(ValueError):
+        se.cauta_lungimi({"v": [copiat]}, [antrenare], [20, 50])
 
 
 def test_bucatile_de_antrenare_nu_pierd_nicio_fereastra(tmp_path):
