@@ -57,17 +57,26 @@ def cere(url: str, parametri: dict[str, Any] | None = None, json_: bool = True, 
     if parametri:
         url += "?" + urllib.parse.urlencode(parametri)
     cerere = urllib.request.Request(url, headers={"User-Agent": AGENT, "Accept": "application/vnd.github+json"})
-    for incercare in range(3):
+    for incercare in range(6):
         try:
             with urllib.request.urlopen(cerere, timeout=60) as r:
                 date = r.read()
             break
         except urllib.error.HTTPError as e:
-            # GitHub fără cont: 60 de cereri pe oră (10 pe minut la căutare); se așteaptă până se reface limita
-            reset = e.headers.get("X-RateLimit-Reset") if e.code in (403, 429) else None
-            if reset is None or incercare == 2:
+            if e.code not in (403, 429, 503) or incercare == 5:
                 raise
-            time.sleep(min(3700, max(5, int(reset) - time.time() + 5)))
+            # GitHub fără cont: 60 de cereri pe oră (10 pe minut la căutare), cu ora la care se reface limita;
+            # Wikipedia: „Retry-After”, sau așteptăm tot mai mult (30 s, 60 s, 120 s...)
+            reset, dupa = e.headers.get("X-RateLimit-Reset"), e.headers.get("Retry-After")
+            if reset:
+                asteapta = int(reset) - time.time() + 5
+            elif dupa and dupa.isdigit():
+                asteapta = int(dupa) + 1
+            elif e.code == 403:
+                raise
+            else:
+                asteapta = 30 * 2**incercare
+            time.sleep(min(3700, max(5, asteapta)))
     time.sleep(pauza)
     return json.loads(date) if json_ else date.decode("utf-8")
 
@@ -119,7 +128,7 @@ def curata_articol(text: str) -> str:
 def text_articol(limba: str, pageid: int, cere_: Callable = cere) -> dict[str, Any] | None:
     d = cere_(f"https://{limba}.wikipedia.org/w/api.php", {
         "action": "query", "prop": "extracts|revisions", "explaintext": 1, "exsectionformat": "plain",
-        "rvprop": "ids|timestamp", "pageids": pageid, "format": "json", "formatversion": 2})
+        "rvprop": "ids|timestamp", "pageids": pageid, "format": "json", "formatversion": 2}, pauza=2.0)
     pagina = d["query"]["pages"][0]
     if pagina.get("missing") or "extract" not in pagina:
         return None
