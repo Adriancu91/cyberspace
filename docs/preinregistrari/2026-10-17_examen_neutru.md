@@ -206,8 +206,8 @@ Cea mai bună notă a fiecăruia (doar informativ): Kronos, aceeași. GPT-2 iese
   românesc 125M la română și la cod Python. La engleza enciclopedică pierde clar în fața lui GPT-2, pentru că el a
   învățat doar engleză simplă.
 - **Ce nu rezultă:** că Kronos e un model mai bun în general. GPT-Neo românesc 125M e un model mic, vechi (cel târziu
-  2023), învățat pe un amestec diferit. Kronos are de partea lui multă română curată din Wikipedia și din web,
-  curățată la fel ca textele pe care le citește aici.
+  2023), învățat pe un amestec diferit. Kronos are de partea lui multă română enciclopedică (Wikipedia din 2023),
+  de același fel cu articolele noi.
 - **Eșantioanele sunt mici:** cifra principală stă pe primele 100.000 de litere, adică 12 articole în română, 32 în
   engleză și doar 7 fișiere de cod. Diferențele mari (0,70 la română, 0,62 la cod) sunt mult peste ce poate schimba
   întâmplarea. Cele de sub ~0,05 nu ar însemna nimic. Pe seturile întregi (de 5–17 ori mai mari) se poate da o notă
