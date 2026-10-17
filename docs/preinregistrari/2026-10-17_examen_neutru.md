@@ -128,3 +128,87 @@ neschimbat, cu excepția a ce schimbă explicit punctele de mai jos.*
    bucăți, la toate cele trei modele**. Separat, doar ca informație, se arată și cea mai bună notă a fiecăruia: cea
    mai mică dintre fereastra de 512 și fereastra lui obișnuită (1.024 la GPT-2, 2.048 la GPT-Neo; la Kronos 512 e chiar
    fereastra lui).
+
+## Ce a ieșit
+
+*Descărcat sâmbătă, 17 octombrie, 21:50–22:38: prima încercare s-a oprit la „prea multe cereri” fără să scrie nimic;
+a doua a mers cu pauze. Examenul a rulat 22:38–22:50, iar căutarea de scurgeri 22:51–23:25, totul doar pe procesor,
+cu prioritate scăzută, lângă W2 noaptea 4. Notele sunt în `lucru/examen_neutru/neutru_20261017_223851.json`,
+scurgerile în `lucru/scurgeri_examen/scurgeri_20261017_232501.json`, iar atribuirile în `date/neutru/surse.json`.*
+
+### Seturile
+
+| set | texte strânse | litere | din care în primele 100.000 de litere |
+|---|---|---|---|
+| Wikipedia română nouă | 97 (din 128 de articole noi după filtre; restul sub 300 de litere) | 720.179 | 12 articole |
+| Wikipedia engleză nouă | 200 (la întâmplare din 2.237) | 476.034 | 32 de articole |
+| cod Python nou | 186 de fișiere din 40 de proiecte (151 MIT, 35 Apache-2.0) | 1.672.331 | 7 fișiere |
+
+- **Articolele roboților: 0 la amândouă limbile.** Am verificat și creatorii: 32 de conturi la română și 149 la
+  engleză, niciunul cu semnul „bot”, în grupul „bot” sau cu nume de robot. Seturile „doar oameni” sunt deci identice
+  cu cele întregi (aceeași amprentă sha256), iar cele două note coincid. Așteptarea din completarea 1 nu se poate
+  verifica. După regula de acolo, o diferență pe sub 10% din litere nu înseamnă nimic.
+
+### Nota (biți pe octet, ferestre de 512 la toți; mai mic e mai bine)
+
+| set | Kronos #373 | GPT-2 small | GPT-Neo ro 125M |
+|---|---|---|---|
+| **Wikipedia română nouă** | **1,1802** | 2,7828 | 1,8851 |
+| **Wikipedia engleză nouă** | 1,6767 | **1,1301** | 2,2524 |
+| **cod Python nou** | **0,9910** | 1,6107 | 4,7436 |
+
+Cea mai bună notă a fiecăruia (doar informativ): Kronos, aceeași. GPT-2 iese mai bine la 1.024: 2,6438, 1,0963 și
+1,4208. GPT-Neo e mai bun la 512 decât la 2.048 (1,8851, 2,2524 și 4,7436 rămân cele mai bune).
+
+### Setul e nou pentru Kronos? (bucăți din setul nou găsite în datele lui)
+
+| set | bucăți de 50 găsite | litere acoperite, 50 | litere acoperite, 200 |
+|---|---|---|---|
+| Wikipedia română nouă | 0,1% | 0,7% | 0,0% |
+| Wikipedia engleză nouă | 0,0% | 0,2% | 0,0% |
+| cod Python nou | 4,4% | 15,0% | 0,0% |
+
+- **Toate sunt sub pragul de 5%**, deci verdictul se dă pe tot setul, nu doar pe o parte curată.
+- **Reperul natural pentru scurgerile de azi:**
+  - **Wikipedia:** pe articolele noi se potrivesc natural sub 1% din litere, iar pe validarea veche 20,8%. Deci
+    validarea veche de Wikipedia chiar seamănă cu antrenarea mai mult decât ar face-o întâmplarea (paginile-listă și
+    articolele-șablon).
+  - **Cod:** 15% la 50 de litere e normal, din `import`-uri și tipare comune, iar validarea veche avea 14,2%. Deci
+    codul vechi nu e scurs.
+
+### Verdictul, pe fiecare așteptare
+
+| | așteptat | ieșit | verdict |
+|---|---|---|---|
+| Kronos, română nouă | 1,25–1,55 | 1,1802 | **infirmat** (mai bine cu 0,07) |
+| GPT-2, română nouă | 2,4–3,0 | 2,7828 | confirmat |
+| GPT-Neo, română nouă | 1,45–1,80 | 1,8851 | **infirmat** (mai rău cu 0,09) |
+| Kronos, engleză nouă | 1,60–2,20 | 1,6767 | confirmat |
+| GPT-2, engleză nouă | 1,00–1,30 | 1,1301 | confirmat |
+| GPT-Neo, engleză nouă | 1,80–2,60 | 2,2524 | confirmat |
+| Kronos, cod nou | 0,95–1,35 | 0,9910 | confirmat |
+| GPT-2, cod nou | 1,20–1,60 | 1,6107 | **infirmat**, la limită (cu 0,01) |
+| GPT-Neo, cod nou | 3,0–4,0 | 4,7436 | **infirmat**, cu 0,74 (peste 0,2) |
+
+- **„GPT-Neo mai bun decât Kronos pe Wikipedia română nouă”: nu s-a întâmplat.** Kronos e mai bun cu 0,70, deci
+  avantajul lui din comparația de azi **nu venea doar din „acasă”**. Am așteptat ca diferența să scadă (pe validarea
+  veche era 0,54), dar a crescut, deci și aici m-am înșelat. Kronos pierde pe articolele noi doar 0,15 față de
+  validarea lui de Wikipedia (1,18 față de 1,03), iar GPT-Neo pierde 0,31 (1,89 față de 1,57).
+- **„Kronos mai bun decât GPT-2 pe Wikipedia engleză nouă”: nu.** GPT-2 câștigă clar (1,13 față de 1,68), cum era
+  de așteptat.
+- **„GPT-2 mai bun decât Kronos pe codul nou”: nu.** Kronos câștigă clar (0,99 față de 1,61).
+- **O cifră iese din interval cu peste 0,2:** GPT-Neo la cod (4,74). După regulă, am înțeles greșit cât de slab e la
+  cod. Celelalte abateri sunt sub 0,1.
+
+### Ce înseamnă, cinstit
+
+- **Concluzia sigură:** pe texte noi, nevăzute de niciunul, Kronos #373 e clar mai bun decât GPT-2 small și GPT-Neo
+  românesc 125M la română și la cod Python. La engleza enciclopedică pierde clar în fața lui GPT-2, pentru că el a
+  învățat doar engleză simplă.
+- **Ce nu rezultă:** că Kronos e un model mai bun în general. GPT-Neo românesc 125M e un model mic, vechi (cel târziu
+  2023), învățat pe un amestec diferit. Kronos are de partea lui atât cantitatea mare de română curată din Wikipedia,
+  cât și 3 ani mai noi de limbă.
+- **Eșantioanele sunt mici:** cifra principală stă pe primele 100.000 de litere, adică 12 articole în română, 32 în
+  engleză și doar 7 fișiere de cod. Diferențele mari (0,70 la română, 0,62 la cod) sunt mult peste ce poate schimba
+  întâmplarea. Cele de sub ~0,05 nu ar însemna nimic. Pe seturile întregi (de 5–17 ori mai mari) se poate da o notă
+  mai sigură, doar ca informație, dacă Adrian vrea.
