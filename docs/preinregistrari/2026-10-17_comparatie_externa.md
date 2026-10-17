@@ -97,3 +97,24 @@ la 512.
 - **Oricare cifră în afara intervalului așteptat cu mai mult de 0,2** înseamnă că am înțeles greșit ceva despre
   modelele astea. Asta se scrie în verdict, oricum ar ieși comparația.
 - Verdictul se scrie pe fiecare rând de mai sus: **confirmat** sau **infirmat**, cu cifrele.
+
+## Adăugat înainte de rulare (17 octombrie, 18:52): a văzut GPT-Neo textele noastre?
+
+*Adrian a dat „da” la ~18:40 și a cerut să raportez și dacă modelul românesc a văzut probabil textele noastre din
+Wikipedia. Secțiunea e scrisă înainte de orice descărcare; restul pre-înregistrării rămâne neschimbat.*
+
+- **Testul „continuă din memorie”:** din fiecare validare (Wikipedia, web, cărți) iau primele 150 de texte de cel puțin
+  500 de litere. Modelul primește primele ~300 de litere (tăiate la un spațiu) și scrie mai departe, alegând mereu
+  bucata cea mai probabilă (fără întâmplare). Număr câte litere la rând se potrivesc **exact** cu textul adevărat.
+  Un pasaj „din memorie” = cel puțin 50 de litere identice.
+- **Martorul e Kronos #373**, care sigur n-a văzut validările. Pe Wikipedia sunt multe texte-tipar („X este o comună în
+  județul Y…”), pe care le ghicește și un model care n-a văzut pagina. Deci contează diferența față de Kronos, nu cifra
+  singură.
+- **Regula, dinainte:** GPT-Neo **a văzut probabil** textele unei validări dacă partea lui de pasaje „din memorie” e cu
+  **cel puțin 10 puncte procentuale peste Kronos și cel puțin dublă**. Altfel: „nu se vede că le-a văzut”, ceea ce nu
+  dovedește că nu le-a văzut.
+- **Al doilea semn, doar informativ:** raportul dintre nota pe Wikipedia și nota pe web. La Kronos e 1,0345 / 1,5271 =
+  0,677. Dacă la GPT-Neo e mult mai mic, Wikipedia îi e mai „cunoscută” decât ne-am aștepta.
+- **Ce aștept:** Kronos 3–15% pasaje „din memorie” pe Wikipedia, GPT-Neo 15–40%, deci „a văzut probabil” Wikipedia.
+  Pe web (OSCAR și FineWeb-2 vin amândouă din Common Crawl) aștept o diferență mai mică, iar pe cărți niciuna clară.
+- GPT-2 nu face acest test: nu știe română, deci nu spune nimic despre ce a văzut.
