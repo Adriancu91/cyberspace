@@ -35,6 +35,6 @@ Register-ScheduledTask -TaskName $sarcini[0] -Action (Actiune "-Blocheaza") -Tri
 $dupa = New-ScheduledTaskTrigger -AtLogOn -User $cine.UserId
 $dupa.Delay = "PT30S"
 Register-ScheduledTask -TaskName $sarcini[1] -Action (Actiune "-Claude") -Trigger $dupa -Settings $setari -Principal $cine `
-    -Description "Porneste Claude Code cu Remote Control, continuand ultima conversatie din C:\Kronos." | Out-Null
+    -Description "Porneste Claude Code cu Remote Control: continua conversatia din C:\Kronos\cyberspace sau, daca nu are, una noua." | Out-Null
 
 Get-ScheduledTask -TaskName "Kronos*" | Select-Object TaskName, State | Format-Table -AutoSize

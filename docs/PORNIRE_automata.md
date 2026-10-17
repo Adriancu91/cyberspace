@@ -149,3 +149,42 @@ blocarea ecranului) și CONTINUUM, dar nu reia singură școala de cod de la noa
   Update a repornit singur calculatorul și a oprit școala de cod.
 - **Regula lui Adrian (16 octombrie):** dacă se oprește și nu revine, vine Adrian și îl pornește; la pornire, Claude
   Code reia singur ce era programat și îi scrie un raport scurt.
+
+## Căderea de sâmbătă, 17 octombrie (Claude Code și interfața oprite după raportul de la 07:45)
+
+**Ce s-a găsit** (verificat la 17:00 din jurnalele Windows și din fișierele lui Claude Code):
+
+- **Windows nu a repornit** (pornit pe 16 octombrie, 09:46:35) și nu s-a delogat. În „Application” și „System”, între
+  07:40 și 08:15, nu e nicio cădere de program (nici „Application Error”, nici raport WER), nicio actualizare Windows
+  și nicio actualizare din Microsoft Store (Windows Terminal e același din 3 octombrie). Prima actualizare de azi:
+  definițiile Defender, la 09:57.
+- **Sesiunea veche** rula în folderul **`C:\Kronos`** (nu `C:\Kronos\cyberspace`), conversația
+  `af2102cd-e870-4718-aa40-de2afa454dbe`, cu versiunea **2.1.301** (nu 2.1.296: așa scrie în fiecare rând al ei).
+  Ultimul lucru făcut: raportul de la **07:46:08**. La **07:59:34** Claude Code și-a oprit singur sarcina de fundal
+  „Așteaptă până la 10:59 pentru fișă” (stare „killed”): așa face când se închide. Deci s-a închis în jur de 07:59:34,
+  în ordine (a apucat să scrie), nu omorât brusc.
+- **Actualizarea automată:** 2.1.301 → 2.1.302 s-a instalat în fundal la **00:17:46** (`.last-update-result.json`:
+  „success”), iar sesiunea a mers apoi încă 7 ore și jumătate. Deci actualizarea **nu** s-a întâmplat între 07:45 și
+  08:10. Că închiderea de la 07:59 are legătură cu ea (programul vechi închis ca să fie înlocuit) e **posibil, dar
+  nedovedit**: Claude Code nu ține un log care să spună de ce s-a oprit.
+- **„No conversation found to continue”:** `claude --continue` caută doar conversațiile folderului în care e pornit.
+  Pornit în `C:\Kronos\cyberspace`, nu are cum să găsească conversația din `C:\Kronos`. Cea veche se poate redeschide
+  cu `cd C:\Kronos` și `claude --resume af2102cd-e870-4718-aa40-de2afa454dbe`.
+- **Interfața** fusese pornită de mână pe 13 octombrie (logul ei, `lucru/interfata/server.log`, era din 13 octombrie
+  la 08:13) și nu găsesc nicio repornire a ei după repornirile de probă din 16 octombrie. E posibil să fi fost oprită
+  încă de ieri, nu de azi-dimineață. CONTINUUM a mers tot timpul (ciclul #994 la 17:00, doar observă).
+
+**Ce s-a schimbat:**
+
+- `unelte/interfata_ws.ps1` pornește interfața fără fereastră (modelul #312, pe procesor, portul 8787), cu logul în
+  `lucru/interfata/server.log`. Repornită la 17:05.
+- `unelte/dupa_logare_ws.ps1 -Claude`: folderul e acum `C:\Kronos\cyberspace`. Dacă folderul are o conversație
+  salvată, o continuă (`--continue`); dacă nu, sau dacă `--continue` se oprește în primul minut, pornește o sesiune
+  nouă: `claude --remote-control "Kronos"`.
+- **Paznicul de procese** (`unelte/paznic_procese_ws.ps1`, sarcina „Kronos paznic procese”, pusă de
+  `unelte/programeaza_paznic_procese_ws.ps1`): la fiecare 15 minute verifică Claude Code cu Remote Control „Kronos”,
+  interfața și CONTINUUM și pornește la loc ce lipsește (CONTINUUM nu, dacă e apăsat STOP). Fiecare repornire se scrie
+  în `lucru/paznic_procese.log`. În primele 5 minute după pornirea calculatorului nu face nimic (atunci lucrează
+  sarcinile de după logare). Proba pe uscat: `powershell -ExecutionPolicy Bypass -File unelte\paznic_procese_ws.ps1 -Proba`.
+- Ce nu poate repara paznicul: o sesiune Remote Control „arhivată” pe telefon, cu Claude Code încă pornit pe
+  calculator. Pentru el, procesul există, deci nu face nimic.
