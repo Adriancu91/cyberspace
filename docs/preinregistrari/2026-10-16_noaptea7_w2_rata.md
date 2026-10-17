@@ -109,3 +109,15 @@ Copia răcită #373 (după ora 30, `lucru/ws_w2/modelul_zilei.json`), față de 
   −0,0386: probabil în jur de 0,01. Iar orele nerăcite au stat pe loc toată noaptea, ca la un nou plafon, mai jos.
 - **Ce urmează (de hotărât de Adrian):** dacă linia W2 rămâne de acum la 0,00025 (config/ws_w2_r025.toml) sau dacă
   facem un martor (o noapte la 0,0005, din aceeași stare) ca să despărțim efectul ratei de efectul timpului.
+
+## Decizia lui Adrian (sâmbătă, 17 octombrie, ~17:15)
+
+- **W2 merge de acum cu rata constantă 0,00025, ca rețetă nouă**, fără o noapte de comparație (martor) la 0,0005.
+  `config/ws_w2.toml` are de acum `rata_invatare = 0.00025` (în rest e neschimbat; față de `config/ws_w2_r025.toml`
+  diferă doar comentariile). Răcirea de la sfârșitul nopții merge liniar 0,00025 → 0,00005, ca în noaptea 7.
+- **Partea din câștig care vine din rată e nesigură.** Din −0,0386 la română (1,3488 → 1,3102), o parte ar fi venit
+  oricum dintr-o a treia noapte la 0,0005 (noaptea 2 adusese −0,029). Fără martor nu se poate despărți efectul ratei de
+  efectul timpului; estimarea de mai sus („probabil în jur de 0,01”) rămâne o estimare, nu o măsurătoare.
+- **CONTINUUM** antrenează linia W2 doar prin `config/ws_w2.toml` (nevoile „continua”, „deprinde” și „linie_noua”),
+  deci folosește de acum 0,00025. Perioada în care doar observă rămâne neschimbată: până pe **18 octombrie, 07:45**
+  (`om_decide_pana_la`).

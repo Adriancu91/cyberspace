@@ -144,7 +144,8 @@ def test_configurarea_w2_are_reteta_noua():
 
     cale = RADACINA / "config" / "ws_w2.toml"
     model = citeste_config(cale).setari_port("model")
-    assert model["rata_invatare"] == 0.0005 and model["rata_care_scade"] and model["fractie_rata_finala"] == 1.0
+    # rata: 0,0005 până pe 17 octombrie 2026; de atunci 0,00025 (decizia lui Adrian, după noaptea 7)
+    assert model["rata_invatare"] == 0.00025 and model["rata_care_scade"] and model["fractie_rata_finala"] == 1.0
     assert 1500 <= model["incalzire_pasi"] <= 2000  # ~5 minute la ~5,9 pași pe secundă
     assert (model["lot"], model["context"], model["fractie_hrana"]) == (12, 512, 0.06)
     reguli = antrenare_lunga.reguli_rulare(tomllib.loads(cale.read_text(encoding="utf-8")))

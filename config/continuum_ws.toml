@@ -49,6 +49,8 @@ buget_ore_placa_pe_zi = 20
 # CONTINUUM. Până atunci doar observă, iar fiecare ciclu din jurnal spune de ce.
 om_decide_pana_la = "2026-10-18T07:45"
 om_decide_motiv = "17 octombrie: după noaptea 7 (rata 0,00025, confirmat), Adrian alege rata lui W2 sau un martor; nimic pe placă fără el"
+# 17 octombrie, seara (Adrian): rata lui W2 e de acum 0,00025, ca rețetă (config/ws_w2.toml, din care CONTINUUM
+# pornește linia W2), fără martor. Perioada de mai sus rămâne neschimbată.
 
 [guvernator.pauza_minute]              # cât așteaptă între două cicluri, pe nivel (secțiunea 3)
 REPAUS = 5
