@@ -165,13 +165,16 @@ def main(argv: list[str] | None = None) -> int:
                         help="câte litere la rând trebuie să fie identice (mai multe: multipli ai celei mai mici)")
     parser.add_argument("--caractere", type=int, default=100_000, help="ca examenul: primele atâtea litere din validare")
     parser.add_argument("--antrenare", nargs="*", default=ANTRENARE)
+    parser.add_argument("--validari", help="alte seturi: un JSON nume → fișier (ex. date/neutru/seturi.json), în locul "
+                                           "validărilor examenului; tot primele --caractere litere")
     parser.add_argument("--director-lucru", default="lucru")
     args = parser.parse_args(argv)
 
     validari: dict[str, list[str]] = {}
-    for v, cale in {**VALIDARI, **OFICIAL}.items():
+    alese = json.loads(Path(args.validari).read_text(encoding="utf-8")) if args.validari else {**VALIDARI, **OFICIAL}
+    for v, cale in alese.items():
         if Path(cale).is_file():
-            validari[v] = texte_validare(Path(cale), None if v in OFICIAL else args.caractere)
+            validari[v] = texte_validare(Path(cale), None if v in OFICIAL and not args.validari else args.caractere)
     pe_lungime = cauta_lungimi(validari, [Path(c) for c in args.antrenare], args.lungime)
     dosar = Path(args.director_lucru) / "scurgeri_examen"
     dosar.mkdir(parents=True, exist_ok=True)

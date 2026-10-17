@@ -19,6 +19,19 @@ def test_amprentele_sunt_ale_bucatilor_nu_ale_pozitiei():
     assert se.amprente(se.coduri("ăîșțâ"), 5)[0] != se.amprente(se.coduri("aisța"), 5)[0]
 
 
+def test_alte_seturi_in_locul_validarilor(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    nou = tmp_path / "nou.txt"
+    nou.write_text(f"un articol scris după 12 octombrie, pe care nu-l are nimeni\n{SEP}\n", encoding="utf-8")
+    ant = tmp_path / "ant.txt"
+    ant.write_text("cu totul altceva, deloc la fel", encoding="utf-8")
+    seturi = tmp_path / "seturi.json"
+    seturi.write_text(json.dumps({"wikipedia_ro_nou": str(nou)}), encoding="utf-8")
+    assert se.main(["--lungime", "10", "--antrenare", str(ant), "--validari", str(seturi)]) == 0
+    raport = json.loads(next((tmp_path / "lucru" / "scurgeri_examen").glob("*.json")).read_text(encoding="utf-8"))
+    assert list(raport["validari"]) == ["wikipedia_ro_nou"] and raport["validari"]["wikipedia_ro_nou"]["bucati_gasite"] == 0
+
+
 def test_amprentele_compuse_sunt_cele_ale_bucatilor_lungi():
     litere = se.coduri("Vulpea și corbul stăteau sub un copac bătrân, departe de sat, într-o zi de vară." * 3)
     assert (se.compune(se.amprente(litere, 10), 10, 4) == se.amprente(litere, 40)).all()
