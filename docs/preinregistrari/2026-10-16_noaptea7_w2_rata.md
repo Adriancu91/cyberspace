@@ -57,3 +57,55 @@ Cu copia răcită #353 (după ora 20, rata 0,0005):
 - Pe copia răcită: româna între 1,31 și 1,34 (cred că mai probabil „neconfirmat”: o parte din câștigul răcirii era deja
   luat la #353); poveștile 0,44–0,455; codul 0,73–0,75; fapte noi cel puțin 60; sacru cel puțin 22; nota 3,3–4,3.
 - Placa: cam 5.400 MB (cât la orele 18–20), sub 70 °C, viteza ~5,8 pași pe secundă, nicio oprire de la paznic.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-17 06:41, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 363 | ws_w2 | 16.10 19:00 | 0,4800 | pastrat | 67 | 149 | 3,45 |  |
+| 364 | ws_w2 | 16.10 20:05 | 0,4804 | respins | 65 | 149 | 3,33 | scorul nu e mai bun |
+| 365 | ws_w2 | 16.10 21:09 | 0,4810 | respins | 57 | 147 | 3,67 | scorul nu e mai bun |
+| 366 | ws_w2 | 16.10 22:13 | 0,4822 | respins | 63 | 148 | 3,77 | scorul nu e mai bun |
+| 367 | ws_w2 | 16.10 23:17 | 0,4834 | respins | 62 | 147 | 3,52 | scorul nu e mai bun |
+| 368 | ws_w2 | 17.10 00:21 | 0,4826 | respins | 76 | 150 | 3,38 | scorul nu e mai bun |
+| 369 | ws_w2 | 17.10 01:25 | 0,4822 | respins | 65 | 148 | 3,55 | scorul nu e mai bun |
+| 370 | ws_w2 | 17.10 02:29 | 0,4828 | respins | 61 | 147 | 4,10 | scorul nu e mai bun |
+| 371 | ws_w2 | 17.10 03:33 | 0,4826 | respins | 72 | 148 | 3,50 | scorul nu e mai bun |
+| 372 | ws_w2 | 17.10 04:37 | 0,4803 | respins | 70 | 147 | 3,67 | scorul nu e mai bun |
+| 373 | ws_w2_racit_030 | 17.10 05:41 | 0,4422 | pastrat | 74 | 150 | 3,90 |  |
+| 374 | examen_validari_ws | 17.10 06:13 | — | masurat | — | — | — |  |
+
+- **ws_w2:** 10 ore, 1 păstrate; val_bpb de la 0,4800 la 0,4803; cel mai bun păstrat: #363 (0,4800).
+- **ws_w2_racit_030:** 1 ore, 1 păstrate; val_bpb de la 0,4422 la 0,4422; cel mai bun păstrat: #373 (0,4422).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul (scris sâmbătă, 17 octombrie, 06:41, de Claude Code): CONFIRMAT
+
+Copia răcită #373 (după ora 30, `lucru/ws_w2/modelul_zilei.json`), față de #353:
+
+| | #353 (rata 0,0005) | #373 (rata 0,00025) | schimbarea |
+|---|---|---|---|
+| **română** (media Wikipedia, web, cărți) | 1,3488 | **1,3102** | **−0,0386** |
+| – Wikipedia | 1,0783 | 1,0345 | −0,044 |
+| **povești** (val_bpb) | 0,4552 | **0,4422** | −0,013 |
+| cod (media cod și sarcini) | 0,7529 | 0,7338 | −0,019 |
+| fapte noi | 75 | 74 | −1 |
+| setul sacru | 25 din 50 | 27 din 50 | +2 |
+| nota profesorului | 3,80 | 3,90 | +0,10 |
+
+- **Româna a scăzut cu 0,0386**, deci sub pragul de 1,3188, **iar poveștile au ajuns la 0,4422**, deci sub 0,46.
+  După pragurile lui Adrian: **CONFIRMAT**.
+- Așteptările lui Claude Code: româna 1,31–1,34 (a ieșit 1,3102, la marginea de jos; mă așteptam mai degrabă la
+  „neconfirmat”, deci am greșit); poveștile 0,44–0,455 (în interval); codul 0,73–0,75 (în interval); fapte noi ≥ 60,
+  sacru ≥ 22, nota 3,3–4,3 (toate în interval). Orele nerăcite: ora 21 a coborât la 0,4800, mai mult decât așteptam
+  (0,50–0,51), apoi au stat pe loc (0,480–0,483).
+- **Placa:** cel mult 6.004 MB pe toată placa, 62 °C, 5,9 pași pe secundă, nicio oprire de la paznic. Antrenarea s-a
+  încheiat la 06:14 (cod 0); starea liniei e neatinsă de copia răcită.
+- **De știut, cinstit:** e o singură noapte, fără martor. O parte din câștig ar fi venit oricum dintr-o a treia noapte
+  la 0,0005: noaptea 2 adusese −0,029 la română. Deci câștigul care se poate pune pe seama ratei e mai mic decât
+  −0,0386: probabil în jur de 0,01. Iar orele nerăcite au stat pe loc toată noaptea, ca la un nou plafon, mai jos.
+- **Ce urmează (de hotărât de Adrian):** dacă linia W2 rămâne de acum la 0,00025 (config/ws_w2_r025.toml) sau dacă
+  facem un martor (o noapte la 0,0005, din aceeași stare) ca să despărțim efectul ratei de efectul timpului.
