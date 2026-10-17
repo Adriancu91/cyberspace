@@ -353,14 +353,16 @@ def toate_bune(dosar: Path, interzise: set[str] | None = None,
 
 
 def scrie_fisa_wikipedia(dosar: Path, docs: Path, samanta: int = 1, cate: int = 30) -> int:
-    """Fișa din 16 octombrie, 12:00 (Adrian): 30 de perechi doar din Wikipedia (după toate filtrele), toate „W”."""
+    """Fișa din 16 octombrie, 12:00 (Adrian): 30 de perechi doar din Wikipedia (după toate filtrele), toate „W”.
+    Din 17 octombrie, 11:00: aceeași fișă, pe Wikipedia v3 (doar prima propoziție)."""
     _, bune = toate_bune(dosar)
     wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl"]
     alese = random.Random(samanta).sample(wiki, min(cate, len(wiki)))
     docs.parent.mkdir(parents=True, exist_ok=True)
     docs.write_text(fisa_de_verificat(alese, samanta, titlu=(
         f"{len(alese)} de perechi alese la întâmplare doar din Wikipedia (W), din {len(wiki)} bune, după curățarea "
-        f"reparată pe 16 octombrie. Regula: cel mult 3 greșite din 30 → W2-conv pornește la noapte")), encoding="utf-8")
+        f"v3 din 17 octombrie (răspunsul = doar prima propoziție, cel mult 30 de cuvinte, fără liste). Regula: cel mult "
+        f"3 greșite din 30 → W2-conv poate porni")), encoding="utf-8")
     return len(wiki)
 
 

@@ -216,3 +216,86 @@ def test_wikipedia_greselile_de_tipar_si_oamenii():
     emisiune = pereche_din("Cronica este o emisiune de televiziune, difuzată miercurea. Au prezentat-o mai mulți (2001-2010).\nX")
     assert emisiune is None or emisiune["tip"] != "om"
     assert pereche_din("Un cookie este un text trimis de un server unui navigator web.\nCorp.") is None
+
+
+@pytest.mark.parametrize("propozitie, lista", [
+    ("Tătăranu este o comună în județul Vrancea, Muntenia, România, formată din satele Bordeasca Nouă, Bordeasca Veche, "
+     "Mărtinești, Tătăranu și Vâjâitoarea.", True),
+    ("Grupul e unul dintre cele 8, celelalte fiind dislocate în Estonia, Letonia, Lituania, Polonia.", True),
+    ("Rolurile au fost interpretate de actorii Iurie Darie, Alexandru Munte, Alexandru Repan și Melania Cîrje.", True),
+    ("Costișa este o comună în județul Neamț, Moldova, România, formată din satele Costișa, Dornești, Frunzeni și "
+     "Mănoaia.", True),
+    ("Cleja este o comună în județul Bacău, Moldova, România, formată din satele Cleja, Somușca și Valea Mică.", False),
+    ("André Henri Lavrillier a fost un artist plastic, gravor de monede și medalist francez.", False),
+])
+def test_wikipedia_v3_listele_ies(propozitie, lista):
+    from unelte.conversatie_wikipedia import are_lista
+
+    assert are_lista(propozitie) is lista
+
+
+def test_wikipedia_v3_numeralele_si_acordul():
+    from unelte.conversatie_wikipedia import _ACORD, numeral_fara_de
+
+    assert numeral_fara_de("Sezonul include peste cincizeci turnee.") == "cincizeci turnee"
+    assert numeral_fara_de("Sezonul include 25 turnee.") == "25 turnee"
+    assert numeral_fara_de("Clubul are 100 membri.") == "100 membri"
+    for bun in ("A câștigat 24 de titluri.", "Are 101 membri.", "Un film din 1963 regizat de el.", "Timp de 19 sezoane.",
+                "Lansat pe 15 noiembrie 1995.", "Un râu de 20 km lungime.", "Folosit de 85-90% din vorbitori."):
+        assert numeral_fara_de(bun) is None, bun
+    assert _ACORD.search("A fost cel de-al 52-lea sezon a celei de-a doua competiții.")
+    assert _ACORD.search("A fost cea de-a 3-a ediție al unui turneu.")
+    assert not _ACORD.search("A fost cel de-al 52-lea sezon al celei de-a doua competiții.")
+    assert not _ACORD.search("Sezonul a fost bun.")
+
+
+def test_wikipedia_v3_doar_prima_propozitie_si_oamenii():
+    from unelte.conversatie_wikipedia import pereche_din
+
+    p = pereche_din("Konrad Bercovici (n. 22 iunie 1882, Brăila – d. 27 decembrie 1961, New York) a fost un prozator și "
+                    "dramaturg american de origine evreiască din România. A scris multe romane.\nCorp.")
+    assert p["intrebare"] == "Cine a fost Konrad Bercovici?" and p["raspuns"].endswith("din România.")
+    p = pereche_din("Carol Stanciu (n. 1937) este un medic, gastroenterolog, membru de onoare al Academiei Române.\nx")
+    assert p["intrebare"] == "Cine este Carol Stanciu?"
+    razboi = pereche_din("Primul Război Mondial (1914–1918) a fost un conflict militar global care a început în Europa.\nx")
+    assert razboi["tip"] == "ce" and razboi["intrebare"] == "Ce a fost Primul Război Mondial?"
+    p = pereche_din("Sorin Babii este un fost trăgător de tir român, laureat cu aur la Seul 1988.\nx")
+    assert p["intrebare"] == "Cine este Sorin Babii?"
+    p = pereche_din("Horia Agarici a fost un maior aviator al Forțelor Aeriene Române.\nx")
+    assert p["intrebare"] == "Cine a fost Horia Agarici?"
+    lung = " ".join(["cuvânt"] * 30)
+    assert pereche_din(f"Lucrul este un obiect {lung}.\nx") is None  # peste 30 de cuvinte
+    assert pereche_din(f"Lucrul este un obiect {lung}.\nx", max_cuvinte=40) is not None
+
+
+def test_wikipedia_v3_oamenii_dupa_prenume():
+    from unelte.conversatie_wikipedia import oamenii_dupa_prenume, pereche_din
+
+    oameni = [pereche_din(f"John Smith{i} (n. 1900) a fost un pictor englez din Londra.\nx") for i in range(3)]
+    constable = pereche_din("John Constable a fost un remarcabil pictor peisagist englez de factură romantică.\nx")
+    film = pereche_din("John Wick este un film american de acțiune din 2014, regizat de Chad Stahelski.\nx")
+    rar = pereche_din("Zorbas Constable a fost un remarcabil pictor peisagist englez de factură romantică.\nx")
+    assert constable["tip"] == "ce" and film["tip"] == "ce"
+    assert oamenii_dupa_prenume(oameni + [constable, film, rar]) == 1
+    assert constable["intrebare"] == "Cine a fost John Constable?" and constable["tip"] == "om"
+    assert film["intrebare"] == "Ce este John Wick?" and rar["tip"] == "ce"  # „Zorbas”: prenume nevăzut la oameni
+
+
+def test_wikipedia_v3_lucrurile_nu_devin_oameni():
+    from unelte.conversatie_wikipedia import oamenii_dupa_prenume, pereche_din
+
+    medalia = pereche_din("Medalia „Răsplata Muncii” este o medalie românească instituită prin decret regal în 1898.\nx")
+    assert medalia["tip"] == "ce"
+    assert pereche_din("În geometrie un segment de cerc este o zonă dintr-un disc tăiată de o coardă.\nx") is None
+    assert pereche_din("Adrian Gurzău este un politician român, deputat de din partea PDL.\nx") is None
+    oameni = [pereche_din(f"The Edge{i} (n. 1961) este un chitarist irlandez din trupa U2.\nx") for i in range(3)]
+    filme = [pereche_din(f"The Film{i} este un film american din 1990, regizat de John Ford.\nx") for i in range(2)]
+    album = pereche_din("The Fame Monster este un disc pop al unei cântărețe americane, lansat în anul 2009.\nx")
+    assert album["poate_om"] and oamenii_dupa_prenume(oameni + filme + [album]) == 0  # 3 la oameni, 2 la filme
+
+
+def test_wikipedia_v3_litera_straina_iese():
+    from unelte.conversatie_wikipedia import pereche_din
+
+    assert pereche_din("Cruciada norvegiană a fost o cruciadă, întreprinsǎ de regele Sigurd I între 1107 și 1110.\nx") is None
+    assert pereche_din("Cruciada norvegiană a fost o cruciadă, întreprinsă de regele Sigurd I între 1107 și 1110.\nx")
