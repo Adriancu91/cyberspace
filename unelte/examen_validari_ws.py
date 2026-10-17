@@ -43,10 +43,11 @@ VALIDARI = {
     "romana_carti": "date/ws/curat/wikisource_ro/validare.txt",
     "romana_fabule": "date/ws/curat/fabule_ro/validare.txt",
     "traducere": "date/ws/curat/europarl_en_ro/validare.txt",
-    "cod": "date/ws/curat/cod_stack/validare.txt",
+    # până pe 17 octombrie 2026 se numea „cod”, ca grupa: în jurnal, media pe cod îi suprascria nota (rândurile vechi rămân așa)
+    "cod_python": "date/ws/curat/cod_stack/validare.txt",
     "cod_sarcini": "date/ws/curat/cod_instruct/validare.txt",
 }
-GRUPE = {"romana": ["romana_wikipedia", "romana_web", "romana_carti"], "cod": ["cod", "cod_sarcini"]}
+GRUPE = {"romana": ["romana_wikipedia", "romana_web", "romana_carti"], "cod": ["cod_python", "cod_sarcini"]}
 
 
 def inceput_de_text(cale: Path, caractere: int) -> str:

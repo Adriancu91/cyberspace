@@ -28,13 +28,15 @@ def test_numerele_pentru_jurnal_si_mediile_pe_grupe():
     rezultate = {
         "romana_wikipedia": {"bpb": 1.0, "octeti": 100, "bucati_corecte": 0.5, "octeti_ghiciti": 0.4},
         "romana_web": {"bpb": 2.0, "octeti": 300, "bucati_corecte": 0.25, "octeti_ghiciti": 0.2},
-        "cod": {"bpb": 0.5, "octeti": 50},
+        "cod_python": {"bpb": 0.5, "octeti": 50, "bucati_corecte": 0.75, "octeti_ghiciti": 0.7},
         "cod_sarcini": {"lipseste": "date/x"},
     }
     n = unealta.numere(rezultate)
     assert n["bpb_romana"] == 1.75 and n["bpb_cod"] == 0.5          # media pe octeți
     assert n["corecte_romana_web"] == 0.25 and n["ghiciti_romana_wikipedia"] == 0.4
     assert "corecte_cod" not in n and "bpb_cod_sarcini" not in n
+    # fișierul de cod Python și grupa „cod” au chei diferite: media nu mai suprascrie nota fișierului
+    assert n["bpb_cod_python"] == 0.5 and n["corecte_cod_python"] == 0.75
 
 
 def test_examenul_pe_un_model_salvat(tmp_path, monkeypatch, capsys):
@@ -46,14 +48,14 @@ def test_examenul_pe_un_model_salvat(tmp_path, monkeypatch, capsys):
     model_id = [f for f in fise(tmp_path) if f.get("model_salvat")][-1]["id"]
     (tmp_path / "ro.txt").write_text(f"Pisica doarme pe covor, iar câinele aleargă prin grădină.\n{SEP}\n" * 40, encoding="utf-8")
     (tmp_path / "cod.txt").write_text(f"def aduna(a, b):\n    return a + b\n{SEP}\n" * 40, encoding="utf-8")
-    monkeypatch.setattr(unealta, "VALIDARI", {"romana_wikipedia": str(tmp_path / "ro.txt"), "cod": str(tmp_path / "cod.txt"),
+    monkeypatch.setattr(unealta, "VALIDARI", {"romana_wikipedia": str(tmp_path / "ro.txt"), "cod_python": str(tmp_path / "cod.txt"),
                                                "cod_sarcini": str(tmp_path / "lipsa.txt")})
     capsys.readouterr()
     assert unealta.main(["--experiment", str(model_id), "--dispozitiv", "cpu", "--caractere", "1500", "--fire", "2"]) == 0
     fisa = [f for f in fise(tmp_path) if f["linie"] == "examen_validari_ws"][-1]
     s = fisa["scoruri"]
     assert fisa["decizie"] == "masurat" and fisa["module"]["elev"]["experiment"] == model_id
-    assert {"bpb_romana_wikipedia", "bpb_cod", "bpb_romana", "caractere"} <= set(s) and "bpb_cod_sarcini" not in s
+    assert {"bpb_romana_wikipedia", "bpb_cod_python", "bpb_cod", "bpb_romana", "caractere"} <= set(s) and "bpb_cod_sarcini" not in s
     assert all(math.isfinite(v) and v > 0 for k, v in s.items() if k.startswith("bpb_"))
     assert all(0 <= v <= 1 for k, v in s.items() if k.startswith(("corecte_", "ghiciti_")))
     iesire = capsys.readouterr().out
