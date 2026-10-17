@@ -96,7 +96,7 @@ texte scrise după ce s-au strâns datele tuturor celor trei modele e neutru: ni
   vechi. Verificarea pe datele lui Kronos prinde asta doar pentru Kronos.
 - **Seturile sunt mici** (100.000 de litere fiecare, ca examenul). Diferențe sub ~0,03 nu înseamnă mare lucru.
 
-## Completări cerute de Adrian, scrise înainte de descărcare (17 octombrie, ~21:50)
+## Completări cerute de Adrian, scrise înainte de descărcare (17 octombrie, 21:43)
 
 *Adrian a dat „da” cu trei completări. Ele se adaugă aici înainte de orice descărcare. Restul pre-înregistrării rămâne
 neschimbat, cu excepția a ce schimbă explicit punctele de mai jos.*
