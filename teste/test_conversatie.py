@@ -188,6 +188,20 @@ def test_o_sursa_scoasa_de_adrian_nu_mai_intra(tmp_path):
     assert "**1. W**" in text and "**2. T**" in text and "peste 2 greșite din 15" in text
 
 
+def test_fisa_wikipedia_fara_perechile_verificate_deja(tmp_path, monkeypatch):
+    """17 octombrie 2026: fișa nouă nu repetă întrebările văzute deja (în fișe sau verificate la mână)."""
+    bune = [{"fel": "wiki", "limba": "ro", "intrebare": f"Ce este lucrul {i}?", "raspuns": f"Lucrul {i} este un lucru.",
+             "sursa": "wikipedia_ro (CC BY-SA 4.0)", "sursa_fisier": "wikipedia.jsonl", "ramane": True} for i in range(40)]
+    monkeypatch.setattr(gc, "toate_bune", lambda dosar: (bune, bune))
+    docs = tmp_path / "fisa.md"
+    vazute = {f"Ce este lucrul {i}?" for i in range(10)} | {"ce este LUCRUL 10"}  # și scrise altfel
+    assert gc.scrie_fisa_wikipedia(tmp_path, docs, samanta=7, fara=vazute) == 29
+    text = docs.read_text(encoding="utf-8")
+    alese = {r.removeprefix("- Întrebare: ") for r in text.splitlines() if r.startswith("- Întrebare: ")}
+    assert len(alese) == 29 and not alese & vazute and "Ce este lucrul 10?" not in alese
+    assert "altele decât cele verificate deja (sămânța 7)" in text
+
+
 @pytest.mark.parametrize("propozitie, rupta", [
     ("A fost dezvoltat în ComitatulWestchester, New York.", True),
     ("Este un film realizat de soții și după povestirea „Casa” a lui.", True),

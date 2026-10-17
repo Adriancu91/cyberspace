@@ -1,215 +1,215 @@
 # Conversația de verificat (pentru Adrian)
 
-*30 de perechi alese la întâmplare doar din Wikipedia (W), din 8000 bune, după curățarea reparată pe 16 octombrie. Regula: cel mult 3 greșite din 30 → W2-conv pornește la noapte (date/conversatie/). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau forma).*
+*30 de perechi alese la întâmplare doar din Wikipedia (W), din 7909 bune, altele decât cele verificate deja (sămânța 1017), după curățarea v3 din 17 octombrie (răspunsul = doar prima propoziție, cel mult 30 de cuvinte, fără liste). Regula: cel mult 3 greșite din 30 → W2-conv poate porni (date/conversatie/). Spune-mi numerele celor greșite și ce e greșit (faptul, româna sau forma).*
 
-*Notă (16 octombrie, 12:05): la #10 am găsit eu greșeala („În, a devenit…”: anul fusese scos la curățare, iar regula nu prindea prepoziția scrisă cu literă mare). Am reparat regula și am refăcut setul; au ieșit 4 perechi din 8.000 cu aceeași problemă. Numără-o totuși la greșite.*
+*Notă (17 octombrie, ~17:30, Claude Code): fișa trebuia gata la 11:00; s-a întârziat pentru că Claude Code s-a închis la 07:59. Excluse: toate cele 506 întrebări văzute deja, în fișele din 15 și 16 octombrie sau verificate la mână azi-noapte (docs/conversatie/verificate_pana_la_17oct.json; 89 dintre ele erau în setul v3). La citirea mea: **#9** pare greșit (răspunsul spune că „Împărțirea la zero” e o culegere de povestiri; e o povestire a lui Ted Chiang, iar întrebarea se poate înțelege și ca operația matematică); **#1** nu spune nimic („a fost infante al Spaniei”); româna stângace la **#3** („la nivel național”) și **#24** (șirul de naționalități). Le judeci tu; eu nu le-am numărat.*
 
 **1. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Circuitul WTA 2023?
-- Răspuns: Circuitul WTA 2023 este cea de-a 53-a ediție a tenisului profesionist feminin de nivel superior, care se joacă de-a lungul anului 2023. Sezonul, care se desfășoară în perioada 29 decembrie 2022 până în 12 noiembrie 2023, include peste cincizeci turnee, marea majoritate organizate de Asociația de Tenis pentru Femei.
+- Întrebare: Cine a fost Infantele Gabriel al Spaniei?
+- Răspuns: Infantele Gabriel al Spaniei a fost infante al Spaniei.
 
 **2. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine a fost Contele Serghei Dmitrievici Urusov?
-- Răspuns: Contele Serghei Dmitrievici Urusov a fost un activist social și politic rus, guvernator al Basarabiei între anii 1903 – 1904.
+- Întrebare: Ce este Optica?
+- Răspuns: Optica este o ramură a fizicii care studiază proprietățile și natura luminii, modul de producere a acesteia și legile propagării și interacțiunii luminii cu substanța.
 
 **3. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce a fost Campionatul European de Baschet Feminin din 2015?
-- Răspuns: Campionatul European de Baschet Feminin din 2015 a fost a 35-a ediție a turneului european de baschet feminin, aflat sub egida FIBA Europe. Turneul a fost găzduit de Ungaria, țară care se află la a cincea organizare după 1950, 1964, 1983 și 1997, și România, aflată la a doua organizare după 1966. Turneul s-a desfășurat în perioada 11–28 iunie 2015.
+- Întrebare: Cine este Antônio de Carvalho Barbosa?
+- Răspuns: Antônio de Carvalho Barbosa este un actor brazilian la nivel național.
 
 **4. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Eugen Cadaru?
-- Răspuns: Eugen Cadaru este un scriitor român de ficțiune speculativă. Este absolvent al Facultății de Drept din cadrul Universității București.
+- Întrebare: Ce este Leucanopsis?
+- Răspuns: Leucanopsis este un gen de insecte lepidoptere din familia Arctiidae.
 
 **5. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Grupul de Luptă Avansat Consolidat al NATO din România?
-- Răspuns: Grupul de Luptă Avansat Consolidat al NATO din România este unul dintre cele 8 multinaționale permanente ale Organizației Tratatului Atlanticului de Nord, dislocate în partea de est a teritoriului Alianței, celelalte grupuri de luptă fiind dislocate în Estonia, Letonia, Lituania, Polonia.
+- Întrebare: Unde se află Sfânta Elena?
+- Răspuns: Sfânta Elena este o insulă în Atlanticul de Sud, în largul coastelor Africii.
 
 **6. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Tribunalul?
-- Răspuns: Tribunalul este un organ de justiție care rezolvă litigiile dintre mai multe părți. În general, deciziile sunt luate de judecători, jurați sau de un magistrat.
+- Întrebare: Unde se află Dalboșeț?
+- Răspuns: Dalboșeț este satul de reședință al comunei cu același nume din județul Caraș-Severin, Banat, România.
 
 **7. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce a fost UEFA Europa League 2022–2023?
-- Răspuns: UEFA Europa League 2022–2023 a fost cel de-al 52-lea sezon a celei de-a doua competiții fotbalistice intercluburi ca valoare din Europa, și a 14-a ediție de la redenumirea ei din Cupa UEFA în UEFA Europa League.
+- Întrebare: Ce este Biserica fortificată din Bunești?
+- Răspuns: Biserica fortificată din Bunești este un ansamblu de monumente istorice aflat pe teritoriul satului Bunești, comuna Bunești.
 
 **8. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Vacanță la mare?
-- Răspuns: Vacanță la mare este un film românesc din 1963 regizat de Andrei Călărașu. Rolurile principale au fost interpretate de actorii Iurie Darie, Alexandru Munte, Alexandru Repan și Melania Cîrje.
+- Întrebare: Ce este Dog Soldiers?
+- Răspuns: Dog Soldiers este un film britanic de groază din 2002 regizat de Neil Marshall.
 
 **9. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Calea ferată Hârlău–Botoșani?
-- Răspuns: Calea ferată Hârlău–Botoșani este o secție feroviară nefinalizată prin intermediul căreia urmau să fie conectate direct orașele București, Iași și Botoșani.
+- Întrebare: Ce este Împărțirea la zero?
+- Răspuns: Împărțirea la zero este o culegere de povestiri fantastice și science fiction scrise de Ted Chiang, apărută la Tor Books.
 
 **10. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Kimi-Matias Räikkönen?
-- Răspuns: Kimi-Matias Räikkönen este un pilot de curse finlandez ce a concurat în Campionatul Mondial de Formula 1 timp de 19 sezoane. În, a devenit campion mondial în Formula 1, pentru Scuderia Ferrari.
+- Întrebare: Unde se află Stâlpu?
+- Răspuns: Stâlpu este o comună în județul Buzău, Muntenia, România, formată numai din satul de reședință cu același nume.
 
 **11. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce a fost Konrad Bercovici?
-- Răspuns: Konrad Bercovici a fost un prozator și dramaturg american de origine evreiască din România.
+- Întrebare: Cine este Marius Chivu?
+- Răspuns: Marius Chivu este un scriitor, traducător și cronicar literar român.
 
 **12. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Unde se află Tătăranu?
-- Răspuns: Tătăranu este o comună în județul Vrancea, Muntenia, România, formată din satele Bordeasca Nouă, Bordeasca Veche, Mărtinești, Tătăranu și Vâjâitoarea.
+- Întrebare: Ce a fost HC Odorheiu Secuiesc?
+- Răspuns: HC Odorheiu Secuiesc a fost o echipă profesionistă de handbal masculin din Odorheiu Secuiesc.
 
 **13. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Unde se află Cleja?
-- Răspuns: Cleja este o comună în județul Bacău, Moldova, România, formată din satele Cleja, Somușca și Valea Mică.
+- Întrebare: Ce este Eddie Murphy Raw?
+- Răspuns: Eddie Murphy Raw este un film american de stand-up comedy din 1987 cu Eddie Murphy.
 
 **14. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine a fost André Henri Lavrillier?
-- Răspuns: André Henri Lavrillier a fost un artist plastic, gravor de monede și medalist francez.
+- Întrebare: Unde se află Todirești?
+- Răspuns: Todirești este o comună în județul Iași, Moldova, România, formată din satele Băiceni, Stroești și Todirești.
 
 **15. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce a fost Abația Cluny?
-- Răspuns: Abația Cluny a fost o mănăstire benedictină din orașul Cluny, Franța. De-a lungul timpului a fost locul unor importante evenimente și unul dintre cele mai cunoscute centre religioase ale Europei medievale. Abația a fost secularizată și deteriorată în contextul revoluției franceze din 1789.
+- Întrebare: Ce a fost Februarie 1988?
+- Răspuns: Februarie 1988 a fost a doua lună a anului și a început într-o zi de luni.
 
 **16. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Unde se află Bezdead?
-- Răspuns: Bezdead este o comună în județul Dâmbovița, Muntenia, România, formată din satele Bezdead, Broșteni, Costișata, Măgura, Tunari și Valea Morii.
+- Întrebare: Unde se află Hârlău?
+- Răspuns: Hârlău este un oraș în județul Iași, Moldova, România, format din localitatea componentă Hârlău, și din satul Pârcovaci.
 
 **17. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Bokmål sau norvegiana cărturărească?
-- Răspuns: Bokmål sau norvegiana cărturărească este cel mai utilizat standard de scriere din cele două existente în norvegiană, celălalt standard fiind nynorsk. Bokmål este folosit de 85-90% din vorbitorii de norvegiană și este cel mai predat studenților străini care doresc să învețe norvegiana.
+- Întrebare: Ce este Căsătoria morganatică?
+- Răspuns: Căsătoria morganatică este o căsătorie încheiată între persoane de ranguri sociale diferite, pentru a împiedica transmiterea de titluri și privilegii între soți și către copiii născuți în urma căsătoriei.
 
 **18. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Brose Baskets?
-- Răspuns: Brose Baskets este un club profesionist de baschet din Bamberg, Germania. Până acum echipa a câștigat Campionatul Germaniei de 8 ori și Cupa Germaniei de 4 ori.
+- Întrebare: Cine este Igor Oprea?
+- Răspuns: Igor Oprea este un antrenor de fotbal, manager sportiv și fost fotbalist din Republica Moldova, care în prezent îndeplinește funcția de director sportiv la clubul Zimbru Chișinău.
 
 **19. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Povestea jucăriilor?
-- Răspuns: Povestea jucăriilor este un film de animație CGI, produs de Pixar Animation Studios, regizat de John Lasseter, Lee Unkrich și Ash Brannon și lansat de Walt Disney Pictures și Buena Vista Distribution pe 15 noiembrie 1995 în Statele Unite.
+- Întrebare: Ce este Destine rătăcite?
+- Răspuns: Destine rătăcite este un serial indian de tip dramă produs de Colors TV.
 
 **20. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Mănăstirea Regală Santa María de Sigena?
-- Răspuns: Mănăstirea Regală Santa María de Sigena este o mănăstire din secolul al XII-lea situată în Villanueva de Sigena în provincia Huesca din comunitatea autonomă Aragon construită de Sancha de Castilia ca mănăstire pentru călugărițe ordinului suveran de Malta.
+- Întrebare: Cine este Eugenia Ostapciuc?
+- Răspuns: Eugenia Ostapciuc este o politiciană din Republica Moldova, fost președinte al Parlamentului Republicii Moldova între anii 2001 și 2005.
 
 **21. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Walid Khalidi?
-- Răspuns: Walid Khalidi este un istoric palestinian absolvent al Universității Oxford, care a scris în mod cuprinzător despre exodul palestinian din 1948.
+- Întrebare: Ce este Limba poloneză?
+- Răspuns: Limba poloneză este o limbă slavă de vest, vorbită de aproximativ 42,5 milioane de persoane în întreaga lume, în principal în Polonia.
 
 **22. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Margaret Court?
-- Răspuns: Margaret Court este o fostă jucătoare de tenis australiană și fostă numărul 1 mondial. Ea a câștigat 24 de titluri de Grand Slam la simplu feminin, 19 titluri de Grand Slam la dublu și 21 de titluri de Grand Slam la dublu mixt.
+- Întrebare: Ce este Taman Negara?
+- Răspuns: Taman Negara este un parc național situat în peninsula Malacca.
 
 **23. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine a fost Angelika Werthmann?
-- Răspuns: Angelika Werthmann a fost o politiciană austriacă, fostă membră a Parlamentului European în perioada iulie 2009 - iulie 2014. În perioada 4 iulie 2012 - 7 aprilie 2014 ea fiind membră a Grupului Liberal din Parlamentul European.
+- Întrebare: Ce este Statuia lui Zeus?
+- Răspuns: Statuia lui Zeus este una dintre cele șapte minuni ale lumii antice, sculptată în tehnica criselefantină, în fildeș ornată cu aur și având o structură internă din lemn.
 
 **24. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce au fost Masacrele din Drenica?
-- Răspuns: Masacrele din Drenica au fost o serie de ucideri ale civililor albanezi kosovari comise de forțele speciale de poliție sârbe în regiunea din centrul provinciei Kosovo.
+- Întrebare: Ce este Tablou de vânătoare?
+- Răspuns: Tablou de vânătoare este un film polonezo-germano-ceho-suedezo-slovac thriller de mister de crimă din 2017 regizat de Agnieszka Holland, o ecranizare a romanului Poartă-ți plugul peste oasele morților de Olga Tokarczuk.
 
 **25. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Unde se află Butimanu?
-- Răspuns: Butimanu este o comună în județul Dâmbovița, Muntenia, România, formată din satele Bărbuceanu, Butimanu, Lucianca și Ungureni. Este străbătută de șoseaua națională DN1A, care leagă Bucureștiul de Ploiești prin Buftea, și care pe teritoriul comunei se intersectează cu DJ711, drum județean ce duce la Târgoviște.
+- Întrebare: Ce este Via Domitia?
+- Răspuns: Via Domitia este un drum roman construit începând din 118 î.Hr. pentru a lega Italia de peninsula Iberică traversând Gallia Narbonensis.
 
 **26. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Jacob Gedleyihlekisa Zuma?
-- Răspuns: Jacob Gedleyihlekisa Zuma este un om politic sud-african, originar din etnia zulu. Între 2009 și 2018, a fost al 4-lea președinte al Africii de Sud.
+- Întrebare: Cine a fost Alfred Nobel?
+- Răspuns: Alfred Nobel a fost un chimist, inventator și om de afaceri suedez.
 
 **27. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine este Carol Stanciu?
-- Răspuns: Carol Stanciu este un medic, gastroenterolog, membru de onoare al Academiei Române.
+- Întrebare: Ce este Universitatea Liberă din Berlin?
+- Răspuns: Universitatea Liberă din Berlin este o universitate de cercetare situată în Berlin, Germania.
 
 **28. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Wikipedia?
-- Răspuns: Wikipedia este o enciclopedie generală, disponibilă pe Internet în mai multe limbi, având conținut ce poate fi utilizat liber și dezvoltat de oricine. Este dezvoltată prin colaborarea voluntară a unui mare număr de persoane și administrată de fundația non-profit Wikimedia. Face parte din fenomenul numit Web 2.0.
+- Întrebare: Ce este Vânătorul de tancuri?
+- Răspuns: Vânătorul de tancuri este un vehicul de luptă blindat care este dotat cu un tun antitanc.
 
 **29. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Cine a fost Ion Nanu-Muscel?
-- Răspuns: Ion Nanu-Muscel a fost un profesor de semiologie și clinică medicală timp de 30 de ani la Universitatea de medicină din București, senator, doctor la Spitalul Filantropia și apoi la Colțea, timp de 36 de ani, președinte al Societății Medicale a spitalelor din București și membru al Academiei de medicină din România.
+- Întrebare: Ce este Helina?
+- Răspuns: Helina este un gen de muște din familia Muscidae.
 
 **30. W**
 
 (wiki, română, wikipedia_ro (CC BY-SA 4.0))
 
-- Întrebare: Ce este Ufologia?
-- Răspuns: Ufologia este un neologism inventat pentru a descrie eforturile colective ale celor care studiază obiectele zburătoare neidentificate, rapoarte și dovezi asociate. Deși ufologia nu reprezintă un domeniu academic de cercetare, OZN-urile au fost supuse diferitelor investigații de-a lungul anilor de către guverne și academicieni independenți.
+- Întrebare: Ce este Whitespace?
+- Răspuns: Whitespace este un limbaj de programare esoteric dezvoltat de Edwin Brady și Chris Morris de la Universitatea din Durham.

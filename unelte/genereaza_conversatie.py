@@ -352,15 +352,19 @@ def toate_bune(dosar: Path, interzise: set[str] | None = None,
     return toate, [p for p in toate if p.get("ramane")]
 
 
-def scrie_fisa_wikipedia(dosar: Path, docs: Path, samanta: int = 1, cate: int = 30) -> int:
+def scrie_fisa_wikipedia(dosar: Path, docs: Path, samanta: int = 1, cate: int = 30,
+                         fara: set[str] | None = None) -> int:
     """Fișa din 16 octombrie, 12:00 (Adrian): 30 de perechi doar din Wikipedia (după toate filtrele), toate „W”.
-    Din 17 octombrie, 11:00: aceeași fișă, pe Wikipedia v3 (doar prima propoziție)."""
+    Din 17 octombrie, 11:00: aceeași fișă, pe Wikipedia v3 (doar prima propoziție), fără întrebările din `fara` (cele
+    verificate deja, în fișe sau la mână)."""
     _, bune = toate_bune(dosar)
-    wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl"]
+    vazute = {normalizat(q) for q in fara or ()}
+    wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl" and normalizat(p["intrebare"]) not in vazute]
     alese = random.Random(samanta).sample(wiki, min(cate, len(wiki)))
     docs.parent.mkdir(parents=True, exist_ok=True)
     docs.write_text(fisa_de_verificat(alese, samanta, titlu=(
-        f"{len(alese)} de perechi alese la întâmplare doar din Wikipedia (W), din {len(wiki)} bune, după curățarea "
+        f"{len(alese)} de perechi alese la întâmplare doar din Wikipedia (W), din {len(wiki)} bune"
+        f"{', altele decât cele verificate deja' if vazute else ''} (sămânța {samanta}), după curățarea "
         f"v3 din 17 octombrie (răspunsul = doar prima propoziție, cel mult 30 de cuvinte, fără liste). Regula: cel mult "
         f"3 greșite din 30 → W2-conv poate porni")), encoding="utf-8")
     return len(wiki)
@@ -432,6 +436,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--refiltreaza", action="store_true", help="filtrele de acum, pe toate perechile scrise")
     parser.add_argument("--fisa", action="store_true", help="doar fișa de verificat (30 de perechi bune de acum)")
     parser.add_argument("--fisa-wikipedia", action="store_true", help="fișa din 16 octombrie: 30 doar din Wikipedia")
+    parser.add_argument("--fara", default="", help="cu --fisa-wikipedia: fișier JSON cu întrebările verificate deja")
     parser.add_argument("--profesor", default="Qwen/Qwen3-4B-Instruct-2507")
     parser.add_argument("--fara-ortografie", action="store_true")
     parser.add_argument("--doar-engleza", action="store_true", help="din 15 octombrie, 11:20: profesorul scrie doar în engleză")
@@ -448,7 +453,9 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(info, ensure_ascii=False), flush=True)
         return 0
     if args.fisa_wikipedia:
-        print(f"Fișa: 30 de perechi din Wikipedia (bune: {scrie_fisa_wikipedia(dosar, docs)}), în {docs}", flush=True)
+        fara = set(json.loads(Path(args.fara).read_text(encoding="utf-8"))) if args.fara else None
+        bune = scrie_fisa_wikipedia(dosar, docs, samanta=args.samanta or 1, fara=fara)
+        print(f"Fișa: 30 de perechi din Wikipedia (bune: {bune}), în {docs}", flush=True)
         return 0
     if args.fisa:
         print(f"Fișa: 30 de perechi românești (bune de acum: {scrie_fisa(dosar, docs)}), în {docs}", flush=True)
