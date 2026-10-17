@@ -83,3 +83,28 @@ Concret, propun:
    potrivește fără nicio scurgere, doar din expresii comune.
 
 Pașii 2 și 3 îi fac doar după „da”-ul lui Adrian.
+
+## Aplicat (duminică, 18 octombrie 2026, după „da”-ul lui Adrian)
+
+- **Fabulele ies din examenul pe validări** și nu primesc variantă curată.
+- **Validările curate sunt scrise** cu `unelte/validari_curate.py`, din **tot** fișierul fiecărei validări, cu regula de
+  mai sus. Fiecare stă în `validare_curata.txt`, lângă `validare.txt`, care rămâne neatins. Raportul, cu amprentele
+  (sha256), e în `date/ws/curat/validari_curate.json`.
+
+| validarea | texte | texte curate | litere păstrate | sha256 (început) |
+|---|---|---|---|---|
+| povești (TinyStories R2) | 2.457 | 1.809 | 75,8% | `d2a6e8459406` |
+| română: Wikipedia | 2.748 | 1.668 | 71,2% | `24916dc66a4e` |
+| română: web | 8.858 | 8.034 | 84,1% | `9c5e4d2f6a15` |
+| română: cărți | 98 | 96 | 94,0% | `9eaef8570113` |
+| traducere | 3.882 | 3.712 | 95,5% | `69374134bf19` |
+| cod Python | 1.454 | 1.220 | 78,0% | `3e3827ce3648` |
+| sarcini de cod | 468 | 442 | 95,8% | `7b908ef68e8c` |
+
+- **Examenul oficial (`module/examen_bpb.py`) și validarea lui nu se schimbă.** Varianta curată a poveștilor se
+  notează doar în examenul pe validări, ca informație.
+- **Examenul pe validări (`unelte/examen_validari_ws.py`)** notează, pe rândurile noi din jurnal, și variantele
+  curate, sub nume noi: `bpb_<validare>_curat` și mediile `bpb_romana_curat`, `bpb_cod_curat`. Notele vechi
+  (`bpb_romana`, `bpb_cod`) se socotesc exact ca înainte, iar rândurile vechi din jurnal nu se ating. Schimbarea intră
+  după închiderea nopții 4 (18 octombrie, 07:45), ca examenul de dimineață al copiei răcite să rămână cel
+  pre-înregistrat.
