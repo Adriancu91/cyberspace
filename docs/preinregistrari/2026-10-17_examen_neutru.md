@@ -212,3 +212,25 @@ Cea mai bună notă a fiecăruia (doar informativ): Kronos, aceeași. GPT-2 iese
   engleză și doar 7 fișiere de cod. Diferențele mari (0,70 la română, 0,62 la cod) sunt mult peste ce poate schimba
   întâmplarea. Cele de sub ~0,05 nu ar însemna nimic. Pe seturile întregi (de 5–17 ori mai mari) se poate da o notă
   mai sigură, doar ca informație, dacă Adrian vrea.
+
+## Completare: notarea pe seturile întregi (scrisă duminică, 18 octombrie, 01:20, înainte de rulare)
+
+**Aprobat de Adrian:** „notează-l pe seturile întregi […], doar pe procesor și ziua, fără să încetinești W2-conv.
+Raportează cu intervale de încredere sau măcar cu nota pe fiecare articol.” E doar informație: concluzia de mai sus
+rămâne cea pe primele 100.000 de litere.
+
+- **Ce:** toate textele din cele trei seturi distincte: 97 de articole în română, 200 în engleză, 186 de fișiere de cod.
+  Seturile „doar oameni” sunt identice cu acestea, deci nu se notează separat.
+- **Cum:** fiecare text se notează **singur** (ferestrele de 512 bucăți încep de la începutul lui), cu
+  `unelte/compara_externe.py --pe-text`. Nota setului = toți biții / toți octeții. Diferența față de cifra principală:
+  acolo textele erau lipite, deci o fereastră putea începe în textul de dinainte. Asta schimbă nota cu foarte puțin.
+- **Intervalul de 95%:** reeșantionez textele de 2.000 de ori (cu întoarcere, sămânța 1018). Pentru Kronos față de
+  fiecare alt model, intervalul diferenței e pe **aceleași** texte reeșantionate, plus la câte texte e Kronos mai bun.
+- **Nota pe fiecare text** se păstrează, în aceeași ordine ca în `date/neutru/surse.json` (titlul, adresa).
+- **Când:** ziua, pe procesor, cu prioritate scăzută, câte un model pe rând. Dacă W2-conv pornește la 19:00 și rularea nu
+  s-a terminat, o opresc.
+
+**Așteptarea mea:** pe seturile întregi, ordinea rămâne aceeași ca pe primele 100.000 de litere: Kronos primul la română
+și la cod, GPT-2 primul la engleză. Notele se mișcă cu cel mult ~0,15 față de cifra principală. Intervalele diferenței
+Kronos − GPT-Neo (la română) și Kronos − GPT-2 (la cod) nu ating zero. Dacă vreuna atinge zero, concluzia de mai sus
+trebuie spusă cu grijă: diferența nu mai e sigură.

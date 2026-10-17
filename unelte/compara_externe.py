@@ -158,6 +158,38 @@ def examen(retea: Retea, caractere: int, fereastra: int, validari: dict[str, str
     return rezultate
 
 
+def note_pe_texte(retea: Retea, cale: Path, fereastra: int) -> list[dict[str, Any]]:
+    """Tot fișierul, fiecare text notat singur (ferestrele încep de la capătul lui): biții și octeții fiecăruia."""
+    texte = [t.strip("\n") for t in cale.read_text(encoding="utf-8").split(SEPARATOR) if t.strip()]
+    return [{"octeti": len(t.encode("utf-8")), "biti": round(biti(retea, t, fereastra), 3), "inceput": t[:60]}
+            for t in texte]
+
+
+def interval(biti_: list[float], octeti: list[int], ori: int = 2000, samanta: int = 1018) -> dict[str, float]:
+    """bpb pe tot setul (biți / octeți) și intervalul de 95%, reeșantionând textele (cu întoarcere)."""
+    import numpy as np
+
+    b, o = np.asarray(biti_, dtype=float), np.asarray(octeti, dtype=float)
+    alese = np.random.default_rng(samanta).integers(0, len(b), size=(ori, len(b)))
+    note = b[alese].sum(axis=1) / o[alese].sum(axis=1)
+    jos, sus = np.percentile(note, [2.5, 97.5])
+    return {"bpb": round(float(b.sum() / o.sum()), 4), "jos": round(float(jos), 4), "sus": round(float(sus), 4)}
+
+
+def diferenta(a: list[dict[str, Any]], b: list[dict[str, Any]], ori: int = 2000, samanta: int = 1018) -> dict[str, Any]:
+    """bpb(a) - bpb(b) pe aceleași texte, cu intervalul de 95% (aceleași texte reeșantionate pentru amândouă), și la câte
+    texte e `a` mai bun."""
+    import numpy as np
+
+    o = np.asarray([x["octeti"] for x in a], dtype=float)
+    d = np.asarray([x["biti"] for x in a], dtype=float) - np.asarray([x["biti"] for x in b], dtype=float)
+    alese = np.random.default_rng(samanta).integers(0, len(d), size=(ori, len(d)))
+    note = d[alese].sum(axis=1) / o[alese].sum(axis=1)
+    jos, sus = np.percentile(note, [2.5, 97.5])
+    return {"diferenta": round(float(d.sum() / o.sum()), 4), "jos": round(float(jos), 4), "sus": round(float(sus), 4),
+            "texte_mai_bun": int((d < 0).sum()), "texte": len(d)}
+
+
 def pasaje(cale: Path, cate: int, minim: int = 500, prefix: int = 300, adevar: int = 120) -> list[tuple[str, str]]:
     """Primele `cate` texte de cel puțin `minim` litere: începutul (~`prefix` litere, tăiat la un spațiu) și ce urmează."""
     gasite: list[tuple[str, str]] = []
@@ -231,9 +263,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fire", type=int, default=6)
     parser.add_argument("--validari", help="alt examen: un JSON nume → fișier (ex. date/neutru/seturi.json); "
                                            "atunci și Kronos dă examenul, iar testul „din memorie” nu se face")
+    parser.add_argument("--pe-text", action="store_true",
+                        help="cu --validari: tot fișierul, fiecare text notat singur, cu intervale de 95%% (doar --fereastra)")
     parser.add_argument("--director-lucru", default="lucru")
     args = parser.parse_args(argv)
     validari = json.loads(Path(args.validari).read_text(encoding="utf-8")) if args.validari else None
+    if args.pe_text and not validari:
+        parser.error("--pe-text merge doar cu --validari")
 
     import torch
 
@@ -243,9 +279,10 @@ def main(argv: list[str] | None = None) -> int:
     torch.set_num_threads(max(1, args.fire))
     dosar = Path(args.director_lucru) / ("examen_neutru" if args.validari else "comparatie_externa")
     dosar.mkdir(parents=True, exist_ok=True)
-    iesire = dosar / f"{'neutru' if args.validari else 'comparatie'}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    raport: dict[str, Any] = {"kronos": args.kronos, "caractere": args.caractere, "fereastra": args.fereastra,
-                              "fire": args.fire, "validari": validari or VALIDARI, "modele": {}}
+    fel = "intreg" if args.pe_text else "neutru" if args.validari else "comparatie"
+    iesire = dosar / f"{fel}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    raport: dict[str, Any] = {"kronos": args.kronos, "caractere": None if args.pe_text else args.caractere,
+                              "fereastra": args.fereastra, "fire": args.fire, "validari": validari or VALIDARI, "modele": {}}
 
     def salveaza() -> None:
         iesire.write_text(json.dumps(raport, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -264,7 +301,11 @@ def main(argv: list[str] | None = None) -> int:
         r: dict[str, Any] = {"context": retea.context, "vocabular": retea.vocabular}
         if nume in MODELE:
             r.update({"id": MODELE[nume]["id"], "versiune": MODELE[nume]["versiune"]})
-        if nume in MODELE or validari:
+        if args.pe_text:
+            r["pe_text"] = {v: note_pe_texte(retea, Path(c), min(args.fereastra, retea.context))
+                            for v, c in validari.items() if Path(c).is_file()}
+            r["examen"] = {v: interval([x["biti"] for x in t], [x["octeti"] for x in t]) for v, t in r["pe_text"].items()}
+        elif nume in MODELE or validari:
             r["examen"] = examen(retea, args.caractere, min(args.fereastra, retea.context), validari)
             r["examen_fereastra_proprie"] = examen(retea, args.caractere, retea.context, validari)
         if seturi and (nume == kronos.nume or "neo" in nume):
@@ -274,13 +315,25 @@ def main(argv: list[str] | None = None) -> int:
         salveaza()
         print(f"=== {nume} ({r['secunde']:.0f} s) ===", flush=True)
         for v, x in r.get("examen", {}).items():
-            if "bpb" in x:
+            if args.pe_text:
+                print(f"  {v:<18} bpb {x['bpb']:.4f}   (95%: {x['jos']:.4f}–{x['sus']:.4f})", flush=True)
+            elif "bpb" in x:
                 proprie = r["examen_fereastra_proprie"][v]["bpb"]
                 print(f"  {v:<18} bpb {x['bpb']:.4f}   (fereastra {retea.context}: {proprie:.4f})", flush=True)
         for v, x in r.get("din_memorie", {}).items():
             if x.get("pasaje"):
                 print(f"  din memorie, {v:<17} {x['parte_din_memorie']:.1%} (mediana {x['mediana_litere']} litere)", flush=True)
         del retea
+
+    if args.pe_text:
+        pe_text = raport["modele"][kronos.nume]["pe_text"]
+        raport["kronos_minus"] = {n: {v: diferenta(pe_text[v], m["pe_text"][v]) for v in pe_text}
+                                  for n, m in raport["modele"].items() if n != kronos.nume}
+        salveaza()
+        for n, d in raport["kronos_minus"].items():
+            for v, x in d.items():
+                print(f"Kronos - {n}, {v}: {x['diferenta']:+.4f} (95%: {x['jos']:+.4f}…{x['sus']:+.4f}); Kronos mai bun "
+                      f"la {x['texte_mai_bun']} din {x['texte']} texte", flush=True)
 
     neo = next((n for n in raport["modele"] if "neo" in n), None)
     if neo and seturi:

@@ -98,3 +98,14 @@ def test_aceleasi_note_ca_examenul_kronos(tmp_path, monkeypatch, capsys):
     assert list(memorie) == ["romana_wikipedia"] and memorie["romana_wikipedia"]["pasaje"] == 2
     assert len(fise(tmp_path)) == randuri  # jurnalul Kronos nu se atinge
     assert "Toate cifrele" in capsys.readouterr().out
+
+
+def test_intervalul_si_diferenta_pe_texte():
+    iv = ce.interval([10.0, 20.0, 30.0], [10, 10, 10], ori=500)
+    assert iv["bpb"] == 2.0 and iv["jos"] <= 2.0 <= iv["sus"] and iv["jos"] >= 1.0 and iv["sus"] <= 3.0
+    assert ce.interval([5.0] * 4, [10] * 4) == {"bpb": 0.5, "jos": 0.5, "sus": 0.5}
+    a = [{"biti": 8.0, "octeti": 10}, {"biti": 9.0, "octeti": 10}, {"biti": 12.0, "octeti": 10}]
+    b = [{"biti": 10.0, "octeti": 10}, {"biti": 10.0, "octeti": 10}, {"biti": 10.0, "octeti": 10}]
+    d = ce.diferenta(a, b, ori=500)
+    assert d["diferenta"] == pytest.approx(-0.0333, abs=1e-4) and d["texte_mai_bun"] == 2 and d["texte"] == 3
+    assert d["jos"] <= d["diferenta"] <= d["sus"]

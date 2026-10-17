@@ -126,3 +126,13 @@ def test_examenul_pe_alte_validari_il_da_si_kronos(tmp_path, monkeypatch, capsys
     kronos = raport["modele"][f"kronos_{model_id}"]
     assert kronos["examen"]["wikipedia_ro_nou"]["bpb"] > 0 and "din_memorie" not in kronos
     assert raport["validari"] == {"wikipedia_ro_nou": str(nou)}
+
+    # pe tot setul, fiecare text singur, cu intervale
+    assert ce.main(["--kronos", str(model_id), "--modele", "", "--validari", str(seturi), "--fire", "2", "--pe-text"]) == 0
+    intreg = json.loads(next((tmp_path / "lucru" / "examen_neutru").glob("intreg_*.json")).read_text(encoding="utf-8"))
+    k = intreg["modele"][f"kronos_{model_id}"]
+    assert len(k["pe_text"]["wikipedia_ro_nou"]) == 20 and k["pe_text"]["wikipedia_ro_nou"][0]["inceput"] == "Pisica doarme pe covor."
+    e = k["examen"]["wikipedia_ro_nou"]
+    assert e["jos"] <= e["bpb"] <= e["sus"] and intreg["kronos_minus"] == {}
+    with pytest.raises(SystemExit):
+        ce.main(["--kronos", str(model_id), "--pe-text"])
