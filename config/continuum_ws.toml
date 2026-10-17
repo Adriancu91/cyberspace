@@ -45,10 +45,10 @@ procese_grele = ["python"]             # dacă un astfel de program folosește p
 # v1, anti-buclă: câte ore pe placă pe zi, cu tot ce pornește oricine (orele din jurnalul Kronos începute azi). Peste
 # buget: REPAUS până mâine. 20 lasă plăcii ~4 ore de odihnă pe zi.
 buget_ore_placa_pe_zi = 20
-# 15 octombrie 2026: azi și la noapte alegerea e a lui Adrian (școala de conversație, W2-conv, școala de cod), nu a lui
+# 15–17 octombrie 2026: alegerea e a lui Adrian (conversația, W2-conv, școala de cod, rata lui W2), nu a lui
 # CONTINUUM. Până atunci doar observă, iar fiecare ciclu din jurnal spune de ce.
-om_decide_pana_la = "2026-10-17T07:45"
-om_decide_motiv = "azi alegerea e a lui Adrian, nu a lui CONTINUUM (16 octombrie: repornirea de probă; nimic pe placă fără el)"
+om_decide_pana_la = "2026-10-18T07:45"
+om_decide_motiv = "17 octombrie: după noaptea 7 (rata 0,00025, confirmat), Adrian alege rata lui W2 sau un martor; nimic pe placă fără el"
 
 [guvernator.pauza_minute]              # cât așteaptă între două cicluri, pe nivel (secțiunea 3)
 REPAUS = 5
