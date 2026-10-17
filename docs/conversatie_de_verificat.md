@@ -213,3 +213,14 @@
 
 - Întrebare: Ce este Whitespace?
 - Răspuns: Whitespace este un limbaj de programare esoteric dezvoltat de Edwin Brady și Chris Morris de la Universitatea din Durham.
+
+## Verdictul lui Adrian (sâmbătă, 17 octombrie 2026, ~18:40)
+
+**Fișa TRECE: 2 greșite din 30** (pragul era cel mult 3).
+- **#1 greșit:** răspunsul nu spune nimic („a fost infante al Spaniei”).
+- **#9 greșit:** întrebarea trimite la matematică, iar „Împărțirea la zero” e o povestire din volumul lui Ted Chiang, nu volumul întreg.
+- **#3 și #24** sunt stângace, dar se numără corecte.
+
+Ce urmează, tot din decizia lui: în seara asta merge W2 noaptea 4, cum era programată. W2-conv pornește duminică,
+18 octombrie, la 19:00, din cel mai bun model de atunci (copia răcită de dimineață, dacă e mai bună decât #373, altfel
+#373), cu pre-înregistrare scrisă ziua, dacă placa e liberă și testele trec.
