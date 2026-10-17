@@ -229,8 +229,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fereastra", type=int, default=512, help="cifra principală: ferestre de atâtea bucăți")
     parser.add_argument("--pasaje", type=int, default=150, help="câte texte din fiecare validare la „din memorie”")
     parser.add_argument("--fire", type=int, default=6)
+    parser.add_argument("--validari", help="alt examen: un JSON nume → fișier (ex. date/neutru/seturi.json); "
+                                           "atunci și Kronos dă examenul, iar testul „din memorie” nu se face")
     parser.add_argument("--director-lucru", default="lucru")
     args = parser.parse_args(argv)
+    validari = json.loads(Path(args.validari).read_text(encoding="utf-8")) if args.validari else None
 
     import torch
 
@@ -238,16 +241,17 @@ def main(argv: list[str] | None = None) -> int:
     from unelte.modele_salvate import fisa_modelului, incarca_modelul
 
     torch.set_num_threads(max(1, args.fire))
-    dosar = Path(args.director_lucru) / "comparatie_externa"
+    dosar = Path(args.director_lucru) / ("examen_neutru" if args.validari else "comparatie_externa")
     dosar.mkdir(parents=True, exist_ok=True)
-    iesire = dosar / f"comparatie_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    iesire = dosar / f"{'neutru' if args.validari else 'comparatie'}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     raport: dict[str, Any] = {"kronos": args.kronos, "caractere": args.caractere, "fereastra": args.fereastra,
-                              "fire": args.fire, "modele": {}}
+                              "fire": args.fire, "validari": validari or VALIDARI, "modele": {}}
 
     def salveaza() -> None:
         iesire.write_text(json.dumps(raport, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    seturi = {v: pasaje(Path(VALIDARI[v]), args.pasaje) for v in DIN_MEMORIE if Path(VALIDARI.get(v, "")).is_file()}
+    seturi = {} if validari else {v: pasaje(Path(VALIDARI[v]), args.pasaje) for v in DIN_MEMORIE
+                                  if Path(VALIDARI.get(v, "")).is_file()}
     kronos = ReteaKronos(incarca_modelul(fisa_modelului(Jurnal(Path(args.director_lucru)), args.kronos), "cpu"),
                          f"kronos_{args.kronos}")
     retele: list[tuple[str, Any]] = [(kronos.nume, lambda: kronos)]
@@ -260,9 +264,10 @@ def main(argv: list[str] | None = None) -> int:
         r: dict[str, Any] = {"context": retea.context, "vocabular": retea.vocabular}
         if nume in MODELE:
             r.update({"id": MODELE[nume]["id"], "versiune": MODELE[nume]["versiune"]})
-            r["examen"] = examen(retea, args.caractere, args.fereastra)
-            r["examen_fereastra_proprie"] = examen(retea, args.caractere, retea.context)
-        if nume == kronos.nume or "neo" in nume:
+        if nume in MODELE or validari:
+            r["examen"] = examen(retea, args.caractere, min(args.fereastra, retea.context), validari)
+            r["examen_fereastra_proprie"] = examen(retea, args.caractere, retea.context, validari)
+        if seturi and (nume == kronos.nume or "neo" in nume):
             r["din_memorie"] = {v: din_memorie(retea, lista) for v, lista in seturi.items()}
         r["secunde"] = round(time.monotonic() - inceput, 1)
         raport["modele"][nume] = r
@@ -278,7 +283,7 @@ def main(argv: list[str] | None = None) -> int:
         del retea
 
     neo = next((n for n in raport["modele"] if "neo" in n), None)
-    if neo:
+    if neo and seturi:
         raport["verdict_memorie"] = {
             v: verdict_memorie(raport["modele"][neo]["din_memorie"][v]["parte_din_memorie"],
                                raport["modele"][kronos.nume]["din_memorie"][v]["parte_din_memorie"])
