@@ -6,7 +6,10 @@
 #   2. examenul de conversatie si cel de romana si cod, pe ultimul model pastrat al liniei w2_conv
 #   3. scoala de cod (ramura kronos-cod, C:\Kronos\cyberspace-cod): config/scoala_cod_v04_noapte.toml --pilot, oprire 06:45
 # Nu porneste nimic daca exista butonul STOP (lucru/STOP) sau daca noaptea ruleaza deja.
-param([string]$Cod = "C:\Kronos\cyberspace-cod")
+# 17 octombrie 2026 (Adrian): -PornesteDin alege modelul din care porneste W2-conv (#373, copia racita dupa ora 30, in
+# loc de #353), iar -FaraScoala sare peste scoala de cod (infirmata pe 16 octombrie).
+#   ... -PornesteDin 373 -FaraScoala
+param([string]$Cod = "C:\Kronos\cyberspace-cod", [int]$PornesteDin = 353, [switch]$FaraScoala)
 
 $ErrorActionPreference = "Stop"
 $radacina = Split-Path -Parent $PSScriptRoot
@@ -39,8 +42,8 @@ if (@($deja).Count -gt 0) { Scrie "Nu pornesc: noaptea ruleaza deja."; exit 0 }
 $env:PYTHONUNBUFFERED = "1"
 $env:PYTHONIOENCODING = "utf-8"
 $urmarire = Start-Process -FilePath $python -PassThru -WindowStyle Hidden -WorkingDirectory $radacina -ArgumentList @(
-    "-X", "utf8", "unelte/urmareste_placa.py", "--minute", "780", "--la-secunde", "10", "--iesire", "lucru/placa_noapte_2026-10-15.csv")
-Scrie "Noaptea incepe (aleasa de Adrian). Urmarirea placii: lucru/placa_noapte_2026-10-15.csv (proces $($urmarire.Id))."
+    "-X", "utf8", "unelte/urmareste_placa.py", "--minute", "780", "--la-secunde", "10", "--iesire", "lucru/placa_noapte_$(Get-Date -Format yyyy-MM-dd).csv")
+Scrie "Noaptea incepe (aleasa de Adrian). Urmarirea placii: lucru/placa_noapte_$(Get-Date -Format yyyy-MM-dd).csv (proces $($urmarire.Id))."
 $aprobata = Join-Path $radacina "lucru\conversatie_aprobata.txt"
 try {
   if (-not (Test-Path $aprobata)) {
@@ -50,7 +53,7 @@ try {
   } else {
     Scrie ("Perechile sunt aprobate: " + (Get-Content $aprobata -Encoding utf8 -Raw).Trim())
     $cod = Ruleaza $radacina @("-X", "utf8", "unelte/antrenare_lunga.py", "--config", "config/conv_w2.toml", "--ore", "3",
-                               "--porneste-din", "353", "--inceput", "Întrebare: Ce este ploaia?`nRăspuns:", "--lungime", "300")
+                               "--porneste-din", "$PornesteDin", "--inceput", "Întrebare: Ce este ploaia?`nRăspuns:", "--lungime", "300")
     $ultimul = & $python -X utf8 -c "import json; f=[json.loads(l) for l in open('lucru/jurnal/experimente.jsonl', encoding='utf-8')]; p=[x for x in f if x.get('linie')=='w2_conv' and x.get('model_salvat')]; print(p[-1]['id'] if p else '')"
     if ($ultimul) {
         Scrie "Ultimul model pastrat al liniei w2_conv: #$ultimul."
@@ -60,7 +63,8 @@ try {
         Scrie "Linia w2_conv n-are niciun model pastrat: sar peste examenele ei."
     }
   }
-    if (Test-Path (Join-Path $radacina "lucru\STOP")) { Scrie "Butonul STOP e apasat: nu mai pornesc scoala de cod." }
+    if ($FaraScoala) { Scrie "Fara scoala de cod in noaptea asta (-FaraScoala)." }
+    elseif (Test-Path (Join-Path $radacina "lucru\STOP")) { Scrie "Butonul STOP e apasat: nu mai pornesc scoala de cod." }
     else { Ruleaza $Cod @("-X", "utf8", "unelte/scoala_cod.py", "--config", "config/scoala_cod_v04_noapte.toml", "--pilot") | Out-Null
            Ruleaza $Cod @("-X", "utf8", "unelte/raport_cod.py", "--dosar", "cod_v04_noapte") | Out-Null }
 }
