@@ -118,3 +118,81 @@ Wikipedia. Secțiunea e scrisă înainte de orice descărcare; restul pre-înreg
 - **Ce aștept:** Kronos 3–15% pasaje „din memorie” pe Wikipedia, GPT-Neo 15–40%, deci „a văzut probabil” Wikipedia.
   Pe web (OSCAR și FineWeb-2 vin amândouă din Common Crawl) aștept o diferență mai mică, iar pe cărți niciuna clară.
 - GPT-2 nu face acest test: nu știe română, deci nu spune nimic despre ce a văzut.
+
+## Ce a ieșit
+
+*Rulat sâmbătă, 17 octombrie, 18:58–20:01, doar pe procesor (6 fire, prioritate scăzută), lângă W2 noaptea 4 pe placă.
+Modelele la versiunile fixate în `unelte/compara_externe.py`. Toate cifrele:
+`lucru/comparatie_externa/comparatie_20261017_185839.json`. Kronos #373 nu s-a măsurat din nou.*
+
+### Cifra principală (biți pe octet, ferestre de 512; mai mic e mai bine)
+
+| | Kronos #373 | GPT-2 small | GPT-Neo ro 125M |
+|---|---|---|---|
+| **română** (media) | **1,3102** | 2,9542 | 1,5577 |
+| — Wikipedia | 1,0345 | 2,5741 | 1,5715 |
+| — web | 1,5271 | 3,1324 | 1,6334 |
+| — cărți | 1,3667 | 3,1469 | 1,4726 |
+| **cod** (media) | **0,7338** | 1,1869 | 3,4029 |
+| — cod Python | 0,9256 | 1,3884 | 3,7364 |
+| — sarcini de cod | 0,5499 | 0,9939 | 3,0834 |
+| **povești** | **0,4422** | 0,9172 | 2,2628 |
+| fabule (informativ) | 0,0944 | 2,7280 | 0,7486 |
+| traducere (informativ) | 0,7732 | 2,2825 | 1,6612 |
+
+Cu fereastra lor obișnuită: GPT-2 (1.024) iese mai bine cu 0,02–0,13 (română 2,8293, cod 1,1005, povești 0,8929).
+GPT-Neo (2.048) iese **mai rău** (română 1,6186, cod 3,7175, povești 2,3314).
+
+### Verdictul, pe fiecare așteptare
+
+- **Kronos îl bate pe GPT-2 small la toate trei: confirmat.** Cod 0,73 față de 1,19, povești 0,44 față de 0,92.
+- **GPT-2 la română 2,0–2,8: infirmat, puțin** (2,95). La cod (1,19) și la povești (0,92): **confirmat**.
+- **GPT-Neo îl bate pe Kronos la română: infirmat.** 1,5577 față de 1,3102, deci Kronos e mai bun pe fiecare din cele
+  trei validări. Asta e regula din „Ce ar infirma” care s-a împlinit. Pe hârtie e o veste bună pentru Kronos, dar
+  vezi mai jos de ce nu înseamnă că Kronos știe română mai bine decât GPT-Neo, în general.
+- **GPT-Neo la cod (1,4–2,5) și la povești (1,2–2,0): infirmat.** A ieșit mai rău: 3,40 și 2,26.
+- **Trei cifre ale lui GPT-Neo ies din interval cu peste 0,2:** română cu 0,36, cod cu 0,90, povești cu 0,26. După
+  regula de dinainte, asta înseamnă că **am înțeles greșit ceva despre model**: îl credeam mult mai bun pe română și
+  mai puțin slab pe rest.
+- **„Cu fereastra lor iese puțin mai bine”: confirmat doar la GPT-2. La GPT-Neo e infirmat.** La 2.048 iese mai rău
+  decât la 512.
+
+### Verificări făcute după, doar ca informație (cifra principală nu se schimbă)
+
+- **Diacriticele nu sunt de vină.** Validările noastre au doar ș/ț cu virgulă dedesubt. Cu ş/ţ cu sedilă, GPT-Neo iese
+  mult mai rău (Wikipedia 2,14 față de 1,57), deci virgula e chiar forma pe care a învățat-o.
+- **Fereastra (GPT-Neo, Wikipedia):** 1,6994 la 128 de bucăți, 1,6180 la 256, 1,5715 la 512, 1,5632 la 1.024 și 1,6783
+  la 2.048. Cel mai probabil a învățat pe texte de cel mult ~1.024 de bucăți, deși scrie că primește 2.048. Pe web e la
+  fel (1,6307 la 1.024). Nici cu fereastra cea mai bună nu se apropie de 1,31.
+
+### A văzut GPT-Neo textele noastre? (testul „continuă din memorie”)
+
+| pasaje cu cel puțin 50 de litere identice | Kronos #373 (martor) | GPT-Neo ro 125M | verdictul, după regulă |
+|---|---|---|---|
+| Wikipedia (150 de texte) | 0,0% | 0,0% | nu se vede că le-a văzut |
+| web (150) | 0,0% | 0,7% (un singur pasaj, 65 de litere) | nu se vede că le-a văzut |
+| cărți (150) | 0,0% | 0,0% | nu se vede că le-a văzut |
+
+- La amândouă, cele mai lungi potriviri pe Wikipedia sunt de 15–32 de litere, iar mediana e 1 literă.
+- Așteptarea mea (GPT-Neo 15–40% pe Wikipedia) e **infirmată**.
+- Cu ce s-a putut măsura aici, **nu se vede că GPT-Neo ar fi văzut textele noastre din Wikipedia**. Asta nu dovedește
+  că nu le-a văzut: un model de 125M ține minte rar 50 de litere la rând. Dacă le-ar fi văzut, ar fi avut la Wikipedia
+  o notă mai bună decât Kronos, dar a avut una mai proastă (1,57 față de 1,03).
+- **La fabule e invers:** Kronos are 0,09, deci aproape le știe pe de rost, pentru că le-a văzut la antrenare (sursa e
+  în amestecul lui). GPT-Neo are 0,75, neobișnuit de bine față de restul românei lui. E posibil să fi văzut și el
+  fabulele, dar n-am testat. Fabulele nu intră în nicio concluzie.
+
+### Ce înseamnă, cinstit
+
+- **Kronos joacă „acasă” pe toate cele trei examene, nu doar la povești.** Validările de română sunt bucăți puse
+  deoparte din **aceleași surse** pe care a învățat: aceeași Wikipedia, același FineWeb-2, același Wikisource, curățate
+  la fel. GPT-Neo a învățat pe alte texte românești (OSCAR și altele, din 2021 sau mai devreme). Diferența cea mai mare
+  e chiar pe Wikipedia (1,03 față de 1,57), unde potrivirea de formă contează cel mai mult. Pe web e cea mai mică
+  (1,53 față de 1,63).
+- **Concluzia sigură:** pe examenul nostru, Kronos #373 e mai bun decât două modele publice de aceeași mărime, la toate
+  trei capitolele.
+- **Concluzia care NU rezultă:** că Kronos știe română mai bine decât GPT-Neo în general. Pentru asta ar trebui un text
+  românesc din afara surselor amândurora, de exemplu articole de presă scrise după octombrie 2026. Asta ar fi un pas
+  următor, doar dacă Adrian vrea.
+- GPT-2 nu știe română: e un reper de jos, cum era de așteptat. La cod și la povești e un adversar cinstit, iar Kronos
+  îl bate clar.
