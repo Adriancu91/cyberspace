@@ -1,0 +1,6 @@
+# Datele mari nu intră în Git (regula lui Adrian): sursele descărcate și baza generată
+_surse/
+_baza/
+*.sqlite
+*.sqlite-journal
+__pycache__/
