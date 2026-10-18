@@ -47,8 +47,9 @@ procese_grele = ["python"]             # dacă un astfel de program folosește p
 buget_ore_placa_pe_zi = 20
 # 15–17 octombrie 2026: alegerea e a lui Adrian (conversația, W2-conv, școala de cod, rata lui W2), nu a lui
 # CONTINUUM. Până atunci doar observă, iar fiecare ciclu din jurnal spune de ce.
-om_decide_pana_la = "2026-10-18T07:45"
-om_decide_motiv = "17 octombrie: după noaptea 7 (rata 0,00025, confirmat), Adrian alege rata lui W2 sau un martor; nimic pe placă fără el"
+# 18 octombrie (Adrian): prelungit până luni, 07:45, ca CONTINUUM să nu pornească o noapte peste W2-conv (19:00).
+om_decide_pana_la = "2026-10-19T07:45"
+om_decide_motiv = "18 octombrie: în seara asta Adrian a ales W2-conv din #385 (pornit la 19:00, pre-înregistrat); nimic pe placă fără el"
 # 17 octombrie, seara (Adrian): rata lui W2 e de acum 0,00025, ca rețetă (config/ws_w2.toml, din care CONTINUUM
 # pornește linia W2), fără martor. Perioada de mai sus rămâne neschimbată.
 
