@@ -53,12 +53,14 @@ try {
   } else {
     Scrie ("Perechile sunt aprobate: " + (Get-Content $aprobata -Encoding utf8 -Raw).Trim())
     $cod = Ruleaza $radacina @("-X", "utf8", "unelte/antrenare_lunga.py", "--config", "config/conv_w2.toml", "--ore", "3",
-                               "--porneste-din", "$PornesteDin", "--inceput", "Întrebare: Ce este ploaia?`nRăspuns:", "--lungime", "300")
+                               "--porneste-din", "$PornesteDin", "--inceput", "$([char]0x00CE)ntrebare: Ce este ploaia?`nR$([char]0x0103)spuns:", "--lungime", "300")
     $ultimul = & $python -X utf8 -c "import json; f=[json.loads(l) for l in open('lucru/jurnal/experimente.jsonl', encoding='utf-8')]; p=[x for x in f if x.get('linie')=='w2_conv' and x.get('model_salvat')]; print(p[-1]['id'] if p else '')"
     if ($ultimul) {
         Scrie "Ultimul model pastrat al liniei w2_conv: #$ultimul."
         Ruleaza $radacina @("-X", "utf8", "unelte/examen_conversatie.py", "--experiment", "$ultimul", "--doar-local") | Out-Null
         Ruleaza $radacina @("-X", "utf8", "unelte/examen_validari_ws.py", "--experiment", "$ultimul") | Out-Null
+        # 18 octombrie (Adrian): setul sacru e urmarit (sub 15 din 50 = raportat separat, cu intrebarile pierdute)
+        Ruleaza $radacina @("-X", "utf8", "unelte/examen_fapte_nou.py", "--sacru", "--experiment", "$ultimul", "--doar-local") | Out-Null
     } else {
         Scrie "Linia w2_conv n-are niciun model pastrat: sar peste examenele ei."
     }
