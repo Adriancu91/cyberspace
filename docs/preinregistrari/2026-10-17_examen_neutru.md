@@ -234,3 +234,43 @@ rămâne cea pe primele 100.000 de litere.
 și la cod, GPT-2 primul la engleză. Notele se mișcă cu cel mult ~0,15 față de cifra principală. Intervalele diferenței
 Kronos − GPT-Neo (la română) și Kronos − GPT-2 (la cod) nu ating zero. Dacă vreuna atinge zero, concluzia de mai sus
 trebuie spusă cu grijă: diferența nu mai e sigură.
+
+### Ce a ieșit pe seturile întregi (duminică, 18 octombrie, 10:15)
+
+Rularea: 09:18–10:08, pe procesor (`lucru/examen_neutru/intreg_20261018_091818.json`, cu nota fiecărui text). Ferestre de
+512 bucăți; fiecare text notat singur; intervale de 95% prin reeșantionarea textelor.
+
+| set (texte) | Kronos #373 | GPT-2 small | GPT-Neo ro 125M |
+|---|---|---|---|
+| Wikipedia română (97) | **1,200** (1,138–1,264) | 2,906 (2,845–2,954) | 1,418 (1,251–1,640) |
+| Wikipedia engleză (200) | 1,715 (1,660–1,763) | **1,187** (1,135–1,235) | 2,514 (2,322–2,783) |
+| cod Python (187) | **1,213** (1,147–1,281) | 1,711 (1,654–1,768) | 4,759 (4,488–5,077) |
+
+**Diferența Kronos − celălalt, pe aceleași texte** (negativ = Kronos mai bun):
+
+| set | față de GPT-2 | față de GPT-Neo |
+|---|---|---|
+| română | −1,71 (−1,78…−1,64); Kronos mai bun la 97 din 97 | **−0,22 (−0,44…−0,09); Kronos mai bun la 77 din 97** |
+| engleză | +0,53 (+0,48…+0,57); Kronos mai bun la 2 din 200 | −0,80 (−1,09…−0,61); 200 din 200 |
+| cod | −0,50 (−0,54…−0,46); Kronos mai bun la 185 din 187 | −3,55 (−3,82…−3,32); 187 din 187 |
+
+- **Concluzia rămâne:** Kronos e primul la română și la cod, iar GPT-2 la engleză. Niciun interval al diferenței nu
+  atinge zero.
+- **Dar diferența față de GPT-Neo la română e mult mai mică decât pe primele 100.000 de litere** (0,22, nu 0,70). Pe
+  mediana articolelor e 1,14 față de 1,30.
+  - Primele 12 articole au avut multe pagini la care GPT-Neo se pierde: turnee de tenis 2026 (2,5 față de 1,1 la Kronos)
+    și „Șoc termic” (4,4 față de 1,3).
+  - **GPT-Neo e mai bun la 20 din 97 de articole,** mai ales la tehnologie și cultură pop: „15.ai”, „DC Studios”,
+    „Tesla Roadster”, „Wolverine (joc video)”, „Tratarea apelor uzate”. Asta se potrivește cu datele lui de pe web.
+  - Intervalul lui GPT-Neo e larg (1,25–1,64), pentru că la câteva articole are note foarte mari.
+- **Codul nou e mai greu pe tot setul pentru Kronos:** 1,21 față de 0,99 pe primele 7 fișiere. Primele fișiere erau mai
+  ușoare. Ordinea nu se schimbă.
+- **Așteptările mele:**
+  - ordinea: **corect**;
+  - intervalele nu ating zero: **corect**;
+  - „notele se mișcă cu cel mult ~0,15”: **greșit**, la GPT-Neo pe română (−0,47) și la Kronos pe cod (+0,22).
+  - **Lecția:** 100.000 de litere înseamnă prea puține texte ca să se vadă cât variază. De acum, la un examen pe
+    seturi mici, dau nota pe tot setul, cu interval.
+- **De știut:** fișierul de cod are 187 de texte, dar `surse.json` are 186 de fișiere. Verificat: un fișier (al
+  43-lea) are într-un comentariu chiar textul `<|endoftext|>`, deci s-a rupt în două (textele 42 și 43). Nota setului
+  abia se schimbă. Doar titlurile de după el, la potrivirea text → sursă, sunt decalate cu unul.
