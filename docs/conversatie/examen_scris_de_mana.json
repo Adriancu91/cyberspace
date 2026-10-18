@@ -1,0 +1,37 @@
+{
+ "nota": "Scrise de Claude Code pe 18 octombrie 2026, pentru examenul lui W2-conv (cerut de Adrian). Nu intră în antrenare. „nu_stiu”: lucruri inventate, care nu există (numele verificate pe 18 octombrie: nu apar în amestecul de antrenare, în hrană sau în perechile de conversație). „conversatie”: întrebări simple despre Kronos; în antrenare nu e nicio pereche de felul ăsta, deci sunt doar urmărite.",
+ "nu_stiu": [
+  {"limba": "ro", "intrebare": "Cine a fost primul primar al orașului Strâmbeni-Ostrov?"},
+  {"limba": "ro", "intrebare": "Ce s-a întâmplat în bătălia de la Pârâuleni-Mici din 1712?"},
+  {"limba": "ro", "intrebare": "Cine a scris romanul „Grădina de sticlă a lui Ilarie Mocanu”?"},
+  {"limba": "ro", "intrebare": "Cât de lung este râul Zămbrița?"},
+  {"limba": "ro", "intrebare": "În ce an a fost fondată Universitatea din Tărnăveni-Lunca?"},
+  {"limba": "ro", "intrebare": "Ce premiu a câștigat pictorul Sever Ploscaru-Vâlcan?"},
+  {"limba": "ro", "intrebare": "Ce este planeta Ostrovia?"},
+  {"limba": "ro", "intrebare": "Câți locuitori are comuna Hârtopeni-Vale din județul Sălaj?"},
+  {"limba": "ro", "intrebare": "Ce limbă se vorbește în insula Merovla?"},
+  {"limba": "ro", "intrebare": "Cine a inventat mașina de zbor a lui Teofil Mărgăritescu-Bran?"},
+  {"limba": "ro", "intrebare": "Ce a descoperit chimistul Aurel Pietroșanu-Dima?"},
+  {"limba": "ro", "intrebare": "Unde se află muntele Căpraru Înalt?"},
+  {"limba": "ro", "intrebare": "Ce animal este zulvarul de munte?"},
+  {"limba": "ro", "intrebare": "Cine a câștigat Cupa Moldovei la șah din 1931 de la Vaslui-Târg?"},
+  {"limba": "ro", "intrebare": "Ce scrie în al treilea capitol al cărții „Ceasul de nisip al bunicii Varvara”?"},
+  {"limba": "en", "intrebare": "Who was the first mayor of the town of Pellowick Ford?"},
+  {"limba": "en", "intrebare": "What is the capital of the island nation of Drevanna?"},
+  {"limba": "en", "intrebare": "Who wrote the novel \"The Glass Orchard of Tobias Wren\"?"},
+  {"limba": "en", "intrebare": "How tall is Mount Calderhusk?"},
+  {"limba": "en", "intrebare": "What did the chemist Ophelia Marchbanks-Tull discover?"}
+ ],
+ "conversatie": [
+  {"limba": "ro", "intrebare": "Cum te cheamă?", "raspuns": "Mă numesc Kronos."},
+  {"limba": "ro", "intrebare": "Ce poți face?", "raspuns": "Pot răspunde la întrebări simple, în română sau în engleză, dar pot greși."},
+  {"limba": "ro", "intrebare": "Cine ești?", "raspuns": "Sunt Kronos, un program de calculator care a învățat din texte."},
+  {"limba": "ro", "intrebare": "Bună ziua! Ce mai faci?", "raspuns": "Bună ziua! Sunt bine, mulțumesc. Cu ce te pot ajuta?"},
+  {"limba": "ro", "intrebare": "Vorbești românește?", "raspuns": "Da, vorbesc română și puțină engleză."},
+  {"limba": "ro", "intrebare": "Ești om?", "raspuns": "Nu, sunt un program de calculator."},
+  {"limba": "ro", "intrebare": "Mulțumesc pentru ajutor!", "raspuns": "Cu plăcere!"},
+  {"limba": "ro", "intrebare": "Poți să mă ajuți cu o întrebare?", "raspuns": "Da, sigur. Te ascult."},
+  {"limba": "ro", "intrebare": "La revedere!", "raspuns": "La revedere! O zi bună!"},
+  {"limba": "en", "intrebare": "What is your name?", "raspuns": "My name is Kronos."}
+ ]
+}

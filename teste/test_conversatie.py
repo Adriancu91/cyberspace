@@ -313,3 +313,50 @@ def test_wikipedia_v3_litera_straina_iese():
 
     assert pereche_din("Cruciada norvegiană a fost o cruciadă, întreprinsǎ de regele Sigurd I între 1107 și 1110.\nx") is None
     assert pereche_din("Cruciada norvegiană a fost o cruciadă, întreprinsă de regele Sigurd I între 1107 și 1110.\nx")
+
+
+def test_examenul_v3_e_nevazut_si_scos_din_antrenare(tmp_path):
+    wiki = [{"fel": "wiki", "limba": "ro", "intrebare": f"Ce este Satul {k}?", "raspuns": f"Satul {k} este un sat.",
+             "grup": f"wiki_{k}", "sursa_fisier": "wikipedia.jsonl"} for k in range(80)]
+    en = [{"fel": "zi", "limba": "en", "intrebare": f"Why is the sky blue {k}?", "raspuns": "Because of light."} for k in range(5)]
+    vazute = {gc.normalizat(f"Ce este Satul {k}?") for k in range(20)}
+    scrise = {"nu_stiu": [{"limba": "ro", "intrebare": "Ce este planeta Ostrovia?"}],
+              "conversatie": [{"limba": "en", "intrebare": "What is your name?", "raspuns": "My name is Kronos."}]}
+    dubla = {"fel": "zi", "limba": "en", "intrebare": "What is your name?", "raspuns": "Kronos."}
+    examen, antrenare = gc.imparte_v3(wiki + en + [dubla], vazute, scrise)
+    din_wiki = [p for p in examen if p["fel"] == "wiki"]
+    assert len(din_wiki) == gc.EXAMEN_WIKI and not {gc.normalizat(p["intrebare"]) for p in din_wiki} & vazute
+    assert [p["fel"] for p in examen[gc.EXAMEN_WIKI:]] == ["nu_stiu", "conversatie"]
+    assert examen[gc.EXAMEN_WIKI]["raspuns"] == "Nu știu sigur."
+    assert len(antrenare) == 80 - gc.EXAMEN_WIKI + 5 and dubla not in antrenare  # aceeași întrebare nu intră
+    assert not {id(p) for p in examen} & {id(p) for p in antrenare}
+    assert gc.imparte_v3(wiki + en, vazute, scrise)[0] == gc.imparte_v3(wiki + en, vazute, scrise)[0]  # aceeași sămânță
+
+
+def test_intrebarile_din_fise(tmp_path, monkeypatch):
+    (tmp_path / "docs" / "conversatie").mkdir(parents=True)
+    (tmp_path / "docs" / "conversatie" / "verificate_pana_la_17oct.json").write_text('["Ce a fost Abația Cluny?"]', encoding="utf-8")
+    (tmp_path / "docs" / "conversatie_de_verificat.md").write_text("**1. W**\n\n- Întrebare: Ce este Optica?\n- Răspuns: O ramură.\n",
+                                                                   encoding="utf-8")
+    assert gc.intrebari_din_fise(tmp_path) == {gc.normalizat("Ce a fost Abația Cluny?"), gc.normalizat("Ce este Optica?")}
+
+
+def test_examenul_numara_corecte_pe_feluri():
+    intrebari = [{"fel": "wiki", "nota_elev": 7, "raspuns_elev": "x", "nu_stiu_corect": False},
+                 {"fel": "wiki", "nota_elev": 6, "raspuns_elev": "x", "nu_stiu_corect": False},
+                 {"fel": "nu_stiu", "nota_elev": 2, "raspuns_elev": "Nu știu sigur.", "nu_stiu_corect": True},
+                 {"fel": "conversatie", "nota_elev": None, "raspuns_elev": "", "nu_stiu_corect": False}]
+    s = ex.scoruri(intrebari)
+    assert (s["intrebari_wiki"], s["corecte_wiki"], s["corecte_nu_stiu"], s["corecte_conversatie"]) == (2, 1, 1, 0)
+
+
+def test_scrise_de_mana_au_numerele_cerute():
+    scrise = json.loads((gc.RADACINA / gc.SCRISE_DE_MANA).read_text(encoding="utf-8"))
+    assert len(scrise["nu_stiu"]) == 20 and len(scrise["conversatie"]) == 10
+
+
+def test_perechile_gresite_din_fisa_v3_nu_intra():
+    p = {"fel": "wiki", "limba": "ro", "intrebare": "Ce este Împărțirea la zero?", "raspuns": "O culegere.",
+         "grup": "wiki_9", "sursa_fisier": "wikipedia.jsonl"}
+    examen, antrenare = gc.imparte_v3([p], set(), {"nu_stiu": [], "conversatie": []})
+    assert antrenare == [] and examen == [p]  # nevăzută în fișe → ar putea intra la examen, dar nu în antrenare

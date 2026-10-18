@@ -302,6 +302,46 @@ def imparte(bune: list[dict[str, Any]], samanta: int = 0) -> tuple[list[dict[str
     return examen, [p for p in bune if id(p) not in in_examen and grup(p) not in grupuri]
 
 
+# 18 octombrie 2026 (Adrian): examenul lui W2-conv. 50 de întrebări din Wikipedia v3 pe care Adrian nu le-a văzut în
+# fișe, 20 „nu știu” despre lucruri inventate și 10 de conversație, scrise de mână (SCRISE_DE_MANA). Nimic din examen
+# (nici aceeași întrebare, nici același grup) nu intră în antrenare.
+EXAMEN_WIKI = 50
+SCRISE_DE_MANA = "docs/conversatie/examen_scris_de_mana.json"
+VAZUTE_IN_FISE = ["docs/conversatie/verificate_pana_la_17oct.json", "docs/conversatie_de_verificat.md"]
+# perechile găsite greșite de Adrian în fișa v3 (17 octombrie, #1 și #9): nu intră nici în antrenare, nici în examen
+GRESITE_IN_FISE = ["Cine a fost Infantele Gabriel al Spaniei?", "Ce este Împărțirea la zero?"]
+
+
+def intrebari_din_fise(radacina: Path = RADACINA) -> set[str]:
+    """Întrebările pe care Adrian le-a văzut deja: lista JSON a celor verificate și fișa de acum („- Întrebare: …”)."""
+    vazute: set[str] = set()
+    for nume in VAZUTE_IN_FISE:
+        cale = radacina / nume
+        if not cale.exists():
+            continue
+        text = cale.read_text(encoding="utf-8")
+        lista = json.loads(text) if cale.suffix == ".json" else re.findall(r"^- Întrebare: (.+)$", text, re.MULTILINE)
+        vazute |= {normalizat(q) for q in lista}
+    return vazute
+
+
+def imparte_v3(bune: list[dict[str, Any]], vazute_in_fise: set[str], scrise: dict[str, Any],
+               samanta: int = 1018) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """(examen, antrenare) pentru W2-conv: EXAMEN_WIKI perechi Wikipedia nevăzute în fișe, la întâmplare, plus cele
+    scrise de mână. Din antrenare ies grupurile și întrebările din examen."""
+    wiki = [p for p in bune if p.get("sursa_fisier") == "wikipedia.jsonl" and normalizat(p["intrebare"]) not in vazute_in_fise]
+    random.Random(samanta).shuffle(wiki)
+    de_mana = [{"fel": "nu_stiu", "limba": p["limba"], "intrebare": p["intrebare"], "raspuns": NU_STIU[p["limba"]],
+                "sursa": "scrise de Claude Code (lucruri inventate)", "grup": f"examen_nu_stiu_{k}"}
+               for k, p in enumerate(scrise["nu_stiu"])]
+    de_mana += [{"fel": "conversatie", "limba": p["limba"], "intrebare": p["intrebare"], "raspuns": p["raspuns"],
+                 "sursa": "scrise de Claude Code", "grup": f"examen_conversatie_{k}"} for k, p in enumerate(scrise["conversatie"])]
+    examen = wiki[:EXAMEN_WIKI] + de_mana
+    grupuri = {grup(p) for p in examen}
+    intrebari = {normalizat(p["intrebare"]) for p in examen} | {normalizat(q) for q in GRESITE_IN_FISE}
+    return examen, [p for p in bune if grup(p) not in grupuri and normalizat(p["intrebare"]) not in intrebari]
+
+
 def fisa_de_verificat(antrenare: list[dict[str, Any]], samanta: int = 0, titlu: str | None = None) -> str:
     alese = antrenare if titlu else random.Random(samanta).sample(antrenare, min(VERIFICAT, len(antrenare)))
     randuri = ["# Conversația de verificat (pentru Adrian)", "",
@@ -388,9 +428,14 @@ def scrie_fisa(dosar: Path, docs: Path, samanta: int = 0, interzise: set[str] | 
     return {"wikipedia": len(wiki), "traduceri": len(trad)}
 
 
-def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+def finalizeaza(dosar: Path, docs: Path, jurnal: Jurnal | None, extra: dict[str, Any] | None = None,
+                v3: bool = False) -> dict[str, Any]:
     toate, bune = toate_bune(dosar)
-    examen, antrenare = imparte(bune)
+    if v3:
+        scrise = json.loads((RADACINA / SCRISE_DE_MANA).read_text(encoding="utf-8"))
+        examen, antrenare = imparte_v3(bune, intrebari_din_fise(), scrise)
+    else:
+        examen, antrenare = imparte(bune)
     (dosar / "examen.json").write_text(json.dumps({
         "nota": "examenul de conversație: nevăzut la antrenare; nu intră în nicio altă hrană",
         "perechi": examen}, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -433,6 +478,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--samanta", type=int, default=0)
     parser.add_argument("--doar-local", action="store_true")
     parser.add_argument("--finalizeaza", action="store_true", help="doar examenul, antrenarea și fișa de verificat")
+    parser.add_argument("--finalizeaza-v3", action="store_true",
+                        help="18 octombrie: examenul lui W2-conv (50 Wikipedia nevăzute în fișe, 20 „nu știu”, 10 de conversație)")
     parser.add_argument("--refiltreaza", action="store_true", help="filtrele de acum, pe toate perechile scrise")
     parser.add_argument("--fisa", action="store_true", help="doar fișa de verificat (30 de perechi bune de acum)")
     parser.add_argument("--fisa-wikipedia", action="store_true", help="fișa din 16 octombrie: 30 doar din Wikipedia")
@@ -448,8 +495,8 @@ def main(argv: list[str] | None = None) -> int:
     dosar.mkdir(parents=True, exist_ok=True)
     jurnal = Jurnal(Path(args.director_lucru))
     docs = RADACINA / "docs" / "conversatie_de_verificat.md"
-    if args.finalizeaza:
-        info = finalizeaza(dosar, docs, jurnal)
+    if args.finalizeaza or args.finalizeaza_v3:
+        info = finalizeaza(dosar, docs, jurnal, v3=args.finalizeaza_v3)
         print(json.dumps(info, ensure_ascii=False), flush=True)
         return 0
     if args.fisa_wikipedia:

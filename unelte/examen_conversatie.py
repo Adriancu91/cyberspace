@@ -66,7 +66,24 @@ def scoruri(intrebari: list[dict[str, Any]]) -> dict[str, Any]:
         "nu_stiu_fractie": round(sum(p["nu_stiu_corect"] for p in nu_stiu) / len(nu_stiu), 3) if nu_stiu else None,
         "nu_stiu_la_stiute": round(sum(spune_nu_stiu(p["raspuns_elev"]) for p in stiute) / len(stiute), 3) if stiute else None,
         "note_neciteite": sum(1 for p in intrebari if p.get("nota_elev") is None),
+        **pe_feluri(intrebari),
     }
+
+
+# 18 octombrie 2026 (pre-înregistrarea lui W2-conv): un răspuns e „corect” dacă profesorul îi dă cel puțin 7 din 10; la
+# „nu știu”, dacă spune că nu știe.
+NOTA_CORECT = 7
+
+
+def pe_feluri(intrebari: list[dict[str, Any]]) -> dict[str, int]:
+    """Pe fiecare fel de întrebare: câte sunt (intrebari_<fel>) și câte au răspuns corect (corecte_<fel>)."""
+    n: dict[str, int] = {}
+    for fel in sorted({p["fel"] for p in intrebari}):
+        lista = [p for p in intrebari if p["fel"] == fel]
+        n[f"intrebari_{fel}"] = len(lista)
+        n[f"corecte_{fel}"] = sum(bool(p["nu_stiu_corect"]) if fel == "nu_stiu" else (p.get("nota_elev") or 0) >= NOTA_CORECT
+                                  for p in lista)
+    return n
 
 
 def main(argv: list[str] | None = None) -> int:
