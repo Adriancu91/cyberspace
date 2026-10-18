@@ -22,3 +22,10 @@
 - Laptopul: ASUS TUF F15, RTX 3060 Laptop 6 GB, 64 GB RAM, Windows 11. Ține memoria video sub ~5,5 GB.
 - Workstation-ul: RTX 3070 Ti 8 GB, 128 GB RAM, Windows 11. Ține memoria video sub ~7 GB (aprobat de Adrian, 12 octombrie 2026).
 - Dacă ceva nu merge, explică ce s-a întâmplat și propune 1–2 variante; nu ocoli în tăcere testele sau paznicul.
+
+## Rapoartele (regula lui Adrian, 18 octombrie 2026)
+- Orice raport către Adrian (raportul de dimineață, verdicte, rezultate, întrebări către el) se scrie ÎNTREG și într-un
+  fișier `docs/rapoarte/AAAA-LL-ZZ_HHMM_subiect.md` (ora la care e scris): tot ce ai făcut, cifrele, testele și ce aștepți
+  de la el. Imediat după: commit și push pe GitHub.
+- În conversație (pe telefon) îi trimiți în continuare raportul scurt, ca până acum, plus numele fișierului.
+- La verificarea răspunsurilor de conversație, cele 20 de răspunsuri alese la întâmplare intră în același fișier.
