@@ -211,33 +211,39 @@ class Baza:
         return [dict(r) for r in self.con.execute("SELECT * FROM ortografie WHERE forma_norm = ?", (normalizeaza(forma),))]
 
     def fuzioneaza_forme_fara_trasaturi(self) -> dict[str, int]:
-        """O formă generată de o regulă FĂRĂ trăsături (de ex. din Hunspell) e aceeași formă cu rândul care are
-        trăsături pentru același lexem (de ex. din Wiktionary). Mutăm proveniențele pe rândul cu trăsături (pe toate,
-        dacă forma e sincretică) și ștergem rândul gol, ca statutul „validat” să aibă sens."""
+        """O formă cu trăsături incomplete (gol, sau un subset al altui rând) e aceeași formă cu rândul complet pentru
+        același lexem: mutăm proveniențele pe rândul (rândurile) mai complet(e) și ștergem rândul incomplet, ca statutul
+        „validat” să aibă sens. Rândurile fără trăsături se mută pe toate rândurile cu trăsături (forme sincretice)."""
         mutate = sterse = 0
-        goale = self.con.execute(
-            "SELECT f.id, f.forma, f.lexem_id FROM forme f WHERE f.trasaturi = '' AND EXISTS ("
-            "SELECT 1 FROM forme g WHERE g.forma = f.forma AND g.lexem_id = f.lexem_id AND g.trasaturi <> '')").fetchall()
-        for r in goale:
-            tinte = [x[0] for x in self.con.execute("SELECT id FROM forme WHERE forma = ? AND lexem_id = ? AND trasaturi <> ''", (r["forma"], r["lexem_id"]))]
-            prov = self.con.execute("SELECT sursa_id, origine, detalii, frecventa FROM forme_provenienta WHERE forma_id = ?", (r["id"],)).fetchall()
-            for t in tinte:
-                for p in prov:
-                    self.con.execute(
-                        "INSERT INTO forme_provenienta(forma_id, sursa_id, origine, detalii, frecventa) VALUES (?,?,?,?,?)"
-                        " ON CONFLICT(forma_id, sursa_id, origine) DO UPDATE SET frecventa = MAX(frecventa, excluded.frecventa)",
-                        (t, p["sursa_id"], p["origine"], (p["detalii"] + "; " if p["detalii"] else "") + "mutat de pe rândul fără trăsături", p["frecventa"]))
-                    mutate += 1
-            self.con.execute("DELETE FROM forme_provenienta WHERE forma_id = ?", (r["id"],))
-            self.con.execute("DELETE FROM forme WHERE id = ?", (r["id"],))
-            sterse += 1
+        lexeme_cu_dubluri = self.con.execute(
+            "SELECT lexem_id, forma FROM forme GROUP BY lexem_id, forma HAVING COUNT(*) > 1").fetchall()
+        for r in lexeme_cu_dubluri:
+            randuri = self.con.execute("SELECT id, trasaturi FROM forme WHERE lexem_id = ? AND forma = ?", (r["lexem_id"], r["forma"])).fetchall()
+            seturi = {x["id"]: set(x["trasaturi"].split("|")) if x["trasaturi"] else set() for x in randuri}
+            for fid, tr in seturi.items():
+                supersets = [g for g, tg in seturi.items() if g != fid and tr < tg]
+                if not supersets:
+                    continue
+                # doar superseturile maximale (ca să nu dublăm proveniențele pe lanțuri a ⊂ b ⊂ c)
+                maximale = [g for g in supersets if not any(seturi[g] < seturi[h] for h in supersets if h != g)]
+                prov = self.con.execute("SELECT sursa_id, origine, detalii, frecventa FROM forme_provenienta WHERE forma_id = ?", (fid,)).fetchall()
+                for t in maximale:
+                    for p in prov:
+                        self.con.execute(
+                            "INSERT INTO forme_provenienta(forma_id, sursa_id, origine, detalii, frecventa) VALUES (?,?,?,?,?)"
+                            " ON CONFLICT(forma_id, sursa_id, origine) DO UPDATE SET frecventa = MAX(frecventa, excluded.frecventa)",
+                            (t, p["sursa_id"], p["origine"], (p["detalii"] + "; " if p["detalii"] else "") + "mutat de pe rândul cu trăsături incomplete", p["frecventa"]))
+                        mutate += 1
+                self.con.execute("DELETE FROM forme_provenienta WHERE forma_id = ?", (fid,))
+                self.con.execute("DELETE FROM forme WHERE id = ?", (fid,))
+                sterse += 1
         self.con.commit()
         return {"proveniente_mutate": mutate, "randuri_sterse": sterse}
 
     # ---- statutul formelor --------------------------------------------------------------------------------
     def recalculeaza_statut_forme(self) -> dict[str, int]:
         """Statutul unei forme vine din proveniențele ei:
-        - `validat`: cel puțin două surse independente, sau o sursă care o atestă + o regulă care o generează;
+        - `validat`: cel puțin două surse independente (de ex. atestată de Wiktionary + generată de Hunspell/paradigme);
         - `atestat`: cel puțin o proveniență de tip atestare (corpus, tabel de flexiune, intrare explicită);
         - `generat`: doar reguli (afixe Hunspell / paradigme proprii)."""
         self.con.execute("""
@@ -397,7 +403,7 @@ class Baza:
     # ---- integritate --------------------------------------------------------------------------------------
     def verifica_integritate(self, maxim_exemple: int = 5) -> dict[str, Any]:
         """Rulează toate verificările din schema.VERIFICARI_INTEGRITATE + detectarea ciclurilor în ierarhii.
-        Întoarce {nume: {probleme: n, exemple: [...]}} și `ok` (True dacă nimic nu a ieșit)."""
+        Întoarce {nume: {probleme: n, exemple: [...]}} și `ok` (True dacă nimic structural nu a ieșit)."""
         raport: dict[str, Any] = {"verificari": {}, "ok": True}
         for nume, sql in schema.VERIFICARI_INTEGRITATE:
             randuri = self.con.execute(sql).fetchall()
@@ -422,7 +428,6 @@ class Baza:
             graf: dict[str, list[str]] = defaultdict(list)
             for r in self.con.execute("SELECT de_la, la FROM relatii_semantice WHERE tip = ?", (tip,)):
                 graf[r[0]].append(r[1])
-            # Kahn: nodurile rămase după eliminarea celor fără intrări sunt într-un ciclu
             grad: dict[str, int] = defaultdict(int)
             for a, bs in graf.items():
                 grad.setdefault(a, 0)

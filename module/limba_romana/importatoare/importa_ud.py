@@ -152,7 +152,7 @@ def importa(baza: Baza, director: Path | None = None, verbos: bool = True) -> di
                 tr = c["trasaturi"]
                 forma = c["forma"]
                 # „Fata” la început de propoziție e aceeași formă cu „fata”: coborâm majuscula când lema e cu minuscule
-                if c["upos"] != "PROPN" and c["lema"] == c["lema"].lower() and forma[:1].isupper() and not forma.isupper():
+                if c["upos"] != "PROPN" and c["lema"] == c["lema"].lower() and forma[:1].isupper() and (forma[1:].islower() or len(forma.strip("-")) == 1):
                     forma = forma[0].lower() + forma[1:]
                 forme_frecvente[(forma, c["lema"], c["upos"], tr, set_)] += 1
                 if c["upos"] == "NOUN":

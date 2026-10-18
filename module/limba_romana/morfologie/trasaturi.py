@@ -241,6 +241,14 @@ def canonic_pentru_pos(pos: str, trasaturi: dict[str, str], gen_lexem: str | Non
                 t.pop("Case")
         if pos == "ADJ" and t and "Degree" not in t:
             t["Degree"] = "Pos"
+        if pos in ("NOUN", "ADJ") and "Number" in t and "Definite" not in t and t.get("Case") != "Voc":
+            t["Definite"] = "Ind"
+    if pos in ("VERB", "AUX") and t.get("VerbForm") == "Inf":
+        t["Tense"] = "Pres"   # convenția UD RRT pentru infinitiv
+        t.pop("Person", None); t.pop("Number", None); t.pop("Mood", None)
+    if pos == "VERB" and "Person" in t and "VerbForm" not in t and t.get("Tense"):
+        t["VerbForm"] = "Fin"
+        t.setdefault("Mood", "Ind")
     if pos in ("VERB", "AUX") and t.get("VerbForm") == "Part":
         t.setdefault("Gender", "Masc")
         t.setdefault("Number", "Sing")

@@ -19,9 +19,6 @@ from dataclasses import dataclass, field
 SEDILE = str.maketrans({"ş": "ș", "ţ": "ț", "Ş": "Ș", "Ţ": "Ț"})
 PLAT = str.maketrans({"ă": "a", "â": "a", "î": "i", "ș": "s", "ț": "t", "Ă": "A", "Â": "A", "Î": "I", "Ș": "S", "Ț": "T"})
 
-LITERE_RO = "a-zA-ZăâîșțĂÂÎȘȚ"
-
-
 def corecteaza_sedile(text: str) -> str:
     return text.translate(SEDILE)
 
@@ -39,19 +36,32 @@ def are_diacritice(text: str) -> bool:
     return any(c in "ăâîșțĂÂÎȘȚşţŞŢ" for c in text)
 
 
-# Cliticele care se leagă cu cratimă de alt cuvânt (după corpusul UD RRT: se despart, cratima rămâne pe clitic).
-CLITICE_DUPA = {"mi", "ți", "i", "l", "o", "le", "ne", "vă", "se", "și", "mă", "te", "mi-l", "ți-l", "i-l", "ni", "vi", "li"}
-CLITICE_INAINTE = {"s", "într", "dintr", "printr", "n", "m", "ți", "mi", "i", "l", "v", "ne", "le", "ș", "c", "d", "ne-", "v-"}
-# Forme prescurtate care rămân lipite de cratimă în stânga: „s-” (să/se), „într-”, „dintr-”, „printr-”, „n-” (nu), „m-” (mă),
-# „ți-”, „mi-”, „i-”, „l-”, „v-” (vă), „ne-”, „le-”, „ș-” (și), „c-” (că), „d-” (de). Alte legături cu cratimă rămân întregi.
-PRESCURTATE_STANGA = {"s", "într", "dintr", "printr", "n", "m", "ți", "mi", "i", "l", "v", "ne", "le", "ș", "c", "d", "să", "se", "nu"}
+LITERA = r"[^\W\d_]"                       # orice literă Unicode (inclusiv ö, š…), fără cifre și _
+LITERE_RO = r"^\W\d_"                       # același lucru, pentru clase de caractere construite în alte module
+L = "(?:" + LITERA + ")"
+
+# Convențiile de despărțire a cratimei (după corpusul UD RRT):
+#   - formă elidată în stânga (s-a, n-am, l-am, într-un, p-ăsta): cratima rămâne pe stânga: „s-”, „a”;
+#   - clitic pronominal în stânga + alt clitic pronominal în dreapta (și-l, mi-l): cratima trece pe dreapta: „și”, „-l”;
+#   - cuvânt întreg în stânga (nu-i, să-și, ce-a, ca-n, la-nceput, dă-mi): cratima trece pe dreapta: „nu”, „-i”;
+#   - sigle/cifre + articol (ADN-ul, pH-ului, 3-lea): cuvântul + „-ul”.
+ELIDATE_STANGA = {"s", "n", "m", "l", "v", "c", "d", "p", "într", "dintr", "printr", "de"}
+CLITICE_STANGA = {"ne", "le", "mi", "ți", "și", "i", "li", "ni", "vi", "te", "se", "mă", "vă"}   # clitice întregi: mi-a (mi-), și-l (și, -l), se-mbarcă (se, -mbarcă)
+CLITICE_PRONOMINALE = {"l", "o", "le", "i", "mi", "ți", "ne", "vă", "se", "și", "mă", "te", "ni", "vi", "li"}
+INTREGI_CU_CRATIMA = {"de-abia", "dintr-odată", "într-adevăr", "de-a", "vreo-"}  # rămân întregi (lexicalizate) — „de-a” se tratează separat
+ARTICOLE_LEGATE = {"ul", "ului", "lui", "le", "lea", "a", "i", "ii", "ilor", "uri", "urile", "urilor", "ele", "elor", "lor", "u"}
+ABREVIERI = {"dr", "nr", "str", "tel", "etc", "ex", "pag", "pg", "p", "pp", "art", "alin", "lit", "cca", "aprox", "sec", "jud", "com", "mun", "bd", "bld", "av",
+             "prof", "ing", "dl", "dna", "dlui", "sf", "lt", "col", "vol", "cap", "fig", "tab", "op", "cit", "ed", "sos", "ș", "a", "m", "d", "e", "î",
+             "s", "r", "l", "o", "u", "n", "c", "b", "f", "g", "h", "i", "j", "k", "t", "v", "w", "x", "y", "z", "mr", "mrs", "ms", "st", "jr", "sr", "no", "max", "min",
+             "mil", "mld", "obs", "ro", "en", "pct", "lect", "conf", "univ", "acad", "dpdv", "resp", "cf", "vs", "ş", "prep", "th", "al", "gh", "ch", "sg", "pl"}
 
 RE_TOKEN = re.compile(
-    r"(?P<ora>\d{1,2}:\d{2})"                                   # ore
-    r"|(?P<numar>\d+(?:[.,]\d+)*(?:%|‰)?)"                      # numere: 12, 3,5, 1.000.000, 25%
-    r"|(?P<abrev>(?:[A-ZĂÂÎȘȚ][a-zăâîșț]{0,3}\.)+)"               # abrevieri cu punct: dr. S.A. etc.
-    r"|(?P<cuvant>[" + LITERE_RO + r"0-9]+(?:[-'’][" + LITERE_RO + r"0-9]+)*)"   # cuvinte, cu cratimă/apostrof în interior
-    r"|(?P<cratima_clitic>-[" + LITERE_RO + r"]+)"               # clitic după cratimă rămas singur (rar)
+    r"(?P<ora>\d{1,2}:\d{2})"                                       # ore
+    r"|(?P<cuvant_cifre>\d+(?:[-]" + L + r"+)+)"                     # 17-beta, 3-lea, 2020-ul (cifre + cratimă + litere)
+    r"|(?P<numar>(?:\d+(?:[.,]\d+)+\.?|\d+[–-]\d+|’\d+|\d+)(?:%|‰)?)"   # 3,5  1.000  3.4.2.2.  1878–1879  ’70  25%  1,5%
+    r"|(?P<abrev>(?:" + L + r"\.){2,}" + L + r"?\.?)"                # S.A., ș.a.m.d., a.c.
+    r"|(?P<cuvant>(?:" + L + r"|\d)+(?:[-'’](?:" + L + r"|\d)+)*\.?)"   # cuvinte și coduri (H7N3, pH), cu cratimă/apostrof; punctul final → abrevieri
+    r"|(?P<cratima_clitic>-" + L + r"+)"                             # clitic după cratimă rămas singur (rar)
     r"|(?P<punct>\.\.\.|…|[.,;:!?()\[\]{}„“”«»\"'’‘\-–—/%&+*=<>§@#])"
     r"|(?P<altceva>\S)"
 )
@@ -78,36 +88,80 @@ def _desparte_cratima(text: str) -> list[str] | None:
     """Împarte un cuvânt cu cratimă în bucăți ca în UD RRT, sau None dacă rămâne întreg."""
     if "-" not in text or text.startswith("-") or text.endswith("-"):
         return None
-    parti = text.split("-")
-    rezultat: list[str] = []
-    stanga = parti[0]
-    # legături cu cratimă în interiorul flexiunii (ADN-ul, cd-ul, X-ului, pH-ul): rămân întregi
-    if (stanga.isupper() and len(stanga) >= 2) or any(ch.isdigit() for ch in stanga):
+    if normalizeaza(text) in INTREGI_CU_CRATIMA and normalizeaza(text) != "de-a":
         return None
+    parti = text.split("-")
+    stanga, rest = parti[0], parti[1:]
     jos = normalizeaza(stanga)
-    if jos in PRESCURTATE_STANGA and len(parti) >= 2:
-        # s-o, într-un, n-am, m-a, i-a, l-am, v-am, ne-a, le-a, ș-apoi, c-un, d-aia, să-l, se-nvârte, nu-i
-        rezultat.append(stanga + "-")
-        rest = "-".join(parti[1:])
-        sub = _desparte_cratima(rest)
-        rezultat.extend(sub if sub else [rest])
-        return rezultat
-    # dă-mi, spune-mi-l, du-te, întreabă-l, face-se-va: clitice după verb
-    if all(normalizeaza(p) in CLITICE_DUPA or normalizeaza(p) in {"va", "vei", "voi", "vom", "veți", "vor", "ar", "aș", "ai", "am", "ați", "ne", "ni", "vi", "li"} for p in parti[1:]):
-        rezultat.append(stanga)
-        for p in parti[1:]:
-            rezultat.append("-" + p)
-        return rezultat
+    # sigle / cifre / cuvinte străine + articol legat (ADN-ul, pH-ului, 3-lea, site-ul): cuvântul + „-ul”
+    if len(parti) == 2 and normalizeaza(parti[1]) in ARTICOLE_LEGATE and jos not in ELIDATE_STANGA and jos not in CLITICE_STANGA and len(stanga) >= 2:
+        return [stanga, "-" + parti[1]]
+    if any(ch.isupper() for ch in stanga[1:]) or any(ch.isdigit() for ch in stanga) or (stanga.isupper() and len(stanga) >= 2):
+        return None
+    if jos == "de" and len(parti) == 2 and normalizeaza(parti[1]) == "a":
+        return ["de-", "a"]                                     # de-a lungul (UD RRT)
+    if len(stanga) == 1 and rest and rest[0][:1].isupper():
+        return None                                             # L-Dopa, T-shirt
+    if jos in ELIDATE_STANGA and len(rest) >= 1:
+        rez = [stanga + "-"]                                    # s-a, s-o, n-am, l-am, într-o, dintr-un, p-ăsta
+        sub = _desparte_cratima("-".join(rest))
+        rez.extend(sub if sub else ["-".join(rest)])
+        return rez
+    if jos in CLITICE_STANGA and len(rest) >= 1 and normalizeaza(rest[0]) in FORME_AUX - CLITICE_PRONOMINALE | {"a", "am", "ai", "au", "ați", "aș", "ar", "o", "oi", "or", "om", "va", "vei", "voi", "vom", "veți", "vor"}:
+        rez = [stanga + "-"]                                    # mi-a, și-a, ne-am, le-am, te-am (clitic + auxiliar: cratima pe clitic)
+        sub = _desparte_cratima("-".join(rest))
+        rez.extend(sub if sub else ["-".join(rest)])
+        return rez
+    if jos in CLITICE_STANGA and len(rest) >= 1:
+        return [stanga] + ["-" + r for r in rest]               # și-l, mi-l, ți-l, se-mbarcă (al doilea element ia cratima)
+    # cuvânt întreg în stânga: cliticele / auxiliarele / forma elidată de după iau cratima (nu-i, să-și, ce-a, ca-n, la-nceput, dă-mi-l)
+    if all(_este_clitic_sau_elidat(r) for r in rest):
+        return [stanga] + ["-" + r for r in rest]
     return None
+
+
+FORME_AUX = {"a", "am", "ai", "au", "ați", "aș", "ar", "o", "oi", "or", "om", "va", "vei", "voi", "vom", "veți", "vor", "i", "s", "l", "n", "mi", "ți", "și"}
+DEMONSTRATIVE_POPULARE = {"ăsta", "asta", "ăla", "aia", "astea", "ăștia", "ăia", "alea", "așa", "acasă", "atât", "atâta", "aici"}
+
+
+def _este_clitic_sau_elidat(bucata: str) -> bool:
+    b = normalizeaza(bucata)
+    if b in CLITICE_PRONOMINALE or b in FORME_AUX or b in DEMONSTRATIVE_POPULARE:
+        return True
+    # formă cu î elidat la început (-nceput, -mpotriva, -n) sau cuvânt care începe cu vocală (ce-a, și-abia, toate-așa: eliziunea stângii)
+    if len(b) >= 1 and b[0] in "nm" and (len(b) == 1 or b[1] not in "aeiouăâî"):
+        return True
+    return len(b) >= 1 and b[0] in "aeiouăâî"
 
 
 def tokenizeaza(text: str) -> list[Token]:
     text = corecteaza_sedile(text)
     tokeni: list[Token] = []
-    for m in RE_TOKEN.finditer(text):
+    m0 = re.match(r"\s*(\d+\.)(?=\s+\S)", text)
+    if m0:
+        tokeni.append(Token(m0.group(1), m0.start(1), m0.end(1), "numar", spatiu_dupa=True))
+    for m in RE_TOKEN.finditer(text, m0.end(1) if m0 else 0):
         tip = m.lastgroup or "altceva"
         s, e = m.start(), m.end()
         bucata = m.group(0)
+        if tip == "cuvant_cifre":
+            tip = "cuvant"
+        if tip == "cuvant" and bucata.endswith("."):
+            # „Cruz.” = nume + punct; „dr.”, „nr.”, „tel.” = abrevieri cunoscute; „A.” = inițială
+            radacina = bucata[:-1]
+            if normalizeaza(radacina) in ABREVIERI or (len(radacina) == 1 and radacina.isupper()):
+                tip = "abrev"
+            else:
+                bucata = radacina
+                e = s + len(radacina)
+                tokeni.append(Token(bucata, s, e, "cuvant", spatiu_dupa=False)) if not _desparte_cratima(bucata) else None
+                if _desparte_cratima(bucata):
+                    poz = s
+                    for p_ in _desparte_cratima(bucata):
+                        tokeni.append(Token(p_, poz, poz + len(p_), "clitic" if (p_.startswith("-") or p_.endswith("-")) else "cuvant", spatiu_dupa=False))
+                        poz += len(p_)
+                tokeni.append(Token(".", e, e + 1, "punct", spatiu_dupa=False))
+                continue
         if tip == "cuvant":
             parti = _desparte_cratima(bucata)
             if parti:
@@ -116,9 +170,6 @@ def tokenizeaza(text: str) -> list[Token]:
                     tokeni.append(Token(p, poz, poz + len(p), "clitic" if (p.startswith("-") or p.endswith("-")) else "cuvant", spatiu_dupa=False))
                     poz += len(p)
                 continue
-        if tip == "abrev" and bucata.endswith(".") and bucata.lower() not in ABREVIERI_FARA_PAUZA and len(bucata) <= 2:
-            # „A.” poate fi inițială; rămâne abreviere
-            pass
         tokeni.append(Token(bucata, s, e, tip, spatiu_dupa=False))
     # spațiul după fiecare token (util la reconstruirea textului și la clitice)
     for i, t in enumerate(tokeni):

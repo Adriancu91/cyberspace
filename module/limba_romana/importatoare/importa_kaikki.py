@@ -168,8 +168,10 @@ def importa(baza: Baza, cale: Path | None = None, verbos: bool = True, limita: i
                 grupuri[(normalizeaza(d["word"]), upos)].append(len(intrari) - 1)
     omonim_pentru: dict[int, int] = {}
     for cheie, idx in grupuri.items():
-        if len(idx) == 1:
-            omonim_pentru[idx[0]] = 0
+        if len(idx) == 1 or cheie[1] in POS_FARA_FORME:
+            # clasele închise nu se despart în omonime: tabelele proprii (inchise.py) sunt lexemul de referință
+            for i in idx:
+                omonim_pentru[i] = 0
         else:
             idx_sortate = sorted(idx, key=lambda i: (intrari[i].get("etymology_number") or 99, i))
             for k, i in enumerate(idx_sortate, start=1):
@@ -197,6 +199,8 @@ def importa(baza: Baza, cale: Path | None = None, verbos: bool = True, limita: i
             continue
         omonim = omonim_pentru.get(i, 0)
         lid = id_lexem(cuvant, upos, omonim)
+        if omonim == 0 and upos in POS_FARA_FORME and lid in lexem_ids_create:
+            n("intrari_contopite_clasa_inchisa")
         sensuri = d.get("senses") or []
         etichete_sens = [t for s in sensuri for t in (s.get("tags") or [])]
         gen = gen_lexem_din_kaikki(etichete_sens) if upos in ("NOUN", "PROPN") else None
