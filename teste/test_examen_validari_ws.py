@@ -61,3 +61,14 @@ def test_examenul_pe_un_model_salvat(tmp_path, monkeypatch, capsys):
     iesire = capsys.readouterr().out
     assert "media pe romana" in iesire and "lipsește" in iesire
     assert len(list((tmp_path / "lucru" / "examen_validari_ws").glob("experiment_*.json"))) == 1
+
+
+def test_fabulele_ies_iar_variantele_curate_au_nume_noi():
+    assert not any("fabule" in v or "fabule" in c for v, c in unealta.VALIDARI.items())
+    assert unealta.VALIDARI["romana_wikipedia_curat"] == "date/ws/curat/wikipedia_ro/validare_curata.txt"
+    assert unealta.VALIDARI["povesti"] == "date/tinystories_r2/validare.txt"  # validarea examenului oficial, neschimbată
+    r = {"romana_wikipedia": {"bpb": 1.0, "octeti": 100}, "romana_web": {"bpb": 2.0, "octeti": 100},
+         "romana_wikipedia_curat": {"bpb": 1.5, "octeti": 300}, "romana_web_curat": {"bpb": 3.0, "octeti": 100}}
+    n = unealta.numere(r)
+    assert n["bpb_romana"] == 1.5 and n["bpb_romana_curat"] == round((1.5 * 300 + 3.0 * 100) / 400, 4)
+    assert "bpb_cod_curat" not in n

@@ -41,13 +41,17 @@ VALIDARI = {
     "romana_wikipedia": "date/ws/curat/wikipedia_ro/validare.txt",
     "romana_web": "date/ws/curat/fineweb2_ro/validare.txt",
     "romana_carti": "date/ws/curat/wikisource_ro/validare.txt",
-    "romana_fabule": "date/ws/curat/fabule_ro/validare.txt",
     "traducere": "date/ws/curat/europarl_en_ro/validare.txt",
     # până pe 17 octombrie 2026 se numea „cod”, ca grupa: în jurnal, media pe cod îi suprascria nota (rândurile vechi rămân așa)
     "cod_python": "date/ws/curat/cod_stack/validare.txt",
     "cod_sarcini": "date/ws/curat/cod_instruct/validare.txt",
 }
-GRUPE = {"romana": ["romana_wikipedia", "romana_web", "romana_carti"], "cod": ["cod_python", "cod_sarcini"]}
+# 18 octombrie 2026 (Adrian): fabulele ies din examen (scurse în antrenare: docs/scurgeri_examen_17oct.md), iar lângă
+# fiecare validare vine varianta ei curată (unelte/validari_curate.py), sub nume noi: <validare>_curat.
+VALIDARI.update({f"{nume}_curat": Path(cale).with_name("validare_curata.txt").as_posix() for nume, cale in list(VALIDARI.items())})
+GRUPE = {"romana": ["romana_wikipedia", "romana_web", "romana_carti"], "cod": ["cod_python", "cod_sarcini"],
+         "romana_curat": ["romana_wikipedia_curat", "romana_web_curat", "romana_carti_curat"],
+         "cod_curat": ["cod_python_curat", "cod_sarcini_curat"]}
 
 
 def inceput_de_text(cale: Path, caractere: int) -> str:
@@ -172,12 +176,12 @@ def main(argv: list[str] | None = None) -> int:
     })
     print(f"=== Examenele pe validările puse deoparte: modelul experimentului #{fisa['id']} (linia „{fisa['linie']}”, "
           f"tokenizer {tokenizer}) ===")
-    print(f"{'validarea':<18} {'bpb':>7} {'bucăți corecte':>15} {'octeți ghiciți':>15} {'octeți/bucată':>14}")
+    print(f"{'validarea':<24} {'bpb':>7} {'bucăți corecte':>15} {'octeți ghiciți':>15} {'octeți/bucată':>14}")
     for nume, r in rezultate.items():
         if "bpb" not in r:
-            print(f"{nume:<18} lipsește ({r['lipseste']})")
+            print(f"{nume:<24} lipsește ({r['lipseste']})")
             continue
-        print(f"{nume:<18} {r['bpb']:>7.4f} {r.get('bucati_corecte', float('nan')):>14.1%} "
+        print(f"{nume:<24} {r['bpb']:>7.4f} {r.get('bucati_corecte', float('nan')):>14.1%} "
               f"{r.get('octeti_ghiciti', float('nan')):>14.1%} {r.get('octeti_pe_bucata', float('nan')):>14.2f}")
     for grupa in GRUPE:
         if f"bpb_{grupa}" in scoruri:
