@@ -2,9 +2,9 @@
 
 Metrici (definiții precise, numitor cunoscut):
   - tokenizare: propoziții în care tokenizarea noastră coincide exact cu cea a corpusului / total propoziții;
-  - pe tokenii aliniați (propozițiile cu tokenizare identică): acuratețea categoriei (UPOS), a lemei (comparare normalizată,
-    fără diacritice la lema de aur? nu: comparare exactă normalizată), a trăsăturilor (identice ca mulțime, după
-    convenția canonică), UAS (capul corect) și LAS (capul și relația corecte, fără subtipurile după „:”);
+  - pe tokenii aliniați (propozițiile cu tokenizare identică): acuratețea categoriei (UPOS), a lemei (comparare exactă,
+    normalizată), a trăsăturilor (identice ca mulțime după convenția canonică; fără ExtPos, care e al expresiei; fără Number
+    când gold îl omite la formele sincretice), UAS (capul corect) și LAS (capul și relația corecte, fără subtipurile după „:”);
   - ambiguitate: tokenii cu ≥ 2 candidați; dintre ei câți au categoria aleasă corect, câți au fost marcați „ambiguu”;
   - necunoscute: tokenii fără analiză în bază;
   - acord: numărul de probleme de acord semnalate pe propozițiile corpusului (care sunt corecte) = alarme false.
@@ -70,8 +70,12 @@ def evalueaza(baza: Baza, set_: str = "evaluare", limita: int | None = None, ver
                 c["lema_corecta"] += 1
             elif len(greseli_lema_ex) < 30:
                 greseli_lema_ex.append((w.text, w.a.lema, g["lema"]))
-            tr_gold = canonic_trasaturi(canonic_pentru_pos(g["upos"], desparte_trasaturi(g["trasaturi"]), None))
-            tr_noi = canonic_trasaturi(canonic_pentru_pos(w.pos, w.a.trasaturi, w.a.gen_lexem))
+            d_gold = canonic_pentru_pos(g["upos"], desparte_trasaturi(g["trasaturi"]), None)
+            d_noi = canonic_pentru_pos(w.pos, w.a.trasaturi, w.a.gen_lexem)
+            # UD RRT omite Number la formele verbale sincretice de persoana a III-a (bazează = sg/pl) și la unele determinante; nu îl cerem când lipsește din gold
+            if "Number" not in d_gold:
+                d_noi.pop("Number", None)
+            tr_gold, tr_noi = canonic_trasaturi(d_gold), canonic_trasaturi(d_noi)
             if pos_ok and tr_gold == tr_noi:
                 c["trasaturi_corecte"] += 1
             if pos_ok and lema_ok and tr_gold == tr_noi:

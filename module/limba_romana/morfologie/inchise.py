@@ -374,11 +374,19 @@ def toate_formele() -> list[tuple[str, str, str, str, str]]:
     return rez
 
 
+def asigura_sursa_reguli(baza: Baza) -> None:
+    """Înregistrează sursa „rlc_reguli” (tabelele și paradigmele proprii) dacă lipsește."""
+    if baza.con.execute("SELECT 1 FROM surse WHERE id = ?", (SURSA_ID,)).fetchone() is None:
+        baza.adauga_sursa(SURSA_ID, "Regulile și tabelele proprii ale motorului (clase închise, paradigme, acord)",
+                          licenta="a proiectului Cyberspace (Adrian); reguli ale limbii, scrise de mână",
+                          atribuire="documentare: GALR (Academia Română, 2005/2008), convențiile UD RRT", obligatii="",
+                          transformari="tabele scrise explicit în morfologie/inchise.py și morfologie/paradigme.py",
+                          limitari="clasele închise sunt complete pentru formele standard uzuale; formele populare/regionale rare lipsesc")
+        baza.commit()
+
+
 def scrie_in_baza(baza: Baza, verbos: bool = True) -> dict:
-    baza.adauga_sursa(SURSA_ID, "Regulile și tabelele proprii ale motorului (clase închise, paradigme, acord)",
-                      licenta="a proiectului Cyberspace (Adrian); reguli ale limbii, scrise de mână",
-                      atribuire="documentare: GALR (Academia Română, 2005/2008), convențiile UD RRT", obligatii="",
-                      transformari="tabele scrise explicit în morfologie/inchise.py", limitari="clasele închise sunt complete pentru formele standard uzuale; formele populare/regionale rare lipsesc")
+    asigura_sursa_reguli(baza)
     n = 0
     lexeme: dict[tuple[str, str], list[str]] = {}
     for pos, lema, forma, tr, detalii in toate_formele():

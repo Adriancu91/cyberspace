@@ -28,7 +28,7 @@ from . import importa_hunspell, importa_kaikki, importa_rown, importa_ud
 PASI = (("kaikki", importa_kaikki.importa), ("ud_rrt", importa_ud.importa), ("rown", importa_rown.importa), ("hunspell", importa_hunspell.importa))
 
 
-def construieste(cale: Path | None = None, fara: set[str] | None = None, proaspat: bool = False, verbos: bool = True) -> dict:
+def construieste(cale: Path | None = None, fara: set[str] | None = None, proaspat: bool = False, verbos: bool = True, doar_finalizare: bool = False) -> dict:
     fara = fara or set()
     cale = Path(cale) if cale else CALE_IMPLICITA
     if proaspat:
@@ -42,6 +42,9 @@ def construieste(cale: Path | None = None, fara: set[str] | None = None, proaspa
         for nume, functie in PASI:
             if nume in fara:
                 raport["pasi"][nume] = "sărit (--fara)"
+                continue
+            if doar_finalizare:
+                raport["pasi"][nume] = "păstrat (--continua)"
                 continue
             t0 = time.time()
             raport["pasi"][nume] = functie(b, verbos=verbos)
@@ -85,8 +88,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--cale", default=None, help="fișierul SQLite (implicit: _baza/limba_romana.sqlite)")
     p.add_argument("--fara", nargs="*", default=[], help="surse de sărit: kaikki ud_rrt rown hunspell")
     p.add_argument("--proaspat", action="store_true", help="șterge baza existentă înainte")
+    p.add_argument("--continua", action="store_true", help="nu reimportă sursele; rulează doar paradigmele, clasele închise, regulile și finalizarea")
     a = p.parse_args(argv)
-    raport = construieste(a.cale, set(a.fara), a.proaspat)
+    raport = construieste(a.cale, set(a.fara), a.proaspat, doar_finalizare=a.continua)
     return 0 if raport["integritate"]["ok"] else 1
 
 

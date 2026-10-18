@@ -444,6 +444,8 @@ def _forme_atestate(baza: Baza, lexem_id: str) -> dict[str, list[str]]:
 
 def aplica_peste_baza(baza: Baza, verbos: bool = True, limita: int | None = None) -> dict:
     """Generează paradigmele pentru toate lexemele NOUN/ADJ/VERB (fără expresii) și le scrie ca forme „generat”."""
+    from .inchise import asigura_sursa_reguli
+    asigura_sursa_reguli(baza)
     scrie_reguli(baza)
     n = {"substantive": 0, "adjective": 0, "verbe": 0, "forme_generate": 0, "forme_noi": 0, "substantive_fara_gen": 0,
          "plural_din_dovezi": 0, "plural_ghicit": 0, "adj_din_dovezi": 0, "adj_ghicit": 0, "verbe_grup_nedeterminat": 0, "verbe_cu_dovezi": 0}

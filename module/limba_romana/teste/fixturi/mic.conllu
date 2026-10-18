@@ -1,0 +1,18 @@
+# sent_id = test-1
+# text = Fata citește o carte.
+1	Fata	fată	NOUN	Ncfsry	Case=Acc,Nom|Definite=Def|Gender=Fem|Number=Sing	2	nsubj	_	_
+2	citește	citi	VERB	Vmip3s	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	o	un	DET	Tifsr	Case=Acc,Nom|Gender=Fem|Number=Sing|PronType=Ind	4	det	_	_
+4	carte	carte	NOUN	Ncfsrn	Case=Acc,Nom|Definite=Ind|Gender=Fem|Number=Sing	2	obj	_	SpaceAfter=No
+5	.	.	PUNCT	PERIOD	_	2	punct	_	_
+
+# sent_id = test-2
+# text = Din cauza ploii copiii au plecat.
+1	Din	din	ADP	Spsa	AdpType=Prep|Case=Acc|ExtPos=ADP	3	case	_	_
+2	cauza	cauză	NOUN	Ncfsry	Case=Acc,Nom|Definite=Def|Gender=Fem|Number=Sing	1	fixed	_	_
+3	ploii	ploaie	NOUN	Ncfsoy	Case=Dat,Gen|Definite=Def|Gender=Fem|Number=Sing	6	obl	_	_
+4	copiii	copil	NOUN	Ncmpry	Case=Acc,Nom|Definite=Def|Gender=Masc|Number=Plur	6	nsubj	_	_
+5	au	avea	AUX	Va--3p	Number=Plur|Person=3	6	aux	_	_
+6	plecat	pleca	VERB	Vmp--sm	Gender=Masc|Number=Sing|VerbForm=Part	0	root	_	SpaceAfter=No
+7	.	.	PUNCT	PERIOD	_	6	punct	_	_
+

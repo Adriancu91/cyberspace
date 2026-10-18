@@ -1,0 +1,21 @@
+# dicționar de test scris de mână pentru teste (nu e din rospell)
+SET UTF-8
+# Substantive feminine
+SFX A Y 5
+SFX A   ă     a       ă                  s.f.sg.art.
+SFX A   ă     ei      ă                  s.f.sg.dat.
+SFX A   ă     e       ă                  s.f.pl.neart.
+SFX A   ă     ele     ă                  s.f.pl.art.
+SFX A   ă     elor    ă                  s.f.pl.dat.
+# Substantive masculine
+SFX L Y 3
+SFX L   0     ul      .                  s. m. sg. art.
+SFX L   0     ului    .                  s. m. sg. dat.
+SFX L   0     i       .                  s. m. pl. neart.
+# verbe conj 1.2 (-ez)
+SFX B Y 3
+SFX B   ez    ezi     ez
+SFX B   ez    ează    ez
+SFX B   ez    ăm      ez
+PFX B Y 1
+PFX B 0 re .

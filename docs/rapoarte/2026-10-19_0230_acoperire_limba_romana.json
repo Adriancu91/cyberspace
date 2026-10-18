@@ -1,0 +1,1351 @@
+{
+ "versiune_motor": "0.1.0",
+ "data": "2026-10-18T22:28:40+00:00",
+ "baza": "/home/claude/cyberspace/module/limba_romana/_baza/limba_romana.sqlite",
+ "1_leme": {
+  "total": 193676,
+  "pe_categorie": {
+   "NOUN": 118246,
+   "ADJ": 33489,
+   "PROPN": 25931,
+   "VERB": 10867,
+   "ADV": 3859,
+   "INTJ": 324,
+   "NUM": 265,
+   "ADP": 243,
+   "X": 133,
+   "PRON": 127,
+   "SCONJ": 75,
+   "DET": 65,
+   "CCONJ": 42,
+   "PART": 7,
+   "AUX": 3
+  },
+  "pe_sursa": {
+   "hunspell_ro": 112328,
+   "rlc_reguli": 335,
+   "rown": 53244,
+   "ud_rrt": 17166,
+   "wiktionary_kaikki": 99750
+  },
+  "confirmate_de_doua_surse": 58196,
+  "cu_gen_cunoscut_substantive": 98522,
+  "substantive_fara_gen": 19724,
+  "omonime_distinse": 829,
+  "multicuvant": 25671,
+  "categorie_necunoscuta_X": 133,
+  "cu_etimologie": 94521,
+  "cu_registru_marcat": 8006,
+  "doar_ortografic": 33110
+ },
+ "2_forme_atestate": {
+  "total_forme_cu_atestare": 956903,
+  "pe_sursa": {
+   "hunspell_ro": 157035,
+   "rlc_reguli": 839,
+   "ud_rrt": 34565,
+   "wiktionary_kaikki": 880626
+  },
+  "din_corpus_ud_cu_frecventa": [
+   34565,
+   258079
+  ]
+ },
+ "3_forme_generate": {
+  "total_forme_cu_regula": 1650891,
+  "pe_origine": {
+   "hunspell": 1027111,
+   "paradigme": 1469922
+  },
+  "doar_generate_neconfirmate": 810766
+ },
+ "4_forme_validate": {
+  "validate_doua_surse": 857707,
+  "atestate_o_sursa": 99196,
+  "generate_neconfirmate": 810766,
+  "total": 1767669
+ },
+ "4b_paradigme_pe_regula": [
+  {
+   "regula": "subst_sg_neart",
+   "forme_generate": 93922,
+   "validate_de_surse": 93768,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 153,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "subst_fem_sg_gd_neart",
+   "forme_generate": 62040,
+   "validate_de_surse": 22794,
+   "contrazise_de_surse": 1389,
+   "neconfirmate": 37857,
+   "procent_validate_din_cele_verificabile": 94.3
+  },
+  {
+   "regula": "subst_fem_sg_gd_art",
+   "forme_generate": 62040,
+   "validate_de_surse": 22964,
+   "contrazise_de_surse": 1635,
+   "neconfirmate": 37441,
+   "procent_validate_din_cele_verificabile": 93.4
+  },
+  {
+   "regula": "subst_fem_sg_art",
+   "forme_generate": 62040,
+   "validate_de_surse": 25260,
+   "contrazise_de_surse": 158,
+   "neconfirmate": 36622,
+   "procent_validate_din_cele_verificabile": 99.4
+  },
+  {
+   "regula": "subst_pl_voc/ghicit",
+   "forme_generate": 53933,
+   "validate_de_surse": 101,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 53832,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "subst_pl_neart/ghicit",
+   "forme_generate": 53933,
+   "validate_de_surse": 169,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 53763,
+   "procent_validate_din_cele_verificabile": 99.4
+  },
+  {
+   "regula": "subst_pl_gd_art/ghicit",
+   "forme_generate": 53933,
+   "validate_de_surse": 131,
+   "contrazise_de_surse": 40,
+   "neconfirmate": 53762,
+   "procent_validate_din_cele_verificabile": 76.6
+  },
+  {
+   "regula": "subst_pl_art/ghicit",
+   "forme_generate": 53933,
+   "validate_de_surse": 146,
+   "contrazise_de_surse": 44,
+   "neconfirmate": 53743,
+   "procent_validate_din_cele_verificabile": 76.8
+  },
+  {
+   "regula": "subst_pl_voc",
+   "forme_generate": 39988,
+   "validate_de_surse": 38101,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 1887,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "subst_pl_neart",
+   "forme_generate": 39988,
+   "validate_de_surse": 39988,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "subst_pl_gd_art",
+   "forme_generate": 39988,
+   "validate_de_surse": 38535,
+   "contrazise_de_surse": 206,
+   "neconfirmate": 1247,
+   "procent_validate_din_cele_verificabile": 99.5
+  },
+  {
+   "regula": "subst_pl_art",
+   "forme_generate": 39988,
+   "validate_de_surse": 38427,
+   "contrazise_de_surse": 336,
+   "neconfirmate": 1225,
+   "procent_validate_din_cele_verificabile": 99.1
+  },
+  {
+   "regula": "subst_fem_voc_o",
+   "forme_generate": 33595,
+   "validate_de_surse": 9892,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 23703,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "subst_masc_sg_gd_art",
+   "forme_generate": 31881,
+   "validate_de_surse": 19385,
+   "contrazise_de_surse": 808,
+   "neconfirmate": 11688,
+   "procent_validate_din_cele_verificabile": 96.0
+  },
+  {
+   "regula": "subst_masc_sg_art",
+   "forme_generate": 31881,
+   "validate_de_surse": 19478,
+   "contrazise_de_surse": 793,
+   "neconfirmate": 11610,
+   "procent_validate_din_cele_verificabile": 96.1
+  },
+  {
+   "regula": "verb_I_ez_prezent",
+   "forme_generate": 17320,
+   "validate_de_surse": 15855,
+   "contrazise_de_surse": 435,
+   "neconfirmate": 1030,
+   "procent_validate_din_cele_verificabile": 97.3
+  },
+  {
+   "regula": "verb_I_ez_conjunctiv",
+   "forme_generate": 17320,
+   "validate_de_surse": 15693,
+   "contrazise_de_surse": 421,
+   "neconfirmate": 1206,
+   "procent_validate_din_cele_verificabile": 97.4
+  },
+  {
+   "regula": "adj_m_sg_gd_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 21,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 16523,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_sg_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 30,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 16513,
+   "procent_validate_din_cele_verificabile": 96.8
+  },
+  {
+   "regula": "adj_m_sg/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 15973,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 570,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_pl_gd_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 16,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 16527,
+   "procent_validate_din_cele_verificabile": 94.1
+  },
+  {
+   "regula": "adj_m_pl_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 25,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 16519,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_pl/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 248,
+   "contrazise_de_surse": 11,
+   "neconfirmate": 16285,
+   "procent_validate_din_cele_verificabile": 95.8
+  },
+  {
+   "regula": "adj_f_sg_gd_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 17,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 16527,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_sg_gd/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 77,
+   "contrazise_de_surse": 9,
+   "neconfirmate": 16458,
+   "procent_validate_din_cele_verificabile": 89.5
+  },
+  {
+   "regula": "adj_f_sg_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 17,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 16527,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_sg/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 216,
+   "contrazise_de_surse": 3,
+   "neconfirmate": 16325,
+   "procent_validate_din_cele_verificabile": 98.6
+  },
+  {
+   "regula": "adj_f_pl_gd_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 10,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 16534,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_pl_art/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 10,
+   "contrazise_de_surse": 2,
+   "neconfirmate": 16532,
+   "procent_validate_din_cele_verificabile": 83.3
+  },
+  {
+   "regula": "adj_f_pl/ghicit",
+   "forme_generate": 16544,
+   "validate_de_surse": 214,
+   "contrazise_de_surse": 58,
+   "neconfirmate": 16272,
+   "procent_validate_din_cele_verificabile": 78.7
+  },
+  {
+   "regula": "verb_I_ez_perfect_simplu",
+   "forme_generate": 16152,
+   "validate_de_surse": 16105,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 47,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_ez_mmcp",
+   "forme_generate": 16152,
+   "validate_de_surse": 16105,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 47,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_ez_imperfect",
+   "forme_generate": 16152,
+   "validate_de_surse": 16111,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 41,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_pl",
+   "forme_generate": 15958,
+   "validate_de_surse": 15958,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_sg_gd_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15937,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 19,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_sg_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15936,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 20,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_sg",
+   "forme_generate": 15957,
+   "validate_de_surse": 15957,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_pl_gd_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15934,
+   "contrazise_de_surse": 3,
+   "neconfirmate": 20,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_pl_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15935,
+   "contrazise_de_surse": 3,
+   "neconfirmate": 19,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_m_pl",
+   "forme_generate": 15957,
+   "validate_de_surse": 15957,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_sg_gd_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15002,
+   "contrazise_de_surse": 281,
+   "neconfirmate": 674,
+   "procent_validate_din_cele_verificabile": 98.2
+  },
+  {
+   "regula": "adj_f_sg_gd",
+   "forme_generate": 15957,
+   "validate_de_surse": 15936,
+   "contrazise_de_surse": 8,
+   "neconfirmate": 13,
+   "procent_validate_din_cele_verificabile": 99.9
+  },
+  {
+   "regula": "adj_f_sg",
+   "forme_generate": 15957,
+   "validate_de_surse": 15957,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "adj_f_pl_gd_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15928,
+   "contrazise_de_surse": 9,
+   "neconfirmate": 20,
+   "procent_validate_din_cele_verificabile": 99.9
+  },
+  {
+   "regula": "adj_f_pl_art",
+   "forme_generate": 15957,
+   "validate_de_surse": 15928,
+   "contrazise_de_surse": 9,
+   "neconfirmate": 20,
+   "procent_validate_din_cele_verificabile": 99.9
+  },
+  {
+   "regula": "adj_f_sg_art",
+   "forme_generate": 15948,
+   "validate_de_surse": 15922,
+   "contrazise_de_surse": 8,
+   "neconfirmate": 18,
+   "procent_validate_din_cele_verificabile": 99.9
+  },
+  {
+   "regula": "subst_masc_voc_ule",
+   "forme_generate": 14361,
+   "validate_de_surse": 7700,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 6661,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_esc_prezent",
+   "forme_generate": 12068,
+   "validate_de_surse": 8988,
+   "contrazise_de_surse": 1790,
+   "neconfirmate": 1290,
+   "procent_validate_din_cele_verificabile": 83.4
+  },
+  {
+   "regula": "verb_IV_esc_conjunctiv",
+   "forme_generate": 12068,
+   "validate_de_surse": 8869,
+   "contrazise_de_surse": 1813,
+   "neconfirmate": 1386,
+   "procent_validate_din_cele_verificabile": 83.0
+  },
+  {
+   "regula": "verb_IV_esc_perfect_simplu",
+   "forme_generate": 10428,
+   "validate_de_surse": 10358,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 70,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_esc_mmcp",
+   "forme_generate": 10428,
+   "validate_de_surse": 10359,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 69,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_esc_imperfect",
+   "forme_generate": 10428,
+   "validate_de_surse": 8112,
+   "contrazise_de_surse": 2245,
+   "neconfirmate": 71,
+   "procent_validate_din_cele_verificabile": 78.3
+  },
+  {
+   "regula": "verb_I_a_perfect_simplu",
+   "forme_generate": 8838,
+   "validate_de_surse": 6975,
+   "contrazise_de_surse": 23,
+   "neconfirmate": 1840,
+   "procent_validate_din_cele_verificabile": 99.7
+  },
+  {
+   "regula": "verb_I_a_mmcp",
+   "forme_generate": 8838,
+   "validate_de_surse": 6967,
+   "contrazise_de_surse": 24,
+   "neconfirmate": 1847,
+   "procent_validate_din_cele_verificabile": 99.7
+  },
+  {
+   "regula": "verb_I_a_imperfect",
+   "forme_generate": 8838,
+   "validate_de_surse": 7034,
+   "contrazise_de_surse": 5,
+   "neconfirmate": 1799,
+   "procent_validate_din_cele_verificabile": 99.9
+  },
+  {
+   "regula": "verb_I_a_prezent",
+   "forme_generate": 8837,
+   "validate_de_surse": 5486,
+   "contrazise_de_surse": 1697,
+   "neconfirmate": 1654,
+   "procent_validate_din_cele_verificabile": 76.4
+  },
+  {
+   "regula": "verb_I_a_conjunctiv",
+   "forme_generate": 8837,
+   "validate_de_surse": 5314,
+   "contrazise_de_surse": 1691,
+   "neconfirmate": 1832,
+   "procent_validate_din_cele_verificabile": 75.9
+  },
+  {
+   "regula": "verb_I_ez_participiu_acord",
+   "forme_generate": 8076,
+   "validate_de_surse": 438,
+   "contrazise_de_surse": 10,
+   "neconfirmate": 7628,
+   "procent_validate_din_cele_verificabile": 97.8
+  },
+  {
+   "regula": "verb_I_ez_imperativ",
+   "forme_generate": 5676,
+   "validate_de_surse": 5259,
+   "contrazise_de_surse": 116,
+   "neconfirmate": 301,
+   "procent_validate_din_cele_verificabile": 97.8
+  },
+  {
+   "regula": "verb_IV_esc_participiu_acord",
+   "forme_generate": 5214,
+   "validate_de_surse": 173,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5041,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_i_prezent",
+   "forme_generate": 4800,
+   "validate_de_surse": 1824,
+   "contrazise_de_surse": 893,
+   "neconfirmate": 2083,
+   "procent_validate_din_cele_verificabile": 67.1
+  },
+  {
+   "regula": "verb_IV_i_perfect_simplu",
+   "forme_generate": 4800,
+   "validate_de_surse": 2613,
+   "contrazise_de_surse": 15,
+   "neconfirmate": 2172,
+   "procent_validate_din_cele_verificabile": 99.4
+  },
+  {
+   "regula": "verb_IV_i_mmcp",
+   "forme_generate": 4800,
+   "validate_de_surse": 2286,
+   "contrazise_de_surse": 18,
+   "neconfirmate": 2496,
+   "procent_validate_din_cele_verificabile": 99.2
+  },
+  {
+   "regula": "verb_IV_i_imperfect",
+   "forme_generate": 4800,
+   "validate_de_surse": 1087,
+   "contrazise_de_surse": 1225,
+   "neconfirmate": 2488,
+   "procent_validate_din_cele_verificabile": 47.0
+  },
+  {
+   "regula": "verb_IV_i_conjunctiv",
+   "forme_generate": 4800,
+   "validate_de_surse": 1750,
+   "contrazise_de_surse": 876,
+   "neconfirmate": 2174,
+   "procent_validate_din_cele_verificabile": 66.6
+  },
+  {
+   "regula": "verb_I_a_participiu_acord",
+   "forme_generate": 4419,
+   "validate_de_surse": 377,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 4041,
+   "procent_validate_din_cele_verificabile": 99.7
+  },
+  {
+   "regula": "verb_IV_esc_imperativ",
+   "forme_generate": 3886,
+   "validate_de_surse": 3082,
+   "contrazise_de_surse": 675,
+   "neconfirmate": 129,
+   "procent_validate_din_cele_verificabile": 82.0
+  },
+  {
+   "regula": "verb_I_a_imperativ",
+   "forme_generate": 2946,
+   "validate_de_surse": 1899,
+   "contrazise_de_surse": 436,
+   "neconfirmate": 611,
+   "procent_validate_din_cele_verificabile": 81.3
+  },
+  {
+   "regula": "verb_I_ez_participiu",
+   "forme_generate": 2692,
+   "validate_de_surse": 2692,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_ez_infinitiv",
+   "forme_generate": 2692,
+   "validate_de_surse": 2692,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_ez_gerunziu",
+   "forme_generate": 2692,
+   "validate_de_surse": 2687,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_i_participiu_acord",
+   "forme_generate": 2400,
+   "validate_de_surse": 55,
+   "contrazise_de_surse": 2,
+   "neconfirmate": 2343,
+   "procent_validate_din_cele_verificabile": 96.5
+  },
+  {
+   "regula": "verb_III_e_prezent",
+   "forme_generate": 2316,
+   "validate_de_surse": 1593,
+   "contrazise_de_surse": 146,
+   "neconfirmate": 577,
+   "procent_validate_din_cele_verificabile": 91.6
+  },
+  {
+   "regula": "verb_III_e_perfect_simplu",
+   "forme_generate": 2316,
+   "validate_de_surse": 1293,
+   "contrazise_de_surse": 352,
+   "neconfirmate": 671,
+   "procent_validate_din_cele_verificabile": 78.6
+  },
+  {
+   "regula": "verb_III_e_mmcp",
+   "forme_generate": 2316,
+   "validate_de_surse": 1297,
+   "contrazise_de_surse": 348,
+   "neconfirmate": 671,
+   "procent_validate_din_cele_verificabile": 78.8
+  },
+  {
+   "regula": "verb_III_e_imperfect",
+   "forme_generate": 2316,
+   "validate_de_surse": 1377,
+   "contrazise_de_surse": 276,
+   "neconfirmate": 663,
+   "procent_validate_din_cele_verificabile": 83.3
+  },
+  {
+   "regula": "verb_III_e_conjunctiv",
+   "forme_generate": 2316,
+   "validate_de_surse": 1450,
+   "contrazise_de_surse": 229,
+   "neconfirmate": 637,
+   "procent_validate_din_cele_verificabile": 86.4
+  },
+  {
+   "regula": "verb_IV_esc_participiu",
+   "forme_generate": 1738,
+   "validate_de_surse": 1737,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 1,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_esc_infinitiv",
+   "forme_generate": 1738,
+   "validate_de_surse": 1737,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 1,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_esc_gerunziu",
+   "forme_generate": 1738,
+   "validate_de_surse": 1728,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 10,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_i_imperativ",
+   "forme_generate": 1600,
+   "validate_de_surse": 1036,
+   "contrazise_de_surse": 41,
+   "neconfirmate": 523,
+   "procent_validate_din_cele_verificabile": 96.2
+  },
+  {
+   "regula": "verb_I_a_participiu",
+   "forme_generate": 1473,
+   "validate_de_surse": 1194,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 279,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_a_infinitiv",
+   "forme_generate": 1473,
+   "validate_de_surse": 1216,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 257,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_I_a_gerunziu",
+   "forme_generate": 1473,
+   "validate_de_surse": 1129,
+   "contrazise_de_surse": 50,
+   "neconfirmate": 294,
+   "procent_validate_din_cele_verificabile": 95.8
+  },
+  {
+   "regula": "verb_III_e_participiu_acord",
+   "forme_generate": 1158,
+   "validate_de_surse": 180,
+   "contrazise_de_surse": 11,
+   "neconfirmate": 967,
+   "procent_validate_din_cele_verificabile": 94.2
+  },
+  {
+   "regula": "verb_IV_i_participiu",
+   "forme_generate": 800,
+   "validate_de_surse": 395,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 405,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_i_infinitiv",
+   "forme_generate": 800,
+   "validate_de_surse": 698,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 102,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_i_gerunziu",
+   "forme_generate": 800,
+   "validate_de_surse": 384,
+   "contrazise_de_surse": 3,
+   "neconfirmate": 413,
+   "procent_validate_din_cele_verificabile": 99.2
+  },
+  {
+   "regula": "verb_III_e_imperativ",
+   "forme_generate": 772,
+   "validate_de_surse": 285,
+   "contrazise_de_surse": 28,
+   "neconfirmate": 459,
+   "procent_validate_din_cele_verificabile": 91.1
+  },
+  {
+   "regula": "adj_invariabil",
+   "forme_generate": 687,
+   "validate_de_surse": 659,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 28,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_III_e_participiu",
+   "forme_generate": 386,
+   "validate_de_surse": 293,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 93,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_III_e_infinitiv",
+   "forme_generate": 386,
+   "validate_de_surse": 330,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 56,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_III_e_gerunziu",
+   "forme_generate": 386,
+   "validate_de_surse": 163,
+   "contrazise_de_surse": 115,
+   "neconfirmate": 108,
+   "procent_validate_din_cele_verificabile": 58.6
+  },
+  {
+   "regula": "verb_II_ea_prezent",
+   "forme_generate": 354,
+   "validate_de_surse": 127,
+   "contrazise_de_surse": 187,
+   "neconfirmate": 40,
+   "procent_validate_din_cele_verificabile": 40.4
+  },
+  {
+   "regula": "verb_II_ea_perfect_simplu",
+   "forme_generate": 354,
+   "validate_de_surse": 103,
+   "contrazise_de_surse": 205,
+   "neconfirmate": 46,
+   "procent_validate_din_cele_verificabile": 33.4
+  },
+  {
+   "regula": "verb_II_ea_mmcp",
+   "forme_generate": 354,
+   "validate_de_surse": 104,
+   "contrazise_de_surse": 205,
+   "neconfirmate": 45,
+   "procent_validate_din_cele_verificabile": 33.7
+  },
+  {
+   "regula": "verb_II_ea_imperfect",
+   "forme_generate": 354,
+   "validate_de_surse": 311,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 43,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_II_ea_conjunctiv",
+   "forme_generate": 354,
+   "validate_de_surse": 119,
+   "contrazise_de_surse": 190,
+   "neconfirmate": 45,
+   "procent_validate_din_cele_verificabile": 38.5
+  },
+  {
+   "regula": "verb_II_ea_participiu_acord",
+   "forme_generate": 177,
+   "validate_de_surse": 23,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 154,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_prezent",
+   "forme_generate": 150,
+   "validate_de_surse": 127,
+   "contrazise_de_surse": 1,
+   "neconfirmate": 22,
+   "procent_validate_din_cele_verificabile": 99.2
+  },
+  {
+   "regula": "verb_IV_ăsc_conjunctiv",
+   "forme_generate": 150,
+   "validate_de_surse": 121,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 29,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_perfect_simplu",
+   "forme_generate": 126,
+   "validate_de_surse": 121,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_mmcp",
+   "forme_generate": 126,
+   "validate_de_surse": 121,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_imperfect",
+   "forme_generate": 126,
+   "validate_de_surse": 121,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_II_ea_imperativ",
+   "forme_generate": 118,
+   "validate_de_surse": 40,
+   "contrazise_de_surse": 42,
+   "neconfirmate": 36,
+   "procent_validate_din_cele_verificabile": 48.8
+  },
+  {
+   "regula": "verb_IV_î_prezent",
+   "forme_generate": 78,
+   "validate_de_surse": 38,
+   "contrazise_de_surse": 11,
+   "neconfirmate": 29,
+   "procent_validate_din_cele_verificabile": 77.6
+  },
+  {
+   "regula": "verb_IV_î_perfect_simplu",
+   "forme_generate": 78,
+   "validate_de_surse": 47,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 31,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_mmcp",
+   "forme_generate": 78,
+   "validate_de_surse": 42,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 36,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_imperfect",
+   "forme_generate": 78,
+   "validate_de_surse": 46,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 32,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_conjunctiv",
+   "forme_generate": 78,
+   "validate_de_surse": 36,
+   "contrazise_de_surse": 6,
+   "neconfirmate": 36,
+   "procent_validate_din_cele_verificabile": 85.7
+  },
+  {
+   "regula": "verb_IV_ăsc_participiu_acord",
+   "forme_generate": 63,
+   "validate_de_surse": 0,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 63,
+   "procent_validate_din_cele_verificabile": 0.0
+  },
+  {
+   "regula": "verb_II_ea_participiu",
+   "forme_generate": 59,
+   "validate_de_surse": 54,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 5,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_II_ea_infinitiv",
+   "forme_generate": 59,
+   "validate_de_surse": 55,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 4,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_II_ea_gerunziu",
+   "forme_generate": 59,
+   "validate_de_surse": 20,
+   "contrazise_de_surse": 32,
+   "neconfirmate": 7,
+   "procent_validate_din_cele_verificabile": 38.5
+  },
+  {
+   "regula": "verb_IV_ăsc_imperativ",
+   "forme_generate": 48,
+   "validate_de_surse": 41,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 7,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_participiu_acord",
+   "forme_generate": 39,
+   "validate_de_surse": 2,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 37,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_imperativ",
+   "forme_generate": 26,
+   "validate_de_surse": 12,
+   "contrazise_de_surse": 3,
+   "neconfirmate": 11,
+   "procent_validate_din_cele_verificabile": 80.0
+  },
+  {
+   "regula": "verb_IV_ăsc_participiu",
+   "forme_generate": 21,
+   "validate_de_surse": 21,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_infinitiv",
+   "forme_generate": 21,
+   "validate_de_surse": 21,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_ăsc_gerunziu",
+   "forme_generate": 21,
+   "validate_de_surse": 21,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 0,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_participiu",
+   "forme_generate": 13,
+   "validate_de_surse": 7,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 6,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_infinitiv",
+   "forme_generate": 13,
+   "validate_de_surse": 12,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 1,
+   "procent_validate_din_cele_verificabile": 100.0
+  },
+  {
+   "regula": "verb_IV_î_gerunziu",
+   "forme_generate": 13,
+   "validate_de_surse": 7,
+   "contrazise_de_surse": 0,
+   "neconfirmate": 6,
+   "procent_validate_din_cele_verificabile": 100.0
+  }
+ ],
+ "5_categorii_gramaticale": {
+  "reprezentate": [
+   "ADJ",
+   "ADP",
+   "ADV",
+   "AUX",
+   "CCONJ",
+   "DET",
+   "INTJ",
+   "NOUN",
+   "NUM",
+   "PART",
+   "PRON",
+   "PROPN",
+   "SCONJ",
+   "VERB",
+   "X"
+  ],
+  "lipsa_din_inventar": []
+ },
+ "6_trasaturi_morfologice": {
+  "inventar": 71,
+  "perechi_cheie_valoare_folosite": {
+   "Abbr=Yes": 311,
+   "AdpType=Prep": 149,
+   "Case=Acc": 146,
+   "Case=Acc,Nom": 429706,
+   "Case=Dat": 47,
+   "Case=Dat,Gen": 445654,
+   "Case=Gen": 30,
+   "Case=Nom": 2,
+   "Case=Voc": 194042,
+   "Definite=Def": 818938,
+   "Definite=Ind": 444177,
+   "Degree=Cmp": 5,
+   "Degree=Pos": 431134,
+   "Degree=Sup": 9,
+   "ExtPos=ADJ": 8,
+   "ExtPos=ADP": 27,
+   "ExtPos=ADV": 57,
+   "ExtPos=CCONJ": 8,
+   "ExtPos=DET": 2,
+   "ExtPos=INTJ": 1,
+   "ExtPos=PRON": 3,
+   "ExtPos=SCONJ": 19,
+   "Foreign=Yes": 83,
+   "Gender=Fem": 936201,
+   "Gender=Masc": 403849,
+   "Mood=Imp": 22475,
+   "Mood=Ind": 185699,
+   "Mood=Sub": 51167,
+   "NumForm=Combi": 112,
+   "NumForm=Roman": 28,
+   "NumForm=Word": 127,
+   "NumType=Card": 190,
+   "NumType=Ord": 86,
+   "Number=Plur": 750099,
+   "Number=Sing": 837078,
+   "Number[psor]=Plur": 20,
+   "Number[psor]=Sing": 35,
+   "PartType=Inf": 1,
+   "Person=1": 77540,
+   "Person=2": 99558,
+   "Person=3": 82730,
+   "Polarity=Neg": 12622,
+   "Polarity=Pos": 36,
+   "Position=Postnom": 29,
+   "Position=Prenom": 64,
+   "Poss=Yes": 61,
+   "PronType=Art": 8,
+   "PronType=Dem": 122,
+   "PronType=Emp": 13,
+   "PronType=Ind": 134,
+   "PronType=Int,Rel": 38,
+   "PronType=Neg": 25,
+   "PronType=Prs": 167,
+   "PronType=Tot": 6,
+   "Reflex=Yes": 12,
+   "Strength=Strong": 38,
+   "Strength=Weak": 66,
+   "Tense=Fut": 1,
+   "Tense=Imp": 46880,
+   "Tense=Past": 43708,
+   "Tense=Pqp": 43715,
+   "Tense=Pres": 109750,
+   "Typo=Yes": 22,
+   "Variant=Short": 314,
+   "VerbForm=Fin": 259338,
+   "VerbForm=Ger": 7543,
+   "VerbForm=Inf": 7190,
+   "VerbForm=Part": 28825
+  },
+  "combinatii_distincte_de_trasaturi": 532,
+  "forme_fara_trasaturi": 142915,
+  "valori_din_inventar_nefolosite": [
+   "Gender=Neut",
+   "NumForm=Digit",
+   "VerbForm=Sup"
+  ]
+ },
+ "7_reguli": {
+  "pe_tip_si_statut": {
+   "acord/evaluata": 7,
+   "acord/implementata": 2,
+   "dezambiguizare/evaluata": 9,
+   "dezambiguizare/implementata": 1,
+   "morfologie/implementata": 16,
+   "sintaxa/evaluata": 7,
+   "sintaxa/implementata": 10
+  },
+  "total": 52,
+  "relatii_sintactice_in_inventar": 49
+ },
+ "8_sensuri": {
+  "total": 201539,
+  "pe_sursa": {
+   "rown": 86347,
+   "wiktionary_kaikki": 115192
+  },
+  "concepte": 59348,
+  "concepte_cu_definitie": 59348,
+  "lexeme_cu_cel_putin_un_sens": 127308,
+  "lexeme_cu_sens_in_romana_rown": 53239,
+  "lexeme_fara_niciun_sens": 66368,
+  "lexeme_polisemantice_rown": 13457
+ },
+ "9_relatii_semantice": {
+  "total": 158112,
+  "pe_tip": {
+   "hypernym": 48320,
+   "hyponym": 47871,
+   "synonym": 11764,
+   "holo_part": 5573,
+   "mero_part": 5564,
+   "similar": 4838,
+   "related": 4615,
+   "antonym": 4422,
+   "instance_hypernym": 3889,
+   "instance_hyponym": 3889,
+   "domain_topic": 3822,
+   "has_domain_topic": 3822,
+   "derived": 2531,
+   "holo_member": 2047,
+   "mero_member": 2044,
+   "attribute": 958,
+   "has_domain_region": 756,
+   "holo_substance": 410,
+   "mero_substance": 410,
+   "entails": 371,
+   "causes": 196
+  },
+  "pe_nivel": {
+   "concept": 138592,
+   "lexem": 19520
+  },
+  "cicluri_in_ierarhii_din_sursa": 1
+ },
+ "10_expresii_si_locutiuni": {
+  "lexeme_multicuvant": 25671,
+  "pe_categorie": {
+   "NOUN": 16463,
+   "PROPN": 4073,
+   "VERB": 3275,
+   "ADV": 879,
+   "ADJ": 414,
+   "ADP": 183,
+   "X": 128,
+   "NUM": 92,
+   "INTJ": 84,
+   "SCONJ": 53,
+   "CCONJ": 15,
+   "PRON": 8,
+   "PART": 2,
+   "DET": 2
+  },
+  "pe_sursa": {
+   "rlc_reguli": 68,
+   "rown": 17864,
+   "ud_rrt": 366,
+   "wiktionary_kaikki": 8924
+  }
+ },
+ "11_evaluare": {
+  "evaluare_evaluare": {
+   "set": "evaluare",
+   "versiune_motor": "0.1.0",
+   "propozitii": 729,
+   "durata_secunde": 3.7,
+   "tokenizare": {
+    "propozitii_identice": 691,
+    "propozitii_diferite": 38,
+    "procent_identice": 94.8
+   },
+   "tokeni_evaluati": 12992,
+   "acuratete": {
+    "categorie_upos": 93.16,
+    "lema": 94.09,
+    "trasaturi_si_categorie": 89.05,
+    "analiza_completa": 88.51,
+    "UAS": 67.13,
+    "LAS": 58.13
+   },
+   "ambiguitate": {
+    "tokeni_cu_mai_multi_candidati": 9588,
+    "din_care_categorie_corecta": 8809,
+    "marcati_ambigui": 1570,
+    "marcati_ambigui_cu_categorie_corecta": 1180
+   },
+   "necunoscute": {
+    "tokeni": 67,
+    "procent_din_tokenii_nostri": 0.41
+   },
+   "alarme_false_acord": {
+    "acord_subiect_predicat": 19,
+    "acord_subst_adj": 18,
+    "acord_subst_det": 2,
+    "numeral_de": 4,
+    "acord_al": 5
+   },
+   "alarme_false_la_100_propozitii": 6.58,
+   "definitii": "acuratețile sunt pe tokenii nepunctuație din propozițiile cu tokenizare identică cu a corpusului; LAS ignoră subtipurile relațiilor (după „:”)"
+  },
+  "evaluare_dezvoltare": {
+   "set": "dezvoltare",
+   "versiune_motor": "0.1.0",
+   "propozitii": 752,
+   "durata_secunde": 3.6,
+   "tokenizare": {
+    "propozitii_identice": 724,
+    "propozitii_diferite": 28,
+    "procent_identice": 96.3
+   },
+   "tokeni_evaluati": 14376,
+   "acuratete": {
+    "categorie_upos": 94.15,
+    "lema": 94.49,
+    "trasaturi_si_categorie": 91.24,
+    "analiza_completa": 90.64,
+    "UAS": 68.31,
+    "LAS": 59.39
+   },
+   "ambiguitate": {
+    "tokeni_cu_mai_multi_candidati": 10638,
+    "din_care_categorie_corecta": 9806,
+    "marcati_ambigui": 1765,
+    "marcati_ambigui_cu_categorie_corecta": 1343
+   },
+   "necunoscute": {
+    "tokeni": 21,
+    "procent_din_tokenii_nostri": 0.12
+   },
+   "alarme_false_acord": {
+    "acord_subst_adj": 20,
+    "acord_subst_det": 2,
+    "acord_subiect_predicat": 9,
+    "numeral_de": 7,
+    "acord_al": 3
+   },
+   "alarme_false_la_100_propozitii": 5.45,
+   "definitii": "acuratețile sunt pe tokenii nepunctuație din propozițiile cu tokenizare identică cu a corpusului; LAS ignoră subtipurile relațiilor (după „:”)"
+  }
+ },
+ "12_ambiguitati": {
+  "evaluare_evaluare": {
+   "tokeni_cu_mai_multi_candidati": 9588,
+   "din_care_categorie_corecta": 8809,
+   "marcati_ambigui": 1570,
+   "marcati_ambigui_cu_categorie_corecta": 1180
+  },
+  "evaluare_dezvoltare": {
+   "tokeni_cu_mai_multi_candidati": 10638,
+   "din_care_categorie_corecta": 9806,
+   "marcati_ambigui": 1765,
+   "marcati_ambigui_cu_categorie_corecta": 1343
+  }
+ },
+ "13_neacoperite": {
+  "masurate": {
+   "substantive_fara_gen_(fara_paradigma)": 19724,
+   "lexeme_cu_categorie_necunoscuta_X": 133,
+   "cuvinte_doar_ortografice_fara_analiza": 33110,
+   "lexeme_fara_sens_documentat": 66368,
+   "forme_generate_neconfirmate": 810766,
+   "reguli_de_paradigma_contrazise_(forme)": 22712,
+   "verbe_cu_grup_de_conjugare_nedeterminat": 292
+  },
+  "declarate": [
+   "verbele neregulate (a fi, a avea, a vrea, a da, a sta, a lua, a bea, a ști, a mânca…): formele vin doar din surse (Wiktionary/UD/Hunspell), nu din paradigme",
+   "alternanțele vocalice/consonantice neregulate la plural (om→oameni, băiat→băieți) și la verbe (a purta → port): paradigma e contrazisă de surse și rămâne „generat”",
+   "gradele de comparație sunt tratate sintactic (mai/cel mai/foarte + adjectiv), nu ca forme",
+   "sintaxa: arbore de dependențe de bază (fără valență verbală, fără coreferință); atașarea grupurilor prepoziționale rămâne ambiguă",
+   "semantica: glosele Wiktionary sunt în engleză; sensurile RoWordNet acoperă doar lexemele din RoWN; fără restricții de selecție din surse (doar animat/inanimat din ierarhia RoWN)",
+   "dezambiguizarea sensurilor: metodă de suprapunere lexicală (Lesk) explicabilă, fără evaluare pe un corpus adnotat semantic",
+   "dialoguri / contextul conversației: infrastructura există (tabela contexte, parametrul context), dar nu influențează încă analiza",
+   "textul fără diacritice: potrivirea pe forma plată există, dar ambiguitatea crește (mult/mulț, sa/să)"
+  ]
+ }
+}

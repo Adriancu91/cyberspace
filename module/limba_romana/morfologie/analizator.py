@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from ..baza import Baza, desparte_trasaturi
+from ..baza import Baza, canonic_trasaturi, desparte_trasaturi
 from ..text import are_diacritice, fara_diacritice, normalizeaza
 
 RE_NUMAR = re.compile(r"^\d+(?:[.,]\d+)*(?:%|‰)?$")
@@ -65,7 +65,8 @@ class Analizator:
     def analizeaza(self, text: str, tip: str = "cuvant") -> list[Analiza]:
         """Toate analizele pentru un token. `tip` vine de la tokenizator (numar, punct, abrev, cuvant, clitic)."""
         if tip == "numar" or RE_NUMAR.match(text):
-            return [Analiza(text, text, None, "NUM", {"NumForm": "Digit", "NumType": "Card"}, "special", dovezi=["număr scris cu cifre"])]
+            numar = "Plur" if text.endswith(("%", "‰")) else "Sing"
+            return [Analiza(text, text, None, "NUM", {"NumForm": "Digit", "NumType": "Card", "Number": numar}, "special", dovezi=["număr scris cu cifre"])]
         if tip == "punct" or RE_PUNCT.match(text):
             return [Analiza(text, text, None, "PUNCT", {}, "special", dovezi=["punctuație"])]
         if tip == "ora":
@@ -86,8 +87,9 @@ class Analizator:
     def _din_baza(self, text: str) -> list[Analiza]:
         randuri = self.baza.cauta_forma(text, si_fara_diacritice=True)
         rez: list[Analiza] = []
+        vazute: dict[tuple[str, str], Analiza] = {}
         for r in randuri:
-            tr = desparte_trasaturi(r["trasaturi"])
+            tr = {k: v for k, v in desparte_trasaturi(r["trasaturi"]).items() if k != "ExtPos"}
             if r["gen"] and r["pos"] in ("NOUN", "PROPN") and "Gender" not in tr and tr.get("Number"):
                 tr["Gender"] = {"Neut": "Masc" if tr["Number"] == "Sing" else "Fem"}.get(r["gen"], r["gen"])
             frecv = sum(p["frecventa"] for p in r["provenienta"] if p["sursa_id"] == "ud_rrt")
@@ -102,6 +104,13 @@ class Analizator:
             if incredere == "fara_diacritice":
                 dovezi.append("potrivire fără diacritice (textul nu avea diacritice sau forma e altfel scrisă)")
             a = Analiza(r["forma"], r["lema"], r["lexem_id"], r["pos"], tr, incredere, r["statut"], r["gen"], bool(r["multicuvant"]), frecv, dovezi, r["atribute"])
+            cheie = (r["lexem_id"], canonic_trasaturi(tr))
+            if cheie in vazute:   # același lexem și aceleași trăsături (rânduri care difereau doar prin ExtPos): contopim dovezile
+                vazute[cheie].frecventa += frecv
+                if r["statut"] == "validat":
+                    vazute[cheie].statut = "validat"
+                continue
+            vazute[cheie] = a
             rez.append(a)
         # un cuvânt cu majusculă necunoscut altfel decât ca nume propriu rămâne și ipoteză de nume propriu
         if text[:1].isupper() and not any(a.pos == "PROPN" for a in rez):

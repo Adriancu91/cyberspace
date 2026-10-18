@@ -182,7 +182,7 @@ def gen_lexem_din_kaikki(etichete: list[str]) -> str | None:
 # ---- anotările din Hunspell ro_RO.aff (de ex. „s.f.sg.art.”, „s.f.pl.dat.”) → inventar ----------------------
 def din_hunspell(anotare: str) -> dict[str, str]:
     t: dict[str, str] = {}
-    bucati = [b for b in anotare.lower().strip(".").split(".") if b]
+    bucati = [b.strip() for b in anotare.lower().replace(" ", ".").split(".") if b.strip()]
     for b in bucati:
         if b == "sg":
             t["Number"] = "Sing"
@@ -219,7 +219,9 @@ def canonic_pentru_pos(pos: str, trasaturi: dict[str, str], gen_lexem: str | Non
       la formele nearticulate sincretice (masculin singular și toate pluralele), ca în UD;
     - adjective: `Degree=Pos` implicit;
     - participii: Gender/Number implicite Masc/Sing (forma de dicționar)."""
-    t = dict(trasaturi)
+    t = {k: v for k, v in trasaturi.items() if k != "ExtPos"}   # ExtPos e proprietatea expresiei fixe, nu a formei
+    if pos == "PROPN" and t.get("Case") not in ("Dat,Gen", "Voc") and t.get("Definite") != "Def":
+        return {k: v for k, v in t.items() if k in ("Abbr", "Foreign")}   # UD RRT: numele proprii au trăsături doar când sunt flexionate
     if pos in ("NOUN", "PROPN", "ADJ", "NUM", "DET"):
         if "Gender" not in t and gen_lexem in ("Masc", "Fem", "Neut") and pos in ("NOUN", "PROPN"):
             if gen_lexem == "Neut":

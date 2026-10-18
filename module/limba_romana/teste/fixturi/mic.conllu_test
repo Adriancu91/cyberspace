@@ -1,0 +1,7 @@
+# sent_id = test-3
+# text = Copiii citesc cărți.
+1	Copiii	copil	NOUN	Ncmpry	Case=Acc,Nom|Definite=Def|Gender=Masc|Number=Plur	2	nsubj	_	_
+2	citesc	citi	VERB	Vmip3p	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	cărți	carte	NOUN	Ncfp-n	Definite=Ind|Gender=Fem|Number=Plur	2	obj	_	SpaceAfter=No
+4	.	.	PUNCT	PERIOD	_	2	punct	_	_
+

@@ -20,8 +20,8 @@ NUMERALE_CUVANT = {"zero": 0, "unu": 1, "una": 1, "un": 1, "o": 1, "doi": 2, "do
                    "șaptesprezece": 17, "optsprezece": 18, "nouăsprezece": 19, "douăzeci": 20, "treizeci": 30, "patruzeci": 40, "cincizeci": 50, "șaizeci": 60,
                    "șaptezeci": 70, "optzeci": 80, "nouăzeci": 90, "sută": 100, "sute": 100, "mie": 1000, "mii": 1000, "milion": 1000000, "milioane": 1000000,
                    "miliard": 10 ** 9, "miliarde": 10 ** 9}
-VERBE_FARA_OBIECT = {"fi", "veni", "pleca", "sosi", "apărea", "exista", "rămâne", "sta", "trece", "muri", "ajunge", "începe", "urma", "părea", "lipsi",
-                     "intra", "ieși", "cădea", "crește", "scădea", "dispărea", "zbura", "dormi", "râde", "plânge", "merge", "alerga", "trăi", "sta", "stărui"}
+VERBE_FARA_OBIECT = {"fi", "veni", "pleca", "sosi", "apărea", "exista", "muri", "părea", "lipsi", "intra", "ieși", "cădea", "dispărea", "zbura", "dormi",
+                     "râde", "plânge", "trăi"}
 # unități de măsură, monede și luni: „200 lei”, „30 aprilie” sunt uzuale/corecte; nu aplicăm regula „de”
 FARA_DE = {"lei", "leu", "euro", "dolari", "bani", "km", "kg", "g", "m", "cm", "mm", "l", "ml", "ha", "mp", "kw", "mw", "gb", "mb", "ianuarie", "februarie",
            "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie", "grade", "volți", "amperi", "la", "sută", "sute", "mii", "mie"}
@@ -75,6 +75,10 @@ def grupuri_nominale(prop: Propozitie) -> list[Grup]:
             inceput = i
             j = i - 1
             while j >= 0 and prop.cuvinte[j].pos in ("DET", "NUM", "ADJ") and prop.cuvinte[j].grup is None:
+                if prop.cuvinte[j].pos == "DET" and prop.cuvinte[j].a.lema == "al":
+                    break  # „turul doi al alegerilor”: al/a/ai/ale începe dependentul genitival, nu grupul următor
+                if prop.cuvinte[j].pos == "ADJ" and prop.cuvinte[j].text[:1].isupper() and j > 0:
+                    break  # adjectiv cu majusculă în interiorul propoziției: parte a unui nume (Comisia Europeană pentru … Alimentar)
                 if prop.cuvinte[j].pos == "ADJ" and prop.cuvinte[j].tr("Definite") == "Def" and c.tr("Definite") == "Def":
                     break  # „albeața paginii”: un „adjectiv” articulat înaintea unui substantiv articulat e de fapt substantiv (cap propriu)
                 if prop.cuvinte[j].pos == "DET" and prop.cuvinte[j].tr("PronType") == "Art" and normalizeaza(prop.cuvinte[j].text) == "lui":
@@ -141,16 +145,19 @@ def verifica_acord_grup(baza: Baza, prop: Propozitie, g: Grup) -> list[Problema]
         return probleme
     def_c = cap.tr("Definite")
     # analizele plauzibile ale capului (sincretisme: „politici” = plural sau genitiv singular)
-    analize_cap = [x.analiza for x in cap.candidati if x.analiza.pos == cap.pos and x.analiza.lema == cap.a.lema and x.scor >= cap.candidati[0].scor - 1.5]
+    analize_cap = [x.analiza for x in cap.candidati if x.analiza.pos in ("NOUN", "PROPN") and x.scor >= cap.candidati[0].scor - 1.5]
     for idx in g.membri:
         if idx == g.cap:
             continue
         cuv = prop.cuvant(idx)
         a = cuv.a
-        if cuv.ambiguu and any(x.analiza.pos != a.pos for x in cuv.candidati[1:3]):
-            continue  # nu reclamăm acordul pe un cuvânt a cărui categorie nu e sigură
         if a.pos not in ("ADJ", "DET", "NUM"):
             continue
+        if a.pos == "ADJ" and cuv.text[:1].isupper() and idx > 1:
+            continue  # parte a unui nume propriu
+        if a.pos == "NUM" and idx > g.cap:
+            continue  # numeral postpus cu valoare ordinală (turul doi, anexa II)
+        ambiguu_categorie = cuv.ambiguu and any(x.analiza.pos != a.pos for x in cuv.candidati[1:3])
         if a.pos == "DET" and a.tr("PronType") == "Art":
             continue  # „lui” proclitic
         if a.pos == "DET" and a.lema == "al":
@@ -166,7 +173,7 @@ def verifica_acord_grup(baza: Baza, prop: Propozitie, g: Grup) -> list[Problema]
         potrivit = None
         for cand in cuv.candidati:
             t = cand.analiza.trasaturi
-            if cand.analiza.pos != a.pos or cand.analiza.lema != a.lema:
+            if cand.analiza.pos not in ("ADJ", "DET", "NUM") or not t:
                 continue
             for ac in analize_cap:
                 g_c, n_c, c_c = ac.trasaturi.get("Gender"), ac.trasaturi.get("Number"), ac.trasaturi.get("Case")
@@ -204,7 +211,7 @@ def verifica_acord_grup(baza: Baza, prop: Propozitie, g: Grup) -> list[Problema]
         regula = "subst_adj" if a.pos == "ADJ" else ("doi_doua" if a.pos == "NUM" else "subst_det")
         probleme.append(Problema("acord_subst_adj" if a.pos == "ADJ" else "acord_subst_det", [idx, g.cap],
                                  f"{ce} „{cuv.text}” ({desc_a or 'fără gen/număr'}) nu se acordă cu substantivul „{cap.text}” ({desc_c}).",
-                                 regula, sugestie, "sigura" if cap.a.incredere == "baza" and a.incredere == "baza" and not cuv.ambiguu else "probabila"))
+                                 regula, sugestie, "sigura" if cap.a.incredere == "baza" and a.incredere == "baza" and not ambiguu_categorie else "probabila"))
     return probleme
 
 
@@ -218,14 +225,16 @@ def verifica_al(baza: Baza, prop: Propozitie) -> list[Problema]:
         posedat = None
         for j in range(i - 1, max(-1, i - 5), -1):
             cj = prop.cuvinte[j]
-            if cj.pos in ("NOUN", "PRON", "NUM") and cj.grup is not None:
-                posedat = prop.cuvant(prop.grupuri[cj.grup].cap) if cj.pos == "NOUN" else cj
+            if cj.pos == "NOUN" and cj.grup is not None:
+                posedat = prop.cuvant(prop.grupuri[cj.grup].cap)
                 break
-            if cj.pos in ("NOUN", "PROPN"):
+            if cj.pos in ("NOUN", "PROPN", "PRON"):
                 posedat = cj
                 break
             if cj.pos not in ("ADJ", "NUM", "ADV"):
                 break  # între obiectul posedat și „al” pot sta doar adjective/numerale; altfel nu verificăm
+        if posedat is not None and posedat.tr("Case") == "Dat,Gen":
+            continue  # „în vederea consumului uman a …”: posedatul e el însuși genitiv; posesorul se leagă mai sus
         if posedat is None or posedat.pos == "PROPN":
             continue
         inceput_grup = prop.grupuri[posedat.grup].inceput - 1 if posedat.grup is not None else posedat.idx - 1
@@ -271,7 +280,7 @@ def verifica_numerale(baza: Baza, prop: Propozitie) -> list[Problema]:
             if subst.pos == "ADJ" and urm2 is not None and urm2.pos == "NOUN":
                 subst = urm2
         if subst is None or subst.pos not in ("NOUN",) or subst.text in ("%",) or len(subst.text) <= 2 or subst.tr("Abbr") == "Yes" or subst.a.incredere != "baza" \
-                or normalizeaza(subst.text) in FARA_DE or subst.ambiguu or any(x.analiza.pos in ("ADJ", "VERB") for x in subst.candidati[:2]):
+                or normalizeaza(subst.text) in FARA_DE or any(x.analiza.pos in ("ADJ", "VERB") and x.scor >= subst.candidati[0].scor - 1.0 for x in subst.candidati):
             i = ultim + 1
             continue
         ultimele_doua = valoare % 100
@@ -336,12 +345,17 @@ def gaseste_subiect(prop: Propozitie, iv: int) -> tuple[Cuvant | None, str, list
             continue
         if c.pos in ("VERB", "AUX", "SCONJ", "CCONJ") or (c.pos == "PRON" and c.tr("PronType") == "Int,Rel") or c.tip == "punct" or c.pos == "PART" and normalizeaza(c.text) in ("să", "s-"):
             break
+        if any(getattr(prop.cuvinte[k], "atribute_expresie", None) and k <= j < k + prop.cuvinte[k].atribute_expresie[0] and prop.cuvinte[k].a.multicuvant for k in range(max(0, j - 3), j + 1)):
+            continue  # cuvânt dintr-o locuțiune recunoscută (pe urmă, în loc de): nu e subiect
         if candidat(j):
             # „Maria și Ion merge”: dacă e al doilea termen al unei coordonări cu „și”, pornim de la primul
             k = j
-            while k - 2 >= 0 and normalizeaza(prop.cuvinte[k - 1].text) == "și":
-                st = prop.cuvinte[k - 2]
-                cap_st = prop.grupuri[st.grup].cap - 1 if st.grup is not None else k - 2
+            while True:
+                inc = prop.grupuri[prop.cuvinte[k].grup].inceput - 1 if prop.cuvinte[k].grup is not None else k
+                if inc - 2 < 0 or normalizeaza(prop.cuvinte[inc - 1].text) != "și":
+                    break
+                st = prop.cuvinte[inc - 2]
+                cap_st = prop.grupuri[st.grup].cap - 1 if st.grup is not None else inc - 2
                 if candidat(cap_st):
                     k = cap_st
                 else:
@@ -356,7 +370,7 @@ def gaseste_subiect(prop: Propozitie, iv: int) -> tuple[Cuvant | None, str, list
             c = prop.cuvinte[j]
             if (c.pos in ("VERB", "AUX") and not (j == iv + 1 and c.tr("VerbForm") in ("Part", "Inf"))) or c.pos in ("SCONJ", "ADP") or c.tip == "punct":
                 break
-            if candidat(j) and not any(x.analiza.pos == "ADJ" for x in c.candidati[:3]):
+            if candidat(j) and not any(x.analiza.pos == "ADJ" for x in c.candidati[:3]) and not (c.pos == "PRON" and c.tr("PronType") != "Prs"):
                 return _cap_cu_coordonare(prop, j)
     return None, "", []
 
@@ -372,16 +386,19 @@ def _cap_cu_coordonare(prop: Propozitie, j: int) -> tuple[Cuvant, str, list[int]
     membri = [c.idx]
     persoana = c.tr("Person", "3") or "3"
     numar = c.tr("Number")
-    # coordonare: „Ion și Maria”, „eu și tu”
-    k = j + 1
+    # coordonare: „Ion și Maria”, „eu și tu”, „toată mintea și tot trupul”
+    k = (prop.grupuri[c.grup].sfarsit if c.grup is not None else c.idx)   # 0-based al următorului = sfârșitul grupului (1-based)
     plural = False
-    while k + 1 < len(prop.cuvinte) and normalizeaza(prop.cuvinte[k].text) in ("și",) and prop.cuvinte[k + 1].pos in ("NOUN", "PROPN", "PRON"):
-        if normalizeaza(prop.cuvinte[k].text) == "și":
-            membri.append(prop.cuvinte[k + 1].idx)
-            plural = True
-            p2 = prop.cuvinte[k + 1].tr("Person", "3") or "3"
-            persoana = min(persoana, p2)
-        k += 2
+    while k + 1 < len(prop.cuvinte) and normalizeaza(prop.cuvinte[k].text) == "și":
+        urm = prop.cuvinte[k + 1]
+        cap_urm = prop.grupuri[urm.grup].cap - 1 if urm.grup is not None else k + 1
+        if prop.cuvinte[cap_urm].pos not in ("NOUN", "PROPN", "PRON"):
+            break
+        membri.append(prop.cuvinte[cap_urm].idx)
+        plural = True
+        p2 = prop.cuvinte[cap_urm].tr("Person", "3") or "3"
+        persoana = min(persoana, p2)
+        k = prop.grupuri[prop.cuvinte[cap_urm].grup].sfarsit if prop.cuvinte[cap_urm].grup is not None else cap_urm + 1
     if plural:
         numar = "Plur"
     return c, f"{persoana}|{numar or ''}", membri

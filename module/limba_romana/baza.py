@@ -243,19 +243,19 @@ class Baza:
     # ---- statutul formelor --------------------------------------------------------------------------------
     def recalculeaza_statut_forme(self) -> dict[str, int]:
         """Statutul unei forme vine din proveniențele ei:
-        - `validat`: cel puțin două surse independente (de ex. atestată de Wiktionary + generată de Hunspell/paradigme);
-        - `atestat`: cel puțin o proveniență de tip atestare (corpus, tabel de flexiune, intrare explicită);
+        - `validat`: cel puțin o ATESTARE (corpus, tabel de flexiune, intrare explicită) + încă o sursă diferită
+          (altă atestare sau o regulă care o generează); două reguli care coincid NU validează (sunt tot reguli);
+        - `atestat`: cel puțin o atestare, dintr-o singură sursă;
         - `generat`: doar reguli (afixe Hunspell / paradigme proprii)."""
         self.con.execute("""
             WITH p AS (
                 SELECT forma_id,
                        COUNT(DISTINCT sursa_id) AS surse,
-                       SUM(CASE WHEN origine LIKE 'atestare%' THEN 1 ELSE 0 END) AS atestari,
-                       SUM(CASE WHEN origine LIKE 'regula%' THEN 1 ELSE 0 END) AS reguli
+                       COUNT(DISTINCT CASE WHEN origine LIKE 'atestare%' THEN sursa_id END) AS surse_atestare
                 FROM forme_provenienta GROUP BY forma_id)
             UPDATE forme SET statut = (
-                SELECT CASE WHEN p.surse >= 2 THEN 'validat'
-                            WHEN p.atestari > 0 THEN 'atestat'
+                SELECT CASE WHEN p.surse_atestare >= 1 AND p.surse >= 2 THEN 'validat'
+                            WHEN p.surse_atestare >= 1 THEN 'atestat'
                             ELSE 'generat' END FROM p WHERE p.forma_id = forme.id)
         """)
         rez = {r[0]: r[1] for r in self.con.execute("SELECT statut, COUNT(*) FROM forme GROUP BY statut")}

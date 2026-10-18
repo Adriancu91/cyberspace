@@ -54,13 +54,25 @@ def _acord(a: dict[str, str], b: dict[str, str], chei: tuple[str, ...] = ("Gende
     return all(a[k] == b[k] for k in comune)
 
 
+def _substantiv_probabil(cuv: Cuvant) -> bool:
+    """Un vecin „substantiv” doar dacă analiza lui cea mai bună e substantiv (sau un substantiv e aproape de ea și cea mai bună nu e cuvânt-unealtă)."""
+    if not cuv.candidati:
+        return False
+    cel_mai_bun = max(cuv.candidati, key=lambda c: c.scor)
+    if cel_mai_bun.analiza.pos in ("NOUN", "PROPN"):
+        return True
+    if cel_mai_bun.analiza.pos in ("AUX", "PART", "ADP", "VERB", "PRON", "DET", "CCONJ", "SCONJ", "PUNCT"):
+        return False
+    return any(c.analiza.pos in ("NOUN", "PROPN") and c.scor >= cel_mai_bun.scor - 1.0 for c in cuv.candidati)
+
+
 def _subst_vecin(prop: Propozitie, i: int, directie: int, maxim: int = 3) -> Cuvant | None:
-    """Cel mai apropiat cuvânt cu candidat substantiv, în direcția dată (sărind peste adjective/numerale/determinanți)."""
+    """Cel mai apropiat cuvânt-substantiv probabil, în direcția dată (sărind peste adjective/numerale/determinanți)."""
     j = i + directie
     pasi = 0
     while 0 <= j < len(prop.cuvinte) and pasi < maxim:
         cuv = prop.cuvinte[j]
-        if _vreun(cuv, "NOUN") or _vreun(cuv, "PROPN"):
+        if _substantiv_probabil(cuv):
             return cuv
         if not (_vreun(cuv, "ADJ") or _vreun(cuv, "NUM") or _vreun(cuv, "DET") or _vreun(cuv, "ADV")):
             return None
@@ -99,8 +111,12 @@ def scoreaza(prop: Propozitie, subiect_persoana: dict[int, tuple[str, str]] | No
             w = PONDERI.get(a.statut, 0.0) if a.incredere in ("baza", "fara_diacritice") else PONDERI.get(a.incredere, 0.0)
             c.scor += w
             c.motive.append(f"statut_forma: {a.statut or a.incredere} ({w:+.1f})")
-            if a.multicuvant and " " not in cuv.text:
-                c.scor -= 3.0
+            if a.multicuvant:
+                exp = getattr(cuv, "atribute_expresie", None)
+                if exp and normalizeaza(exp[1]) == normalizeaza(a.forma):
+                    c.scor += 4.0; c.motive.append(f"expresie: locuțiunea „{exp[1]}” e recunoscută în bază (+4)")
+                else:
+                    c.scor -= 3.0; c.motive.append("expresie multicuvânt nepotrivită (-3)")
             if a.incredere == "fara_diacritice":
                 c.scor += PONDERI["fara_diacritice"]
                 c.motive.append("potrivire fără diacritice (-0.5)")
@@ -166,11 +182,11 @@ def scoreaza(prop: Propozitie, subiect_persoana: dict[int, tuple[str, str]] | No
                     c.scor += PONDERI["decisiv"]; c.motive.append("dupa_sa: „fi/fost” + participiu → auxiliar (+3)")
                 elif a.pos == "VERB":
                     c.scor -= 2.0; c.motive.append("dupa_sa: „fi/fost” + participiu: aici „a fi” e auxiliar, nu predicativ (-2)")
-            if ant_norm in ("fost", "fi") and a.trasaturi.get("VerbForm") == "Part":
-                if a.pos == "VERB":
-                    c.scor += PONDERI["puternic"]; c.motive.append("diateza: participiu după „fost/fi” → verb la pasiv / timp compus (+2)")
-            if ant_norm in ("fost", "fi") and a.pos == "ADJ" and any(x.analiza.pos == "VERB" and x.analiza.trasaturi.get("VerbForm") == "Part" for x in cuv.candidati):
-                c.scor -= 1.0; c.motive.append("diateza: după „fost/fi” forma e mai degrabă participiu verbal decât adjectiv (-1)")
+            dupa_a_fi = ant is not None and ant.candidati and ant.candidati[0].analiza.lema == "fi" and ant.candidati[0].analiza.pos in ("AUX", "VERB")
+            if dupa_a_fi and a.trasaturi.get("VerbForm") == "Part" and a.pos == "VERB":
+                c.scor += PONDERI["puternic"]; c.motive.append("diateza: participiu după o formă a lui „a fi” → pasiv / timp compus (+2)")
+            if dupa_a_fi and a.pos == "ADJ" and any(x.analiza.pos == "VERB" and x.analiza.trasaturi.get("VerbForm") == "Part" for x in cuv.candidati):
+                c.scor -= 1.0; c.motive.append("diateza: după „a fi” forma e mai degrabă participiu verbal decât adjectiv (-1)")
             # genitivul după un substantiv articulat: „grădina bunicii”, „cartea elevului”
             if a.pos in ("NOUN", "PROPN") and a.trasaturi.get("Case") == "Dat,Gen" and ant is not None and not _vreun(ant, "ADP"):
                 if any(x.analiza.pos in ("NOUN", "PROPN") and x.analiza.trasaturi.get("Definite") == "Def" for x in _plauzibili(ant)) or (ant.pos == "DET" and ant.a.lema == "al"):
@@ -184,6 +200,13 @@ def scoreaza(prop: Propozitie, subiect_persoana: dict[int, tuple[str, str]] | No
             # participiul folosit după substantiv: în UD RRT e de regulă verb (acl), nu adjectiv, dacă forma e participiul unui verb cunoscut
             if a.pos == "VERB" and a.trasaturi.get("VerbForm") == "Part" and any(x.analiza.pos == "ADJ" for x in cuv.candidati) and not a.frecventa and not any(x.analiza.pos == "ADJ" and x.analiza.frecventa for x in cuv.candidati):
                 c.scor += 0.5; c.motive.append("diateza: participiu verbal preferat adjectivului omonim fără dovezi din corpus (+0.5)")
+            # forma de genitiv-dativ singular nearticulat (case, cărți, frumoase) e identică cu pluralul: o citim ca genitiv doar după un determinant în genitiv-dativ
+            if a.pos in ("NOUN", "ADJ") and a.trasaturi.get("Case") == "Dat,Gen" and a.trasaturi.get("Definite") == "Ind" and a.trasaturi.get("Number") == "Sing":
+                gd_inainte = any(_vreun(prop.cuvinte[j], "DET", Case="Dat,Gen") or _vreun(prop.cuvinte[j], "NUM", Case="Dat,Gen") for j in range(max(0, i - 3), i))
+                if gd_inainte:
+                    c.scor += PONDERI["puternic"]; c.motive.append("genitiv: după un determinant în genitiv-dativ (unei, acestei…) (+2)")
+                else:
+                    c.scor -= 1.5; c.motive.append("genitiv: fără determinant în genitiv-dativ înainte, forma e mai degrabă plural (-1.5)")
             # „nu” înaintea verbului
             if ant_norm in ("nu", "n-") and a.pos in ("VERB", "AUX"):
                 c.scor += 1.0; c.motive.append("negatie: după „nu” urmează verbul (+1)")

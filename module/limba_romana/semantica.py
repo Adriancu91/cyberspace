@@ -91,9 +91,20 @@ class Semantica:
     def roluri(self, prop: Propozitie) -> list[dict]:
         rez = []
         for c in prop.cuvinte:
-            if c.cap is None or c.cap == 0 or c.rel not in ("nsubj", "nsubj:pass", "obj", "iobj", "obl", "obl:agent", "obl:tmod") or c.pos not in ("NOUN", "PROPN", "PRON", "NUM"):
+            if c.cap is None or c.cap == 0 or c.pos not in ("NOUN", "PROPN", "PRON", "NUM"):
                 continue
-            verb = prop.cuvant(c.cap)
+            atasare_ambigua = False
+            if c.rel == "nmod":
+                # grup prepozițional legat de un substantiv, dar care s-ar putea lega și de verb (vezi analize_alternative): îi dăm rolul față de verb
+                alt = next((a for a in prop.analize_alternative if a["cuvant"] == c.idx and a["rel"] == "obl"), None)
+                if alt is None:
+                    continue
+                verb = prop.cuvant(alt["cap"])
+                atasare_ambigua = True
+            elif c.rel not in ("nsubj", "nsubj:pass", "obj", "iobj", "obl", "obl:agent", "obl:tmod"):
+                continue
+            else:
+                verb = prop.cuvant(c.cap)
             animat = self.este_animat(c.a.lexem_id) if c.a.lexem_id else None
             if c.pos == "PRON" and c.tr("Person") in ("1", "2"):
                 animat = True
@@ -132,6 +143,8 @@ class Semantica:
                     rol = "Timp"
             else:
                 rol, motiv = "Circumstanță", f"complement prepozițional cu „{prep}”" if prep else "complement"
+            if atasare_ambigua:
+                motiv += "; atașare ambiguă (la substantivul dinainte sau la verb)"
             rez.append({"cuvant": c.idx, "text": c.text, "verb": verb.idx, "verb_text": verb.text, "rol": rol, "motiv": motiv, "animat": animat, "prepozitie": prep})
         return rez
 

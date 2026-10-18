@@ -168,7 +168,7 @@ def importa(baza: Baza, director: Path | None = None, verbos: bool = True) -> di
             gen = gen_din_corpus(genuri.get(cheie, set())) if upos == "NOUN" else None
             lexeme_vazute[cheie] = lexeme_tinta(baza, lema, upos, SURSA_ID, gen=gen, detalii="lemă automată (UD RRT)")
             n("lexeme")
-        trc = canonic_trasaturi(canonic_pentru_pos(upos, desparte_trasaturi(tr), None))
+        trc = canonic_trasaturi(canonic_pentru_pos(upos, {k: v for k, v in desparte_trasaturi(tr).items() if k != "ExtPos"}, None))
         for lid in lexeme_vazute[cheie]:
             randuri.append((forma, lid, trc, "atestat", SURSA_ID, f"atestare:ud_rrt:{set_}", "", frecv))
     n("forme_noi", baza.adauga_forme_in_bloc(randuri))

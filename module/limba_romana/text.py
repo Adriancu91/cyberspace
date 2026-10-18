@@ -94,7 +94,7 @@ def _desparte_cratima(text: str) -> list[str] | None:
     stanga, rest = parti[0], parti[1:]
     jos = normalizeaza(stanga)
     # sigle / cifre / cuvinte străine + articol legat (ADN-ul, pH-ului, 3-lea, site-ul): cuvântul + „-ul”
-    if len(parti) == 2 and normalizeaza(parti[1]) in ARTICOLE_LEGATE and jos not in ELIDATE_STANGA and jos not in CLITICE_STANGA and len(stanga) >= 2:
+    if len(parti) == 2 and normalizeaza(parti[1]) in ARTICOLE_LEGATE and jos not in ELIDATE_STANGA and jos not in CLITICE_STANGA and (len(stanga) >= 2 or stanga.isdigit()):
         return [stanga, "-" + parti[1]]
     if any(ch.isupper() for ch in stanga[1:]) or any(ch.isdigit() for ch in stanga) or (stanga.isupper() and len(stanga) >= 2):
         return None

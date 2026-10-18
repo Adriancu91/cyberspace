@@ -309,7 +309,7 @@ def construieste(prop: Propozitie) -> None:
     for i, c in enumerate(prop.cuvinte):
         if c.pos == "CCONJ" and c.cap and c.cap - 1 < n:
             dreapta = prop.cuvinte[c.cap - 1]
-            if dreapta.pos in ("NOUN", "PROPN", "PRON", "ADJ", "NUM") and dreapta.rel not in ("root",):
+            if dreapta.pos in ("NOUN", "PROPN", "PRON", "ADJ", "NUM") and dreapta.rel not in ("root", "nsubj", "nsubj:pass"):
                 for k in range(i - 1, max(-1, i - 6), -1):
                     ck = prop.cuvinte[k]
                     if ck.pos == dreapta.pos or (ck.pos in ("NOUN", "PROPN") and dreapta.pos in ("NOUN", "PROPN")):
@@ -317,6 +317,12 @@ def construieste(prop: Propozitie) -> None:
                             continue
                         dreapta.cap, dreapta.rel = ck.idx, "conj"
                         break
+    # 6b. conjuncția dinaintea unui subiect leagă propoziții: se atașează la predicatul subiectului (dar mama a rămas → cc la „rămas”)
+    for c in prop.cuvinte:
+        if c.pos == "CCONJ" and c.cap and c.cap - 1 < n:
+            dreapta = prop.cuvinte[c.cap - 1]
+            if dreapta.rel in ("nsubj", "nsubj:pass") and dreapta.cap:
+                c.cap = dreapta.cap
     # 7. fără cicluri: un cuvânt nu poate fi propriul cap; capetele lipsă merg la rădăcină
     for c in prop.cuvinte:
         if c.cap is None or c.cap == c.idx:
