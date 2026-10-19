@@ -25,7 +25,7 @@ Executantul rulează proba cu `unelte/executant_coada.ps1 -Proba`.
 - raport: —
 
 ### P3 — Proba: rularea testelor pe procesor, pornită desprins
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor
 - fereastră: oricând
 - durată maximă: 15 minute
