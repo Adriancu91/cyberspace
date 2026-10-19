@@ -1,7 +1,7 @@
 Ești Claude Code, pornit singur de sarcina Windows „Kronos raport dimineata” (07:40), fără om de față. Treaba ta: raportul de dimineață pentru Adrian, după regula „Rapoartele” din CLAUDE.md. Citește întâi CLAUDE.md și memoria proiectului (MEMORY.md și fișierele ei).
 
 Pașii:
-1. Dacă în docs/rapoarte/ există deja un raport cu data de azi (AAAA-LL-ZZ_*), nu face nimic: scrie doar „Raportul de azi există deja: <nume>” și oprește-te.
+1. Dacă în docs/rapoarte/ există deja raportul de dimineață de azi (AAAA-LL-ZZ_*_raport_dimineata.md), nu face nimic: scrie doar „Raportul de azi există deja: <nume>” și oprește-te. (Celelalte rapoarte de azi, de exemplu ale executantului din cascadă, nu contează aici.)
 2. Află ce s-a întâmplat de ieri seară până acum, doar citind: lucru/noapte_conversatie.log și celelalte jurnale de noapte din lucru/ (*.log), ultimele rânduri din lucru/jurnal/experimente.jsonl, git log de la ieri seară, starea CONTINUUM (lucru/continuum*), placa (nvidia-smi).
 3. Dacă există o pre-înregistrare pentru noaptea trecută în docs/preinregistrari/ fără secțiunea „Ce a ieșit”: închide-o cu `.venv/Scripts/python -X utf8 unelte/preinregistrare.py --inchide <nume>`, apoi adaugă la finalul ei secțiunea „Verdictul”, judecat strict după pragurile scrise în ea (nu le schimba, nu le reinterpreta; dacă un prag nu se poate măsura, spune asta).
 4. Dacă noaptea a avut examenul de conversație, pune în raport 20 de răspunsuri alese la întâmplare (random.Random(1019).sample) din lucru/examen_conversatie/experiment_<N>_*.json al ultimului model: întrebarea, răspunsul lui Kronos, referința, nota profesorului și o coloană goală „e bine? (tu)”.
