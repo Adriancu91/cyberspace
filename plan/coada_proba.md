@@ -25,11 +25,11 @@ Executantul rulează proba cu `unelte/executant_coada.ps1 -Proba`.
 - raport: —
 
 ### P3 — Proba: rularea testelor pe procesor, pornită desprins
-- stare: in_lucru
+- stare: gata
 - tip: procesor
 - fereastră: oricând
 - durată maximă: 15 minute
 - ce faci: pornește-o desprinsă (ca pe o antrenare): `CUDA_VISIBLE_DEVICES=-1 .venv/Scripts/python -X utf8 unelte/cascada.py porneste P3 --dosar lucru/cascada_proba -- .venv/Scripts/python.exe -m pytest -q -o addopts=""`; la final, raportul spune câte teste au trecut
 - pre-înregistrare: nu trebuie (nu e antrenare)
 - aprobat de: Claude Code, pentru probă
-- raport: —
+- raport: docs/rapoarte/2026-10-19_2032_proba_P3_teste.md
