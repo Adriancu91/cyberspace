@@ -1,7 +1,7 @@
 """Școala de conversație (15 octombrie 2026): GPT-ul care continuă, antrenat să răspundă la întrebări.
 
 Ca model_continuu, plus perechile întrebare → răspuns din `conversatie` (un .jsonl cu „intrebare” și „raspuns”, scris de
-unelte/genereaza_conversatie.py). Fiecare pereche se scrie „Întrebare: …⏎Răspuns: …”, urmată de <|endoftext|>.
+unelte/genereaza_conversatie.py; la „răspuns din text”, din 19 octombrie, și „text”, scris de unelte/conversatie_text.py). Fiecare pereche se scrie „Întrebare: …⏎Răspuns: …”, urmată de <|endoftext|>.
 Din fiecare lot:
 - `fractie_conversatie` (ex. 0,75) ferestre sunt perechi lipite una după alta. **Pierderea se socotește doar pe
   răspunsuri** (și pe <|endoftext|> de după ele), nu pe întrebări: modelul învață să răspundă, nu să pună întrebări;
@@ -28,9 +28,11 @@ SFARSIT = "\n<|endoftext|>\n"
 IGNORAT = -100
 
 
-def intrebarea(text: str) -> str:
-    """Ce vede modelul în față: „Întrebare: …⏎Răspuns:” (la antrenare, la examen și în interfață)."""
-    return f"Întrebare: {text.strip()}\nRăspuns:"
+def intrebarea(text: str, context: str = "") -> str:
+    """Ce vede modelul în față: „Întrebare: …⏎Răspuns:” (la antrenare, la examen și în interfață). 19 octombrie 2026
+    („răspuns din text”, Adrian): cu un paragraf în față, „Text: …⏎Întrebare: …⏎Răspuns:”."""
+    inainte = f"Text: {context.strip()}\n" if context.strip() else ""
+    return f"{inainte}Întrebare: {text.strip()}\nRăspuns:"
 
 
 def raspunsul(text: str) -> str:
@@ -62,7 +64,8 @@ class ModelGPTConversatie(ModelGPTContinuu):
         for rand in Path(self.conversatie).read_text(encoding="utf-8").splitlines():
             if rand.strip():
                 p = json.loads(rand)
-                perechi.append((self.tok.codifica(intrebarea(p["intrebare"])), self.tok.codifica(raspunsul(p["raspuns"]))))
+                perechi.append((self.tok.codifica(intrebarea(p["intrebare"], p.get("text", ""))),
+                                self.tok.codifica(raspunsul(p["raspuns"]))))
         if not perechi:
             raise ValueError(f"{self.conversatie} n-are nicio pereche")
         return perechi

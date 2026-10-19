@@ -32,6 +32,7 @@ from kronos.jurnal import Jurnal  # noqa: E402
 SISTEM = "You are a strict but fair teacher who grades a student's short answers to simple questions."
 _NOTA = re.compile(r"(?:GRADE|NOTA)\s*:\s*(\d+)", re.IGNORECASE)
 _NU_STIU = re.compile(r"\b(nu stiu|nu sunt sigur|i don t know|i do not know|i m not sure)\b")
+_NU_SCRIE = re.compile(r"\bnu scrie in text\b")
 
 
 def taie(text: str) -> str:
@@ -45,6 +46,17 @@ def spune_nu_stiu(raspuns: str) -> bool:
     return bool(_NU_STIU.search(normalizat(raspuns)))
 
 
+def spune_nu_scrie(raspuns: str) -> bool:
+    """19 octombrie 2026 („răspuns din text”): „Nu scrie în text.”"""
+    from unelte.genereaza_conversatie import normalizat
+
+    return bool(_NU_SCRIE.search(normalizat(raspuns)))
+
+
+# Felurile la care răspunsul corect e un refuz, și cum se recunoaște refuzul
+REFUZURI = {"nu_stiu": spune_nu_stiu, "nu_scrie": spune_nu_scrie}
+
+
 def mesaje_nota(intrebare: str, referinta: str, raspuns: str, limba: str) -> list[dict[str, str]]:
     return [{"role": "system", "content": SISTEM}, {"role": "user", "content": (
         f"Question ({'Romanian' if limba == 'ro' else 'English'}): {intrebare}\nReference answer: {referinta}\n"
@@ -56,22 +68,24 @@ def mesaje_nota(intrebare: str, referinta: str, raspuns: str, limba: str) -> lis
 
 def scoruri(intrebari: list[dict[str, Any]]) -> dict[str, Any]:
     note = [p["nota_elev"] for p in intrebari if p.get("nota_elev") is not None]
-    fara = [p["nota_elev"] for p in intrebari if p["fel"] != "nu_stiu" and p.get("nota_elev") is not None]
+    fara = [p["nota_elev"] for p in intrebari if p["fel"] not in REFUZURI and p.get("nota_elev") is not None]
     nu_stiu = [p for p in intrebari if p["fel"] == "nu_stiu"]
-    stiute = [p for p in intrebari if p["fel"] != "nu_stiu"]
+    stiute = [p for p in intrebari if p["fel"] not in REFUZURI]
+    din_text = [p for p in intrebari if p["fel"] == "text"]
     return {
         "intrebari": len(intrebari), "nota_medie": round(statistics.mean(note), 3) if note else None,
         "nota_medie_fara_nu_stiu": round(statistics.mean(fara), 3) if fara else None,
         "nu_stiu_intrebari": len(nu_stiu), "nu_stiu_corecte": sum(p["nu_stiu_corect"] for p in nu_stiu),
         "nu_stiu_fractie": round(sum(p["nu_stiu_corect"] for p in nu_stiu) / len(nu_stiu), 3) if nu_stiu else None,
         "nu_stiu_la_stiute": round(sum(spune_nu_stiu(p["raspuns_elev"]) for p in stiute) / len(stiute), 3) if stiute else None,
+        **({"nu_scrie_la_text": sum(spune_nu_scrie(p["raspuns_elev"]) for p in din_text)} if din_text else {}),
         "note_neciteite": sum(1 for p in intrebari if p.get("nota_elev") is None),
         **pe_feluri(intrebari),
     }
 
 
 # 18 octombrie 2026 (pre-înregistrarea lui W2-conv): un răspuns e „corect” dacă profesorul îi dă cel puțin 7 din 10; la
-# „nu știu”, dacă spune că nu știe.
+# „nu știu”, dacă spune că nu știe (19 octombrie: la „nu_scrie”, dacă spune „Nu scrie în text.”).
 NOTA_CORECT = 7
 
 
@@ -81,7 +95,7 @@ def pe_feluri(intrebari: list[dict[str, Any]]) -> dict[str, int]:
     for fel in sorted({p["fel"] for p in intrebari}):
         lista = [p for p in intrebari if p["fel"] == fel]
         n[f"intrebari_{fel}"] = len(lista)
-        n[f"corecte_{fel}"] = sum(bool(p["nu_stiu_corect"]) if fel == "nu_stiu" else (p.get("nota_elev") or 0) >= NOTA_CORECT
+        n[f"corecte_{fel}"] = sum(bool(p["nu_stiu_corect"]) if fel in REFUZURI else (p.get("nota_elev") or 0) >= NOTA_CORECT
                                   for p in lista)
     return n
 
@@ -113,8 +127,8 @@ def main(argv: list[str] | None = None) -> int:
     intrebari = intrebari[: args.cate] if args.cate else intrebari
     model = incarca_modelul(fisa, args.dispozitiv)
     for p in intrebari:
-        p["raspuns_elev"] = taie(model.completeaza(intrebarea(p["intrebare"]), args.simboluri))
-        p["nu_stiu_corect"] = p["fel"] == "nu_stiu" and spune_nu_stiu(p["raspuns_elev"])
+        p["raspuns_elev"] = taie(model.completeaza(intrebarea(p["intrebare"], p.get("text", "")), args.simboluri))
+        p["nu_stiu_corect"] = p["fel"] in REFUZURI and REFUZURI[p["fel"]](p["raspuns_elev"])
     del model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

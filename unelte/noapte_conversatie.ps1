@@ -9,7 +9,11 @@
 # 17 octombrie 2026 (Adrian): -PornesteDin alege modelul din care porneste W2-conv (#373, copia racita dupa ora 30, in
 # loc de #353), iar -FaraScoala sare peste scoala de cod (infirmata pe 16 octombrie).
 #   ... -PornesteDin 373 -FaraScoala
-param([string]$Cod = "C:\Kronos\cyberspace-cod", [int]$PornesteDin = 353, [switch]$FaraScoala)
+# 19 octombrie 2026 (Adrian, "raspuns din text"): -Config, -Linie si -Examen aleg configurarea, linia si examenul de
+# conversatie (implicit: cele din noaptea 9). Aprobarea: lucru/conversatie_aprobata.txt trebuie sa pomeneasca -Config.
+#   ... -PornesteDin 385 -FaraScoala -Config config/conv_w2_text.toml -Linie w2_conv_text -Examen date/conversatie/text/examen.json
+param([string]$Cod = "C:\Kronos\cyberspace-cod", [int]$PornesteDin = 353, [switch]$FaraScoala,
+      [string]$Config = "config/conv_w2.toml", [string]$Linie = "w2_conv", [string]$Examen = "date/conversatie/examen.json")
 
 $ErrorActionPreference = "Stop"
 $radacina = Split-Path -Parent $PSScriptRoot
@@ -36,7 +40,7 @@ function Ruleaza([string]$director, [string[]]$argumente) {
 
 if (Test-Path (Join-Path $radacina "lucru\STOP")) { Scrie "Nu pornesc: exista butonul STOP (lucru/STOP)."; exit 0 }
 $deja = Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
-    Where-Object { $_.CommandLine -and ($_.CommandLine -like "*conv_w2.toml*" -or $_.CommandLine -like "*scoala_cod_v04_noapte*") }
+    Where-Object { $_.CommandLine -and ($_.CommandLine -like "*conv_w2*" -or $_.CommandLine -like "*scoala_cod_v04_noapte*") }
 if (@($deja).Count -gt 0) { Scrie "Nu pornesc: noaptea ruleaza deja."; exit 0 }
 
 $env:PYTHONUNBUFFERED = "1"
@@ -46,23 +50,23 @@ $urmarire = Start-Process -FilePath $python -PassThru -WindowStyle Hidden -Worki
 Scrie "Noaptea incepe (aleasa de Adrian). Urmarirea placii: lucru/placa_noapte_$(Get-Date -Format yyyy-MM-dd).csv (proces $($urmarire.Id))."
 $aprobata = Join-Path $radacina "lucru\conversatie_aprobata.txt"
 try {
-  if (-not (Test-Path $aprobata)) {
+  if (-not (Test-Path $aprobata) -or -not ((Get-Content $aprobata -Encoding utf8 -Raw) -like "*$Config*")) {
     # Regula lui Adrian (15 octombrie): W2-conv porneste doar daca a gasit cel mult 3 perechi gresite din 30. Fara
     # aprobarea lui (fisierul lucru/conversatie_aprobata.txt, scris de Claude Code dupa raspunsul lui), doar scoala.
-    Scrie "W2-conv NU porneste: perechile de conversatie nu sunt aprobate de Adrian (lipseste lucru/conversatie_aprobata.txt)."
+    Scrie "W2-conv NU porneste: perechile pentru $Config nu sunt aprobate de Adrian (lucru/conversatie_aprobata.txt lipseste sau nu pomeneste $Config)."
   } else {
     Scrie ("Perechile sunt aprobate: " + (Get-Content $aprobata -Encoding utf8 -Raw).Trim())
-    $cod = Ruleaza $radacina @("-X", "utf8", "unelte/antrenare_lunga.py", "--config", "config/conv_w2.toml", "--ore", "3",
+    $cod = Ruleaza $radacina @("-X", "utf8", "unelte/antrenare_lunga.py", "--config", $Config, "--ore", "3",
                                "--porneste-din", "$PornesteDin", "--inceput", "$([char]0x00CE)ntrebare: Ce este ploaia?`nR$([char]0x0103)spuns:", "--lungime", "300")
-    $ultimul = & $python -X utf8 -c "import json; f=[json.loads(l) for l in open('lucru/jurnal/experimente.jsonl', encoding='utf-8')]; p=[x for x in f if x.get('linie')=='w2_conv' and x.get('model_salvat')]; print(p[-1]['id'] if p else '')"
+    $ultimul = & $python -X utf8 -c "import json; f=[json.loads(l) for l in open('lucru/jurnal/experimente.jsonl', encoding='utf-8')]; p=[x for x in f if x.get('linie')=='$Linie' and x.get('model_salvat')]; print(p[-1]['id'] if p else '')"
     if ($ultimul) {
-        Scrie "Ultimul model pastrat al liniei w2_conv: #$ultimul."
-        Ruleaza $radacina @("-X", "utf8", "unelte/examen_conversatie.py", "--experiment", "$ultimul", "--doar-local") | Out-Null
+        Scrie "Ultimul model pastrat al liniei ${Linie}: #$ultimul."
+        Ruleaza $radacina @("-X", "utf8", "unelte/examen_conversatie.py", "--experiment", "$ultimul", "--examen", $Examen, "--doar-local") | Out-Null
         Ruleaza $radacina @("-X", "utf8", "unelte/examen_validari_ws.py", "--experiment", "$ultimul") | Out-Null
         # 18 octombrie (Adrian): setul sacru e urmarit (sub 15 din 50 = raportat separat, cu intrebarile pierdute)
         Ruleaza $radacina @("-X", "utf8", "unelte/examen_fapte_nou.py", "--sacru", "--experiment", "$ultimul", "--doar-local") | Out-Null
     } else {
-        Scrie "Linia w2_conv n-are niciun model pastrat: sar peste examenele ei."
+        Scrie "Linia $Linie n-are niciun model pastrat: sar peste examenele ei."
     }
   }
     if ($FaraScoala) { Scrie "Fara scoala de cod in noaptea asta (-FaraScoala)." }
