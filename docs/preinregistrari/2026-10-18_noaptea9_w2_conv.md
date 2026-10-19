@@ -94,3 +94,52 @@ Un răspuns e **corect** dacă profesorul îi dă **cel puțin 7 din 10**. La �
   examenele de până acum;
 - **peste 12 din 20 la „nu știu”**: recunoaște lucrurile necunoscute, nu doar forma întrebării;
 - **codul curat peste 0,85 sau poveștile peste 0,48**: 20% din amestec nu ajunge ca să nu uite.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-19 09:15, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 394 | w2_conv | 18.10 19:00 | 0,4779 | pastrat | — | — | — |  |
+| 395 | w2_conv | 18.10 20:05 | 0,4832 | pastrat | — | — | — |  |
+| 396 | w2_conv | 18.10 21:09 | 0,4877 | pastrat | — | — | — |  |
+| 397 | examen_conversatie | 18.10 22:13 | — | masurat | — | — | — |  |
+| 398 | examen_validari_ws | 18.10 22:13 | — | masurat | — | — | — |  |
+
+- **w2_conv:** 3 ore, 3 păstrate; val_bpb de la 0,4779 la 0,4877; cel mai bun păstrat: #394 (0,4779); pornită din #385 (0,4383).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris la 2026-10-19 09:25 de Claude Code, strict după pragurile de mai sus. Examenele pe ultimul model, #396 (ora 3):
+`lucru/examen_conversatie/experiment_396_20261018_221340.json`, `lucru/examen_validari_ws/experiment_396_20261018_221354.json`,
+`lucru/examen_sacru/experiment_396_20261018_221402.json`.*
+
+| | prag | #396 | |
+|---|---|---|---|
+| Wikipedia corecte (nota ≥ 7), din 50 | confirmat ≥ 15, infirmat < 8 | **2** | **infirmat** |
+| „nu știu” corecte, din 20 | confirmat ≥ 10, infirmat < 5 | 15 | trece |
+| „nu știu” spus la Wikipedia, din 50 | ≤ 10 | 0 | trece |
+| conversație, din 10 (doar urmărit) | — | 0 | — |
+| română, validarea curată | ≤ 1,3133 | **1,3781** | **depășit** |
+| cod, validarea curată | ≤ 0,8174 | **0,8736** | **depășit** |
+| povești (val_bpb) | ≤ 0,47 | **0,4877** | **depășit** |
+| fapte noi | ≥ 65 | 75 | trece |
+| setul sacru (urmărit), din 50 | sub 15 = raport separat | 26 (#385: 18) | nu e nevoie |
+
+**Verdict: INFIRMAT** (Wikipedia 2 din 50, sub 8), **cu regresie** la română, cod și povești. Linia w2_conv nu se
+păstrează și nu intră în interfață.
+
+Față de așteptări:
+- **Wikipedia, 2 față de 6–14:** mai rău decât credeam. Modelul a învățat forma („X este un film / un sat în comuna
+  …”), dar inventează amănuntele: 40 din 50 de răspunsuri au nota 1.
+- **„Nu știu”, 15 față de 3–9:** mult mai bine decât credeam, deci așteptarea „peste 12 din 20” din „Ce ar infirma
+  așteptările” s-a îndeplinit. Totuși, la Wikipedia n-a spus niciodată „nu știu”, iar la conversație l-a spus la 6 din 10
+  („Cum te cheamă?” → „Nu știu sigur.”). Pare să se ia după cât de ciudat sună numele, nu după ce știe; cele 5 ratate sunt
+  tocmai cele cu nume obișnuite („Ce este planeta Ostrovia?”, „Unde se află muntele Căpraru Înalt?”).
+- **Uitarea, mai mare decât credeam:** codul curat 0,87 și poveștile 0,49 au trecut și de pragul din „Ce ar infirma
+  așteptările” (0,85 și 0,48). 20% amestec nu ajunge. val_bpb a crescut în fiecare oră (0,4383 → 0,4779 → 0,4832 → 0,4877).
+- **Setul sacru, 26 față de 14–20:** a crescut față de #385 (18), deși restul a scăzut.
+- Placa: ~5.370 MB, 5,9 pași pe secundă, nicio oprire, cum mă așteptam.
