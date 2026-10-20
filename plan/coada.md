@@ -75,3 +75,18 @@ Formatul unei sarcini:
   (c) și (d) doar urmărite. Profesorul notează la fel ca la noaptea 10 (corect = nota ≥ 7). Nicio antrenare, doar examen.
 - aprobat de: supraveghetor, 20 octombrie 2026, 10:50 (categoria „examene”)
 - raport: docs/rapoarte/<data>_<ora>_S4_generalizare_401.md, cu toate cele 60 de răspunsuri
+
+### S5 — Interfața: fila nouă „Întreabă din text” cu modelul #401
+- stare: aprobat
+- tip: procesor (interfața rulează pe procesor; NU ocupă placa)
+- fereastră: oricând
+- durată maximă: 2 ore
+- ce faci: în interfața de pe portul 8787 adaugă o filă nouă „Întreabă din text”: o căsuță mare pentru paragraf, o căsuță
+  pentru întrebare și butonul „Întreabă”. Răspunsul vine de la modelul #401 (linia w2_conv_text), cu exact formatul de la
+  antrenare („Text: … / Întrebare: … / Răspuns:”), oprit la sfârșitul răspunsului. Fila veche (modelul #312) rămâne cum e.
+  Arată sub răspuns un rând mic: „Kronos #401 — răspunde doar din textul dat.” Dacă paragraful e mai lung decât încape
+  în fereastra modelului (512 bucăți cu tot cu întrebarea), spune asta clar, nu tăia în tăcere. Teste pentru noua filă,
+  apoi repornește interfața și verifică de pe 100.90.150.35:8787 cu 3 exemple (unul cu răspuns, unul fără, unul lung).
+  Nu atinge `kronos/`.
+- aprobat de: Adrian, 20 octombrie 2026, 10:47
+- raport: docs/rapoarte/<data>_<ora>_S5_interfata_intreaba_din_text.md, cu cele 3 exemple
