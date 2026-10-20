@@ -146,4 +146,14 @@ sare mereu în felul acesta. Aceleași cifre ca aseară.
 3. **Dacă vrei să pornească cascada pe `plan/coada.md`:** trebuie să înregistrezi tu sarcina Windows „Kronos executant
    coada”, cum am vorbit aseară. Azi ziua e aprobat S2, motorul de română.
 
-Nimic n-a căzut și n-am găsit nimic stricat de reparat.
+4. **Trimiterea pe GitHub n-a mers.** GitHub are deja lucrări care nu sunt pe acest calculator, probabil de pe laptop
+   sau de pe telefon. Ca să le aduc aici, trebuiau rulate `git fetch` și `git pull`, iar pentru amândouă paznicul cerea
+   aprobarea unui om de față. Pe tine nu te aveam, așa că n-am forțat nimic. Raportul și pre-înregistrarea sunt salvate
+   **doar pe workstation**, în commit-uri locale. Când ajungi la calculator, rulează în `C:\Kronos\cyberspace`:
+   ```
+   git pull --rebase
+   git push
+   ```
+   (sau spune-mi și le rulez eu). Dacă `git pull --rebase` anunță un conflict, nu continua: spune-mi și mă uit eu.
+
+Noaptea n-a căzut și nici testele. Singura problemă e trimiterea pe GitHub (punctul 4).
