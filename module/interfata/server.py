@@ -7,6 +7,8 @@ Ce răspunde:
     GET  /api/conversatii         lista conversațiilor
     GET  /api/conversatii/<nr>    mesajele unei conversații
     POST /api/mesaj               {"text": "...", "conversatie": nr sau null} → întrebarea și răspunsul, scrise în bază
+    POST /api/din-text            {"text": paragraf, "intrebare": "..."} → răspunsul modelului „din text” (fila
+                                  „Întreabă din text”, 20 octombrie 2026); nu se scrie în bază
 
 Fiecare cerere trece întâi prin verificarea adresei (retea.adresa_permisa): cine nu e de pe acest calculator sau din
 rețeaua Tailscale primește 403. Serverul nu pornește antrenări și nu atinge jurnalul Kronos.
@@ -25,7 +27,7 @@ from typing import Any, Callable
 
 from . import retea
 from .catalog import ROL_CREIER, ROL_OM, Catalog
-from .creiere import Creier
+from .creiere import Creier, TextPreaLung
 
 DIRECTOR_STATIC = Path(__file__).resolve().parent / "static"
 # Singurele fișiere servite din static/: calea din browser → (fișierul, tipul lui).
@@ -42,6 +44,7 @@ LUNGIME_MAXIMA_MESAJ = 2000       # caractere scrise de om într-un mesaj
 LUNGIME_RASPUNS_IMPLICITA = 200   # cât cere interfața de la creier, dacă nu se spune altfel
 LUNGIME_RASPUNS_MAXIMA = 2000
 OCTETI_MAXIMI_CERERE = 64 * 1024
+LUNGIME_MAXIMA_PARAGRAF = 20000   # caractere; oricum fereastra modelului e cea care hotărăște cât încape
 
 
 class EroareCerere(Exception):
@@ -57,9 +60,11 @@ class Aplicatie:
     """Tot ce știe interfața să facă, fără nimic despre HTTP: catalogul, creierul și lista modulelor."""
 
     def __init__(self, catalog: Catalog, creier: Creier, module: list[dict[str, Any]] | None = None,
-                 configurare: str = "", lungime_raspuns: int = LUNGIME_RASPUNS_IMPLICITA) -> None:
+                 configurare: str = "", lungime_raspuns: int = LUNGIME_RASPUNS_IMPLICITA,
+                 creier_text: Any = None) -> None:
         self.catalog = catalog
         self.creier = creier
+        self.creier_text = creier_text  # fila „Întreabă din text” (CreierText); None = fila nu e pornită
         self.module = list(module or [])
         self.configurare = configurare
         self.lungime_raspuns = max(1, min(int(lungime_raspuns), LUNGIME_RASPUNS_MAXIMA))
@@ -68,7 +73,9 @@ class Aplicatie:
 
     def stare(self) -> dict[str, Any]:
         return {"creier": self.creier.eticheta, "configurare": self.configurare,
-                "lungime_maxima_mesaj": LUNGIME_MAXIMA_MESAJ, "lungime_raspuns": self.lungime_raspuns}
+                "lungime_maxima_mesaj": LUNGIME_MAXIMA_MESAJ, "lungime_raspuns": self.lungime_raspuns,
+                "din_text": self.creier_text.eticheta if self.creier_text is not None else None,
+                "lungime_maxima_paragraf": LUNGIME_MAXIMA_PARAGRAF}
 
     def lista_module(self) -> dict[str, Any]:
         return {"configurare": self.configurare, "module": self.module}
@@ -105,6 +112,34 @@ class Aplicatie:
         secunde = round(time.perf_counter() - start, 3)
         raspuns = self.catalog.adauga_mesaj(conversatie, ROL_CREIER, self.creier.eticheta, raspuns_text, secunde)
         return {"conversatie": conversatie, "intrebare": intrebare, "raspuns": raspuns, "eroare": None}
+
+
+    def din_text(self, cerere: Any) -> dict[str, Any]:
+        """Fila „Întreabă din text”: întrebarea despre paragraful dat, la creierul „din text”. Dacă paragraful nu
+        încape în fereastra modelului, se spune asta (prea_lung), nu se taie. Nimic nu se scrie în bază."""
+        if self.creier_text is None:
+            raise EroareCerere(HTTPStatus.NOT_FOUND, "Fila „Întreabă din text” nu e pornită pe acest server.")
+        if not isinstance(cerere, dict):
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, "Cererea trebuie să fie un obiect JSON.")
+        text, intrebare = cerere.get("text"), cerere.get("intrebare")
+        if not isinstance(text, str) or not text.strip():
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, "Paragraful e gol.")
+        if not isinstance(intrebare, str) or not intrebare.strip():
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, "Întrebarea e goală.")
+        if len(text) > LUNGIME_MAXIMA_PARAGRAF or len(intrebare) > LUNGIME_MAXIMA_MESAJ:
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, f"Paragraful are cel mult {LUNGIME_MAXIMA_PARAGRAF} caractere, "
+                                                       f"iar întrebarea cel mult {LUNGIME_MAXIMA_MESAJ}.")
+        eticheta = self.creier_text.eticheta
+        start = time.perf_counter()
+        try:
+            raspuns = self.creier_text.raspunde_din_text(text, intrebare)
+        except TextPreaLung as e:
+            return {"raspuns": None, "eticheta": eticheta, "prea_lung": True, "eroare": str(e)}
+        except Exception as e:  # noqa: BLE001 - orice eroare a modelului se arată omului, nu oprește serverul
+            return {"raspuns": None, "eticheta": eticheta, "prea_lung": False,
+                    "eroare": f"{eticheta} n-a putut răspunde: {type(e).__name__}: {e}"}
+        return {"raspuns": raspuns, "eticheta": eticheta, "prea_lung": False, "eroare": None,
+                "secunde": round(time.perf_counter() - start, 3)}
 
 
 class Cerere(BaseHTTPRequestHandler):
@@ -174,7 +209,8 @@ class Cerere(BaseHTTPRequestHandler):
         if not self._are_voie():
             return
         try:
-            if self.path.split("?", 1)[0] != "/api/mesaj":
+            cale = self.path.split("?", 1)[0]
+            if cale not in ("/api/mesaj", "/api/din-text"):
                 raise EroareCerere(HTTPStatus.NOT_FOUND, "Pagina nu există.")
             # Doar JSON: un formular de pe alt site, deschis în același browser, nu poate trimite așa ceva.
             if self.headers.get_content_type() != "application/json":
@@ -189,7 +225,9 @@ class Cerere(BaseHTTPRequestHandler):
                 cerere = json.loads(self.rfile.read(octeti).decode("utf-8"))
             except (UnicodeDecodeError, json.JSONDecodeError):
                 raise EroareCerere(HTTPStatus.BAD_REQUEST, "Cererea nu e JSON corect.") from None
-            self._trimite_json(HTTPStatus.OK, self.server.aplicatie.mesaj_nou(cerere))
+            aplicatie: Aplicatie = self.server.aplicatie
+            self._trimite_json(HTTPStatus.OK, aplicatie.mesaj_nou(cerere) if cale == "/api/mesaj"
+                               else aplicatie.din_text(cerere))
         except EroareCerere as e:
             self._eroare(e.cod, e.mesaj)
 

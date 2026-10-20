@@ -2,6 +2,7 @@
 
     python -m module.interfata --config config/laptop_antrenare_lunga_8.toml --experiment 295 --port 8787
     python -m module.interfata --config config/proba.toml --fals        # fără niciun model, doar de probă
+    python -m module.interfata --config config/ws_w1.toml --experiment 312 --experiment-text 401   # cu fila „Întreabă din text”
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ from kronos.config import EroareConfig, citeste_config
 
 from . import PORT_IMPLICIT, retea
 from .catalog import Catalog
-from .creiere import Creier, CreierFals, CreierKronos
+from .creiere import Creier, CreierFals, CreierKronos, CreierText
 from .module_ui import lista_modulelor
 from .server import LUNGIME_RASPUNS_IMPLICITA, Aplicatie, Servere, porneste
 
@@ -29,6 +30,8 @@ def _argumente(argv: list[str] | None) -> argparse.Namespace:
     )
     parser.add_argument("--config", required=True, help="configurarea Kronos din care se citesc modulele")
     parser.add_argument("--experiment", type=int, help="numărul experimentului cu modelul salvat care răspunde")
+    parser.add_argument("--experiment-text", type=int,
+                        help="modelul care răspunde în fila „Întreabă din text” (fără el, fila nu apare)")
     parser.add_argument("--fals", action="store_true", help="creier de probă, fără niciun model")
     parser.add_argument("--port", type=int, default=PORT_IMPLICIT, help=f"portul (implicit {PORT_IMPLICIT})")
     parser.add_argument("--dispozitiv", default="cpu", help="pe ce rulează modelul (implicit cpu, adică procesorul)")
@@ -58,7 +61,9 @@ def main(argv: list[str] | None = None) -> int:
 
     creier: Creier = CreierFals() if args.fals else CreierKronos(args.experiment, config.director_lucru, args.dispozitiv)
     baza = Path(args.baza) if args.baza else config.director_lucru / "interfata" / NUME_BAZA
-    aplicatie = Aplicatie(Catalog(baza), creier, lista_modulelor(config), config.nume, args.lungime)
+    creier_text = (CreierText(args.experiment_text, config.director_lucru, args.dispozitiv)
+                   if args.experiment_text is not None else None)
+    aplicatie = Aplicatie(Catalog(baza), creier, lista_modulelor(config), config.nume, args.lungime, creier_text)
 
     tailscale = retea.adresa_tailscale()
     try:
@@ -71,6 +76,8 @@ def main(argv: list[str] | None = None) -> int:
     print("Interfața Cyberspace v0 a pornit.")
     lenes = "" if args.fals else f", pe „{args.dispozitiv}”; se încarcă la prima întrebare"
     print(f"   Răspunde: {creier.eticheta}{lenes}")
+    if creier_text is not None:
+        print(f"   Fila „Întreabă din text”: {creier_text.eticheta}")
     print(f"   Module:   din configurarea „{config.nume}” ({len(aplicatie.module)} porturi)")
     print(f"   Istoric:  {baza}")
     for adresa in servere.adrese:

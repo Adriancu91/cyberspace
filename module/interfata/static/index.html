@@ -18,7 +18,12 @@
   <p id="detalii-modul" hidden></p>
 </section>
 
-<main>
+<nav id="file" aria-label="File" hidden>
+  <button type="button" id="fila-chat" class="aleasa" aria-pressed="true">Chat</button>
+  <button type="button" id="fila-text" aria-pressed="false">Întreabă din text</button>
+</nav>
+
+<main id="zona-chat">
   <aside aria-label="Conversații">
     <button type="button" id="conversatie-noua">Conversație nouă</button>
     <ul id="conversatii"></ul>
@@ -35,6 +40,21 @@
     </form>
   </section>
 </main>
+
+<section id="zona-text" aria-label="Întreabă din text" hidden>
+  <form id="formular-text">
+    <label for="paragraf">Paragraful (Kronos răspunde doar din el)</label>
+    <textarea id="paragraf" rows="10" placeholder="Lipește aici un paragraf"></textarea>
+    <label for="intrebare">Întrebarea</label>
+    <textarea id="intrebare" rows="2" placeholder="Ce vrei să afli din paragraf? (Ctrl+Enter trimite)"></textarea>
+    <button type="submit" id="intreaba">Întreabă</button>
+  </form>
+  <p id="anunt-text" role="status"></p>
+  <article id="raspuns-text" class="mesaj creier" aria-live="polite" hidden>
+    <p class="text" id="raspuns-text-continut"></p>
+    <p class="autor" id="raspuns-text-eticheta"></p>
+  </article>
+</section>
 
 <noscript>Pagina are nevoie de JavaScript ca să meargă.</noscript>
 <script src="aplicatie.js"></script>

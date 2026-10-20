@@ -119,7 +119,52 @@ async function incarcaModulele() {
   }
 }
 
+// --- fila „Întreabă din text” (20 octombrie 2026) ---------------------------------------------------------
+
+function alegeFila(text) {
+  el("zona-chat").hidden = text;
+  el("zona-text").hidden = !text;
+  el("fila-chat").classList.toggle("aleasa", !text);
+  el("fila-text").classList.toggle("aleasa", text);
+  el("fila-chat").setAttribute("aria-pressed", String(!text));
+  el("fila-text").setAttribute("aria-pressed", String(text));
+  el(text ? "paragraf" : "text").focus();
+}
+
+function anuntaText(mesaj) { el("anunt-text").textContent = mesaj || ""; }
+
+async function intreabaDinText(eveniment) {
+  eveniment.preventDefault();
+  const paragraf = el("paragraf").value;
+  const intrebare = el("intrebare").value;
+  if (!paragraf.trim()) { anuntaText("Scrie întâi paragraful."); return; }
+  if (!intrebare.trim()) { anuntaText("Scrie și întrebarea."); return; }
+  el("intreaba").disabled = true;
+  el("raspuns-text").hidden = true;
+  anuntaText("Kronos citește textul… (prima întrebare durează mai mult: se încarcă modelul)");
+  try {
+    const date = await cere("/api/din-text", { text: paragraf, intrebare: intrebare });
+    if (date.raspuns === null) { anuntaText(date.eroare); return; }
+    el("raspuns-text-continut").textContent = date.raspuns || "(niciun răspuns)";
+    let jos = date.eticheta;
+    if (typeof date.secunde === "number") jos += " · " + date.secunde.toLocaleString("ro-RO") + " s";
+    el("raspuns-text-eticheta").textContent = jos;
+    el("raspuns-text").hidden = false;
+    anuntaText("");
+  } catch (e) {
+    anuntaText("Întrebarea nu a plecat: " + e.message);
+  } finally {
+    el("intreaba").disabled = false;
+  }
+}
+
 async function porneste() {
+  el("fila-chat").addEventListener("click", () => alegeFila(false));
+  el("fila-text").addEventListener("click", () => alegeFila(true));
+  el("formular-text").addEventListener("submit", intreabaDinText);
+  el("intrebare").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) el("formular-text").requestSubmit();
+  });
   el("formular").addEventListener("submit", trimite);
   el("text").addEventListener("keydown", (e) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) el("formular").requestSubmit();
@@ -135,6 +180,7 @@ async function porneste() {
     const stare = await cere("/api/stare");
     el("cine").textContent = "Răspunde: " + stare.creier;
     lungimeMaxima = stare.lungime_maxima_mesaj;
+    el("file").hidden = !stare.din_text;   // fila apare doar dacă serverul are modelul „din text”
     await incarcaModulele();
     await incarcaConversatiile();
   } catch (e) { anunta("Nu pot vorbi cu serverul: " + e.message); }

@@ -18,7 +18,7 @@ from kronos.jurnal import Jurnal
 from module.date_mostra import DateMostra
 from module.interfata import PORT_IMPLICIT, __main__ as pornire
 from module.interfata.catalog import Catalog
-from module.interfata.creiere import CreierFals, CreierKronos
+from module.interfata.creiere import CreierFals, CreierKronos, CreierText, TextPreaLung, taie
 from module.interfata.module_ui import lista_modulelor
 from module.interfata.retea import adresa_permisa, adrese_de_ascultat
 from module.interfata.server import LUNGIME_MAXIMA_MESAJ, Aplicatie, ServerInterfata, porneste
@@ -247,6 +247,76 @@ def test_creier_kronos_raspunde_cu_un_model_mic_incarcat_lenes(tmp_path):
 
     with pytest.raises(ValueError, match="#6"):  # experiment fără model salvat: eroare pe înțeles, la prima întrebare
         CreierKronos(6, tmp_path / "lucru").raspunde("The ", 10)
+
+
+class ModelTextFals:
+    """În locul lui #401: o bucată = un caracter, fereastra de 120, și răspunde „Da.” urmat de ce ar mai scrie un model
+    care nu se oprește singur. Ține minte ce a primit."""
+
+    setari = {"context": 120}
+
+    class tok:  # noqa: N801
+        @staticmethod
+        def codifica(text: str) -> list[int]:
+            return [ord(c) for c in text]
+
+    def __init__(self) -> None:
+        self.primite: list[tuple[str, int]] = []
+
+    def completeaza(self, inceput: str, max_simboluri: int) -> str:
+        self.primite.append((inceput, max_simboluri))
+        return " Satul are 500 de locuitori.\n<|endoftext|>\nÎntrebare: altceva"
+
+
+def creier_text_fals(simboluri: int = 20) -> tuple[CreierText, ModelTextFals]:
+    model = ModelTextFals()
+    creier = CreierText(401, "lucru-inexistent", simboluri=simboluri)
+    creier._incarca = lambda: model  # type: ignore[method-assign]
+    return creier, model
+
+
+def test_creier_text_da_formatul_de_la_antrenare_si_se_opreste_la_sfarsitul_raspunsului():
+    creier, model = creier_text_fals()
+    assert creier.eticheta == "Kronos #401 — răspunde doar din textul dat." and not creier.incarcat
+    raspuns = creier.raspunde_din_text("  Satul X are 500 de locuitori. ", " Câți locuitori are X? ")
+    assert raspuns == "Satul are 500 de locuitori."  # tăiat la primul rând nou, fără <|endoftext|> și ce urmează
+    assert model.primite == [("Text: Satul X are 500 de locuitori.\nÎntrebare: Câți locuitori are X?\nRăspuns:", 20)]
+    assert taie(" Nu scrie în text.<|endoftext|>x") == "Nu scrie în text."
+
+
+def test_creier_text_spune_cand_paragraful_nu_incape_si_nu_taie(tmp_path):
+    creier, model = creier_text_fals(simboluri=20)  # fereastra 120 - 20 de răspuns = 100 de bucăți pentru text
+    scurt = "x" * (100 - len("Text: \nÎntrebare: ?\nRăspuns:"))
+    assert creier.raspunde_din_text(scurt, "?")  # exact cât încape: răspunde
+    with pytest.raises(TextPreaLung, match="101 bucăți") as e:
+        creier.raspunde_din_text(scurt + "y", "?")
+    assert e.value.incap == 100 and "Scurtează" in str(e.value) and len(model.primite) == 1  # modelul nu a fost întrebat
+
+    with server_pornit(tmp_path / "c.db", creier_text=creier) as (adresa, _):
+        primit = json_de_la(adresa + "/api/din-text", {"text": scurt * 3, "intrebare": "?"})
+        assert primit["raspuns"] is None and primit["prea_lung"] is True and "fereastra modelului" in primit["eroare"]
+
+
+def test_fila_din_text_pe_server(tmp_path):
+    baza = tmp_path / "c.db"
+    with server_pornit(baza) as (adresa, _):  # fără creier „din text”: fila nu apare, iar cererea primește 404
+        assert json_de_la(adresa + "/api/stare")["din_text"] is None
+        assert cere(adresa + "/api/din-text", {"text": "a", "intrebare": "b"})[0] == 404
+    creier, model = creier_text_fals()
+    with server_pornit(baza, creier_text=creier) as (adresa, _):
+        assert json_de_la(adresa + "/api/stare")["din_text"] == creier.eticheta
+        primit = json_de_la(adresa + "/api/din-text", {"text": "Satul X are 500 de locuitori.",
+                                                        "intrebare": "Câți locuitori are X?"})
+        assert primit["raspuns"] == "Satul are 500 de locuitori." and primit["eroare"] is None
+        assert primit["eticheta"] == creier.eticheta and primit["secunde"] >= 0
+        assert cere(adresa + "/api/din-text", {"text": " ", "intrebare": "b"})[0] == 400
+        assert cere(adresa + "/api/din-text", {"text": "a", "intrebare": ""})[0] == 400
+        assert cere(adresa + "/api/din-text", {"text": "a", "intrebare": "b"}, tip="text/plain")[0] == 415
+        # chatul vechi merge la fel
+        assert json_de_la(adresa + "/api/mesaj", {"text": "Salut"})["raspuns"]["autor"] == CreierFals.eticheta
+    assert randuri_din_baza(baza) == [("om", "Tu", "Salut"), ("creier", CreierFals.eticheta, CreierFals().raspunde("Salut", 200))]
+    html = (RADACINA / "module" / "interfata" / "static" / "index.html").read_text(encoding="utf-8")
+    assert "Întreabă din text" in html and 'id="paragraf"' in html and 'id="intrebare"' in html
 
 
 def test_linia_de_comanda_cere_un_creier_si_o_configurare_buna(tmp_path, capsys):

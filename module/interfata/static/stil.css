@@ -10,6 +10,7 @@
   }
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; padding: 0 16px 16px; background: var(--fond); color: var(--text);
        font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
 header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 12px 0 4px; }
@@ -52,4 +53,9 @@ textarea { width: 100%; font: inherit; color: var(--text); background: var(--har
   main { grid-template-columns: minmax(0, 1fr); }
   aside ul { max-height: 20vh; }
 }
+#file { display: flex; gap: 6px; padding-top: 12px; }
+#file button.aleasa { border-color: var(--accent); background: var(--om); }
+#zona-text { padding-top: 12px; max-width: 46rem; }
+#intreaba { justify-self: start; background: var(--accent); color: var(--hartie); border-color: var(--accent); }
+#anunt-text { min-height: 1.5em; margin: 4px 0; color: var(--rau); }
 #ce-stie { margin: 0 0 12px; padding: 8px 12px; border-left: 3px solid #888; background: rgba(128, 128, 128, 0.12); font-size: 0.95em; }
