@@ -60,7 +60,7 @@ Toate cifrele și exemplele: `lucru/masoara_romana/rezultat.json`.
 
 ## Ce am văzut în exemple (părerea mea; supraveghetorul le numără)
 
-- **Cele 30 alese dintre toate:** 23 sunt nume proprii sau cuvinte străine luate drept necunoscute (Schocken, Panther,
+- **Cele 30 alese dintre toate:** 24 sunt nume proprii sau cuvinte străine luate drept necunoscute (Schocken, Panther,
   Disney, LGBTQ). Doar unul e o problemă adevărată: „rîul” (ortografia veche, azi „râul”). Celelalte sunt alarme
   false de gramatică sau cuvinte reale lipsă din bază („maronită”, „ministru-șef”).
 - **Cele 20 alese doar dintre gramatică:** cred că doar 2 sunt greșeli adevărate:
