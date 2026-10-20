@@ -19,6 +19,6 @@ kronos = "kronos.cli:main"
 include = ["kronos*", "module*"]
 
 [tool.pytest.ini_options]
-testpaths = ["teste", "teste_contracte"]
+testpaths = ["teste", "teste_contracte", "module/limba_romana/teste"]
 pythonpath = ["."]
 addopts = "-q --basetemp=lucru/teste_tmp"
