@@ -94,7 +94,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/2026-10-20_1317_S5_interfata_intreaba_din_text.md (3/3 exemple bune: „24.160 de locuitori.”, „Nu scrie în text.”, textul lung refuzat clar: 669 > 432 bucăți)
 
 ### S6 — Datele pentru noaptea 11: aceleași întrebări, formulate în mai multe feluri, plus da/nu
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30); după S5. Trebuie să fie `gata` până la 18:30, altfel S7 nu pornește în seara asta.
 - durată maximă: 2 ore
