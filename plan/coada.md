@@ -32,7 +32,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/2026-10-20_0756_raport_dimineata.md (CONFIRMAT, fără regresie)
 
 ### S2 — Motorul de română: merge în main și măsurarea datelor de conversație
-- stare: in_lucru
+- stare: gata
 - tip: procesor (prioritate scăzută; NU folosește placa)
 - fereastră: zi (08:00–18:30), oricând placa e ocupată sau liberă
 - durată maximă: 3 ore
@@ -49,7 +49,7 @@ Formatul unei sarcini:
      exemple alese la întâmplare (sămânță fixă) cu textul, problema și sugestia, ca supraveghetorul să numere alarmele false.
   5. Filtrul pe datele de antrenare se aplică abia într-o sarcină separată, după „da”-ul lui Adrian.
 - aprobat de: Adrian, 19 octombrie 2026, 19:45 (merge + descărcare + măsurare, cu condițiile 2–5)
-- raport: docs/rapoarte/<data>_<ora>_motor_romana_masurare.md
+- raport: docs/rapoarte/2026-10-20_1120_motor_romana_masurare.md (fără necunoscute: 18,6% din „răspuns din text”, 6,6% din cele vechi; mai ales alarme false)
 ### S3 — Școala de cod: o sarcină nouă pentru nivelul 0w
 - stare: propus
 - tip: placă
