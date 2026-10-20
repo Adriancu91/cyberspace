@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 23:15 — noaptea 11 rulează
+
+- **REZOLVAT:** noaptea 11 (S7) a pornit la 20:46, de mână, cu tine de față (fișierele vechi puse deoparte, nu șterse).
+  Merge pe linia nouă `w2_conv_text_v2`, din #401, cu pragurile scrise dinainte. Placa: 6.225 MB, 55 °C — sub limite.
+- Antrenarea se termină pe la 23:50, apoi examenele (~1 oră). Verdictul îl dau la 08:15, din raportul de dimineață.
+- Reparația uneltei de pornire (`--din-nou`) n-a mai fost nevoie aseară; am pus-o separat ca **S9** (aprobată de mine, mâine
+  ziua, pe procesor), ca data viitoare să nu mai fie nevoie de tine la calculator. S8 (`module.toml`) rămâne tot mâine ziua.
+- Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 20 octombrie 2026, 20:45 — noaptea 11 s-a împiedicat încă o dată; o deblochez fără tine
 
 - Executantul a pregătit corect rularea reparată (linia `w2_conv_text_v2`, din #401, aceleași praguri), dar unealta care
