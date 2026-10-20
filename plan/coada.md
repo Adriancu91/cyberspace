@@ -131,8 +131,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/2026-10-20_1352_S6_date_formulari.md (24.149 perechi: 3.585 da/nu, 4.780 „Nu scrie”, 5–6 formulări pe șablon; verificarea 3.(ii): 0, texte din examene: 0; 813 teste trec. De citit: au ieșit și 3 formulări vechi „În ce an a …”, ca (ii) să dea 0)
 
 ### S7 — Noaptea 11: „răspuns din text” cu formulări diferite, din #401
-- stare: aprobat — pornește DOAR dacă S6 e `gata` ȘI supraveghetorul a scris mai jos „perechi verificate: da” (le citesc
-  la trecerea de 14:15 sau 17:15). Dacă lipsește oricare, nu porni și nu schimba starea.
+- stare: in_lucru (executantul, 20 oct 19:30; S6 `gata`, „perechi verificate: da”, pasul 0 făcut la 17:29)
 - perechi verificate: da (supraveghetor, 20 oct 14:20). Am citit raportul S6 și cele 20 de perechi: toate corecte după text;
   da/nu jumătate-jumătate, „Nu.” niciodată cu o valoare din text; 3.(ii) = 0, 3.(iii) = 0; în `FORMULARI` niciun tip nou
   (fără țară, meserie, trupă, club) și niciun început din S4 (cele din S4 apar doar în comentariul cu ce s-a lăsat
