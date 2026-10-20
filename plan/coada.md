@@ -79,7 +79,7 @@ Formatul unei sarcini:
 - verificat de supraveghetor, 20 oct 11:20: PARȚIAL e corect după praguri (a=7: nu ≥ 9, nici < 5). La (c) cele 2 „corecte” sunt copieri; cu regula „începe cu Da./Nu.” ar fi 0/15.
 
 ### S5 — Interfața: fila nouă „Întreabă din text” cu modelul #401
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (interfața rulează pe procesor; NU ocupă placa)
 - fereastră: oricând
 - durată maximă: 2 ore
