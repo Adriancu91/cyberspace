@@ -146,14 +146,14 @@ sare mereu în felul acesta. Aceleași cifre ca aseară.
 3. **Dacă vrei să pornească cascada pe `plan/coada.md`:** trebuie să înregistrezi tu sarcina Windows „Kronos executant
    coada”, cum am vorbit aseară. Azi ziua e aprobat S2, motorul de română.
 
-4. **Trimiterea pe GitHub n-a mers.** GitHub are deja lucrări care nu sunt pe acest calculator, probabil de pe laptop
-   sau de pe telefon. Ca să le aduc aici, trebuiau rulate `git fetch` și `git pull`, iar pentru amândouă paznicul cerea
-   aprobarea unui om de față. Pe tine nu te aveam, așa că n-am forțat nimic. Raportul și pre-înregistrarea sunt salvate
-   **doar pe workstation**, în commit-uri locale. Când ajungi la calculator, rulează în `C:\Kronos\cyberspace`:
-   ```
-   git pull --rebase
-   git push
-   ```
-   (sau spune-mi și le rulez eu). Dacă `git pull --rebase` anunță un conflict, nu continua: spune-mi și mă uit eu.
+4. **De știut despre GitHub (rezolvat):**
+   - Prima trimitere, la 07:57, a fost respinsă. Pe GitHub erau două rezumate noi de la „Claude (supraveghetor)”, în
+     `plan/pentru_adrian.md`.
+   - Eu n-am avut voie să le aduc pe calculator: pentru `git fetch` și `git pull`, paznicul cerea aprobarea unui om de
+     față.
+   - La 07:58 le-a adus altcineva, cu un commit de unire pe numele tău (b4d97c1). Nu știu ce proces a fost.
+   - A intrat doar acel fișier și nu s-a lovit de nimic din ce am scris eu.
+   - A doua trimitere a mers, așa că totul e acum pe GitHub. Dacă n-ai fost tu cel care a adus fișierele la 07:58, merită
+     să aflăm cine a fost.
 
-Noaptea n-a căzut și nici testele. Singura problemă e trimiterea pe GitHub (punctul 4).
+Noaptea n-a căzut, testele n-au picat și n-am găsit nimic de reparat.
