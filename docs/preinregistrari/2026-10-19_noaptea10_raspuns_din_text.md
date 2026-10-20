@@ -107,3 +107,45 @@ spune „Nu scrie în text.”.
 - **Sub 15 din 25 la „Ce este X?”:** nici măcar copierea primei propoziții nu iese, deci textul în față nu ajută.
 - **Româna curată sub 1,30 și codul curat sub 0,80:** 50% text vechi oprește uitarea aproape de tot.
 - **Româna curată peste 1,35:** nici 50% text vechi nu ajunge; atunci problema e alta (rata, felul perechilor).
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-20 07:43, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 399 | w2_conv_text | 19.10 19:00 | 0,4364 | pastrat | — | — | — |  |
+| 400 | w2_conv_text | 19.10 20:06 | 0,4379 | pastrat | — | — | — |  |
+| 401 | w2_conv_text | 19.10 21:10 | 0,4357 | pastrat | — | — | — |  |
+| 402 | examen_conversatie | 19.10 22:14 | — | masurat | — | — | — |  |
+| 403 | examen_validari_ws | 19.10 22:14 | — | masurat | — | — | — |  |
+
+- **w2_conv_text:** 3 ore, 3 păstrate; val_bpb de la 0,4364 la 0,4357; cel mai bun păstrat: #401 (0,4357); pornită din #385 (0,4383).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris la 2026-10-20 07:56 de Claude Code (sarcina „Kronos raport dimineata”), strict după pragurile de mai sus, pe
+ultimul model păstrat, #401 (`lucru/examen_conversatie/experiment_401_20261019_221439.json`,
+`lucru/examen_validari_ws/experiment_401_20261019_221453.json`, `lucru/examen_sacru/experiment_401_20261019_221501.json`).*
+
+- Cu răspunsul în text: **50 din 50** corecte (nota ≥ 7; prag ≥ 30). „Ce este X?”: 25 din 25; celelalte șabloane: 25 din 25.
+  49 din 50 de răspunsuri sunt identice cu referința.
+- „Nu scrie în text.”: **20 din 20** corecte (prag ≥ 12): 10 din 10 același subiect, 10 din 10 alt subiect.
+- „Nu scrie în text.” spus la cele care au răspunsul: **0 din 50** (prag ≤ 5).
+- Conversație (doar urmărit): 7 din 10.
+- Să nu uite, față de #385:
+  - română pe validarea curată **1,2769 ≤ 1,3133** (trece; #385: 1,2833);
+  - cod pe validarea curată **0,7852 ≤ 0,8174** (trece; #385: 0,7874);
+  - povești (val_bpb) **0,4357 ≤ 0,47** (trece; #385: 0,4383);
+  - fapte noi **74 ≥ 65** (trece; #385: 73).
+- Setul sacru: 24 din 50 (#385: 18), nu sub 15, deci nu e nevoie de raport separat.
+- Față de așteptările mele: am greșit, Kronos a ieșit mai bine. 50 din 50 e peste 40, deci „citește mai bine decât
+  cred”. Româna curată e sub 1,30 și codul curat sub 0,80, deci 50% text vechi oprește uitarea aproape de tot.
+
+**Verdict: CONFIRMAT, fără regresie.** Adrian hotărăște dacă #401 intră în interfață.
+
+Ce spune verdictul și ce nu: examenul folosește aceleași șabloane de întrebări ca antrenarea, dar pe articole pe care
+Kronos nu le-a văzut. Arată deci că știe să găsească și să copieze bucata potrivită din text la întrebările de felul
+acesta. Nu arată că ar înțelege întrebări puse altfel.
