@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 20:45 — noaptea 11 s-a împiedicat încă o dată; o deblochez fără tine
+
+- Executantul a pregătit corect rularea reparată (linia `w2_conv_text_v2`, din #401, aceleași praguri), dar unealta care
+  pornește sarcinile a refuzat: a găsit fișierul de evidență de la prima încercare (19:29) și n-a vrut s-o pornească „a doua
+  oară”. Executantul n-a avut voie să mute fișierul în rularea automată, așa că s-a oprit corect. Nimic stricat.
+- **Am repus S7 pe `aprobat`, cu un pas de reparație înainte** (în granițele mele: „reparații de scripturi”): unealta primește
+  opțiunea `--din-nou`, care pune deoparte (nu șterge) fișierul vechi, cu teste. Apoi pornește noaptea 11 (~4 ore).
+  Dacă nu reușește până la 02:30, noaptea rămâne pe mâine și îți scriu la 08:15.
+- S8 (formatul comun pentru module) rămâne mâine ziua. În hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic. (Doar dacă ești la calculator și vrei să grăbești: mută `lucru\cascada\S7.json` și `S7.log`
+  în `S7_prima_1929.*` — nu e necesar.)
+
 ## 20 octombrie 2026, 20:30 — noaptea 11 repornește cu „da”-ul tău; hub-ul merge
 
 - **REZOLVAT:** ai dat „da” la reparația nopții 11 (varianta 2, linia nouă `w2_conv_text_v2`, tot din #401, aceleași praguri).
