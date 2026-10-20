@@ -22,14 +22,14 @@ Formatul unei sarcini:
 ---
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
-- stare: in_lucru
+- stare: gata
 - tip: placă
 - fereastră: noapte
 - durată maximă: 3 ore + examene
 - ce faci: pornită de sarcina Windows „Kronos noapte conversatie” la 19:00, 19 octombrie
 - pre-înregistrare: docs/preinregistrari/2026-10-19_noaptea10_raspuns_din_text.md
 - aprobat de: Adrian, 19 octombrie
-- raport: verdictul vine la 07:40, 20 octombrie (raportul automat)
+- raport: docs/rapoarte/2026-10-20_0756_raport_dimineata.md (CONFIRMAT, fără regresie)
 
 ### S2 — Motorul de română: merge în main și măsurarea datelor de conversație
 - stare: aprobat
