@@ -83,6 +83,59 @@ def test_nu_scrie_in_text_se_recunoaste_si_se_numara():
     assert s["nu_scrie_la_text"] == 1 and s["nota_medie_fara_nu_stiu"] == 5.5
 
 
+def _amestec(n):
+    """Sate, filme și oameni, ca să fie de toate șabloanele da/nu."""
+    return _articole(n) + [
+        {"x": f"Film{i}", "tip": "ce", "text": FILM.replace("Okinawa", f"Film{i}"), "prima": FILM, "definitie": f"Ce este Film{i}?"}
+        for i in range(n)] + [
+        {"x": f"Om{i}", "tip": "om", "text": OM.replace("Aurel Decei", f"Om{i}"), "prima": OM, "definitie": f"Cine a fost Om{i}?"}
+        for i in range(n)]
+
+
+def test_fara_formulari_perechile_sunt_ca_inainte():
+    perechi = ct.perechi_pentru(_amestec(30), 0.2, random.Random(0), "text")
+    assert all("x" not in p and not p["tip"].startswith("da_nu") for p in perechi)
+    assert {p["intrebare"] for p in perechi if p["tip"] == "nascut"} == {f"În ce an s-a născut Om{i}?" for i in range(30)}
+
+
+def test_formulari_si_da_nu():
+    perechi = ct.perechi_pentru(_amestec(60), 0.2, random.Random(0), "text", formulari=random.Random(1))
+    nascut = [p for p in perechi if p["tip"] == "nascut"]
+    assert len({p["intrebare"].replace(p["text"].split(" (")[0], "{x}") for p in nascut}) >= 4
+    assert all(p["raspuns"] == "În 1905." for p in nascut)
+    da_nu = [p for p in perechi if p["tip"].startswith("da_nu")]
+    assert abs(len(da_nu) / len(perechi) - 0.15) < 0.04
+    assert abs(sum(p["raspuns"] == "Da." for p in da_nu) - len(da_nu) / 2) <= 1
+    for p in da_nu:
+        assert p["raspuns"] in ("Da.", "Nu.") and p["fel"] == "text"
+        if p["tip"] in ("da_nu_nascut", "da_nu_murit", "da_nu_an"):
+            an = next(c for c in p["intrebare"].rstrip("?").split() if c.isdigit())
+            assert (an in p["text"]) == (p["raspuns"] == "Da.")
+    feluri = [p["fel"] for p in perechi]
+    assert abs(feluri.count("nu_scrie") / len(feluri) - 0.2) < 0.03
+    an = [p for p in perechi if p["tip"] == "an"]
+    assert all(p["raspuns"] == ("În 1952." if p["intrebare"].startswith(("Când", "Ce an", "Care e")) else "Din 1952.")
+               for p in an)
+
+
+def test_da_nu_nu_schimba_valoarea_in_una_din_text():
+    rng = random.Random(3)
+    for _ in range(50):
+        nou = ct._alta_valoare("locuitori", "1.204 locuitori", SAT, {}, rng)
+        assert nou and nou != "1.204 locuitori" and nou.split()[0] not in SAT and nou.endswith("locuitori")
+    assert ct._alta_valoare("judet", "Tulcea", SAT, {"judet": ["Tulcea"]}, rng) is None
+
+
+def test_formularile_nu_sunt_din_examenul_s4():
+    interzise = ct.inceputuri_interzise()
+    for tip, formulari in ct.FORMULARI.items():
+        assert 5 <= len(formulari) <= 8, tip
+        for f in formulari + list(ct._LIPSA_VECHI.values()):
+            assert ct._inceput(f.format(x="Xyz", y="Yzx")) not in interzise, f
+    for f in sum(ct.DA_NU.values(), []):
+        assert ct._inceput(f.format(x="Xyz", v="1950")) not in interzise, f
+
+
 def test_conversatia_simpla_nu_are_intrebarile_din_examen():
     from unelte.genereaza_conversatie import normalizat
 

@@ -16,7 +16,17 @@
   în antrenare, plus cele 10 de conversație din docs/conversatie/examen_scris_de_mana.json (doar urmărite).
 Ies: date/conversatie/text/antrenare.jsonl, examen.json, info.json. Licența: Wikipedia, CC BY-SA 4.0.
 
+**--formulari (S6, 20 octombrie 2026; implicit oprită, ca datele nopții 10 să rămână aceleași).** S4 a arătat că #401 a
+învățat cuvintele întrebării, nu sensul. Cu --formulari, la antrenare (examenul rămâne neschimbat):
+- fiecare șablon (în afară de „Ce este X?”) are 5–8 formulări (FORMULARI), alese la întâmplare, la fel și întrebările
+  „Nu scrie în text.” despre același subiect; nicio formulare din examenul S4 (docs/conversatie/examen_generalizare_401.json)
+  și niciun tip nou de întrebare;
+- cam --da-nu din perechile cu text sunt da/nu, doar pe șabloanele an, locuitori, județ, comună, regizat, scris: „Da.”
+  cu ce scrie în text, „Nu.” cu alt an / alt număr / alt nume, schimbat de unealtă (jumătate-jumătate).
+Formulările și da/nu au întâmplarea lor (--samanta + 1), deci articolele și examenul sunt aceleași ca fără --formulari.
+
     python unelte/conversatie_text.py --articole 6000
+    python unelte/conversatie_text.py --articole 16000 --formulari --dosar date/conversatie/text_v2
 """
 
 from __future__ import annotations
@@ -64,6 +74,168 @@ _CAPITALA = re.compile(rf"\b(?:cu capitala (?:la|în)|[Aa]re capitala în orașu
 _SUPRAFATA = re.compile(r"\bsuprafață (?:totală )?de (?:aproximativ )?(\d[\d.,]* (?:km²|ha))")
 _DISTANTA = re.compile(rf"\bla (?:aproximativ |circa )?(\d+ km) (?:(?:spre )?(?:nord|sud|est|vest)(?:-(?:est|vest))? )?"
                        rf"de ({_MARE}(?:[- ]{_MARE})?)")
+
+
+EXAMEN_S4 = "docs/conversatie/examen_generalizare_401.json"
+# Formulările fiecărui șablon (prima e cea veche, în afară de murit și atestat). Răspunsul rămâne cel vechi, în afară de „Din …” → „În …” unde scrie.
+# Lăsate deoparte, ca examenul S4 să rămână cinstit: „Ce populație are”, „Câți oameni trăiesc în”, „Ce număr de
+# locuitori”, „Cine este autorul”, „Cine a făcut filmul”, „Cine a scris scenariul”, „Cât de mare este”, „În care județ
+# e”, „Care este data nașterii”, „Când a fost lansat”, „Când s-a stins din viață”, „Când a venit pe lume”, „În ce an a …”
+# (de aceea, cu --formulari, nici cele vechi „În ce an a murit / a apărut / a fost atestat documentar X?” nu mai apar).
+FORMULARI: dict[str, list[str]] = {
+    "nascut": ["În ce an s-a născut {x}?", "Când s-a născut {x}?", "Care e anul nașterii lui {x}?",
+               "Ce an de naștere are {x}?", "{x} s-a născut în ce an?", "În ce an e născut {x}?"],
+    "murit": ["În ce an moare {x}?", "Când a murit {x}?", "Care e anul morții lui {x}?", "Când a decedat {x}?",
+              "{x} a murit în ce an?"],
+    "locuitori": ["Câți locuitori are {x}?", "Câte persoane locuiesc în {x}?", "Câți locuitori sunt în {x}?",
+                  "Câți locuitori numără {x}?", "Câtă lume locuiește în {x}?", "{x} câți locuitori are?"],
+    "judet": ["În ce județ se află {x}?", "În ce județ este {x}?", "{x} se află în ce județ?",
+              "În ce județ se găsește {x}?", "În ce județ e {x}?"],
+    "comuna": ["În ce comună se află {x}?", "În ce comună este {x}?", "{x} se află în ce comună?",
+               "În ce comună se găsește {x}?", "În ce comună e {x}?"],
+    "distanta": ["La ce distanță de {y} se află {x}?", "La câți kilometri de {y} se află {x}?",
+                 "La ce distanță se află {x} de {y}?", "Cât de departe de {y} se află {x}?",
+                 "Cât de departe este {x} de {y}?"],
+    "regiune": ["În ce regiune se află {x}?", "În ce regiune este {x}?", "{x} se află în ce regiune?",
+                "În ce regiune se găsește {x}?", "În ce regiune e {x}?"],
+    "capitala": ["Ce capitală are {x}?", "{x} ce capitală are?", "Unde își are capitala {x}?",
+                 "Ce oraș are {x} drept capitală?", "Ce oraș e capitală pentru {x}?"],
+    "suprafata": ["Ce suprafață are {x}?", "Ce întindere are {x}?", "Pe ce suprafață se întinde {x}?",
+                  "{x} ce suprafață are?", "Ce suprafață ocupă {x}?"],
+    "regizat": ["Cine a regizat {x}?", "Cine e regizorul lui {x}?", "Sub ce regie e {x}?",
+                "Cine a făcut regia pentru {x}?", "Cine semnează regia lui {x}?"],
+    "scris": ["Cine a scris {x}?", "Cine semnează {x}?", "Cine e cel care a scris {x}?",
+              "Cine a fost cel care a scris {x}?", "Cine a pus pe hârtie {x}?"],
+    "fondat": ["Cine a fondat {x}?", "Cine a înființat {x}?", "Cine e fondatorul lui {x}?",
+               "Cine a pus bazele lui {x}?", "Cine a creat {x}?"],
+    "dezvoltat": ["Cine a dezvoltat {x}?", "Cine e dezvoltatorul lui {x}?", "Cine a realizat {x}?",
+                  "De cine a fost dezvoltat {x}?", "{x} a fost dezvoltat de cine?"],
+    "an": ["Din ce an este {x}?", "Din ce an e {x}?", "Când a apărut {x}?", "Ce an de apariție are {x}?",
+           "Care e anul apariției lui {x}?", "{x} e din ce an?"],
+    # „Nu scrie în text.” despre același subiect (cele vechi: lipsa_*)
+    "murit_unde": ["Unde a murit {x}?", "În ce loc a murit {x}?", "Unde a decedat {x}?", "{x} unde a murit?",
+                   "În ce localitate a murit {x}?"],
+    "parinti": ["Cine au fost părinții lui {x}?", "Cum se numeau părinții lui {x}?", "Ce părinți a avut {x}?",
+                "Cine erau părinții lui {x}?", "Cine i-au fost părinți lui {x}?"],
+    "altitudine": ["La ce altitudine se află {x}?", "Ce altitudine are {x}?", "La ce înălțime se află {x}?",
+                   "{x} la ce altitudine se află?", "Cât de sus se află {x}?"],
+    "atestat": ["În ce an e atestat documentar {x}?", "Când a fost atestat documentar {x}?",
+                "Din ce an e atestat documentar {x}?", "Când apare {x} prima dată în documente?",
+                "În ce an apare prima dată în documente {x}?"],
+}
+# cele vechi „Nu scrie” care au alt șablon decât perechea „text” cu același nume
+_LIPSA_VECHI = {"fondat": "Cine a creat {x}?"}
+_RASPUNS_IN = {"Când a apărut {x}?", "Ce an de apariție are {x}?", "Care e anul apariției lui {x}?"}
+# da/nu: (întrebarea, de unde vine valoarea din răspuns)
+DA_NU: dict[str, list[str]] = {
+    "nascut": ["S-a născut {x} în {v}?", "{x} s-a născut în {v}?", "E adevărat că {x} s-a născut în {v}?"],
+    "murit": ["A murit {x} în {v}?", "{x} a murit în {v}?", "E adevărat că {x} a murit în {v}?"],
+    "an": ["Este {x} din {v}?", "{x} e din {v}?", "A apărut {x} în {v}?"],
+    "locuitori": ["Are {x} {v}?", "{x} are {v}?", "E adevărat că {x} are {v}?"],
+    "judet": ["Se află {x} în județul {v}?", "{x} e în județul {v}?", "E adevărat că {x} e în județul {v}?"],
+    "comuna": ["Se află {x} în comuna {v}?", "{x} e în comuna {v}?", "E adevărat că {x} e în comuna {v}?"],
+    "regizat": ["A regizat {v} {x}?", "E {v} regizorul lui {x}?", "E adevărat că {v} a regizat {x}?"],
+    "scris": ["A scris {v} {x}?", "{v} a scris {x}?", "E adevărat că {v} a scris {x}?"],
+}
+
+
+def _valoare(q: dict[str, str]) -> str:
+    """Ce e de verificat la da/nu: anul, „1.204 locuitori”, „Tulcea”, „Leigh Jason”."""
+    r = q["raspuns"].rstrip(".")
+    for prefix in ("În județul ", "În comuna ", "Din ", "În "):
+        r = r.removeprefix(prefix)
+    return r
+
+
+def _alta_valoare(tip: str, v: str, text: str, alte: dict[str, list[str]], rng: random.Random) -> str | None:
+    """O valoare greșită pentru „Nu.”: alt an (±1–30), alt număr de locuitori, alt nume de același fel (din alte
+    articole); niciodată una care apare în text."""
+    for _ in range(20):
+        if tip in ("nascut", "murit", "an"):
+            nou = str(int(v) + rng.choice([-1, 1]) * rng.randint(1, 30))
+        elif tip == "locuitori":
+            m = re.match(r"([\d.]+) ((?:de )?locuitori)", v)
+            if m is None:
+                return None
+            n = int(m.group(1).replace(".", ""))
+            alt = max(2, round(n * rng.choice([0.4, 0.6, 0.75, 1.3, 1.5, 2.5]) + rng.randint(-9, 9)))
+            nou = f"{alt:,}".replace(",", ".") + (" de locuitori" if alt % 100 >= 20 or alt % 100 == 0 else " locuitori")
+        else:
+            if not alte.get(tip):
+                return None
+            nou = rng.choice(alte[tip])
+        if nou != v and nou not in text and nou.split()[0] not in text:
+            return nou
+    return None
+
+
+def da_nu_pentru(pozitive: list[dict[str, Any]], cate: int, rng: random.Random) -> list[dict[str, Any]]:
+    """`cate` perechi da/nu din perechile „text” cu șabloanele din DA_NU, jumătate „Da.” (valoarea din text) și jumătate
+    „Nu.” (altă valoare, schimbată de unealtă). Câte una pe articol, cel mult."""
+    bune = [p for p in pozitive if p["tip"] in DA_NU]
+    alte: dict[str, list[str]] = {}
+    for p in bune:
+        if p["tip"] in ("judet", "comuna", "regizat", "scris"):
+            alte.setdefault(p["tip"], []).append(_valoare(p))
+    rng.shuffle(bune)
+    perechi: list[dict[str, Any]] = []
+    grupuri: set[str] = set()
+    for p in bune:
+        if len(perechi) >= cate:
+            break
+        if p["grup"] in grupuri:
+            continue
+        v = _valoare(p)
+        da = len(perechi) % 2 == 0
+        if not da and (v := _alta_valoare(p["tip"], v, p["text"], alte, rng)) is None:
+            continue
+        intrebare = rng.choice(DA_NU[p["tip"]]).format(x=p["x"], v=v)
+        grupuri.add(p["grup"])
+        perechi.append({"fel": "text", "limba": "ro", "grup": p["grup"], "text": p["text"], "tip": f"da_nu_{p['tip']}",
+                        "intrebare": intrebare, "raspuns": "Da." if da else "Nu."})
+    return perechi
+
+
+def reformuleaza(p: dict[str, Any], rng: random.Random) -> dict[str, Any]:
+    """Aceeași pereche, cu o formulare aleasă la întâmplare (și „Din” → „În” unde formularea o cere)."""
+    tip = p["tip"].removeprefix("lipsa_")
+    if tip not in FORMULARI or "x" not in p:
+        return p
+    sablon = rng.choice(FORMULARI[tip])
+    if p["tip"].startswith("lipsa_") and tip in _LIPSA_VECHI and sablon == FORMULARI[tip][0]:
+        sablon = _LIPSA_VECHI[tip]
+    y = p["intrebare"].removeprefix("La ce distanță de ").split(" se află ")[0] if tip == "distanta" else ""
+    nou = {**p, "intrebare": sablon.format(x=p["x"], y=y)}
+    if sablon in _RASPUNS_IN and nou["raspuns"].startswith("Din "):
+        nou["raspuns"] = "În " + nou["raspuns"].removeprefix("Din ")
+    return nou
+
+
+def inceputuri_interzise(cuvinte: int = 4) -> set[str]:
+    """Primele `cuvinte` cuvinte ale fiecărei întrebări din examenul S4 (litere mici, fără semne)."""
+    s4 = json.loads((RADACINA / EXAMEN_S4).read_text(encoding="utf-8"))["perechi"]
+    return {_inceput(p["intrebare"], cuvinte) for p in s4}
+
+
+def _inceput(intrebare: str, cuvinte: int = 4) -> str:
+    return " ".join(intrebare.lower().replace("?", " ").replace(",", " ").split()[:cuvinte])
+
+
+def verificari(antrenare: list[dict[str, Any]]) -> dict[str, Any]:
+    """Ce cere S6 la 3.(ii)–(iii): câte întrebări de antrenare încep cu primele 4 cuvinte ale unei întrebări din S4 (pe
+    începuturi, cu felul lor), câte texte din examenul nopții 10 sau din S4 au ajuns în antrenare (trebuie 0)."""
+    interzise = inceputuri_interzise()
+    gasite: Counter[str] = Counter()
+    for p in antrenare:
+        if (inceput := _inceput(p["intrebare"])) in interzise:
+            gasite[f"{inceput} ({p['tip']})"] += 1
+    texte = {p["text"] for p in json.loads((RADACINA / DOSAR / "examen.json").read_text(encoding="utf-8"))["perechi"]
+             if "text" in p}
+    texte |= {p["text"] for p in json.loads((RADACINA / EXAMEN_S4).read_text(encoding="utf-8"))["perechi"]}
+    return {"inceputuri_din_S4": sum(gasite.values()), "inceputuri_din_S4_pe_fel": dict(gasite),
+            "texte_din_examene": sum(p.get("text") in texte for p in antrenare),
+            "da_nu": dict(Counter(p["raspuns"] for p in antrenare if p["tip"].startswith("da_nu"))),
+            "formulari_pe_sablon": {t: len(f) for t, f in FORMULARI.items()}}
 
 
 def text_din(articol: str) -> str:
@@ -188,9 +360,11 @@ def articole_bune(cale: Path, interzise: set[str], cunoscute: Any, exceptii: Any
 
 
 def perechi_pentru(articole_: list[dict[str, Any]], fara: float, rng: random.Random, prefix: str,
-                   definitii: float = 0.5) -> list[dict[str, Any]]:
+                   definitii: float = 0.5, formulari: random.Random | None = None,
+                   da_nu: float = 0.15) -> list[dict[str, Any]]:
     """Întrebările „text” ale articolelor („Ce este X?” cel mult `definitii` din ele, ca modelul să nu învețe doar să
-    copieze prima propoziție), plus cam `fara` din total „nu_scrie” (jumătate același subiect, jumătate alt subiect)."""
+    copieze prima propoziție), plus cam `fara` din total „nu_scrie” (jumătate același subiect, jumătate alt subiect).
+    Cu `formulari` (întâmplarea lor): formulări diferite (FORMULARI) și cam `da_nu` din total perechi da/nu."""
     pozitive: list[dict[str, Any]] = []
     defs: list[dict[str, Any]] = []
     lipsa: list[dict[str, Any]] = []
@@ -198,13 +372,16 @@ def perechi_pentru(articole_: list[dict[str, Any]], fara: float, rng: random.Ran
         grup = f"{prefix}_{i}"
         for q in intrebari_din_text(a["text"], a["x"], a["tip"], a["prima"], a["definitie"]):
             (defs if q["tip"] == "definitie" else pozitive).append(
-                {"fel": "text", "limba": "ro", "grup": grup, "text": a["text"], **q})
+                {"fel": "text", "limba": "ro", "grup": grup, "text": a["text"], **q, "x": a["x"]})
     rng.shuffle(defs)
-    pozitive += defs[: round(definitii / (1 - definitii) * len(pozitive))]
+    if formulari is not None:
+        pozitive += da_nu_pentru(pozitive, round(da_nu / (1 - da_nu - fara) * (len(pozitive) + min(
+            len(defs), round(definitii / (1 - definitii) * len(pozitive))))), formulari)
+    pozitive += defs[: round(definitii / (1 - definitii) * len([p for p in pozitive if not p["tip"].startswith("da_nu")]))]
     for i, a in enumerate(articole_):
         grup = f"{prefix}_{i}"
         for q in lipsa_din_text(a["text"], a["x"], a["tip"]):
-            lipsa.append({"fel": "nu_scrie", "limba": "ro", "grup": grup, "text": a["text"], **q})
+            lipsa.append({"fel": "nu_scrie", "limba": "ro", "grup": grup, "text": a["text"], **q, "x": a["x"]})
     cate_fara = round(fara / (1 - fara) * len(pozitive))
     rng.shuffle(lipsa)
     alese = lipsa[: cate_fara // 2]
@@ -214,7 +391,10 @@ def perechi_pentru(articole_: list[dict[str, Any]], fara: float, rng: random.Ran
             continue
         alese.append({"fel": "nu_scrie", "limba": "ro", "grup": f"{prefix}_{a}", "text": articole_[a]["text"],
                       "tip": "alt_subiect", "intrebare": articole_[b]["definitie"], "raspuns": NU_SCRIE})
-    return pozitive + alese
+    perechi = pozitive + alese
+    if formulari is not None:
+        perechi = [reformuleaza(p, formulari) for p in perechi]
+    return [{k: v for k, v in p.items() if k != "x"} for p in perechi]
 
 
 def examenul(articole_: list[dict[str, Any]], cate_text: int, cate_fara: int, rng: random.Random
@@ -272,6 +452,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--conversatie-ori", type=int, default=5)
     parser.add_argument("--samanta", type=int, default=1019)
     parser.add_argument("--dosar", default=DOSAR)
+    parser.add_argument("--formulari", action="store_true", help="formulări diferite și da/nu la antrenare (S6)")
+    parser.add_argument("--da-nu", type=float, default=0.15, help="cu --formulari: partea da/nu din perechile cu text")
     args = parser.parse_args(argv)
 
     from unelte.conversatie_wikipedia import SURSA
@@ -292,7 +474,8 @@ def main(argv: list[str] | None = None) -> int:
     for k, p in enumerate(examen):
         p["grup"] = f"examen_{k}"
 
-    antrenare = perechi_pentru(de_antrenare, args.fara, rng, "text")
+    antrenare = perechi_pentru(de_antrenare, args.fara, rng, "text",
+                               formulari=random.Random(args.samanta + 1) if args.formulari else None, da_nu=args.da_nu)
     simple = json.loads((RADACINA / CONVERSATIE).read_text(encoding="utf-8"))["perechi"]
     la_examen = {normalizat(p["intrebare"]) for p in examen}
     simple = [p for p in simple if normalizat(p["intrebare"]) not in la_examen]
@@ -315,6 +498,8 @@ def main(argv: list[str] | None = None) -> int:
             "antrenare_pe_tip": dict(Counter(p["tip"] for p in antrenare)),
             "examen": dict(Counter(p["fel"] for p in examen)), "examen_pe_tip": dict(Counter(p["tip"] for p in examen)),
             "conversatie_simpla": len(simple), "scoase": dict(motive), "sursa": "wikipedia_ro (CC BY-SA 4.0)"}
+    if args.formulari:
+        info["verificari"] = verificari(antrenare)
     (dosar / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps(info, ensure_ascii=False, indent=1), flush=True)
     return 0

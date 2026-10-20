@@ -94,7 +94,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/2026-10-20_1317_S5_interfata_intreaba_din_text.md (3/3 exemple bune: „24.160 de locuitori.”, „Nu scrie în text.”, textul lung refuzat clar: 669 > 432 bucăți)
 
 ### S6 — Datele pentru noaptea 11: aceleași întrebări, formulate în mai multe feluri, plus da/nu
-- stare: in_lucru
+- stare: gata
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30); după S5. Trebuie să fie `gata` până la 18:30, altfel S7 nu pornește în seara asta.
 - durată maximă: 2 ore
@@ -125,8 +125,7 @@ Formatul unei sarcini:
      jos, copiate exact, plus așteptările tale în cifre.
 - aprobat de: supraveghetor, 20 octombrie 2026, 11:20 (categoriile „pregătirea datelor din surse deja descărcate” și
   „unelte noi în unelte/ cu teste”)
-- raport: docs/rapoarte/<data>_<ora>_S6_date_formulari.md — cu cifrele (câte perechi pe tip, câte formulări, câte da/nu),
-  verificarea de la 3.(ii) și 20 de perechi alese la întâmplare (sămânța 1020), dintre care 5 da/nu
+- raport: docs/rapoarte/2026-10-20_1352_S6_date_formulari.md (24.149 perechi: 3.585 da/nu, 4.780 „Nu scrie”, 5–6 formulări pe șablon; verificarea 3.(ii): 0, texte din examene: 0; 813 teste trec. De citit: au ieșit și 3 formulări vechi „În ce an a …”, ca (ii) să dea 0)
 
 ### S7 — Noaptea 11: „răspuns din text” cu formulări diferite, din #401
 - stare: aprobat — pornește DOAR dacă S6 e `gata` ȘI supraveghetorul a scris mai jos „perechi verificate: da” (le citesc
