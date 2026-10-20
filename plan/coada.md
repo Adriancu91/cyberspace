@@ -32,7 +32,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/2026-10-20_0756_raport_dimineata.md (CONFIRMAT, fără regresie)
 
 ### S2 — Motorul de română: merge în main și măsurarea datelor de conversație
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (prioritate scăzută; NU folosește placa)
 - fereastră: zi (08:00–18:30), oricând placa e ocupată sau liberă
 - durată maximă: 3 ore
@@ -60,7 +60,7 @@ Formatul unei sarcini:
 - raport: —
 
 ### S4 — Examen de generalizare pentru #401: întrebări puse altfel
-- stare: aprobat
+- stare: in_lucru
 - tip: placă (scurt, cel mult 45 de minute) — sau procesor, dacă placa e ocupată
 - fereastră: zi (08:00–18:30)
 - durată maximă: 1 oră
