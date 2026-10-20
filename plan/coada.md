@@ -60,7 +60,7 @@ Formatul unei sarcini:
 - raport: —
 
 ### S4 — Examen de generalizare pentru #401: întrebări puse altfel
-- stare: in_lucru
+- stare: gata
 - tip: placă (scurt, cel mult 45 de minute) — sau procesor, dacă placa e ocupată
 - fereastră: zi (08:00–18:30)
 - durată maximă: 1 oră
@@ -74,7 +74,7 @@ Formatul unei sarcini:
   Pre-înregistrarea ÎNAINTE de rulare: confirmat dacă (a) ≥ 9/15 și (b) ≥ 6/15; infirmat dacă (a) < 5/15.
   (c) și (d) doar urmărite. Profesorul notează la fel ca la noaptea 10 (corect = nota ≥ 7). Nicio antrenare, doar examen.
 - aprobat de: supraveghetor, 20 octombrie 2026, 10:50 (categoria „examene”)
-- raport: docs/rapoarte/<data>_<ora>_S4_generalizare_401.md, cu toate cele 60 de răspunsuri
+- raport: docs/rapoarte/2026-10-20_1100_S4_generalizare_401.md (PARȚIAL: a 7/15, b 3/15, c 2/15, d 11/15; „Nu scrie” pe nedrept 22/45)
 
 ### S5 — Interfața: fila nouă „Întreabă din text” cu modelul #401
 - stare: aprobat

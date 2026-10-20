@@ -64,3 +64,36 @@ Un răspuns e **corect** dacă profesorul îi dă **cel puțin 7 din 10**. La (d
 - **(b) peste 12 din 15:** #401 a învățat să caute bucata potrivită pentru orice întrebare, nu doar tipare.
 - **(a) sub 5 din 15:** a învățat doar tiparele de cuvinte, nu sensul întrebării.
 - **(c) peste 10 din 15:** știe să compare o afirmație cu textul, fără să fi învățat asta.
+
+## Ce a ieșit
+
+<!-- inchisa: 2026-10-20T11:10 -->
+Examenul a rulat 10:55–10:57 pe placă (`lucru/examen_conversatie/experiment_401_20261020_105728.json`). Profesorul a
+notat toate cele 60 de răspunsuri.
+
+| felul | corecte | „Nu scrie în text.” |
+|---|---|---|
+| (a) altă formulare | 7 din 15 | 8 din 15 (pe nedrept) |
+| (b) tip nou | 3 din 15 | 8 din 15 (pe nedrept) |
+| (c) da/nu | 2 din 15 | 6 din 15 (pe nedrept) |
+| (d) fără răspuns, formulat altfel | 11 din 15 | 11 din 15 (corect) |
+
+Nota medie: 4,68. „Nu scrie în text.” pe nedrept la (a)+(b)+(c): 22 din 45.
+
+## Verdictul
+
+**PARȚIAL.**
+
+- Nu e confirmat: (a) are 7 din 15, sub pragul de 9, iar (b) are 3 din 15, sub pragul de 6.
+- Nu e infirmat: (a) are 7, deci nu e sub 5.
+
+Așteptările mele au ieșit astfel:
+
+- (a): în plaja 8–12? Nu, cu unu sub ea.
+- (b): în plaja 4–9? Nu, sub ea.
+- (c): în plaja 3–8? Nu, sub ea.
+- (d): în plaja 6–12? Da.
+- „Nu scrie” pe nedrept: am scris 3–10, a ieșit 22. Aici am greșit cel mai tare.
+
+#401 a învățat tiparele de cuvinte ale întrebărilor, nu sensul lor. Când formularea e alta, de obicei refuză. Raportul:
+`docs/rapoarte/2026-10-20_1100_S4_generalizare_401.md`.
