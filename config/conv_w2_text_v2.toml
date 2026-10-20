@@ -15,7 +15,9 @@
 #   python unelte/antrenare_lunga.py --config config/conv_w2_text.toml --ore 3 --porneste-din 385
 
 [platforma]
-nume = "w2_conv_text"
+# Rularea reparată (Adrian, 20 oct 20:27, varianta 2): linie nouă, ca `--porneste-din 401` să se aplice (linia
+# „w2_conv_text” avea deja 3 ore în jurnal). Aceleași date, setări și praguri.
+nume = "w2_conv_text_v2"
 director_lucru = "lucru"
 buget_antrenare_secunde = 3600
 experimente = 3

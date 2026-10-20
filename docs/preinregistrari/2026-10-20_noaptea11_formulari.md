@@ -95,3 +95,12 @@ profesor).
   departe e răspunsul în text).
 - **Noaptea 10 sub 45 din 50:** formulările noi au stricat ce știa (atunci verific întâi cele 2 „În ce an a murit X?”).
 - **(c) sub 5 din 15:** nici da/nu antrenat pe aceleași șabloane nu trece la întrebările da/nu din S4.
+
+## Notă înainte de rularea reparată (20 octombrie, 20:35)
+
+Rulare reparată pe linia `w2_conv_text_v2`, din #401, aceleași praguri. Prima pornire (19:29) n-a antrenat nimic
+(11 secunde, cod 0): linia `w2_conv_text` avea deja 3 ore în jurnal, iar `--ore 3` înseamnă „3 în total”
+(`docs/rapoarte/2026-10-20_2002_S7_oprit_nu_a_antrenat.md`). Reparația, varianta 2, aprobată de Adrian la 20:27: în
+`config/conv_w2_text_v2.toml` doar `nume = "w2_conv_text_v2"`; datele, setările, comanda și pragurile de mai sus rămân
+neschimbate. Dosarul `lucru/w2_conv_text_v2/` nu exista înainte de pornire, deci `--porneste-din 401` se aplică. Noul id
+de experiment se scrie mai jos când apare.
