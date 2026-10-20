@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 20:15 — PROBLEMĂ: noaptea 11 n-a pornit; am nevoie de „da”-ul tău ca s-o repornim
+
+- **S7 s-a oprit după 11 secunde, fără să antreneze nimic.** Vina e a mea: în S6 am cerut ca noaptea 11 să rămână pe
+  linia veche `w2_conv_text`, care avea deja cele 3 ore din noaptea 10, deci unealta a crezut că n-are nimic de făcut.
+  Modelul #401 e neatins; nimic nu s-a stricat. Executantul a oprit corect și n-a reparat pe ascuns. Testele trec.
+- **Reparația propusă:** aceeași antrenare, același punct de plecare (#401), aceleași praguri, doar alt nume de linie
+  (`w2_conv_text_v2`) în configurare. Am verificat în cod că așa pornește corect.
+- Placa e liberă (28 °C, 712 MB). Cyber Hub: tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`).
+- **Aștept de la tine:** „da” pentru reparația lui S7 (în COMENZI.md din hub sau direct executantului). Dacă vine până
+  pe la 02:30, noaptea 11 încape în noaptea asta; altfel rămâne pe mâine.
+
 ## 20 octombrie 2026, 17:20 — noaptea 11: am deblocat pasul de dinainte de 19:00
 
 - Executantul a întrebat (raportul de 16:00): S7 cerea să scoată aprobarea veche din drum „înainte de 19:00”, dar el
