@@ -1,0 +1,605 @@
+{
+ "nota": "S4 (cascada, aprobat de supraveghetor pe 20 octombrie 2026): 60 de întrebări NOI, scrise de mână de Claude Code, pe textele din examenul pus deoparte al nopții 10 (date/conversatie/text/examen.json; articole nevăzute la antrenare). a = aceleași informații, altă formulare; b = tipuri de întrebări care nu există în antrenare; c = da/nu; d = fără răspuns în text, formulate altfel decât la antrenare.",
+ "perechi": [
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Magda Alfredo Cazanga (n. 28 mai 1991, în Luanda) este o handbalistă angoleză care joacă pentru CS Minaur Baia Mare și pentru echipa națională a Angolei.",
+   "intrebare": "Când a venit pe lume Magda Alfredo Cazanga?",
+   "raspuns": "Pe 28 mai 1991.",
+   "grup": "examen_26"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Comitatul Washington este un comitat din statul Minnesota, Statele Unite ale Americii. Conform recensământului din 2010, are o populație de 238.136 de locuitori, fiind astfel al cincilea cel mai populat comitat din Minnesota. Reședința comitatului este orașul Stillwater. Comitatul a fost înființat în 1849.",
+   "intrebare": "Ce populație are Comitatul Washington?",
+   "raspuns": "238.136 de locuitori.",
+   "grup": "examen_28"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Neveste perfecte este un film din 1975 regizat de Bryan Forbes, scris de William Goldman, cu actorii Katharine Ross, Paula Prentiss și Peter Masterson. Este bazat pe romanul omonim din 1972 scris de Ira Levin.",
+   "intrebare": "Cine este regizorul filmului Neveste perfecte?",
+   "raspuns": "Bryan Forbes.",
+   "grup": "examen_35"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Ciuta este o piesă de teatru scrisă de Victor Ion Popa în 1918-1919. Premiera a avut loc la Teatrul Național din București la 13 septembrie 1922 sub regia lui Vasile Enescu și a lui Victor Ion Popa. Este piesa de teatru de debut a lui Popa.",
+   "intrebare": "Cine este autorul piesei Ciuta?",
+   "raspuns": "Victor Ion Popa.",
+   "grup": "examen_33"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Bartula este un sat din comuna Bar, Muntenegru. Conform datelor de la recensământul din 2003, localitatea are 355 de locuitori (la recensământul din 1991 erau 400 de locuitori).",
+   "intrebare": "Câți oameni trăiesc în Bartula?",
+   "raspuns": "355 de locuitori.",
+   "grup": "examen_44"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Patrick Jørgensen (n. 31 mai 1991, Copenhaga) este un scrimer danez specializat pe spadă, laureat cu bronz individual la Campionatul Mondial de Scrimă din 2015.",
+   "intrebare": "În ce an a venit pe lume Patrick Jørgensen?",
+   "raspuns": "În 1991.",
+   "grup": "examen_30"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Necruțătorul (Unforgiven) este un film anti-western (sau western revizionist) american din 1992 produs și regizat de Clint Eastwood. Scenariul este realizat de David Webb Peoples.",
+   "intrebare": "Cine a făcut filmul Necruțătorul?",
+   "raspuns": "Clint Eastwood.",
+   "grup": "examen_27"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Rezervația peisagistică Călărașeuca sau Calarașovca este o arie protejată din Republica Moldova. Se întinde pe o suprafață de 252 ha, în apropierea satului Călărașeuca, raionul Ocnița, la 5 km sud-est de orașul Otaci (ocolul silvic Otaci, Calarașovca-Stînca, parcelele 10-12). Obiectul este administrat de două organizații: Gospodăria Silvică de Stat Soroca (225 ha) și Întreprinderea Agricolă „Dnestrovsc” (27 ha).",
+   "intrebare": "Cât de mare este Rezervația peisagistică Călărașeuca?",
+   "raspuns": "252 ha.",
+   "grup": "examen_41"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Valea Călmățuiului (în trecut, Rubla) este un sat ce aparține orașului Însurăței din județul Brăila, Muntenia, România. Se află la nord de orașul propriu-zis, pe malul stâng al Călmățuiului.",
+   "intrebare": "În care județ e satul Valea Călmățuiului?",
+   "raspuns": "În județul Brăila.",
+   "grup": "examen_39"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Laura Elizabeth Metcalf (n. 16 iunie 1955) este o actriță americană. De-a lungul carierei sale de patru decenii, a câștigat trei premii Emmy Primetime, două premii Tony și a fost nominalizată la premiile Oscar și British Academy Film Award.",
+   "intrebare": "Care este data nașterii Laurei Elizabeth Metcalf?",
+   "raspuns": "16 iunie 1955.",
+   "grup": "examen_36"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Trick (titlu original: Trick) este un film american slasher din 2019 regizat de Patrick Lussier. Rolurile principale au fost interpretate de actorii Jamie Kennedy și Omar Epps. A avut premiera la 18 octombrie 2019 în Statele Unite.",
+   "intrebare": "Când a fost lansat filmul Trick?",
+   "raspuns": "În 2019.",
+   "grup": "examen_29"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Lalevići este un sat din comuna Danilovgrad, Muntenegru. Conform datelor de la recensământul din 2003, localitatea are 154 de locuitori (la recensământul din 1991 erau 149 de locuitori).",
+   "intrebare": "Ce număr de locuitori are Lalevići?",
+   "raspuns": "154 de locuitori.",
+   "grup": "examen_49"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Isabela Petrașincu (n. 3 noiembrie 1931 - d. 2018) a fost o realizatoare de filme de animație cu păpuși, regizoare de filme de animație și profesoară română.",
+   "intrebare": "Când s-a stins din viață Isabela Petrașincu?",
+   "raspuns": "În 2018.",
+   "grup": "examen_32"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Băiatul care poate zbura (titlu original: The Boy Who Could Fly) este un film american din 1986 scris și regizat de Nick Castle. Rolurile principale au fost interpretate de actorii John Carpenter, Jason Priestley.",
+   "intrebare": "Cine a scris scenariul filmului Băiatul care poate zbura?",
+   "raspuns": "Nick Castle.",
+   "grup": "examen_38"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "a",
+   "tip": "alta_formulare",
+   "text": "Emanuel-Cristian Caraman (n. 23 iulie 1978, București) este un tenor român care cântă pe scenele lirice ale lumii, și este fiul tenorului Cristian Caraman.",
+   "intrebare": "În ce an a venit pe lume Emanuel-Cristian Caraman?",
+   "raspuns": "În 1978.",
+   "grup": "examen_47"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Tours Football Club este un club de fotbal din Tours, Franța, care evoluează în Ligue 2. Meciurile de acasă le dispută pe stadionul Stade de la Vallée du Cher care are o capacitate de 13.500 de locuri.",
+   "intrebare": "În ce țară se află clubul Tours Football Club?",
+   "raspuns": "În Franța.",
+   "grup": "examen_14"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Barrie \"Barriemore\" Barlow (născut pe 10 septembrie 1949 în Birmingham) este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980.",
+   "intrebare": "Cu ce trupă a cântat Barrie Barlow?",
+   "raspuns": "Cu Jethro Tull.",
+   "grup": "examen_13"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Magda Alfredo Cazanga (n. 28 mai 1991, în Luanda) este o handbalistă angoleză care joacă pentru CS Minaur Baia Mare și pentru echipa națională a Angolei.",
+   "intrebare": "Pentru ce club joacă Magda Alfredo Cazanga?",
+   "raspuns": "Pentru CS Minaur Baia Mare.",
+   "grup": "examen_26"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Nicolae Daniel Balauru (n. 6 decembrie 1980, Alexandria) este un fotbalist român care evoluează pe postul de mijlocaș dreapta, în prezent fiind liber de contract.",
+   "intrebare": "Unde s-a născut Nicolae Daniel Balauru?",
+   "raspuns": "În Alexandria.",
+   "grup": "examen_42"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Alexandru Onică (n. 25 iulie, 1984) este un fotbalist moldovean care în prezent evoluează la clubul Neftchi Farg'ona în Prima Ligă Uzbecă. Anterior a mai jucat la câteva cluburi din Republica Moldova, Rusia și Ucraina. Alexandru Onică a jucat 6 meciuri pentru echipa națională de fotbal a Republicii Moldova și fost desemnat cel mai bun mijlocaș al campionatului Republicii Moldova în anul 2009.",
+   "intrebare": "La ce club evoluează Alexandru Onică?",
+   "raspuns": "La Neftchi Farg'ona.",
+   "grup": "examen_15"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Panda roșu (Ailurus fulgens) este o rudă de dimensiunea unei pisici a ratonilor și a dihorilor. Deși se credea că este o rudă a ursului panda, prin analize moleculare s-a constatat că nu face parte din familia urșilor.",
+   "intrebare": "Care este numele științific al pandei roșii?",
+   "raspuns": "Ailurus fulgens.",
+   "grup": "examen_16"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Templul Vinayaka sau Sri Varasidhi Vinayaka Swamy este un templu hindus din satul Kanipakam, Andhra Pradesh, India. Templul îi este dedicat zeului-elefant Ganesha și este un monument istoric important.",
+   "intrebare": "Cărui zeu îi este dedicat Templul Vinayaka?",
+   "raspuns": "Zeului-elefant Ganesha.",
+   "grup": "examen_10"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Tours Football Club este un club de fotbal din Tours, Franța, care evoluează în Ligue 2. Meciurile de acasă le dispută pe stadionul Stade de la Vallée du Cher care are o capacitate de 13.500 de locuri.",
+   "intrebare": "Câte locuri are stadionul pe care joacă Tours Football Club?",
+   "raspuns": "13.500 de locuri.",
+   "grup": "examen_14"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Renew Europe este al treilea grup politic din Parlamentul European ca mărime, cu 108 membri din 22 de țări ale Uniunii Europene. Acesta este succesorul grupului Alianței Liberalilor și Democraților pentru Europa (ALDE), care a existat între anii 2004 și 2019.",
+   "intrebare": "Câți membri are grupul Renew Europe?",
+   "raspuns": "108 membri.",
+   "grup": "examen_21"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Sky Kid Deluxe este un joc video arcade lansat de către Namco în 1986. Rulează pe sistemul arcade Namco System 86 și este continuarea jocului Sky Kid (1985). Jocul este mult mai dificil decât originalul și are în plus față de precedentul inamici și misiuni noi.",
+   "intrebare": "Ce firmă a lansat jocul Sky Kid Deluxe?",
+   "raspuns": "Namco.",
+   "grup": "examen_9"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Jean-Paul Mendy (n. 14 decembrie 1973 în Mantes-la-Jolie, Yvelines) este un boxer profesionist din Franța, care a câștigat medalia de bronz la categoria mijlocie (-75) la Campionatul Mondial de Box Amator 1997 din Budapesta, Ungaria.",
+   "intrebare": "Ce medalie a câștigat Jean-Paul Mendy la Campionatul Mondial de Box Amator 1997?",
+   "raspuns": "Medalia de bronz.",
+   "grup": "examen_45"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Karel Domin (1882 - 1953) a fost unul din cei mai renumiți specialiști în botanică din Cehoslovacia. În tinerețe a participat la expediții științifice în Java și Australia, făcând studii asupra florei din Queensland. A fost profesor de botanică la Universitatea din Praga, concentrându-și cercetările asupra botanicii sistematice.",
+   "intrebare": "Unde a fost profesor Karel Domin?",
+   "raspuns": "La Universitatea din Praga.",
+   "grup": "examen_24"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Comitatul Washington este un comitat din statul Minnesota, Statele Unite ale Americii. Conform recensământului din 2010, are o populație de 238.136 de locuitori, fiind astfel al cincilea cel mai populat comitat din Minnesota. Reședința comitatului este orașul Stillwater. Comitatul a fost înființat în 1849.",
+   "intrebare": "Care este reședința Comitatului Washington?",
+   "raspuns": "Orașul Stillwater.",
+   "grup": "examen_28"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Emanuel-Cristian Caraman (n. 23 iulie 1978, București) este un tenor român care cântă pe scenele lirice ale lumii, și este fiul tenorului Cristian Caraman.",
+   "intrebare": "Ce meserie are Emanuel-Cristian Caraman?",
+   "raspuns": "Este tenor.",
+   "grup": "examen_47"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "b",
+   "tip": "tip_nou",
+   "text": "Pescadorul Yldirimlar 1 a fost o navă de 47,5 tone și 19 metri lungime înregistrată sub pavilion român care s-a scufundat în anul 2007 în Marea Neagră.",
+   "intrebare": "În ce mare s-a scufundat Pescadorul Yldirimlar 1?",
+   "raspuns": "În Marea Neagră.",
+   "grup": "examen_1"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Cynthia Ann „Cindy” Crawford (n. 20 februarie 1966) este un fost fotomodel, moderatoare TV și actriță americană. Ea este ușor de recunoscut după negul de pe buza superioară.",
+   "intrebare": "S-a născut Cindy Crawford în 1966?",
+   "raspuns": "Da.",
+   "grup": "examen_31"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Laura Elizabeth Metcalf (n. 16 iunie 1955) este o actriță americană. De-a lungul carierei sale de patru decenii, a câștigat trei premii Emmy Primetime, două premii Tony și a fost nominalizată la premiile Oscar și British Academy Film Award.",
+   "intrebare": "S-a născut Laura Elizabeth Metcalf în 1960?",
+   "raspuns": "Nu.",
+   "grup": "examen_36"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Neveste perfecte este un film din 1975 regizat de Bryan Forbes, scris de William Goldman, cu actorii Katharine Ross, Paula Prentiss și Peter Masterson. Este bazat pe romanul omonim din 1972 scris de Ira Levin.",
+   "intrebare": "A fost regizat filmul Neveste perfecte de Bryan Forbes?",
+   "raspuns": "Da.",
+   "grup": "examen_35"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Pasărea albastră (titlu original: The Blue Bird) este un film american mut alb-negru fantastic din 1918 regizat de Maurice Tourneur sub auspiciile producătorului Adolph Zukor. Rolurile principale au fost interpretate de actorii Tula Belle și Robin Macdougall. Scenariul este scris de Maurice Maeterlinck pe baza piesei sale de teatru L'Oiseau bleu (Pasărea albastră) din 1909.",
+   "intrebare": "Este filmul Pasărea albastră din 1925?",
+   "raspuns": "Nu.",
+   "grup": "examen_25"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Ljubljana (Mestna občina Ljubljana) este o din Slovenia, cu o populație de 279.653 de locuitori (2009), în care se află capitala țării, orașul Ljubljana.",
+   "intrebare": "Are Ljubljana o populație de 279.653 de locuitori?",
+   "raspuns": "Da.",
+   "grup": "examen_18"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Râul Tazlăul Mare este un curs de apă, din bazinul râului Trotuș. El se unește cu Tazlăul Sărat în dreptul localității Tescani, județul Bacău pentru a forma râul Tazlău.",
+   "intrebare": "Se unește râul Tazlăul Mare cu Tazlăul Sărat?",
+   "raspuns": "Da.",
+   "grup": "examen_12"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Pădurea Tudora este o arie protejată de intres național ce corespunde categoriei a IV-a IUCN (rezervație naturală de tip forestier), situată în județul Botoșani, pe teritoriul administrativ al comunei Tudora.",
+   "intrebare": "Se află Pădurea Tudora în județul Suceava?",
+   "raspuns": "Nu.",
+   "grup": "examen_20"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Sky Kid Deluxe este un joc video arcade lansat de către Namco în 1986. Rulează pe sistemul arcade Namco System 86 și este continuarea jocului Sky Kid (1985). Jocul este mult mai dificil decât originalul și are în plus față de precedentul inamici și misiuni noi.",
+   "intrebare": "A fost lansat Sky Kid Deluxe în 1986?",
+   "raspuns": "Da.",
+   "grup": "examen_9"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Bartula este un sat din comuna Bar, Muntenegru. Conform datelor de la recensământul din 2003, localitatea are 355 de locuitori (la recensământul din 1991 erau 400 de locuitori).",
+   "intrebare": "Avea Bartula 500 de locuitori la recensământul din 1991?",
+   "raspuns": "Nu.",
+   "grup": "examen_44"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Barrie \"Barriemore\" Barlow (născut pe 10 septembrie 1949 în Birmingham) este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980.",
+   "intrebare": "Este Barrie Barlow un muzician englez?",
+   "raspuns": "Da.",
+   "grup": "examen_13"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Daniel Bulai (n. 16 martie 1968, Tămășeni, județul Neamț, România) este un preot romano-catolic, fost responsabil diecezan cu pastorația tineretului în Arhidieceza Romano-Catolică de București (timp de 21 de ani, până în 2016) și paroh la Biserica Italiană „Preasfântul Mântuitor” din București.",
+   "intrebare": "S-a născut Daniel Bulai în județul Neamț?",
+   "raspuns": "Da.",
+   "grup": "examen_43"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Liga I 2019–2020 a fost al 30-lea sezon al Ligii I, prima divizie a fotbalului feminin din România. Ediția a fost afectată de pandemia de COVID-19. Pe 21 mai 2020 Comitetul de Urgență al FRF a decis anularea etapelor rămase de disputat.",
+   "intrebare": "A fost Liga I 2019–2020 al 25-lea sezon al Ligii I?",
+   "raspuns": "Nu.",
+   "grup": "examen_17"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Restaurația este numele dat perioadei din Istoria Franței dintre 1814 și 1830. Restaurația reprezintă revenirea regimului monarhic, suveranitatea fiind exercitată de către monarh în limitele Cartei din 1814. Regimul a luat naștere în urma abdicării lui Napoleon Bonaparte la data de 6 aprilie 1814 și a durat până în anul 1830.",
+   "intrebare": "A durat Restaurația până în anul 1830?",
+   "raspuns": "Da.",
+   "grup": "examen_6"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Jaka Štromajer (n. 27 iulie 1983, Domžale, Iugoslavia) este un fotbalist sloven care este în prezent liber de contract. De-a lungul carierei a evoluat la NK Domžale, FC Koper, NK Celje, NK Drava Ptuj, Pandurii dar și la Oțelul Galați.",
+   "intrebare": "A jucat Jaka Štromajer la Oțelul Galați?",
+   "raspuns": "Da.",
+   "grup": "examen_48"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "c",
+   "tip": "da_nu",
+   "text": "Costel Claudiu Pavelescu (n. 6 noiembrie 1946) a fost un fost deputat român în legislatura 1996-2000, ales în județul Călărași pe listele partidului PNȚCD. Costel Claudiu Pavelescu a fost membru în grupurile parlamentare de prietenie cu Republica Bulgaria și Regatul Spaniei.",
+   "intrebare": "A fost ales Costel Claudiu Pavelescu în județul Ialomița?",
+   "raspuns": "Nu.",
+   "grup": "examen_40"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Funkadelic este o trupă de muzică afroamericană, care a avut popularitate în anii '70. Alături de formația Parliament, și ea condusă de George Clinton, a început cultura muzicii funk în acel deceniu.",
+   "intrebare": "Cine cânta la chitară în trupa Funkadelic?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_52"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Fiat 130 a fost un autoturism de dimensiuni mari, echipat cu un motor cu șase cilindri, produs de producătorul auto italian Fiat în perioada 1969-1977. Modelul era disponibil în două variante de caroserie: sedan cu patru uși și coupe cu două uși. Fiat 130 a fost conceput pentru a oferi un nivel ridicat de confort și performanță, fiind destinat în principal pieței de lux.",
+   "intrebare": "Cât costa un Fiat 130 nou?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_53"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Molibdenit este un mineral întâlnit destul de frecvent în natură, el face parte din clasa sulfiților. Mineralul cristalizează în sistemul hexagonal,sau se prezintă sub formă de agregate de culoare cenușie plumburie, cu nuanțe albăstrui violet. Molibdenitul poate fi găsit asociat în minereuri de aur și argint.",
+   "intrebare": "În ce țară s-a descoperit prima dată molibdenitul?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_54"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Împăratul ghețurilor este un roman de Ana-Maria Negrilă, apărut în 2006 la Editura Diasfera. În 2018, apare ediția a doua la editura Crux Publishing, iar în 2019, ediția în limba maghiară, la editura Metropolis Media, Ungaria.",
+   "intrebare": "Câte pagini are romanul Împăratul ghețurilor?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_55"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Sinagoga din Câmpina este un lăcaș de cult evreiesc situat pe strada Dreptății nr. 5 din municipiul Câmpina, județul Prahova. Edificiul a fost inaugurat în anul 1904 (1905, după alte surse).",
+   "intrebare": "Cine a fost primul rabin al Sinagogii din Câmpina?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_56"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Briceni este un sat din raionul Dondușeni, Republica Moldova. În preajma satului s-a păstrat o movilă funerară aparținând triburilor de nomazi din epoca bronzului și de la începutul evului mediu.",
+   "intrebare": "Câte case are satul Briceni?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_57"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Parcul din Zastavna este un parc și monument al naturii de tip peisagistic de importanță locală din raionul Zastavna, regiunea Cernăuți (Ucraina), situat în orașul Zastavna. Este administrat de consiliul local.",
+   "intrebare": "Ce suprafață are Parcul din Zastavna?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_58"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Editora Abril este o editură braziliană, care este considerată a fi una dintre cele mai mari organizații media din America Latină. Compania a fost fondată în 1950 de Victor Civita la São Paulo și face parte acum din Grupo Abril.",
+   "intrebare": "Câți angajați are Editora Abril?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_59"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Jean-Luc Dehaene (7 august 1940 – 15 mai 2014) a fost un om politic flamand, belgian. A fost prim-ministru al Belgiei între 1992 și 1999, senator belgian până în 2001 iar din 2004 este membru al Parlamentului European din partea Belgiei.",
+   "intrebare": "Unde a studiat Jean-Luc Dehaene?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_51"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Paris-Roubaix 1975 a fost a 73-a ediție a Paris-Roubaix, o cursă clasică de ciclism de o zi din Franța. Evenimentul a avut loc pe 13 aprilie 1975 și s-a desfășurat pe o distanță de 277,5 de kilometri de la Compiègne până la velodromul din Roubaix. Câștigătorul a fost Roger De Vlaeminck din Belgia de la echipa Brooklyn.",
+   "intrebare": "Cine a ieșit pe locul al doilea la Paris-Roubaix 1975?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_50"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Sosul este un preparat culinar lichid sau vâscos alcătuit dintr-un amestec de ingrediente (preparate la cald sau la rece) și care acompaniază preparatele alimentare. Consistența sosurilor poate varia de la un sos în stare lichidă, la o pastă groasă sau piure. Obiectivul sosurilor este cel de a condimenta mâncarea, îmbogățindu-i gustul dar și de a da aromă și diversitate coloristică preparatului.",
+   "intrebare": "Ce sos este cel mai popular în Italia?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_4"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Boomerang Scandinavia este un canal de televiziune care se difuzează în Țările Nordice. Este un serviciu asemănător cu Cartoon Network, canalul difuzând desene animate clasice și moderne destinate copiilor.",
+   "intrebare": "În ce an a început să emită Boomerang Scandinavia?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_19"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Sphaerodactylus richardi este o specie de șopârle din genul Sphaerodactylus, familia Gekkonidae, descrisă de S.Blair Hedges și Garrido 1993. A fost clasificată de IUCN ca specie cu risc scăzut. Conform Catalogue of Life specia Sphaerodactylus richardi nu are subspecii cunoscute.",
+   "intrebare": "Cât de lungă este specia Sphaerodactylus richardi?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_11"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Stejarii seculari de la Breite este o arie protejată de interes național ce corespunde categoriei a IV-a IUCN (rezervație naturală de tip mixt), situată în Transilvania, pe teritoriul județului Mureș.",
+   "intrebare": "Câți stejari are rezervația Stejarii seculari de la Breite?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_7"
+  },
+  {
+   "fel": "nu_scrie",
+   "limba": "ro",
+   "categorie": "d",
+   "tip": "lipsa_altfel",
+   "text": "Rio de San Zulian (în italiană Rio di San Giuliano; canalul Sfântul Iulian) sau rio de la Guerra este un canal din Veneția care formează granița între sestierele Castello și San Marco.",
+   "intrebare": "Cât de lung este canalul Rio de San Zulian?",
+   "raspuns": "Nu scrie în text.",
+   "grup": "examen_23"
+  }
+ ]
+}
