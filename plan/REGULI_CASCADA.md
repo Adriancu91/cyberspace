@@ -43,6 +43,13 @@ Sarcinile de felul ăsta intră în coadă cu starea `propus — necesită Adria
 - Ferestrele plăcii: ziua 08:00–18:30, noaptea 19:00–07:00. Raportul de dimineață: 07:40.
 - CONTINUUM rămâne doar observator cât timp merge cascada (altfel s-ar bate pe placă cu executantul).
 
+## Cyber Hub (adăugat cu aprobarea lui Adrian, 20 octombrie 2026)
+
+- Supraveghetorul citește la fiecare trecere `Adriancu91/cyber-hub` (stările celorlalte proiecte, propunerile din `idei/`).
+- Când s-a schimbat ceva la Kronos, rescrie `stare/kronos.md` și adaugă 1–3 rânduri în `jurnal/kronos.md` din hub.
+- Poate scrie propuneri de colaborare în `idei/` din hub. O propunere nu intră în `plan/coada.md` decât după „da”-ul lui Adrian.
+- Hub-ul nu schimbă nimic din granițele de mai sus.
+
 ## Când ceva merge prost
 
 - Executantul oprește sarcina, scrie de ce în raport și pune sarcina pe `oprit`.

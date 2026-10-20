@@ -23,6 +23,14 @@
 - Workstation-ul: RTX 3070 Ti 8 GB, 128 GB RAM, Windows 11. Ține memoria video sub ~7 GB (aprobat de Adrian, 12 octombrie 2026).
 - Dacă ceva nu merge, explică ce s-a întâmplat și propune 1–2 variante; nu ocoli în tăcere testele sau paznicul.
 
+## Cyber Hub (aprobat de Adrian, 20 octombrie 2026)
+- Kronos e conectat la centrul comun `Adriancu91/cyber-hub`, împreună cu Cyber Universe OS și suita office. ID-ul nostru: `kronos`.
+- **Supraveghetorul** ține hub-ul la zi: citește la fiecare trecere stările celorlalte proiecte și propunerile din `idei/`,
+  rescrie `stare/kronos.md` și adaugă în `jurnal/kronos.md` când s-a schimbat ceva. Regulile complete: `REGULI.md` din hub.
+- **Executantul nu are nimic de făcut în hub** (lucrul lui pe placă nu se schimbă).
+- Nimic din hub nu schimbă granițele din `plan/REGULI_CASCADA.md`: o propunere de colaborare devine sarcină doar cu „da”-ul lui Adrian.
+- Niciun agent nu modifică codul altui proiect; niciun agent al altui proiect nu modifică acest repo.
+
 ## Rapoartele (regula lui Adrian, 18 octombrie 2026)
 - Orice raport către Adrian (raportul de dimineață, verdicte, rezultate, întrebări către el) se scrie ÎNTREG și într-un
   fișier `docs/rapoarte/AAAA-LL-ZZ_HHMM_subiect.md` (ora la care e scris): tot ce ai făcut, cifrele, testele și ce aștepți
