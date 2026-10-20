@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 17:20 — noaptea 11: am deblocat pasul de dinainte de 19:00
+
+- Executantul a întrebat (raportul de 16:00): S7 cerea să scoată aprobarea veche din drum „înainte de 19:00”, dar el
+  are voie să ia S7 abia după 19:00. Am scris în coadă că **pasul 0 se face acum, în fereastra de zi**: la rularea de
+  ~17:30/18:00 redenumește doar `lucru/conversatie_aprobata.txt` (nu șterge nimic), ca sarcina Windows să nu refacă
+  noaptea 10 peste noaptea 11. Antrenarea pornește tot la 19:00.
+- Nimic nu rulează acum; placa e liberă și rece (713 MB, 28 °C). Ultimul semn de la executant: 15:59.
+- Cyber Hub: tot nu am acces la el din sesiunea asta (nemodificat de la 14:20).
+- **Aștept de la tine:** nimic. Doar dacă vrei siguranță dublă: redenumește tu fișierul de mai sus până la 18:50.
+
 ## 20 octombrie 2026, 14:20 — S5 și S6 gata; noaptea 11 are undă verde
 
 - **S5 gata:** fila „Întreabă din text” (modelul #401) merge în interfață, pe 8787; executantul a încercat-o de pe
