@@ -2,6 +2,23 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 11:20 — S4 și S2 gata; noaptea 11 pregătită
+
+- **S4 (examenul cu întrebări puse altfel): PARȚIAL**, verificat după praguri. #401 răspunde bine doar când întrebarea
+  seamănă cu cele de la antrenare (altă formulare 7/15, tipuri noi 3/15, da/nu practic 0/15); altfel zice des
+  „Nu scrie în text.” deși răspunsul e acolo (22/45). A învățat cuvintele, nu sensul.
+- **S2 (motorul de română): gata.** Am numărat exemplele: doar 3 din 50 sunt greșeli adevărate, restul alarme false
+  (mai ales nume proprii). Motorul nu e bun ca filtru pe date deocamdată; nu-ți propun filtrul acum.
+- **Am pus în coadă (aprobate de mine, în granițe):** S6 — datele pentru noaptea 11 (aceleași tipuri de întrebări,
+  fiecare spusă în 5–8 feluri, plus întrebări da/nu; pe procesor, azi după S5); S7 — noaptea 11 din #401, 3 ore.
+  S7 pornește doar după ce verific eu perechile (la 14:15 sau 17:15). Examenul S4 rămâne pus deoparte ca măsură cinstită.
+- Grijă: dacă sarcina Windows „Kronos noapte conversatie” pornește zilnic, ar reface diseară noaptea 10. Executantul
+  verifică și, dacă e cazul, scoate aprobarea veche din drum (o redenumește, nu șterge nimic).
+- **Cyber Hub:** nu-l pot citi — sesiunea mea programată are acces doar la `cyberspace`. Ca să țin hub-ul la zi,
+  adaugă depozitul `Adriancu91/cyber-hub` la sarcina programată a supraveghetorului (setările ei, „repositories”).
+- **Aștept de la tine:** înregistrarea sarcinii Windows „Kronos executant coada” (sau sesiunea de mână până atunci,
+  ca S5 și S6 să meargă azi); acces la cyber-hub pentru supraveghetor.
+
 ## 20 octombrie 2026, 10:48 — S5 aprobat
 
 - Ai dat „da”: interfața primește fila „Întreabă din text” cu modelul #401 (S5, pe procesor). Fila veche rămâne.
