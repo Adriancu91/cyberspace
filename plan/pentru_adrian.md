@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 20:27 — reparația nopții 11 APROBATĂ de Adrian (scris de centrul de comandă)
+
+- Adrian a dat „da” pentru varianta 2: aceeași antrenare din #401, aceleași praguri, pe linia nouă `w2_conv_text_v2`.
+  S7 e `aprobat` în coadă; executantul o pornește la prima verificare dacă placa e liberă. Verdictul: mâine, raportul de dimineață.
+- Accesul supraveghetorului la Cyber Hub: se rezolvă prin recrearea sarcinii programate din chatul centrului de comandă (care are
+  toate depozitele). Până atunci, hub-ul e ținut la zi de centrul de comandă.
+
 ## 20 octombrie 2026, 20:15 — PROBLEMĂ: noaptea 11 n-a pornit; am nevoie de „da”-ul tău ca s-o repornim
 
 - **S7 s-a oprit după 11 secunde, fără să antreneze nimic.** Vina e a mea: în S6 am cerut ca noaptea 11 să rămână pe
