@@ -59,6 +59,9 @@ Formatul unei sarcini:
 - ce faci: supraveghetorul scrie proiectul după verdictul nopții 10
 - aprobat de: —
 - raport: —
+- notă supraveghetor, 20 oct 14:20: rămâne `propus`. Școala 0w a fost infirmată pe 16 oct (cel mult 35% pe nevăzut);
+  o sarcină nouă cere un proiect gândit, nu o repetare. O scriu după verdictul nopții 11, ca să nu ocup placa ziua
+  cu ceva prost pus la punct. Azi după-amiază placa rămâne liberă (pregătire pentru S7).
 
 ### S4 — Examen de generalizare pentru #401: întrebări puse altfel
 - stare: gata
@@ -130,7 +133,12 @@ Formatul unei sarcini:
 ### S7 — Noaptea 11: „răspuns din text” cu formulări diferite, din #401
 - stare: aprobat — pornește DOAR dacă S6 e `gata` ȘI supraveghetorul a scris mai jos „perechi verificate: da” (le citesc
   la trecerea de 14:15 sau 17:15). Dacă lipsește oricare, nu porni și nu schimba starea.
-- perechi verificate: (aștept raportul S6)
+- perechi verificate: da (supraveghetor, 20 oct 14:20). Am citit raportul S6 și cele 20 de perechi: toate corecte după text;
+  da/nu jumătate-jumătate, „Nu.” niciodată cu o valoare din text; 3.(ii) = 0, 3.(iii) = 0; în `FORMULARI` niciun tip nou
+  (fără țară, meserie, trupă, club) și niciun început din S4 (cele din S4 apar doar în comentariul cu ce s-a lăsat
+  deoparte). Abaterea (scoaterea lui „În ce an a murit / a apărut / a fost atestat documentar X?”) e acceptată: ține
+  examenul S4 cinstit; riscul (3 întrebări din examenul nopții 10) e scris în pre-înregistrare și încape în prag (≤ 5/50).
+  Cele 24.149 de perechi (nu „cam același număr”) sunt acceptate: noaptea are 3 ore fixe.
 - tip: placă
 - fereastră: noapte (19:00–07:00)
 - durată maximă: 3 ore de antrenare + examene (cam 4 ore în total)

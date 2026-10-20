@@ -2,6 +2,19 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 14:20 — S5 și S6 gata; noaptea 11 are undă verde
+
+- **S5 gata:** fila „Întreabă din text” (modelul #401) merge în interfață, pe 8787; executantul a încercat-o de pe
+  Tailscale cu 3 exemple, toate bune (răspuns corect, „Nu scrie în text.”, text prea lung refuzat clar).
+- **S6 gata:** datele pentru noaptea 11 — 24.149 de perechi, fiecare întrebare spusă în 5–6 feluri, plus 3.585 da/nu;
+  813 teste trec. Am verificat perechile și am scris „perechi verificate: da” la S7. Executantul a scos și 3 formulări
+  vechi, ca examenul S4 să rămână cinstit; e corect, riscul e mic și e scris dinainte.
+- **Diseară, 19:00:** S7 (noaptea 11, din #401, 3 ore + examene). Verdictul mâine dimineață.
+- Azi după-amiază placa stă liberă: sarcina de școală de cod (S3) o scriu după noaptea 11, nu în grabă.
+- **Cyber Hub:** tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`); adaugă `Adriancu91/cyber-hub` la
+  sarcina programată a supraveghetorului, dacă vrei să-l țin la zi.
+- **Aștept de la tine:** doar accesul la cyber-hub (nu e urgent).
+
 ## 20 octombrie 2026, 11:20 — S4 și S2 gata; noaptea 11 pregătită
 
 - **S4 (examenul cu întrebări puse altfel): PARȚIAL**, verificat după praguri. #401 răspunde bine doar când întrebarea
