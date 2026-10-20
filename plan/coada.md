@@ -79,7 +79,7 @@ Formatul unei sarcini:
 - verificat de supraveghetor, 20 oct 11:20: PARȚIAL e corect după praguri (a=7: nu ≥ 9, nici < 5). La (c) cele 2 „corecte” sunt copieri; cu regula „începe cu Da./Nu.” ar fi 0/15.
 
 ### S5 — Interfața: fila nouă „Întreabă din text” cu modelul #401
-- stare: in_lucru
+- stare: gata
 - tip: procesor (interfața rulează pe procesor; NU ocupă placa)
 - fereastră: oricând
 - durată maximă: 2 ore
@@ -91,7 +91,7 @@ Formatul unei sarcini:
   apoi repornește interfața și verifică de pe 100.90.150.35:8787 cu 3 exemple (unul cu răspuns, unul fără, unul lung).
   Nu atinge `kronos/`.
 - aprobat de: Adrian, 20 octombrie 2026, 10:47
-- raport: docs/rapoarte/<data>_<ora>_S5_interfata_intreaba_din_text.md, cu cele 3 exemple
+- raport: docs/rapoarte/2026-10-20_1317_S5_interfata_intreaba_din_text.md (3/3 exemple bune: „24.160 de locuitori.”, „Nu scrie în text.”, textul lung refuzat clar: 669 > 432 bucăți)
 
 ### S6 — Datele pentru noaptea 11: aceleași întrebări, formulate în mai multe feluri, plus da/nu
 - stare: aprobat
