@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 20:30 — noaptea 11 repornește cu „da”-ul tău; hub-ul merge
+
+- **REZOLVAT:** ai dat „da” la reparația nopții 11 (varianta 2, linia nouă `w2_conv_text_v2`, tot din #401, aceleași praguri).
+  S7 e `aprobat`; executantul o pornește la prima lui verificare (din 30 în 30 de minute) — placa e liberă (28 °C). Verdictul
+  la 08:15, din raportul de dimineață. Nu rulează nimic chiar acum (ultimul semn de la executant: 20:10).
+- **REZOLVAT:** acum pot citi și scrie în Cyber Hub (sarcina programată are ambele depozite). Am rescris starea Kronos în hub.
+- **Am pus în coadă S8 (aprobată):** descrierea fiecărui modul Kronos după formatul comun pe care l-ai aprobat în hub la 16:04
+  (`module.toml`, ~27 de fișiere + o unealtă și un test ca să nu se desincronizeze de `MANIFEST`). Pe procesor, mâine ziua,
+  după raportul nopții 11; nu atinge codul, `kronos/` sau examenul. Suita office și-a făcut deja partea.
+- Sarcina de școală de cod (S3) rămâne pe mai târziu, după verdictul nopții 11.
+- **Aștept de la tine:** nimic.
+
 ## 20 octombrie 2026, 20:27 — reparația nopții 11 APROBATĂ de Adrian (scris de centrul de comandă)
 
 - Adrian a dat „da” pentru varianta 2: aceeași antrenare din #401, aceleași praguri, pe linia nouă `w2_conv_text_v2`.
