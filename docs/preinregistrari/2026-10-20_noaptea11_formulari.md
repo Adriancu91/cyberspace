@@ -104,3 +104,51 @@ Rulare reparată pe linia `w2_conv_text_v2`, din #401, aceleași praguri. Prima 
 `config/conv_w2_text_v2.toml` doar `nume = "w2_conv_text_v2"`; datele, setările, comanda și pragurile de mai sus rămân
 neschimbate. Dosarul `lucru/w2_conv_text_v2/` nu exista înainte de pornire, deci `--porneste-din 401` se aplică. Noul id
 de experiment se scrie mai jos când apare.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-21 00:04, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 405 | w2_conv_text_v2 | 20.10 20:47 | 0,4370 | pastrat | — | — | — |  |
+| 406 | w2_conv_text_v2 | 20.10 21:52 | 0,4384 | pastrat | — | — | — |  |
+| 407 | w2_conv_text_v2 | 20.10 22:56 | 0,4395 | pastrat | — | — | — |  |
+| 408 | examen_conversatie | 21.10 00:01 | — | masurat | — | — | — |  |
+| 409 | examen_conversatie | 21.10 00:02 | — | masurat | — | — | — |  |
+| 410 | examen_validari_ws | 21.10 00:03 | — | masurat | — | — | — |  |
+
+- **w2_conv_text_v2:** 3 ore, 3 păstrate; val_bpb de la 0,4370 la 0,4395; cel mai bun păstrat: #405 (0,4370); pornită din #401 (0,4357).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris de Claude Code (executantul din cascadă), 21 octombrie 2026, 00:05, strict după pragurile de mai sus. Examenele
+s-au dat pe ultimul model păstrat, #407 (ora 3), între 00:01 și 00:03 (jurnal #408–#410, plus setul sacru).*
+
+| ce se măsoară | pragul | a ieșit (#407) | #401 | |
+|---|---|---|---|---|
+| S4 (a) aceeași informație, altă formulare | confirmat ≥ 10/15; infirmat ≤ 7/15 | **11/15** | 7/15 | trece |
+| S4 (b) tipuri noi de întrebări | confirmat ≥ 5/15 | **2/15** | 3/15 | NU trece |
+| „Nu scrie în text.” pe nedrept, (a)+(b)+(c) | confirmat ≤ 10/45 | **11/45** (a 4, b 7, c 0) | 22/45 | NU trece (la una) |
+| noaptea 10: din text | ≥ 45/50 | **49/50** | 50/50 | trece |
+| noaptea 10: „Nu scrie” | ≥ 16/20 | **19/20** | 20/20 | trece |
+| noaptea 10: refuz greșit | ≤ 5/50 | **0/50** | 0/50 | trece |
+| română, validarea curată | ≤ 1,3133 | **1,2818** | 1,2769 | trece |
+| cod, validarea curată | ≤ 0,8174 | **0,7882** | 0,7852 | trece |
+| povești (val_bpb) | ≤ 0,47 | **0,4395** | 0,4357 | trece |
+| fapte noi | ≥ 65 | **75** | 74 | trece |
+| urmărit: (c) da/nu, începe cu „Da.”/„Nu.” potrivit | — | **13/15** | 0/15 | — |
+| urmărit: (d) fără răspuns | — | **12/15** | 11/15 | — |
+| urmărit: setul sacru | — | **27/50** (28 cu sinonime) | 24 | — |
+
+**PARȚIAL, fără regresie.** (a) a trecut de prag (11 ≥ 10) și nu e infirmat, dar (b) a rămas la 2/15 (prag 5) și
+refuzul pe nedrept e 11/45 (prag 10), deci nu e CONFIRMAT. Noaptea 10 și „să nu uite” trec toate.
+
+Față de așteptările mele: (a) 11 în 9–12 (bine); (b) 2 sub 3–6 (am greșit, mai prost decât #401); refuzul 11 în 8–16;
+(c) 13 peste 7–11 (am greșit în bine); (d) 12 în 9–13; noaptea 10 în așteptări; română 1,2818 în 1,27–1,29; cod 0,7882
+în 0,78–0,80; povești 0,4395 în 0,434–0,440; fapte noi 75 în 70–76; setul sacru 27 peste 20–26; placa 6.303 MB (peste
+~5.400 cât așteptam, dar sub 7.000), nicio oprire. Dintre „ce ar infirma așteptările”: (b) peste 7 nu; refuzul peste 18 nu;
+noaptea 10 sub 45 nu; (c) sub 5 nu. Cele 2 „În ce an a murit X?” din examenul nopții 10: ambele corecte. Singura greșeală
+din text: „Cine a scris Pasărea albastră?” → „Maurice Tourneur.” (regizorul, nu autorul; nota 2).
