@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 octombrie 2026, 10:50 — noaptea 10 CONFIRMATĂ
+
+- Noaptea 10 („răspuns din text”): 50/50 din text, 20/20 „Nu scrie în text.”, 0 refuzuri greșite, fără uitare
+  (română 1,2769, cod 0,7852). Am verificat cele 20 de răspunsuri: toate corecte.
+- Limita: întrebările de examen au aceleași tipare ca la antrenare. Am pus S4 (aprobat): 60 de întrebări formulate
+  altfel, ca să vedem dacă #401 înțelege sau doar recunoaște tiparul.
+- Aștept de la tine: înregistrarea sarcinii Windows „Kronos executant coada” la 14:00 (sau prompt de mână în sesiunea
+  Kronos până atunci); „da”/„nu” pentru #401 în interfață (cu o căsuță pentru text + întrebare).
+
 ## 20 octombrie 2026, 07:57 — PROBLEMĂ: raportul de dimineață lipsește
 
 - Raportul automat de la 07:40 (verdictul nopții 10, „răspuns din text”) **nu a ajuns pe GitHub** până la 07:57.

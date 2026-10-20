@@ -58,3 +58,20 @@ Formatul unei sarcini:
 - ce faci: supraveghetorul scrie proiectul după verdictul nopții 10
 - aprobat de: —
 - raport: —
+
+### S4 — Examen de generalizare pentru #401: întrebări puse altfel
+- stare: aprobat
+- tip: placă (scurt, cel mult 45 de minute) — sau procesor, dacă placa e ocupată
+- fereastră: zi (08:00–18:30)
+- durată maximă: 1 oră
+- ce faci: noaptea 10 a ieșit 50/50, dar întrebările de examen au aceleași tipare ca la antrenare. Măsurăm dacă #401
+  înțelege și întrebări formulate altfel. Din aceleași articole puse deoparte (nevăzute la antrenare), scrie 60 de
+  întrebări NOI, cu răspunsul în text, în 4 feluri, câte 15:
+  (a) aceleași informații, altă formulare („Când a venit pe lume X?”, „Ce populație are X?”, „Cine e autorul cărții X?”);
+  (b) tipuri de întrebări care NU există în antrenare („În ce țară se află X?”, „Ce meserie are X?”, „Cu ce trupă a cântat X?”);
+  (c) întrebări de tip „da/nu” („S-a născut X în 1980?”) — răspuns corect „Da.”/„Nu.” după text;
+  (d) întrebări fără răspuns în text, dar formulate altfel decât la antrenare (corect: „Nu scrie în text.”).
+  Pre-înregistrarea ÎNAINTE de rulare: confirmat dacă (a) ≥ 9/15 și (b) ≥ 6/15; infirmat dacă (a) < 5/15.
+  (c) și (d) doar urmărite. Profesorul notează la fel ca la noaptea 10 (corect = nota ≥ 7). Nicio antrenare, doar examen.
+- aprobat de: supraveghetor, 20 octombrie 2026, 10:50 (categoria „examene”)
+- raport: docs/rapoarte/<data>_<ora>_S4_generalizare_401.md, cu toate cele 60 de răspunsuri
