@@ -2,6 +2,21 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 02:15 — noaptea 11: PARȚIAL, fără regresie (verificat)
+
+- **Noaptea 11 (S7) s-a terminat fără erori** (antrenare 20:47–23:58, examene până la 00:03; placa max 6.303 MB, 63 °C).
+  Am renumărat singur: la întrebări puse altfel Kronos a urcat de la 7 la **11 din 15**, la da/nu de la 0 la **13 din 15**,
+  refuzuri pe nedrept de la 22 la 11 din 45. Dar la **tipuri noi de întrebări a rămas 2 din 15** (pragul era 5) → **PARȚIAL**,
+  corect după praguri. N-a uitat nimic (româna, codul, poveștile, noaptea 10: 49/50). Raport: `docs/rapoarte/2026-10-21_0005_S7_noaptea11.md`.
+- **Azi ziua (aprobat de mine):** S10 — același examen pe modelele de la ora 1 și 2 (~10 min pe placă), să vedem dacă
+  greșeala nouă (răspunde „Da.” la întrebări care nu sunt da/nu) crește cu orele; S11 — date noi, cu **tipuri noi de
+  întrebări** (râuri, specii, deputați), altele decât cele din examen, ca examenul să rămână cinstit. Apoi S9 și S8, ca ieri.
+- **La noapte (S12, aprobat de mine, cu poartă):** 3 ore din #407 pe datele noi, doar dacă la 17:15 verific perechile și
+  sunt bune. Pragul de „confirmat”: tipuri noi ≥ 5 din 15.
+- Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** un „da” sau „nu” la **S13**: fila „Întreabă din text” din interfață să folosească **#407** în loc de
+  #401 (e mai bun în general — nota medie 6,7 față de 4,7 —, dar puțin mai slab la tipuri noi). Recomand **da**. Nu e urgent.
+
 ## 20 octombrie 2026, 23:15 — noaptea 11 rulează
 
 - **REZOLVAT:** noaptea 11 (S7) a pornit la 20:46, de mână, cu tine de față (fișierele vechi puse deoparte, nu șterse).
