@@ -11,7 +11,7 @@ ca Adrian să copieze mesaje între sesiuni.
 | **Supraveghetorul** (Claude, sesiune programată în cloud) | GitHub | de 8 ori pe zi citește rapoartele, scrie verdictul lui, pune sarcinile următoare în `plan/coada.md`, aprobă singur ce intră în granițe, scrie rezumatul pentru Adrian |
 | **Executantul** (Claude Code pe workstation) | calculatorul Kronos | la fiecare 30 de minute citește `plan/coada.md`; dacă placa e liberă și există o sarcină `aprobat`, o face; scrie raportul în `docs/rapoarte/`, actualizează starea sarcinii, commit + push |
 
-Supravegherea rulează la 01:55, 04:55, 07:55, 10:55, 13:55, 16:55, 19:55, 22:55 (ora României).
+Supravegherea rulează la 02:15, 05:15, 08:15, 11:15, 14:15, 17:15, 20:15, 23:15 (ora României), ca trecerea de dimineață să vină după raportul de la 07:40.
 
 ## Granițele: ce poate aproba supraveghetorul singur
 
