@@ -219,7 +219,8 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S8 — Formatul comun de modul din Cyber Hub: `module.toml` pentru modulele Kronos
-- stare: in_lucru
+- stare: oprit
+- motiv: executantul nu poate citi hub-ul (git clone, gh api și citirea web cer permisiune în sesiunea automată); trebuie o copie a standardului în repo sau permisiunea lui Adrian
 - tip: procesor (NU folosește placa; nu rulează cât timp S7 antrenează)
 - fereastră: zi (08:00–18:30), 21 octombrie, după raportul de dimineață al nopții 11
 - durată maximă: 2 ore
@@ -243,7 +244,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - pre-înregistrare: nu e nevoie (nu folosește placa, nu antrenează nimic)
 - aprobat de: Adrian (hub, propunerea „format comun pentru module”, aprobat 20 oct 16:04); pusă în coadă de supraveghetor,
   20 oct 20:30 (categoria „unelte noi în unelte/ și teste noi, care nu ating kronos/ și examenul”)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_0940_S8_oprit_hub_inaccesibil.md
 
 
 ### S9 — Unealta de pornire: `cascada.py porneste --din-nou` (fostul pas R din S7)
