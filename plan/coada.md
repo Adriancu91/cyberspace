@@ -354,7 +354,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - raport: docs/rapoarte/2026-10-21_1122_S11_date_tipuri_noi.md (3.319 perechi noi: 2.157 cu text, 498 da/nu, 664 „Nu scrie”; 30 de perechi de verificat în raport; „În ce an a fost descrisă X?” înlocuită cu „Când a fost descrisă X?” din cauza regulii (ii); config/conv_w2_text_v3.toml și pre-înregistrarea S12 scrise)
 
 ### S12 — Noaptea 12: „răspuns din text” cu tipuri noi de întrebări, din #407
-- stare: aprobat (poarta: pornește DOAR dacă S11 e `gata` și la S11 scrie „perechi verificate: da” de la supraveghetor)
+- stare: in_lucru (21 oct 19:00; poarta trecută: S11 `gata`, „perechi verificate: da” de la supraveghetor la 14:20)
 - tip: placă
 - fereastră: noapte (19:00–07:00), 21→22 octombrie
 - durată maximă: 3 ore de antrenare + examene (cam 3 ore și jumătate)
