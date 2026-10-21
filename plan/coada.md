@@ -290,7 +290,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - raport: docs/rapoarte/2026-10-21_0910_S10_S4_pe_405_406.md ((a) 10 → 9 → 11, (b) 2 → 1 → 2, (c) 13/15 la toate, „Nu scrie” pe nedrept 7 → 6 → 11/45, „Da./Nu.” greșit 10 → 6 → 3: scade cu orele)
 
 ### S11 — Datele pentru noaptea 12: tipuri noi de întrebări (altele decât cele din examenul S4)
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30), 21 octombrie, după S10. Trebuie `gata` până la 16:30 (le verific la 17:15), altfel S12
   nu pornește în seara asta.
