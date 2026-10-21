@@ -77,28 +77,31 @@ ieri**. Așa poți compara, dar nu vezi întrebări noi.
 
 „text” = răspunsul se află în paragraful dat; „nu_scrie” = răspunsul corect e „Nu scrie în text.”.
 
-| nr. | felul | întrebarea | răspunsul lui Kronos | referința | nota profesorului | e bine? (tu) |
+| nr. | felul | întrebarea | răspunsul lui Kronos | referința | nota profesorului | e bine? (verificat de centrul de comandă la cererea lui Adrian, 21 oct 10:10) |
 |---|---|---|---|---|---|---|
-| 1 | text | Ce este sosul? | Sosul este un preparat culinar lichid sau vâscos alcătuit dintr-un amestec de ingrediente și care acompaniază preparatele alimentare. | Sosul este un preparat culinar lichid sau vâscos alcătuit dintr-un amestec de ingrediente și care acompaniază preparatele alimentare. | 10 |  |
-| 2 | text | În ce an s-a născut Nicolae Daniel Balauru? | În 1980. | În 1980. | 10 |  |
-| 3 | text | Din ce an este Necruțătorul? | Din 1992. | Din 1992. | 10 |  |
-| 4 | text | Ce este Râul Tazlăul Mare? | Râul Tazlăul Mare este un curs de apă, din bazinul râului Trotuș. | Râul Tazlăul Mare este un curs de apă, din bazinul râului Trotuș. | 10 |  |
-| 5 | text | În ce an s-a născut Patrick Jørgensen? | În 1991. | În 1991. | 10 |  |
-| 6 | nu_scrie | Câți locuitori are Briceni? | Nu scrie în text. | Nu scrie în text. | 10 |  |
-| 7 | nu_scrie | Ce este Punct de evaporare? | Nu scrie în text. | Nu scrie în text. | 10 |  |
-| 8 | text | Din ce an este Trick? | Din 2019. | Din 2019. | 10 |  |
-| 9 | text | Din ce an este Amenințarea? | Din 1976. | Din 1976. | 10 |  |
-| 10 | text | În ce an s-a născut Jaka Štromajer? | În 1983. | În 1983. | 10 |  |
-| 11 | text | Câți locuitori are Lalevići? | 154 de locuitori. | 154 de locuitori. | 10 |  |
-| 12 | text | În ce an s-a născut Laura Elizabeth Metcalf? | În 1955. | În 1955. | 10 |  |
-| 13 | text | Cine a scris Ciuta? | Victor Ion Popa. | Victor Ion Popa. | 10 |  |
-| 14 | text | Câți locuitori are Comitatul Washington? | 238.136 de locuitori. | 238.136 de locuitori. | 10 |  |
-| 15 | nu_scrie | Ce este Moselle Open 2023? | Nu scrie în text. | Nu scrie în text. | 10 |  |
-| 16 | text | Cine este Barrie "Barriemore" Barlow? | Barriemore "Barriemore" Barlow este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980. | Barrie "Barriemore" Barlow este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980. | 9 |  |
-| 17 | text | Câți locuitori are Bartula? | 355 de locuitori. | 355 de locuitori. | 10 |  |
-| 18 | text | În ce an s-a născut Magda Alfredo Cazanga? | În 1991. | În 1991. | 10 |  |
-| 19 | text | Cine a fost Flavius Valerius Severus? | Flavius Valerius Severus a fost un împărat roman între 306-307. | Flavius Valerius Severus a fost un împărat roman între 306-307. | 10 |  |
-| 20 | text | Ce este Sphaerodactylus richardi? | Sphaerodactylus richardi este o specie de șopârle din genul Sphaerodactylus, familia Gekkonidae, descrisă de S.Blair Hedges și Garrido 1993. | Sphaerodactylus richardi este o specie de șopârle din genul Sphaerodactylus, familia Gekkonidae, descrisă de S.Blair Hedges și Garrido 1993. | 10 |  |
+| 1 | text | Ce este sosul? | Sosul este un preparat culinar lichid sau vâscos alcătuit dintr-un amestec de ingrediente și care acompaniază preparatele alimentare. | Sosul este un preparat culinar lichid sau vâscos alcătuit dintr-un amestec de ingrediente și care acompaniază preparatele alimentare. | 10 | da |
+| 2 | text | În ce an s-a născut Nicolae Daniel Balauru? | În 1980. | În 1980. | 10 | da |
+| 3 | text | Din ce an este Necruțătorul? | Din 1992. | Din 1992. | 10 | da |
+| 4 | text | Ce este Râul Tazlăul Mare? | Râul Tazlăul Mare este un curs de apă, din bazinul râului Trotuș. | Râul Tazlăul Mare este un curs de apă, din bazinul râului Trotuș. | 10 | da |
+| 5 | text | În ce an s-a născut Patrick Jørgensen? | În 1991. | În 1991. | 10 | da |
+| 6 | nu_scrie | Câți locuitori are Briceni? | Nu scrie în text. | Nu scrie în text. | 10 | da |
+| 7 | nu_scrie | Ce este Punct de evaporare? | Nu scrie în text. | Nu scrie în text. | 10 | da |
+| 8 | text | Din ce an este Trick? | Din 2019. | Din 2019. | 10 | da |
+| 9 | text | Din ce an este Amenințarea? | Din 1976. | Din 1976. | 10 | da |
+| 10 | text | În ce an s-a născut Jaka Štromajer? | În 1983. | În 1983. | 10 | da |
+| 11 | text | Câți locuitori are Lalevići? | 154 de locuitori. | 154 de locuitori. | 10 | da |
+| 12 | text | În ce an s-a născut Laura Elizabeth Metcalf? | În 1955. | În 1955. | 10 | da |
+| 13 | text | Cine a scris Ciuta? | Victor Ion Popa. | Victor Ion Popa. | 10 | da |
+| 14 | text | Câți locuitori are Comitatul Washington? | 238.136 de locuitori. | 238.136 de locuitori. | 10 | da |
+| 15 | nu_scrie | Ce este Moselle Open 2023? | Nu scrie în text. | Nu scrie în text. | 10 | da |
+| 16 | text | Cine este Barrie "Barriemore" Barlow? | Barriemore "Barriemore" Barlow este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980. | Barrie "Barriemore" Barlow este un muzician englez, cel mai cunoscut ca baterist și percuționist în trupa rock, Jethro Tull din mai 1971 până în iunie 1980. | 9 | aproape: numele e greșit („Barriemore” de două ori, corect „Barrie”); restul propoziției e identic |
+| 17 | text | Câți locuitori are Bartula? | 355 de locuitori. | 355 de locuitori. | 10 | da |
+| 18 | text | În ce an s-a născut Magda Alfredo Cazanga? | În 1991. | În 1991. | 10 | da |
+| 19 | text | Cine a fost Flavius Valerius Severus? | Flavius Valerius Severus a fost un împărat roman între 306-307. | Flavius Valerius Severus a fost un împărat roman între 306-307. | 10 | da |
+| 20 | text | Ce este Sphaerodactylus richardi? | Sphaerodactylus richardi este o specie de șopârle din genul Sphaerodactylus, familia Gekkonidae, descrisă de S.Blair Hedges și Garrido 1993. | Sphaerodactylus richardi este o specie de șopârle din genul Sphaerodactylus, familia Gekkonidae, descrisă de S.Blair Hedges și Garrido 1993. | 10 | da |
+
+**Verificarea celor 20 (centrul de comandă, la cererea lui Adrian):** 19 din 20 identice cu referința; nr. 16 are o greșeală mică
+de nume (prenumele repetat), nota 9 a profesorului e corectă. Verdictul „fără regresie pe noaptea 10” e confirmat pe acest eșantion.
 
 Greșelile lui #407 la acest examen nu au ieșit printre cele 20:
 - „Cine a scris Pasărea albastră?” → „Maurice Tourneur.” Acesta e regizorul, nu autorul; nota 2.

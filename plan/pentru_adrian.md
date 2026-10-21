@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 10:05 — decizii Adrian (scrise de centrul de comandă)
+
+- **S13 aprobat:** fila „Întreabă din text” trece la #407 (fila veche rămâne).
+- **S8 reaprobat:** standardul din hub e copiat în `plan/hub_modul-v0.md`; executantul îl citește de acolo, nu mai clonează hub-ul.
+  Regulă de acum: tot ce are executantul de citit din hub ajunge în `plan/` prin supraveghetor sau centrul de comandă.
+- Cele 20 de răspunsuri din raportul de dimineață: Adrian le verifică când are timp.
+
 ## 21 octombrie 2026, 02:15 — noaptea 11: PARȚIAL, fără regresie (verificat)
 
 - **Noaptea 11 (S7) s-a terminat fără erori** (antrenare 20:47–23:58, examene până la 00:03; placa max 6.303 MB, 63 °C).
