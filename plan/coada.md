@@ -268,7 +268,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S10 — Examenul S4 pe #405 și #406 (orele 1 și 2 ale nopții 11)
-- stare: aprobat
+- stare: in_lucru (pornită de executant, 21 oct 08:3x)
 - tip: placă (scurt: ~3 minute pe examen, cel mult 30 de minute în total)
 - fereastră: zi (08:00–18:30), 21 octombrie, prima sarcină a zilei
 - durată maximă: 30 de minute
