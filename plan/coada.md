@@ -431,7 +431,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
   repo-ului, cu ramura „continui cu fișierul local”) și `teste/test_raport_dimineata.py`; nimic în `kronos/`. Proba reală: 22 oct 07:40.
 
 ### S15 — Examen mare de generalizare: e 2/15 chiar zero? Și s-au învățat măcar tipurile antrenate?
-- stare: aprobat
+- stare: in_lucru (22 oct 00:00)
 - tip: procesor (scrierea examenului) + placă scurt (~15 minute, doar examene)
 - fereastră: oricând placa e liberă — de preferat noaptea 21→22 (după ce citești asta); altfel prima sarcină a zilei de 22 oct
 - durată maximă: 2 ore (din care pe placă cel mult 30 de minute)
