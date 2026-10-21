@@ -485,7 +485,7 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
 - raport: docs/rapoarte/2026-10-22_0044_S15_examen_generalizare_mare.md
 
 ### S16 — E0: verificatorul fără LLM pentru „răspuns din text” + re-notarea S15 și S4 în ambele feluri
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă, fără Qwen, fără niciun model)
 - fereastră: oricând (de preferat imediat, noaptea 21→22 sau dimineața 22 oct)
 - durată maximă: 3 ore
