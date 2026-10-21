@@ -268,7 +268,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S10 — Examenul S4 pe #405 și #406 (orele 1 și 2 ale nopții 11)
-- stare: in_lucru (pornită de executant, 21 oct 08:3x)
+- stare: in_lucru (pornită de executant, 21 oct 08:29:42, procesul 4112; prima încercare de la 08:29:20 n-a rulat nimic — Git Bash a stricat „/c” în „C:/” — fișierele ei mutate în lucru/cascada/S10_gresita_0829.*; de pus în raport)
 - tip: placă (scurt: ~3 minute pe examen, cel mult 30 de minute în total)
 - fereastră: zi (08:00–18:30), 21 octombrie, prima sarcină a zilei
 - durată maximă: 30 de minute
