@@ -373,7 +373,8 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - raport: —
 
 ### S13 — Interfața: fila „Întreabă din text” trece de la #401 la #407
-- stare: aprobat (Adrian, 21 oct 10:05, prin centrul de comandă) — #407 în fila „Întreabă din text”; fila veche rămâne.
+- stare: in_lucru (executant, 21 oct 11:30)
+- stare veche: aprobat (Adrian, 21 oct 10:05, prin centrul de comandă) — #407 în fila „Întreabă din text”; fila veche rămâne.
 - tip: procesor (interfața; NU ocupă placa)
 - fereastră: oricând, după „da”-ul lui Adrian
 - durată maximă: 30 de minute
