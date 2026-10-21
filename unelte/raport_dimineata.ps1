@@ -17,6 +17,18 @@ function Scrie([string]$text) {
     Add-Content -Path $jurnal -Value ("[{0}] {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $text) -Encoding utf8
 }
 
+# S14 (21 octombrie 2026): instructiunea se citeste dupa git pull, ca sa fie cea de pe GitHub. Daca pull-ul pica
+# (fara retea, conflict), scriem in jurnal si continuam cu fisierul local: raportul nu se opreste din cauza asta.
+$ErrorActionPreference = "Continue"
+try {
+    $iesire = & git pull --ff-only 2>&1 | Out-String
+    if ($LASTEXITCODE -eq 0) { Scrie ("git pull --ff-only: " + $iesire.Trim()) }
+    else { Scrie ("git pull --ff-only a picat (cod $LASTEXITCODE), continui cu fisierul local: " + $iesire.Trim()) }
+} catch {
+    Scrie ("git pull --ff-only a picat, continui cu fisierul local: " + $_)
+}
+$ErrorActionPreference = "Stop"
+
 $instructiunea = Get-Content (Join-Path $PSScriptRoot "raport_dimineata.txt") -Encoding utf8 -Raw
 $citire = @("Read", "Glob", "Grep", "Bash(git status*)", "Bash(git log*)", "Bash(git diff*)", "Bash(git show*)",
             "Bash(ls *)", "Bash(cat *)", "Bash(tail *)", "Bash(head *)", "Bash(grep *)", "Bash(date*)", "Bash(nvidia-smi*)")
