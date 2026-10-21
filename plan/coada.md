@@ -398,7 +398,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
   și un test; nimic în `kronos/`. Fila „Chat” rămâne pe #312.
 
 ### S14 — Raportul de dimineață: `git pull` înainte de a citi instrucțiunea
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (NU folosește placa)
 - fereastră: oricând, dar NU cât timp rulează S12 cu examenele (azi, înainte de 19:00 e cel mai bine); trebuie gata înainte de 07:40, 22 oct
 - durată maximă: 30 de minute
