@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 octombrie 2026, 02:15 — direcția nouă a pornit: primul pas e „judecătorul fără Qwen”
+
+- **S15 gata (verificat, am adunat singur cifrele pe tipuri):** Kronos (#415) a învățat **toate** tipurile de întrebări pe care
+  le-a văzut (**30 din 30**, pe texte noi), dar la tipuri nevăzute stă la **6 din 50** — cât modelul vechi. Se învață, nu se transferă.
+- **Pus în coadă, cum ai aprobat:** **S16 (E0)**, aprobat de mine, doar pe procesor, fără placă: un verificator scris de noi care
+  notează răspunsurile fără Qwen, comparat cu notele lui Qwen pe examenele S15 și S4 deja făcute. Poate rula chiar acum.
+- **S17 (E1, „întrebări născute de Kronos”)** e scris, dar pornește (o noapte pe placă, țintă 22→23 oct) doar dacă S16 arată
+  că verificatorul și Qwen sunt de acord în cel puțin 90 % din cazuri. O precizare: S17 va fi notat de verificator, deci îl
+  compar cu #415 notat tot de verificator (cifrele lui Qwen, 6/50 și 30/30, rămân scrise alături).
+- Ziua de 22 oct: nimic pe placă (cum cere direcția nouă, fără nopți cu rețeta veche). Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 21 octombrie 2026, 23:15 — noaptea 12: INFIRMAT, fără regresie (verificat)
 
 - **Noaptea 12 (S12) s-a terminat fără erori** (antrenare 19:00–22:12, examene până la 22:34; placa max 6.319 MB, 64 °C).
@@ -201,9 +213,3 @@
 - N-am pus nimic nou în coadă: sarcina de zi pe placă (S3) o scriu la 07:55, după verdictul nopții 10.
 - **Aștept de la tine:** dacă n-ai făcut-o încă, înregistrează la workstation sarcina Windows „Kronos executant coada”
   (comanda e în `docs/rapoarte/2026-10-19_2040_executantul_cascadei_proba.md`). Fără ea, S2 nu pornește mâine.
-
-## 19 octombrie 2026, 19:46 — S2 aprobat
-
-- Ai dat „da” la S2: motorul de română intră în `main`, cu testele care se sar fără bază, apoi doar măsoară greșelile
-  din datele de conversație (nu șterge nimic). Executantul o face mâine ziua, pe procesor.
-- Aștept de la tine: nimic acum. Filtrul pe date vine abia după ce verific cele 30 de exemple și îți spun.
