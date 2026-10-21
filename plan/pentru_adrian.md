@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 17:20 — totul e pregătit pentru noaptea 12 (pornește la 19:00)
+
+- **S14 gata (verificat):** raportul de dimineață face acum singur `git pull` înainte să-și citească instrucțiunea; dacă
+  nu are internet, merge mai departe cu ce are. Copia de pe workstation era oricum la zi. Am citit schimbarea: e doar în
+  `unelte/raport_dimineata.ps1` + un test; nimic în `kronos/`. Teste: 851 trec, 1 sărit.
+- **Rulează acum:** nimic pe placă. **La 19:00:** noaptea 12 (S12), 3 ore din #407 pe datele cu tipuri noi de întrebări,
+  cu pragurile scrise dinainte. Verdictul mâine la 08:15.
+- Nu am pus nimic nou în coadă: ziua de mâine o decid după rezultatul nopții. Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 21 octombrie 2026, 14:20 — datele pentru noaptea 12 sunt bune; la 19:00 pornește
 
 - **S11 gata și verificat:** 3.319 întrebări noi de antrenare (familii de specii, deputați și partide, râuri, raioane, anul
