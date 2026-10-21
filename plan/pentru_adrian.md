@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 11:15 — dimineața a mers bine; datele pentru noaptea 12 se fac acum
+
+- **S10 gata (verificat, am renumărat singur):** greșeala nouă — „Da.”/„Nu.” la întrebări care nu sunt da/nu — **scade**
+  cu orele (10 → 6 → 3), deci noaptea 12 rămâne de 3 ore. Tipurile noi de întrebări stau pe loc (2 → 1 → 2 din 15):
+  mai multe ore nu ajută, trebuie alte tipuri în date — exact ce face S11.
+- **S9 gata:** unealta de pornire pune singură deoparte fișierele vechi (`--din-nou`), ca să nu mai fie nevoie de tine.
+- **S8 gata:** fiecare modul Kronos are acum descrierea în formatul comun din hub (24 de fișiere, cu test care le ține la zi).
+  Am notat „gata” în hub. Teste: 843 trec, 1 sărit.
+- **Rulează acum:** S11 (datele cu tipuri noi de întrebări, pe procesor, din 10:58). Urmează S13 (#407 în interfață, cum ai
+  aprobat). La 17:15 verific 30 de perechi din datele noi; dacă sunt bune, noaptea 12 (S12) pornește la 19:00.
+- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
+
 ## 21 octombrie 2026, 10:05 — decizii Adrian (scrise de centrul de comandă)
 
 - **S13 aprobat:** fila „Întreabă din text” trece la #407 (fila veche rămâne).
