@@ -354,7 +354,8 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - raport: docs/rapoarte/2026-10-21_1122_S11_date_tipuri_noi.md (3.319 perechi noi: 2.157 cu text, 498 da/nu, 664 „Nu scrie”; 30 de perechi de verificat în raport; „În ce an a fost descrisă X?” înlocuită cu „Când a fost descrisă X?” din cauza regulii (ii); config/conv_w2_text_v3.toml și pre-înregistrarea S12 scrise)
 
 ### S12 — Noaptea 12: „răspuns din text” cu tipuri noi de întrebări, din #407
-- stare: in_lucru (21 oct 19:00; poarta trecută: S11 `gata`, „perechi verificate: da” de la supraveghetor la 14:20)
+- stare: gata (21 oct 22:35; antrenarea 19:00–22:12 cod 0, examenele pe #415 la 22:31–22:34; INFIRMAT, fără regresie)
+- stare veche: in_lucru (21 oct 19:00; poarta trecută: S11 `gata`, „perechi verificate: da” de la supraveghetor la 14:20)
 - tip: placă
 - fereastră: noapte (19:00–07:00), 21→22 octombrie
 - durată maximă: 3 ore de antrenare + examene (cam 3 ore și jumătate)
@@ -379,7 +380,8 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - pre-înregistrare: docs/preinregistrari/2026-10-21_noaptea12_tipuri_noi.md (scrisă în S11)
 - aprobat de: supraveghetor, 21 octombrie 2026, 02:15 (categoria 1 „încă o rulare pe o linie care există, alt amestec de
   date”: același model, același tokenizer, aceeași mărime, aceleași setări; doar datele noi)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_2235_S12_noaptea12.md (INFIRMAT: S4 (b) 2/15, ca #407; fără regresie: noaptea 10
+  50/50, 20/20, 0 refuzuri; (a) 11, (c) 13, (d) 12, „Nu scrie” pe nedrept 9/45, „Da./Nu.” greșit 3)
 
 ### S13 — Interfața: fila „Întreabă din text” trece de la #401 la #407
 - stare: gata (21 oct 11:46; interfața repornită cu #407, procesul 26132; 4/4 exemple bune de pe 100.90.150.35:8787; 850 teste trec, 1 sărit)

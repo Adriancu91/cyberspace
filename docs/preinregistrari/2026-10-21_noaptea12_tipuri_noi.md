@@ -111,3 +111,53 @@ răspuns care începe cu „Da.”/„Nu.” la o întrebare din (a), (b) sau (d
 - **„Nu scrie” pe nedrept peste 15 din 45:** cele 664 de „Nu scrie” noi l-au făcut să refuze mai des.
 - **Noaptea 10 sub 45 din 50 sau S4 (a) sub 9:** datele noi au stricat ce știa.
 - **„Da./Nu. greșit” peste 6:** perechile-soră n-au ajutat deloc.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-21 22:34, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 413 | w2_conv_text_v3 | 21.10 19:01 | 0,4393 | pastrat | — | — | — |  |
+| 414 | w2_conv_text_v3 | 21.10 20:05 | 0,4417 | pastrat | — | — | — |  |
+| 415 | w2_conv_text_v3 | 21.10 21:09 | 0,4411 | pastrat | — | — | — |  |
+| 416 | examen_conversatie | 21.10 22:31 | — | masurat | — | — | — |  |
+| 417 | examen_conversatie | 21.10 22:33 | — | masurat | — | — | — |  |
+| 418 | examen_validari_ws | 21.10 22:33 | — | masurat | — | — | — |  |
+
+- **w2_conv_text_v3:** 3 ore, 3 păstrate; val_bpb de la 0,4393 la 0,4411; cel mai bun păstrat: #413 (0,4393); pornită din #407 (0,4395).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris de Claude Code (executantul din cascadă), 21 octombrie 2026, 22:35, strict după pragurile de mai sus. Examenele
+s-au dat pe ultimul model păstrat, #415 (ora 3), între 22:31 și 22:34 (jurnal #416–#418, plus setul sacru).*
+
+| ce se măsoară | pragul | a ieșit (#415) | #407 | |
+|---|---|---|---|---|
+| S4 (b) tipuri noi de întrebări | confirmat ≥ 5/15; **infirmat ≤ 2/15** | **2/15** | 2/15 | **INFIRMAT** |
+| S4 (a) aceeași informație, altă formulare | confirmat ≥ 10/15; nu strică ≥ 9/15 | **11/15** | 11/15 | trece |
+| „Nu scrie în text.” pe nedrept, (a)+(b)+(c) | confirmat ≤ 10/45 | **9/45** (a 2, b 7, c 0) | 11/45 | trece |
+| „Da./Nu. greșit” în (a)+(b)+(d) | confirmat ≤ 1 | **3** (#22, #47, #59) | 3 (#20, #22, #59) | NU trece |
+| S4 (c) da/nu | nu strică ≥ 11/15 | **13/15** | 13/15 | trece |
+| noaptea 10: din text | ≥ 45/50 | **50/50** | 49/50 | trece |
+| noaptea 10: „Nu scrie” | ≥ 16/20 | **20/20** | 19/20 | trece |
+| noaptea 10: refuz greșit | ≤ 5/50 | **0/50** | 0/50 | trece |
+| română, validarea curată | ≤ 1,3133 | **1,2858** | 1,2818 | trece |
+| cod, validarea curată | ≤ 0,8174 | **0,7920** | 0,7882 | trece |
+| povești (val_bpb) | ≤ 0,47 | **0,4411** | 0,4395 | trece |
+| fapte noi | ≥ 65 | **68** | 75 | trece |
+| urmărit: (d) fără răspuns | — | **12/15** | 12/15 | — |
+| urmărit: setul sacru | — | **26/50** (27 cu sinonime) | 27 | — |
+
+**INFIRMAT, fără regresie.** (b) a rămas la 2 din 15, exact cât #407, deci pragul de infirmare (≤ 2) e atins: tipurile
+noi de întrebări de la antrenare nu l-au învățat pe Kronos să răspundă la tipurile din S4 (b), pe care nu le-a văzut.
+Ce știa nu s-a stricat (noaptea 10 chiar 50/50 și 20/20) și n-a uitat (toate patru pragurile trec, fapte noi 68, aproape
+de limita de 65).
+
+**Față de așteptările mele:** (b) 2, la marginea de jos a lui 2–5 (am scris „cel mai probabil 3”); (a) 11, (c) 13, (d)
+12, „Nu scrie” pe nedrept 9, „Da./Nu. greșit” 3, noaptea 10, română 1,2858 (în 1,28–1,30), cod 0,7920 (în 0,785–0,80), povești 0,4411 (în 0,437–0,445), setul sacru 26, placa 6.319 MB: toate în intervalele scrise.
+Fapte noi 68, sub intervalul meu 70–77. Am scris „mai degrabă PARȚIAL sau INFIRMAT”; a ieșit INFIRMAT.
+
+**Urmărit, S10:** (b) pe ore la linia nouă nu s-a măsurat (doar pe #415); la noaptea 11 era 2 → 1 → 2, deci tot palier.
