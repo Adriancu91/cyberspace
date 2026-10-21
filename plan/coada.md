@@ -248,7 +248,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S9 — Unealta de pornire: `cascada.py porneste --din-nou` (fostul pas R din S7)
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30), 21 octombrie, după raportul de dimineață al nopții 11; înainte sau după S8, nu în paralel
 - durată maximă: 1 oră
