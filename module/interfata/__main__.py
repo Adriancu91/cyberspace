@@ -2,7 +2,7 @@
 
     python -m module.interfata --config config/laptop_antrenare_lunga_8.toml --experiment 295 --port 8787
     python -m module.interfata --config config/proba.toml --fals        # fără niciun model, doar de probă
-    python -m module.interfata --config config/ws_w1.toml --experiment 312 --experiment-text 401   # cu fila „Întreabă din text”
+    python -m module.interfata --config config/ws_w1.toml --experiment 312 --experiment-text 407  # cu fila „Întreabă din text”
 """
 
 from __future__ import annotations

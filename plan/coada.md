@@ -373,7 +373,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - raport: —
 
 ### S13 — Interfața: fila „Întreabă din text” trece de la #401 la #407
-- stare: in_lucru (executant, 21 oct 11:30)
+- stare: gata (21 oct 11:46; interfața repornită cu #407, procesul 26132; 4/4 exemple bune de pe 100.90.150.35:8787; 850 teste trec, 1 sărit)
 - stare veche: aprobat (Adrian, 21 oct 10:05, prin centrul de comandă) — #407 în fila „Întreabă din text”; fila veche rămâne.
 - tip: procesor (interfața; NU ocupă placa)
 - fereastră: oricând, după „da”-ul lui Adrian
@@ -385,4 +385,4 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
   7/15), da/nu (13 față de 0/15) și refuză pe nedrept de două ori mai rar; puțin mai slab la tipuri noi (2 față de 3/15) și
   uneori răspunde „Da.” unde nu e cazul. Recomandarea supraveghetorului: **da**.
 - aprobat de: — (aștept „da”-ul lui Adrian)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_1146_S13_interfata_407.md (24.160 de locuitori. / Nu scrie în text. / text lung refuzat clar / da/nu: „Da.”)

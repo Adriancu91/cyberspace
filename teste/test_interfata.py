@@ -327,3 +327,11 @@ def test_linia_de_comanda_cere_un_creier_si_o_configurare_buna(tmp_path, capsys)
     capsys.readouterr()
     assert pornire.main(["--config", str(tmp_path / "lipsa.toml"), "--fals"]) == 2
     assert "Nu pot porni" in capsys.readouterr().out
+
+
+def test_pornirea_automata_pune_407_in_fila_din_text():
+    """S13 (21 octombrie 2026, aprobat de Adrian): paznicul de procese pornește interfața prin unelte/interfata_ws.ps1,
+    deci acolo e modelul filei „Întreabă din text”: #407 (noaptea 11), nu #401. Chatul rămâne #312."""
+    script = (Path(__file__).resolve().parents[1] / "unelte" / "interfata_ws.ps1").read_text(encoding="utf-8")
+    assert "[int]$ExperimentText = 407," in script and "[int]$Experiment = 312," in script
+    assert CreierText(407, "lucru-inexistent").eticheta == "Kronos #407 — răspunde doar din textul dat."
