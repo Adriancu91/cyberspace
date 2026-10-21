@@ -68,3 +68,42 @@ Corect = nota profesorului ≥ 7. Numără pentru fiecare model: (b2) x/50, (e) 
 - **#415 (e) ≤ 14:** nici ce a văzut n-a învățat pe texte noi — atunci problema e cantitatea de date pe tip, nu felul lor.
 - **#415 (b2) ≥ #407 (b2) + 6:** tipurile noi din S11 au ajutat și la tipuri nevăzute.
 - **(b2) peste 20 din 50 la oricare model:** cele 15 întrebări din S4 (b) erau mai grele decât tipurile noi în general.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-22 00:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 419 | examen_conversatie | 22.10 00:13 | — | masurat | — | — | — |  |
+| 420 | examen_conversatie | 22.10 00:15 | — | masurat | — | — | — |  |
+| 421 | examen_conversatie | 22.10 00:17 | — | masurat | — | — | — |  |
+
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris de Claude Code (executantul din cascadă), 22 octombrie 2026, 00:30, strict după regulile de mai sus. Examenele
+s-au dat între 00:13 și 00:17 (jurnal #419–#421), cod 0. Corect = nota profesorului ≥ 7.*
+
+| model | (b2) tipuri nevăzute | (e) tipurile din S11 | „Nu scrie” pe nedrept (b2 / e) | „Da./Nu.” greșit (b2 / e) |
+|---|---|---|---|---|
+| #401 | 6/50 | 14/30 | 24 / 4 | 0 / 0 |
+| #407 | 9/50 | 4/30 | 25 / 20 | 2 / 2 |
+| #415 | **6/50** | **30/30** | 20 / 0 | 1 / 0 |
+
+- „Tipurile văzute s-au învățat, dar nu se transferă” (#415 (e) ≥ 21/30 ȘI #415 (b2) ≤ 7/50): **30 ≥ 21 și 6 ≤ 7 → DA.**
+- „Nici tipurile văzute nu s-au învățat bine” (#415 (e) ≤ 14/30): 30 → nu.
+- „Există transfer mic” (#415 (b2) ≥ #407 (b2) + 6 = 15): 6 → nu (#415 e chiar cu 3 sub #407).
+
+**Se aplică regula „Tipurile văzute s-au învățat, dar nu se transferă”.** #415 a răspuns corect la toate cele 30 de
+întrebări din tipurile pe care le-a văzut la antrenare, pe texte nevăzute; la tipurile pe care nu le-a văzut a rămas la
+6 din 50 (12%), cât #401, care n-a văzut niciun tip nou. „2/15” din S4 nu era un zero ascuns sub un transfer mic: pe 50 de
+întrebări tot nu se vede niciun transfer.
+
+**Față de așteptările mele:** #415 (e) 30, peste intervalul 18–25 (n-am crezut că „descris de cine” și „afluent / bazin”
+merg toate). #407 (e) 4, sub 8–15; #401 (e) 14, peste 5–12 (#401 ghicește din text mai des decât #407, care refuză 20 din
+30). (b2): 6, 9, 6 — toate în 5–12; diferența #415 − #407 = −3, sub 6, cum am scris. „Nu scrie” pe nedrept la (b2): #401
+24 (în 15–30), #407 25 (peste 8–20), #415 20 (la marginea de sus). Regula așteptată: cea care a ieșit. Niciuna din
+„ce ar infirma așteptările” nu s-a întâmplat ((b2) nicăieri peste 20).
