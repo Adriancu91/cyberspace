@@ -136,6 +136,129 @@ def test_formularile_nu_sunt_din_examenul_s4():
         assert ct._inceput(f.format(x="Xyz", v="1950")) not in interzise, f
 
 
+# --tipuri-noi (S11)
+RAU = "Râul Boca este un curs de apă, afluent al râului Siret. Râul Boca are o lungime de 11 km și izvorăște de lângă Hăbășești."
+SPECIE = ("Naja philippinensis este o specie de șerpi din genul Naja, familia Elapidae, descrisă de William Randolph Taylor "
+          "în anul 1922. A fost clasificată de IUCN ca specie amenințată.")
+DEPUTAT = ("Nicolae Ionescu (n. 10 iunie 1944) este un fost deputat român în legislatura 1996-2000, ales în județul Argeș pe "
+           "listele partidului PUNR.")
+ORAS = "Zvolen este un oraș în Slovacia centrală, situat pe râul Hron. Are 42.000 locuitori."
+SAT_MD = "Scoreni este un sat din raionul Strășeni, Republica Moldova."
+MUZEU = "Muzeul Zanabazar este un muzeu de artă din Ulaanbaatar și a fost fondat în 1966."
+BISERICA = "Biserica din Cărbuna este un lăcaș de cult din satul Cărbuna, construit în 1894."
+
+
+def _noi(text, x, tip):
+    return {q["tip"]: q["raspuns"] for q in ct.intrebari_noi(text, x, tip)}
+
+
+def test_tipurile_noi_iau_raspunsul_din_text():
+    assert _noi(RAU, "Râul Boca", "ce") == {"nou_afluent": "Al râului Siret.", "nou_lungime": "11 km."}
+    assert _noi(SPECIE, "Naja philippinensis", "ce") == {  # genul e chiar în nume, deci nu se întreabă
+        "nou_familie": "Din familia Elapidae.", "nou_descris_cine": "William Randolph Taylor.", "nou_descris_an": "În 1922."}
+    assert _noi(DEPUTAT, "Nicolae Ionescu", "om") == {"nou_legislatura": "În legislatura 1996-2000.",
+                                                     "nou_partid": "Pe listele partidului PUNR."}
+    assert _noi(ORAS, "Zvolen", "loc") == {"nou_rau": "Pe râul Hron."}
+    assert _noi(SAT_MD, "Scoreni", "loc") == {"nou_raion": "În raionul Strășeni."}
+    assert _noi(MUZEU, "Muzeul Zanabazar", "ce") == {"nou_fondat_an": "În 1966."}
+    assert _noi(BISERICA, "Biserica din Cărbuna", "ce") == {"nou_construit_an": "În 1894."}
+    for text, x, tip in [(RAU, "Râul Boca", "ce"), (SPECIE, "Naja philippinensis", "ce"), (DEPUTAT, "Nicolae Ionescu", "om")]:
+        for q in ct.intrebari_noi(text, x, tip):
+            assert q["valoare"] in text
+
+
+def test_tipurile_noi_cu_mai_multi_autori_si_acord():
+    text = "Sphaerodactylus scaber este o specie de șopârle din familia Gekkonidae, descrisă de Thomas Barbour și Ramsden 1919."
+    assert _noi(text, "Sphaerodactylus scaber", "ce")["nou_descris_cine"] == "Thomas Barbour și Ramsden."
+    p = {"tip": "nou_descris_cine", "x": "Sphaerodactylus scaber", "f": "descrisă"}
+    for samanta in range(5):
+        assert " a descris" not in ct._intrebare_noua(p, random.Random(samanta), "Thomas Barbour și Ramsden")
+    assert ct._acord("construit", "Biserica din Cărbuna") == "construită"
+    assert ct._acord("fondată", "Muzeul Zanabazar") == "fondat"
+    assert ct.intrebari_noi(BISERICA, "Biserica din Cărbuna", "ce")[0]["f"] == "construită"
+
+
+def test_tipurile_noi_nu_iau_alt_subiect():
+    familie = "Silviile (Sylviidae) sunt o familie de păsări cântătoare, la fel ca și cele din familia Muscicapidae."
+    assert "nou_familie" not in _noi(familie, "Silviile", "ce")
+    boala = "Cenuroza este o parazitoză a unor specii de viermi plați paraziți din genul Taenia."
+    assert "nou_gen" not in _noi(boala, "Cenuroza", "ce")
+    afluent = "Chetriș este un sat din Republica Moldova. Localitatea este situată pe malul râului Camenca, afluent al râului Prut."
+    assert "nou_afluent" not in _noi(afluent, "Chetriș", "loc")
+    doi = "Ludovic Rákóczi este un fost deputat român în legislatura 1992-1996 și în legislatura 1996-2000, ales pe listele UDMR."
+    assert "nou_legislatura" not in _noi(doi, "Ludovic Rákóczi", "om")
+
+
+def test_nu_scrie_la_tipurile_noi_doar_ce_lipseste():
+    def lipsa(text, x, tip):
+        return {q["tip"] for q in ct.lipsa_noi(text, x, tip)}
+
+    assert "lipsa_nou_afluent" not in lipsa(RAU, "Râul Boca", "ce")
+    assert "lipsa_nou_afluent" in lipsa("Râul Cerna este un râu din România, care izvorăște din Munții Godeanu.", "Râul Cerna", "ce")
+    assert not {"lipsa_nou_familie", "lipsa_nou_descris_cine"} & lipsa(SPECIE, "Naja philippinensis", "ce")
+    homo = "Homo ergaster este o specie umanoidă preistorică, posibil precursor al oamenilor moderni."
+    assert {"lipsa_nou_familie", "lipsa_nou_descris_cine"} <= lipsa(homo, "Homo ergaster", "ce")
+    assert "lipsa_nou_descris_cine" not in lipsa("Ballota este un gen de plante din familia Lamiaceae.", "Ballota", "ce")
+    assert not {"lipsa_nou_legislatura", "lipsa_nou_partid"} & lipsa(DEPUTAT, "Nicolae Ionescu", "om")
+    fost = "Teodora Mihăilescu (n. 17 septembrie 1960) este o economistă română, fost deputat."
+    assert {"lipsa_nou_legislatura", "lipsa_nou_partid"} <= lipsa(fost, "Teodora Mihăilescu", "om")
+    assert "lipsa_nou_partid" not in lipsa("Alexandru Alexandrini a fost membru al P.N.L., deputat.", "Alexandru Alexandrini", "om")
+    assert "lipsa_nou_construit_an" not in lipsa("Arcul lui Severus este un arc. A fost construit în 203.", "Arcul lui Severus", "ce")
+    assert "lipsa_nou_fondat_an" not in lipsa("Clubul X este un club. A fost fondat la în districtul Rímac.", "Clubul X", "ce")
+    assert "lipsa_nou_rau" not in lipsa(ORAS, "Zvolen", "loc")
+    assert all(q["raspuns"] == ct.NU_SCRIE for q in ct.lipsa_noi(homo, "Homo ergaster", "ce"))
+
+
+def _articole_noi(n):
+    partide, familii, raioane = ["PUNR", "FSN", "PSD", "PNL"], ["Elapidae", "Colubridae", "Viperidae"], ["Strășeni", "Cahul", "Orhei"]
+    articole = []
+    for i in range(n):
+        ani = f"{1990 + i % 5 * 4}-{1994 + i % 5 * 4}"
+        articole += [
+            {"x": f"Deputat{i}", "tip": "om",
+             "text": DEPUTAT.replace("Nicolae Ionescu", f"Deputat{i}").replace("1996-2000", ani).replace("PUNR", partide[i % 4])},
+            {"x": f"Specia{i} rara", "tip": "ce",
+             "text": SPECIE.replace("Naja philippinensis", f"Specia{i} rara").replace("Elapidae", familii[i % 3])},
+            {"x": f"Satul{i}", "tip": "loc", "text": SAT_MD.replace("Scoreni", f"Satul{i}").replace("Strășeni", raioane[i % 3])},
+            {"x": f"Teodora{i} Mihăilescu", "tip": "om", "text": f"Teodora{i} Mihăilescu (n. 1960) este o economistă română, fost deputat."},
+        ]
+    return articole
+
+
+def test_perechi_noi_da_nu_si_nu_scrie():
+    perechi = ct.perechi_noi(_articole_noi(60), 0.2, 0.15, random.Random(0), "text")
+    feluri = [p["fel"] for p in perechi]
+    assert abs(feluri.count("nu_scrie") / len(feluri) - 0.2) < 0.03
+    da_nu = [p for p in perechi if p["tip"].startswith("da_nu_nou")]
+    assert abs(len(da_nu) / len(perechi) - 0.15) < 0.04
+    assert abs(sum(p["raspuns"] == "Da." for p in da_nu) - len(da_nu) / 2) <= 1
+    deschise = {p["grup"] for p in perechi if p["fel"] == "text" and not p["tip"].startswith("da_nu")}
+    for p in da_nu:  # perechea-soră: o întrebare deschisă despre același text
+        assert p["grup"] in deschise
+        if p["raspuns"] == "Nu." and p["tip"] in ("da_nu_nou_familie", "da_nu_nou_raion"):
+            assert p["intrebare"].rstrip("?").split()[-1] not in p["text"]
+        if p["raspuns"] == "Nu." and p["tip"] == "da_nu_nou_descris_an":
+            assert next(c for c in p["intrebare"].rstrip("?").split() if c.isdigit()) not in p["text"]
+    assert all(set(p) == {"fel", "limba", "grup", "text", "tip", "raspuns", "x", "intrebare"} for p in perechi)
+
+
+def test_tipurile_noi_nu_sunt_din_examenul_s4():
+    interzise = ct.inceputuri_interzise()
+    for tip, formulari in ct.TIPURI_NOI.items():
+        assert 3 <= len(formulari) <= 5, tip
+    for f in sum(ct.TIPURI_NOI.values(), []) + sum(ct.DA_NU_NOI.values(), []):
+        assert not ct.INTERZISE_S4_B.search(f.format(x="", f="", v="")), f
+        assert ct._inceput(f.format(x="Xyz", f="fondat", v="1950")) not in interzise, f
+    for interzis in ["În ce țară se află X?", "Cu ce trupă a cântat X?", "Unde s-a născut X?", "Ce meserie are X?",
+                     "Cărui zeu îi este dedicat X?", "Ce firmă a lansat X?", "Care este reședința X?"]:
+        assert ct.INTERZISE_S4_B.search(interzis.replace("X", "")), interzis
+    noi = ct.perechi_noi(_articole_noi(20), 0.2, 0.15, random.Random(0), "text")
+    v = ct.verificari_tipuri_noi([{k: x for k, x in p.items() if k != "x"} for p in noi], noi)
+    assert v["i_sabloane_cu_tip_din_S4b"] == [] and v["i_intrebari_noi_cu_tip_din_S4b"] == 0
+    assert v["ii_sabloane_noi_cu_inceput_din_S4"] == [] and v["ii_inceputuri_din_S4"] == 0
+    assert v["iii_texte_din_examene"] == 0
+
+
 def test_conversatia_simpla_nu_are_intrebarile_din_examen():
     from unelte.genereaza_conversatie import normalizat
 

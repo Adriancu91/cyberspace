@@ -296,7 +296,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
   mai multe ore nu ajută — se potrivește cu ideea din S11 (alte tipuri de întrebări în date).
 
 ### S11 — Datele pentru noaptea 12: tipuri noi de întrebări (altele decât cele din examenul S4)
-- stare: in_lucru
+- stare: gata (21 oct 11:22; 3.319 perechi noi, 27.468 în total în date/conversatie/text_v3; verificările 3.(i)–(iii) toate 0; 849 teste trec, 1 sărit). Aștept „perechi verificate: da” de la supraveghetor.
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30), 21 octombrie, după S10. Trebuie `gata` până la 16:30 (le verific la 17:15), altfel S12
   nu pornește în seara asta.
@@ -342,7 +342,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - pre-înregistrare: nu e nevoie pentru S11 (nu antrenează); o scrie pe cea a lui S12
 - aprobat de: supraveghetor, 21 octombrie 2026, 02:15 (categoriile 3 „pregătirea datelor din surse deja descărcate” și 5
   „unelte noi în unelte/ cu teste”)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_1122_S11_date_tipuri_noi.md (3.319 perechi noi: 2.157 cu text, 498 da/nu, 664 „Nu scrie”; 30 de perechi de verificat în raport; „În ce an a fost descrisă X?” înlocuită cu „Când a fost descrisă X?” din cauza regulii (ii); config/conv_w2_text_v3.toml și pre-înregistrarea S12 scrise)
 
 ### S12 — Noaptea 12: „răspuns din text” cu tipuri noi de întrebări, din #407
 - stare: aprobat (poarta: pornește DOAR dacă S11 e `gata` și la S11 scrie „perechi verificate: da” de la supraveghetor)

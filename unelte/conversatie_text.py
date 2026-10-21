@@ -25,8 +25,16 @@ Ies: date/conversatie/text/antrenare.jsonl, examen.json, info.json. Licența: Wi
   cu ce scrie în text, „Nu.” cu alt an / alt număr / alt nume, schimbat de unealtă (jumătate-jumătate).
 Formulările și da/nu au întâmplarea lor (--samanta + 1), deci articolele și examenul sunt aceleași ca fără --formulari.
 
+**--tipuri-noi (S11, 21 octombrie 2026; implicit oprită, ca datele nopților 10 și 11 să rămână aceleași).** Noaptea 11 a
+arătat că formulările ajută la tipurile știute, nu la cele nevăzute. Cu --tipuri-noi, PESTE perechile de mai sus (care
+rămân exact aceleași), din aceleași articole de antrenare: tipuri noi de întrebări (TIPURI_NOI: râuri, specii, deputați,
+raioane, anul fondării / construcției), cu 3–5 formulări, „Nu scrie în text.” despre același subiect (cam --fara) și da/nu
+(cam --da-nu, „Nu.” cu valoarea altui articol, niciodată cu una din text). Niciun tip din examenul S4 (b) (verificat de
+verificari_tipuri_noi). Au întâmplarea lor (--samanta + 2).
+
     python unelte/conversatie_text.py --articole 6000
     python unelte/conversatie_text.py --articole 16000 --formulari --dosar date/conversatie/text_v2
+    python unelte/conversatie_text.py --articole 16000 --formulari --tipuri-noi --dosar date/conversatie/text_v3
 """
 
 from __future__ import annotations
@@ -236,6 +244,311 @@ def verificari(antrenare: list[dict[str, Any]]) -> dict[str, Any]:
             "texte_din_examene": sum(p.get("text") in texte for p in antrenare),
             "da_nu": dict(Counter(p["raspuns"] for p in antrenare if p["tip"].startswith("da_nu"))),
             "formulari_pe_sablon": {t: len(f) for t, f in FORMULARI.items()}}
+
+
+# --tipuri-noi (S11). {x} = subiectul, {f} = cuvântul din text („descrisă”, „fondat”, „deputat”), {v} = valoarea (da/nu).
+# Lăsate deoparte: „În ce an a …” (început din S4), „Cât de lung …” (S4 (d)), „Cărui … îi este …” (S4 (b), zeul).
+TIPURI_NOI: dict[str, list[str]] = {
+    "afluent": ["Al cărui râu este afluent {x}?", "{x} este afluent al cărui râu?", "Al cărui râu e afluent {x}?",
+                "Afluent al cărui râu este {x}?"],
+    "bazin": ["Din ce bazin face parte {x}?", "{x} face parte din ce bazin?", "Din ce bazin hidrografic face parte {x}?",
+              "Din bazinul cărui râu face parte {x}?"],
+    "lungime": ["Ce lungime are {x}?", "{x} ce lungime are?", "Ce lungime măsoară {x}?", "Câți kilometri are {x}?"],
+    "familie": ["Din ce familie face parte {x}?", "Din ce familie este {x}?", "{x} face parte din ce familie?",
+                "Din ce familie e {x}?", "{x} este din ce familie?"],
+    "gen": ["Din ce gen face parte {x}?", "Din ce gen este {x}?", "{x} face parte din ce gen?", "Din ce gen e {x}?",
+            "{x} este din ce gen?"],
+    "descris_cine": ["Cine a descris specia {x}?", "Cine a descris prima dată specia {x}?",
+                     "De cine a fost {f} specia {x}?", "Specia {x} a fost {f} de cine?"],
+    "descris_an": ["Când a fost {f} {x}?", "În ce an e {f} {x}?", "{x} a fost {f} în ce an?",
+                   "Care e anul în care a fost {f} {x}?"],
+    "legislatura": ["În ce legislatură a fost {f} {x}?", "În ce legislatură a fost {x} {f}?",
+                    "{x} a fost {f} în ce legislatură?", "În care legislatură a fost {f} {x}?",
+                    "Care e legislatura în care {x} a fost {f}?"],
+    "partid": ["Pe listele cărui partid a fost ales {x}?", "{x} a candidat pe listele cărui partid?",
+               "Pe listele cărui partid a candidat {x}?", "Pe ce liste a candidat {x}?",
+               "Pe listele cărui partid a intrat {x} în parlament?"],
+    "rau": ["Pe ce râu se află {x}?", "{x} se află pe ce râu?", "Pe ce râu e {x}?", "Lângă ce râu se află {x}?",
+            "Pe malul cărui râu se află {x}?"],
+    "raion": ["În ce raion se află {x}?", "În ce raion este {x}?", "{x} se află în ce raion?",
+              "În ce raion se găsește {x}?", "În ce raion e {x}?"],
+    "fondat_an": ["Când a fost {f} {x}?", "În ce an e {f} {x}?", "{x} a fost {f} în ce an?",
+                  "Care e anul în care a fost {f} {x}?"],
+    "construit_an": ["Când a fost {f} {x}?", "În ce an e {f} {x}?", "{x} a fost {f} în ce an?",
+                     "Care e anul în care a fost {f} {x}?"],
+}
+DA_NU_NOI: dict[str, list[str]] = {
+    "afluent": ["Este {x} afluent al râului {v}?", "{x} e afluent al râului {v}?", "E adevărat că {x} e afluent al râului {v}?"],
+    "familie": ["Face parte {x} din familia {v}?", "{x} e din familia {v}?", "E adevărat că {x} face parte din familia {v}?"],
+    "gen": ["Face parte {x} din genul {v}?", "{x} e din genul {v}?", "E adevărat că {x} face parte din genul {v}?"],
+    "descris_cine": ["A descris {v} specia {x}?", "{v} a descris specia {x}?", "E adevărat că {v} a descris specia {x}?"],
+    "descris_an": ["{x} a fost {f} în {v}?", "E adevărat că {x} a fost {f} în {v}?", "Este {x} {f} în {v}?"],
+    "legislatura": ["{x} a fost {f} în legislatura {v}?", "E adevărat că {x} a fost {f} în legislatura {v}?",
+                    "A fost {x} {f} în legislatura {v}?"],
+    "partid": ["{x} a candidat pe listele {v}?", "E adevărat că {x} a candidat pe listele {v}?",
+               "A candidat {x} pe listele {v}?"],
+    "rau": ["Se află {x} pe râul {v}?", "{x} e pe râul {v}?", "E adevărat că {x} se află pe râul {v}?"],
+    "raion": ["Se află {x} în raionul {v}?", "{x} e în raionul {v}?", "E adevărat că {x} e în raionul {v}?"],
+    "fondat_an": ["{x} a fost {f} în {v}?", "E adevărat că {x} a fost {f} în {v}?", "Este {x} {f} în {v}?"],
+    "construit_an": ["{x} a fost {f} în {v}?", "E adevărat că {x} a fost {f} în {v}?", "Este {x} {f} în {v}?"],
+}
+# Tipurile din S4 (b), interzise la antrenare (verificat pe șabloane și pe întrebările făcute, fără subiect și valoare).
+INTERZISE_S4_B = re.compile(
+    r"\bțar[aăi]|\btrup[aăe]|\bformați|\bclub|\bechip|\bevolue|\bjoac[ăa]\b|s-a născut|\bnaștere|științific|\bzeu|"
+    r"dedicat|\bfirm[aăe]|\blansat|\bprodus|\bmedali|\bprofesor|\breședinț|\bmar(?:e|ea)\b|scufund|\blocuri\b|"
+    r"\bmembri|\bmeseri|\bocupați", re.IGNORECASE)
+
+_MARE_LAT = r"[A-ZĂÂÎȘȚÀ-ÖØ-ÞŠŽČĆŁ][\w'’-]*"
+_RAU = rf"{_MARE}(?: (?:de |lui )?{_MARE}){{0,2}}"
+_ESTE_RAU = re.compile(r"\b(?:este|e) (?:un |o )?(?:râu|fluviu|pârâu|curs de apă|afluent)\b")
+_AFLUENT = re.compile(rf"\bafluent (?:de (?:dreapta|stânga) )?al (râului|fluviului) ({_RAU})")
+_BAZIN = re.compile(rf"\bdin bazinul (?:hidrografic al )?(râului|fluviului) ({_RAU})")
+_LUNGIME = re.compile(r"\b(?:are|având|cu|în) (?:o )?lungime(?:a)? (?:totală )?de (?:aproximativ |circa )?(\d[\d.,]* km)\b")
+_FAMILIE = re.compile(r"\bfamilia ([A-Z][a-z]+(?:idae|aceae|inae))\b")
+_GEN = re.compile(r"\bdin genul ([A-Z][a-z]+)\b")
+_UN_AUTOR = rf"{_MARE_LAT}(?: (?:(?:von|van|de|der|du|da|la) )?{_MARE_LAT}){{0,4}}"
+_AUTOR = rf"{_UN_AUTOR}(?:(?:, | și | & ){_UN_AUTOR})*"
+_E_SPECIE = re.compile(r"\b(?:este|sunt|e) (?:o |un |singura |unica )?(?:specie|gen)\b")
+_DESCRIS = re.compile(rf"\b(descris|descrisă) (?:pentru prima (?:dată|oară) |prima dată )?de ({_AUTOR})"
+                      rf"(?:,? (?:în )?(?:anul )?{_AN}\b)?")
+_ROL = r"deputat|deputată|senator|senatoare"
+_LEGISLATURA = re.compile(rf"\b({_ROL})\b(?:(?!{_ROL})[^.]){{0,90}}?\bîn legislatura (\d{{4}} ?[-–] ?\d{{4}})")
+_PARTID = re.compile(rf"\bpe listele ((?:partidului |Partidului |formațiunii )?({_MARE}(?: {_MARE}){{0,5}}))")
+_PE_RAU = re.compile(rf"\b(pe (?:malul (?:(?:stâng|drept|de (?:est|vest|nord|sud)) )?(?:al )?)?(?:râului|fluviului|râul|"
+                     rf"fluviul) ({_RAU}))")
+_RAION = re.compile(rf"\braionul ({_MARE}(?:[- ]{_MARE})?)")
+_FONDAT_AN = re.compile(rf"\b(fondat|fondată|înființat|înființată) (?:în|la)(?: \d{{1,2}} [a-zăâîșț]+)? (?:anul )?{_AN}\b"
+                        rf"(?!\s*[-–])")
+_CONSTRUIT_AN = re.compile(rf"\b(construit|construită|ridicat|ridicată) (?:în|la)(?: \d{{1,2}} [a-zăâîșț]+)? (?:anul )?"
+                           rf"{_AN}\b(?!\s*[-–])")
+_DESPRE_X = ("A fost", "Este", "Se ", "Are ", "Acesta", "Aceasta", "El ", "Ea ", "Localitatea", "Orașul", "Satul",
+             "Comuna", "Râul", "Clubul", "Clădirea", "Biserica", "Specia", "Lacul", "Situat", "Situată", "Aflat", "Aflată")
+
+
+def _subiect(x: str) -> str:
+    """„Râul Doftana” → „râul Doftana” în mijlocul întrebării."""
+    return "râul " + x.removeprefix("Râul ") if x.startswith("Râul ") else x
+
+
+def _despre_x(text: str, x: str) -> list[str]:
+    """Propozițiile care sigur vorbesc despre X: prima și cele care încep cu X sau cu „Este”, „Localitatea”…"""
+    from unelte.conversatie_wikipedia import _PROPOZITII
+
+    prop = _PROPOZITII.split(text)
+    return [p for k, p in enumerate(prop) if k == 0 or p.startswith((x, *_DESPRE_X))]
+
+
+def intrebari_noi(text: str, x: str, tip: str) -> list[dict[str, str]]:
+    """Tipurile noi (S11) al căror răspuns e în text, cuvânt cu cuvânt. `valoare` e ce se verifică la da/nu, `f` cuvântul
+    din text care intră în întrebare („descrisă”, „fondat”, „deputat”)."""
+    fara_paranteze = _PARANTEZA.sub("", text)
+    despre = " ".join(_despre_x(fara_paranteze, x))
+    q: list[dict[str, str]] = []
+
+    def adauga(t: str, raspuns: str, valoare: str, f: str = "") -> None:
+        if valoare and valoare not in x and x not in valoare:
+            q.append({"tip": f"nou_{t}", "raspuns": raspuns, "valoare": valoare, "f": f})
+
+    rau = x.startswith(("Râul ", "Pârâul ")) or bool(_ESTE_RAU.search(_prima_propozitie(fara_paranteze)))
+    if rau:
+        if m := _AFLUENT.search(despre):
+            adauga("afluent", f"Al {m.group(1)} {m.group(2)}.", m.group(2))
+        if m := _BAZIN.search(despre):
+            adauga("bazin", f"Din bazinul {m.group(1)} {m.group(2)}.", m.group(2))
+        if m := _LUNGIME.search(despre):
+            adauga("lungime", f"{m.group(1)}.", m.group(1))
+    if tip == "ce" and _E_SPECIE.search(despre):  # X e o specie sau un gen, nu o boală sau o familie
+        if len(set(_FAMILIE.findall(fara_paranteze))) == 1 and (m := _FAMILIE.search(despre)):
+            adauga("familie", f"Din familia {m.group(1)}.", m.group(1))
+        if len(set(_GEN.findall(fara_paranteze))) == 1 and (m := _GEN.search(despre)):
+            adauga("gen", f"Din genul {m.group(1)}.", m.group(1))
+        e_specie = re.search(r"\b(?:este|e) (?:o |singura |unica )?specie\b", despre)  # „specia X”, nu un gen
+        if e_specie and len(_DESCRIS.findall(fara_paranteze)) == 1 and (m := _DESCRIS.search(fara_paranteze)):
+            autor = m.group(2) if m.group(2).endswith(".") and len(m.group(2).split()[-1]) <= 2 else m.group(2).rstrip(".")
+            adauga("descris_cine", autor if autor.endswith(".") else f"{autor}.", autor, "descrisă")
+            if m.group(3):
+                adauga("descris_an", f"În {m.group(3)}.", m.group(3), m.group(1))
+    if tip == "om":
+        if fara_paranteze.count("legislatur") == 1 and (m := _LEGISLATURA.search(fara_paranteze)):
+            adauga("legislatura", f"În legislatura {m.group(2)}.", m.group(2), m.group(1))
+        if fara_paranteze.count("pe listele") == 1 and (m := _PARTID.search(fara_paranteze)):
+            adauga("partid", f"Pe listele {m.group(1)}.", m.group(1))
+    if tip in ("loc", "ce") and not rau:
+        if len({g[1] for g in _PE_RAU.findall(despre)}) == 1 and (m := _PE_RAU.search(despre)):
+            adauga("rau", f"{m.group(1)[0].upper()}{m.group(1)[1:]}.", m.group(2))
+        if not x.startswith("Raionul") and len(set(_RAION.findall(fara_paranteze))) == 1 and (m := _RAION.search(fara_paranteze)):
+            adauga("raion", f"În raionul {m.group(1)}.", m.group(1))
+    if tip == "ce":
+        if len(_FONDAT_AN.findall(fara_paranteze)) == 1 and (m := _FONDAT_AN.search(despre)):
+            adauga("fondat_an", f"În {m.group(2)}.", m.group(2), _acord(m.group(1), x))
+        if len(_CONSTRUIT_AN.findall(fara_paranteze)) == 1 and (m := _CONSTRUIT_AN.search(despre)):
+            adauga("construit_an", f"În {m.group(2)}.", m.group(2), _acord(m.group(1), x))
+    return q
+
+
+def _acord(f: str, x: str) -> str:
+    """„construit” → „construită” când X e feminin după primul cuvânt („Biserica”, „Federația”), invers la „Muzeul”;
+    altfel cum scrie în text."""
+    fem = {"construit": "construită", "fondat": "fondată", "înființat": "înființată", "ridicat": "ridicată",
+           "descris": "descrisă"}
+    masc = {v: k for k, v in fem.items()}
+    primul = x.split()[0]
+    if re.fullmatch(r"[A-ZĂÂÎȘȚ][a-zăâîșț]+(?:ia|ea|ua|ca|ga|ta|ra|na|la|sa|da|za|ța|șa)", primul):
+        return fem.get(f, f)
+    if re.fullmatch(r"[A-ZĂÂÎȘȚ][a-zăâîșț]+(?:ul|le)", primul):
+        return masc.get(f, f)
+    return f
+
+
+def _prima_propozitie(text: str) -> str:
+    from unelte.conversatie_wikipedia import _PROPOZITII
+
+    return _PROPOZITII.split(text)[0]
+
+
+def lipsa_noi(text: str, x: str, tip: str) -> list[dict[str, str]]:
+    """Tipurile noi despre același X, cu un lucru care sigur nu e în text (răspunsul: „Nu scrie în text.”). La lungime
+    și la gen nu (genul se vede din numele speciei; lungimile sunt în S4 (d))."""
+    mic = text.lower()
+    q: list[tuple[str, str]] = []
+    rau = bool(_ESTE_RAU.search(_prima_propozitie(text)))
+    if rau and not re.search(r"afluen|se varsă|vărsându|vărsare|tributar|confluen|se unește|formează|braț|curge (?:spre|în)", mic):
+        q.append(("afluent", ""))
+    specie = tip == "ce" and re.search(r"\b(?:este|e) (?:o |singura |unica )?specie\b", " ".join(_despre_x(text, x)))
+    if specie and "famili" not in mic and not re.search(r"\w(?:idae|aceae|inae)\b", text):
+        q.append(("familie", ""))
+    if specie and "descris" not in mic and "descoperit" not in mic and not re.search(_AN, text):
+        q.append(("descris_cine", "descrisă"))
+    if tip == "om" and (rol := re.search(rf"\b({_ROL})\b", text)):
+        if "legislatur" not in mic and "mandat" not in mic and not re.search(_AN, _PARANTEZA.sub("", text)):
+            q.append(("legislatura", rol.group(1)))
+        if not re.search(r"\b[A-Z]{2,}\b|[A-Z]\.[A-Z]", text) and not re.search(
+                r"partid|pe listele|din partea|ales|liberal|democrat|comunist|țărănist|socialist|legionar|naționalist|"
+                r"conservator|membr", mic):
+            q.append(("partid", ""))
+    prima = _prima_propozitie(text)
+    if tip == "loc" and re.search(r"\b(sat|oraș|comună|localitate)\b", prima) and not rau and not re.search(
+            r"râu|fluvi|\bmal|pârâ|dunăr|prut|nistru|lac|vale|apa|curs", mic):
+        q.append(("rau", ""))
+    if (tip == "loc" and re.search(r"Republica Moldova|Ucraina", prima) and re.search(r"\b(sat|oraș|comună|localitate|așezare)\b",
+                                                                                         prima)
+            and "raion" not in mic and not x.startswith(("Raionul", "Județul", "Regiunea"))):
+        q.append(("raion", ""))
+    # nici „203”, nici „secolul al XIX-lea”, nici „fondat la în districtul” (anul șters la curățare)
+    fara_ani = not re.search(r"\d|\b(?:în|la|din) (?:în|la|din|,|\.)|\b[IVX]{2,}\b", text) and not re.search(
+        r"secol|sec\.|mileni|epoc|perioad|domni|antic|mediev|î\.\s?hr", mic)
+    despre = " ".join(_despre_x(text, x))
+    if tip == "ce" and (m := re.search(r"\b(fondat|fondată|înființat|înființată)\b", despre)) and fara_ani:
+        q.append(("fondat_an", _acord(m.group(1), x)))
+    if tip == "ce" and (m := re.search(r"\ba fost (construit|construită)\b", despre)) and fara_ani:
+        q.append(("construit_an", _acord(m.group(1), x)))
+    return [{"tip": f"lipsa_nou_{t}", "raspuns": NU_SCRIE, "valoare": "", "f": f} for t, f in q]
+
+
+def _intrebare_noua(p: dict[str, Any], rng: random.Random, v: str | None = None) -> str:
+    tip = p["tip"].removeprefix("lipsa_").removeprefix("nou_")
+    sabloane = DA_NU_NOI[tip] if v is not None else TIPURI_NOI[tip]
+    intrebare = rng.choice(sabloane).format(x=_subiect(p["x"]), f=p["f"], v=v)
+    if v is not None and " și " in v:  # mai mulți autori
+        intrebare = intrebare.replace(f"{v} a descris", f"{v} au descris").replace("A descris", "Au descris")
+    return intrebare[0].upper() + intrebare[1:]
+
+
+def _alta_valoare_noua(tip: str, v: str, text: str, alte: dict[str, list[str]], rng: random.Random) -> str | None:
+    """O valoare greșită pentru „Nu.”: alt an (±1–30), altă valoare a altui articol; niciodată una care e în text."""
+    for _ in range(30):
+        if tip in ("descris_an", "fondat_an", "construit_an"):
+            nou = str(min(2025, int(v) + rng.choice([-1, 1]) * rng.randint(1, 30)))
+        elif alte.get(tip):
+            nou = rng.choice(alte[tip])
+        else:
+            return None
+        cuvinte = [c for c in re.findall(r"[\w'’]+", nou) if c not in ("partidului", "Partidului", "formațiunii") and len(c) > 1]
+        if nou != v and cuvinte and not any(c in text for c in cuvinte):
+            return nou
+    return None
+
+
+def perechi_noi(articole_: list[dict[str, Any]], fara: float, da_nu: float, rng: random.Random, prefix: str
+                ) -> list[dict[str, Any]]:
+    """Perechile tipurilor noi (S11), separate de cele vechi: toate cele cu text, cam `da_nu` din total da/nu (câte una pe
+    articol, cel mult; jumătate „Da.”, jumătate „Nu.”), cam `fara` din total „Nu scrie în text.” despre același subiect.
+    Grupul e cel al articolului, ca perechile-soră să stea împreună. Câmpul „x” rămâne (îl scoate apelantul)."""
+    pozitive: list[dict[str, Any]] = []
+    lipsa: list[dict[str, Any]] = []
+    for i, a in enumerate(articole_):
+        baza = {"fel": "text", "limba": "ro", "grup": f"{prefix}_{i}", "text": a["text"], "x": a["x"]}
+        pozitive += [{**baza, **q} for q in intrebari_noi(a["text"], a["x"], a["tip"])]
+        lipsa += [{**baza, "fel": "nu_scrie", **q} for q in lipsa_noi(a["text"], a["x"], a["tip"])]
+    alte: dict[str, list[str]] = {}
+    for p in pozitive:
+        alte.setdefault(p["tip"].removeprefix("nou_"), []).append(p["valoare"])
+    cate_da_nu = round(da_nu / (1 - da_nu - fara) * len(pozitive))
+    candidati = [p for p in pozitive if p["tip"].removeprefix("nou_") in DA_NU_NOI]
+    rng.shuffle(candidati)
+    perechi: list[dict[str, Any]] = []
+    grupuri: set[str] = set()
+    for p in candidati:
+        if len(perechi) >= cate_da_nu:
+            break
+        if p["grup"] in grupuri:
+            continue
+        tip = p["tip"].removeprefix("nou_")
+        da = len(perechi) % 2 == 0
+        v = p["valoare"] if da else _alta_valoare_noua(tip, p["valoare"], p["text"], alte, rng)
+        if v is None:
+            continue
+        grupuri.add(p["grup"])
+        perechi.append({**p, "tip": f"da_nu_nou_{tip}", "intrebare": _intrebare_noua(p, rng, v),
+                        "raspuns": "Da." if da else "Nu.", "valoare": v})
+    perechi += [{**p, "intrebare": _intrebare_noua(p, rng)} for p in pozitive]
+    rng.shuffle(lipsa)
+    pe_tip: dict[str, list[dict[str, Any]]] = {}
+    for p in lipsa:
+        pe_tip.setdefault(p["tip"], []).append(p)
+    alese: list[dict[str, Any]] = []
+    cate_fara = round(fara / (1 - fara) * len(perechi))
+    while len(alese) < cate_fara and any(pe_tip.values()):  # pe rând din fiecare tip, ca niciunul să nu le acopere pe celelalte
+        for t in sorted(pe_tip):
+            if pe_tip[t] and len(alese) < cate_fara:
+                alese.append(pe_tip[t].pop())
+    perechi += [{**p, "intrebare": _intrebare_noua(p, rng)} for p in alese]
+    return [{k: v for k, v in p.items() if k not in ("valoare", "f")} for p in perechi]
+
+
+def _fara_subiect(p: dict[str, Any], valoare: str = "") -> str:
+    """Întrebarea fără subiect și fără valoare, ca verificarea (i) să se uite doar la tipul întrebării."""
+    q = p["intrebare"].replace(_subiect(p["x"]), " ").replace(p["x"], " ")
+    return q.replace(valoare, " ") if valoare else q
+
+
+def verificari_tipuri_noi(antrenare: list[dict[str, Any]], noi: list[dict[str, Any]]) -> dict[str, Any]:
+    """Ce cere S11 la 3.(i)–(iii), plus perechile-soră: (i) câte șabloane și câte întrebări noi (fără subiect și valoare)
+    au un tip din S4 (b); (ii) câte întrebări de antrenare încep cu primele 4 cuvinte ale unei întrebări din S4; (iii) câte
+    texte din examenul nopții 10 sau din S4 au ajuns în antrenare. Toate trebuie 0."""
+    sabloane = sum(TIPURI_NOI.values(), []) + sum(DA_NU_NOI.values(), [])
+    interzise = inceputuri_interzise()
+    v = verificari(antrenare)
+    da_nu_grup = {p["grup"] for p in antrenare if p["tip"].startswith("da_nu")}
+    deschise_grup = {p["grup"] for p in antrenare if p["fel"] == "text" and not p["tip"].startswith("da_nu")}
+    da_nu_nou = {p["grup"] for p in noi if p["tip"].startswith("da_nu")}
+    deschise_nou = {p["grup"] for p in noi if p["fel"] == "text" and not p["tip"].startswith("da_nu")}
+    return {
+        "i_sabloane_cu_tip_din_S4b": [s for s in sabloane if INTERZISE_S4_B.search(s.format(x="", f="", v=""))],
+        "i_intrebari_noi_cu_tip_din_S4b": sum(bool(INTERZISE_S4_B.search(_fara_subiect(p))) for p in noi),
+        "ii_sabloane_noi_cu_inceput_din_S4": [s for s in sabloane if _inceput(s.format(x="Xyz", f="fondat", v="1950"))
+                                              in interzise],
+        "ii_inceputuri_din_S4": v["inceputuri_din_S4"], "ii_inceputuri_din_S4_pe_fel": v["inceputuri_din_S4_pe_fel"],
+        "iii_texte_din_examene": v["texte_din_examene"],
+        "texte_cu_da_nu_si_intrebare_deschisa": len(da_nu_grup & deschise_grup),
+        "texte_cu_da_nu": len(da_nu_grup),
+        "texte_cu_da_nu_si_intrebare_deschisa_tipuri_noi": len(da_nu_nou & deschise_nou),
+        "texte_cu_da_nu_tipuri_noi": len(da_nu_nou),
+        "da_nu_tipuri_noi": dict(Counter(p["raspuns"] for p in noi if p["tip"].startswith("da_nu"))),
+        "perechi_tipuri_noi": len(noi), "perechi_tipuri_noi_pe_fel": dict(Counter(p["fel"] for p in noi)),
+        "perechi_tipuri_noi_pe_tip": dict(Counter(p["tip"] for p in noi)),
+        "formulari_pe_tip_nou": {t: len(f) for t, f in TIPURI_NOI.items()},
+    }
 
 
 def text_din(articol: str) -> str:
@@ -454,6 +767,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dosar", default=DOSAR)
     parser.add_argument("--formulari", action="store_true", help="formulări diferite și da/nu la antrenare (S6)")
     parser.add_argument("--da-nu", type=float, default=0.15, help="cu --formulari: partea da/nu din perechile cu text")
+    parser.add_argument("--tipuri-noi", action="store_true", help="tipuri noi de întrebări, peste celelalte (S11)")
     args = parser.parse_args(argv)
 
     from unelte.conversatie_wikipedia import SURSA
@@ -476,7 +790,11 @@ def main(argv: list[str] | None = None) -> int:
 
     antrenare = perechi_pentru(de_antrenare, args.fara, rng, "text",
                                formulari=random.Random(args.samanta + 1) if args.formulari else None, da_nu=args.da_nu)
-    simple = json.loads((RADACINA / CONVERSATIE).read_text(encoding="utf-8"))["perechi"]
+    noi: list[dict[str, Any]] = []
+    if args.tipuri_noi:
+        noi = perechi_noi(de_antrenare, args.fara, args.da_nu, random.Random(args.samanta + 2), "text")
+        antrenare += [{k: v for k, v in p.items() if k != "x"} for p in noi]
+    simple =json.loads((RADACINA / CONVERSATIE).read_text(encoding="utf-8"))["perechi"]
     la_examen = {normalizat(p["intrebare"]) for p in examen}
     simple = [p for p in simple if normalizat(p["intrebare"]) not in la_examen]
     for k in range(args.conversatie_ori):
@@ -500,6 +818,11 @@ def main(argv: list[str] | None = None) -> int:
             "conversatie_simpla": len(simple), "scoase": dict(motive), "sursa": "wikipedia_ro (CC BY-SA 4.0)"}
     if args.formulari:
         info["verificari"] = verificari(antrenare)
+    if args.tipuri_noi:
+        info["verificari_tipuri_noi"] = verificari_tipuri_noi(antrenare, noi)
+        with (dosar / "tipuri_noi.jsonl").open("w", encoding="utf-8") as f:
+            for p in noi:
+                f.write(json.dumps(p, ensure_ascii=False) + "\n")
     (dosar / "info.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps(info, ensure_ascii=False, indent=1), flush=True)
     return 0
