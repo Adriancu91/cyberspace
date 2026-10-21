@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 14:20 — datele pentru noaptea 12 sunt bune; la 19:00 pornește
+
+- **S11 gata și verificat:** 3.319 întrebări noi de antrenare (familii de specii, deputați și partide, râuri, raioane, anul
+  fondării). Am citit singur cele 30 alese la întâmplare: **toate 30 corecte după text**; nicio întrebare de tipul celor din
+  examen. Am scris „perechi verificate: da” → **noaptea 12 (S12) pornește la 19:00**, 3 ore din #407. Verdictul mâine la 08:15.
+- **S13 gata:** fila „Întreabă din text” folosește acum #407 (4 din 4 exemple bune). Teste: 850 trec, 1 sărit.
+- **Pus în coadă (S14, aprobat de mine, 30 de minute pe procesor):** raportul de dimineață face `git pull` înainte de a-și citi
+  instrucțiunea, ca schimbarea ta de azi (cele 20 de răspunsuri alese după data zilei) să fie sigur folosită mâine.
+- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
+
 ## 21 octombrie 2026, 12:20 — cele 20 de răspunsuri (scris de centrul de comandă)
 
 - Adrian a cerut ca cele 20 de răspunsuri din raportul de dimineață să fie altele în fiecare zi: în `unelte/raport_dimineata.txt`
