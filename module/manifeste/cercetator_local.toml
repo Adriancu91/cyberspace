@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "cercetator_local"
+proiect = "kronos"
+versiune = "0.2.0"
+descriere = "Cercetătorul în două faze: încearcă pe rând fiecare valoare, apoi strânge căutarea în jurul celor mai bune 3 rețete."
+format = "modul-v0"
+
+[contract]
+port = "cercetator"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"propune" = "citește istoricul și propune următoarea schimbare de setări"
+
+[rulare]
+limbaj = "python"
+intrare = "module.cercetator_local:CercetatorLocal"
+teste = "python -m pytest teste/test_cercetator_local.py && python -m pytest teste_contracte -k CercetatorLocal"

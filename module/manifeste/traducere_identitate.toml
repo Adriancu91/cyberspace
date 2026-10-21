@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "traducere_identitate"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Traducere de jucărie care întoarce textul neschimbat."
+format = "modul-v0"
+
+[contract]
+port = "traducere"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"traduce" = "traduce un text între limbi"
+
+[rulare]
+limbaj = "python"
+intrare = "module.jucarii:TraducereIdentitate"
+teste = "python -m pytest teste_contracte -k TraducereIdentitate"

@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "profesor_gol"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Profesor de jucărie care nu scrie niciun exercițiu, ca portul să fie ocupat până vine unul adevărat."
+format = "modul-v0"
+
+[contract]
+port = "profesor"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"genereaza_exercitii" = "scrie exerciții pe o temă"
+
+[rulare]
+limbaj = "python"
+intrare = "module.jucarii:ProfesorGol"
+teste = "python -m pytest teste_contracte -k ProfesorGol"

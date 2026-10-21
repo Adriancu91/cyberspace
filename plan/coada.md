@@ -219,7 +219,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S8 — Formatul comun de modul din Cyber Hub: `module.toml` pentru modulele Kronos
-- stare: in_lucru (executant, 21 oct 10:30)
+- stare: gata (21 oct 10:46; 24 de fișiere în module/manifeste/, unealta unelte/module_toml.py, 843 teste trec, 1 sărit)
 - stare veche: aprobat — reaprobată de Adrian (21 oct 10:05, prin centrul de comandă). Standardul e acum copiat în repo: citește
   `plan/hub_modul-v0.md` (copie identică a `standarde/modul-v0.md` din hub) în loc să clonezi hub-ul. Restul pașilor neschimbați.
   Starea veche: oprit
@@ -247,7 +247,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 - pre-înregistrare: nu e nevoie (nu folosește placa, nu antrenează nimic)
 - aprobat de: Adrian (hub, propunerea „format comun pentru module”, aprobat 20 oct 16:04); pusă în coadă de supraveghetor,
   20 oct 20:30 (categoria „unelte noi în unelte/ și teste noi, care nu ating kronos/ și examenul”)
-- raport: docs/rapoarte/2026-10-21_0940_S8_oprit_hub_inaccesibil.md
+- raport: docs/rapoarte/2026-10-21_0940_S8_oprit_hub_inaccesibil.md; **docs/rapoarte/2026-10-21_1046_S8_module_toml.md** (gata)
 
 
 ### S9 — Unealta de pornire: `cascada.py porneste --din-nou` (fostul pas R din S7)

@@ -1,0 +1,25 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "model_gpt"
+proiect = "kronos"
+versiune = "0.7.0"
+descriere = "Modelul GPT mic, scris de la 0, pe caractere sau pe bucăți de cuvinte, pe placa video sau pe procesor."
+format = "modul-v0"
+
+[contract]
+port = "model"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"antreneaza" = "antrenează cel mult un buget de secunde și întoarce statistici"
+"biti_pentru" = "câți biți îi trebuie ca să ghicească un text (mai puțin = mai bine)"
+"genereaza" = "continuă un text cu exact atâtea caractere câte se cer"
+"salveaza" = "salvează modelul și întoarce calea fișierului"
+"incarca" = "readuce un model salvat"
+
+[rulare]
+limbaj = "python"
+intrare = "module.model_gpt:ModelGPT"
+teste = "python -m pytest teste/test_model_gpt.py && python -m pytest teste_contracte -k ModelGPT"

@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "examen_bpb"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Examenul de bază: câți biți pe octet îi trebuie modelului pe textul de validare nevăzut (mai mic = mai bine)."
+format = "modul-v0"
+
+[contract]
+port = "examen"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"examineaza" = "notează un model pe textul de validare și întoarce scorurile"
+"scor_principal" = "numele scorului după care se decide"
+"mai_mic_e_mai_bun" = "în ce direcție e mai bun scorul"
+
+[rulare]
+limbaj = "python"
+intrare = "module.examen_bpb:ExamenBpb"
+teste = "python -m pytest teste_contracte -k ExamenBpb"

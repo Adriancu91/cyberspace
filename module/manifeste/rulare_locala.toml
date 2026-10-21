@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "rulare_locala"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Rulează o sarcină pe calculatorul local cu limită de timp și măsoară timpul și memoria video."
+format = "modul-v0"
+
+[contract]
+port = "rulare"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"executa" = "rulează o sarcină cu limită de timp și măsoară consumul"
+
+[rulare]
+limbaj = "python"
+intrare = "module.rulare_locala:RulareLocala"
+teste = "python -m pytest teste_contracte -k RulareLocala"

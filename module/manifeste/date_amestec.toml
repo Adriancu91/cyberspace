@@ -1,0 +1,22 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "date_amestec"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Date din două fișiere text gata făcute (antrenare și validare), pentru amestecul workstation-ului."
+format = "modul-v0"
+
+[contract]
+port = "date"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"text_antrenare" = "textul de antrenare, mereu același"
+"text_validare" = "textul de validare, nefolosit la antrenare"
+
+[rulare]
+limbaj = "python"
+intrare = "module.date_amestec:DateAmestec"
+teste = "python -m pytest teste_contracte -k DateAmestec"

@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "interfata_consola"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Scrie în consolă, pe înțelesul omului, ce se întâmplă pe platformă."
+format = "modul-v0"
+
+[contract]
+port = "interfata"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"anunta" = "arată omului ce se întâmplă"
+
+[rulare]
+limbaj = "python"
+intrare = "module.interfata_consola:InterfataConsola"
+teste = "python -m pytest teste_contracte -k InterfataConsola"

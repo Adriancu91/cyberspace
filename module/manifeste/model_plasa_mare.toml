@@ -1,0 +1,29 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "model_plasa_mare"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Plasa adaptivă mare: un model mai mare decât încape pe placa video, încărcat pe bucăți."
+format = "modul-v0"
+
+[contract]
+port = "model"
+versiune_contract = "1"
+
+[depinde]
+"model_gpt_continuu" = ">=0.3.0"
+"model_gpt" = ">=0.7.0"
+"model_plasa" = ">=0.1.0"
+"model_plasa_adaptiva" = ">=0.1.0"
+
+[ofera]
+"antreneaza" = "antrenează cel mult un buget de secunde și întoarce statistici"
+"biti_pentru" = "câți biți îi trebuie ca să ghicească un text (mai puțin = mai bine)"
+"genereaza" = "continuă un text cu exact atâtea caractere câte se cer"
+"salveaza" = "salvează modelul și întoarce calea fișierului"
+"incarca" = "readuce un model salvat"
+
+[rulare]
+limbaj = "python"
+intrare = "module.model_plasa_mare:ModelPlasaMare"
+teste = "python -m pytest teste/test_model_plasa_mare.py && python -m pytest teste_contracte -k ModelPlasaMare"

@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "profesor_qwen"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Profesorul local Qwen3-4B (Apache 2.0, în 4 biți) care scrie povești cu un fapt adevărat și le notează."
+format = "modul-v0"
+
+[contract]
+port = "profesor"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"genereaza_exercitii" = "scrie exerciții pe o temă"
+
+[rulare]
+limbaj = "python"
+intrare = "module.profesor_qwen:ProfesorQwen"
+teste = "python -m pytest teste/test_profesor_qwen.py && python -m pytest teste_contracte -k ProfesorQwen"

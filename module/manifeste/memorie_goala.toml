@@ -1,0 +1,25 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "memorie_goala"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Memorie de jucărie care nu știe niciun cuvânt: fiecare literă primește codul gol."
+format = "modul-v0"
+
+[contract]
+port = "memorie"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"caracteristici" = "codul ultimului cuvânt terminat, pentru fiecare literă"
+"cod" = "locul unui cuvânt în bibliotecă, pe niveluri"
+"cauta" = "sensurile unui cuvânt, pentru oameni"
+"nivele" = "câte niveluri are codul"
+"statistici" = "cifrele bibliotecii"
+
+[rulare]
+limbaj = "python"
+intrare = "module.jucarii:MemorieGoala"
+teste = "python -m pytest teste_contracte -k MemorieGoala"

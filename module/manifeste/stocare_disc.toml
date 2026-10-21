@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "stocare_disc"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Salvează și readuce fișiere (modele, rezultate) într-un folder al proiectului."
+format = "modul-v0"
+
+[contract]
+port = "stocare"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"salveaza_json" = "salvează un rezultat"
+"incarca_json" = "readuce un rezultat salvat"
+"cale_pentru" = "calea unui fișier în folderul proiectului, fără ieșire din el"
+
+[rulare]
+limbaj = "python"
+intrare = "module.stocare_disc:StocareDisc"
+teste = "python -m pytest teste_contracte -k StocareDisc"

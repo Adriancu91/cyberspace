@@ -1,0 +1,22 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "date_wikipedia"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Text din Simple English Wikipedia (CC BY-SA 4.0 și GFDL), pentru antrenare și validare."
+format = "modul-v0"
+
+[contract]
+port = "date"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"text_antrenare" = "textul de antrenare, mereu același"
+"text_validare" = "textul de validare, nefolosit la antrenare"
+
+[rulare]
+limbaj = "python"
+intrare = "module.date_wikipedia:DateWikipedia"
+teste = "python -m pytest teste_contracte -k DateWikipedia"

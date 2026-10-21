@@ -1,0 +1,21 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "cercetator_aleator"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Cercetătorul fără AI: schimbă la întâmplare o singură setare a celei mai bune rețete, fără să repete combinații încercate."
+format = "modul-v0"
+
+[contract]
+port = "cercetator"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"propune" = "citește istoricul și propune următoarea schimbare de setări"
+
+[rulare]
+limbaj = "python"
+intrare = "module.cercetator_aleator:CercetatorAleator"
+teste = "python -m pytest teste_contracte -k CercetatorAleator"

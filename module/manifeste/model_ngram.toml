@@ -1,0 +1,25 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "model_ngram"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Modelul n-gram pe caractere: primul model de la 0, rapid, fără placă video."
+format = "modul-v0"
+
+[contract]
+port = "model"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"antreneaza" = "antrenează cel mult un buget de secunde și întoarce statistici"
+"biti_pentru" = "câți biți îi trebuie ca să ghicească un text (mai puțin = mai bine)"
+"genereaza" = "continuă un text cu exact atâtea caractere câte se cer"
+"salveaza" = "salvează modelul și întoarce calea fișierului"
+"incarca" = "readuce un model salvat"
+
+[rulare]
+limbaj = "python"
+intrare = "module.model_ngram:ModelNgram"
+teste = "python -m pytest teste/test_model_ngram.py && python -m pytest teste_contracte -k ModelNgram"
