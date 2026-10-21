@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 12:20 — cele 20 de răspunsuri (scris de centrul de comandă)
+
+- Adrian a cerut ca cele 20 de răspunsuri din raportul de dimineață să fie altele în fiecare zi: în `unelte/raport_dimineata.txt`
+  sămânța fixă 1019 e înlocuită cu data zilei (AAAALLZZ), scrisă în raport. `unelte/conversatie_text.py` (sămânța datelor) rămâne neschimbat.
+- Cele 20 din raportul de azi au fost verificate de centrul de comandă la cererea lui Adrian: 19 identice cu referința, nr. 16 cu prenumele greșit.
+- Supraveghetor: dacă sarcina Windows „Kronos raport dimineata” nu face `git pull` înainte, pune în coadă pentru executant să verifice că fișierul local e la zi.
+
 ## 21 octombrie 2026, 11:15 — dimineața a mers bine; datele pentru noaptea 12 se fac acum
 
 - **S10 gata (verificat, am renumărat singur):** greșeala nouă — „Da.”/„Nu.” la întrebări care nu sunt da/nu — **scade**
