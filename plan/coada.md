@@ -485,7 +485,7 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
 - raport: docs/rapoarte/2026-10-22_0044_S15_examen_generalizare_mare.md
 
 ### S16 — E0: verificatorul fără LLM pentru „răspuns din text” + re-notarea S15 și S4 în ambele feluri
-- stare: in_lucru
+- stare: gata (22 oct 02:46; acord împreună 527/540 = 97,6 % ≥ 90 % → „verificatorul poate înlocui pe Qwen”; niciun model sub 85 %; 868 teste trec, 1 sărit)
 - tip: procesor (fără placă, fără Qwen, fără niciun model)
 - fereastră: oricând (de preferat imediat, noaptea 21→22 sau dimineața 22 oct)
 - durată maximă: 3 ore
@@ -527,7 +527,7 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
 - pre-înregistrare: nu e antrenare; regula de citire de la pasul 4 ține loc de praguri (scrisă înainte)
 - aprobat de: supraveghetor, 22 octombrie 2026, 02:15 (categoria 2 „examene, comparații, notări” + 5 „unelte noi și teste”), din
   direcția aprobată de Adrian pe 22 oct 01:45 (punctul 3 din actualizarea de sus a cozii)
-- raport: docs/rapoarte/2026-10-22_<ora>_S16_verificator_fara_llm.md
+- raport: docs/rapoarte/2026-10-22_0246_S16_verificator_fara_llm.md
 
 ### S17 — E1: „întrebări născute de Kronos” (auto-joc cu verificator, fără niciun model străin)
 - stare: propus — trece pe `aprobat` (de supraveghetor, cu „da”-ul lui Adrian din 22 oct 01:45) DOAR dacă S16 iese cu acord ≥ 90 %
