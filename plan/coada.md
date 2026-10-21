@@ -268,7 +268,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S10 — Examenul S4 pe #405 și #406 (orele 1 și 2 ale nopții 11)
-- stare: in_lucru (pornită de executant, 21 oct 08:29:42, procesul 4112; prima încercare de la 08:29:20 n-a rulat nimic — Git Bash a stricat „/c” în „C:/” — fișierele ei mutate în lucru/cascada/S10_gresita_0829.*; de pus în raport)
+- stare: gata (21 oct 08:32:29, cod 0; pornită 08:29:42, procesul 4112; prima încercare de la 08:29:20 n-a rulat nimic — Git Bash a stricat „/c” în „C:/” — fișierele ei mutate în lucru/cascada/S10_gresita_0829.*, scris în raport)
 - tip: placă (scurt: ~3 minute pe examen, cel mult 30 de minute în total)
 - fereastră: zi (08:00–18:30), 21 octombrie, prima sarcină a zilei
 - durată maximă: 30 de minute
@@ -283,7 +283,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
      pre-înregistrare; e doar măsurare). Commit + push.
 - pre-înregistrare: nu e nevoie (doar examen, fără praguri de decizie)
 - aprobat de: supraveghetor, 21 octombrie 2026, 02:15 (categoria 2 „examene, comparații, notări”)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_0910_S10_S4_pe_405_406.md ((a) 10 → 9 → 11, (b) 2 → 1 → 2, (c) 13/15 la toate, „Nu scrie” pe nedrept 7 → 6 → 11/45, „Da./Nu.” greșit 10 → 6 → 3: scade cu orele)
 
 ### S11 — Datele pentru noaptea 12: tipuri noi de întrebări (altele decât cele din examenul S4)
 - stare: aprobat
