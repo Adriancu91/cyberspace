@@ -219,7 +219,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S8 — Formatul comun de modul din Cyber Hub: `module.toml` pentru modulele Kronos
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (NU folosește placa; nu rulează cât timp S7 antrenează)
 - fereastră: zi (08:00–18:30), 21 octombrie, după raportul de dimineață al nopții 11
 - durată maximă: 2 ore
