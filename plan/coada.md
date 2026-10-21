@@ -248,7 +248,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
 
 
 ### S9 — Unealta de pornire: `cascada.py porneste --din-nou` (fostul pas R din S7)
-- stare: in_lucru
+- stare: gata (21 oct 10:11; 815 teste trec, 1 sărit)
 - tip: procesor (NU folosește placa)
 - fereastră: zi (08:00–18:30), 21 octombrie, după raportul de dimineață al nopții 11; înainte sau după S8, nu în paralel
 - durată maximă: 1 oră
@@ -265,7 +265,7 @@ pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor)
   `docs/rapoarte/2026-10-21_<ora>_S9_cascada_din_nou.md` (ce s-a schimbat, câte teste trec).
 - pre-înregistrare: nu e nevoie (nu folosește placa, nu antrenează nimic)
 - aprobat de: supraveghetor, 20 octombrie 2026, 20:45 (ca pas R în S7), mutată în S9 la 23:15 (categoria 6 „reparații de scripturi”)
-- raport: —
+- raport: docs/rapoarte/2026-10-21_1011_S9_cascada_din_nou.md
 
 
 ### S10 — Examenul S4 pe #405 și #406 (orele 1 și 2 ale nopții 11)

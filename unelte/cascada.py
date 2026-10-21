@@ -6,6 +6,7 @@ antrenare de 3 ore: o pornește desprinsă de el, iese, iar rulările următoare
     python unelte/cascada.py stare                       # placa, procesele grele, fereastra, sarcinile pornite
     python unelte/cascada.py porneste S4 -- python -X utf8 unelte/antrenare_lunga.py --config ... --ore 3
     python unelte/cascada.py sarcina S4                  # merge? s-a terminat? cu ce cod? ultimele rânduri
+    python unelte/cascada.py porneste S4 --din-nou -- ...  # S4 terminată: mută S4.json/.log în S4_<HHMM>.*, pornește
 
 Fiecare sarcină pornită are lucru/cascada/S<n>.json (comanda, procesul, pornirea, iar la final codul) și
 lucru/cascada/S<n>.log (tot ce a scris). Unealta doar pornește și citește; nu oprește și nu șterge nimic.
@@ -129,10 +130,38 @@ def pornite(dosar: Path = DOSAR) -> list[dict]:
     return [s for s in (sarcina(c.stem, dosar) for c in sorted(dosar.glob("*.json"))) if s] if dosar.exists() else []
 
 
-def porneste(nume: str, comanda: list[str], dosar: Path = DOSAR) -> int:
-    """Pornește `comanda` desprinsă de executant (supraviețuiește după ce Claude Code iese)."""
+def muta_vechea(nume: str, dosar: Path = DOSAR) -> bool:
+    """Mută <nume>.json și <nume>.log ale unei sarcini terminate în <nume>_<HHMM>.* (ora pornirii), ca să poată
+    porni din nou (S9, 21 octombrie). Nu șterge nimic; dacă sarcina încă merge, nu mută și întoarce False."""
+    s = sarcina(nume, dosar)
+    if s is None:
+        return True
+    if s["merge"]:
+        print(f"{nume} încă merge (procesul {s['pid']}); nu o pornesc din nou.")
+        return False
+    try:
+        ora = datetime.fromisoformat(s["pornita"]).strftime("%H%M")
+    except (KeyError, TypeError, ValueError):
+        ora = "vechi"
+    baza, n = f"{nume}_{ora}", 1
+    while any((dosar / f"{baza if n == 1 else f'{baza}_{n}'}{ext}").exists() for ext in (".json", ".log")):
+        n += 1
+    nou = baza if n == 1 else f"{baza}_{n}"
+    for ext in (".json", ".log"):
+        vechi = dosar / f"{nume}{ext}"
+        if vechi.exists():
+            vechi.rename(dosar / f"{nou}{ext}")
+            print(f"Am mutat {vechi.name} → {nou}{ext}")
+    return True
+
+
+def porneste(nume: str, comanda: list[str], dosar: Path = DOSAR, din_nou: bool = False) -> int:
+    """Pornește `comanda` desprinsă de executant (supraviețuiește după ce Claude Code iese). Cu `din_nou`, o
+    pornire veche terminată e mutată deoparte întâi (`muta_vechea`)."""
     dosar.mkdir(parents=True, exist_ok=True)
     stare = dosar / f"{nume}.json"
+    if stare.exists() and din_nou and not muta_vechea(nume, dosar):
+        return 1
     if stare.exists():
         print(f"{nume} a mai fost pornită ({stare}); nu o pornesc a doua oară.")
         return 1
@@ -220,6 +249,9 @@ def main(argv: list[str] | None = None) -> int:
         p = sub.add_parser(ce)
         p.add_argument("nume")
         p.add_argument("--dosar", type=Path, default=DOSAR)
+        if ce == "porneste":
+            p.add_argument("--din-nou", action="store_true",
+                           help="dacă a mai fost pornită și s-a terminat, mută fișierele vechi deoparte și pornește")
     args = parser.parse_args(argv)
     if args.ce == "stare":
         print(json.dumps(stare(dosar=args.dosar), ensure_ascii=False, indent=1))
@@ -230,7 +262,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if not comanda:
         parser.error("după „--” vine comanda de pornit")
-    return (porneste if args.ce == "porneste" else ruleaza)(args.nume, comanda, args.dosar)
+    if args.ce == "porneste":
+        return porneste(args.nume, comanda, args.dosar, din_nou=args.din_nou)
+    return ruleaza(args.nume, comanda, args.dosar)
 
 
 if __name__ == "__main__":
