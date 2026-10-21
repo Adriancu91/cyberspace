@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 octombrie 2026, 23:15 — noaptea 12: INFIRMAT, fără regresie (verificat)
+
+- **Noaptea 12 (S12) s-a terminat fără erori** (antrenare 19:00–22:12, examene până la 22:34; placa max 6.319 MB, 64 °C).
+  Am renumărat singur: la **tipuri de întrebări nevăzute** Kronos a rămas la **2 din 15** (pragul de infirmare era ≤ 2) →
+  **INFIRMAT**: mai multe tipuri de întrebări la antrenare nu l-au învățat să răspundă la alte tipuri. Dar n-a stricat nimic:
+  examenul nopții 10 a ieșit **50/50** (cel mai bun de până acum), româna, codul și poveștile în praguri. Teste: 851 trec, 1 sărit.
+- Cele 20 de răspunsuri din raport le-am citit: toate 20 bune. Interfața rămâne pe #407 (noul #415 a uitat „Mă numesc Kronos.”).
+- **Pus în coadă (S15, aprobat de mine, doar examen):** un examen mai mare — 50 de întrebări de tipuri nevăzute în loc de 15,
+  plus 30 din tipurile pe care le-a văzut azi, pe texte noi — pe #401, #407, #415. Așa aflăm dacă „2 din 15” e chiar zero și
+  dacă măcar tipurile antrenate s-au învățat. Rulează în noaptea asta sau prima dimineață; de aici decid ziua de mâine.
+- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
+
 ## 21 octombrie 2026, 17:20 — totul e pregătit pentru noaptea 12 (pornește la 19:00)
 
 - **S14 gata (verificat):** raportul de dimineață face acum singur `git pull` înainte să-și citească instrucțiunea; dacă
@@ -195,9 +207,3 @@
 - Ai dat „da” la S2: motorul de română intră în `main`, cu testele care se sar fără bază, apoi doar măsoară greșelile
   din datele de conversație (nu șterge nimic). Executantul o face mâine ziua, pe procesor.
 - Aștept de la tine: nimic acum. Filtrul pe date vine abia după ce verific cele 30 de exemple și îți spun.
-
-## 19 octombrie 2026, 19:40 — pornirea cascadei
-
-- Noaptea 10 („răspuns din text”) rulează din 19:00; verdictul vine mâine la 07:40.
-- De la 07:55 supraveghetorul trece de 8 ori pe zi și pune sarcinile următoare în coadă.
-- **Aștept de la tine:** „da” sau „nu” la S2 (motorul de română intră în `main` și curăță datele de conversație).
