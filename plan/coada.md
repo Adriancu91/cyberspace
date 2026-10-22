@@ -591,7 +591,7 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 - raport: docs/rapoarte/2026-10-22_2110_S17_E1_intrebari_nascute.md (NECLAR: (b2) 13/50 față de 6/50; (e) 29/30; noaptea 10 49/50, 20/20; S4 40/60)
 
 ### S18 — E1, repetarea cu 3× date („întrebări născute de Kronos”, a doua și ultima rundă)
-- stare: in_lucru
+- stare: gata
 - pornită: 22 oct 23:39:43, prin cascadă (procesul 2256; placa liberă: 681 MB, 30 °C). Corectură: în pre-înregistrare
   scrie „23:38–23:55” / „între 23:28 și 23:55”; ora reală de sfârșit a pregătirii e 23:39 (înainte de pornire).
 - pregătirea (executantul, 22 oct 23:28–23:39, procesor): opțiunile noi în `unelte/e1_intrebari_nascute.py` (`--dosar`,
@@ -641,4 +641,4 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
   Totul în `unelte/`, `config/conv_w2_auto_v2.toml`, `date/conversatie/auto_v2/`. #425 și modelul nou NU intră în interfață.
 - aprobat de: Adrian (22 oct 15:10, prin centrul de comandă, punctul 3: „repetarea cu 3× date dacă e neclar”) + supraveghetor,
   22 oct 23:15 (categoria 1: încă o rulare pe o linie existentă, alt amestec de date; categoria 6/5 pentru opțiunile din unealtă)
-- raport: `docs/rapoarte/2026-10-23_<ora>_S18_E1_repetare_3x.md` (și pre-înregistrarea închisă cu „Ce a ieșit” și „Verdictul”)
+- raport: docs/rapoarte/2026-10-23_0103_S18_E1_repetare_3x.md (n-a trecut poarta: 402 noi, 918 în total < 1.032; nu s-a antrenat, fără verdict; pre-înregistrarea închisă)
