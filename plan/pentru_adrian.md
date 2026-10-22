@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 octombrie 2026, 23:15 — S17: NECLAR (13 din 50, de la 6); repetarea cu 3× date pornește acum
+
+- **S17 gata (verificat față de pragurile scrise dinainte):** după 3 ore pe întrebările scrise de el însuși, Kronos (#425) răspunde
+  la **13 din 50** de tipuri de întrebări nevăzute (înainte: 6). Pragurile: „confirmat” de la 16, „infirmat” până la 9 → **NECLAR**.
+  Fără regresie: tipurile văzute 29/30, examenul nopții 10 49/50 și 20/20, S4 40/60. Placa: max 6.274 MB, 64 °C. Teste: 886 trec.
+- **De știut:** din ~30.000 de întrebări scrise de Kronos, doar 516 au trecut toate verificările; o parte din creștere poate veni din
+  răspunsuri lungi care conțin răspunsul corect — le număr separat la repetare, fără să schimb regula de notare.
+- **Pus în coadă, cum ai cerut la 15:10:** **S18 = repetarea cu 3× întrebări** (aprobat; pornește la prima verificare a cozii, ~7 ore,
+  gata pe la ~07:00). E ultima rundă: dacă iese iar „neclar”, nu se mai repetă și decizi tu. Verdictul la trecerea de 08:15.
+- Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 22 octombrie 2026, 17:15 — S17 rulează pe placă de la 15:30 (cum ai cerut)
 
 - **Am văzut decizia ta de la 15:10:** placa se folosește oricând, ziua și noaptea; S17 pornește imediat. Executantul a pornit
@@ -207,9 +219,3 @@
   adaugă depozitul `Adriancu91/cyber-hub` la sarcina programată a supraveghetorului (setările ei, „repositories”).
 - **Aștept de la tine:** înregistrarea sarcinii Windows „Kronos executant coada” (sau sesiunea de mână până atunci,
   ca S5 și S6 să meargă azi); acces la cyber-hub pentru supraveghetor.
-
-## 20 octombrie 2026, 10:48 — S5 aprobat
-
-- Ai dat „da”: interfața primește fila „Întreabă din text” cu modelul #401 (S5, pe procesor). Fila veche rămâne.
-- Aștept de la tine: înregistrarea sarcinii executantului la 14:00 (sau promptul de mână în sesiunea Kronos).
-

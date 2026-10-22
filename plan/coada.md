@@ -53,6 +53,11 @@ reguli (pre-înregistrare, paznic, un singur lucru pe placă). Supraveghetor: nu
 aprobată; planifică și pentru ziua următoare. Ferestrele din `REGULI_CASCADA.md` rămân ca orientare pentru raport, nu ca limită.
 (3) După S17 (gata pe la ~22:00), la trecerea de 23:15 pune pe placă următorul pas (repetarea cu 3× date dacă e „neclar”, altfel E2).
 
+**Actualizare 22 oct 23:15 (supraveghetor):** S17 gata, verificat față de pre-înregistrare: (b2) **13/50** (baseline 6/50; CONFIRMAT
+cerea ≥ 16, INFIRMAT ≤ 9), (e) 29/30 ≥ 27, fără regresie, 452 de tipuri ≥ 20 → **NECLAR**. Cum a cerut Adrian la 15:10 (punctul 3),
+am pus pe placă **S18 = repetarea cu 3× date** (`aprobat`, pornește la prima verificare a cozii, ~7 ore). Judecătorul rămâne
+neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-ul; varianta mai strictă se raportează doar alături.
+
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
 - tip: placă
@@ -584,3 +589,49 @@ aprobată; planifică și pentru ziua următoare. Ferestrele din `REGULI_CASCADA
 - pre-înregistrare: docs/preinregistrari/2026-10-22_E1_intrebari_nascute.md (scrisă de executant pe 22 oct, 12:16–12:37, înainte de pornire)
 - aprobat de: direcția lui Adrian, 22 oct 01:45 (punctul 3); aprobarea finală o pune supraveghetorul după S16
 - raport: docs/rapoarte/2026-10-22_2110_S17_E1_intrebari_nascute.md (NECLAR: (b2) 13/50 față de 6/50; (e) 29/30; noaptea 10 49/50, 20/20; S4 40/60)
+
+### S18 — E1, repetarea cu 3× date („întrebări născute de Kronos”, a doua și ultima rundă)
+- stare: aprobat
+- tip: placă (~6 ore) + procesor (pregătirea, ~30 min, înainte)
+- fereastră: **oricând — pornește la prima verificare a cozii** (placa e liberă de la 20:57; regula lui Adrian din 22 oct 15:10)
+- durată maximă: 8 ore pe placă
+- de ce: S17 a ieșit NECLAR ((b2) 13/50 față de 6/50; pragurile: CONFIRMAT ≥ 16, INFIRMAT ≤ 9). Criteriul din §8 al strategiei,
+  copiat în pre-înregistrarea S17: „Neclar → o singură repetare cu 3× date; apoi decizie.” Asta e repetarea. Singura schimbare
+  față de S17 e **cantitatea de întrebări născute** (3× 516 ≈ 1.548); restul rămâne la fel, ca rezultatul să se poată citi.
+- ce faci:
+  0. **Pregătirea, pe procesor (`CUDA_VISIBLE_DEVICES=-1`), înainte de placă:** fă `unelte/e1_intrebari_nascute.py` să primească
+     ca opțiuni dosarul (`date/conversatie/auto_v2/`), articolele, sămânța, generatorul, configurarea și linia de antrenare (implicit
+     tot cum era la S17, ca testele vechi să treacă). Teste noi pentru ce adaugi. `python -m pytest` trece. Commit + push.
+  1. **Generatorul:** NU se mai antrenează; folosești **#422** (generatorul din S17), ca singura schimbare să fie cantitatea.
+  2. **Articole:** **4.000 de articole noi**, cele de DUPĂ cele 2.000 din S17 (aceeași alegere, sămânța 1019: `articole_noi(6000)[2000:]`).
+     Verificat automat, toate trebuie 0: texte de examen, texte din orice antrenare (inclusiv `auto_v1`), subiecte repetate. Dacă nu
+     sunt 4.000 de articole bune, le iei pe toate câte sunt și scrii numărul în raport.
+  3. **Generarea:** 8 întrebări pe bucată, temperatura 1,0, nucleu 0,9, sămânța **1023**, cel mult **150 de minute** pe placă.
+     Scrii câte bucăți au rămas neîncercate.
+  4. **Filtrele, exact ca la S17** (formă, duplicate, noutate pe primele 4 cuvinte și pe tipar, motorul de română, dus-întors cu
+     #415 + verificatorul din S16 ≥ 0,8), cel mult **90 de minute** la dus-întors. În plus: fără duplicate față de cele 516 din
+     `auto_v1`. Raportezi câte au căzut la fiecare filtru.
+  5. **Datele:** `auto_v2/antrenare.jsonl` = `text_v3` (27.468) + cele 516 din `auto_v1` + cele noi (în total cel mult 3.300 născute).
+     Ținta: **≥ 1.548 de întrebări născute** în total (3×). **Poartă:** dacă sunt **sub 1.032** (2×), NU antrenezi: raportezi
+     „repetarea n-a putut strânge destule întrebări” cu cifrele, stare `gata`, și eu decid. Între 1.032 și 1.548: antrenezi și scrii
+     de câte ori mai multe sunt (de ex. 2,4×).
+  6. **Antrenare 3 ore din #415** (NU din #425), `config/conv_w2_auto_v2.toml` = copia lui `conv_w2_auto_v1.toml` cu altă cale de
+     date și altă `cale_stare`, linia nouă `w2_conv_auto_v2`. Apoi examenele, la fel ca la S17: S15 (b2, e), S4, noaptea 10, și
+     validările (română, cod, povești, fapte noi).
+  7. **Judecătorul rămâne verificatorul din S16, neschimbat** (răspuns la întrebarea ta din raportul S17, punctul 2: baseline-ul și
+     pragurile au fost notate cu el; dacă îl schimbăm acum, cifrele nu mai sunt comparabile). Raportezi **în plus, fără să decidă**:
+     (a) scorul (b2) cu varianta F1 ≥ 0,8 pentru #415, #425 și modelul nou; (b) câte răspunsuri „lungi” (de peste 2× cuvintele
+     referinței) au fost numărate corecte, la fiecare din cele trei; (c) (b2) fără tipurile al căror tipar apare printre întrebările
+     născute păstrate (lista făcută automat, de ex. „în ce oraș se”, „cine a pictat”), pentru #415, #425 și modelul nou.
+- pre-înregistrare: `docs/preinregistrari/2026-10-23_E1_repetare_3x.md`, scrisă și urcată (commit + push) ÎNAINTE de pornirea pe
+  placă, cu pragurile S17 neschimbate (baseline #415 notat de verificator: (b2) 6/50, (e) 30/30):
+  - CONFIRMAT: (b2) ≥ 16/50 și (e) ≥ 27/30 și fără regresie (aceleași praguri ca la S17: noaptea 10 ≥ 45/50, ≥ 16/20, refuz greșit
+    ≤ 5/50; S4 (a) ≥ 9, (c) ≥ 11; validările ca la S17).
+  - INFIRMAT: (b2) ≤ 9/50, sau tipuri distincte generate < 20 → H3-lite în forma asta se abandonează; trecem la E2.
+  - NECLAR: (b2) 10–15/50 → **nu se mai repetă**; decizia o ia Adrian (eu îi scriu variantele).
+  Plus așteptările tale în cifre (câte întrebări păstrate, (b2), verdictul cu procente) și comparația cu #425.
+- Paznicul: placa sub 7.000 MB și 83 °C. Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, datele de examen, `auto_v1`.
+  Totul în `unelte/`, `config/conv_w2_auto_v2.toml`, `date/conversatie/auto_v2/`. #425 și modelul nou NU intră în interfață.
+- aprobat de: Adrian (22 oct 15:10, prin centrul de comandă, punctul 3: „repetarea cu 3× date dacă e neclar”) + supraveghetor,
+  22 oct 23:15 (categoria 1: încă o rulare pe o linie existentă, alt amestec de date; categoria 6/5 pentru opțiunile din unealtă)
+- raport: `docs/rapoarte/2026-10-23_<ora>_S18_E1_repetare_3x.md` (și pre-înregistrarea închisă cu „Ce a ieșit” și „Verdictul”)
