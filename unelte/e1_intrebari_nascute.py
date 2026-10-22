@@ -35,6 +35,15 @@ Pașii (fiecare e o comandă; `noaptea` le rulează pe toate, unul după altul, 
     python -X utf8 unelte/e1_intrebari_nascute.py noaptea          # pașii de pe placă, în ordine
     python -X utf8 unelte/e1_intrebari_nascute.py examene --experiment 415
 
+S18 (repetarea cu 3× date, 22 oct 23:15): aceiași pași, cu alte opțiuni; singura schimbare e cantitatea:
+    python -X utf8 unelte/e1_intrebari_nascute.py --dosar date/conversatie/auto_v2 --lucru lucru/e1 articole \
+        --sari 2000 --cate 4000 --oricate --verifica-si date/conversatie/auto_v1/antrenare.jsonl \
+        date/conversatie/auto_v1/articole.jsonl                         # pe procesor, înainte
+    python -X utf8 unelte/e1_intrebari_nascute.py --dosar date/conversatie/auto_v2 --lucru lucru/e1 repetare
+(generare cu #422, sămânța 1023, ≤ 150 min → filtre + „fără dubluri din auto_v1”, dus-întors ≤ 90 min → poarta: ≥ 1.032
+de întrebări născute, cu tot cu cele 516 → antrenare 3 ore din #415 pe config/conv_w2_auto_v2.toml → examene pe modelul
+nou și pe #415 → validări → `analiza`: (b2) cu F1, răspunsuri lungi numărate corecte, (b2) fără tiparele născute).
+
 Ies: date/conversatie/auto_v1/ (articole.jsonl, generator.jsonl, candidati.jsonl, intrebari.jsonl, antrenare.jsonl,
 info.json) și lucru/e1/ (examene_<exp>_<data>.json, noaptea.json). Nu atinge kronos/, examenul BPB, paznicul sau
 datele de examen. Licența textelor: Wikipedia, CC BY-SA 4.0.
@@ -174,9 +183,10 @@ def bucati_candidate(text: str) -> list[str]:
 
 # ---- articole și datele generatorului ------------------------------------------------------------------------------
 
-def articole_noi(cate: int = 2000) -> list[dict[str, Any]]:
+def articole_noi(cate: int = 2000, sari: int = 0) -> list[dict[str, Any]]:
     """Articole noi: aceeași alegere ca unelte/conversatie_text.py (sămânța 1019), dar mai multe; primele FOLOSITE sunt
-    exact cele de atunci (16.000 de antrenare + 280 puse deoparte), deci le iau pe cele de după."""
+    exact cele de atunci (16.000 de antrenare + 280 puse deoparte), deci le iau pe cele de după. `sari` sare peste
+    primele articole noi (S18: articole_noi(6000)[2000:] = articole_noi(4000, sari=2000), după cele 2.000 din S17)."""
     from unelte.conversatie_text import articole_bune
     from unelte.conversatie_wikipedia import SURSA
     from unelte.genereaza_conversatie import bucati_interzise
@@ -184,8 +194,8 @@ def articole_noi(cate: int = 2000) -> list[dict[str, Any]]:
 
     rng = random.Random(1019)
     bune = articole_bune(RADACINA / SURSA, bucati_interzise(), citeste_lista(), citeste_exceptii(), 150, 700,
-                         FOLOSITE + cate, Counter(), rng)
-    return bune[FOLOSITE:FOLOSITE + cate]
+                         FOLOSITE + sari + cate, Counter(), rng)
+    return bune[FOLOSITE:FOLOSITE + sari + cate][sari:]
 
 
 def texte_de_examen() -> set[str]:
@@ -346,6 +356,7 @@ def genereaza(generator_exp: int | None, minute: float, pe_bucata: int = 8, pe_a
         facute += 1
     _scrie_jsonl(DOSAR / "candidati.jsonl", candidati)
     rez = {"generator": fisa["id"], "bucati_posibile": len(bucati), "bucati_facute": facute,
+           "bucati_neincercate": len(bucati) - facute,
            "articole_atinse": len({b["articol"] for b in bucati[:facute]}), "intrebari": len(candidati),
            "minute": round((time.perf_counter() - start) / 60, 1), "pe_bucata": pe_bucata, "temperatura": 1.0,
            "nucleu": 0.9, "samanta": samanta}
@@ -379,10 +390,14 @@ def motor_ok(motor: Any, intrebare: str, text: str = "") -> bool:
     return True
 
 
-def filtre_ieftine(candidati: list[dict[str, Any]], inceputuri: set[str], tipare: set[str], motor: Any
-                   ) -> tuple[list[dict[str, Any]], dict[str, int]]:
-    """(0), (iii), (ii), (iv), în ordinea asta; câte cad la fiecare (din ce a rămas după cele de dinainte)."""
+def filtre_ieftine(candidati: list[dict[str, Any]], inceputuri: set[str], tipare: set[str], motor: Any,
+                   deja: set[str] | None = None) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """(0), (iii), (ii), (iv), în ordinea asta; câte cad la fiecare (din ce a rămas după cele de dinainte). `deja`
+    (S18): întrebările născute păstrate înainte (normalizate); cele egale cu ele cad la „iii_duplicat_deja”."""
     cazute = {"0_forma": 0, "iii_duplicat": 0, "ii_noutate_4_cuvinte": 0, "ii_noutate_tipar": 0, "iv_motor": 0}
+    if deja is not None:
+        cazute = {"0_forma": 0, "iii_duplicat": 0, "iii_duplicat_deja": 0, "ii_noutate_4_cuvinte": 0,
+                  "ii_noutate_tipar": 0, "iv_motor": 0}
     vazute: set[str] = set()
     raman: list[dict[str, Any]] = []
     for c in candidati:
@@ -395,6 +410,9 @@ def filtre_ieftine(candidati: list[dict[str, Any]], inceputuri: set[str], tipare
             cazute["iii_duplicat"] += 1
             continue
         vazute.add(cheie)
+        if deja is not None and cheie in deja:
+            cazute["iii_duplicat_deja"] += 1
+            continue
         if inceput(q) in inceputuri:
             cazute["ii_noutate_4_cuvinte"] += 1
             continue
@@ -440,14 +458,18 @@ def tipuri(intrebari: list[dict[str, Any]]) -> dict[str, Any]:
     return {"tipuri_4_cuvinte": len(pe4), "tipuri_tipar": len(pet), "cele_mai_dese_tipare": pet.most_common(40)}
 
 
-def filtreaza(elev: int, minute: float) -> dict[str, Any]:
+def filtreaza(elev: int, minute: float, deja_cale: str = "") -> dict[str, Any]:
+    """`deja_cale` (S18): întrebările născute păstrate înainte (auto_v1/intrebari.jsonl). Cu ea, cele noi nu pot fi
+    dubluri ale lor, intră în antrenare alături de ele și, împreună, sunt cel mult MAX_PASTRATE."""
     from module.limba_romana.motor import Motor
     from module.model_conversatie import intrebarea
 
     candidati = _citeste_jsonl(DOSAR / "candidati.jsonl")
     antrenari = [_citeste_jsonl(c) for c in ANTRENARI]
     inceputuri, tipare = inceputuri_antrenare(antrenari)
-    raman, cazute = filtre_ieftine(candidati, inceputuri, tipare, Motor())
+    vechi = _citeste_jsonl(deja_cale) if deja_cale else []
+    deja = {normalizeaza(p["intrebare"]) for p in vechi} if deja_cale else None
+    raman, cazute = filtre_ieftine(candidati, inceputuri, tipare, Motor(), deja)
     print(f"filtrele ieftine: {len(candidati)} → {len(raman)} ({cazute})", flush=True)
     model, fisa = modelul(elev)
     start = time.perf_counter()
@@ -465,26 +487,32 @@ def filtreaza(elev: int, minute: float) -> dict[str, Any]:
         if v["corect"]:
             trec.append({**c, "raspuns_elev": r, "acoperire": v["acoperire"]})
     cazute["i_dus_intors"] = len(raman) - neincercate - len(trec)
-    pastrate = alege_pe_tipare(trec, MAX_PASTRATE, random.Random(1023))
+    pastrate = alege_pe_tipare(trec, max(0, MAX_PASTRATE - len(vechi)), random.Random(1023))
     perechi = [{"fel": "text", "limba": "ro", "grup": f"auto_{q['articol']}", "text": q["text"], "tip": "auto",
                 "intrebare": q["intrebare"], "raspuns": raspuns_de_antrenare(q["bucata"])} for q in pastrate]
     _scrie_jsonl(DOSAR / "intrebari.jsonl", perechi)
     v3 = _citeste_jsonl(TEXT_V3)
-    toate = v3 + perechi
+    toate = v3 + vechi + perechi
     random.Random(1024).shuffle(toate)
     _scrie_jsonl(DOSAR / "antrenare.jsonl", toate)
     examen = texte_de_examen()
     b2 = [p for p in json.loads((RADACINA / EXAMENE["S15"]).read_text(encoding="utf-8"))["perechi"]
           if p.get("categorie") == "b2"]
     tipare_b2 = {tipar(p["intrebare"]) for p in b2}
+    nascute = vechi + perechi
     rez = {"elev": fisa["id"],
-           "pastrate_cu_tipar_din_b2": dict(Counter(t for t in (tipar(p["intrebare"]) for p in perechi) if t in tipare_b2)), "candidati": len(candidati), "dupa_filtrele_ieftine": len(raman), "cazute": cazute,
+           "pastrate_cu_tipar_din_b2": dict(Counter(t for t in (tipar(p["intrebare"]) for p in nascute) if t in tipare_b2)), "candidati": len(candidati), "dupa_filtrele_ieftine": len(raman), "cazute": cazute,
            "dus_intors_neincercate_timp": neincercate, "trec_toate": len(trec), "pastrate": len(perechi),
            "minute_dus_intors": round((time.perf_counter() - start) / 60, 1),
            "tipuri_dupa_filtre": tipuri(trec), "tipuri_pastrate": tipuri(pastrate),
            "verificari": {"texte_de_examen_in_pastrate": sum(p["text"] in examen for p in perechi),
                           "inceput_din_antrenare_in_pastrate": sum(inceput(p["intrebare"]) in inceputuri for p in perechi)},
            "antrenare": {"text_v3": len(v3), "auto_v1": len(perechi), "total": len(toate)}}
+    if deja_cale:
+        rez["deja"] = {"cale": deja_cale, "intrebari": len(vechi)}
+        rez["nascute_total"] = len(nascute)
+        rez["tipuri_nascute_total"] = tipuri(nascute)
+        rez["antrenare"] = {"text_v3": len(v3), "deja": len(vechi), "noi": len(perechi), "total": len(toate)}
     _actualizeaza_info({"filtre": rez})
     print(json.dumps({k: v for k, v in rez.items() if k not in ("tipuri_dupa_filtre",)}, ensure_ascii=False), flush=True)
     return rez
@@ -547,6 +575,50 @@ def examene(experiment: int | None, linie: str | None = None, max_simboluri: int
     return rez
 
 
+def analiza_b2(raspunsuri: list[dict[str, Any]], tipare_nascute: set[str]) -> dict[str, Any]:
+    """Cifrele „în plus, fără să decidă” cerute la S18 (punctul 7), pe răspunsurile S15 ale unui model:
+    (a) (b2) cu varianta F1 ≥ 0,8; (b) câte răspunsuri „lungi” (peste 2× cuvintele referinței) au fost numărate corecte,
+    pe categorii; (c) (b2) fără tipurile (câmpul „tip”) din care măcar o întrebare are tiparul printre cele născute."""
+    b2 = [p for p in raspunsuri if p.get("categorie") == "b2"]
+    scoase = sorted({p.get("tip", "") for p in b2 if tipar(p["intrebare"]) in tipare_nascute})
+    lungi: Counter[str] = Counter()
+    corecte, corecte_f1, ramase, ramase_corecte = 0, 0, 0, 0
+    for p in raspunsuri:
+        v = verifica(p["raspuns"], p["raspuns_elev"])
+        if v["corect"] and len(cuvinte(p["raspuns_elev"])) > 2 * len(cuvinte(p["raspuns"])):
+            lungi[p.get("categorie") or p["fel"]] += 1
+        if p.get("categorie") != "b2":
+            continue
+        corecte += v["corect"]
+        corecte_f1 += v["corect_f1"]
+        if p.get("tip", "") not in scoase:
+            ramase += 1
+            ramase_corecte += v["corect"]
+    return {"b2": f"{corecte}/{len(b2)}", "b2_f1": f"{corecte_f1}/{len(b2)}", "lungi_corecte": dict(lungi),
+            "b2_fara_tipare_nascute": f"{ramase_corecte}/{ramase}", "tipuri_scoase": scoase}
+
+
+def analiza(experimente: list[int], linie: str, nascute_cai: list[str]) -> dict[str, Any]:
+    """Punctul 7 din S18, pe ultimele examene din LUCRU ale fiecărui experiment (și ale ultimului model de pe `linie`)."""
+    tipare_nascute = {tipar(p["intrebare"]) for c in nascute_cai for p in _citeste_jsonl(c)}
+    alese: dict[str, Path] = {}
+    for cale in sorted(LUCRU.glob("examene_*.json")):
+        r = json.loads(cale.read_text(encoding="utf-8"))
+        if r["experiment"] in experimente:
+            alese[f"#{r['experiment']}"] = cale
+        elif linie and r.get("linie") == linie:
+            alese[f"#{r['experiment']} ({linie})"] = cale
+    rez: dict[str, Any] = {"tipare_nascute": len(tipare_nascute), "modele": {}}
+    for nume, cale in alese.items():
+        r = json.loads(cale.read_text(encoding="utf-8"))
+        rez["modele"][nume] = {"fisier": cale.relative_to(RADACINA).as_posix(),
+                               **analiza_b2(r["S15"]["raspunsuri"], tipare_nascute)}
+    LUCRU.mkdir(parents=True, exist_ok=True)
+    (LUCRU / "analiza_s18.json").write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(json.dumps(rez, ensure_ascii=False, indent=1), flush=True)
+    return rez
+
+
 # ---- info și noaptea -----------------------------------------------------------------------------------------------
 
 def _actualizeaza_info(bucata: dict[str, Any]) -> None:
@@ -557,20 +629,28 @@ def _actualizeaza_info(bucata: dict[str, Any]) -> None:
     cale.write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+def _relativ(cale: Path) -> str:
+    try:
+        return cale.relative_to(RADACINA).as_posix()
+    except ValueError:
+        return str(cale)
+
+
 def _python() -> list[str]:
     return [sys.executable, "-X", "utf8"]
 
 
-def _ruleaza(pas: str, comanda: list[str], jurnal_noapte: dict[str, Any]) -> None:
-    print(f"\n=== S17 {datetime.now():%H:%M:%S} — {pas}: {' '.join(comanda)}", flush=True)
+def _ruleaza(pas: str, comanda: list[str], jurnal_noapte: dict[str, Any], sarcina: str = "S17",
+             fisier: str = "noaptea.json") -> None:
+    print(f"\n=== {sarcina} {datetime.now():%H:%M:%S} — {pas}: {' '.join(comanda)}", flush=True)
     start = datetime.now()
     cod = subprocess.call(comanda, cwd=RADACINA)
     jurnal_noapte["pasi"].append({"pas": pas, "comanda": comanda, "inceput": start.isoformat(timespec="seconds"),
                                   "sfarsit": datetime.now().isoformat(timespec="seconds"), "cod": cod})
     LUCRU.mkdir(parents=True, exist_ok=True)
-    (LUCRU / "noaptea.json").write_text(json.dumps(jurnal_noapte, ensure_ascii=False, indent=1), encoding="utf-8")
+    (LUCRU / fisier).write_text(json.dumps(jurnal_noapte, ensure_ascii=False, indent=1), encoding="utf-8")
     if cod != 0:
-        raise SystemExit(f"S17: pasul „{pas}” a ieșit cu codul {cod}; mă opresc aici")
+        raise SystemExit(f"{sarcina}: pasul „{pas}” a ieșit cu codul {cod}; mă opresc aici")
 
 
 def noaptea(minute_generare: float, minute_dus_intors: float) -> int:
@@ -595,49 +675,116 @@ def noaptea(minute_generare: float, minute_dus_intors: float) -> int:
     return 0
 
 
+# S18 (22 oct 23:15): repetarea cu 3× date. Singura schimbare față de S17 e cantitatea de întrebări născute.
+DOSAR_S18 = "date/conversatie/auto_v2"
+DEJA_S18 = "date/conversatie/auto_v1/intrebari.jsonl"
+CONFIG_S18 = "config/conv_w2_auto_v2.toml"
+LINIE_S18 = "w2_conv_auto_v2"
+GENERATOR_S18 = 422
+POARTA_S18 = 1032   # 2× cele 516 din S17: sub atât nu se antrenează
+TINTA_S18 = 1548    # 3×
+
+
+def repetare(minute_generare: float, minute_dus_intors: float, samanta: int = 1023) -> int:
+    """S18, pe placă, după `articole --sari 2000 --cate 4000` (făcut înainte, pe procesor): generare cu #422 →
+    filtre (și fără dubluri din auto_v1) → poarta (≥ 1.032 născute, altfel oprire fără antrenare, cod 0) → antrenare
+    3 ore din #415 → examene pe modelul nou și pe #415 → validări → analiza de la punctul 7."""
+    jurnal: dict[str, Any] = {"inceput": datetime.now().isoformat(timespec="seconds"), "pasi": []}
+    unealta = str(Path(__file__).relative_to(RADACINA))
+    lunga = "unelte/antrenare_lunga.py"
+    dosar = ["--dosar", _relativ(DOSAR), "--lucru", _relativ(LUCRU)]
+
+    def pas(nume: str, comanda: list[str]) -> None:
+        _ruleaza(nume, comanda, jurnal, "S18", "repetare.json")
+
+    pas("genereaza", _python() + [unealta, *dosar, "genereaza", "--generator", str(GENERATOR_S18), "--minute",
+                                  str(minute_generare), "--samanta", str(samanta)])
+    pas("filtreaza", _python() + [unealta, *dosar, "filtreaza", "--minute", str(minute_dus_intors), "--deja", DEJA_S18])
+    info = json.loads((DOSAR / "info.json").read_text(encoding="utf-8"))
+    nascute = info["filtre"]["nascute_total"]
+    jurnal["nascute_total"] = nascute
+    jurnal["fata_de_s17"] = round(nascute / 516, 2)
+    if nascute < POARTA_S18:
+        jurnal["poarta"] = f"{nascute} < {POARTA_S18}: repetarea n-a putut strânge destule întrebări; nu antrenez"
+        (LUCRU / "repetare.json").write_text(json.dumps(jurnal, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\n=== S18: {jurnal['poarta']}", flush=True)
+        return 0
+    jurnal["poarta"] = f"{nascute} ≥ {POARTA_S18} ({jurnal['fata_de_s17']}×; ținta {TINTA_S18})"
+    pas("antrenare", _python() + [lunga, "--config", CONFIG_S18, "--ore", "3", "--porneste-din", str(ELEV)])
+    pas("examene", _python() + [unealta, *dosar, "examene", "--linie", LINIE_S18])
+    pas("examene_415", _python() + [unealta, *dosar, "examene", "--experiment", str(ELEV)])
+    pas("validari", _python() + ["unelte/examen_validari_ws.py", "--linie", LINIE_S18])
+    pas("analiza", _python() + [unealta, *dosar, "analiza", "--experimente", str(ELEV), "425", "--linie", LINIE_S18,
+                                "--nascute", DEJA_S18, f"{DOSAR_S18}/intrebari.jsonl"])
+    jurnal["sfarsit"] = datetime.now().isoformat(timespec="seconds")
+    (LUCRU / "repetare.json").write_text(json.dumps(jurnal, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"\n=== S18 gata la {datetime.now():%H:%M:%S}", flush=True)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
     except (AttributeError, ValueError):
         pass
     parser = argparse.ArgumentParser(description="E1: întrebări născute de Kronos (S17).")
-    parser.add_argument("--dosar", default="", help="alt dosar decât date/conversatie/auto_v1 (pentru probe)")
+    parser.add_argument("--dosar", default="", help="alt dosar decât date/conversatie/auto_v1 (S18: auto_v2; sau probe)")
+    parser.add_argument("--lucru", default="", help="unde scrie examenele și jurnalul (implicit lucru/e1; cu --dosar "
+                                                     "fără --lucru: <dosar>/lucru_e1)")
     sub = parser.add_subparsers(dest="pas", required=True)
     a = sub.add_parser("articole")
     a.add_argument("--cate", type=int, default=2000)
+    a.add_argument("--sari", type=int, default=0, help="sare peste primele articole noi (S18: 2000, cele din S17)")
+    a.add_argument("--verifica-si", nargs="*", default=[], help="alte fișiere ale căror texte nu au voie să apară "
+                                                                 "(S18: auto_v1/antrenare.jsonl, auto_v1/articole.jsonl)")
+    a.add_argument("--oricate", action="store_true", help="dacă sunt mai puține articole bune, le ia pe toate (S18)")
     sub.add_parser("date-generator")
     g = sub.add_parser("genereaza")
     g.add_argument("--generator", type=int, default=None, help="experimentul generatorului (implicit: ultimul de pe linie)")
     g.add_argument("--minute", type=float, default=60)
     g.add_argument("--pe-bucata", type=int, default=8)
     g.add_argument("--pe-articol", type=int, default=2)
+    g.add_argument("--samanta", type=int, default=1022)
     f = sub.add_parser("filtreaza")
     f.add_argument("--elev", type=int, default=ELEV)
     f.add_argument("--minute", type=float, default=45)
+    f.add_argument("--deja", default="", help="întrebările născute păstrate înainte (S18: auto_v1/intrebari.jsonl)")
     e = sub.add_parser("examene")
     e.add_argument("--experiment", type=int, default=None)
     e.add_argument("--linie", default=None)
     e.add_argument("--cate", type=int, default=0, help="doar primele atâtea întrebări din fiecare examen (probă)")
+    an = sub.add_parser("analiza")
+    an.add_argument("--experimente", type=int, nargs="*", default=[ELEV, 425])
+    an.add_argument("--linie", default=LINIE_S18)
+    an.add_argument("--nascute", nargs="*", default=[DEJA_S18, f"{DOSAR_S18}/intrebari.jsonl"])
     n = sub.add_parser("noaptea")
     n.add_argument("--minute-generare", type=float, default=60)
     n.add_argument("--minute-dus-intors", type=float, default=45)
+    r = sub.add_parser("repetare", help="S18: lanțul de pe placă (după `articole --sari 2000 --cate 4000 --oricate`)")
+    r.add_argument("--minute-generare", type=float, default=150)
+    r.add_argument("--minute-dus-intors", type=float, default=90)
+    r.add_argument("--samanta", type=int, default=1023)
     args = parser.parse_args(argv)
     global DOSAR, LUCRU
     if args.dosar:
         DOSAR = RADACINA / args.dosar
         LUCRU = DOSAR / "lucru_e1"
+    if args.lucru:
+        LUCRU = RADACINA / args.lucru
 
     if args.pas == "articole":
-        articole_ = articole_noi(args.cate)
-        antrenari = [_citeste_jsonl(c) for c in ANTRENARI]
+        articole_ = articole_noi(args.cate, args.sari)
+        antrenari = [_citeste_jsonl(c) for c in ANTRENARI + tuple(args.verifica_si)]
         v = verificari_articole(articole_, texte_de_examen(), antrenari)
         _scrie_jsonl(DOSAR / "articole.jsonl", articole_)
-        _actualizeaza_info({"articole": {"cate": len(articole_), "verificari": v, "sursa": "wikipedia_ro (CC BY-SA 4.0)",
+        _actualizeaza_info({"articole": {"cate": len(articole_), "ceruta": args.cate, "sarite": args.sari,
+                                         "verificate_si": list(args.verifica_si), "verificari": v,
+                                         "sursa": "wikipedia_ro (CC BY-SA 4.0)",
                                          "pe_tip": dict(Counter(a["tip"] for a in articole_)),
                                          "bucati_candidate_medie": round(sum(len(bucati_candidate(a["text"]))
                                                                              for a in articole_) / max(1, len(articole_)), 1)}})
         print(json.dumps({"articole": len(articole_), "verificari": v}, ensure_ascii=False))
-        return 1 if any(v.values()) or len(articole_) < args.cate else 0
+        return 1 if any(v.values()) or (len(articole_) < args.cate and not args.oricate) else 0
     if args.pas == "date-generator":
         perechi, motive = date_generator([_citeste_jsonl(c) for c in ANTRENARI])
         examen = texte_de_examen()
@@ -648,14 +795,19 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"perechi": len(perechi), "scoase": dict(motive), "verificari": v}, ensure_ascii=False))
         return 1 if v["texte_de_examen"] else 0
     if args.pas == "genereaza":
-        genereaza(args.generator, args.minute, args.pe_bucata, args.pe_articol)
+        genereaza(args.generator, args.minute, args.pe_bucata, args.pe_articol, args.samanta)
         return 0
     if args.pas == "filtreaza":
-        filtreaza(args.elev, args.minute)
+        filtreaza(args.elev, args.minute, args.deja)
         return 0
     if args.pas == "examene":
         examene(args.experiment, args.linie, cate=args.cate)
         return 0
+    if args.pas == "analiza":
+        analiza(args.experimente, args.linie, args.nascute)
+        return 0
+    if args.pas == "repetare":
+        return repetare(args.minute_generare, args.minute_dus_intors, args.samanta)
     return noaptea(args.minute_generare, args.minute_dus_intors)
 
 

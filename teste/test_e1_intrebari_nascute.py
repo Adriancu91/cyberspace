@@ -237,3 +237,111 @@ def test_tipurile_numarate_pe_patru_cuvinte_si_pe_tipar():
     t = e1.tipuri([{"intrebare": "Ce este Ana?"}, {"intrebare": "Ce este Ion?"}, {"intrebare": "Unde stă Ana?"}])
     assert t["tipuri_4_cuvinte"] == 3 and t["tipuri_tipar"] == 2
     assert Counter(dict(t["cele_mai_dese_tipare"]))["ce este"] == 2
+
+
+# ---- S18: repetarea cu 3× date --------------------------------------------------------------------------------------
+
+def test_articolele_s18_sunt_cele_de_dupa_primele_2000(monkeypatch):
+    import unelte.conversatie_text as ct
+
+    cerute = []
+
+    def articole_bune(*args):
+        cerute.append(args[6])
+        return [{"x": i} for i in range(args[6])]
+
+    monkeypatch.setattr(ct, "articole_bune", articole_bune)
+    noi = e1.articole_noi(4, sari=2)
+    assert [a["x"] for a in noi] == [e1.FOLOSITE + 2 + i for i in range(4)]
+    assert noi == e1.articole_noi(6)[2:] and cerute[0] == e1.FOLOSITE + 6
+    assert [a["x"] for a in e1.articole_noi(3)] == [e1.FOLOSITE + i for i in range(3)]
+
+
+def test_filtrul_fara_dubluri_fata_de_intrebarile_de_dinainte():
+    c = [{"text": TEXT, "bucata": "Richard Donner", "intrebare": q} for q in (
+        "Cine a fost regizorul filmului din 2006?",       # e deja în auto_v1
+        "Cine a fost regizorul filmului din 2006 ?",      # duplicat în lotul nou (după normalizare)
+        "Care este numele regizorului din 2006?",         # trece
+    )]
+    deja = {e1.normalizeaza("Cine a fost regizorul filmului din 2006?")}
+    raman, cazute = e1.filtre_ieftine(c, set(), set(), MotorDeJucarie(), deja)
+    assert [r["intrebare"] for r in raman] == ["Care este numele regizorului din 2006?"]
+    assert cazute["iii_duplicat"] == 1 and cazute["iii_duplicat_deja"] == 1
+    _, fara = e1.filtre_ieftine(c, set(), set(), MotorDeJucarie())
+    assert "iii_duplicat_deja" not in fara
+
+
+def _repetare_cu(monkeypatch, tmp_path, nascute, coduri=None):
+    import json
+
+    chemate = _noaptea_cu(monkeypatch, tmp_path, coduri or {})
+    info = {"filtre": {"pastrate": nascute - 516, "nascute_total": nascute}}
+    (tmp_path / "auto" / "info.json").write_text(json.dumps(info), encoding="utf-8")
+    return chemate
+
+
+def test_repetarea_ruleaza_pasii_s18_in_ordine(monkeypatch, tmp_path):
+    import json
+
+    chemate = _repetare_cu(monkeypatch, tmp_path, 1600)
+    assert e1.repetare(150, 90) == 0
+    pasi = [" ".join(c[3:]) for c in chemate]
+    assert "genereaza --generator 422 --minute 150 --samanta 1023" in pasi[0]
+    assert "filtreaza --minute 90 --deja date/conversatie/auto_v1/intrebari.jsonl" in pasi[1]
+    assert pasi[2] == "unelte/antrenare_lunga.py --config config/conv_w2_auto_v2.toml --ore 3 --porneste-din 415"
+    assert pasi[3].endswith("examene --linie w2_conv_auto_v2") and pasi[4].endswith("examene --experiment 415")
+    assert pasi[5] == "unelte/examen_validari_ws.py --linie w2_conv_auto_v2"
+    assert "analiza --experimente 415 425 --linie w2_conv_auto_v2" in pasi[6]
+    assert all("--dosar" in p and "--lucru" in p for p in (pasi[0], pasi[1], pasi[3], pasi[4], pasi[6]))
+    j = json.loads((tmp_path / "e1" / "repetare.json").read_text(encoding="utf-8"))
+    assert j["nascute_total"] == 1600 and j["fata_de_s17"] == 3.1 and "sfarsit" in j
+    assert not (tmp_path / "e1" / "noaptea.json").exists()
+
+
+def test_repetarea_nu_antreneaza_sub_poarta(monkeypatch, tmp_path):
+    import json
+
+    chemate = _repetare_cu(monkeypatch, tmp_path, 1031)
+    assert e1.repetare(150, 90) == 0
+    assert len(chemate) == 2
+    j = json.loads((tmp_path / "e1" / "repetare.json").read_text(encoding="utf-8"))
+    assert j["poarta"].startswith("1031 < 1032")
+
+
+def test_repetarea_se_opreste_la_prima_eroare(monkeypatch, tmp_path):
+    import pytest
+
+    chemate = _repetare_cu(monkeypatch, tmp_path, 2000, {3: 1})
+    with pytest.raises(SystemExit):
+        e1.repetare(150, 90)
+    assert len(chemate) == 3
+
+
+def test_analiza_b2_f1_lungi_si_fara_tiparele_nascute():
+    r = [
+        {"fel": "text", "categorie": "b2", "tip": "tara", "intrebare": "În ce țară se află X?", "raspuns": "În Elveția.",
+         "raspuns_elev": "În Elveția."},
+        {"fel": "text", "categorie": "b2", "tip": "tara", "intrebare": "În ce țară se află Y?", "raspuns": "În Franța.",
+         "raspuns_elev": "Nu știu."},
+        {"fel": "text", "categorie": "b2", "tip": "pictor", "intrebare": "Cine a pictat Z?", "raspuns": "Ion Andreescu.",
+         "raspuns_elev": "Ion Andreescu, un pictor român foarte cunoscut din București."},
+        {"fel": "text", "categorie": "e", "tip": "canal", "intrebare": "Pe ce canal rulează W?",
+         "raspuns": "Pe Cartoon Network.", "raspuns_elev": "Pe Cartoon Network."},
+    ]
+    a = e1.analiza_b2(r, {"cine a pictat"})
+    assert a["b2"] == "2/3" and a["b2_f1"] == "1/3"
+    assert a["lungi_corecte"] == {"b2": 1}
+    assert a["tipuri_scoase"] == ["pictor"] and a["b2_fara_tipare_nascute"] == "1/2"
+
+
+def test_configurarea_s18_e_copia_s17_cu_alte_date():
+    import tomllib
+
+    v1 = tomllib.loads((e1.RADACINA / "config/conv_w2_auto_v1.toml").read_text(encoding="utf-8"))
+    v2 = tomllib.loads((e1.RADACINA / "config/conv_w2_auto_v2.toml").read_text(encoding="utf-8"))
+    s1, s2 = v1["porturi"]["model"].pop("setari"), v2["porturi"]["model"].pop("setari")
+    assert v2["platforma"].pop("nume") == "w2_conv_auto_v2" and v1["platforma"].pop("nume") == "w2_conv_auto_v1"
+    assert s2.pop("conversatie") == "date/conversatie/auto_v2/antrenare.jsonl"
+    assert s2.pop("cale_stare") == "lucru/w2_conv_auto_v2/gpt.pt"
+    s1.pop("conversatie"), s1.pop("cale_stare")
+    assert s1 == s2 and v1 == v2

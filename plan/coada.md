@@ -592,6 +592,11 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 
 ### S18 — E1, repetarea cu 3× date („întrebări născute de Kronos”, a doua și ultima rundă)
 - stare: in_lucru
+- pregătirea (executantul, 22 oct 23:28–23:55, procesor): opțiunile noi în `unelte/e1_intrebari_nascute.py` (`--dosar`,
+  `--lucru`, `articole --sari/--verifica-si/--oricate`, `genereaza --samanta`, `filtreaza --deja`, `analiza`, `repetare`)
+  + 7 teste noi; `config/conv_w2_auto_v2.toml`; 893 teste trec, 1 sărit. **Articole: doar 1.497 bune** (nu 4.000; sursa
+  s-a terminat), toate verificările 0. Pre-înregistrarea: `docs/preinregistrari/2026-10-23_E1_repetare_3x.md` (aștept
+  ~820–970 născute, adică probabil sub poarta de 1.032).
 - tip: placă (~6 ore) + procesor (pregătirea, ~30 min, înainte)
 - fereastră: **oricând — pornește la prima verificare a cozii** (placa e liberă de la 20:57; regula lui Adrian din 22 oct 15:10)
 - durată maximă: 8 ore pe placă
