@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 octombrie 2026, 17:15 — S17 rulează pe placă de la 15:30 (cum ai cerut)
+
+- **Am văzut decizia ta de la 15:10:** placa se folosește oricând, ziua și noaptea; S17 pornește imediat. Executantul a pornit
+  S17 la 15:30 (placa era liberă: 681 MB, 30 °C). Durează ~6,5 ore → gata pe la **~22:00**.
+- **Rulează acum:** S17 („întrebări născute de Kronos”). Nicio problemă: e normal să nu scrie nimic până termină.
+- Nu am pus nimic nou în coadă: placa e ocupată până diseară, iar pasul următor depinde de verdictul S17. **La trecerea de 23:15**
+  verific cifrele față de praguri și pun imediat pe placă pasul următor (repetarea cu 3× date dacă e „neclar”, altfel E2), ca placa
+  să nu stea liberă mâine ziua. Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 22 octombrie 2026, 14:15 — totul e gata pentru diseară (S17 pornește la 19:00)
 
 - **Pregătirea S17 e gata (verificat):** executantul a scris unealta „întrebări născute de Kronos”, 18 teste noi și a pus deoparte
@@ -203,11 +213,3 @@
 - Ai dat „da”: interfața primește fila „Întreabă din text” cu modelul #401 (S5, pe procesor). Fila veche rămâne.
 - Aștept de la tine: înregistrarea sarcinii executantului la 14:00 (sau promptul de mână în sesiunea Kronos).
 
-## 20 octombrie 2026, 10:50 — noaptea 10 CONFIRMATĂ
-
-- Noaptea 10 („răspuns din text”): 50/50 din text, 20/20 „Nu scrie în text.”, 0 refuzuri greșite, fără uitare
-  (română 1,2769, cod 0,7852). Am verificat cele 20 de răspunsuri: toate corecte.
-- Limita: întrebările de examen au aceleași tipare ca la antrenare. Am pus S4 (aprobat): 60 de întrebări formulate
-  altfel, ca să vedem dacă #401 înțelege sau doar recunoaște tiparul.
-- Aștept de la tine: înregistrarea sarcinii Windows „Kronos executant coada” la 14:00 (sau prompt de mână în sesiunea
-  Kronos până atunci); „da”/„nu” pentru #401 în interfață (cu o căsuță pentru text + întrebare).
