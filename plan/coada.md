@@ -46,6 +46,12 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
 **Actualizare 22 oct 05:15 (supraveghetor):** S16 gata, verificat (527/540 = 97,6 % ≥ 90 %; adunat din nou: 234/240 + 293/300) →
 **S17 trece pe `aprobat`**, pentru noaptea 22→23 (pornire 19:00). Ziua: doar pregătirea S17 pe procesor, fără placă.
 ---
+**Actualizare 22 oct 15:10 (Adrian, prin centrul de comandă):** (1) **S17 pornește ACUM**, nu la 19:00: fereastra lui S17 e „oricând”;
+executantul o pornește la prima verificare a cozii. (2) **Regulă nouă, permanentă:** workstation-ul e ținut pornit doar pentru Kronos
+(Adrian îl folosește foarte rar, pentru o imprimare sau un PDF); **placa poate fi folosită oricând, ziua și noaptea**, cu aceleași
+reguli (pre-înregistrare, paznic, un singur lucru pe placă). Supraveghetor: nu mai lăsa placa liberă ziua când există o sarcină
+aprobată; planifică și pentru ziua următoare. Ferestrele din `REGULI_CASCADA.md` rămân ca orientare pentru raport, nu ca limită.
+(3) După S17 (gata pe la ~22:00), la trecerea de 23:15 pune pe placă următorul pas (repetarea cu 3× date dacă e „neclar”, altfel E2).
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
@@ -544,11 +550,12 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
   (b2) ≥ 16/50, INFIRMAT ≤ 9/50; (e) ≥ 27/30); baseline-ul refăcut pe procesor = cifrele S16. De acord cu cele 4 alegeri ale tale
   (filtrul „formă”, noutatea și pe tipar, excepția pentru nume luate din text, bucățile) — toate sunt mai stricte, nu mai largi.
   Rămâne `aprobat` pentru 19:00. Dacă generarea sau dus-întorsul se opresc la limita de timp, scrie în raport câte au rămas neîncercate.
-- pornire (o singură comandă, după 19:00): `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S17 -- .venv/Scripts/python.exe
+- pornire (o singură comandă, oricând după 15:10 — aprobat de Adrian): `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S17 -- .venv/Scripts/python.exe
   -X utf8 unelte/e1_intrebari_nascute.py noaptea` (generator 1 h → generare ≤ 60 min → filtre ≤ 45 min → antrenare 3 h din
   #415 → examene cu verificatorul + validări; ~6,5 ore).
 - tip: placă (~5 ore) + procesor (~1 oră pentru filtre)
-- fereastră: noapte (19:00–07:00), prima după aprobare — țintă: noaptea 22→23 octombrie
+- fereastră: **oricând — PORNEȘTE ACUM** (Adrian, 22 oct 15:10, prin centrul de comandă; era: noapte 19:00–07:00, țintă noaptea 22→23).
+  Executant: la prima verificare a cozii după 15:10, dacă placa e liberă, rulezi comanda de pornire de mai jos fără să aștepți 19:00.
 - durată maximă: 7 ore pe placă
 - ce faci: exact §8 din `docs/rapoarte/2026-10-22_0200_strategie_nucleu_fara_llm.md` (citește-l întreg). Pe scurt:
   1. **Generatorul:** aceeași arhitectură W2, pornit din #415, antrenat 1 oră pe (text, bucată) → întrebare, din perechile
