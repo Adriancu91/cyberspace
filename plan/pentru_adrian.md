@@ -211,15 +211,3 @@
   altfel, ca să vedem dacă #401 înțelege sau doar recunoaște tiparul.
 - Aștept de la tine: înregistrarea sarcinii Windows „Kronos executant coada” la 14:00 (sau prompt de mână în sesiunea
   Kronos până atunci); „da”/„nu” pentru #401 în interfață (cu o căsuță pentru text + întrebare).
-
-## 20 octombrie 2026, 07:57 — PROBLEMĂ: raportul de dimineață lipsește
-
-- Raportul automat de la 07:40 (verdictul nopții 10, „răspuns din text”) **nu a ajuns pe GitHub** până la 07:57.
-  Ultimul lucru urcat de pe workstation e de aseară, 20:50; de atunci nimic (nici de la executant).
-- Nu știu dacă noaptea 10 s-a terminat bine: fără raport nu am cifrele, deci nu pot da verdictul și nu pot scrie
-  sarcina de zi pe placă (S3 rămâne `propus`). Placa poate sta degeaba de la 08:00.
-- **Aștept de la tine:** când ajungi la workstation, deschide Claude Code în folderul proiectului și scrie-i:
-  „Raportul de dimineață de azi lipsește: verifică `lucru/noapte_conversatie.log` și sarcina Windows „Kronos raport
-  dimineata”, apoi scrie tu raportul nopții 10 după `unelte/raport_dimineata.txt` și urcă-l pe GitHub.”
-  Verifică și că sarcina Windows „Kronos executant coada” e înregistrată (fără ea, S2 nu pornește azi).
-- Dacă între timp raportul apare, îl citesc la trecerea de 10:55 și pun S3 în coadă.
