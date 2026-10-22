@@ -645,6 +645,9 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 
 ### S19 — E1, analiza care a rămas nefăcută la S18: de unde vine creșterea #425 (13/50)? (doar examen + numărare, fără antrenare)
 - stare: in_lucru
+- pornită: 23 oct 02:30:36, prin cascadă (procesul 27092; placa liberă: 681 MB, 30 °C), scriptul
+  `lucru/cascada/S19_proba/s19.py` (pașii 1–3 unul după altul; pasul 3 doar dacă baseline-ul #415 iese exact). Pre-înregistrarea
+  urcată înainte (5c44feb). Corectură: în ea scrie „02:35”; ora reală e ~02:29, înainte de pornire.
 - tip: placă (cel mult 1 oră; merge și pe procesor dacă placa e ocupată) — **fără antrenare**
 - fereastră: **oricând — pornește la prima verificare a cozii** (placa e liberă de la 23 oct 00:33; regula lui Adrian din 22 oct 15:10)
 - durată maximă: 1 oră
