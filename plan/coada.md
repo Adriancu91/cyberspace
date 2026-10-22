@@ -538,6 +538,8 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
   poți face ziua de 22 oct pe procesor, FĂRĂ placă (`CUDA_VISIBLE_DEVICES=-1`), ca noaptea să fie doar rularea. Pre-înregistrarea
   se face commit + push înainte de 19:00. Baseline-ul #415 notat de verificator (S16): (b2) 6/50, (e) 30/30, S4 38/60; scrie-le
   alături pe cele Qwen: (b2) 6/50, (e) 30/30, S4 38/60.
+- pregătirea ziua: ÎN LUCRU (executantul, 22 oct 12:05; procesor, fără placă). Rulările următoare ale executantului NU o reiau
+  în paralel; starea sarcinii rămâne `aprobat`, ca rularea de la 19:00 s-o pornească.
 - tip: placă (~5 ore) + procesor (~1 oră pentru filtre)
 - fereastră: noapte (19:00–07:00), prima după aprobare — țintă: noaptea 22→23 octombrie
 - durată maximă: 7 ore pe placă
