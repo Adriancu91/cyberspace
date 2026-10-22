@@ -591,7 +591,7 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 - raport: docs/rapoarte/2026-10-22_2110_S17_E1_intrebari_nascute.md (NECLAR: (b2) 13/50 față de 6/50; (e) 29/30; noaptea 10 49/50, 20/20; S4 40/60)
 
 ### S18 — E1, repetarea cu 3× date („întrebări născute de Kronos”, a doua și ultima rundă)
-- stare: aprobat
+- stare: in_lucru
 - tip: placă (~6 ore) + procesor (pregătirea, ~30 min, înainte)
 - fereastră: **oricând — pornește la prima verificare a cozii** (placa e liberă de la 20:57; regula lui Adrian din 22 oct 15:10)
 - durată maximă: 8 ore pe placă
