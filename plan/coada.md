@@ -538,7 +538,8 @@ aprobată; planifică și pentru ziua următoare. Ferestrele din `REGULI_CASCADA
 - raport: docs/rapoarte/2026-10-22_0246_S16_verificator_fara_llm.md
 
 ### S17 — E1: „întrebări născute de Kronos” (auto-joc cu verificator, fără niciun model străin)
-- stare: in_lucru (executantul, 22 oct 15:30, pornire „ACUM” cerută de Adrian la 15:10; placa liberă: 681 MB, 30 °C)
+- stare: gata (22 oct 21:10; rularea 15:29–20:57, toți pașii cod 0; 516 întrebări păstrate, 452 de tipuri; #425: (b2) 13/50, (e) 29/30, fără regresie → NECLAR: criteriul cere o repetare cu 3× date; 886 teste trec, 1 sărit)
+- stare veche: in_lucru (executantul, 22 oct 15:30, pornire „ACUM” cerută de Adrian la 15:10; placa liberă: 681 MB, 30 °C)
 - stare veche: aprobat (supraveghetor, 22 oct 05:15: S16 verificat — acord împreună 527/540 = 97,6 % ≥ 90 %, niciun model sub 85 %)
 - stare veche: propus — trece pe `aprobat` (de supraveghetor, cu „da”-ul lui Adrian din 22 oct 01:45) DOAR dacă S16 iese cu acord ≥ 90 %
 - pregătire ziua: scripturile (generator, filtre), testele lor, verificarea automată „0 articole de examen” și pre-înregistrarea le
@@ -582,4 +583,4 @@ aprobată; planifică și pentru ziua următoare. Ferestrele din `REGULI_CASCADA
   Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, datele de examen. Totul în `unelte/`, `module/`, `date/conversatie/auto_v1/`.
 - pre-înregistrare: docs/preinregistrari/2026-10-22_E1_intrebari_nascute.md (scrisă de executant pe 22 oct, 12:16–12:37, înainte de pornire)
 - aprobat de: direcția lui Adrian, 22 oct 01:45 (punctul 3); aprobarea finală o pune supraveghetorul după S16
-- raport: docs/rapoarte/2026-10-2x_<ora>_S17_E1_intrebari_nascute.md
+- raport: docs/rapoarte/2026-10-22_2110_S17_E1_intrebari_nascute.md (NECLAR: (b2) 13/50 față de 6/50; (e) 29/30; noaptea 10 49/50, 20/20; S4 40/60)

@@ -118,3 +118,42 @@ povești ≤ 0,47; fapte noi ≥ 65.
 - **Orele de antrenare au și examenele lor obișnuite** (val_bpb, fapte, povești notate de Qwen — Qwen rămâne doar pentru
   povești, ca înainte). Nota Qwen nu intră în verdictul E1.
 - Generatorul (`w2_e1_generator`) e doar unealta care scrie întrebări; nu e un model pentru interfață și nu se compară.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-22 21:03, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 422 | w2_e1_generator | 22.10 15:29 | 0,4438 | pastrat | — | — | — |  |
+| 423 | w2_conv_auto_v1 | 22.10 17:42 | 0,4430 | pastrat | — | — | — |  |
+| 424 | w2_conv_auto_v1 | 22.10 18:47 | 0,4419 | pastrat | — | — | — |  |
+| 425 | w2_conv_auto_v1 | 22.10 19:51 | 0,4436 | pastrat | — | — | — |  |
+| 426 | examen_validari_ws | 22.10 20:57 | — | masurat | — | — | — |  |
+
+- **w2_e1_generator:** 1 ore, 1 păstrate; val_bpb de la 0,4438 la 0,4438; cel mai bun păstrat: #422 (0,4438); pornită din #415 (0,4411).
+- **w2_conv_auto_v1:** 3 ore, 3 păstrate; val_bpb de la 0,4430 la 0,4436; cel mai bun păstrat: #424 (0,4419); pornită din #415 (0,4411).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris la 2026-10-22 21:10 de executant, strict după pragurile de mai sus (notare: verificatorul din S16, fără Qwen).*
+
+| ce | prag | #425 | baseline #415 |
+|---|---|---|---|
+| S15 (b2) | CONFIRMAT ≥ 16/50; INFIRMAT ≤ 9/50 | **13/50** | 6/50 |
+| S15 (e) | ≥ 27/30 | **29/30** | 30/30 |
+| tipuri distincte (4 cuvinte / tipar) | ≥ 20 | **452 / 400** | — |
+| noaptea 10: din text / „Nu scrie” / refuz greșit | ≥ 45/50, ≥ 16/20, ≤ 5/50 | **49/50, 20/20, 0/50** | 50/50, 20/20, 0/50 |
+| S4 (a) / (c) | ≥ 9/15, ≥ 11/15 | **11/15, 14/15** (b 4, d 11; total 40/60) | 11, 13 (38/60) |
+
+**NECLAR.** (b2) 13/50 e între 10 și 15: peste pragul de infirmare (+7 față de baseline, nu +4), sub cel de confirmare
+(+10). (e) și „fără regresie” trec; tipurile distincte (452 pe 4 cuvinte, 400 pe tipar) sunt mult peste 20, deci nici
+clauza a doua de infirmare nu se aplică. După criteriu: **o singură repetare cu 3× date; apoi decizie** (sarcina o pune
+supraveghetorul/Adrian în coadă, nu executantul).
+
+Să nu uite: română 1,3090 ≤ 1,3133 ✓; cod 0,7254 ≤ 0,8174 ✓; povești 0,4436 ≤ 0,47 ✓; fapte noi 72 ≥ 65 ✓.
+
+Față de așteptările mele: păstrate 516 (așteptam 500–2.000, la limita de jos); (b2) 13 (așteptam 7–11, a ieșit peste);
+verdictul neclar (îi dădeam ~35 %).
