@@ -2,6 +2,20 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 02:15 — S18 n-a putut strânge destule întrebări; acum decizi tu pasul următor
+
+- **S18 gata (verificat față de pre-înregistrare):** repetarea a adunat doar **402** întrebări noi → **918** în total (516 + 402),
+  adică 1,78×; poarta cerea cel puțin **1.032** → după regula scrisă dinainte **nu s-a antrenat și nu există verdict**. Cauza:
+  articolele din Wikipedia pe care le avem s-au terminat (1.497 în loc de 4.000). Fără erori, placa liberă de la 00:33. Teste: 893 trec.
+- **E1 rămâne cu un singur rezultat: S17, NECLAR (13 din 50, de la 6).** Regula: nu se mai repetă, decizi tu.
+- **Pus în coadă (S19, aprobat de mine, doar examen, ~1 oră, acum):** analiza care n-a mai rulat la S18 — cât din creșterea 6 → 13
+  vine din tipuri de întrebări pe care Kronos le-a „atins” direct când și-a scris întrebările. Cifrele vin la trecerea de 05:15.
+- **Variantele tale (S20 în coadă):** (1) închidem E1 și trecem la E2 (specialiști + ruter); (2) o antrenare de 3 ore pe cele 918
+  întrebări care există deja, cu aceleași praguri (~4 ore pe placă); (3) altă metodă sau articole noi (descărcarea cere „da”-ul tău).
+  Părerea mea: dacă S19 arată că creșterea nu vine doar din tipurile atinse → (2), e ieftină; altfel → (1).
+- Cyber Hub: nicio comandă nouă pentru Kronos; am scris poziția Kronos la propunerea nouă „Kronos bare-metal v0.2”.
+- **Aștept de la tine:** alegerea 1, 2 sau 3 (o comandă în centrul de comandă e de ajuns); până atunci placa face doar S19.
+
 ## 22 octombrie 2026, 23:15 — S17: NECLAR (13 din 50, de la 6); repetarea cu 3× date pornește acum
 
 - **S17 gata (verificat față de pragurile scrise dinainte):** după 3 ore pe întrebările scrise de el însuși, Kronos (#425) răspunde
@@ -202,20 +216,3 @@
 - **Cyber Hub:** tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`); adaugă `Adriancu91/cyber-hub` la
   sarcina programată a supraveghetorului, dacă vrei să-l țin la zi.
 - **Aștept de la tine:** doar accesul la cyber-hub (nu e urgent).
-
-## 20 octombrie 2026, 11:20 — S4 și S2 gata; noaptea 11 pregătită
-
-- **S4 (examenul cu întrebări puse altfel): PARȚIAL**, verificat după praguri. #401 răspunde bine doar când întrebarea
-  seamănă cu cele de la antrenare (altă formulare 7/15, tipuri noi 3/15, da/nu practic 0/15); altfel zice des
-  „Nu scrie în text.” deși răspunsul e acolo (22/45). A învățat cuvintele, nu sensul.
-- **S2 (motorul de română): gata.** Am numărat exemplele: doar 3 din 50 sunt greșeli adevărate, restul alarme false
-  (mai ales nume proprii). Motorul nu e bun ca filtru pe date deocamdată; nu-ți propun filtrul acum.
-- **Am pus în coadă (aprobate de mine, în granițe):** S6 — datele pentru noaptea 11 (aceleași tipuri de întrebări,
-  fiecare spusă în 5–8 feluri, plus întrebări da/nu; pe procesor, azi după S5); S7 — noaptea 11 din #401, 3 ore.
-  S7 pornește doar după ce verific eu perechile (la 14:15 sau 17:15). Examenul S4 rămâne pus deoparte ca măsură cinstită.
-- Grijă: dacă sarcina Windows „Kronos noapte conversatie” pornește zilnic, ar reface diseară noaptea 10. Executantul
-  verifică și, dacă e cazul, scoate aprobarea veche din drum (o redenumește, nu șterge nimic).
-- **Cyber Hub:** nu-l pot citi — sesiunea mea programată are acces doar la `cyberspace`. Ca să țin hub-ul la zi,
-  adaugă depozitul `Adriancu91/cyber-hub` la sarcina programată a supraveghetorului (setările ei, „repositories”).
-- **Aștept de la tine:** înregistrarea sarcinii Windows „Kronos executant coada” (sau sesiunea de mână până atunci,
-  ca S5 și S6 să meargă azi); acces la cyber-hub pentru supraveghetor.

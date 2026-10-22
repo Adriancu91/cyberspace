@@ -642,3 +642,52 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 - aprobat de: Adrian (22 oct 15:10, prin centrul de comandă, punctul 3: „repetarea cu 3× date dacă e neclar”) + supraveghetor,
   22 oct 23:15 (categoria 1: încă o rulare pe o linie existentă, alt amestec de date; categoria 6/5 pentru opțiunile din unealtă)
 - raport: docs/rapoarte/2026-10-23_0103_S18_E1_repetare_3x.md (n-a trecut poarta: 402 noi, 918 în total < 1.032; nu s-a antrenat, fără verdict; pre-înregistrarea închisă)
+
+### S19 — E1, analiza care a rămas nefăcută la S18: de unde vine creșterea #425 (13/50)? (doar examen + numărare, fără antrenare)
+- stare: aprobat
+- tip: placă (cel mult 1 oră; merge și pe procesor dacă placa e ocupată) — **fără antrenare**
+- fereastră: **oricând — pornește la prima verificare a cozii** (placa e liberă de la 23 oct 00:33; regula lui Adrian din 22 oct 15:10)
+- durată maximă: 1 oră
+- de ce: S18 n-a trecut poarta (918 < 1.032), deci E1 rămâne cu un singur rezultat: S17, NECLAR ((b2) 13/50 față de 6/50).
+  Pasul următor îl alege Adrian (pre-înregistrarea: „nu se mai repetă; decizia o ia Adrian”). Ca să aleagă pe cifre, lipsește
+  exact analiza de la S18 punctul 7, care n-a mai rulat din cauza porții: **cât din creșterea 6 → 13 vine din tipuri pe care
+  întrebările născute le-au atins direct** (de ex. „în ce oraș se”) și cât din răspunsuri lungi care conțin răspunsul corect.
+- ce faci:
+  0. Verifici că în `lucru/e1/` există examenele lui **#425** din S17 (`examene_425_*.json`, cu `S15.raspunsuri`). Dacă lipsesc,
+     le refaci la pasul 1 împreună cu #415.
+  1. **Examenele lui #415, notate de verificator** (aceleași ca la S17/S18, fără întâmplare):
+     `python -X utf8 unelte/e1_intrebari_nascute.py --lucru lucru/e1 examene --experiment 415`
+     Cifrele TREBUIE să iasă cele din baseline-ul pre-înregistrat: (b2) 6/50, (e) 30/30, S4 38/60, noaptea 10 50/50 și 20/20.
+     Dacă ies altele, scrii anume în raport și te oprești la pasul 2 (fără pasul 3).
+  2. **Analiza, cu tiparele întrebărilor pe care #425 chiar le-a văzut la antrenare (doar `auto_v1`, cele 516):**
+     `python -X utf8 unelte/e1_intrebari_nascute.py --lucru lucru/e1 analiza --experimente 415 425 --linie "" --nascute date/conversatie/auto_v1/intrebari.jsonl`
+     Copiezi `lucru/e1/analiza_s18.json` în `lucru/e1/analiza_s19_auto_v1.json`.
+  3. **A doua analiză, doar informativ, cu toate cele 918** (`auto_v1` + `auto_v2/intrebari.jsonl`, ca să vedem ce tipuri ar fi
+     atins o eventuală antrenare pe ele): aceeași comandă cu `--nascute date/conversatie/auto_v1/intrebari.jsonl date/conversatie/auto_v2/intrebari.jsonl`;
+     copiezi rezultatul în `lucru/e1/analiza_s19_toate.json`.
+  4. Raportezi, pentru #415 și #425: (b2) cu verificatorul; (a) (b2) cu F1 ≥ 0,8; (b) câte răspunsuri „lungi” (peste 2× cuvintele
+     referinței) au fost numărate corecte, pe categorii; (c) (b2) fără tipurile atinse de tiparele născute (x/y, pe aceleași
+     întrebări rămase la ambele modele) + lista tipurilor scoase. Și diferența (c) #425 − #415.
+- pre-înregistrare (scurtă, înainte de pornire, `docs/preinregistrari/2026-10-23_S19_analiza_E1.md`, commit + push): NU e un
+  experiment nou și NU schimbă verdictul S17 (rămâne NECLAR). Scrii doar așteptările tale în cifre pentru (a), (b), (c) și regula
+  de citire, stabilită acum de mine:
+  - diferența (c) #425 − #415 **≥ 4** întrebări → creșterea nu vine doar din tipurile atinse direct (semn bun pentru auto-joc);
+  - diferența (c) **≤ 2** → creșterea se explică aproape toată prin tipurile atinse sau prin răspunsuri lungi (semn slab);
+  - 3 → nedecis. Cifra intră doar în variantele pe care i le scriu lui Adrian, nu în niciun verdict.
+- Paznicul: placa sub 7.000 MB și 83 °C. Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, datele de examen, `auto_v1`,
+  `auto_v2`, verificatorul din S16. Nicio antrenare, niciun model nou, nimic în interfață. Codul nu se schimbă (dacă o comandă
+  pică, repari doar unealta, cu test, și scrii în raport — categoria 6).
+- aprobat de: supraveghetor, 23 oct 02:15 (categoria 2: examene și notări pe modele existente; e analiza deja cerută la S18, pct. 7)
+- raport: `docs/rapoarte/2026-10-23_<ora>_S19_analiza_E1.md`
+
+### S20 — Pasul următor după E1 (decizia lui Adrian)
+- stare: propus — necesită Adrian
+- de ce: E1 s-a încheiat fără verdict clar: S17 NECLAR (13/50), S18 n-a putut strânge destule întrebări (918 din 1.032; sursa de
+  articole din Wikipedia descărcată s-a terminat). Pre-înregistrarea spune: „nu se mai repetă; decizia o ia Adrian.”
+- variantele (Adrian alege una; scrise și în `plan/pentru_adrian.md`):
+  1. **Se închide E1 cu „neclar” și se trece la E2** (3 specialiști + ruter, strategia §7). E2 nu e încă aprobat: e o direcție nouă.
+  2. **O antrenare de 3 ore din #415 pe cele 918 întrebări (1,78×)**, cu o poartă nouă scrisă înainte și aceleași praguri
+     (confirmat ≥ 16/50, infirmat ≤ 9/50). Datele există deja (`auto_v2/antrenare.jsonl`); ~4 ore pe placă.
+  3. **Altă metodă sau altă sursă:** mai multe bucăți pe articol din articolele deja folosite (schimbare de metodă) sau articole
+     noi (descărcare nouă = „da”-ul tău, cu licența verificată înainte).
+- recomandarea supraveghetorului: se decide după S19 (vezi `plan/pentru_adrian.md`).
