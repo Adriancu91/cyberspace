@@ -1,0 +1,63 @@
+# E1 „întrebări născute de Kronos” (S17, 22 octombrie 2026; direcția aprobată de Adrian pe 22 oct 01:45, aprobarea
+# finală de supraveghetor la 05:15): linia nouă „w2_conv_auto_v1”, din #415, cu datele date/conversatie/auto_v1
+# (unelte/e1_intrebari_nascute.py: perechile din text_v3 plus cel mult 3.300 de întrebări făcute de generatorul lui
+# Kronos și trecute prin filtrele fără LLM). Pre-înregistrarea: docs/preinregistrari/2026-10-22_E1_intrebari_nascute.md.
+# Față de config/conv_w2_text_v3.toml (noaptea 12), doar `nume`, `conversatie` și `cale_stare`; restul identic
+# (45/5/50, rata 0,00005, lot 12, context 512).
+#   python unelte/antrenare_lunga.py --config config/conv_w2_auto_v1.toml --ore 3 --porneste-din 415
+# (pornită de unelte/e1_intrebari_nascute.py noaptea, după generator, generare și filtre)
+
+[platforma]
+# Linie nouă, ca `--porneste-din 415` să se aplice (lucru/w2_conv_auto_v1/ nu există la 22 oct).
+nume = "w2_conv_auto_v1"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_conversatie:ModelGPTConversatie"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_conv_auto_v1/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "date/conversatie/auto_v1/antrenare.jsonl", fractie_conversatie = 0.45 }
+
+[antrenare_lunga]
+eticheta = "întrebări născute de Kronos"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [12] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

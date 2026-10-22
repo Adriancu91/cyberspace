@@ -538,8 +538,11 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
   poți face ziua de 22 oct pe procesor, FĂRĂ placă (`CUDA_VISIBLE_DEVICES=-1`), ca noaptea să fie doar rularea. Pre-înregistrarea
   se face commit + push înainte de 19:00. Baseline-ul #415 notat de verificator (S16): (b2) 6/50, (e) 30/30, S4 38/60; scrie-le
   alături pe cele Qwen: (b2) 6/50, (e) 30/30, S4 38/60.
-- pregătirea ziua: ÎN LUCRU (executantul, 22 oct 12:05; procesor, fără placă). Rulările următoare ale executantului NU o reiau
-  în paralel; starea sarcinii rămâne `aprobat`, ca rularea de la 19:00 s-o pornească.
+- pregătirea ziua: GATA (executantul, 22 oct 12:37; procesor, fără placă; 886 teste trec, 1 sărit). Starea sarcinii rămâne
+  `aprobat`, ca rularea de după 19:00 s-o pornească. Raport: docs/rapoarte/2026-10-22_1237_S17_pregatire.md.
+- pornire (o singură comandă, după 19:00): `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S17 -- .venv/Scripts/python.exe
+  -X utf8 unelte/e1_intrebari_nascute.py noaptea` (generator 1 h → generare ≤ 60 min → filtre ≤ 45 min → antrenare 3 h din
+  #415 → examene cu verificatorul + validări; ~6,5 ore).
 - tip: placă (~5 ore) + procesor (~1 oră pentru filtre)
 - fereastră: noapte (19:00–07:00), prima după aprobare — țintă: noaptea 22→23 octombrie
 - durată maximă: 7 ore pe placă
@@ -565,6 +568,6 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
   - Neclar: între ele → o singură repetare cu 3× date; apoi decizie.
   Plus așteptările tale în cifre. Paznicul: placa sub 7.000 MB și 83 °C. Teste: `python -m pytest` trece. Commit + push.
   Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, datele de examen. Totul în `unelte/`, `module/`, `date/conversatie/auto_v1/`.
-- pre-înregistrare: docs/preinregistrari/2026-10-2x_E1_intrebari_nascute.md (o scrii tu, înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-10-22_E1_intrebari_nascute.md (scrisă de executant pe 22 oct, 12:16–12:37, înainte de pornire)
 - aprobat de: direcția lui Adrian, 22 oct 01:45 (punctul 3); aprobarea finală o pune supraveghetorul după S16
 - raport: docs/rapoarte/2026-10-2x_<ora>_S17_E1_intrebari_nascute.md
