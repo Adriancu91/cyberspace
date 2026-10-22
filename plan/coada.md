@@ -43,6 +43,8 @@ văzute 30/30, nevăzute 6/50: „se învață, nu se transferă”). Adrian a a
 **Actualizare 22 oct 02:15 (supraveghetor):** S15 verificat (cifrele adunate din nou pe tipuri: 6/9/6 la (b2), 14/4/30 la (e)) →
 „Tipurile văzute s-au învățat, dar nu se transferă”. Am scris **S16 = E0** (`aprobat`, procesor, fără placă — se poate face chiar
 acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă acord ≥ 90 %). Nicio sarcină de placă în ziua de 22 oct.
+**Actualizare 22 oct 05:15 (supraveghetor):** S16 gata, verificat (527/540 = 97,6 % ≥ 90 %; adunat din nou: 234/240 + 293/300) →
+**S17 trece pe `aprobat`**, pentru noaptea 22→23 (pornire 19:00). Ziua: doar pregătirea S17 pe procesor, fără placă.
 ---
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
@@ -530,7 +532,12 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
 - raport: docs/rapoarte/2026-10-22_0246_S16_verificator_fara_llm.md
 
 ### S17 — E1: „întrebări născute de Kronos” (auto-joc cu verificator, fără niciun model străin)
-- stare: propus — trece pe `aprobat` (de supraveghetor, cu „da”-ul lui Adrian din 22 oct 01:45) DOAR dacă S16 iese cu acord ≥ 90 %
+- stare: aprobat (supraveghetor, 22 oct 05:15: S16 verificat — acord împreună 527/540 = 97,6 % ≥ 90 %, niciun model sub 85 %)
+- stare veche: propus — trece pe `aprobat` (de supraveghetor, cu „da”-ul lui Adrian din 22 oct 01:45) DOAR dacă S16 iese cu acord ≥ 90 %
+- pregătire ziua: scripturile (generator, filtre), testele lor, verificarea automată „0 articole de examen” și pre-înregistrarea le
+  poți face ziua de 22 oct pe procesor, FĂRĂ placă (`CUDA_VISIBLE_DEVICES=-1`), ca noaptea să fie doar rularea. Pre-înregistrarea
+  se face commit + push înainte de 19:00. Baseline-ul #415 notat de verificator (S16): (b2) 6/50, (e) 30/30, S4 38/60; scrie-le
+  alături pe cele Qwen: (b2) 6/50, (e) 30/30, S4 38/60.
 - tip: placă (~5 ore) + procesor (~1 oră pentru filtre)
 - fereastră: noapte (19:00–07:00), prima după aprobare — țintă: noaptea 22→23 octombrie
 - durată maximă: 7 ore pe placă

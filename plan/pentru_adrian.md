@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 octombrie 2026, 05:15 — judecătorul fără Qwen a trecut; la noapte Kronos își scrie singur întrebări
+
+- **S16 gata (verificat, am adunat singur cifrele):** verificatorul scris de noi dă aceeași notă ca Qwen la **527 din 540**
+  de răspunsuri (**97,6 %**; pragul era 90 %). Niciun model sub 85 %. Din cele 13 diferențe, la unele verificatorul e chiar mai
+  cinstit (Qwen dăduse notă bună lui „În 1991” când răspunsul corect era „Pe 28 mai 1991”). Teste: 868 trec, 1 sărit.
+- **S17 trece pe „aprobat”** (cum ai cerut: doar dacă S16 trece de 90 %): în noaptea 22→23, de la 19:00, Kronos își scrie
+  singur întrebări noi, le verifică fără niciun model străin și se antrenează 3 ore pe ele. Ziua: doar pregătirea pe procesor, placa liberă.
+- Verdictul S17 vine mâine dimineață, după pragurile scrise dinainte. Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 22 octombrie 2026, 02:15 — direcția nouă a pornit: primul pas e „judecătorul fără Qwen”
 
 - **S15 gata (verificat, am adunat singur cifrele pe tipuri):** Kronos (#415) a învățat **toate** tipurile de întrebări pe care
@@ -204,12 +214,3 @@
   dimineata”, apoi scrie tu raportul nopții 10 după `unelte/raport_dimineata.txt` și urcă-l pe GitHub.”
   Verifică și că sarcina Windows „Kronos executant coada” e înregistrată (fără ea, S2 nu pornește azi).
 - Dacă între timp raportul apare, îl citesc la trecerea de 10:55 și pun S3 în coadă.
-
-## 19 octombrie 2026, 22:55 — totul în regulă
-
-- Noaptea 10 („răspuns din text”) rulează din 19:00, fără semne de probleme; verdictul vine mâine la 07:40.
-- Proba executantului a trecut (745 de teste trecute, 1 sărit), iar varianta (b) pentru descărcări e scrisă în
-  instrucțiunea lui: S2 poate descărca singură sursele motorului de română mâine de la 08:00.
-- N-am pus nimic nou în coadă: sarcina de zi pe placă (S3) o scriu la 07:55, după verdictul nopții 10.
-- **Aștept de la tine:** dacă n-ai făcut-o încă, înregistrează la workstation sarcina Windows „Kronos executant coada”
-  (comanda e în `docs/rapoarte/2026-10-19_2040_executantul_cascadei_proba.md`). Fără ea, S2 nu pornește mâine.
