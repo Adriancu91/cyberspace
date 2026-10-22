@@ -540,6 +540,10 @@ acum, noaptea) și **S17 = E1** (`propus`; trece pe `aprobat` doar dacă S16 dă
   alături pe cele Qwen: (b2) 6/50, (e) 30/30, S4 38/60.
 - pregătirea ziua: GATA (executantul, 22 oct 12:37; procesor, fără placă; 886 teste trec, 1 sărit). Starea sarcinii rămâne
   `aprobat`, ca rularea de după 19:00 s-o pornească. Raport: docs/rapoarte/2026-10-22_1237_S17_pregatire.md.
+- verificat de supraveghetor (22 oct 14:15): pre-înregistrarea are pragurile din §8 corect calculate (baseline 6/50 → CONFIRMAT
+  (b2) ≥ 16/50, INFIRMAT ≤ 9/50; (e) ≥ 27/30); baseline-ul refăcut pe procesor = cifrele S16. De acord cu cele 4 alegeri ale tale
+  (filtrul „formă”, noutatea și pe tipar, excepția pentru nume luate din text, bucățile) — toate sunt mai stricte, nu mai largi.
+  Rămâne `aprobat` pentru 19:00. Dacă generarea sau dus-întorsul se opresc la limita de timp, scrie în raport câte au rămas neîncercate.
 - pornire (o singură comandă, după 19:00): `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S17 -- .venv/Scripts/python.exe
   -X utf8 unelte/e1_intrebari_nascute.py noaptea` (generator 1 h → generare ≤ 60 min → filtre ≤ 45 min → antrenare 3 h din
   #415 → examene cu verificatorul + validări; ~6,5 ore).

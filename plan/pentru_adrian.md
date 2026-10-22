@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 octombrie 2026, 14:15 — totul e gata pentru diseară (S17 pornește la 19:00)
+
+- **Pregătirea S17 e gata (verificat):** executantul a scris unealta „întrebări născute de Kronos”, 18 teste noi și a pus deoparte
+  2.000 de articole noi (verificat automat: **0** texte de examen). Proba pe procesor dă pe #415 exact cifrele de ieri (6/50, 30/30,
+  38/60), deci diseară noul model e notat la fel ca baseline-ul. Pragurile din pre-înregistrare sunt cele aprobate. Teste: 886 trec, 1 sărit.
+- **Rulează acum:** nimic pe placă (cum ai cerut: ziua fără placă). **La 19:00:** S17, ~6,5 ore. Verdictul mâine la 08:15.
+- Nu am pus nimic nou în coadă. Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 22 octombrie 2026, 05:15 — judecătorul fără Qwen a trecut; la noapte Kronos își scrie singur întrebări
 
 - **S16 gata (verificat, am adunat singur cifrele):** verificatorul scris de noi dă aceeași notă ca Qwen la **527 din 540**
