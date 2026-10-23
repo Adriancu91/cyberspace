@@ -107,6 +107,14 @@ articolul la 5: 42+26+10+13+44 = **135 = 84,4 %** ✓. Așteptările au fost urc
 5 variante încercate doar pe validare (≤ 6) ✓; 904 teste trec. Față de pragul propus de executant (≥ 80 % și ≥ 85 %, nedecis de Adrian):
 (i) trece la limită, (ii) **cade cu o întrebare**. Am pus **S25** (`aprobat`, doar procesor, ~2 ore): îmbunătățirea căutării, pasul 1 din
 propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punctul 3), fără antrenare. **Placa rămâne liberă**; E3 cu antrenare așteaptă „da”-ul lui Adrian.
+**Actualizare 24 oct 02:15 (supraveghetor) — S25 verificat; S26 = un examen nou, neatins (doar procesor):** S25 `gata`, verificat cu cifrele
+din raport adunate din nou: validarea nouă (2048) k = 5: aleasa 424/500 = 84,8 % față de S24 423/500 = 84,6 % → **+0,2 puncte < 3** → după pragul
+meu scris înainte, **NU e câștig real** (verdictul executantului e corect). Împreună 417+424 = 841 ✓, S24 410+423 = 833 ✓. Examene: k = 1 37+21+8+12+30 = 108 ✓;
+k = 5 46+25+12+14+42 = **139/160 = 86,9 %** ✓; k = 20 49+27+15+14+48 = 153 ✓; (ii) 46+27+12+14+46 = **145 = 90,6 %** ✓ — umflate (ideile au venit din
+greșelile de pe examene). Așteptările urcate înainte de examene (64d9b48, 23:59; examenele 00:00) ✓; S24 refăcut exact ✓; 0 stricate; 907 teste trec.
+Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am pus **S26** (`aprobat`, doar procesor, ~1 oră): un examen E3 nou de 100 de
+întrebări neatinse (punctul 3 din propunerea executantului), măsurat o singură dată, plus „primele 3 bucăți” (plafonul pentru E3 cu model).
+**S27 = E3 cu antrenare pe placă: `propus — necesită Adrian`** (pragul și pornirea le decide el). **Placa rămâne liberă.**
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
@@ -967,3 +975,46 @@ propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punct
 - raport: docs/rapoarte/2026-10-23_2335_S25_E3_cautare.md (aleasa `nume_obligatorii_liste`; pe validarea nouă +0,2 puncte la k = 5 →
   NU e câștig real după prag; pe examene, o singură rulare: (i) k = 5 80,6 → 86,9 %, (ii) 84,4 → 90,6 %, 10 reparate, 0 stricate —
   umflat, ideile au venit din greșelile de pe examene; 907 teste trec, 1 sărit)
+
+### S26 — E3, examenul nou neatins (procesor): 100 de întrebări noi, o singură măsurare a căutării, plus „primele 3 bucăți”
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
+- fereastră: oricând — la prima verificare a cozii
+- durată maximă: 1,5 ore; memorie RAM cel mult ~40 GB
+- de ce: cele 160 de întrebări E3 au fost văzute de două ori de căutare (S24, S25), deci cifrele lor sunt umflate. Adrian are nevoie de o cifră
+  curată ca să aleagă pragul E3, iar E3 cu antrenare (S27, dacă o aprobă) are nevoie de un examen pe care nu l-a atins nimeni. Punctul 3 din
+  propunerea ta din S25. Plus plafonul nemăsurat: cât de des e răspunsul în primele 3 bucăți (exact ce ar primi modelul în E3).
+- ce faci (în `unelte/e3_memorie.py`, comenzi noi; teste noi în `teste/test_e3_memorie.py`; indexul `lucru/e3/index.sqlite` neschimbat):
+  1. **Examenul nou:** 100 de întrebări din `text_v3/antrenare.jsonl`, sămânța **4096**, aceleași filtre ca la eșantioanele de validare S25,
+     **fără nicio întrebare și niciun articol** comun cu eșantioanele 1024 și 2048 și cu cele 160 de examene. Le salvezi ca listă fixă
+     (`lucru/e3/examen_nou_4096.json`) și scrii în raport amprenta lor (sha256 al fișierului) și câte articole distincte au. De acum, aceste 100
+     de întrebări **nu se folosesc la nicio ajustare și nicio antrenare** (S27 trebuie să le scoată din datele de antrenare, cu tot cu articolele lor).
+  2. **Fără nicio schimbare de reguli:** nu ajustezi nimic. Variantele măsurate: S24 „fără cuvinte + perechi” și aleasa S25 `nume_obligatorii_liste`.
+  3. **Așteptările tale în cifre** (k = 1/3/5/20 și (ii), potrivirea S16 și cea nouă, ambele variante), scrise în raport și **urcate (commit + push)
+     ÎNAINTE** de măsurare. Reperul cinstit e validarea 2048 (S24 84,6 %, aleasa 84,8 % la k = 5).
+  4. **Măsurarea, o singură rulare** pe cele 100: aceleași tabele ca la S25, cu **k = 3 în plus**. Tot o singură dată adaugi k = 3 și pe cele
+     160 de examene vechi și pe validarea 2048, pentru aleasă (doar numărare, fără nicio alegere pe baza lor).
+  5. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-24_<ora>_S26_E3_examen_nou.md`.
+- Citirea (supraveghetorul, scrisă acum, înainte): cifra oficială pentru pragul E3 al lui Adrian = aleasa pe cele 100 noi, potrivirea S16, la
+  k = 5 și (ii). Dacă aleasa iese cu **≥ 5 puncte sub** cifra ei de pe cele 160 la k = 5, spunem limpede că cifrele de pe cele 160 erau umflate.
+  Plafonul pentru E3 cu model = aleasa la k = 3 pe cele 100.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen (doar citire), `text_v3` (doar citire), `e2/`,
+  `unelte/verificator_text.py`. Nimic pe placă, nimic descărcat, nimic instalat, nimic în interfață, nimic din `lucru/e3/` în Git.
+- Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport și se urcă înainte de pasul 4 (pasul 3)
+- aprobat de: supraveghetor, 24 oct 02:15 (categoriile 2, 3 și 5; pregătirea E3 doar pe procesor, aprobată de Adrian 23 oct 10:20, punctul 3)
+- raport: —
+
+### S27 — E3 cu antrenare (placa): index + model, din #415
+- stare: propus — necesită Adrian
+- tip: placă
+- fereastră: zi sau noapte, după „da”-ul lui Adrian și după S26 `gata`
+- durată maximă: 3 ore de antrenare + examene (~4 ore în total)
+- ce ar face (propunerea executantului din S25, punctul 2): pornind din #415, 2–3 ore pe întrebări din `text_v3` la care textul dat e format din
+  **primele 3 bucăți aduse de index** (căutarea `nume_obligatorii_liste`), nu din textul perechii; fără cele 100 de întrebări S26 și articolele lor.
+  Examenele: cele 100 noi din S26 (oficiale) + cele 160 vechi, modelul primește doar întrebarea; plus noaptea 10, S4 și validările obișnuite ca regresie.
+- criterii propuse (le decide Adrian): confirmat dacă sistemul răspunde corect la **≥ 60 %** fără text dat și nu pierde mai mult de 2 puncte pe
+  noaptea 10 / S4 cu textul dat; infirmat sub 45 %. Placa sub 7.000 MB și 83 °C.
+- pre-înregistrare: se scrie înainte de pornire (`docs/preinregistrari/2026-10-2x_E3_memorie.md`), după cifrele S26
+- aprobat de: — (așteaptă „da”-ul lui Adrian: pragul E3 și pornirea antrenării)
+- raport: —

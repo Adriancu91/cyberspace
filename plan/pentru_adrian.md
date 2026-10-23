@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 octombrie 2026, 02:15 — Căutarea mai bună (S25): pe întrebări noi câștigul e în zgomot; acum un examen nou, curat (doar procesor)
+
+- **S25 gata și verificat (doar procesor, 23:38–00:05, fără erori):** am încercat 6 feluri de căutare mai bună. Cea aleasă pe **întrebări noi**
+  găsește răspunsul în primele 5 la **84,8 %**, față de **84,6 %** înainte: **+0,2 puncte**, sub pragul meu de 3 → **nu e un câștig real**.
+  Pe cele 160 de întrebări de examen urcă mult (**86,9 %** și articolul **90,6 %**), dar cifrele sunt umflate: ideile au venit chiar din
+  greșelile de acolo. Ce e bun: n-a stricat nimic și e mai rapidă. Am adunat cifrele din nou: se potrivesc. Teste: 907 trec.
+- **Pus în coadă: S26** (doar procesor, ~1 oră): un examen nou de 100 de întrebări pe care nu le-a văzut nimeni, măsurat o singură dată —
+  cifra curată pentru pragul tău. Plus cât de des e răspunsul în primele 3 bucăți (ce ar primi modelul în E3).
+- **S27 = E3 cu antrenare pe placă (~4 ore): propus, așteaptă „da”-ul tău.** Criterii propuse: ≥ 60 % răspunsuri corecte fără text dat. **Placa rămâne liberă.**
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Când te întorci (după cifrele S26): „da”/„nu” pentru S27 și pragul E3.
+
 ## 23 octombrie 2026, 23:15 — Memoria (S24): indexul găsește răspunsul în 4 din 5 cazuri, fără niciun model; acum îmbunătățim căutarea (doar procesor)
 
 - **S24 gata și verificat (doar procesor, 20:34–21:05, fără erori):** am făcut un „index” peste toată Wikipedia în română (277.357 de articole).
@@ -212,13 +224,3 @@
 - Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** un „da” sau „nu” la **S13**: fila „Întreabă din text” din interfață să folosească **#407** în loc de
   #401 (e mai bun în general — nota medie 6,7 față de 4,7 —, dar puțin mai slab la tipuri noi). Recomand **da**. Nu e urgent.
-
-## 20 octombrie 2026, 23:15 — noaptea 11 rulează
-
-- **REZOLVAT:** noaptea 11 (S7) a pornit la 20:46, de mână, cu tine de față (fișierele vechi puse deoparte, nu șterse).
-  Merge pe linia nouă `w2_conv_text_v2`, din #401, cu pragurile scrise dinainte. Placa: 6.225 MB, 55 °C — sub limite.
-- Antrenarea se termină pe la 23:50, apoi examenele (~1 oră). Verdictul îl dau la 08:15, din raportul de dimineață.
-- Reparația uneltei de pornire (`--din-nou`) n-a mai fost nevoie aseară; am pus-o separat ca **S9** (aprobată de mine, mâine
-  ziua, pe procesor), ca data viitoare să nu mai fie nevoie de tine la calculator. S8 (`module.toml`) rămâne tot mâine ziua.
-- Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
