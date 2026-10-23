@@ -706,10 +706,15 @@ aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să 
      noi (descărcare nouă = „da”-ul tău, cu licența verificată înainte).
 - recomandarea supraveghetorului: după S19 (23 oct 05:15): **varianta 1** (închidem E1, trecem la E2). Dacă Adrian alege
   varianta 2, poarta nouă cere și F1 ≥ 0,8 (sau o limită de lungime), nu doar verificatorul — vezi S21.
+- notă supraveghetor, 23 oct 08:15: după S21 recomandarea rămâne **varianta 1**. S21 arată că răspunsurile lungi apar doar la (b2);
+  deci, la varianta 2, F1 ≥ 0,8 (sau limita de lungime) e nevoie doar în poarta pe (b2), pe celelalte examene verificatorul ajunge.
 
 ### S21 — Cât de „îngăduitor” e verificatorul cu răspunsurile lungi? (toate examenele, #415 și #425, doar numărare)
 - stare: gata (23 oct 05:35; (i) exact ca în S17/S19; pe (e) + S4 + noaptea 10 „text”, corecte fără lungi #415 117, #425 116 →
   scade cu 1 ≤ 2: lungile țin doar de (b2); 895 teste trec, 1 sărit)
+- verificat de supraveghetor (23 oct 08:15): (iv) #415 30+37+50 = 117, #425 29+38+49 = 116 → −1 ≤ 2, citirea e corectă;
+  (i) identic cu S17/S19; pre-înregistrarea scrisă înainte de rulare (commit 05:29). Rezultat: răspunsurile lungi țin doar de (b2),
+  „fără regresie” din S17 rămâne valabil și cu nota strictă.
 - tip: procesor (fără placă, fără model încărcat — doar citește examenele deja scrise)
 - fereastră: oricând — la prima verificare a cozii (după S19; nu are nevoie de placă)
 - durată maximă: 1 oră (cu tot cu testul nou)

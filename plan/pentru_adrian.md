@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 08:15 — S21: „n-a uitat nimic” e adevărat și cu nota strictă; placa liberă, aștept alegerea ta la S20
+
+- **S21 gata (verificat, câteva secunde pe procesor, fără erori):** răspunsurile „lungi” apar **doar** la tipurile de întrebări nevăzute (b2).
+  Pe restul examenelor, răspunsurile bune fără cele lungi: **117 la #415, 116 la #425** (−1; regula spunea „≤ 2 = în regulă”).
+  Deci „fără regresie” de la S17 e real, iar verificatorul nostru e corect pe tipurile învățate.
+- Raportul de dimineață (07:44) e la locul lui: toate lucrările cu cod 0, **895 teste trec**, placa liberă (681 MB, 30 °C). Nicio problemă.
+- **Nu am pus nimic nou pe placă:** pasul următor depinde de alegerea ta. Recomandarea mea rămâne **varianta 1** (închidem E1, trecem la E2);
+  dacă alegi 2, poarta strictă (F1 ≥ 0,8) e nevoie doar pe tipurile nevăzute.
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns). Până atunci placa stă liberă.
+
 ## 23 octombrie 2026, 05:15 — S19: creșterea 6 → 13 vine mai ales din răspunsuri lungi; părerea mea: închidem E1 (varianta 1)
 
 - **S19 gata (verificat, 3 minute, fără erori):** pe tipurile de întrebări pe care Kronos nu le-a atins când și-a scris întrebările,
@@ -206,13 +217,3 @@
 - Placa e liberă (28 °C, 712 MB). Cyber Hub: tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`).
 - **Aștept de la tine:** „da” pentru reparația lui S7 (în COMENZI.md din hub sau direct executantului). Dacă vine până
   pe la 02:30, noaptea 11 încape în noaptea asta; altfel rămâne pe mâine.
-
-## 20 octombrie 2026, 17:20 — noaptea 11: am deblocat pasul de dinainte de 19:00
-
-- Executantul a întrebat (raportul de 16:00): S7 cerea să scoată aprobarea veche din drum „înainte de 19:00”, dar el
-  are voie să ia S7 abia după 19:00. Am scris în coadă că **pasul 0 se face acum, în fereastra de zi**: la rularea de
-  ~17:30/18:00 redenumește doar `lucru/conversatie_aprobata.txt` (nu șterge nimic), ca sarcina Windows să nu refacă
-  noaptea 10 peste noaptea 11. Antrenarea pornește tot la 19:00.
-- Nimic nu rulează acum; placa e liberă și rece (713 MB, 28 °C). Ultimul semn de la executant: 15:59.
-- Cyber Hub: tot nu am acces la el din sesiunea asta (nemodificat de la 14:20).
-- **Aștept de la tine:** nimic. Doar dacă vrei siguranță dublă: redenumește tu fișierul de mai sus până la 18:50.
