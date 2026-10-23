@@ -868,7 +868,7 @@ placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu
 - verificat de supraveghetor, 23 oct 20:15: cifrele se adună (144 / 137 / 142), verdictul INFIRMAT e corect după pre-înregistrare. E2 închis.
 
 ### S24 — E3, pregătirea (procesor): indexul propriu de memorie peste Wikipedia în română și cât de bine găsește
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii (S23 e gata, placa e liberă)
 - durată maximă: 4 ore; memorie RAM cel mult ~40 GB
