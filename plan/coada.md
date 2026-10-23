@@ -869,6 +869,8 @@ placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu
 
 ### S24 — E3, pregătirea (procesor): indexul propriu de memorie peste Wikipedia în română și cât de bine găsește
 - stare: in_lucru
+- pornit: 23 oct 20:34 (executant, procesul 10976): lanțul pașilor 1, 2, 3, 5 (`lucru/cascada/S24_proba/s24.py`; sfârșit estimat
+  ~21:00). Pasul 4 (examenele) îl rulez la verificarea următoare, după ce așteptările sunt scrise și urcate. 904 teste trec, 1 sărit.
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii (S23 e gata, placa e liberă)
 - durată maximă: 4 ore; memorie RAM cel mult ~40 GB
