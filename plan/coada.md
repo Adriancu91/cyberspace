@@ -94,6 +94,13 @@ ruterul ajustat doar pe validare (1–5 cuvinte, prag 2: 93,7 %), apoi o singur�
 limită**; baseline-ul #415 pe familii 101 + 13 + 30 = 144 ✓; 900 teste trec. Pragul val_bpb ≤ 0,4511 (#415 + 0,01), propus de executant,
 îl accept (e fixat înainte de pornire, la fel de strict ca toleranța „minus 1” de la (A)). **S23 rulează de la ~11:05, sfârșit estimat
 ~18:10** (cel târziu ~19:05). Nimic nou în coadă acum: pregătirea E3 (procesor) o scriu după verdictul E2, la trecerea de 20:15.
+**Actualizare 23 oct 20:15 (supraveghetor) — E2 INFIRMAT, verificat; trec la pregătirea E3 (doar procesor):** S23 `gata`, verificat față
+de pre-înregistrare cu cifrele din raport adunate din nou: #415 6+30+11+2+13+12+50+20 = 144 ✓; sistemul 8+23+9+1+15+11+50+20 = 137 ✓
+(pe familii 99+15+23 = 137 ✓); ruter perfect 98+14+30 = 142 ✓. (A) cade: F1 **98/165 < 100**; (B) cade: **137 < 144** (și 142 < 144 cu ruter
+perfect); (C) 90,0 % ✓; validările toate în praguri (fapte noi F3 = 65, exact la limită) → **INFIRMAT**, corect. Lecția: specialiștii uită repede
+tot ce nu e familia lor, iar câștigul pe da/nu (+1) nu acoperă pierderea pe F1 (−3). Placa a stat sub 6.455 MB și 64 °C. **E2 se închide**; nu pun
+altă variantă de specialiști fără Adrian. Cum a decis Adrian (10:20, punctul 3), am scris **S24 = pregătirea E3** (`aprobat`, doar procesor, fără
+placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu antrenare și orice altă rulare pe placă așteaptă „da”-ul lui Adrian.
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
@@ -858,3 +865,49 @@ limită**; baseline-ul #415 pe familii 101 + 13 + 30 = 144 ✓; 900 teste trec. 
 - pre-înregistrare: docs/preinregistrari/2026-10-23_E2_specialisti.md (scrisă la S22, urcată înainte de pornire)
 - aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 2: E2 aprobat, „antrenare nouă”) + supraveghetor, 23 oct 10:30
 - raport: docs/rapoarte/2026-10-23_1803_S23_E2_specialisti.md (INFIRMAT)
+- verificat de supraveghetor, 23 oct 20:15: cifrele se adună (144 / 137 / 142), verdictul INFIRMAT e corect după pre-înregistrare. E2 închis.
+
+### S24 — E3, pregătirea (procesor): indexul propriu de memorie peste Wikipedia în română și cât de bine găsește
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
+- fereastră: oricând — la prima verificare a cozii (S23 e gata, placa e liberă)
+- durată maximă: 4 ore; memorie RAM cel mult ~40 GB
+- de ce: Adrian (23 oct 10:20, punctul 3): după E2, „pregătirea E3 (memoria) doar pe procesor — indexul propriu peste articolele deja
+  descărcate și măsurarea lui; fără antrenare E3 până nu decide Adrian”. Strategia `docs/rapoarte/2026-10-22_0200_strategie_nucleu_fara_llm.md`
+  §4 H2 și §7 E3 (citește-le). Întrebarea de azi e doar: **dacă îi dăm lui Kronos o întrebare, găsește indexul nostru, fără niciun model,
+  bucata de text în care e răspunsul?** Dacă nu o găsește, antrenarea E3 n-are sens; dacă o găsește, Adrian are cifre ca să decidă.
+- ce faci (totul într-o unealtă nouă `unelte/e3_memorie.py`, cu teste noi în `teste/test_e3_memorie.py`):
+  1. **Indexul** (comanda `index`): din `date/ws/curat/wikipedia_ro/antrenare.txt` (copia deja descărcată și curățată; nimic nou descărcat),
+     fiecare articol tăiat în **bucăți** de aceeași mărime ca bucățile de text de la „răspuns din text” (citește în `unelte/conversatie_text.py`
+     cum se taie; dacă nu se poate potrivi exact, ~600 de caractere, tăiat la sfârșit de propoziție — scrii ce ai ales). Fiecare bucată ține
+     `articol`, `nr` și textul. Căutarea: **SQLite FTS5 cu BM25** (e în Python, fără instalare; verifici întâi că `fts5` există), cu tokenizerul
+     `unicode61` (ș/ş și ț/ţ unificate înainte de indexare, în text și în întrebare). Dacă FTS5 lipsește, un index inversat propriu cu BM25
+     (k1 = 1,2, b = 0,75). Fără model, fără rețea. Indexul în `lucru/e3/index.sqlite` (NU în Git). Scrii: câte articole, câte bucăți,
+     mărimea pe disc, RAM-ul maxim, timpul de construire.
+  2. **Documente noi = învățate instant** (comanda `adauga`): adaugă în index textele examenelor care **nu** sunt deja în el (S15
+     `docs/conversatie/examen_generalizare_mare.json`, S4 `docs/conversatie/examen_generalizare_401.json`, noaptea 10
+     `date/conversatie/text/examen.json`), tăiate la fel, marcate `sursa = examen`. Raportezi câte texte de examen erau deja în Wikipedia
+     (potrivire exactă a textului normalizat) și câte s-au adăugat, plus timpul de adăugare pe text. Fișierele de examen doar se citesc.
+  3. **Ajustarea doar pe validare** (comanda `masoara --set validare`): 500 de întrebări luate la întâmplare (sămânța 1024) din
+     `date/conversatie/text_v3/antrenare.jsonl`, doar cele cu răspuns care apare în text (nu „Nu scrie în text.”, nu da/nu). O căutare e
+     „bună la k” dacă printre primele k bucăți e una care conține răspunsul de referință (normalizat, cu aceeași potrivire ca verificatorul S16,
+     `unelte/verificator_text.py`, doar citit, nu schimbat). Poți încerca cel mult 6 variante (de ex. întrebarea întreagă / fără cuvintele de
+     întrebare „cine, ce, când, unde, în, a, al…” / cu sau fără prefixe de cuvânt) **numai pe validare**; o alegi pe cea mai bună la k = 5.
+  4. **Examenele, o singură rulare** cu varianta aleasă (comanda `masoara --set examene`): toate întrebările din S15 (b2, e), S4 (a, b, d) și
+     noaptea 10 „text” care au răspunsul în text (fără „Nu scrie”, fără da/nu (c); scrii câte rămân, ~160). Pentru fiecare: e bună la k = 1, 5, 20?
+     Separat: **(i) căutarea în tot indexul** (Wikipedia + examene) și **(ii) găsirea articolului corect** (măcar o bucată din textul de examen
+     în primele 5, indiferent de răspuns). Raportezi procentele pe fiecare examen și total, timpul median și maxim pe întrebare, plus
+     20 de greșeli alese la întâmplare (sămânța 1024), cu întrebarea, răspunsul și primele 3 bucăți găsite (primele 200 de caractere).
+  5. **Documentele lungi** (doar măsurare): pentru textele de examen, de câte ori sunt mai lungi decât contextul modelului (512 simboluri,
+     cu tokenizerul Kronos, doar citit), și câte articole Wikipedia au peste 10 × 512 simboluri — pentru experimentul H2 din strategie
+     („documente de 10× mai lungi decât contextul”).
+  6. **Așteptările tale în cifre** la pasul 4, scrise în raport ÎNAINTE de rularea lui (commit + push înainte), plus o propunere de prag
+     pentru E3: de exemplu „antrenarea E3 are sens doar dacă găsește răspunsul în primele 5 la ≥ 80 % din întrebări”. Pragul îl decide Adrian.
+  7. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S24_E3_index.md`, cu tot ce e mai sus și cu
+     propunerea ta pentru pasul următor (E3 cu antrenare: ce date, câte ore, ce examene, ce criterii) — **doar propunere, nu o pornești**.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen (doar citire), `text_v3`, `e2/`, `unelte/verificator_text.py`.
+  Nimic pe placă, nimic descărcat, nimic instalat, nimic în interfață. Indexul și bucățile nu intră în Git (licența Wikipedia: CC BY-SA; doar local).
+- Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport înainte de pasul 4 (pasul 6)
+- aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 3: pregătirea E3 doar pe procesor) + supraveghetor, 23 oct 20:15 (categoriile 2, 3 și 5)
+- raport: docs/rapoarte/2026-10-2x_<ora>_S24_E3_index.md

@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 20:15 — E2 (specialiști + ruter): INFIRMAT, verificat; acum pregătirea memoriei (E3), doar pe procesor
+
+- **S23 gata (11:00–17:31, fără erori, placa sub 6.455 MB și 64 °C):** cei 3 specialiști împreună cu ruterul au **137 din 210**, sub #415 (**144**).
+  Și cu un ruter perfect ar fi avut 142. Specialistul pe „fapte/nume/ani/locuri” are 98, sub pragul de 100. Am adunat cifrele din nou: se potrivesc.
+  **Verdict: INFIRMAT** — rezultat negativ, dar clar: fiecare specialist uită repede tot ce nu e familia lui, iar câștigul la da/nu (+1) e prea mic.
+- **E2 se închide.** Nu pun altă variantă de specialiști fără tine.
+- **Pus în coadă, cum ai decis la 10:20:** **S24** (doar procesor, ~2–4 ore, fără antrenare): indexul nostru de memorie peste Wikipedia în română
+  (deja descărcată) și măsurarea lui: la o întrebare, găsește singur bucata de text cu răspunsul? Cu cifrele astea decizi dacă merită antrenarea E3.
+- **Placa rămâne liberă la noapte** (nimic aprobat pentru ea). Dacă te întorci, workstation-ul e liber pentru fereastra OS/GPU oricând.
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. După S24 (raportul vine probabil la noapte), un „da”/„nu” pentru E3 cu antrenare pe placă.
+
 ## 23 octombrie 2026, 11:15 — Pregătirea E2 (S22) e gata și corectă; cei 3 specialiști se antrenează acum (S23, până pe la 18:10)
 
 - **S22 gata (verificat, doar procesor):** întrebările sunt împărțite în 3 familii (20.564 fapte/nume/ani/locuri, 4.083 da/nu, 2.821 tipurile
@@ -210,16 +222,3 @@
 - S8 (formatul comun pentru module) rămâne mâine ziua. În hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic. (Doar dacă ești la calculator și vrei să grăbești: mută `lucru\cascada\S7.json` și `S7.log`
   în `S7_prima_1929.*` — nu e necesar.)
-
-## 20 octombrie 2026, 20:30 — noaptea 11 repornește cu „da”-ul tău; hub-ul merge
-
-- **REZOLVAT:** ai dat „da” la reparația nopții 11 (varianta 2, linia nouă `w2_conv_text_v2`, tot din #401, aceleași praguri).
-  S7 e `aprobat`; executantul o pornește la prima lui verificare (din 30 în 30 de minute) — placa e liberă (28 °C). Verdictul
-  la 08:15, din raportul de dimineață. Nu rulează nimic chiar acum (ultimul semn de la executant: 20:10).
-- **REZOLVAT:** acum pot citi și scrie în Cyber Hub (sarcina programată are ambele depozite). Am rescris starea Kronos în hub.
-- **Am pus în coadă S8 (aprobată):** descrierea fiecărui modul Kronos după formatul comun pe care l-ai aprobat în hub la 16:04
-  (`module.toml`, ~27 de fișiere + o unealtă și un test ca să nu se desincronizeze de `MANIFEST`). Pe procesor, mâine ziua,
-  după raportul nopții 11; nu atinge codul, `kronos/` sau examenul. Suita office și-a făcut deja partea.
-- Sarcina de școală de cod (S3) rămâne pe mai târziu, după verdictul nopții 11.
-- **Aștept de la tine:** nimic.
-
