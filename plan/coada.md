@@ -833,7 +833,11 @@ scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
 - raport: docs/rapoarte/2026-10-23_1036_S22_E2_pregatire.md
 
 ### S23 — E2, rularea (placa): 3 specialiști din #415, pe rând, apoi examenele și nota sistemului
-- stare: aprobat — pornește DOAR după: S22 `gata`, pre-înregistrarea E2 urcată (commit înainte de pornire), ruterul ≥ 90 % la S22 pasul 3 (ii)
+- stare: in_lucru (executant, 23 oct ~11:05; condițiile verificate: S22 `gata`, pre-înregistrarea urcată în 514b6ae, ruterul
+  189/210 = 90,0 %; `lucru/w2_spec_*` nu există). **Sfârșit estimat: ~18:10** (3 × ~2 h 10 + examene); cel târziu ~19:05
+  (durata maximă 8 h). Fereastra „zi” mai avea 451 de minute < 480: pornită totuși, fiindcă sarcina e „oricând” și placa e
+  folosibilă zi și noapte (regula lui Adrian, 22 oct 15:10). Lanțul: `lucru/cascada/S23_proba/s23.py`, jurnalul `lucru/e2/s23.json`.
+- stare veche: aprobat — pornește DOAR după: S22 `gata`, pre-înregistrarea E2 urcată (commit înainte de pornire), ruterul ≥ 90 % la S22 pasul 3 (ii)
 - tip: placă (~7 ore)
 - fereastră: oricând — la prima verificare a cozii după condițiile de mai sus (regula lui Adrian din 22 oct 15:10)
 - durată maximă: 8 ore pe placă
