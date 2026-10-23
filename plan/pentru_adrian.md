@@ -2,6 +2,19 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 05:15 — S19: creșterea 6 → 13 vine mai ales din răspunsuri lungi; părerea mea: închidem E1 (varianta 1)
+
+- **S19 gata (verificat, 3 minute, fără erori):** pe tipurile de întrebări pe care Kronos nu le-a atins când și-a scris întrebările,
+  #425 tot câștigă **+7** (11/42 față de 4/42) → după regula scrisă dinainte, creșterea „nu vine doar din tipurile atinse”.
+  **Dar:** 7 din cele 13 răspunsuri bune sunt „lungi” (bucăți copiate care conțin răspunsul). Fără ele: **6 față de 4**; cu nota
+  strictă (F1 ≥ 0,8): **2 față de 4**, adică mai slab decât înainte. Kronos a învățat să copieze mai mult text, nu clar să răspundă mai exact.
+- E1 rămâne **NECLAR**. **Părerea mea s-a schimbat:** acum recomand **varianta 1** (închidem E1, trecem la E2). Dacă alegi totuși
+  varianta 2, poarta nouă trebuie să ceară și nota strictă, nu doar verificatorul.
+- **Pus în coadă (S21, aprobat de mine, doar pe procesor, ~1 oră, fără placă):** aceeași numărătoare pe toate examenele, ca să vedem
+  dacă și „fără regresie” de la S17 stă pe răspunsuri lungi. Placa e liberă și rămâne așa până alegi. Teste: 893 trec.
+- Cyber Hub: nicio comandă nouă pentru Kronos; a apărut proiectul nou **Cyber-GPU**, care va cere o fereastră pe workstation doar cu acordul tău.
+- **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns).
+
 ## 23 octombrie 2026, 02:15 — S18 n-a putut strânge destule întrebări; acum decizi tu pasul următor
 
 - **S18 gata (verificat față de pre-înregistrare):** repetarea a adunat doar **402** întrebări noi → **918** în total (516 + 402),
@@ -203,16 +216,3 @@
 - Nimic nu rulează acum; placa e liberă și rece (713 MB, 28 °C). Ultimul semn de la executant: 15:59.
 - Cyber Hub: tot nu am acces la el din sesiunea asta (nemodificat de la 14:20).
 - **Aștept de la tine:** nimic. Doar dacă vrei siguranță dublă: redenumește tu fișierul de mai sus până la 18:50.
-
-## 20 octombrie 2026, 14:20 — S5 și S6 gata; noaptea 11 are undă verde
-
-- **S5 gata:** fila „Întreabă din text” (modelul #401) merge în interfață, pe 8787; executantul a încercat-o de pe
-  Tailscale cu 3 exemple, toate bune (răspuns corect, „Nu scrie în text.”, text prea lung refuzat clar).
-- **S6 gata:** datele pentru noaptea 11 — 24.149 de perechi, fiecare întrebare spusă în 5–6 feluri, plus 3.585 da/nu;
-  813 teste trec. Am verificat perechile și am scris „perechi verificate: da” la S7. Executantul a scos și 3 formulări
-  vechi, ca examenul S4 să rămână cinstit; e corect, riscul e mic și e scris dinainte.
-- **Diseară, 19:00:** S7 (noaptea 11, din #401, 3 ore + examene). Verdictul mâine dimineață.
-- Azi după-amiază placa stă liberă: sarcina de școală de cod (S3) o scriu după noaptea 11, nu în grabă.
-- **Cyber Hub:** tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`); adaugă `Adriancu91/cyber-hub` la
-  sarcina programată a supraveghetorului, dacă vrei să-l țin la zi.
-- **Aștept de la tine:** doar accesul la cyber-hub (nu e urgent).

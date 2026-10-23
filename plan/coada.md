@@ -58,6 +58,10 @@ cerea ≥ 16, INFIRMAT ≤ 9), (e) 29/30 ≥ 27, fără regresie, 452 de tipuri 
 am pus pe placă **S18 = repetarea cu 3× date** (`aprobat`, pornește la prima verificare a cozii, ~7 ore). Judecătorul rămâne
 neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-ul; varianta mai strictă se raportează doar alături.
 
+**Actualizare 23 oct 05:15 (supraveghetor):** S19 gata, verificat: (c) +7 (≥ 4), dar 7 din 13 la #425 sunt răspunsuri lungi și cu
+F1 ≥ 0,8 #425 are 2/50 față de 4/50 → semn slab pentru auto-joc; S17 rămâne NECLAR. Am pus **S21** (`aprobat`, doar procesor, ~1 oră):
+aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să aleagă la S20 pe cifre. Placa rămâne liberă până la „da”-ul lui.
+
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
 - tip: placă
@@ -645,6 +649,11 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 
 ### S19 — E1, analiza care a rămas nefăcută la S18: de unde vine creșterea #425 (13/50)? (doar examen + numărare, fără antrenare)
 - stare: gata
+- verificat de supraveghetor (23 oct 05:15): pașii 0–3 făcuți exact cum scrie; pre-înregistrarea urcată înainte de pornire
+  (5c44feb 02:30:28 < pornirea 02:30:36); baseline #415 exact; cifrele din raport se potrivesc între ele (13 − 7 lungi = 6,
+  6 − 2 = 4; (c) 11/42 − 4/42 = +7). Regula de citire: (c) = +7 ≥ 4 → „nu vine doar din tipurile atinse”. Dar fără răspunsurile
+  lungi rămâne +2 (6 față de 4), iar cu F1 ≥ 0,8 #425 e mai slab (2/50 față de 4/50) → semnul pentru auto-joc e SLAB. Verdictul S17
+  rămâne NECLAR.
 - terminată: 23 oct 02:33:29, cod 0. Baseline #415 exact; diferența (c) = 7 (≥ 4), dar 7/13 la #425 sunt răspunsuri lungi și
   cu F1 ≥ 0,8 #425 are 2/50 față de 4/50 la #415. Teste: 893 trecute, 1 sărit.
 - pornită: 23 oct 02:30:36, prin cascadă (procesul 27092; placa liberă: 681 MB, 30 °C), scriptul
@@ -695,4 +704,42 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
      (confirmat ≥ 16/50, infirmat ≤ 9/50). Datele există deja (`auto_v2/antrenare.jsonl`); ~4 ore pe placă.
   3. **Altă metodă sau altă sursă:** mai multe bucăți pe articol din articolele deja folosite (schimbare de metodă) sau articole
      noi (descărcare nouă = „da”-ul tău, cu licența verificată înainte).
-- recomandarea supraveghetorului: se decide după S19 (vezi `plan/pentru_adrian.md`).
+- recomandarea supraveghetorului: după S19 (23 oct 05:15): **varianta 1** (închidem E1, trecem la E2). Dacă Adrian alege
+  varianta 2, poarta nouă cere și F1 ≥ 0,8 (sau o limită de lungime), nu doar verificatorul — vezi S21.
+
+### S21 — Cât de „îngăduitor” e verificatorul cu răspunsurile lungi? (toate examenele, #415 și #425, doar numărare)
+- stare: aprobat
+- tip: procesor (fără placă, fără model încărcat — doar citește examenele deja scrise)
+- fereastră: oricând — la prima verificare a cozii (după S19; nu are nevoie de placă)
+- durată maximă: 1 oră (cu tot cu testul nou)
+- de ce: S19 a arătat că 7 din cele 13 răspunsuri bune ale lui #425 la (b2) sunt „lungi” și că, cu F1 ≥ 0,8, #425 scade la 2/50.
+  Nu știm încă dacă același lucru se întâmplă la tipurile văzute (e), la S4 și la noaptea 10 — adică dacă și „fără regresie” din
+  S17 (e 29/30, S4 40/60) stă pe răspunsuri lungi. Cifra asta trebuie să existe înainte ca Adrian să aleagă la S20 și înainte de
+  orice poartă nouă (varianta 2 sau E2): altfel riscăm să antrenăm modelul spre „copiază mai mult text”.
+- ce faci:
+  1. În `unelte/e1_intrebari_nascute.py` adaugi o comandă nouă `lungimi` (categoria 5: unealtă nouă, fără să schimbi ce există):
+     `python -X utf8 unelte/e1_intrebari_nascute.py --lucru lucru/e1 lungimi --experimente 415 425`
+     Citește ultimele `examene_<id>_*.json` din `lucru/e1/` (pentru #415: `examene_415_20261023_023327.json`; pentru #425:
+     `examene_425_20261022_205650.json`) și, pe fiecare examen (S15 pe categorii — b2, e și celelalte —, S4 pe categorii a/b/c/d,
+     noaptea 10 „text” și „nu scrie”; fără conversația simplă), scoate:
+     (i) corecte cu verificatorul (trebuie să iasă exact cifrele din rapoartele S17/S19 — dacă nu, scrii și te oprești);
+     (ii) corecte cu F1 ≥ 0,8 (`corect_f1` din `verifica`);
+     (iii) câte din cele corecte sunt „lungi” (peste 2× cuvintele referinței, aceeași definiție ca `analiza_b2`);
+     (iv) corecte fără cele lungi;
+     (v) mediana numărului de cuvinte al răspunsului elevului și al referinței.
+     Scrie totul în `lucru/e1/lungimi_s21.json` și tipărește un tabel. Nu se rulează niciun model; `verifica` și verificatorul S16
+     rămân neschimbate.
+  2. Un test nou în `teste/test_e1_intrebari_nascute.py` pentru `lungimi` (2–3 răspunsuri inventate: unul scurt corect, unul lung
+     corect, unul greșit → cifrele așteptate). Apoi `python -m pytest`: toate trebuie să treacă.
+  3. Raportul: tabelul #415 / #425 pe fiecare examen și categorie, cu (i)–(v) și diferențele.
+- pre-înregistrare (scurtă, înainte de rulare, `docs/preinregistrari/2026-10-23_S21_lungimi.md`, commit + push): NU e experiment
+  și NU schimbă niciun verdict. Scrii așteptările tale în cifre pentru (ii) și (iii) la (e), S4 și noaptea 10, pentru ambele modele,
+  și regula de citire (stabilită acum de mine, doar informativă, pentru variantele lui Adrian):
+  - dacă la #425, pe (e) + S4 + noaptea 10 „text” la un loc, „corecte fără cele lungi” scade cu **≥ 5** față de #415 → „fără regresie”
+    din S17 stă pe răspunsuri lungi; orice antrenare viitoare are nevoie de o poartă cu F1 sau limită de lungime;
+  - **≤ 2** → răspunsurile lungi țin doar de (b2); verificatorul e în regulă pe tipurile învățate;
+  - 3–4 → nedecis.
+- Paznicul: nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, `auto_v1`, `auto_v2`,
+  `unelte/verificator_text.py`. Fără placă, fără antrenare, fără descărcări, nimic în interfață. Doar comanda nouă + testul ei.
+- aprobat de: supraveghetor, 23 oct 05:15 (categoria 2: notări pe examene existente; categoria 5: comandă nouă în `unelte/`, cu test)
+- raport: `docs/rapoarte/2026-10-23_HHMM_S21_lungimi.md`
