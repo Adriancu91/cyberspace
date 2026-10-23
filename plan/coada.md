@@ -838,10 +838,7 @@ limită**; baseline-ul #415 pe familii 101 + 13 + 30 = 144 ✓; 900 teste trec. 
 - raport: docs/rapoarte/2026-10-23_1036_S22_E2_pregatire.md
 
 ### S23 — E2, rularea (placa): 3 specialiști din #415, pe rând, apoi examenele și nota sistemului
-- stare: in_lucru (executant, 23 oct ~11:05; condițiile verificate: S22 `gata`, pre-înregistrarea urcată în 514b6ae, ruterul
-  189/210 = 90,0 %; `lucru/w2_spec_*` nu există). **Sfârșit estimat: ~18:10** (3 × ~2 h 10 + examene); cel târziu ~19:05
-  (durata maximă 8 h). Fereastra „zi” mai avea 451 de minute < 480: pornită totuși, fiindcă sarcina e „oricând” și placa e
-  folosibilă zi și noapte (regula lui Adrian, 22 oct 15:10). Lanțul: `lucru/cascada/S23_proba/s23.py`, jurnalul `lucru/e2/s23.json`.
+- stare: gata (executant, 23 oct 18:03: lanțul 11:00–17:31, cod 0; INFIRMAT: (A) F1 98/165 < 100, (B) sistemul 137/210 < 144; (C) 90,0 % ✓; 900 teste trec; placa liberă)
 - stare veche: aprobat — pornește DOAR după: S22 `gata`, pre-înregistrarea E2 urcată (commit înainte de pornire), ruterul ≥ 90 % la S22 pasul 3 (ii)
 - tip: placă (~7 ore)
 - fereastră: oricând — la prima verificare a cozii după condițiile de mai sus (regula lui Adrian din 22 oct 15:10)
@@ -860,4 +857,4 @@ limită**; baseline-ul #415 pe familii 101 + 13 + 30 = 144 ✓; 900 teste trec. 
   după S22. Specialiștii NU intră în interfață (rămâne #407). Teste: `python -m pytest` trece înainte de `gata`. Commit + push.
 - pre-înregistrare: docs/preinregistrari/2026-10-23_E2_specialisti.md (scrisă la S22, urcată înainte de pornire)
 - aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 2: E2 aprobat, „antrenare nouă”) + supraveghetor, 23 oct 10:30
-- raport: docs/rapoarte/2026-10-2x_<ora>_S23_E2_specialisti.md
+- raport: docs/rapoarte/2026-10-23_1803_S23_E2_specialisti.md (INFIRMAT)

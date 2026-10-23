@@ -125,3 +125,53 @@ Durata: 3 × ~2 h 10 + ~25 min examene ≈ **7 ore** pe placă. Paznicul: sub 7.
   care nu sunt ale lor.
 - F3 la examene = S15 (e), pe care #415 are deja 30/30: aici specialistul F3 nu poate decât să egaleze sau să piardă.
 - Cele 7 ore pe placă sunt doar pentru S23; specialiștii nu intră în interfață (rămâne #407).
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-23 18:03, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 427 | w2_spec_f1 | 23.10 11:00 | 0,4438 | pastrat | — | — | — |  |
+| 428 | w2_spec_f1 | 23.10 12:05 | 0,4432 | pastrat | — | — | — |  |
+| 429 | w2_spec_f2 | 23.10 13:08 | 0,4403 | pastrat | — | — | — |  |
+| 430 | w2_spec_f2 | 23.10 14:12 | 0,4447 | pastrat | — | — | — |  |
+| 431 | w2_spec_f3 | 23.10 15:15 | 0,4441 | pastrat | — | — | — |  |
+| 432 | w2_spec_f3 | 23.10 16:19 | 0,4449 | pastrat | — | — | — |  |
+| 433 | examen_validari_ws | 23.10 17:25 | — | masurat | — | — | — |  |
+| 434 | examen_validari_ws | 23.10 17:28 | — | masurat | — | — | — |  |
+| 435 | examen_validari_ws | 23.10 17:30 | — | masurat | — | — | — |  |
+
+- **w2_spec_f1:** 2 ore, 2 păstrate; val_bpb de la 0,4438 la 0,4432; cel mai bun păstrat: #428 (0,4432); pornită din #415 (0,4411).
+- **w2_spec_f2:** 2 ore, 2 păstrate; val_bpb de la 0,4403 la 0,4447; cel mai bun păstrat: #429 (0,4403); pornită din #415 (0,4411).
+- **w2_spec_f3:** 2 ore, 2 păstrate; val_bpb de la 0,4441 la 0,4449; cel mai bun păstrat: #431 (0,4441); pornită din #415 (0,4411).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Examenele (verificatorul S16): specialiștii #428 (F1), #430 (F2), #432 (F3); nota sistemului în `lucru/e2/sistem_s23.json`.
+
+| | #415 monolit | specialistul familiei | sistem (ruter) | sistem (ruter perfect) |
+|---|---|---|---|---|
+| F1 (165) | 101 | **98** (#428) | 99 | 98 |
+| F2 (15) | 13 | **14** (#430) | 15 | 14 |
+| F3 (30) | 30 | **30** (#432) | 23 | 30 |
+| **total (210)** | **144** | — | **137** | **142** |
+| F1 ≥ 0,8 (total) | 139 | — | 130 | 138 |
+| S15 (b2), verificator / F1 ≥ 0,8 | 6 / 4 | — | 8 / 3 | 6 / 4 |
+| lungi corecte | 3 | — | 6 | 4 |
+
+Validările (prag S17 / pre-înregistrare): val_bpb ≤ 0,4511 → 0,4432 / 0,4447 / 0,4449 ✓; română ≤ 1,3133 → 1,3116 / 1,3093 /
+1,3120 ✓; cod ≤ 0,8174 → 0,7266 / 0,7256 / 0,7332 ✓; povești ≤ 0,47 → 0,4432 / 0,4447 / 0,4449 ✓; fapte noi ≥ 65 → 72 / 73 / 65 ✓
+(F3 exact la limită).
+
+## Verdictul
+
+**INFIRMAT.** Strict după pragurile de mai sus:
+- **(A) nu e îndeplinit:** specialistul F1 are **98/165** pe familia lui, pragul era ≥ 100 (#415: 101, minus 1). F2 14/15 ≥ 12 ✓,
+  F3 30/30 ≥ 29 ✓; toate validările în praguri ✓.
+- **(B) nu e îndeplinit:** sistemul are **137/210**, pragul era ≥ 144 (minus 7). Nici cu ruter perfect nu ar fi trecut (142).
+- **(C) îndeplinit:** 189/210 = 90,0 % (măsurat la S22).
+
+Față de așteptări: F1 98 (capătul de jos al 98–106), F2 14 și F3 30 în interval; sistemul 137, sub intervalul 138–148.
+Verdictul așteptat cu ~65 % (INFIRMAT) s-a adeverit, dar prin (A) la F1 și (B), nu la F3. Ruterul pierde 5 întrebări față de
+„ruterul perfect” (mai ales cele 9 din S15 (e) trimise greșit: 23/30 în loc de 30/30).
