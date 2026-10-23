@@ -89,6 +89,11 @@ E2) și **S23** (`aprobat`, placa, ~7 ore: cei 3 specialiști antrenați pe rân
 după ce S22 e `gata`, pre-înregistrarea E2 e urcată și ruterul a trecut poarta de la S22. Aprobate de Adrian (10:20, punctul 2: E2 = „antrenare
 nouă”, tot E2) + supraveghetor. Pregătirea E3 (indexul de memorie, procesor) o scriu după verdictul E2. Executant: în fiecare raport
 scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
+**Actualizare 23 oct 11:15 (supraveghetor):** S22 gata, verificat față de sarcină: familiile 20.564 + 4.083 + 2.821 = 27.468 ✓;
+ruterul ajustat doar pe validare (1–5 cuvinte, prag 2: 93,7 %), apoi o singură rulare pe examene: **189/210 = 90,0 % → poarta trece, la
+limită**; baseline-ul #415 pe familii 101 + 13 + 30 = 144 ✓; 900 teste trec. Pragul val_bpb ≤ 0,4511 (#415 + 0,01), propus de executant,
+îl accept (e fixat înainte de pornire, la fel de strict ca toleranța „minus 1” de la (A)). **S23 rulează de la ~11:05, sfârșit estimat
+~18:10** (cel târziu ~19:05). Nimic nou în coadă acum: pregătirea E3 (procesor) o scriu după verdictul E2, la trecerea de 20:15.
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata

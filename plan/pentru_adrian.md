@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 11:15 — Pregătirea E2 (S22) e gata și corectă; cei 3 specialiști se antrenează acum (S23, până pe la 18:10)
+
+- **S22 gata (verificat, doar procesor):** întrebările sunt împărțite în 3 familii (20.564 fapte/nume/ani/locuri, 4.083 da/nu, 2.821 tipurile
+  din S11). „Ruterul” (alege familia după primele cuvinte) a nimerit **189 din 210 = 90,0 %** la examene → condiția ta (≥ 90 %) e îndeplinită,
+  **exact la limită**. Greșește mai ales la întrebările care încep cu un nume propriu. #415 are 144 din 210 — ținta pentru sistemul nou. Teste: 900 trec.
+- **S23 rulează pe placă de la ~11:05:** cei 3 specialiști, câte 2 ore fiecare, apoi examenele. **Sfârșit estimat ~18:10** (cel târziu ~19:05) —
+  până atunci workstation-ul e ocupat. Verdictul îl verific la trecerea de 20:15.
+- Executantul se așteaptă mai degrabă la „infirmat” (~65 %); un rezultat negativ e tot un rezultat și ne spune dacă merită ruterul mai bun.
+- Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 23 octombrie 2026, 10:30 — Am văzut decizia ta: E1 închis, E2 (specialiști + ruter) pus în coadă
 
 - **S20 gata:** ai ales varianta 1 (10:20). E1 se închide cu NECLAR (13 din 50); nimic nu a rulat pe placă de dimineață (placa liberă).
@@ -212,9 +223,3 @@
 - Sarcina de școală de cod (S3) rămâne pe mai târziu, după verdictul nopții 11.
 - **Aștept de la tine:** nimic.
 
-## 20 octombrie 2026, 20:27 — reparația nopții 11 APROBATĂ de Adrian (scris de centrul de comandă)
-
-- Adrian a dat „da” pentru varianta 2: aceeași antrenare din #401, aceleași praguri, pe linia nouă `w2_conv_text_v2`.
-  S7 e `aprobat` în coadă; executantul o pornește la prima verificare dacă placa e liberă. Verdictul: mâine, raportul de dimineață.
-- Accesul supraveghetorului la Cyber Hub: se rezolvă prin recrearea sarcinii programate din chatul centrului de comandă (care are
-  toate depozitele). Până atunci, hub-ul e ținut la zi de centrul de comandă.
