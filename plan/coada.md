@@ -708,7 +708,7 @@ aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să 
   varianta 2, poarta nouă cere și F1 ≥ 0,8 (sau o limită de lungime), nu doar verificatorul — vezi S21.
 
 ### S21 — Cât de „îngăduitor” e verificatorul cu răspunsurile lungi? (toate examenele, #415 și #425, doar numărare)
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă, fără model încărcat — doar citește examenele deja scrise)
 - fereastră: oricând — la prima verificare a cozii (după S19; nu are nevoie de placă)
 - durată maximă: 1 oră (cu tot cu testul nou)
