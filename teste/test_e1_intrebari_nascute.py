@@ -1,6 +1,7 @@
 """E1 „întrebări născute de Kronos” (S17, 22 octombrie 2026): bucățile, tiparele, filtrele fără LLM, alegerea pe tipare,
 notarea examenelor cu verificatorul și generarea (pe un model de jucărie, fără placă)."""
 
+import json
 import random
 from collections import Counter
 
@@ -332,6 +333,38 @@ def test_analiza_b2_f1_lungi_si_fara_tiparele_nascute():
     assert a["b2"] == "2/3" and a["b2_f1"] == "1/3"
     assert a["lungi_corecte"] == {"b2": 1}
     assert a["tipuri_scoase"] == ["pictor"] and a["b2_fara_tipare_nascute"] == "1/2"
+
+
+def test_lungimi_scurt_lung_gresit_si_fara_conversatie():
+    r = [
+        {"fel": "text", "categorie": "e", "intrebare": "În ce țară se află X?", "raspuns": "În Elveția.",
+         "raspuns_elev": "În Elveția."},
+        {"fel": "text", "categorie": "e", "intrebare": "Cine a pictat Z?", "raspuns": "Ion Andreescu.",
+         "raspuns_elev": "Ion Andreescu, un pictor român foarte cunoscut din București."},
+        {"fel": "text", "categorie": "e", "intrebare": "În ce țară se află Y?", "raspuns": "În Franța.",
+         "raspuns_elev": "Nu știu."},
+        {"fel": "conversatie", "intrebare": "Salut!", "raspuns": "Salut!", "raspuns_elev": "Bună ziua."},
+    ]
+    g = e1.lungimi_grupuri(r)
+    assert list(g) == ["e"]
+    x = g["e"]
+    assert (x["intrebari"], x["corecte"], x["corecte_f1"], x["lungi_corecte"], x["corecte_fara_lungi"]) == (3, 2, 1, 1, 1)
+    assert x["mediana_cuvinte_elev"] == 2 and x["mediana_cuvinte_referinta"] == 2
+
+
+def test_lungimi_se_opreste_daca_cifrele_nu_ies_ca_in_fisier(monkeypatch, tmp_path):
+    p = {"fel": "text", "categorie": "e", "intrebare": "Cine a pictat Z?", "raspuns": "Ion Andreescu.",
+         "raspuns_elev": "Ion Andreescu."}
+    examen = {"experiment": 1, "raspunsuri": [p], "corecte": {"e": 1}}
+    fisier = {"experiment": 1, **{nume: examen for nume in e1.EXAMENE}}
+    (tmp_path / "examene_1_20261023_000000.json").write_text(json.dumps(fisier), encoding="utf-8")
+    monkeypatch.setattr(e1, "LUCRU", tmp_path)
+    assert e1.lungimi([1]) == 0
+    s = json.loads((tmp_path / "lungimi_s21.json").read_text(encoding="utf-8"))
+    assert s["modele"]["#1"]["s21_fara_lungi"] == 2  # (e) din S15 + tot S4; noaptea 10 are doar „e”, nu „text”
+    examen["corecte"] = {"e": 0}
+    (tmp_path / "examene_1_20261023_000000.json").write_text(json.dumps(fisier), encoding="utf-8")
+    assert e1.lungimi([1]) == 1
 
 
 def test_configurarea_s18_e_copia_s17_cu_alte_date():

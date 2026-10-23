@@ -708,7 +708,8 @@ aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să 
   varianta 2, poarta nouă cere și F1 ≥ 0,8 (sau o limită de lungime), nu doar verificatorul — vezi S21.
 
 ### S21 — Cât de „îngăduitor” e verificatorul cu răspunsurile lungi? (toate examenele, #415 și #425, doar numărare)
-- stare: in_lucru
+- stare: gata (23 oct 05:35; (i) exact ca în S17/S19; pe (e) + S4 + noaptea 10 „text”, corecte fără lungi #415 117, #425 116 →
+  scade cu 1 ≤ 2: lungile țin doar de (b2); 895 teste trec, 1 sărit)
 - tip: procesor (fără placă, fără model încărcat — doar citește examenele deja scrise)
 - fereastră: oricând — la prima verificare a cozii (după S19; nu are nevoie de placă)
 - durată maximă: 1 oră (cu tot cu testul nou)
@@ -742,4 +743,4 @@ aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să 
 - Paznicul: nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, `auto_v1`, `auto_v2`,
   `unelte/verificator_text.py`. Fără placă, fără antrenare, fără descărcări, nimic în interfață. Doar comanda nouă + testul ei.
 - aprobat de: supraveghetor, 23 oct 05:15 (categoria 2: notări pe examene existente; categoria 5: comandă nouă în `unelte/`, cu test)
-- raport: `docs/rapoarte/2026-10-23_HHMM_S21_lungimi.md`
+- raport: `docs/rapoarte/2026-10-23_0535_S21_lungimi.md`

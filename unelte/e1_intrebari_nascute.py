@@ -619,6 +619,78 @@ def analiza(experimente: list[int], linie: str, nascute_cai: list[str]) -> dict[
     return rez
 
 
+def _lung(p: dict[str, Any]) -> bool:
+    """„Lung” ca în analiza_b2: peste 2× cuvintele referinței."""
+    return len(cuvinte(p["raspuns_elev"])) > 2 * len(cuvinte(p["raspuns"]))
+
+
+def lungimi_grupuri(raspunsuri: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """S21, pe fiecare grup (categoria, sau felul la noaptea 10; fără conversația simplă): (i) corecte cu verificatorul,
+    (ii) corecte cu F1 ≥ 0,8, (iii) câte din cele corecte sunt „lungi”, (iv) corecte fără cele lungi, (v) mediana
+    cuvintelor elevului și a referinței (pe toate întrebările grupului)."""
+    from statistics import median
+
+    grupuri: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for p in raspunsuri:
+        if p["fel"] != "conversatie":
+            grupuri[p.get("categorie") or p["fel"]].append(p)
+    rez: dict[str, dict[str, Any]] = {}
+    for g, ps in grupuri.items():
+        v = [verifica(p["raspuns"], p["raspuns_elev"]) for p in ps]
+        corecte = sum(x["corect"] for x in v)
+        lungi = sum(bool(x["corect"]) and _lung(p) for x, p in zip(v, ps))
+        rez[g] = {"intrebari": len(ps), "corecte": corecte, "corecte_f1": sum(x["corect_f1"] for x in v),
+                  "lungi_corecte": lungi, "corecte_fara_lungi": corecte - lungi,
+                  "mediana_cuvinte_elev": median(len(cuvinte(p["raspuns_elev"])) for p in ps),
+                  "mediana_cuvinte_referinta": median(len(cuvinte(p["raspuns"])) for p in ps)}
+    return rez
+
+
+# Grupurile adunate în regula de citire S21: (e) din S15, tot S4, „text” din noaptea 10.
+GRUPURI_S21 = (("S15", "e"), ("S4", None), ("noaptea10", "text"))
+
+
+def lungimi(experimente: list[int]) -> int:
+    """S21: pe ultimele examene din LUCRU ale fiecărui experiment, lungimi_grupuri pe S15, S4, noaptea 10. Oprește (cod 1)
+    dacă (i) nu iese exact cifra notată în fișierul examenelor."""
+    rez: dict[str, Any] = {"creat": datetime.now().isoformat(timespec="seconds"), "modele": {}}
+    for exp in experimente:
+        cai = sorted(LUCRU.glob(f"examene_{exp}_*.json"))
+        if not cai:
+            print(f"lipsesc examenele lui #{exp} în {LUCRU}", flush=True)
+            return 1
+        r = json.loads(cai[-1].read_text(encoding="utf-8"))
+        model: dict[str, Any] = {"fisier": _relativ(cai[-1]), "examene": {}}
+        for nume in EXAMENE:
+            grupuri = lungimi_grupuri(r[nume]["raspunsuri"])
+            for g, x in grupuri.items():
+                if x["corecte"] != r[nume]["corecte"].get(g, 0):
+                    print(f"#{exp} {nume} {g}: (i) {x['corecte']} ≠ {r[nume]['corecte'].get(g, 0)} din fișier — oprit",
+                          flush=True)
+                    return 1
+            model["examene"][nume] = grupuri
+        model["s21_fara_lungi"] = sum(x["corecte_fara_lungi"] for nume, g in GRUPURI_S21
+                                      for gg, x in model["examene"][nume].items() if g is None or gg == g)
+        rez["modele"][f"#{exp}"] = model
+    LUCRU.mkdir(parents=True, exist_ok=True)
+    (LUCRU / "lungimi_s21.json").write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    nume_modele = list(rez["modele"])
+    print("examen grup | " + " | ".join(f"{m}: n (i) (ii) (iii) (iv) med_elev/med_ref" for m in nume_modele))
+    for nume in EXAMENE:
+        grupuri = sorted({g for m in nume_modele for g in rez["modele"][m]["examene"][nume]})
+        for g in grupuri:
+            celule = []
+            for m in nume_modele:
+                x = rez["modele"][m]["examene"][nume].get(g)
+                celule.append("-" if x is None else
+                              f"{x['intrebari']} {x['corecte']} {x['corecte_f1']} {x['lungi_corecte']} "
+                              f"{x['corecte_fara_lungi']} {x['mediana_cuvinte_elev']}/{x['mediana_cuvinte_referinta']}")
+            print(f"{nume} {g} | " + " | ".join(celule))
+    print("(e) + S4 + noaptea 10 „text”, corecte fără lungi: "
+          + ", ".join(f"{m} {rez['modele'][m]['s21_fara_lungi']}" for m in nume_modele), flush=True)
+    return 0
+
+
 # ---- info și noaptea -----------------------------------------------------------------------------------------------
 
 def _actualizeaza_info(bucata: dict[str, Any]) -> None:
@@ -757,6 +829,8 @@ def main(argv: list[str] | None = None) -> int:
     an.add_argument("--experimente", type=int, nargs="*", default=[ELEV, 425])
     an.add_argument("--linie", default=LINIE_S18)
     an.add_argument("--nascute", nargs="*", default=[DEJA_S18, f"{DOSAR_S18}/intrebari.jsonl"])
+    lu = sub.add_parser("lungimi", help="S21: verificator, F1 și răspunsuri lungi pe examenele deja scrise (fără model)")
+    lu.add_argument("--experimente", type=int, nargs="*", default=[ELEV, 425])
     n = sub.add_parser("noaptea")
     n.add_argument("--minute-generare", type=float, default=60)
     n.add_argument("--minute-dus-intors", type=float, default=45)
@@ -806,6 +880,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.pas == "analiza":
         analiza(args.experimente, args.linie, args.nascute)
         return 0
+    if args.pas == "lungimi":
+        return lungimi(args.experimente)
     if args.pas == "repetare":
         return repetare(args.minute_generare, args.minute_dus_intors, args.samanta)
     return noaptea(args.minute_generare, args.minute_dus_intors)
