@@ -66,6 +66,22 @@ aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să 
 întoarce). Workstation-ul rămâne pornit în Windows. Supraveghetor: la trecerile tale doar verifici că nimic nu rulează și că placa e liberă,
 scrii starea în hub („pauză”) și nu propui lucru nou pe placă; dacă executantul sau raportul de dimineață semnalează o eroare, o notezi în
 `pentru_adrian.md`. Executant: nu porni nimic. Pauza se ridică doar printr-o actualizare nouă a lui Adrian.
+**Actualizare 23 oct 10:20 (Adrian, prin centrul de comandă) — PAUZA SE RIDICĂ; S20 = VARIANTA 1:** Adrian pleacă, dar workstation-ul nu
+trebuie să stea degeaba. Decizii:
+1. **E1 se închide** cu rezultatul S17 (NECLAR, 13/50, explicat de S19/S21). S20 → `gata` cu „varianta 1, aleasă de Adrian 23 oct 10:20”.
+2. **E2 e aprobat de Adrian** (strategia `docs/rapoarte/2026-10-22_0200_strategie_nucleu_fara_llm.md`, §4 H4 și §7 E2): **3 specialiști + ruter**,
+   antrenați pe rând din #415 (Branch-Train-Merge), fiecare pe o familie de întrebări (propunere: (1) fapte/nume/ani/locuri, (2) da/nu,
+   (3) tipurile din S11), ruter simplu (primele cuvinte ale întrebării, apoi eventual un clasificator mic). Criteriile scrise ÎNAINTE, ca în §7:
+   fără regresie pe niciun specialist față de #415 pe examenele lui; suma (ruter + specialiști) ≥ monolitul #415 pe S4 + S15 + noaptea 10;
+   ruterul alege corect ≥ 90 %. Supraveghetor: scrii sarcinile (S22…) cu pre-înregistrare, câte una pe placă, ca de obicei; categoria e
+   „antrenare nouă”, aprobată acum de Adrian pentru tot E2, cu bugetul: cel mult o sarcină grea pe placă odată, nopți și zile, fără date noi
+   descărcate (doar ce există deja) și fără modificări în `kronos/`, examenul BPB, paznic sau datele de examen.
+3. **Lucru cât e Adrian plecat (câteva zile):** după E2, dacă rămâne timp: **pregătirea E3 (memoria) doar pe procesor** — indexul propriu peste
+   articolele deja descărcate și măsurarea lui; fără antrenare E3 până nu decide Adrian. Dacă ceva pică de 2 ori la rând (aceeași eroare),
+   oprești lucrul pe placă și scrii în `pentru_adrian.md`.
+4. **Fereastra pentru OS/GPU:** când se întoarce, Adrian va avea nevoie de workstation ~30–60 min (pornire de pe stick). Atunci executantul nu
+   pornește nimic nou; o sarcină în curs se poate opri doar cu checkpoint (dacă nu are, se așteaptă sfârșitul ei). Notează în fiecare raport
+   până când ține sarcina curentă de pe placă, ca Adrian să-și aleagă momentul.
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
@@ -700,7 +716,7 @@ scrii starea în hub („pauză”) și nu propui lucru nou pe placă; dacă exe
 - raport: `docs/rapoarte/2026-10-23_0303_S19_analiza_E1.md`
 
 ### S20 — Pasul următor după E1 (decizia lui Adrian)
-- stare: propus — necesită Adrian
+- stare: gata — varianta 1, aleasă de Adrian (23 oct 10:20, prin centrul de comandă): E1 se închide, se trece la E2
 - de ce: E1 s-a încheiat fără verdict clar: S17 NECLAR (13/50), S18 n-a putut strânge destule întrebări (918 din 1.032; sursa de
   articole din Wikipedia descărcată s-a terminat). Pre-înregistrarea spune: „nu se mai repetă; decizia o ia Adrian.”
 - variantele (Adrian alege una; scrise și în `plan/pentru_adrian.md`):
