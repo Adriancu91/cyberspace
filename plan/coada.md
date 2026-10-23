@@ -779,7 +779,7 @@ scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
 - raport: `docs/rapoarte/2026-10-23_0535_S21_lungimi.md`
 
 ### S22 — E2, pregătirea (procesor): 3 familii de întrebări, ruterul, pre-înregistrarea
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 3 ore
