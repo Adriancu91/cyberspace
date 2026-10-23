@@ -101,6 +101,12 @@ perfect); (C) 90,0 % ✓; validările toate în praguri (fapte noi F3 = 65, exac
 tot ce nu e familia lor, iar câștigul pe da/nu (+1) nu acoperă pierderea pe F1 (−3). Placa a stat sub 6.455 MB și 64 °C. **E2 se închide**; nu pun
 altă variantă de specialiști fără Adrian. Cum a decis Adrian (10:20, punctul 3), am scris **S24 = pregătirea E3** (`aprobat`, doar procesor, fără
 placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu antrenare și orice altă rulare pe placă așteaptă „da”-ul lui Adrian.
+**Actualizare 23 oct 23:15 (supraveghetor) — S24 verificat; S25 = căutarea mai bună (doar procesor):** S24 `gata`, verificat cu cifrele
+din raport adunate din nou: k = 1: 33+19+8+12+31 = **103/160** ✓; k = 5: 41+24+10+14+40 = **129/160 = 80,6 %** ✓; k = 20: 47+27+12+14+48 = **148** ✓;
+articolul la 5: 42+26+10+13+44 = **135 = 84,4 %** ✓. Așteptările au fost urcate înainte de examene (4a9fb68, 20:59; examenele ~21:05) ✓;
+5 variante încercate doar pe validare (≤ 6) ✓; 904 teste trec. Față de pragul propus de executant (≥ 80 % și ≥ 85 %, nedecis de Adrian):
+(i) trece la limită, (ii) **cade cu o întrebare**. Am pus **S25** (`aprobat`, doar procesor, ~2 ore): îmbunătățirea căutării, pasul 1 din
+propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punctul 3), fără antrenare. **Placa rămâne liberă**; E3 cu antrenare așteaptă „da”-ul lui Adrian.
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
@@ -915,3 +921,44 @@ placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu
 - aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 3: pregătirea E3 doar pe procesor) + supraveghetor, 23 oct 20:15 (categoriile 2, 3 și 5)
 - raport: docs/rapoarte/2026-10-23_2100_S24_E3_index.md (în primele 5 la 80,6 %, articolul la 84,4 %; 17/160 cu răspunsul nepotrivit
   de verificator nici în textul examenului → cifrele sunt o limită de jos)
+- verificat de supraveghetor, 23 oct 23:15: sumele pe examene se potrivesc (103 / 129 / 148 / 135 din 160); așteptări urcate înainte de
+  rularea unică ✓. Rezultat: indexul găsește răspunsul în primele 5 la 4 din 5 întrebări, fără model, în ~65 ms; pragul E3 îl decide Adrian.
+
+### S25 — E3, pregătirea (procesor): căutarea mai bună, ajustată doar pe validare, apoi o singură rulare pe examene
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
+- fereastră: oricând — la prima verificare a cozii
+- durată maximă: 3 ore; memorie RAM cel mult ~40 GB
+- de ce: pasul 1 din propunerea ta din raportul S24 („întâi, fără antrenare”). Adrian (23 oct 10:20, punctul 3) a aprobat pregătirea E3 doar
+  pe procesor. Azi indexul are 80,6 % (i, k = 5) și 84,4 % (ii); vrem să știm cât urcă doar din căutare, ca Adrian să decidă E3 pe cifre bune.
+- ATENȚIE la curățenia măsurării: ideile (a)–(c) au venit din greșelile de pe examene, deci examenele nu mai sunt complet „neatinse”. De aceea:
+  regulile se scriu GENERAL (nu după exemplele văzute), se ajustează doar pe validare, iar examenele se rulează o singură dată. Raportezi
+  cinstit că ideile au venit din greșelile S24.
+- ce faci (în `unelte/e3_memorie.py`, comenzi/variante noi; testele noi în `teste/test_e3_memorie.py`; indexul existent `lucru/e3/index.sqlite` se refolosește, nu se reconstruiește decât dacă (c) o cere — atunci într-un fișier nou, `lucru/e3/index_s25.sqlite`, cel vechi rămâne):
+  1. **(a) Potrivirea „număr gol”, doar în unealta E3:** o bucată e bună și dacă răspunsul de referință e un an/număr cu cuvinte de umplutură
+     („În 1966.”, „Din 2019.”, „238.136 de locuitori.”) și bucata conține acel număr ca cuvânt întreg. Regula: scoți din referință cuvintele de
+     legătură (în, din, de, la, anul…) și, dacă rămâne doar un număr, cauți numărul. `unelte/verificator_text.py` NU se schimbă. Raportezi
+     **toate cifrele în ambele feluri**: cu potrivirea S16 (comparabilă cu S24) și cu potrivirea nouă, una lângă alta.
+  2. **(b) Numele proprii cântăresc mai mult:** cuvintele cu majusculă care nu sunt la începutul întrebării (și perechile lor) primesc o pondere
+     mai mare în interogare (de ex. obligatorii sau repetate). **(c) Paginile-listă și de dezambiguizare coborâte sau scoase**, după reguli
+     generale scrise în raport înainte de măsurare (titlu/început de articol: „Listă de”, „poate să însemne”, „se poate referi la”, „(dezambiguizare)”,
+     pagini cu proporție mare de rânduri scurte — alegi reguli simple și le scrii), nu după articolele văzute în greșelile S24.
+  3. **Ajustarea doar pe validare:** aceleași 500 de întrebări din S24 (sămânța 1024, comparabile) **plus** 500 noi (sămânța 2048, fără cele
+     din primul eșantion, tot din `text_v3/antrenare.jsonl`, aceleași filtre) ca să vezi dacă câștigul ține pe întrebări neatinse. Cel mult
+     6 variante noi (combinații de b și c, pornind de la varianta S24 „fără cuvinte + perechi”). Alegi una singură, după k = 5 pe ambele
+     eșantioane de validare luate împreună (la egalitate k = 1), cu potrivirea S16.
+  4. **Așteptările tale în cifre** pentru examene (i k = 1/5/20 și ii, în ambele potriviri), scrise în raport și **urcate (commit + push)
+     ÎNAINTE** de rularea pe examene.
+  5. **Examenele, o singură rulare** cu varianta aleasă, aceleași 160 de întrebări ca la S24, aceleași tabele (pe examen și total, timpul
+     median/maxim), în ambele potriviri, alături de cifrele S24. Plus: câte din cele 31 de greșeli S24 la k = 5 s-au reparat și câte întrebări
+     care erau bune la S24 s-au stricat (lista lor, cu întrebarea și locul vechi/nou).
+  6. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S25_E3_cautare.md`, cu tot ce e mai sus și cu
+     propunerea ta actualizată pentru E3 cu antrenare (doar propunere; nu o pornești).
+- Pragul de citire (supraveghetorul, scris acum, înainte): câștig real = varianta aleasă urcă (i) k = 5 cu **≥ 3 puncte** pe validarea nouă
+  (sămânța 2048) față de varianta S24, cu potrivirea S16. Sub 3 puncte pe validarea nouă: câștigul e în zgomot, chiar dacă pe examene urcă.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen (doar citire), `text_v3`, `e2/`, `unelte/verificator_text.py`.
+  Nimic pe placă, nimic descărcat, nimic instalat, nimic în interfață, nimic din `lucru/e3/` în Git.
+- Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport și se urcă înainte de pasul 5 (pasul 4)
+- aprobat de: supraveghetor, 23 oct 23:15 (categoriile 2 și 5; pregătirea E3 doar pe procesor, aprobată de Adrian 23 oct 10:20, punctul 3)
+- raport: —

@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 23:15 — Memoria (S24): indexul găsește răspunsul în 4 din 5 cazuri, fără niciun model; acum îmbunătățim căutarea (doar procesor)
+
+- **S24 gata și verificat (doar procesor, 20:34–21:05, fără erori):** am făcut un „index” peste toată Wikipedia în română (277.357 de articole).
+  La 160 de întrebări de examen, bucata de text cu răspunsul e în primele 5 găsite la **80,6 %** și în primele 20 la **92,5 %**, în ~65 ms
+  pe întrebare. Articolul corect e în primele 5 la **84,4 %**. Am adunat cifrele din nou: se potrivesc. Executantul și-a scris așteptările
+  înainte de rulare (corect). Cifrele sunt chiar puțin mai mici decât realitatea: la 17 întrebări „În 1966.” nu se potrivește cu „1966”.
+- Pragul propus de executant pentru E3 (≥ 80 % și ≥ 85 %): primul trece la limită, al doilea **cade cu o singură întrebare**.
+- **Pus în coadă: S25** (doar procesor, ~2–3 ore, fără antrenare): căutare mai bună (numele proprii contează mai mult, paginile-listă coborâte),
+  ajustată doar pe întrebări de antrenament, apoi o singură rulare pe examene. **Placa rămâne liberă la noapte.**
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Când te întorci: „da”/„nu” pentru E3 cu antrenare pe placă și pragul (cifrele S25 vin probabil la noapte).
+
 ## 23 octombrie 2026, 20:15 — E2 (specialiști + ruter): INFIRMAT, verificat; acum pregătirea memoriei (E3), doar pe procesor
 
 - **S23 gata (11:00–17:31, fără erori, placa sub 6.455 MB și 64 °C):** cei 3 specialiști împreună cu ruterul au **137 din 210**, sub #415 (**144**).
@@ -210,15 +222,3 @@
   ziua, pe procesor), ca data viitoare să nu mai fie nevoie de tine la calculator. S8 (`module.toml`) rămâne tot mâine ziua.
 - Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
-
-## 20 octombrie 2026, 20:45 — noaptea 11 s-a împiedicat încă o dată; o deblochez fără tine
-
-- Executantul a pregătit corect rularea reparată (linia `w2_conv_text_v2`, din #401, aceleași praguri), dar unealta care
-  pornește sarcinile a refuzat: a găsit fișierul de evidență de la prima încercare (19:29) și n-a vrut s-o pornească „a doua
-  oară”. Executantul n-a avut voie să mute fișierul în rularea automată, așa că s-a oprit corect. Nimic stricat.
-- **Am repus S7 pe `aprobat`, cu un pas de reparație înainte** (în granițele mele: „reparații de scripturi”): unealta primește
-  opțiunea `--din-nou`, care pune deoparte (nu șterge) fișierul vechi, cu teste. Apoi pornește noaptea 11 (~4 ore).
-  Dacă nu reușește până la 02:30, noaptea rămâne pe mâine și îți scriu la 08:15.
-- S8 (formatul comun pentru module) rămâne mâine ziua. În hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic. (Doar dacă ești la calculator și vrei să grăbești: mută `lucru\cascada\S7.json` și `S7.log`
-  în `S7_prima_1929.*` — nu e necesar.)
