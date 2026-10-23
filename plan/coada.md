@@ -925,7 +925,7 @@ propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punct
   rularea unică ✓. Rezultat: indexul găsește răspunsul în primele 5 la 4 din 5 întrebări, fără model, în ~65 ms; pragul E3 îl decide Adrian.
 
 ### S25 — E3, pregătirea (procesor): căutarea mai bună, ajustată doar pe validare, apoi o singură rulare pe examene
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 3 ore; memorie RAM cel mult ~40 GB
