@@ -121,3 +121,73 @@ def test_index_adauga_si_masoara(tmp_path):
     assert ex["pe_examen"]["noaptea10_text"]["intrebari"] == 1
     with pytest.raises(SystemExit):
         e3.cmd_examene(lucru, examene)  # o singură rulare
+
+    # S25: paginile-listă, validarea pe două eșantioane, rularea unică pe examene
+    liste = e3.cmd_liste(_wikipedia(tmp_path), lucru)
+    assert liste["articole"] == 4 and liste["fraze_lista"] == [] and liste["randuri_scurte"] == []
+    val = e3.cmd_validare_s25(lucru, v3)
+    assert val["intrebari"] == {"s1024": 2, "s2048": 0} and val["comune_intre_esantioane"] == 0
+    assert val["aleasa"] in e3.VARIANTE_S25 and val["varianta_s24_reprodusa_pe_1024"]
+    assert set(val["variante"]) == {e3.VARIANTA_S24, *e3.VARIANTE_S25}
+    ex = e3.cmd_examene_s25(lucru, examene)
+    assert ex["intrebari"] == 4 and ex["varianta_s24_reprodusa"]
+    assert ex["rulari"]["s24"]["s16"]["total"]["i_cautare"]["k5"]["bune"] == 3
+    # „În Elveția.” rămâne nepotrivit și cu numărul gol (nu e număr): aceleași cifre în ambele potriviri
+    assert ex["rulari"]["s24"]["numar"]["total"]["i_cautare"]["k5"]["bune"] == 3
+    assert ex["schimbari_fata_de_s24"]["s16"]["greseli_s24_la_5"] == 1
+    with pytest.raises(SystemExit):
+        e3.cmd_examene_s25(lucru, examene)  # o singură rulare
+
+
+def test_numar_gol_si_potrivirea_noua():
+    assert e3.numar_gol("În 1966.") == "1966"
+    assert e3.numar_gol("Din 2019.") == "2019"
+    assert e3.numar_gol("238.136 de locuitori.") == "238.136"
+    assert e3.numar_gol("În Elveția.") is None
+    assert e3.numar_gol("În sezonul 2019–2020.") is None  # două numere și un cuvânt care nu e de umplutură
+    assert e3.contine_numar("1966", "Cindy Crawford (n. 20 februarie 1966) este un fotomodel.")
+    assert not e3.contine_numar("1966", "În 19661 sau 1.966 sau 21966.")
+    assert e3.contine_numar("238.136", "Are 238 136 de locuitori.")
+    assert not e3.contine_numar("238.136", "Are 238.1365 de locuitori.")
+    text = "Specia a fost descrisă de Fitzsimons 1930."
+    assert not e3.bun("În 1930.", text) and e3.bun("În 1930.", text, "numar")  # S16 nu, numărul gol da
+    assert e3.bun("Fitzsimons.", text) and e3.bun("Fitzsimons.", text, "numar")
+
+
+def test_nume_proprii_si_interogarile_s25():
+    assert e3.nume_proprii("Ce populație are Comitatul Washington?") == (["comitatul", "washington"],
+                                                                         ["comitatul washington"])
+    nume, perechi = e3.nume_proprii("În ce an s-a născut Cynthia Ann „Cindy” Crawford?")
+    assert nume == ["cynthia", "ann", "cindy", "crawford"] and "ann cindy" in perechi
+    assert e3.nume_proprii("Cine a regizat filmul?") == ([], [])  # primul cuvânt nu e nume
+    baza = e3.interogare("Cine a regizat Trick?", e3.VARIANTA_S24)
+    assert baza == '"regizat" OR "trick" OR "regizat trick"'
+    assert e3.interogare("Cine a regizat Trick?", "nume_repetate") == baza + ' OR "trick" OR "trick"'
+    assert e3.interogare("Cine a regizat Trick?", "nume_obligatorii_liste") == f'"trick" AND ({baza})'
+    assert e3.interogare("Cine a regizat filmul?", "nume_obligatorii") == \
+        e3.interogare("Cine a regizat filmul?", e3.VARIANTA_S24)
+    assert e3.interogare("Cine a regizat Trick?", "liste") == baza
+    with pytest.raises(ValueError):
+        e3.interogare("Cine?", "nume_ciudate")
+
+
+def test_paginile_lista_coborate(tmp_path):
+    assert e3.fel_lista("Bilca se poate referi la:\n Bilca, Suceava\n Bilca, Cernăuți") == (True, False)
+    assert e3.fel_lista("Listă de râuri din România\nRâul A") == (True, False)
+    assert e3.fel_lista("Orașe\n" + "\n".join(f"Oraș {i}" for i in range(25))) == (False, True)
+    assert e3.fel_lista(ARTICOLE[1]) == (False, False)
+    wiki = tmp_path / "wiki.txt"
+    wiki.write_text("<|endoftext|>".join(["Bilca se poate referi la:\nBilca, sat în Suceava.\nBilca, sat în Ucraina.",
+                                          ARTICOLE[0]]), encoding="utf-8")
+    lucru = tmp_path / "e3"
+    e3.cmd_index(wiki, lucru, _examene(tmp_path))
+    assert e3.cmd_liste(wiki, lucru)["fraze_lista"] == ["w0"]
+    liste = e3.incarca_liste(lucru)
+    con = e3.deschide(lucru / "index.sqlite")
+    simplu = e3.cauta(con, "Unde se află Bilca?", e3.VARIANTA_S24)
+    coborat = e3.cauta(con, "Unde se află Bilca?", "liste", liste=liste)
+    assert simplu[0]["articol"] == "w0" and coborat[0]["articol"] == "w1"
+    assert sorted(g["rowid"] for g in simplu) == sorted(g["rowid"] for g in coborat)  # aceleași bucăți, altă ordine
+    with pytest.raises(ValueError):
+        e3.cauta(con, "Unde se află Bilca?", "liste")  # fără liste_s25.json
+    con.close()
