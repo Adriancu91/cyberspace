@@ -33,6 +33,11 @@ ajustate doar pe validare, iar examenele se rulează o singură dată):
     python -X utf8 unelte/e3_memorie.py masoara --set validare --runda s25   # 2 × 500 de întrebări, ≤ 6 variante noi
     python -X utf8 unelte/e3_memorie.py masoara --set examene --runda s25    # O SINGURĂ DATĂ
 
+S26 (24 octombrie 2026, examenul nou neatins): 100 de întrebări din text_v3 (sămânța 4096), fără nicio întrebare, text,
+grup sau articol comun cu eșantioanele 1024/2048 și cu examenele; fără nicio schimbare de reguli; k = 3 în plus.
+    python -X utf8 unelte/e3_memorie.py examen-nou                   # lucru/e3/examen_nou_4096.json (+ _info, sha256)
+    python -X utf8 unelte/e3_memorie.py masoara --set examen_nou     # O SINGURĂ DATĂ, după ce așteptările sunt urcate
+
 Ies doar în lucru/e3/ (nu în Git: Wikipedia e CC BY-SA). Nu atinge kronos/, examenul BPB, paznicul, datele de examen
 (doar citite), text_v3, e2/ sau unelte/verificator_text.py.
 """
@@ -40,6 +45,7 @@ Ies doar în lucru/e3/ (nu în Git: Wikipedia e CC BY-SA). Nu atinge kronos/, ex
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 import re
@@ -95,6 +101,11 @@ _FRAZE_LISTA = re.compile(r"poate să însemne|se poate referi la|se mai poate r
                           re.IGNORECASE)
 RANDURI_MINIM, RANDURI_SCURTE, RAND_SCURT = 20, 0.9, 50
 _NUMAR = re.compile(r"\d+(?:[.,  ]\d{3})*(?:,\d+)?")
+
+# S26
+SAMANTA_EXAMEN_NOU = 4096
+CATE_EXAMEN_NOU = 100
+K_S26 = (1, 3, 5, 20)
 
 
 def _scrie_json(cale: Path, obiect: Any) -> None:
@@ -218,7 +229,8 @@ def candidate_validare(cale: Path) -> list[dict]:
             continue
         p = json.loads(r)
         if p.get("fel") == "text" and _fel_special(p["raspuns"]) is None and verifica(p["raspuns"], p["text"])["corect"]:
-            bune.append({"intrebare": p["intrebare"], "raspuns": p["raspuns"], "text": p["text"], "tip": p.get("tip")})
+            bune.append({"intrebare": p["intrebare"], "raspuns": p["raspuns"], "text": p["text"], "tip": p.get("tip"),
+                         "grup": p.get("grup")})
     return bune
 
 
@@ -359,7 +371,8 @@ def primul_bun(gasite: list[dict[str, Any]], raspuns: str, potrivire: str = "s16
     return None
 
 
-def procente(locuri: list[int | None], k: Iterable[int] = K) -> dict[str, Any]:
+def procente(locuri: list[int | None], k: Iterable[int] | None = None) -> dict[str, Any]:
+    k = K if k is None else k
     n = len(locuri)
     return {f"k{x}": {"bune": sum(1 for l in locuri if l is not None and l <= x),
                       "procent": round(100 * sum(1 for l in locuri if l is not None and l <= x) / n, 1) if n else 0.0}
@@ -486,8 +499,8 @@ def _marcheaza_articol(rez: list[dict[str, Any]], lucru: Path) -> None:
         r["raspuns_in_textul_examenului"] = verifica(r["raspuns"], r["text"])["corect"]
 
 
-def _rezumat(parte: list[dict[str, Any]], loc: str = "loc") -> dict[str, Any]:
-    return {"intrebari": len(parte), "i_cautare": procente([r[loc] for r in parte]),
+def _rezumat(parte: list[dict[str, Any]], loc: str = "loc", k: Iterable[int] | None = None) -> dict[str, Any]:
+    return {"intrebari": len(parte), "i_cautare": procente([r[loc] for r in parte], k),
             "ii_articol_la_5": {"bune": sum(r["articol_gasit_la_5"] for r in parte),
                                 "procent": round(100 * sum(r["articol_gasit_la_5"] for r in parte) / len(parte), 1)
                                 if parte else 0.0}}
@@ -657,6 +670,140 @@ def cmd_examene_s25(lucru: Path, examene: dict[str, str] = EXAMENE) -> dict[str,
     return info
 
 
+# ---------------------------------------------------------------- S26
+
+def articole_text(con: sqlite3.Connection, text: str) -> list[str]:
+    """Articolele din index cu o bucată care conține începutul textului (primele 40 de caractere, ca la
+    „articole_probabile” din S24); căutate cu fraza exactă a cuvintelor întregi din acest început."""
+    tot = " ".join(curata(text).split())
+    prefix = tot[:PREFIX_POTRIVIRE]
+    cuv = cuvinte(prefix)
+    if len(tot) > PREFIX_POTRIVIRE:
+        cuv = cuv[:-1]  # ultimul cuvânt poate fi tăiat
+    if not cuv:
+        return []
+    randuri = con.execute("SELECT text, articol FROM bucati WHERE bucati MATCH ? LIMIT 500",
+                          (_ghilimele(" ".join(cuv)),)).fetchall()
+    return sorted({a for t, a in randuri if prefix in t})
+
+
+def _articole_examen(lucru: Path) -> set[str]:
+    rez: set[str] = set()
+    for t in json.loads((lucru / "texte_examen.json").read_text(encoding="utf-8")):
+        rez |= {t["id"], *t["articole_probabile"], *([t["in_wikipedia"]] if t["in_wikipedia"] else [])}
+    return rez
+
+
+def cmd_examen_nou(lucru: Path, text_v3: Path, examene: dict[str, str] = EXAMENE,
+                   cate: int = CATE_EXAMEN_NOU) -> dict[str, Any]:
+    """Pasul 1 din S26: `cate` întrebări din text_v3 (sămânța 4096, filtrele validării), fără nicio întrebare, niciun
+    text, niciun grup și niciun articol comun cu eșantioanele 1024 și 2048 și cu examenele. Listă fixă; nu măsoară nimic."""
+    cale = lucru / "examen_nou_4096.json"
+    if cale.exists():
+        raise SystemExit("examenul nou e deja ales (listă fixă, nu se mai alege)")
+    bune = candidate_validare(text_v3)
+    vechi, noi, _ = intrebari_validare_s25(text_v3)
+    folosite = vechi + noi + intrebari_examen(examene)
+    intrebari_luate = {normalizeaza(q["intrebare"]) for q in folosite}
+    texte_luate = {normalizeaza(q["text"]) for q in folosite}
+    grupuri_luate = {q["grup"] for q in vechi + noi if q.get("grup")}
+    con = deschide(lucru / "index.sqlite")
+    articole_luate = _articole_examen(lucru)
+    for q in vechi + noi:
+        articole_luate |= set(articole_text(con, q["text"]))
+    rest = [q for q in bune if normalizeaza(q["intrebare"]) not in intrebari_luate
+            and normalizeaza(q["text"]) not in texte_luate and q.get("grup") not in grupuri_luate]
+    alese: list[dict[str, Any]] = []
+    vazute: set[str] = set()
+    respinse_articol = 0
+    for q in random.Random(SAMANTA_EXAMEN_NOU).sample(rest, len(rest)):
+        if len(alese) >= cate:
+            break
+        if normalizeaza(q["intrebare"]) in vazute:
+            continue
+        art = articole_text(con, q["text"])
+        if set(art) & articole_luate:
+            respinse_articol += 1
+            continue
+        vazute.add(normalizeaza(q["intrebare"]))
+        alese.append({**q, "articole_corecte": art})
+    con.close()
+    _scrie_json(cale, alese)
+    info = {"intrebari": len(alese), "samanta": SAMANTA_EXAMEN_NOU, "candidate_in_text_v3": len(bune),
+            "candidate_dupa_excluderi": len(rest), "respinse_pentru_articol_comun": respinse_articol,
+            "grupuri_distincte": len({q["grup"] for q in alese}),
+            "texte_distincte": len({normalizeaza(q["text"]) for q in alese}),
+            "articole_wikipedia_distincte": len({a for q in alese for a in q["articole_corecte"]}),
+            "fara_articol_gasit": sum(1 for q in alese if not q["articole_corecte"]),
+            "tipuri": dict(Counter(q["tip"] for q in alese).most_common()),
+            "articole_excluse": len(articole_luate), "fisier": _relativ(cale),
+            "sha256": hashlib.sha256(cale.read_bytes()).hexdigest(),
+            "regula": "nu se folosesc la nicio ajustare și nicio antrenare (S27 le scoate, cu tot cu articolele lor)",
+            "scris": datetime.now().isoformat(timespec="seconds")}
+    _scrie_json(lucru / "examen_nou_4096_info.json", info)
+    return info
+
+
+def _pe_tip(rez: list[dict[str, Any]], loc: str) -> dict[str, Any]:
+    return {t: procente([r[loc] for r in rez if r["tip"] == t], K_S26)
+            for t, _ in Counter(r["tip"] for r in rez).most_common()}
+
+
+def cmd_examen_nou_masoara(lucru: Path, text_v3: Path) -> dict[str, Any]:
+    """Pasul 4 din S26, O SINGURĂ rulare: varianta S24 și aleasa S25 pe cele 100 noi (k = 1/3/5/20, ambele potriviri,
+    (ii) articolul la 5); plus k = 3 pentru aleasă pe cele 160 de examene (din examene_s25.json, doar numărare) și pe
+    validarea 2048 (aleasa rulată din nou, cu verificarea că k = 1/5/20 ies la fel ca în S25)."""
+    iesire = lucru / "examen_nou_s26.json"
+    if iesire.exists():
+        raise SystemExit("examenul nou s-a măsurat deja (o singură rulare)")
+    cale = lucru / "examen_nou_4096.json"
+    sha = hashlib.sha256(cale.read_bytes()).hexdigest()
+    if sha != json.loads((lucru / "examen_nou_4096_info.json").read_text(encoding="utf-8"))["sha256"]:
+        raise SystemExit("lista examenului nou nu mai are amprenta de la alegere")
+    intrebari = json.loads(cale.read_text(encoding="utf-8"))
+    val25 = json.loads((lucru / "validare_s25.json").read_text(encoding="utf-8"))
+    aleasa = val25["aleasa"]
+    liste = incarca_liste(lucru)
+    potriviri = (("s16", "loc"), ("numar", "loc_numar"))
+    con = deschide(lucru / "index.sqlite")
+    rulari = {"s24": masoara_intrebari(con, intrebari, VARIANTA_S24, liste),
+              "aleasa": masoara_intrebari(con, intrebari, aleasa, liste)}
+    _, noi, _ = intrebari_validare_s25(text_v3)
+    rez2048 = masoara_intrebari(con, noi, aleasa, liste)
+    con.close()
+    for rez in rulari.values():
+        for r in rez:
+            r["articol_gasit_la_5"] = any(g["articol"] in set(r["articole_corecte"]) for g in r["gasite"][:5])
+            r["raspuns_in_textul_examenului"] = verifica(r["raspuns"], r["text"])["corect"]
+    pe_rulari = {}
+    for nume, rez in rulari.items():
+        cu_articol = [r for r in rez if r["articole_corecte"]]
+        pe_rulari[nume] = {pot: {"total": _rezumat(rez, loc, K_S26),
+                                 "cu_articol_gasit": _rezumat(cu_articol, loc, K_S26),
+                                 "pe_tip": _pe_tip(rez, loc)} for pot, loc in potriviri}
+        pe_rulari[nume].update(_timpi(rez))
+    ex25 = json.loads((lucru / "examene_s25.json").read_text(encoding="utf-8"))["toate"]["aleasa"]
+    vechi160 = {pot: procente([r[loc] for r in ex25], K_S26) for pot, loc in potriviri}
+    v2048 = {pot: procente([r[loc] for r in rez2048], K_S26) for pot, loc in potriviri}
+    s25_2048 = val25["variante"][aleasa]["s2048"]
+    reprodus = all(_bune(v2048[pot], k) == _bune(s25_2048[pot], k) for pot, _ in potriviri for k in K)
+    oficial = pe_rulari["aleasa"]["s16"]["total"]
+    diferenta = round(vechi160["s16"]["k5"]["procent"] - oficial["i_cautare"]["k5"]["procent"], 1)
+    info = {"aleasa": aleasa, "intrebari": len(intrebari), "sha256": sha,
+            "raspuns_in_textul_examenului": sum(r["raspuns_in_textul_examenului"] for r in rulari["aleasa"]),
+            "rulari": pe_rulari, "k3_examene_160_aleasa": vechi160, "k3_validare_2048_aleasa": v2048,
+            "validare_2048_reprodusa_k1_5_20": reprodus,
+            "cifra_oficiala": {"i_k5": oficial["i_cautare"]["k5"], "ii_articol_la_5": oficial["ii_articol_la_5"]},
+            "plafon_e3_k3": oficial["i_cautare"]["k3"],
+            "puncte_sub_cele_160_la_k5": diferenta, "cele_160_umflate": diferenta >= 5,
+            "toate": {n: [_fara_gasite(r) for r in rez] for n, rez in rulari.items()},
+            "primele_3_aleasa": [{"intrebare": r["intrebare"], "raspuns": r["raspuns"], "loc": r["loc"],
+                                  "primele_3": [g["text"][:200] for g in r["gasite"][:3]]} for r in rulari["aleasa"]],
+            "scris": datetime.now().isoformat(timespec="seconds")}
+    _scrie_json(iesire, info)
+    return info
+
+
 def cmd_lungimi(wikipedia: Path, lucru: Path, tokenizer: Path, examene: dict[str, str] = EXAMENE) -> dict[str, Any]:
     from module.tokenizer_bpe import TokenizerBPE
     tok = TokenizerBPE.incarca(tokenizer)
@@ -696,10 +843,11 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("index")
     sub.add_parser("adauga")
     m = sub.add_parser("masoara")
-    m.add_argument("--set", choices=("validare", "examene"), required=True)
+    m.add_argument("--set", choices=("validare", "examene", "examen_nou"), required=True)
     m.add_argument("--runda", choices=("s24", "s25"), default="s24")
     sub.add_parser("lungimi")
     sub.add_parser("liste")
+    sub.add_parser("examen-nou")
     args = parser.parse_args(argv)
     lucru, wikipedia = RADACINA / args.lucru, RADACINA / args.wikipedia
     if args.pas == "index":
@@ -710,6 +858,11 @@ def main(argv: list[str] | None = None) -> int:
         info = cmd_lungimi(wikipedia, lucru, RADACINA / TOKENIZER)
     elif args.pas == "liste":
         info = {k: v for k, v in cmd_liste(wikipedia, lucru).items() if k not in ("fraze_lista", "randuri_scurte")}
+    elif args.pas == "examen-nou":
+        info = cmd_examen_nou(lucru, RADACINA / TEXT_V3)
+    elif args.set == "examen_nou":
+        info = cmd_examen_nou_masoara(lucru, RADACINA / TEXT_V3)
+        info = {k: v for k, v in info.items() if k not in ("toate", "primele_3_aleasa")}
     elif args.runda == "s25" and args.set == "validare":
         info = cmd_validare_s25(lucru, RADACINA / TEXT_V3)
         info = {**info, "variante": {v: {n: x[n]["s16"] for n in ("s1024", "s2048")} for v, x in info["variante"].items()}}

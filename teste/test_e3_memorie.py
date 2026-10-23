@@ -139,6 +139,60 @@ def test_index_adauga_si_masoara(tmp_path):
         e3.cmd_examene_s25(lucru, examene)  # o singură rulare
 
 
+def test_examenul_nou_s26(tmp_path, monkeypatch):
+    bistrita = "Râul Bistrița este un râu din România. Izvorăște din Munții Rodnei."
+    turda = "Turda este un municipiu în județul Cluj, România. Are o salină veche."
+    wiki = tmp_path / "wiki.txt"
+    wiki.write_text("<|endoftext|>".join(ARTICOLE + [bistrita, turda]), encoding="utf-8")
+    lucru = tmp_path / "e3"
+    examene = _examene(tmp_path)
+    e3.cmd_index(wiki, lucru, examene)
+    e3.cmd_adauga(lucru)
+    v3 = tmp_path / "v3.jsonl"
+    v3.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in [
+        {"fel": "text", "grup": "g0", "text": ARTICOLE[0], "intrebare": "În ce raion se află Bilca?",
+         "raspuns": "În raionul Hliboca."},
+        {"fel": "text", "grup": "g3", "text": ARTICOLE[3], "intrebare": "Peste ce râu e Podul Pupin?",
+         "raspuns": "Peste Dunăre."},
+        {"fel": "text", "grup": "g9", "text": "Podul Pupin este un pod peste Dunăre, la Belgrad, în Serbia.",
+         "intrebare": "În ce oraș e Podul Pupin?", "raspuns": "La Belgrad."},  # alt grup, același articol (w3)
+        {"fel": "text", "grup": "g0", "text": ARTICOLE[0], "intrebare": "Ce are Bilca?",
+         "raspuns": "O biserică veche din lemn."},  # același grup ca o întrebare de validare
+        {"fel": "text", "grup": "g7", "text": "Peştera Mondmilchloch este situată pe Muntele Pilat din Elveția.",
+         "intrebare": "Pe ce munte e Peștera Mondmilchloch?", "raspuns": "Pe Muntele Pilat."},  # textul unui examen
+        {"fel": "text", "grup": "g4", "text": bistrita, "intrebare": "Din ce munți izvorăște râul Bistrița?",
+         "raspuns": "Din Munții Rodnei."},
+        {"fel": "text", "grup": "g5", "text": turda, "intrebare": "În ce județ e Turda?", "raspuns": "În județul Cluj."},
+    ]), encoding="utf-8")
+    bune = e3.candidate_validare(v3)
+    monkeypatch.setattr(e3, "intrebari_validare_s25", lambda cale, cate=500: ([bune[0]], [bune[1]], len(bune)))
+    con = e3.deschide(lucru / "index.sqlite")
+    assert e3.articole_text(con, bune[2]["text"]) == ["w3"]
+    con.close()
+
+    ales = e3.cmd_examen_nou(lucru, v3, examene, cate=10)
+    assert ales["intrebari"] == 2 and ales["respinse_pentru_articol_comun"] == 1
+    assert ales["articole_wikipedia_distincte"] == 2 and ales["fara_articol_gasit"] == 0
+    lista = json.loads((lucru / "examen_nou_4096.json").read_text(encoding="utf-8"))
+    assert sorted(q["grup"] for q in lista) == ["g4", "g5"]
+    assert sorted(a for q in lista for a in q["articole_corecte"]) == ["w4", "w5"]
+    with pytest.raises(SystemExit):
+        e3.cmd_examen_nou(lucru, v3, examene)  # listă fixă
+
+    e3.cmd_liste(wiki, lucru)
+    e3.cmd_validare(lucru, v3)
+    e3.cmd_validare_s25(lucru, v3)
+    e3.cmd_examene(lucru, examene)
+    e3.cmd_examene_s25(lucru, examene)
+    rez = e3.cmd_examen_nou_masoara(lucru, v3)
+    assert rez["intrebari"] == 2 and rez["validare_2048_reprodusa_k1_5_20"]
+    assert set(rez["rulari"]["aleasa"]["s16"]["total"]["i_cautare"]) == {"k1", "k3", "k5", "k20"}
+    assert rez["plafon_e3_k3"]["bune"] == 2 and rez["cifra_oficiala"]["ii_articol_la_5"]["bune"] == 2
+    assert set(rez["k3_examene_160_aleasa"]["s16"]) == {"k1", "k3", "k5", "k20"}
+    with pytest.raises(SystemExit):
+        e3.cmd_examen_nou_masoara(lucru, v3)  # o singură rulare
+
+
 def test_numar_gol_si_potrivirea_noua():
     assert e3.numar_gol("În 1966.") == "1966"
     assert e3.numar_gol("Din 2019.") == "2019"
