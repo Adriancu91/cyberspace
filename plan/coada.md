@@ -977,7 +977,8 @@ Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am p
   umflat, ideile au venit din greșelile de pe examene; 907 teste trec, 1 sărit)
 
 ### S26 — E3, examenul nou neatins (procesor): 100 de întrebări noi, o singură măsurare a căutării, plus „primele 3 bucăți”
-- stare: in_lucru
+- stare: gata (executant, 24 oct 02:45: 100 de întrebări, sha256 3501f307…f523; așteptările urcate cb7b461; o rulare: aleasa S16
+  k = 5 80 %, (ii) 84 %, k = 3 72 % (plafonul); 6,9 puncte sub cele 160 → umflate după regulă; S24 78 %; 908 teste trec, 1 sărit)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 1,5 ore; memorie RAM cel mult ~40 GB
@@ -1003,7 +1004,7 @@ Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am p
 - Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport și se urcă înainte de pasul 4 (pasul 3)
 - aprobat de: supraveghetor, 24 oct 02:15 (categoriile 2, 3 și 5; pregătirea E3 doar pe procesor, aprobată de Adrian 23 oct 10:20, punctul 3)
-- raport: —
+- raport: docs/rapoarte/2026-10-24_0232_S26_E3_examen_nou.md
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
 - stare: propus — necesită Adrian
