@@ -926,6 +926,9 @@ propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punct
 
 ### S25 — E3, pregătirea (procesor): căutarea mai bună, ajustată doar pe validare, apoi o singură rulare pe examene
 - stare: in_lucru
+- pornit: 23 oct 23:38 (executant, procesul 6676): lanțul `liste` + `masoara --set validare --runda s25`
+  (`lucru/cascada/S25_proba/s25.py`; sfârșit estimat ~23:55). Regulile și cele 6 variante urcate înainte (e2d3726); 907 teste trec, 1 sărit.
+  Examenele (o singură rulare) le rulez după ce așteptările sunt scrise și urcate. Placa nu e folosită: e liberă oricând pentru Adrian.
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 3 ore; memorie RAM cel mult ~40 GB
