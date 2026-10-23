@@ -925,7 +925,7 @@ propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punct
   rularea unică ✓. Rezultat: indexul găsește răspunsul în primele 5 la 4 din 5 întrebări, fără model, în ~65 ms; pragul E3 îl decide Adrian.
 
 ### S25 — E3, pregătirea (procesor): căutarea mai bună, ajustată doar pe validare, apoi o singură rulare pe examene
-- stare: in_lucru
+- stare: gata
 - pornit: 23 oct 23:38 (executant, procesul 6676): lanțul `liste` + `masoara --set validare --runda s25`
   (`lucru/cascada/S25_proba/s25.py`; sfârșit estimat ~23:55). Regulile și cele 6 variante urcate înainte (e2d3726); 907 teste trec, 1 sărit.
   Examenele (o singură rulare) le rulez după ce așteptările sunt scrise și urcate. Placa nu e folosită: e liberă oricând pentru Adrian.
@@ -964,4 +964,6 @@ propunerea executantului — tot pregătirea E3 pe procesor (Adrian 10:20, punct
 - Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport și se urcă înainte de pasul 5 (pasul 4)
 - aprobat de: supraveghetor, 23 oct 23:15 (categoriile 2 și 5; pregătirea E3 doar pe procesor, aprobată de Adrian 23 oct 10:20, punctul 3)
-- raport: —
+- raport: docs/rapoarte/2026-10-23_2335_S25_E3_cautare.md (aleasa `nume_obligatorii_liste`; pe validarea nouă +0,2 puncte la k = 5 →
+  NU e câștig real după prag; pe examene, o singură rulare: (i) k = 5 80,6 → 86,9 %, (ii) 84,4 → 90,6 %, 10 reparate, 0 stricate —
+  umflat, ideile au venit din greșelile de pe examene; 907 teste trec, 1 sărit)
