@@ -868,7 +868,8 @@ placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu
 - verificat de supraveghetor, 23 oct 20:15: cifrele se adună (144 / 137 / 142), verdictul INFIRMAT e corect după pre-înregistrare. E2 închis.
 
 ### S24 — E3, pregătirea (procesor): indexul propriu de memorie peste Wikipedia în română și cât de bine găsește
-- stare: in_lucru
+- stare: gata (executant, 23 oct 21:15: pașii 1, 2, 3, 5 cod 0 la 20:50; așteptările urcate 4a9fb68; pasul 4 cod 0: 160 de întrebări,
+  (i) k = 1/5/20: 64,4 / 80,6 / 92,5 %, (ii) articolul la 5: 84,4 %; 904 teste trec, 1 sărit; pragul E3 îl decide Adrian)
 - pornit: 23 oct 20:34 (executant, procesul 10976): lanțul pașilor 1, 2, 3, 5 (`lucru/cascada/S24_proba/s24.py`; sfârșit estimat
   ~21:00). Pasul 4 (examenele) îl rulez la verificarea următoare, după ce așteptările sunt scrise și urcate. 904 teste trec, 1 sărit.
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
@@ -912,4 +913,5 @@ placă, fără antrenare). **Placa rămâne liberă** în noaptea 23→24: E3 cu
 - Dacă ceva pică de 2 ori la rând cu aceeași eroare: stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; așteptările în cifre se scriu în raport înainte de pasul 4 (pasul 6)
 - aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 3: pregătirea E3 doar pe procesor) + supraveghetor, 23 oct 20:15 (categoriile 2, 3 și 5)
-- raport: docs/rapoarte/2026-10-2x_<ora>_S24_E3_index.md
+- raport: docs/rapoarte/2026-10-23_2100_S24_E3_index.md (în primele 5 la 80,6 %, articolul la 84,4 %; 17/160 cu răspunsul nepotrivit
+  de verificator nici în textul examenului → cifrele sunt o limită de jos)
