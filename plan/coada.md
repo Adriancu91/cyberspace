@@ -779,7 +779,9 @@ scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
 - raport: `docs/rapoarte/2026-10-23_0535_S21_lungimi.md`
 
 ### S22 — E2, pregătirea (procesor): 3 familii de întrebări, ruterul, pre-înregistrarea
-- stare: in_lucru
+- stare: gata (23 oct 10:36; F1 20.564 / F2 4.083 / F3 2.821; ruterul (1–5 cuvinte, prag 2, ales pe validare 93,7 %) pe examene
+  189/210 = 90,0 % → poarta trece la limită; #415 pe familii 101 + 13 + 30 = 144 ✓; pre-înregistrarea E2 urcată (val_bpb ≤ 0,4511
+  pus de mine: S17 n-avea prag); 900 teste trec, 1 sărit)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 3 ore
@@ -828,7 +830,7 @@ scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
   `unelte/verificator_text.py`. Nicio descărcare, nimic în interfață.
 - pre-înregistrare: e chiar pasul 7 (pentru S23); S22 nu antrenează
 - aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 2: tot E2) + supraveghetor, 23 oct 10:30 (categoriile 3 și 5)
-- raport: docs/rapoarte/2026-10-23_<ora>_S22_E2_pregatire.md
+- raport: docs/rapoarte/2026-10-23_1036_S22_E2_pregatire.md
 
 ### S23 — E2, rularea (placa): 3 specialiști din #415, pe rând, apoi examenele și nota sistemului
 - stare: aprobat — pornește DOAR după: S22 `gata`, pre-înregistrarea E2 urcată (commit înainte de pornire), ruterul ≥ 90 % la S22 pasul 3 (ii)

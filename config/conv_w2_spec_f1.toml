@@ -1,0 +1,78 @@
+# Noaptea 12 (S11/S12, 21 octombrie 2026, aprobat de supraveghetor): linia „w2_conv_text_v3”, din #407, cu datele
+# date/conversatie/text_v3 (unelte/conversatie_text.py --formulari --tipuri-noi: perechile din text_v2 plus tipuri noi de
+# întrebări). Pre-înregistrarea: docs/preinregistrari/2026-10-21_noaptea12_tipuri_noi.md. Față de
+# config/conv_w2_text_v2.toml, doar `nume`, `conversatie` și `cale_stare`; restul identic (45/5/50, rata 0,00005, lot 12,
+# context 512).
+#   python unelte/antrenare_lunga.py --config config/conv_w2_text_v3.toml --ore 3 --porneste-din 407
+#
+# Antetul de la noaptea 11:
+# Noaptea 11 (S6/S7, 20 octombrie 2026, aprobat de supraveghetor): aceeași linie „w2_conv_text”, din #401, cu datele
+# date/conversatie/text_v2 (unelte/conversatie_text.py --formulari: formulări diferite + da/nu). Pre-înregistrarea:
+# docs/preinregistrari/2026-10-20_noaptea11_formulari.md. Față de config/conv_w2_text.toml, doar `conversatie` și
+# `cale_stare`; restul identic (45/5/50, rata 0,00005, lot 12, context 512).
+#   python unelte/antrenare_lunga.py --config config/conv_w2_text_v2.toml --ore 3 --porneste-din 401
+#
+# Antetul de la noaptea 10:
+# „Răspuns din text” (19 octombrie 2026, hotărât de Adrian; nu de CONTINUUM): linia „w2_conv_text”, o COPIE a lui #385.
+# Linia W2 și linia w2_conv (infirmată pe 19 octombrie) nu se ating. Pre-înregistrarea:
+# docs/preinregistrari/2026-10-19_noaptea10_raspuns_din_text.md. Față de config/conv_w2.toml (noaptea 9), doar:
+# - perechile: date/conversatie/text/antrenare.jsonl (unelte/conversatie_text.py): „Text: … / Întrebare: … / Răspuns: …”,
+#   cam 20% cu „Nu scrie în text.”, plus conversația simplă; pierderea tot doar pe răspunsuri;
+# - amestecul: 45% perechi, 5% hrană, 50% text vechi (amestecul lui W2), ca să nu uite (aseară: 75/5/20);
+# - rata: 0,00005 constantă (aseară 0,0001), după 100 de pași de încălzire.
+#   python unelte/antrenare_lunga.py --config config/conv_w2_text.toml --ore 3 --porneste-din 385
+
+[platforma]
+# Linie nouă, ca `--porneste-din 407` să se aplice (lucru/w2_conv_text_v3/ nu există la 21 oct, verificat în S11).
+nume = "w2_spec_f1"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_conversatie:ModelGPTConversatie"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_spec_f1/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "date/conversatie/e2/f1/antrenare.jsonl", fractie_conversatie = 0.45 }
+
+[antrenare_lunga]
+eticheta = "răspuns din text"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [12] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
