@@ -644,7 +644,9 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 - raport: docs/rapoarte/2026-10-23_0103_S18_E1_repetare_3x.md (n-a trecut poarta: 402 noi, 918 în total < 1.032; nu s-a antrenat, fără verdict; pre-înregistrarea închisă)
 
 ### S19 — E1, analiza care a rămas nefăcută la S18: de unde vine creșterea #425 (13/50)? (doar examen + numărare, fără antrenare)
-- stare: in_lucru
+- stare: gata
+- terminată: 23 oct 02:33:29, cod 0. Baseline #415 exact; diferența (c) = 7 (≥ 4), dar 7/13 la #425 sunt răspunsuri lungi și
+  cu F1 ≥ 0,8 #425 are 2/50 față de 4/50 la #415. Teste: 893 trecute, 1 sărit.
 - pornită: 23 oct 02:30:36, prin cascadă (procesul 27092; placa liberă: 681 MB, 30 °C), scriptul
   `lucru/cascada/S19_proba/s19.py` (pașii 1–3 unul după altul; pasul 3 doar dacă baseline-ul #415 iese exact). Pre-înregistrarea
   urcată înainte (5c44feb). Corectură: în ea scrie „02:35”; ora reală e ~02:29, înainte de pornire.
@@ -681,7 +683,7 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
   `auto_v2`, verificatorul din S16. Nicio antrenare, niciun model nou, nimic în interfață. Codul nu se schimbă (dacă o comandă
   pică, repari doar unealta, cu test, și scrii în raport — categoria 6).
 - aprobat de: supraveghetor, 23 oct 02:15 (categoria 2: examene și notări pe modele existente; e analiza deja cerută la S18, pct. 7)
-- raport: `docs/rapoarte/2026-10-23_<ora>_S19_analiza_E1.md`
+- raport: `docs/rapoarte/2026-10-23_0303_S19_analiza_E1.md`
 
 ### S20 — Pasul următor după E1 (decizia lui Adrian)
 - stare: propus — necesită Adrian
