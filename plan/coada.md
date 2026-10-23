@@ -83,6 +83,13 @@ trebuie să stea degeaba. Decizii:
    pornește nimic nou; o sarcină în curs se poate opri doar cu checkpoint (dacă nu are, se așteaptă sfârșitul ei). Notează în fiecare raport
    până când ține sarcina curentă de pe placă, ca Adrian să-și aleagă momentul.
 
+**Actualizare 23 oct 10:30 (supraveghetor) — E2 pornește:** am citit decizia de la 10:20. S20 e `gata` (varianta 1). Am scris
+**S22** (`aprobat`, doar procesor, ~2 ore: împărțirea datelor pe 3 familii, ruterul, măsurarea ruterului, configurările, pre-înregistrarea
+E2) și **S23** (`aprobat`, placa, ~7 ore: cei 3 specialiști antrenați pe rând din #415 + examenele + nota sistemului). S23 pornește doar
+după ce S22 e `gata`, pre-înregistrarea E2 e urcată și ruterul a trecut poarta de la S22. Aprobate de Adrian (10:20, punctul 2: E2 = „antrenare
+nouă”, tot E2) + supraveghetor. Pregătirea E3 (indexul de memorie, procesor) o scriu după verdictul E2. Executant: în fiecare raport
+scrii până când ține sarcina de pe placă (punctul 4 al lui Adrian).
+
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
 - tip: placă
@@ -770,3 +777,76 @@ trebuie să stea degeaba. Decizii:
   `unelte/verificator_text.py`. Fără placă, fără antrenare, fără descărcări, nimic în interfață. Doar comanda nouă + testul ei.
 - aprobat de: supraveghetor, 23 oct 05:15 (categoria 2: notări pe examene existente; categoria 5: comandă nouă în `unelte/`, cu test)
 - raport: `docs/rapoarte/2026-10-23_0535_S21_lungimi.md`
+
+### S22 — E2, pregătirea (procesor): 3 familii de întrebări, ruterul, pre-înregistrarea
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
+- fereastră: oricând — la prima verificare a cozii
+- durată maximă: 3 ore
+- de ce: Adrian a aprobat E2 (23 oct 10:20): **3 specialiști + ruter**, antrenați pe rând din #415 (Branch-Train-Merge), strategia
+  `docs/rapoarte/2026-10-22_0200_strategie_nucleu_fara_llm.md` §4 H4 și §7 E2 (citește-le). S22 face tot ce nu cere placa, ca S23 să fie doar rularea.
+- ce faci (totul într-o unealtă nouă `unelte/e2_specialisti.py`, cu teste noi în `teste/test_e2_specialisti.py`):
+  1. **Familiile, cu o regulă fixă, fără model** (aceeași regulă pentru antrenare și pentru examene):
+     - **F2 „da/nu”:** răspunsul de referință e „Da.” sau „Nu.”;
+     - **F3 „tipurile din S11”:** perechea vine din tipurile adăugate la S11 (`date/conversatie/text_v3/tipuri_noi.jsonl`; la examene:
+       S15 categoria (e)) și nu e da/nu;
+     - **F1 „fapte / nume / ani / locuri”:** tot restul (inclusiv „Nu scrie în text.” al tipurilor vechi, S4 (a)(b)(d), S15 (b2), noaptea 10).
+     Comanda `imparte`: din `date/conversatie/text_v3/antrenare.jsonl` (27.468) scrie `date/conversatie/e2/f1/antrenare.jsonl`,
+     `f2/…`, `f3/…` (fiecare pereche în exact o familie; suma = 27.468, verificat automat) și `date/conversatie/e2/info.json` cu numărul
+     pe familie. Pune deoparte 10 % din articole (după grupul `text_<i>`, sămânța 1023) ca `e2/ruter_validare.jsonl` — DOAR pentru ruter,
+     specialiștii se antrenează pe tot. Dacă o familie are sub 2.000 de perechi, scrii cifra în raport (nu schimbi regula).
+  2. **Ruterul** (comanda `ruter`): tabel învățat doar din întrebările de antrenare (fără cele 10 % puse deoparte): pentru începuturile
+     de 1, 2 și 3 cuvinte (litere mici, fără semne), familia cea mai des întâlnită, dacă apare de cel puțin 5 ori; se folosește cel mai
+     lung început găsit; altfel F1. Scris în `date/conversatie/e2/ruter.json`. Fără model, fără examene la construire.
+  3. **Măsurarea ruterului** (comanda `masoara-ruter`): (i) pe `ruter_validare.jsonl`; (ii) pe TOATE întrebările examenelor S15 (b2, e),
+     S4 și noaptea 10 (aceleași 210 ca la S17/S19), cu familia „corectă” dată de regula de la pasul 1. Ruterul se poate ajusta (ex. 4
+     cuvinte, alt prag) DOAR după (i); (ii) se rulează o singură dată, cu ruterul final, și se scrie ce a ieșit. Raportezi procentul pe
+     fiecare examen și familie + lista greșelilor de la (ii).
+     **Poartă:** dacă (ii) < 90 %, S23 NU pornește: scrii cifrele și stare `gata`, eu decid (de ex. clasificatorul mic din strategie).
+  4. **Baseline-ul pe familii:** din examenele deja scrise ale lui #415 (`lucru/e1/examene_415_20261023_023327.json`), câte corecte are
+     #415 pe întrebările fiecărei familii (verificatorul S16 și separat F1 ≥ 0,8). Total verificator trebuie să iasă 144/210
+     ((b2) 6 + (e) 30 + S4 38 + noaptea 10 50 + 20); dacă nu, scrii și te oprești.
+  5. **Configurările:** `config/conv_w2_spec_f1.toml`, `…_f2.toml`, `…_f3.toml` = copii ale `config/conv_w2_text_v3.toml` (noaptea 12, din
+     care a ieșit #415), diferă doar `nume` (`w2_spec_f1`/`f2`/`f3`, linii noi), `conversatie` (fișierul familiei) și `cale_stare`
+     (`lucru/w2_spec_fX/gpt.pt`). Verificat cu `diff`. Directoarele `lucru/w2_spec_*` nu trebuie să existe (ca `--porneste-din 415` să se aplice).
+  6. **Nota sistemului, fără model** (comanda `sistem`): primește ruterul și câte un fișier `examene_<id>_*.json` pentru fiecare
+     specialist; pentru fiecare întrebare ia răspunsul specialistului ales de ruter și îl notează cu verificatorul S16 (și F1).
+     Test cu răspunsuri inventate (2 specialiști, 4 întrebări). Așa S23 nu are nevoie de cod nou pe placă.
+  7. **Pre-înregistrarea E2** `docs/preinregistrari/2026-10-23_E2_specialisti.md`, commit + push ÎNAINTE de S23, cu cifrele de la pașii
+     1–4 și criteriile lui Adrian (10:20), copiate:
+     - **CONFIRMAT:** (A) **fără regresie pe niciun specialist**: specialistul k, pe întrebările familiei k din S4 + S15 + noaptea 10,
+       are cel puțin cât #415 pe aceleași întrebări, minus 1; și validările (val_bpb, română, cod, povești, fapte noi) în aceleași praguri
+       ca la S17; **și** (B) **sistemul (ruter + specialiști) ≥ #415 monolit** pe toate cele 210 întrebări (≥ 144, cu verificatorul S16);
+       **și** (C) **ruterul alege corect ≥ 90 %** (cifra de la pasul 3 (ii)).
+     - **INFIRMAT:** oricare din (A), (B), (C) nu e îndeplinit → scrii care, cu cifrele.
+     - **În plus, fără să decidă:** sistemul și #415 cu F1 ≥ 0,8 (pe (b2) separat), răspunsurile „lungi” (ca la S21), sistemul cu
+       „ruter perfect” (familia corectă) — ca să vedem cât pierde ruterul.
+     Plus așteptările tale în cifre (fiecare specialist pe familia lui, sistemul, verdictul cu procente).
+  8. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-23_<ora>_S22_E2_pregatire.md` (cifrele de la 1–4, diff-ul
+     configurărilor, așteptările).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, `text_v3`, `auto_v1`, `auto_v2`,
+  `unelte/verificator_text.py`. Nicio descărcare, nimic în interfață.
+- pre-înregistrare: e chiar pasul 7 (pentru S23); S22 nu antrenează
+- aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 2: tot E2) + supraveghetor, 23 oct 10:30 (categoriile 3 și 5)
+- raport: docs/rapoarte/2026-10-23_<ora>_S22_E2_pregatire.md
+
+### S23 — E2, rularea (placa): 3 specialiști din #415, pe rând, apoi examenele și nota sistemului
+- stare: aprobat — pornește DOAR după: S22 `gata`, pre-înregistrarea E2 urcată (commit înainte de pornire), ruterul ≥ 90 % la S22 pasul 3 (ii)
+- tip: placă (~7 ore)
+- fereastră: oricând — la prima verificare a cozii după condițiile de mai sus (regula lui Adrian din 22 oct 15:10)
+- durată maximă: 8 ore pe placă
+- ce faci (un singur lanț prin cascadă: `cascada.py porneste S23 -- …`, un pas după altul, fiecare pas doar dacă cel dinainte a ieșit cu cod 0):
+  1. **Specialistul F1:** `python unelte/antrenare_lunga.py --config config/conv_w2_spec_f1.toml --ore 2 --porneste-din 415`
+  2. **Specialistul F2:** la fel cu `conv_w2_spec_f2.toml`, **tot din #415** (nu din F1), 2 ore.
+  3. **Specialistul F3:** la fel cu `conv_w2_spec_f3.toml`, din #415, 2 ore.
+  4. **Examenele** pe fiecare specialist, ca la S17/S19: `python -X utf8 unelte/e1_intrebari_nascute.py --lucru lucru/e2 examene --experiment <id>`
+     + validările (română, cod, povești, fapte noi, val_bpb) ca la S17.
+  5. **Nota sistemului:** `python -X utf8 unelte/e2_specialisti.py sistem …` (S22 pasul 6), cu ruterul din S22 și cele 3 fișiere de examen.
+  6. Verdictul după pre-înregistrare (A, B, C), cu toate cifrele „în plus”. Raport `docs/rapoarte/2026-10-2x_<ora>_S23_E2_specialisti.md`.
+     La pornire scrii în coadă **ora estimată de sfârșit** (Adrian are nevoie de workstation ~30–60 min când se întoarce).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport (regula lui Adrian, 10:20).
+- Paznicul: placa sub 7.000 MB și 83 °C. Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, datele de examen, `text_v3`, ruterul
+  după S22. Specialiștii NU intră în interfață (rămâne #407). Teste: `python -m pytest` trece înainte de `gata`. Commit + push.
+- pre-înregistrare: docs/preinregistrari/2026-10-23_E2_specialisti.md (scrisă la S22, urcată înainte de pornire)
+- aprobat de: Adrian (23 oct 10:20, prin centrul de comandă, punctul 2: E2 aprobat, „antrenare nouă”) + supraveghetor, 23 oct 10:30
+- raport: docs/rapoarte/2026-10-2x_<ora>_S23_E2_specialisti.md

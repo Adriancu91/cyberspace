@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 octombrie 2026, 10:30 — Am văzut decizia ta: E1 închis, E2 (specialiști + ruter) pus în coadă
+
+- **S20 gata:** ai ales varianta 1 (10:20). E1 se închide cu NECLAR (13 din 50); nimic nu a rulat pe placă de dimineață (placa liberă).
+- **Pus în coadă, aprobat cu „da”-ul tău pentru E2:** **S22** (doar procesor, ~2–3 ore): împart întrebările în 3 familii (fapte/nume/ani/locuri,
+  da/nu, tipurile noi din S11), fac „ruterul” care alege familia după primele cuvinte și scriu criteriile înainte. Apoi **S23** (placa, ~7 ore):
+  3 specialiști antrenați pe rând din #415, examenele și nota sistemului întreg. S23 pornește doar dacă ruterul alege corect ≥ 90 %.
+- Criteriile (ale tale, copiate): niciun specialist mai slab ca #415 pe familia lui; sistemul ≥ #415 (144 din 210); ruterul ≥ 90 %.
+- Calendar estimat: S22 gata pe la ~13:00, S23 pe la ~20:00; verdictul la trecerea de 20:15 sau 23:15. Executantul scrie în coadă ora de
+  sfârșit, ca să știi când e liber workstation-ul. Pregătirea E3 (memoria, pe procesor) o pun după verdictul E2.
+- Raportul de dimineață (07:44) a fost în regulă: 895 teste trec, nicio eroare. Cyber Hub: nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 23 octombrie 2026, 08:15 — S21: „n-a uitat nimic” e adevărat și cu nota strictă; placa liberă, aștept alegerea ta la S20
 
 - **S21 gata (verificat, câteva secunde pe procesor, fără erori):** răspunsurile „lungi” apar **doar** la tipurile de întrebări nevăzute (b2).
@@ -206,14 +218,3 @@
   S7 e `aprobat` în coadă; executantul o pornește la prima verificare dacă placa e liberă. Verdictul: mâine, raportul de dimineață.
 - Accesul supraveghetorului la Cyber Hub: se rezolvă prin recrearea sarcinii programate din chatul centrului de comandă (care are
   toate depozitele). Până atunci, hub-ul e ținut la zi de centrul de comandă.
-
-## 20 octombrie 2026, 20:15 — PROBLEMĂ: noaptea 11 n-a pornit; am nevoie de „da”-ul tău ca s-o repornim
-
-- **S7 s-a oprit după 11 secunde, fără să antreneze nimic.** Vina e a mea: în S6 am cerut ca noaptea 11 să rămână pe
-  linia veche `w2_conv_text`, care avea deja cele 3 ore din noaptea 10, deci unealta a crezut că n-are nimic de făcut.
-  Modelul #401 e neatins; nimic nu s-a stricat. Executantul a oprit corect și n-a reparat pe ascuns. Testele trec.
-- **Reparația propusă:** aceeași antrenare, același punct de plecare (#401), aceleași praguri, doar alt nume de linie
-  (`w2_conv_text_v2`) în configurare. Am verificat în cod că așa pornește corect.
-- Placa e liberă (28 °C, 712 MB). Cyber Hub: tot nu-l pot citi (sesiunea mea are acces doar la `cyberspace`).
-- **Aștept de la tine:** „da” pentru reparația lui S7 (în COMENZI.md din hub sau direct executantului). Dacă vine până
-  pe la 02:30, noaptea 11 încape în noaptea asta; altfel rămâne pe mâine.
