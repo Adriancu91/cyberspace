@@ -977,7 +977,7 @@ Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am p
   umflat, ideile au venit din greșelile de pe examene; 907 teste trec, 1 sărit)
 
 ### S26 — E3, examenul nou neatins (procesor): 100 de întrebări noi, o singură măsurare a căutării, plus „primele 3 bucăți”
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`; nu se încarcă niciun model)
 - fereastră: oricând — la prima verificare a cozii
 - durată maximă: 1,5 ore; memorie RAM cel mult ~40 GB
