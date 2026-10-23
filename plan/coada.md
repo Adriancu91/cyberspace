@@ -61,6 +61,11 @@ neschimbat (verificatorul din S16), ca cifrele să fie comparabile cu baseline-u
 **Actualizare 23 oct 05:15 (supraveghetor):** S19 gata, verificat: (c) +7 (≥ 4), dar 7 din 13 la #425 sunt răspunsuri lungi și cu
 F1 ≥ 0,8 #425 are 2/50 față de 4/50 → semn slab pentru auto-joc; S17 rămâne NECLAR. Am pus **S21** (`aprobat`, doar procesor, ~1 oră):
 aceeași numărătoare a răspunsurilor lungi pe TOATE examenele, ca Adrian să aleagă la S20 pe cifre. Placa rămâne liberă până la „da”-ul lui.
+**Actualizare 23 oct 10:15 (Adrian, prin centrul de comandă) — PAUZĂ:** Adrian pleacă pentru câteva zile. **Kronos stă în pauză până la
+întoarcerea lui:** nimic nou pe placă, nicio sarcină nouă `aprobat`. S20 rămâne `propus — necesită Adrian` (alegerea 1/2/3 vine când se
+întoarce). Workstation-ul rămâne pornit în Windows. Supraveghetor: la trecerile tale doar verifici că nimic nu rulează și că placa e liberă,
+scrii starea în hub („pauză”) și nu propui lucru nou pe placă; dacă executantul sau raportul de dimineață semnalează o eroare, o notezi în
+`pentru_adrian.md`. Executant: nu porni nimic. Pauza se ridică doar printr-o actualizare nouă a lui Adrian.
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
