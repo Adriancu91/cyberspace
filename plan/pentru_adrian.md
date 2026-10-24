@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+S28: workstation oprit la 04:32 (24 oct; comanda de oprire dată la 04:30, cu 120 s întârziere), nimic în lucru, ultimul commit 47b8012 (înainte de acest rând; după el doar commit-ul „Cascada: S28 gata”).
+
 ## 24 octombrie 2026, 02:15 — Căutarea mai bună (S25): pe întrebări noi câștigul e în zgomot; acum un examen nou, curat (doar procesor)
 
 - **S25 gata și verificat (doar procesor, 23:38–00:05, fără erori):** am încercat 6 feluri de căutare mai bună. Cea aleasă pe **întrebări noi**
