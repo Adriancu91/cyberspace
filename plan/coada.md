@@ -115,6 +115,22 @@ greșelile de pe examene). Așteptările urcate înainte de examene (64d9b48, 23
 Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am pus **S26** (`aprobat`, doar procesor, ~1 oră): un examen E3 nou de 100 de
 întrebări neatinse (punctul 3 din propunerea executantului), măsurat o singură dată, plus „primele 3 bucăți” (plafonul pentru E3 cu model).
 **S27 = E3 cu antrenare pe placă: `propus — necesită Adrian`** (pragul și pornirea le decide el). **Placa rămâne liberă.**
+**Actualizare 24 oct 04:05 (Adrian, prin centrul de comandă) — PAUZĂ PÂNĂ LUNI (26 oct) + OPRIREA WORKSTATION-ULUI:** Adrian se întoarce luni.
+Nicio sarcină nouă pe placă sau pe procesor până atunci; S27 rămâne `propus — necesită Adrian`. Supraveghetorul e oprit până luni.
+Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altceva.
+
+### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
+- stare: aprobat
+- tip: procesor (fără placă)
+- fereastră: oricând — prima verificare a cozii după 24 oct 04:05
+- durată maximă: 15 minute
+- ce faci: 1) verifici că nu rulează nicio sarcină (nicio sarcină `in_lucru`, niciun proces Python al lui Kronos, `nvidia-smi` fără procese de
+  calcul); dacă rulează ceva, aștepți să se termine (cel mult 6 ore), fără să-l oprești. 2) `git status` curat; dacă există modificări ale
+  executantului, commit + push. 3) Scrii în `plan/pentru_adrian.md` un rând: „S28: workstation oprit la <ora>, nimic în lucru, ultimul commit <hash>”,
+  pui S28 pe `gata`, commit + push și **verifici că push-ul a reușit**. 4) Abia apoi: `shutdown /s /t 120 /c "Kronos: oprire ceruta de Adrian (S28)"`.
+  Nu opri, nu reseta și nu șterge nimic altceva. Dacă push-ul nu reușește, NU opri calculatorul (scrie de ce în `pentru_adrian.md` local și reîncearcă la verificarea următoare).
+- aprobat de: Adrian, 24 oct 04:05 (prin centrul de comandă)
+- raport: rândul din `plan/pentru_adrian.md`
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata
