@@ -120,7 +120,7 @@ Nicio sarcină nouă pe placă sau pe procesor până atunci; S27 rămâne `prop
 Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altceva.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă)
 - fereastră: oricând — prima verificare a cozii după 24 oct 04:05
 - durată maximă: 15 minute
