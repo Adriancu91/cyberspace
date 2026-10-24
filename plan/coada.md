@@ -120,7 +120,8 @@ Nicio sarcină nouă pe placă sau pe procesor până atunci; S27 rămâne `prop
 Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altceva.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
-- stare: gata
+- stare: oprit
+- motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
 - tip: procesor (fără placă)
 - fereastră: oricând — prima verificare a cozii după 24 oct 04:05
 - durată maximă: 15 minute
@@ -130,7 +131,7 @@ Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altcev
   pui S28 pe `gata`, commit + push și **verifici că push-ul a reușit**. 4) Abia apoi: `shutdown /s /t 120 /c "Kronos: oprire ceruta de Adrian (S28)"`.
   Nu opri, nu reseta și nu șterge nimic altceva. Dacă push-ul nu reușește, NU opri calculatorul (scrie de ce în `pentru_adrian.md` local și reîncearcă la verificarea următoare).
 - aprobat de: Adrian, 24 oct 04:05 (prin centrul de comandă)
-- raport: rândul din `plan/pentru_adrian.md`
+- raport: rândul din `plan/pentru_adrian.md` + `docs/rapoarte/2026-10-24_0433_S28_oprire_workstation.md`
 
 ### S1 — Noaptea 10: „răspuns din text” (w2_conv_text, din #385)
 - stare: gata

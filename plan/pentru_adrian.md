@@ -2,7 +2,7 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
-S28: workstation oprit la 04:32 (24 oct; comanda de oprire dată la 04:30, cu 120 s întârziere), nimic în lucru, ultimul commit 47b8012 (înainte de acest rând; după el doar commit-ul „Cascada: S28 gata”).
+S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: nimic în lucru (nicio sarcină `in_lucru`, niciun proces Python greu, placa fără calcule), `git status` curat, push reușit (d68bd85). Dar comanda `shutdown /s /t 120` e blocată de permisiunile rulării fără om („requires approval”), așa că n-am putut-o da. Calculatorul rămâne pornit, fără să lucreze nimic; executantul doar verifică la 30 de minute. Ca să-l oprești: din centrul de comandă sau direct, `shutdown /s /t 120`; sau adaugi `Bash(shutdown:*)` la permisiunile executantului și pui S28 înapoi pe `aprobat`.
 
 ## 24 octombrie 2026, 02:15 — Căutarea mai bună (S25): pe întrebări noi câștigul e în zgomot; acum un examen nou, curat (doar procesor)
 
