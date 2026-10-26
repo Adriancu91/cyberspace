@@ -1150,7 +1150,9 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md (pașii 0–3); pașii 5–7: docs/rapoarte/2026-10-26_2340_S29_E3_cautare_v2_verdict.md
 
 ### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
-- stare: in_lucru (executant, 27 oct 00:00; S29 `gata`)
+- stare: gata (executant, 27 oct 00:24: codul în module/model_muon.py, implicit aceiași pași bit cu bit; proba B pe placă
+  00:11–00:24 cod 0, **5.917 MB**, 64 °C; „șoc” vizibil la pornirea din #415 (după 10 min la 0,02 pierderea medie 1,88 > 1,46
+  la început); propun **rata Muon 0,01** pentru S31 (B are încă 0,02 în configurare); 946 teste trec, 1 sărit)
 - tip: procesor + placă scurt (proba de 10 minute)
 - fereastră: oricând, cu placa liberă
 - durată maximă: 4 ore; cel mult 30 de minute pe placă; placa sub 7.000 MB și 83 °C
@@ -1179,7 +1181,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare (proba de 10 minute nu se notează); pre-înregistrarea S31 se scrie la S31
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
-- raport: docs/rapoarte/2026-10-2x_<ora>_S30_muon_pregatire.md
+- raport: docs/rapoarte/2026-10-27_0024_S30_muon_pregatire.md
 
 ### S31 — C-21.2, rularea: AdamW (A) contra Muon (B), câte 2 ore din #415 (placa)
 - stare: aprobat — pornește DOAR după S30 `gata` cu proba sub 7.000 MB (supraveghetorul verifică S30 înainte; dacă S30 propune o schimbare
