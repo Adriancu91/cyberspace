@@ -38,6 +38,11 @@ grup sau articol comun cu eșantioanele 1024/2048 și cu examenele; fără nicio
     python -X utf8 unelte/e3_memorie.py examen-nou                   # lucru/e3/examen_nou_4096.json (+ _info, sha256)
     python -X utf8 unelte/e3_memorie.py masoara --set examen_nou     # O SINGURĂ DATĂ, după ce așteptările sunt urcate
 
+S27 (26 octombrie 2026, E3 cu antrenare, aprobat de Adrian 26 oct 16:10): exemplele de antrenare = întrebările din
+text_v3 (filtrele validării), fără lista S26 (amprenta verificată), articolele ei, examenele vechi și validarea 2048;
+textul dat = primele 3 bucăți ale căutării alese (fără bucățile articolelor oprite), câte încap în 512 − 64 simboluri.
+    python -X utf8 unelte/e3_memorie.py date-antrenare    # lucru/e3/date_antrenare_s27.jsonl + amestec_s27.jsonl
+
 Ies doar în lucru/e3/ (nu în Git: Wikipedia e CC BY-SA). Nu atinge kronos/, examenul BPB, paznicul, datele de examen
 (doar citite), text_v3, e2/ sau unelte/verificator_text.py.
 """
@@ -106,6 +111,14 @@ _NUMAR = re.compile(r"\d+(?:[.,  ]\d{3})*(?:,\d+)?")
 SAMANTA_EXAMEN_NOU = 4096
 CATE_EXAMEN_NOU = 100
 K_S26 = (1, 3, 5, 20)
+
+# S27
+SHA_EXAMEN_NOU = "3501f307f3dcc2cd2abbb5c75bd93b9181e2fd924e959f484a622b9f96b4f523"
+K_E3 = 3
+REZERVA_RASPUNS = 64  # simboluri lăsate răspunsului; întrebarea cu bucățile intră în CONTEXT - REZERVA_RASPUNS
+FRACTIE_E3, FRACTIE_VECHI = 0.30, 0.15
+SAMANTA_S27 = 2710
+AMESTEC_S27 = "amestec_s27.jsonl"
 
 
 def _scrie_json(cale: Path, obiect: Any) -> None:
@@ -804,6 +817,146 @@ def cmd_examen_nou_masoara(lucru: Path, text_v3: Path) -> dict[str, Any]:
     return info
 
 
+# ---------------------------------------------------------------- S27
+
+def context_e3(bucati: list[dict[str, Any]]) -> str:
+    """Textul dat modelului: bucățile aduse de căutare, în ordinea căutării, câte una pe rând."""
+    return "\n".join(b["text"] for b in bucati)
+
+
+def bucati_e3(con: sqlite3.Connection, intrebare: str, varianta: str, liste: dict[str, set[str]] | None,
+              oprite: set[str] = frozenset(), k: int = K_E3) -> list[dict[str, Any]]:
+    """Primele k bucăți ale căutării, fără bucățile articolelor oprite (ordinea căutării rămâne)."""
+    gasite = cauta(con, intrebare, varianta, k=CATE_PENTRU_LISTE, liste=liste)
+    return [g for g in gasite if g["articol"] not in oprite][:k]
+
+
+def cate_incap(tok: Any, intrebare: str, bucati: list[dict[str, Any]], maxim: int = CONTEXT - REZERVA_RASPUNS) -> int:
+    """Câte bucăți (3, apoi 2, apoi 1) lasă întrebarea „Text: …⏎Întrebare: …⏎Răspuns:” în `maxim` simboluri; aceeași
+    regulă la antrenare și la examen (nu depinde de răspuns)."""
+    from module.model_conversatie import intrebarea
+    for n in range(len(bucati), 0, -1):
+        if len(tok.codifica(intrebarea(intrebare, context_e3(bucati[:n])))) <= maxim:
+            return n
+    return 0
+
+
+def _repeta(perechi: list[Any], ori: float, samanta: int) -> list[Any]:
+    """Fiecare pereche de floor(ori) ori, plus o parte aleasă la întâmplare pentru rest."""
+    intregi = int(ori)
+    rest = random.Random(samanta).sample(perechi, round((ori - intregi) * len(perechi)))
+    return perechi * intregi + rest
+
+
+def cmd_date_antrenare(lucru: Path, text_v3: Path, tokenizer: Path, examene: dict[str, str] = EXAMENE,
+                       sha_examen_nou: str = SHA_EXAMEN_NOU) -> dict[str, Any]:
+    """Pasul 1 din S27: exemplele E3 (întrebarea din text_v3, textul dat = primele 3 bucăți ale căutării alese, fără
+    bucățile articolelor S26 și ale examenelor) și amestecul pentru configurare (30 % E3 + 15 % perechile vechi)."""
+    from module.model_conversatie import intrebarea, raspunsul
+    from module.tokenizer_bpe import TokenizerBPE
+    start = time.time()
+    cale_s26 = lucru / "examen_nou_4096.json"
+    sha = hashlib.sha256(cale_s26.read_bytes()).hexdigest()
+    if sha != sha_examen_nou:
+        raise SystemExit(f"lista S26 nu are amprenta așteptată ({sha})")
+    s26 = json.loads(cale_s26.read_text(encoding="utf-8"))
+    _, val2048, _ = intrebari_validare_s25(text_v3)
+    vechi_ex = intrebari_examen(examene)
+    articole_s26 = {a for q in s26 for a in q["articole_corecte"]}
+    articole_ex = _articole_examen(lucru)
+    oprite = articole_s26 | articole_ex
+    intrebari_oprite = {normalizeaza(q["intrebare"]) for q in s26 + val2048 + vechi_ex}
+    texte_oprite = ({normalizeaza(q["text"]) for q in s26 + val2048}
+                    | {normalizeaza(t["text"]) for t in texte_examen(examene)})
+    grupuri_oprite = {q["grup"] for q in s26 + val2048 if q.get("grup")}
+
+    bune = candidate_validare(text_v3)
+    scoase = Counter()
+    ramase = []
+    for q in bune:
+        if q.get("grup") in grupuri_oprite:
+            scoase["grup"] += 1
+        elif normalizeaza(q["intrebare"]) in intrebari_oprite:
+            scoase["intrebare"] += 1
+        elif normalizeaza(q["text"]) in texte_oprite:
+            scoase["text"] += 1
+        else:
+            ramase.append(q)
+    tok = TokenizerBPE.incarca(tokenizer)
+    liste = incarca_liste(lucru)
+    varianta = json.loads((lucru / "validare_s25.json").read_text(encoding="utf-8"))["aleasa"]
+    con = deschide(lucru / "index.sqlite")
+    articole_cache: dict[str, list[str]] = {}
+    exemple: list[dict[str, Any]] = []
+    taiate = Counter()
+    for n, q in enumerate(ramase, 1):
+        if q["text"] not in articole_cache:
+            articole_cache[q["text"]] = articole_text(con, q["text"])
+        art = set(articole_cache[q["text"]])
+        if art & articole_s26:
+            scoase["articol_s26"] += 1
+            continue
+        if art & articole_ex:
+            scoase["articol_examen"] += 1
+            continue
+        bucati = bucati_e3(con, q["intrebare"], varianta, liste, oprite)
+        cate = cate_incap(tok, q["intrebare"], bucati)
+        taiate[f"{len(bucati)}->{cate}"] += 1
+        if not cate:
+            scoase["nu_incape"] += 1
+            continue
+        bucati = bucati[:cate]
+        context = context_e3(bucati)
+        simboluri = len(tok.codifica(intrebarea(q["intrebare"], context))) + len(tok.codifica(raspunsul(q["raspuns"])))
+        if simboluri > CONTEXT:
+            scoase["raspuns_prea_lung"] += 1
+            continue
+        exemple.append({"fel": "e3", "grup": q.get("grup"), "tip": q.get("tip"), "intrebare": q["intrebare"],
+                        "raspuns": q["raspuns"], "text": context, "bucati": cate, "simboluri": simboluri,
+                        "articole": [b["articol"] for b in bucati],
+                        "raspuns_in_bucati": any(bun(q["raspuns"], b["text"]) for b in bucati)})
+        if n % 2000 == 0:
+            print(f"{datetime.now():%H:%M:%S} {n}/{len(ramase)} întrebări, {len(exemple)} exemple", flush=True)
+    con.close()
+
+    vechi: list[dict[str, Any]] = []
+    simboluri_vechi = 0
+    for r in text_v3.read_text(encoding="utf-8").splitlines():
+        if not r.strip():
+            continue
+        p = json.loads(r)
+        if p.get("grup") in grupuri_oprite or normalizeaza(p["intrebare"]) in intrebari_oprite:
+            scoase["vechi_oprite"] += 1
+            continue
+        vechi.append(p)
+        simboluri_vechi += len(tok.codifica(intrebarea(p["intrebare"], p.get("text", "")))) + len(
+            tok.codifica(raspunsul(p["raspuns"])))
+    simboluri_e3 = sum(e["simboluri"] for e in exemple)
+    ori = FRACTIE_VECHI / FRACTIE_E3 * simboluri_e3 / simboluri_vechi if simboluri_vechi else 0.0
+    vechi_puse = _repeta(vechi, ori, SAMANTA_S27)
+    cale_e3, cale_amestec = lucru / "date_antrenare_s27.jsonl", lucru / AMESTEC_S27
+    cale_e3.write_text("".join(json.dumps(e, ensure_ascii=False) + "\n" for e in exemple), encoding="utf-8")
+    cale_amestec.write_text("".join(json.dumps({k: p[k] for k in ("fel", "grup", "tip", "intrebare", "raspuns", "text")
+                                                if k in p}, ensure_ascii=False) + "\n"
+                                    for p in exemple + vechi_puse), encoding="utf-8")
+    simboluri_puse = simboluri_vechi * len(vechi_puse) / len(vechi) if vechi else 0
+    info = {"varianta": varianta, "sha256_s26": sha, "candidate_in_text_v3": len(bune), "scoase": dict(scoase),
+            "articole_oprite": {"s26": len(articole_s26), "examene": len(articole_ex)},
+            "exemple": len(exemple), "raspuns_in_bucati": sum(e["raspuns_in_bucati"] for e in exemple),
+            "bucati_pe_exemplu": dict(Counter(e["bucati"] for e in exemple)), "taieri": dict(taiate),
+            "simboluri_e3": simboluri_e3, "simboluri_median_e3": statistics.median([e["simboluri"] for e in exemple])
+            if exemple else None,
+            "perechi_vechi": len(vechi), "perechi_vechi_puse": len(vechi_puse), "ori_vechi": round(ori, 3),
+            "parte_e3_in_simboluri": round(simboluri_e3 / (simboluri_e3 + simboluri_puse), 3)
+            if simboluri_e3 + simboluri_puse else None,
+            "tinta": f"{FRACTIE_E3:.0%} E3 + {FRACTIE_VECHI:.0%} vechi din fracția conversației (2/3 E3 în simboluri)",
+            "rezerva_raspuns": REZERVA_RASPUNS, "fisier_e3": _relativ(cale_e3), "fisier_amestec": _relativ(cale_amestec),
+            "secunde": round(time.time() - start, 1), "ram_maxim_mb": _ram_maxim_mb(),
+            "scris": datetime.now().isoformat(timespec="seconds")}
+    _scrie_json(lucru / "date_antrenare_s27.json", info)
+    return info
+
+
 def cmd_lungimi(wikipedia: Path, lucru: Path, tokenizer: Path, examene: dict[str, str] = EXAMENE) -> dict[str, Any]:
     from module.tokenizer_bpe import TokenizerBPE
     tok = TokenizerBPE.incarca(tokenizer)
@@ -848,6 +1001,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("lungimi")
     sub.add_parser("liste")
     sub.add_parser("examen-nou")
+    sub.add_parser("date-antrenare")
     args = parser.parse_args(argv)
     lucru, wikipedia = RADACINA / args.lucru, RADACINA / args.wikipedia
     if args.pas == "index":
@@ -860,6 +1014,8 @@ def main(argv: list[str] | None = None) -> int:
         info = {k: v for k, v in cmd_liste(wikipedia, lucru).items() if k not in ("fraze_lista", "randuri_scurte")}
     elif args.pas == "examen-nou":
         info = cmd_examen_nou(lucru, RADACINA / TEXT_V3)
+    elif args.pas == "date-antrenare":
+        info = cmd_date_antrenare(lucru, RADACINA / TEXT_V3, RADACINA / TOKENIZER)
     elif args.set == "examen_nou":
         info = cmd_examen_nou_masoara(lucru, RADACINA / TEXT_V3)
         info = {k: v for k, v in info.items() if k not in ("toate", "primele_3_aleasa")}

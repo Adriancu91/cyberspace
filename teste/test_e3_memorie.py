@@ -192,6 +192,37 @@ def test_examenul_nou_s26(tmp_path, monkeypatch):
     with pytest.raises(SystemExit):
         e3.cmd_examen_nou_masoara(lucru, v3)  # o singură rulare
 
+    # S27: datele de antrenare E3 (un „tokenizer” de cuvinte, ca să nu încarce BPE-ul)
+    import module.tokenizer_bpe as tb
+
+    class Cuvinte:
+        def codifica(self, text):
+            return text.split()
+
+    monkeypatch.setattr(tb.TokenizerBPE, "incarca", staticmethod(lambda cale: Cuvinte()))
+    sha = json.loads((lucru / "examen_nou_4096_info.json").read_text(encoding="utf-8"))["sha256"]
+    with pytest.raises(SystemExit):
+        e3.cmd_date_antrenare(lucru, v3, tmp_path / "tok.json", examene)  # altă amprentă decât cea S26 reală
+    info = e3.cmd_date_antrenare(lucru, v3, tmp_path / "tok.json", examene, sha_examen_nou=sha)
+    assert info["candidate_in_text_v3"] == 7
+    assert info["scoase"] == {"grup": 3, "text": 1, "vechi_oprite": 3}  # g3 (2048), g4 și g5 (S26); textul unui examen
+    assert info["exemple"] == 3 and info["perechi_vechi"] == 4
+    exemple = [json.loads(r) for r in (lucru / "date_antrenare_s27.jsonl").read_text(encoding="utf-8").splitlines()]
+    oprite = {"w1", "w2", "w4", "w5"} | {t["id"] for t in json.loads(
+        (lucru / "texte_examen.json").read_text(encoding="utf-8"))}
+    assert all(not set(e["articole"]) & oprite and 1 <= e["bucati"] <= 3 for e in exemple)
+    bilca = next(e for e in exemple if e["intrebare"] == "În ce raion se află Bilca?")
+    assert bilca["articole"][0] == "w0" and bilca["raspuns_in_bucati"]
+    assert bilca["text"] == "\n".join(b["text"] for b in e3.bucati_e3(
+        e3.deschide(lucru / "index.sqlite"), bilca["intrebare"], info["varianta"], e3.incarca_liste(lucru), oprite))
+    amestec = (lucru / e3.AMESTEC_S27).read_text(encoding="utf-8").splitlines()
+    assert len(amestec) == 3 + info["perechi_vechi_puse"]
+    bucati = [{"text": "unu doi trei"}, {"text": "patru cinci"}]
+    assert e3.cate_incap(Cuvinte(), "Ce?", bucati, maxim=100) == 2
+    assert e3.cate_incap(Cuvinte(), "Ce?", bucati, maxim=7) == 1  # „Text: unu doi trei Întrebare: Ce? Răspuns:”
+    assert e3.cate_incap(Cuvinte(), "Ce?", bucati, maxim=6) == 0
+    assert len(e3._repeta([1, 2, 3, 4], 1.5, 0)) == 6
+
 
 def test_numar_gol_si_potrivirea_noua():
     assert e3.numar_gol("În 1966.") == "1966"
