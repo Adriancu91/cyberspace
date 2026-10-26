@@ -118,6 +118,10 @@ Fiindcă cele 160 de întrebări au fost folosite de două ori de căutare, am p
 **Actualizare 24 oct 04:05 (Adrian, prin centrul de comandă) — PAUZĂ PÂNĂ LUNI (26 oct) + OPRIREA WORKSTATION-ULUI:** Adrian se întoarce luni.
 Nicio sarcină nouă pe placă sau pe procesor până atunci; S27 rămâne `propus — necesită Adrian`. Supraveghetorul e oprit până luni.
 Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altceva.
+**Actualizare 26 oct 16:10 (Adrian, prin centrul de comandă) — PAUZA SE RIDICĂ:** Adrian s-a întors; Kronos lucrează din nou, zi și noapte
+(regula din 22 oct 15:10). **S27 e aprobat de Adrian** cu criteriile propuse: confirmat dacă sistemul răspunde corect la ≥ 60 % fără text dat și nu
+pierde mai mult de 2 puncte pe noaptea 10 / S4 cu textul dat; infirmat sub 45 %. Pre-înregistrarea se scrie înainte de pornire, ca de obicei.
+Supraveghetorul e repornit. Fereastra OS/GPU pe workstation (~30–60 min, cu Adrian) se alege între două sarcini; o anunță centrul de comandă.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
@@ -1024,7 +1028,7 @@ Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altcev
 - raport: docs/rapoarte/2026-10-24_0232_S26_E3_examen_nou.md
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
-- stare: propus — necesită Adrian
+- stare: aprobat (Adrian, 26 oct 16:10, prin centrul de comandă; criteriile propuse: ≥ 60 % confirmat, < 45 % infirmat, ≤ 2 puncte pierdute pe noaptea 10 / S4)
 - tip: placă
 - fereastră: zi sau noapte, după „da”-ul lui Adrian și după S26 `gata`
 - durată maximă: 3 ore de antrenare + examene (~4 ore în total)
@@ -1034,5 +1038,5 @@ Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altcev
 - criterii propuse (le decide Adrian): confirmat dacă sistemul răspunde corect la **≥ 60 %** fără text dat și nu pierde mai mult de 2 puncte pe
   noaptea 10 / S4 cu textul dat; infirmat sub 45 %. Placa sub 7.000 MB și 83 °C.
 - pre-înregistrare: se scrie înainte de pornire (`docs/preinregistrari/2026-10-2x_E3_memorie.md`), după cifrele S26
-- aprobat de: — (așteaptă „da”-ul lui Adrian: pragul E3 și pornirea antrenării)
+- aprobat de: Adrian, 26 oct 16:10 (prin centrul de comandă)
 - raport: —
