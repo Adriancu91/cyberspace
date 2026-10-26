@@ -62,6 +62,11 @@ MODULE = [
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
     pytest.param(
+        "model", "module.model_muon:ModelGPTConversatieMuon",
+        {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__", "optimizator": "muon", "adunare_loturi": 2},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
+    pytest.param(
         "model", "module.model_racit:ModelGPTRacit", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
