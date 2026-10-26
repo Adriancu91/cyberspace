@@ -330,17 +330,19 @@ def interogare(intrebare: str, varianta: str) -> str:
 
 
 def cauta(con: sqlite3.Connection, intrebare: str, varianta: str, k: int = max(K),
-          liste: dict[str, set[str]] | None = None) -> list[dict[str, Any]]:
+          liste: dict[str, set[str]] | None = None, transforma: Any = None) -> list[dict[str, Any]]:
     """Primele k bucăți după BM25. La „fara_cuvinte_si” și „nume_obligatorii”, dacă AND aduce prea puțin, se completează
-    cu OR (varianta de bază). Cu partea (c), se aduc `CATE_PENTRU_LISTE` și paginile-listă trec după celelalte."""
+    cu OR (varianta de bază). Cu partea (c), se aduc `CATE_PENTRU_LISTE` și paginile-listă trec după celelalte.
+    `transforma` (S29): o funcție aplicată interogării FTS5 înainte de căutare (de ex. cuvintele trecute prin rădăcini)."""
     b, c = ("", "") if varianta in VARIANTE else _parti(varianta)
     cate = max(k, CATE_PENTRU_LISTE) if c else k
+    transforma = transforma or (lambda x: x)
     sql = "SELECT rowid, text, articol, sursa FROM bucati WHERE bucati MATCH ? ORDER BY rank LIMIT ?"
-    gasite = con.execute(sql, (interogare(intrebare, varianta), cate)).fetchall()
+    gasite = con.execute(sql, (transforma(interogare(intrebare, varianta)), cate)).fetchall()
     completare = {"fara_cuvinte_si": "fara_cuvinte", "nume_obligatorii": VARIANTA_S24}.get(varianta if not b else b)
     if completare and len(gasite) < cate:
         vazute = {g[0] for g in gasite}
-        gasite += [g for g in con.execute(sql, (interogare(intrebare, completare), cate)).fetchall()
+        gasite += [g for g in con.execute(sql, (transforma(interogare(intrebare, completare)), cate)).fetchall()
                    if g[0] not in vazute][: cate - len(gasite)]
     if c:
         if liste is None:
