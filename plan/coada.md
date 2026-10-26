@@ -135,6 +135,11 @@ Abaterea „de obicei 2 bucăți în 512, nu 3” e scrisă în pre-înregistrar
 depindă de răspuns, iar pragul lui Adrian rămâne neschimbat → acceptată. Plafonul real (răspunsul în bucățile chiar date) se numără după examen.
 Verdictul îl verific după raport. Tot nicio altă sarcină pe placă până atunci.
 
+**Actualizare 26 oct 20:15 (supraveghetor) — comanda C-21 a lui Adrian (Cyber Hub) pusă în coadă, DUPĂ S27:** S27 încă rulează (fără commit
+nou de la 16:52, normal în timpul antrenării; placa ocupată până pe la ~20:45). Comanda C-21 (Adrian, 26 oct 17:45, prin centrul de comandă;
+`studiu/2026-10-26_open-source/kronos.md` §3 din hub) e împărțită în **S29 → S30 → S31 → S32**, în ordinea asta, fiecare pornește **doar după ce
+cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S27. Fiecare are pre-înregistrare urcată înainte de pornire.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1077,3 +1082,124 @@ Verdictul îl verific după raport. Tot nicio altă sarcină pe placă până at
 - pre-înregistrare: docs/preinregistrari/2026-10-26_E3_memorie.md (pasul 3, urcată înainte de pasul 4)
 - aprobat de: Adrian, 26 oct 16:10 (prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 16:15
 - raport: docs/rapoarte/2026-10-2x_<ora>_S27_E3_memorie.md
+
+### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
+- stare: aprobat — pornește DOAR după S27 `gata` (verdictul scris în raport); dacă S27 e încă `in_lucru`, aștepți
+- tip: procesor (rădăcinile, RRF) + placă scurt (reordonarea: ~20 × 1.000–1.200 de evaluări, estimat sub 1 oră)
+- fereastră: oricând — la prima verificare a cozii după S27 `gata`, cu placa liberă
+- durată maximă: 6 ore în total; cel mult 1,5 ore pe placă; RAM cel mult ~40 GB; placa sub 7.000 MB și 83 °C
+- de ce: comanda C-21 punctul 1 (propunerea 2 din studiu). Azi răspunsul e în primele 3 bucăți la 72 % și în primele 5 la 80 % (S26):
+  diferența arată că **ordinea** e problema. Iar S27 a arătat că în context încap de obicei doar 2 bucăți, deci ordinea contează și mai mult.
+- ce faci (comenzi noi în `unelte/e3_memorie.py` sau o unealtă nouă `unelte/e3_reordonare.py`; teste noi în `teste/`):
+  0. **Unde stă codul.** C-21 cere module noi (MANIFEST + teste de contract). Dacă un port existent din contracte se potrivește (de ex. cel al
+     memoriei), faci piesele ca module noi în `module/` cu MANIFEST și le adaugi în lista `MODULE` din `teste_contracte/`. Dacă ar trebui
+     un **port nou** (adică o schimbare în `kronos/`), NU-l adaugi: scrii piesele în `unelte/` cu teste și notezi în raport ce port ar trebui
+     — schimbarea în `kronos/` rămâne la Adrian.
+  1. **(a) Rădăcini românești:** un stemmer românesc scris de noi după descrierea publică a algoritmului Snowball pentru română (fără cod
+     copiat; sursa ideii în comentariu/README), cu teste pe cel puțin 30 de cuvinte (pluraluri, articol hotărât, diacritice). Un index NOU,
+     separat, `lucru/e3/index_radacini.sqlite` (aceleași bucăți, textul trecut prin stemmer); `lucru/e3/index.sqlite` rămâne neatins
+     (doar citire). Căutarea pe ambele indexuri se unește cu **RRF, k = 60**.
+  2. **(b) Reordonarea „probabilitatea întrebării”:** pentru primele 20 de bucăți aduse de căutare, judecătorul calculează
+     log p(întrebare | bucată), **normalizat pe simbol** (și varianta nenormalizată, ca să vezi dacă favorizează bucățile scurte), cu un
+     prompt fix (de ex. „Text: …⏎Întrebare:”), fără întâmplare. **Judecătorul: #415.** Modelul S27 se folosește în loc doar dacă S27 a ieșit
+     **CONFIRMAT**. Niciun alt model.
+  3. **Alegerea, doar pe validare:** pe eșantioanele de validare existente **1024 și 2048** (500 + 500, S25) măsori la k = 1/3/5/20, potrivirea
+     S16: căutarea aleasă S25 (`nume_obligatorii_liste`) simplă; + (a) RRF; + (b) reordonare; (a)+(b). Alegi **o singură** variantă finală
+     (cea mai bună la k = 3 pe validare; la egalitate, cea mai simplă). Doc2query (c) NU se face acum.
+  4. **Setul nou, neatins:** 100 de întrebări „text” din `text_v3/antrenare.jsonl`, **sămânța 8192**, aceleași filtre ca la S26, **fără nicio
+     întrebare și niciun articol** comun cu: cele 100 S26, cele 160 de examene, eșantioanele 1024 și 2048, și **exemplele de antrenare S27**
+     (`lucru/e3/date_antrenare_s27.json`). Salvezi lista fixă `lucru/e3/examen_nou_8192.json`, scrii în raport sha256 și câte articole are.
+     **Spus cinstit, de scris în pre-înregistrare:** întrebările din `text_v3` au fost văzute de #415 la antrenare (noaptea 12), deci judecătorul
+     le poate „recunoaște”; numeri și raportezi acest risc. Ca reper, măsori (o singură dată) și pe cele 100 S26.
+  5. **Pre-înregistrarea** `docs/preinregistrari/2026-10-2x_E3_cautare_v2.md`, **urcată (commit + push) ÎNAINTE de pasul 6** (după pasul 3,
+     cu varianta aleasă deja fixată): pragul din C-21 cuvânt cu cuvânt — **CONFIRMAT** dacă pe setul 8192 varianta aleasă urcă la **k = 3 cu
+     ≥ 5 puncte** față de căutarea aleasă S25 simplă **și** la k = 20 nu scade; **INFIRMAT** dacă la k = 3 urcă cu **mai puțin de 2 puncte**
+     sau k = 20 scade; între ele: NECLAR. Plus așteptările tale în cifre și „câte bucăți încap în 448 de simboluri” (regula S27) pentru varianta aleasă.
+  6. **Măsurarea, o singură rulare** pe setul 8192 (și reperul S26): k = 1/2/3/5/20, potrivirea S16, timpul pe întrebare, memoria plăcii.
+  7. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S29_E3_cautare_v2.md`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen și `text_v3` (doar citire), listele S26/S27,
+  `lucru/e3/index.sqlite` (doar citire), `unelte/verificator_text.py`, #415 și linia w2. Nimic antrenat, nimic descărcat, nimic instalat,
+  nimic în interfață, nimic din `lucru/e3/` în Git.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: docs/preinregistrari/2026-10-2x_E3_cautare_v2.md (urcată înainte de pasul 6)
+- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
+- raport: docs/rapoarte/2026-10-2x_<ora>_S29_E3_cautare_v2.md
+
+### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
+- stare: aprobat — pornește DOAR după S29 `gata`
+- tip: procesor + placă scurt (proba de 10 minute)
+- fereastră: oricând, cu placa liberă
+- durată maximă: 4 ore; cel mult 30 de minute pe placă; placa sub 7.000 MB și 83 °C
+- de ce: comanda C-21 punctul 2 (propunerea 1 din studiu): Muon ar ajunge la aceeași pierdere cu ~1,5× mai puțini pași; răcirea lungă e
+  cel mai sigur câștig din rețetele citite. Înainte de 5–6 ore pe placă, codul trebuie dovedit pe procesor.
+- ce faci:
+  1. **Optimizatorul**, scris de noi (inspirat din descrierea publică Muon: Newton-Schulz în bf16, momentum 0,95 Nesterov; sursa ideii în
+     README), ca **modul nou** `module/optimizator_muon.py` cu MANIFEST și teste de contract dacă există un port potrivit; dacă ar cere un port
+     nou în `kronos/`, NU-l adaugi: îl pui în `unelte/` și notezi în raport. Muon pe matricile din straturi; AdamW pe intrare, ieșire,
+     LayerNorm și bias.
+  2. **Opțiuni noi în `unelte/antrenare_lunga.py`** (sau în configurare): alegerea optimizatorului, **gradient adunat pe 8 loturi**, și
+     **răcirea finală ~25 %** din antrenare. **Valorile implicite rămân exact ca acum** (AdamW, fără adunare, răcirea de azi) — un test
+     arată că fără opțiunile noi antrenarea face exact aceiași pași ca înainte (#415 și linia w2 neatinse).
+  3. **Testul unitar pe procesor** (`CUDA_VISIBLE_DEVICES=-1`): pe un MLP mic, Muon scade pierderea, iar matricea de update are valorile
+     singulare în ~[0,6; 1,2].
+  4. **Configurările** pentru S31: `config/conv_w2_muon_A.toml` (AdamW) și `config/conv_w2_muon_B.toml` (Muon) = copii ale
+     `config/conv_w2_text_v3.toml` (rețeta lui #415), aceleași date și aceeași sămânță, ambele cu adunare pe 8 loturi și răcire ~25 %;
+     diferă doar optimizatorul (B: lr Muon 0,02 pe matrici, AdamW ca acum pe rest), `nume` (`w2_muon_A`/`w2_muon_B`, linii noi de rulare)
+     și `cale_stare`. Arăți diferențele cu `diff` în raport.
+  5. **Proba pe placă, 10 minute, cu B** (din #415, prin cascadă), plus 2 minute cu lr 0,01: memoria plăcii cel mult, temperatura, pierderea
+     la început (dacă vezi „șocul” de la momentumul pornit de la zero, îl scrii). Dacă memoria trece de 7.000 MB: te oprești, `oprit`,
+     scrii cifrele. Proba nu e un rezultat; modelele ei nu se păstrează pentru examen.
+  6. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S30_muon_pregatire.md`, cu lr-ul pe care îl
+     propui pentru S31 (0,01 sau 0,02) și de ce.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, #415, linia w2. Nimic descărcat, nimic instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare (proba de 10 minute nu se notează); pre-înregistrarea S31 se scrie la S31
+- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
+- raport: docs/rapoarte/2026-10-2x_<ora>_S30_muon_pregatire.md
+
+### S31 — C-21.2, rularea: AdamW (A) contra Muon (B), câte 2 ore din #415 (placa)
+- stare: aprobat — pornește DOAR după S30 `gata` cu proba sub 7.000 MB (supraveghetorul verifică S30 înainte; dacă S30 propune o schimbare
+  față de pașii de aici în afară de lr, aștepți verificarea lui)
+- tip: placă (~5–6 ore în total)
+- fereastră: noapte (19:00–07:00) de preferat; altfel oricând, dacă A + B + examenele încap în aceeași fereastră
+- durată maximă: 2 ore A + 2 ore B + examene; cel mult 6 ore pe placă
+- ce faci:
+  1. **Pre-înregistrarea** `docs/preinregistrari/2026-10-2x_muon.md`, **urcată ÎNAINTE de pornire**, cu pragul din C-21 cuvânt cu cuvânt:
+     **CONFIRMAT** dacă B ≤ A − 0,010 val_bpb pe validarea românească **și** nicio regresie mai mare de 0,005 pe celelalte (TinyStories R2,
+     cod, fapte); **INFIRMAT** dacă B ≥ A pe română; între ele: **NECLAR** (se repetă cu altă sămânță — o pune supraveghetorul). Plus
+     așteptările tale în cifre, lr-ul ales la S30 și ora estimată de sfârșit (scrisă și în coadă la pornire).
+  2. **A:** `cascada.py porneste S31A -- python unelte/antrenare_lunga.py --config config/conv_w2_muon_A.toml --ore 2 --porneste-din 415`;
+     apoi **B** la fel cu `conv_w2_muon_B.toml`. Aceeași sămânță, aceleași date.
+  3. **Examenele, o singură rulare pe A și B:** val_bpb pe validarea românească și pe TinyStories R2 + examenele obișnuite ca la S23
+     (română, cod, povești, fapte noi). Verdictul după pre-înregistrare, cu toate cifrele.
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S31_muon.md`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, #415, linia w2. Modelele noi NU intră în interfață.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: docs/preinregistrari/2026-10-2x_muon.md (urcată înainte de pornire)
+- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
+- raport: docs/rapoarte/2026-10-2x_<ora>_S31_muon.md
+
+### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
+- stare: aprobat — pornește DOAR după S31 `gata`
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
+- fereastră: oricând
+- durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB
+- de ce: comanda C-21 punctul 3 (propunerea 3 din studiu): desparte „ce face modelul” de PyTorch și dă lui Cyber Universe un contract exact
+  (fișierul de greutăți) pentru motorul lor fără sistem de operare. Nu schimbă modelul.
+- ce faci:
+  1. **Unealta de export** `unelte/exporta_greutati.py`: scrie #415 într-un fișier binar propriu (antet cu chei-valori, little-endian,
+     aliniere 32 — ideea GGUF, cod scris de noi), variantele fp32 și **Q8_0 doar pe greutăți** (blocuri de 32, o scară). Formatul descris
+     într-un README scurt (contractul pentru OS).
+  2. **Motorul** ca modul nou `module/inferenta_bruta.py` (Python + numpy) cu MANIFEST și teste de contract dacă există un port potrivit
+     (altfel în `unelte/` și notezi în raport — portul nou rămâne la Adrian): citește fișierul și face forward-ul lui #415 strat cu strat.
+     Atenție la ordinea greutăților din `nn.MultiheadAttention` (in_proj combinat): test strat cu strat.
+  3. **Starea de control:** PyTorch scrie logits pentru 3 texte fixe (în `teste/`, mici). **Prag (de scris în raport înainte de măsurare):**
+     fp32: diferența maximă < **1e-4** față de PyTorch; Q8_0: val_bpb pe validarea românească crește cu **cel mult 0,005** față de fp32.
+     Plus simboluri pe secundă pe procesor, fp32 și Q8_0.
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S32_inferenta_bruta.md`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, #415 (doar citire). Fișierele de greutăți exportate stau în `lucru/`, nu în
+  Git. Nimic descărcat, nimic instalat (numpy există deja; dacă nu, te oprești și scrii).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; pragul se scrie în raport și se urcă înainte de pasul 3
+- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
+- raport: docs/rapoarte/2026-10-2x_<ora>_S32_inferenta_bruta.md

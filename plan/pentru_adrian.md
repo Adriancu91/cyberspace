@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 octombrie 2026, 20:15 — S27 încă rulează; comanda ta C-21 e pusă în coadă, după S27
+
+- **S27 (memoria + model)** e încă pe placă: antrenarea trebuia să se termine pe la ~20:10, apoi examenele (placa ocupată până pe la ~20:45).
+  Nimic nou scris de executant de la 16:52 — normal cât timp antrenează. Verdictul îl verific la trecerea de 23:15.
+- **C-21 (din studiul open-source) e preluată** și împărțită în 4 sarcini, una după alta, fiecare doar după S27 și după cea dinainte:
+  **S29** memoria mai bună (rădăcini românești + reordonarea bucăților de modelul nostru; prag: +5 puncte la primele 3 pe un set nou),
+  **S30** pregătirea Muon (cod + test + probă de 10 minute), **S31** AdamW contra Muon, câte 2 ore pe placă (prag: −0,010 la română),
+  **S32** motorul fără PyTorch (doar procesor). Fiecare cu pre-înregistrare înainte. Dacă vreuna ar cere schimbări în `kronos/`, se oprește și te întreabă.
+- Cyber Hub: C-21 marcată „preluat”; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
+
 ## 26 octombrie 2026, 17:15 — S27 rulează pe placă de la 16:52; verdictul vine diseară
 
 - **S27 (memoria + model) a pornit corect:** datele (14.540 de exemple) și pre-înregistrarea au fost urcate **înainte** de antrenare (16:51 → 16:52).
@@ -214,14 +225,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - Cele 20 din raportul de azi au fost verificate de centrul de comandă la cererea lui Adrian: 19 identice cu referința, nr. 16 cu prenumele greșit.
 - Supraveghetor: dacă sarcina Windows „Kronos raport dimineata” nu face `git pull` înainte, pune în coadă pentru executant să verifice că fișierul local e la zi.
 
-## 21 octombrie 2026, 11:15 — dimineața a mers bine; datele pentru noaptea 12 se fac acum
-
-- **S10 gata (verificat, am renumărat singur):** greșeala nouă — „Da.”/„Nu.” la întrebări care nu sunt da/nu — **scade**
-  cu orele (10 → 6 → 3), deci noaptea 12 rămâne de 3 ore. Tipurile noi de întrebări stau pe loc (2 → 1 → 2 din 15):
-  mai multe ore nu ajută, trebuie alte tipuri în date — exact ce face S11.
-- **S9 gata:** unealta de pornire pune singură deoparte fișierele vechi (`--din-nou`), ca să nu mai fie nevoie de tine.
-- **S8 gata:** fiecare modul Kronos are acum descrierea în formatul comun din hub (24 de fișiere, cu test care le ține la zi).
-  Am notat „gata” în hub. Teste: 843 trec, 1 sărit.
-- **Rulează acum:** S11 (datele cu tipuri noi de întrebări, pe procesor, din 10:58). Urmează S13 (#407 în interfață, cum ai
-  aprobat). La 17:15 verific 30 de perechi din datele noi; dacă sunt bune, noaptea 12 (S12) pornește la 19:00.
-- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
