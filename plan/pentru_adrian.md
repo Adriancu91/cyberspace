@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 octombrie 2026, 16:15 — Bine ai revenit: S27 (memoria + model) pornește pe placă; cifrele S26 verificate
+
+- **S26 verificat (făcut pe 24 oct, doar procesor):** pe 100 de întrebări noi, neatinse, căutarea noastră găsește răspunsul în primele 5 bucăți la
+  **80 %** și în primele 3 la **72 %**. Am adunat cifrele din nou: se potrivesc. Cifrele vechi (86,9 %) erau umflate, cum bănuiam.
+- **S27 e aprobat de tine** și l-am scris pas cu pas pentru executant: datele (întrebare + primele 3 bucăți găsite), 3 ore de antrenare din #415,
+  apoi examenul oficial pe cele 100 de întrebări noi. Pre-înregistrarea se urcă înainte de pornire. Probabil gata diseară (~21:00–22:00).
+- De știut dinainte: cum răspunsul e în cele 3 bucăți doar la 72 %, pragul tău de 60 % cere ca modelul să nimerească ~5 din 6 când are textul în față. E greu, dar e o întrebare cinstită.
+- Workstation-ul a rămas pornit (S28 nu l-a putut opri), executantul a mers toată pauza fără erori; 908 teste trec.
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Două mici întrebări din raportul de azi al executantului, când ai timp: (1) raportul de dimineață rămâne la 06:40 (ora de iarnă) sau îl muți la 07:40? (2) S28 (oprirea) o închidem ca „nu mai e nevoie”?
+
 S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: nimic în lucru (nicio sarcină `in_lucru`, niciun proces Python greu, placa fără calcule), `git status` curat, push reușit (d68bd85). Dar comanda `shutdown /s /t 120` e blocată de permisiunile rulării fără om („requires approval”), așa că n-am putut-o da. Calculatorul rămâne pornit, fără să lucreze nimic; executantul doar verifică la 30 de minute. Ca să-l oprești: din centrul de comandă sau direct, `shutdown /s /t 120`; sau adaugi `Bash(shutdown:*)` la permisiunile executantului și pui S28 înapoi pe `aprobat`.
 
 ## 24 octombrie 2026, 02:15 — Căutarea mai bună (S25): pe întrebări noi câștigul e în zgomot; acum un examen nou, curat (doar procesor)
@@ -211,18 +222,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **S8 reaprobat:** standardul din hub e copiat în `plan/hub_modul-v0.md`; executantul îl citește de acolo, nu mai clonează hub-ul.
   Regulă de acum: tot ce are executantul de citit din hub ajunge în `plan/` prin supraveghetor sau centrul de comandă.
 - Cele 20 de răspunsuri din raportul de dimineață: Adrian le verifică când are timp.
-
-## 21 octombrie 2026, 02:15 — noaptea 11: PARȚIAL, fără regresie (verificat)
-
-- **Noaptea 11 (S7) s-a terminat fără erori** (antrenare 20:47–23:58, examene până la 00:03; placa max 6.303 MB, 63 °C).
-  Am renumărat singur: la întrebări puse altfel Kronos a urcat de la 7 la **11 din 15**, la da/nu de la 0 la **13 din 15**,
-  refuzuri pe nedrept de la 22 la 11 din 45. Dar la **tipuri noi de întrebări a rămas 2 din 15** (pragul era 5) → **PARȚIAL**,
-  corect după praguri. N-a uitat nimic (româna, codul, poveștile, noaptea 10: 49/50). Raport: `docs/rapoarte/2026-10-21_0005_S7_noaptea11.md`.
-- **Azi ziua (aprobat de mine):** S10 — același examen pe modelele de la ora 1 și 2 (~10 min pe placă), să vedem dacă
-  greșeala nouă (răspunde „Da.” la întrebări care nu sunt da/nu) crește cu orele; S11 — date noi, cu **tipuri noi de
-  întrebări** (râuri, specii, deputați), altele decât cele din examen, ca examenul să rămână cinstit. Apoi S9 și S8, ca ieri.
-- **La noapte (S12, aprobat de mine, cu poartă):** 3 ore din #407 pe datele noi, doar dacă la 17:15 verific perechile și
-  sunt bune. Pragul de „confirmat”: tipuri noi ≥ 5 din 15.
-- Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** un „da” sau „nu” la **S13**: fila „Întreabă din text” din interfață să folosească **#407** în loc de
-  #401 (e mai bun în general — nota medie 6,7 față de 4,7 —, dar puțin mai slab la tipuri noi). Recomand **da**. Nu e urgent.

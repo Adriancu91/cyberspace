@@ -123,6 +123,13 @@ Executant: faci **S28** (mai jos) la prima verificare a cozii, apoi nimic altcev
 pierde mai mult de 2 puncte pe noaptea 10 / S4 cu textul dat; infirmat sub 45 %. Pre-înregistrarea se scrie înainte de pornire, ca de obicei.
 Supraveghetorul e repornit. Fereastra OS/GPU pe workstation (~30–60 min, cu Adrian) se alege între două sarcini; o anunță centrul de comandă.
 
+**Actualizare 26 oct 16:15 (supraveghetor) — repornit; S26 verificat; S27 scris în pași exacți:** S26 `gata`, verificat cu cifrele din raport
+adunate din nou pe tipuri: k = 5 38+14+6+6+3+13 = **80/100** ✓; k = 3 32+14+6+6+1+13 = **72/100** ✓; 86,9 − 80,0 = **6,9 ≥ 5** → după regula scrisă
+înainte, **cifrele de pe cele 160 erau umflate** (verdictul executantului e corect; și față de validarea 2048 e −4,8, cam o abatere — o parte e noroc).
+Cifra oficială a căutării: **80 % la k = 5**, plafonul pentru E3 cu model: **72 % la k = 3**. Atenție la pragul S27: ≥ 60 % cere ca modelul să răspundă
+corect în ~83 % din cazurile în care răspunsul e în cele 3 bucăți. S27 rămâne `aprobat` (Adrian, 16:10); mai jos am completat instrucțiunile exacte.
+Nicio altă sarcină pe placă până la verdictul S27.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1029,14 +1036,36 @@ Supraveghetorul e repornit. Fereastra OS/GPU pe workstation (~30–60 min, cu Ad
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
 - stare: aprobat (Adrian, 26 oct 16:10, prin centrul de comandă; criteriile propuse: ≥ 60 % confirmat, < 45 % infirmat, ≤ 2 puncte pierdute pe noaptea 10 / S4)
-- tip: placă
-- fereastră: zi sau noapte, după „da”-ul lui Adrian și după S26 `gata`
-- durată maximă: 3 ore de antrenare + examene (~4 ore în total)
-- ce ar face (propunerea executantului din S25, punctul 2): pornind din #415, 2–3 ore pe întrebări din `text_v3` la care textul dat e format din
-  **primele 3 bucăți aduse de index** (căutarea `nume_obligatorii_liste`), nu din textul perechii; fără cele 100 de întrebări S26 și articolele lor.
-  Examenele: cele 100 noi din S26 (oficiale) + cele 160 vechi, modelul primește doar întrebarea; plus noaptea 10, S4 și validările obișnuite ca regresie.
-- criterii propuse (le decide Adrian): confirmat dacă sistemul răspunde corect la **≥ 60 %** fără text dat și nu pierde mai mult de 2 puncte pe
-  noaptea 10 / S4 cu textul dat; infirmat sub 45 %. Placa sub 7.000 MB și 83 °C.
-- pre-înregistrare: se scrie înainte de pornire (`docs/preinregistrari/2026-10-2x_E3_memorie.md`), după cifrele S26
-- aprobat de: Adrian, 26 oct 16:10 (prin centrul de comandă)
-- raport: —
+- tip: placă (~4–5 ore în total)
+- fereastră: oricând — la prima verificare a cozii (regula lui Adrian din 22 oct 15:10); S26 e `gata`
+- durată maximă: 3 ore de antrenare + examene; cel mult 6 ore pe placă în total
+- de ce: propunerea executantului din S25 (punctul 2), aprobată de Adrian. Întrebarea: **dacă Kronos își caută singur textul în indexul propriu
+  și îl citește, răspunde corect fără să i se dea textul?** Strategia: `docs/rapoarte/2026-10-22_0200_strategie_nucleu_fara_llm.md` §4 H2, §7 E3.
+- ce faci:
+  1. **Datele (procesor, `CUDA_VISIBLE_DEVICES=-1`), comandă nouă `date-antrenare` în `unelte/e3_memorie.py`, cu test nou în
+     `teste/test_e3_memorie.py`:** din `date/conversatie/text_v3/antrenare.jsonl`, întrebările „text” (aceleași filtre ca la S25/S26), **fără**:
+     cele 100 de întrebări S26 (verifici amprenta `3501f307…f523`) și **toate bucățile celor 113 articole ale lor**, cele 160 de examene vechi
+     (întrebări + texte) și eșantionul de validare 2048 (rămâne validarea curată a sistemului). Pentru fiecare întrebare, textul dat = **primele
+     3 bucăți aduse de căutarea aleasă `nume_obligatorii_liste`**, în ordinea căutării; răspunsul țintă = răspunsul perechii. Scrii câte exemple,
+     la câte e răspunsul în cele 3 bucăți (după verificatorul S16) și câte articole au fost scoase. Fișierul în `lucru/e3/` (nu în Git).
+  2. **Configurarea `config/conv_w2_e3_memorie.toml`** = copie a `config/conv_w2_text_v3.toml` (rețeta lui #415, noaptea 12), cu `nume = "w2_conv_e3_memorie"`
+     și o singură schimbare, amestecul: cei 45 % de perechi devin **30 % exemple E3 (pasul 1) + 15 % perechile vechi text_v3** (ca să nu uite
+     „răspuns din textul dat”); 5 % hrană și 50 % text vechi rămân. Rata, lotul, mărimea modelului: neschimbate.
+  3. **Pre-înregistrarea** `docs/preinregistrari/2026-10-26_E3_memorie.md`, **urcată (commit + push) ÎNAINTE de pornirea antrenării**: criteriile
+     lui Adrian cuvânt cu cuvânt (confirmat: sistemul răspunde corect la **≥ 60 %** din cele 100 S26 fără text dat **și** nu pierde mai mult de
+     **2 puncte** pe noaptea 10 / S4 cu textul dat, față de #415; infirmat: **sub 45 %**; între ele: NECLAR), unitatea exactă a „punctelor” (aceeași
+     ca în rapoartele S17/S23), notarea (verificatorul S16, potrivirea S16), plafonul 72 % și așteptările tale în cifre. Placa sub 7.000 MB și 83 °C.
+  4. **Antrenarea:** `cascada.py porneste S27 -- python unelte/antrenare_lunga.py --config config/conv_w2_e3_memorie.toml --ore 3 --porneste-din 415`.
+     La pornire scrii în coadă **ora estimată de sfârșit** (Adrian are nevoie de workstation ~30–60 min pentru OS/GPU; o anunță centrul de comandă).
+  5. **Examenele (după antrenare), o singură rulare pe modelul nou și, în aceeași rulare, pe #415 (baseline-ul sistemului fără antrenare):**
+     (a) **oficial:** cele 100 S26 — sistemul primește doar întrebarea, caută primele 3 bucăți, modelul răspunde; notat cu verificatorul S16;
+     scrii și câte corecte sunt dintre cele 72 cu răspunsul în bucăți și câte dintre cele 28 fără; (b) în plus (umflate): cele 160 vechi, la fel;
+     (c) **regresia:** noaptea 10 și S4 cu textul dat, față de #415; (d) validările obișnuite ca la S23 (română, cod, povești, fapte noi, val_bpb).
+  6. Verdictul după pre-înregistrare, cu toate cifrele. `python -m pytest`: toate trec. Commit + push.
+     Raport `docs/rapoarte/2026-10-2x_<ora>_S27_E3_memorie.md`.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen și `text_v3` (doar citire), lista S26, indexul
+  `lucru/e3/index.sqlite` (doar citire), `unelte/verificator_text.py`. Nimic descărcat, nimic instalat. Modelul nou NU intră în interfață (rămâne #407).
+- pre-înregistrare: docs/preinregistrari/2026-10-26_E3_memorie.md (pasul 3, urcată înainte de pasul 4)
+- aprobat de: Adrian, 26 oct 16:10 (prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 16:15
+- raport: docs/rapoarte/2026-10-2x_<ora>_S27_E3_memorie.md
