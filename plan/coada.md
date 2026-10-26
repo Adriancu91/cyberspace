@@ -1035,7 +1035,10 @@ Nicio altă sarcină pe placă până la verdictul S27.
 - raport: docs/rapoarte/2026-10-24_0232_S26_E3_examen_nou.md
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
-- stare: in_lucru (executant, 26 oct 16:30: pașii 1–3 pe procesor, apoi antrenarea; aprobat de Adrian, 26 oct 16:10, prin centrul de comandă; criteriile propuse: ≥ 60 % confirmat, < 45 % infirmat, ≤ 2 puncte pierdute pe noaptea 10 / S4)
+- stare: in_lucru (executant, 26 oct 16:52: pașii 1–3 gata (7f756ef: 14.540 de exemple; de obicei încap doar 2 bucăți în 512 −
+  64 simboluri — scris în pre-înregistrare); **antrenarea pornită la 16:52 prin cascadă (procesul 6700), sfârșit estimat ~20:10**;
+  apoi unealta de examen (procesor, cu test) și examenele (~30 min pe placă) → **placa ocupată până pe la ~20:45**. Rămas: pașii
+  5–6, raportul; aprobat de Adrian, 26 oct 16:10, prin centrul de comandă; criteriile propuse: ≥ 60 % confirmat, < 45 % infirmat, ≤ 2 puncte pierdute pe noaptea 10 / S4)
 - tip: placă (~4–5 ore în total)
 - fereastră: oricând — la prima verificare a cozii (regula lui Adrian din 22 oct 15:10); S26 e `gata`
 - durată maximă: 3 ore de antrenare + examene; cel mult 6 ore pe placă în total
