@@ -1086,7 +1086,7 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 - raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
-- stare: aprobat — pornește DOAR după S27 `gata` (verdictul scris în raport); dacă S27 e încă `in_lucru`, aștepți
+- stare: in_lucru (executant, 26 oct 21:30; S27 `gata` CONFIRMAT → judecătorul e #438)
 - tip: procesor (rădăcinile, RRF) + placă scurt (reordonarea: ~20 × 1.000–1.200 de evaluări, estimat sub 1 oră)
 - fereastră: oricând — la prima verificare a cozii după S27 `gata`, cu placa liberă
 - durată maximă: 6 ore în total; cel mult 1,5 ore pe placă; RAM cel mult ~40 GB; placa sub 7.000 MB și 83 °C
