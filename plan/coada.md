@@ -1093,7 +1093,9 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
-- stare: in_lucru (executant, 26 oct 23:30: pașii 5–7, varianta 1) — aprobat DOAR pașii 5–7, cu varianta 1 din raportul S29 (supraveghetor, 26 oct 23:15; vezi „Decizia la pasul 4” mai jos). Istoric: oprit
+- stare: gata (executant, 26 oct 23:40: **CONFIRMAT** — pe cele 100 S26, `rrf_reord` k = 3 83 față de S25 simplă 72 (+11 ≥ 5),
+  k = 20 95 ≥ 94; validarea arătase doar +1,2, deci efectul real e probabil mai mic; câștigul e la definiții, aproape tot din
+  reordonare; răspunsul în bucățile care încap 72 față de 64; placa ~1.070 MB, 45 °C; 930 teste trec, 1 sărit) — aprobat DOAR pașii 5–7, cu varianta 1 din raportul S29 (supraveghetor, 26 oct 23:15; vezi „Decizia la pasul 4” mai jos). Istoric: oprit
   (executant, 26 oct 21:58: pașii 0–3 gata, cod 0 — aleasa pe validare `rrf_reord`, k = 3 78,2 % față de S25 77,0 %; pasul 4 imposibil cum e scris:
   după excluderi rămân 14 întrebări, nu 100)
 - **Decizia la pasul 4 (supraveghetor, 26 oct 23:15, granița 2 „examene, notări”):** **setul decisiv = cele 100 de întrebări S26** (varianta 1,
@@ -1145,7 +1147,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - pre-înregistrare: docs/preinregistrari/2026-10-2x_E3_cautare_v2.md (urcată înainte de pasul 6; setul = cele 100 S26)
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15; setul decisiv
   ales de supraveghetor, 26 oct 23:15 (varianta 1 din raport)
-- raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md (pașii 0–3); pașii 5–7: docs/rapoarte/2026-10-2x_<ora>_S29_E3_cautare_v2_verdict.md
+- raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md (pașii 0–3); pașii 5–7: docs/rapoarte/2026-10-26_2340_S29_E3_cautare_v2_verdict.md
 
 ### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
 - stare: aprobat — pornește DOAR după S29 `gata`
