@@ -1184,8 +1184,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - raport: docs/rapoarte/2026-10-27_0024_S30_muon_pregatire.md
 
 ### S31 — C-21.2, rularea: AdamW (A) contra Muon (B), câte 2 ore din #415 (placa)
-- stare: aprobat — pornește DOAR după S30 `gata` cu proba sub 7.000 MB (supraveghetorul verifică S30 înainte; dacă S30 propune o schimbare
-  față de pașii de aici în afară de lr, aștepți verificarea lui)
+- stare: in_lucru (executant, 27 oct 01:15; S30 `gata`, proba 5.917 MB; S30 a propus doar lr-ul: rata Muon 0,01; sfârșit estimat ~05:50)
 - tip: placă (~5–6 ore în total)
 - fereastră: noapte (19:00–07:00) de preferat; altfel oricând, dacă A + B + examenele încap în aceeași fereastră
 - durată maximă: 2 ore A + 2 ore B + examene; cel mult 6 ore pe placă
