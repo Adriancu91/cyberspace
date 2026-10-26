@@ -1150,7 +1150,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md (pașii 0–3); pașii 5–7: docs/rapoarte/2026-10-26_2340_S29_E3_cautare_v2_verdict.md
 
 ### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
-- stare: aprobat — pornește DOAR după S29 `gata`
+- stare: in_lucru (executant, 27 oct 00:00; S29 `gata`)
 - tip: procesor + placă scurt (proba de 10 minute)
 - fereastră: oricând, cu placa liberă
 - durată maximă: 4 ore; cel mult 30 de minute pe placă; placa sub 7.000 MB și 83 °C
