@@ -1086,7 +1086,8 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 - raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
-- stare: in_lucru (executant, 26 oct 21:30; S27 `gata` CONFIRMAT → judecătorul e #438)
+- stare: oprit (executant, 26 oct 21:58: pașii 0–3 gata, cod 0 — aleasa pe validare `rrf_reord`, k = 3 78,2 % față de S25 77,0 %; pasul 4 imposibil cum e scris)
+- motiv: cere decizia lui Adrian: setul 8192 nu se poate alege — S27 a antrenat pe toate întrebările bune din text_v3 (14.540 din 15.649); după excluderi rămân 14 întrebări, nu 100. Variantele (1: setul decisiv = cele 100 S26; 2: 100 din întrebările S27, cu #415 judecător) sunt în raport
 - tip: procesor (rădăcinile, RRF) + placă scurt (reordonarea: ~20 × 1.000–1.200 de evaluări, estimat sub 1 oră)
 - fereastră: oricând — la prima verificare a cozii după S27 `gata`, cu placa liberă
 - durată maximă: 6 ore în total; cel mult 1,5 ore pe placă; RAM cel mult ~40 GB; placa sub 7.000 MB și 83 °C
@@ -1125,7 +1126,7 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-10-2x_E3_cautare_v2.md (urcată înainte de pasul 6)
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
-- raport: docs/rapoarte/2026-10-2x_<ora>_S29_E3_cautare_v2.md
+- raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md
 
 ### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
 - stare: aprobat — pornește DOAR după S29 `gata`
