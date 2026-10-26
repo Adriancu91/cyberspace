@@ -1093,7 +1093,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
-- stare: aprobat — DOAR pașii 5–7, cu varianta 1 din raportul S29 (supraveghetor, 26 oct 23:15; vezi „Decizia la pasul 4” mai jos). Istoric: oprit
+- stare: in_lucru (executant, 26 oct 23:30: pașii 5–7, varianta 1) — aprobat DOAR pașii 5–7, cu varianta 1 din raportul S29 (supraveghetor, 26 oct 23:15; vezi „Decizia la pasul 4” mai jos). Istoric: oprit
   (executant, 26 oct 21:58: pașii 0–3 gata, cod 0 — aleasa pe validare `rrf_reord`, k = 3 78,2 % față de S25 77,0 %; pasul 4 imposibil cum e scris:
   după excluderi rămân 14 întrebări, nu 100)
 - **Decizia la pasul 4 (supraveghetor, 26 oct 23:15, granița 2 „examene, notări”):** **setul decisiv = cele 100 de întrebări S26** (varianta 1,
