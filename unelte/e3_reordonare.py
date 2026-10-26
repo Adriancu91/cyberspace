@@ -16,6 +16,7 @@ bucăți; un port „cautare” (intrebare → bucăți ordonate) ar fi o schimb
 
     python -X utf8 unelte/e3_reordonare.py index-radacini          # lucru/e3/index_radacini.sqlite (+ .json)
     python -X utf8 unelte/e3_reordonare.py validare --judecator 438  # lucru/e3/validare_s29.json (placa, scurt)
+    python -X utf8 unelte/e3_reordonare.py examen --judecator 438    # O SINGURĂ DATĂ: cele 100 S26 → examen_s29.json
 
 Nu atinge kronos/, examenul BPB, paznicul, jurnalul, datele de examen, text_v3, listele S26/S27, lucru/e3/index.sqlite
 (doar citire), unelte/verificator_text.py, modelele.
@@ -49,6 +50,8 @@ LOT_JUDECATOR = 10
 K_S29 = (1, 3, 5, 20)
 VARIANTE_S29 = ("s25", "rrf", "s25_reord", "rrf_reord")  # de la cea mai simplă la cea mai complicată
 IESIRE_VALIDARE = "validare_s29.json"
+K_EXAMEN = (1, 2, 3, 5, 20)
+IESIRE_EXAMEN = "examen_s29.json"
 
 # ---------------------------------------------------------------- (a) rădăcinile românești
 
@@ -336,9 +339,10 @@ def masoara(con: sqlite3.Connection, con_r: sqlite3.Connection, intrebari: list[
     return rez
 
 
-def rezumat(rez: list[dict[str, Any]]) -> dict[str, Any]:
+def rezumat(rez: list[dict[str, Any]], k: Iterable[int] = K_S29) -> dict[str, Any]:
     variante = list(rez[0]["loc"]) if rez else []
-    return {v: {**e3.procente([r["loc"][v] for r in rez], K_S29),
+    k = tuple(k)
+    return {v: {**e3.procente([r["loc"][v] for r in rez], k),
                 "incap": dict(sorted(Counter(r["incap"][v] for r in rez).items()))} for v in variante}
 
 
@@ -400,6 +404,78 @@ def cmd_validare(lucru: Path, text_v3: Path, judecator_exp: int, incarca: Callab
     return info
 
 
+# ---------------------------------------------------------------- pasul 6: setul decisiv (cele 100 S26), o singură rulare
+
+def verdict_s29(pe: dict[str, Any], aleasa: str = "rrf_reord", baza: str = "s25") -> dict[str, Any]:
+    """Pragul C-21 (pre-înregistrarea 2026-10-26_E3_cautare_v2): CONFIRMAT = la k = 3 ≥ +5 puncte față de S25 simplă și
+    k = 20 nu scade; INFIRMAT = la k = 3 sub +2 puncte sau k = 20 scade; între ele NECLAR. Punctele sunt procentuale."""
+    d3 = round(pe[aleasa]["k3"]["procent"] - pe[baza]["k3"]["procent"], 1)
+    d20 = round(pe[aleasa]["k20"]["procent"] - pe[baza]["k20"]["procent"], 1)
+    if d20 < 0 or d3 < 2:
+        verdict = "INFIRMAT"
+    elif d3 >= 5:
+        verdict = "CONFIRMAT"
+    else:
+        verdict = "NECLAR"
+    return {"verdict": verdict, "aleasa": aleasa, "baza": baza, "puncte_k3": d3, "puncte_k20": d20}
+
+
+def cmd_examen(lucru: Path, judecator_exp: int, incarca: Callable[..., Any] | None = None,
+               paznic: Callable[[], None] | None = None,
+               judecator: Callable[[str, list[str]], list[tuple[float, int]]] | None = None,
+               sha_examen: str = e3.SHA_EXAMEN_NOU) -> dict[str, Any]:
+    """Pasul 6 din S29, O SINGURĂ rulare: toate variantele pe cele 100 S26 (amprenta verificată), k = 1/2/3/5/20,
+    potrivirea S16; verdictul pentru varianta aleasă la pasul 3 (validare_s29.json) față de S25 simplă din aceeași rulare."""
+    import hashlib
+    from unelte import e1_intrebari_nascute as e1
+
+    iesire = lucru / IESIRE_EXAMEN
+    if iesire.exists():
+        raise SystemExit("setul decisiv S29 s-a măsurat deja (o singură rulare)")
+    cale = lucru / "examen_nou_4096.json"
+    sha = hashlib.sha256(cale.read_bytes()).hexdigest()
+    if sha != sha_examen:
+        raise SystemExit(f"lista S26 nu are amprenta așteptată ({sha})")
+    start = time.time()
+    intrebari = json.loads(cale.read_text(encoding="utf-8"))
+    varianta = json.loads((lucru / "validare_s25.json").read_text(encoding="utf-8"))["aleasa"]
+    aleasa = json.loads((lucru / IESIRE_VALIDARE).read_text(encoding="utf-8"))["aleasa"]
+    liste = e3.incarca_liste(lucru)
+    model, fisa = (incarca or e1.modelul)(judecator_exp)
+    paznic = paznic or e1.paznic_placa
+    judecator = judecator or (lambda intrebare, texte: scoruri_intrebare(model, intrebare, texte))
+    try:
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.reset_peak_memory_stats()
+    except ImportError:
+        torch = None  # type: ignore[assignment]
+    con = sqlite3.connect(f"file:{(lucru / 'index.sqlite').as_posix()}?mode=ro", uri=True)
+    con_r = sqlite3.connect(f"file:{(lucru / 'index_radacini.sqlite').as_posix()}?mode=ro", uri=True)
+    rez = masoara(con, con_r, intrebari, varianta, liste, judecator, model.tok, paznic)
+    con.close()
+    con_r.close()
+    pe = rezumat(rez, K_EXAMEN)
+    memorie = None
+    if torch is not None and torch.cuda.is_available():
+        memorie = round(torch.cuda.max_memory_allocated() / 2**20, 1)
+    secunde = lambda cheie: {"median": round(statistics.median(r[cheie] for r in rez), 3),  # noqa: E731
+                             "maxim": round(max(r[cheie] for r in rez), 3)} if rez else None
+    fata_de_s25 = {v: {"reparate_k3": sum(1 for r in rez if (r["loc"]["s25"] or 99) > 3 and (r["loc"][v] or 99) <= 3),
+                       "stricate_k3": sum(1 for r in rez if (r["loc"]["s25"] or 99) <= 3 and (r["loc"][v] or 99) > 3)}
+                   for v in pe if v != "s25"}
+    info = {"set": "examen_nou_4096 (cele 100 S26)", "sha256": sha, "intrebari": len(intrebari),
+            "varianta_s25": varianta, "judecator": fisa["id"], "judecator_linie": fisa.get("linie"),
+            "variante": pe, **verdict_s29(pe, aleasa), "fata_de_s25": fata_de_s25,
+            "ordine_nenorm_diferita": sum(r["ordine_nenorm_diferita"] for r in rez),
+            "secunde_cautare": secunde("secunde_cautare"), "secunde_judecator": secunde("secunde_judecator"),
+            "memorie_placa_max_mb": memorie, "ram_maxim_mb": e3._ram_maxim_mb(),
+            "secunde": round(time.time() - start, 1), "scris": datetime.now().isoformat(timespec="seconds"),
+            "toate": rez}
+    e3._scrie_json(iesire, info)
+    return info
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -411,10 +487,14 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("index-radacini")
     v = sub.add_parser("validare")
     v.add_argument("--judecator", type=int, required=True)
+    x = sub.add_parser("examen")
+    x.add_argument("--judecator", type=int, required=True)
     args = parser.parse_args(argv)
     lucru = RADACINA / args.lucru
     if args.pas == "index-radacini":
         info = cmd_index_radacini(lucru)
+    elif args.pas == "examen":
+        info = {k: x for k, x in cmd_examen(lucru, args.judecator).items() if k != "toate"}
     else:
         info = cmd_validare(lucru, RADACINA / e3.TEXT_V3, args.judecator)
         info = {k: x for k, x in info.items() if k != "toate"}

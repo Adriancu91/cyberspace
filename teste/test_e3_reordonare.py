@@ -126,3 +126,51 @@ def test_scorurile_judecatorului():
     assert len(s) == 2 and s[0][1] == s[1][1] == 3  # „ aa” = 3 simboluri, același număr la ambele bucăți
     assert s[0][0] == pytest.approx(s[1][0])  # bucata lungă e tăiată la început; sfârșitul e același
     assert r.scoruri_intrebare(Model(), "aa", []) == []
+
+
+def _pe(k3_baza, k20_baza, k3, k20):
+    return {"s25": {"k3": {"procent": k3_baza}, "k20": {"procent": k20_baza}},
+            "rrf_reord": {"k3": {"procent": k3}, "k20": {"procent": k20}}}
+
+
+def test_verdictul_dupa_pragurile_c21():
+    assert r.verdict_s29(_pe(72, 94, 77, 94))["verdict"] == "CONFIRMAT"  # +5, k20 la fel
+    assert r.verdict_s29(_pe(72, 94, 77, 93))["verdict"] == "INFIRMAT"  # k20 scade
+    assert r.verdict_s29(_pe(72, 94, 76, 95))["verdict"] == "NECLAR"  # +4
+    assert r.verdict_s29(_pe(72, 94, 74, 94))["verdict"] == "NECLAR"  # +2
+    assert r.verdict_s29(_pe(72, 94, 73, 95))["verdict"] == "INFIRMAT"  # +1
+    assert r.verdict_s29(_pe(72, 94, 70, 94))["puncte_k3"] == -2
+
+
+def test_examenul_o_singura_rulare_si_amprenta(tmp_path):
+    import hashlib
+    import json
+
+    lucru = tmp_path / "e3"
+    randuri = [("Orașul Brașov are o cetate veche din 1400.", "w1"), ("Satele din Brașov sunt mici.", "w2"),
+               ("Cluj are o universitate mare.", "w3")]
+    _index(lucru / "index.sqlite", randuri).close()
+    r.cmd_index_radacini(lucru)
+    intrebari = [{"intrebare": "Ce are orașul Brașov?", "raspuns": "o cetate veche", "tip": "text"},
+                 {"intrebare": "Ce are Cluj?", "raspuns": "o universitate", "tip": "text"}]
+    (lucru / "examen_nou_4096.json").write_text(json.dumps(intrebari, ensure_ascii=False), encoding="utf-8")
+    (lucru / "validare_s25.json").write_text(json.dumps({"aleasa": "nume_obligatorii_liste"}), encoding="utf-8")
+    (lucru / "validare_s29.json").write_text(json.dumps({"aleasa": "rrf_reord"}), encoding="utf-8")
+    (lucru / "liste_s25.json").write_text(json.dumps({"fraze_lista": [], "randuri_scurte": []}), encoding="utf-8")
+    sha = hashlib.sha256((lucru / "examen_nou_4096.json").read_bytes()).hexdigest()
+
+    class Model:
+        tok = _Tok()
+
+    paznic = []
+    argumente = dict(incarca=lambda exp: (Model(), {"id": exp, "linie": "proba"}), paznic=lambda: paznic.append(1),
+                     judecator=lambda q, texte: [(-float(len(t)), 1) for t in texte])
+    with pytest.raises(SystemExit):
+        r.cmd_examen(lucru, 438, sha_examen="altceva", **argumente)
+    info = r.cmd_examen(lucru, 438, sha_examen=sha, **argumente)
+    assert info["intrebari"] == 2 and info["judecator"] == 438 and paznic == [1]
+    assert set(info["variante"]["rrf_reord"]) >= {"k1", "k2", "k3", "k5", "k20", "incap"}
+    assert info["variante"]["s25"]["k3"]["bune"] == 2 and info["verdict"] == "INFIRMAT"  # +0 puncte
+    assert (lucru / "examen_s29.json").exists()
+    with pytest.raises(SystemExit):
+        r.cmd_examen(lucru, 438, sha_examen=sha, **argumente)
