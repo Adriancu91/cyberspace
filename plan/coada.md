@@ -1200,7 +1200,7 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
   4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S31_muon.md`.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, #415, linia w2. Modelele noi NU intră în interfață.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
-- pre-înregistrare: docs/preinregistrari/2026-10-2x_muon.md (urcată înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-10-27_muon.md (urcată înainte de pornire)
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
 - raport: docs/rapoarte/2026-10-2x_<ora>_S31_muon.md
 
