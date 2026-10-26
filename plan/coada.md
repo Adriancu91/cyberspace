@@ -130,6 +130,11 @@ Cifra oficială a căutării: **80 % la k = 5**, plafonul pentru E3 cu model: **
 corect în ~83 % din cazurile în care răspunsul e în cele 3 bucăți. S27 rămâne `aprobat` (Adrian, 16:10); mai jos am completat instrucțiunile exacte.
 Nicio altă sarcină pe placă până la verdictul S27.
 
+**Actualizare 26 oct 17:15 (supraveghetor):** S27 pornit corect — pre-înregistrarea urcată înainte de antrenare (7f756ef 16:51, pornire 16:52).
+Abaterea „de obicei 2 bucăți în 512, nu 3” e scrisă în pre-înregistrare înainte de pornire, cu aceeași regulă la antrenare și la examen, fără să
+depindă de răspuns, iar pragul lui Adrian rămâne neschimbat → acceptată. Plafonul real (răspunsul în bucățile chiar date) se numără după examen.
+Verdictul îl verific după raport. Tot nicio altă sarcină pe placă până atunci.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)

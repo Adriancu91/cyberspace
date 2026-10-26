@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 octombrie 2026, 17:15 — S27 rulează pe placă de la 16:52; verdictul vine diseară
+
+- **S27 (memoria + model) a pornit corect:** datele (14.540 de exemple) și pre-înregistrarea au fost urcate **înainte** de antrenare (16:51 → 16:52).
+  Antrenarea se termină pe la **~20:10**, apoi examenele; **placa e ocupată până pe la ~20:45**. 908 teste trec. Fără erori până acum.
+- **De știut (spus cinstit de executant înainte de pornire):** în fereastra de 512 a modelului încap de obicei **doar 2 bucăți de text, nu 3**.
+  Pragul tău (≥ 60 %) a rămas neschimbat, dar plafonul real scade de la 72 la ~64 din 100. Executantul se așteaptă la ~53 % → cel mai probabil **NECLAR**.
+- Nimic nou pus în coadă: nu adaug altă sarcină pe placă până la verdictul S27 (îl verific la trecerea de 20:15 sau 23:15).
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos (fereastra OS/GPU pe workstation e mâine/poimâine — placa e liberă după ~20:45).
+- **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
+
 ## 26 octombrie 2026, 16:15 — Bine ai revenit: S27 (memoria + model) pornește pe placă; cifrele S26 verificate
 
 - **S26 verificat (făcut pe 24 oct, doar procesor):** pe 100 de întrebări noi, neatinse, căutarea noastră găsește răspunsul în primele 5 bucăți la
@@ -215,10 +225,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **Rulează acum:** S11 (datele cu tipuri noi de întrebări, pe procesor, din 10:58). Urmează S13 (#407 în interfață, cum ai
   aprobat). La 17:15 verific 30 de perechi din datele noi; dacă sunt bune, noaptea 12 (S12) pornește la 19:00.
 - Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
-
-## 21 octombrie 2026, 10:05 — decizii Adrian (scrise de centrul de comandă)
-
-- **S13 aprobat:** fila „Întreabă din text” trece la #407 (fila veche rămâne).
-- **S8 reaprobat:** standardul din hub e copiat în `plan/hub_modul-v0.md`; executantul îl citește de acolo, nu mai clonează hub-ul.
-  Regulă de acum: tot ce are executantul de citit din hub ajunge în `plan/` prin supraveghetor sau centrul de comandă.
-- Cele 20 de răspunsuri din raportul de dimineață: Adrian le verifică când are timp.
