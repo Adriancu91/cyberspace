@@ -1046,8 +1046,9 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
 - stare: in_lucru (executant, 26 oct 16:52: pașii 1–3 gata (7f756ef: 14.540 de exemple; de obicei încap doar 2 bucăți în 512 −
-  64 simboluri — scris în pre-înregistrare); **antrenarea pornită la 16:52 prin cascadă (procesul 6700), sfârșit estimat ~20:10**;
-  apoi unealta de examen (procesor, cu test) și examenele (~30 min pe placă) → **placa ocupată până pe la ~20:45**. Rămas: pașii
+  64 simboluri — scris în pre-înregistrare); **antrenarea 16:52–20:03, cod 0 (#436, #437, #438; jurnalul mutat în
+  lucru/cascada/S27_1652.*)**; unealta de examen `unelte/e3_examen.py` cu test (5bb6d95, 910 teste trec); **examenele (a)–(d)
+  pornite la 20:35 prin cascadă (procesul 14756, `lucru/cascada/S27_proba/s27_examene.py`), placa ocupată până pe la ~21:15**. Rămas: pașii
   5–6, raportul; aprobat de Adrian, 26 oct 16:10, prin centrul de comandă; criteriile propuse: ≥ 60 % confirmat, < 45 % infirmat, ≤ 2 puncte pierdute pe noaptea 10 / S4)
 - tip: placă (~4–5 ore în total)
 - fereastră: oricând — la prima verificare a cozii (regula lui Adrian din 22 oct 15:10); S26 e `gata`
