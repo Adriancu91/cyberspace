@@ -1045,7 +1045,8 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 - raport: docs/rapoarte/2026-10-24_0232_S26_E3_examen_nou.md
 
 ### S27 — E3 cu antrenare (placa): index + model, din #415
-- stare: in_lucru (executant, 26 oct 16:52: pașii 1–3 gata (7f756ef: 14.540 de exemple; de obicei încap doar 2 bucăți în 512 −
+- stare: gata (executant, 26 oct 21:04: **CONFIRMAT la limită** — (a) 60/100 (#415 în aceeași rulare: 57), noaptea 10 69/70
+  (#415 70), S4 39/60 (#415 38); plafonul real 64/100; validările în praguri; 910 teste trec. Istoric: 26 oct 16:52: pașii 1–3 gata (7f756ef: 14.540 de exemple; de obicei încap doar 2 bucăți în 512 −
   64 simboluri — scris în pre-înregistrare); **antrenarea 16:52–20:03, cod 0 (#436, #437, #438; jurnalul mutat în
   lucru/cascada/S27_1652.*)**; unealta de examen `unelte/e3_examen.py` cu test (5bb6d95, 910 teste trec); **examenele (a)–(d)
   pornite la 20:35 prin cascadă (procesul 14756, `lucru/cascada/S27_proba/s27_examene.py`), placa ocupată până pe la ~21:15**. Rămas: pașii
@@ -1082,7 +1083,7 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
   `lucru/e3/index.sqlite` (doar citire), `unelte/verificator_text.py`. Nimic descărcat, nimic instalat. Modelul nou NU intră în interfață (rămâne #407).
 - pre-înregistrare: docs/preinregistrari/2026-10-26_E3_memorie.md (pasul 3, urcată înainte de pasul 4)
 - aprobat de: Adrian, 26 oct 16:10 (prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 16:15
-- raport: docs/rapoarte/2026-10-2x_<ora>_S27_E3_memorie.md
+- raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
 - stare: aprobat — pornește DOAR după S27 `gata` (verdictul scris în raport); dacă S27 e încă `in_lucru`, aștepți
