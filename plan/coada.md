@@ -140,6 +140,13 @@ nou de la 16:52, normal în timpul antrenării; placa ocupată până pe la ~20:
 `studiu/2026-10-26_open-source/kronos.md` §3 din hub) e împărțită în **S29 → S30 → S31 → S32**, în ordinea asta, fiecare pornește **doar după ce
 cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S27. Fiecare are pre-înregistrare urcată înainte de pornire.
 
+**Actualizare 26 oct 23:15 (supraveghetor) — S27 verificat: CONFIRMAT la limită; S29 repornit cu setul S26:** S27 `gata`, verificat față de
+pre-înregistrare (7f756ef, 16:51, urcată înainte de antrenarea de la 16:52 ✓): (a) 60/64 + 0/36 = **60/100 ≥ 60** ✓; noaptea 10 **69 ≥ 70 − 2 = 68** ✓;
+S4 **39 ≥ 38 − 2 = 36** ✓; placa ≤ 5.374 MB → **CONFIRMAT, la limită** (o întrebare mai puțin = NECLAR). Citirea: #415 fără antrenare face 57 →
+antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 (setul 8192 imposibil: rămân 14 întrebări) → am ales **varianta 1**
+(setul decisiv = cele 100 S26; pragul C-21 neschimbat) și am trecut S29 pe `aprobat` pentru pașii 5–7 (sub o oră). Incidentul plăcii de la 21:47
+(7.942 MB, oprit de paznic în câteva secunde, reparat, a doua rulare ≤ 1.500 MB) e notat; nu se repetă. Apoi S30 → S31 → S32, ca până acum.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1086,8 +1093,19 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
 - raport: docs/rapoarte/2026-10-26_2104_S27_E3_memorie.md
 
 ### S29 — C-21.1: memoria E3 mai bună — rădăcini românești + RRF și reordonare cu modelul propriu (procesor + câteva minute pe placă)
-- stare: oprit (executant, 26 oct 21:58: pașii 0–3 gata, cod 0 — aleasa pe validare `rrf_reord`, k = 3 78,2 % față de S25 77,0 %; pasul 4 imposibil cum e scris)
-- motiv: cere decizia lui Adrian: setul 8192 nu se poate alege — S27 a antrenat pe toate întrebările bune din text_v3 (14.540 din 15.649); după excluderi rămân 14 întrebări, nu 100. Variantele (1: setul decisiv = cele 100 S26; 2: 100 din întrebările S27, cu #415 judecător) sunt în raport
+- stare: aprobat — DOAR pașii 5–7, cu varianta 1 din raportul S29 (supraveghetor, 26 oct 23:15; vezi „Decizia la pasul 4” mai jos). Istoric: oprit
+  (executant, 26 oct 21:58: pașii 0–3 gata, cod 0 — aleasa pe validare `rrf_reord`, k = 3 78,2 % față de S25 77,0 %; pasul 4 imposibil cum e scris:
+  după excluderi rămân 14 întrebări, nu 100)
+- **Decizia la pasul 4 (supraveghetor, 26 oct 23:15, granița 2 „examene, notări”):** **setul decisiv = cele 100 de întrebări S26** (varianta 1,
+  recomandată de executant). Motive: niciuna n-a intrat în vreo alegere S29 (pașii 0–3 sunt deja făcuți și varianta `rrf_reord` e fixată),
+  #438 nu le-a văzut (S27 le-a scos, cu articolele lor), iar pragul C-21 rămâne cuvânt cu cuvânt. Baza de comparație: căutarea S25 simplă
+  re-măsurată în **aceeași rulare** pe aceleași 100 (reper: la S26 a dat k = 3 = 72; dacă iese altceva, contează cifra din rulare și o spui).
+  Varianta 2 (întrebări din antrenarea S27) NU se face. Pasul 4 nu se mai face: nu se scrie `examen_nou_8192.json`. Judecătorul rămâne **#438**,
+  neschimbat față de pasul 3. **Spus cinstit în pre-înregistrare:** (i) setul S26 a mai fost folosit ca examen la S26 și S27 (doar măsurat, nimic
+  ales pe el); (ii) #415, deci și #438, a văzut întrebările din `text_v3` la noaptea 12; (iii) pe validare câștigul a fost +1,2 puncte, deci verdictul
+  așteptat e INFIRMAT — și e un rezultat. Dacă Adrian scrie altceva în coadă înainte de pornire, are prioritate.
+- **Placa (după incidentul de la 21:47, 7.942 MB):** judecătorul DOAR în varianta reparată (6f8630b: loturi de 10, doar pozițiile întrebării);
+  paznicul S17 verificat la fiecare 20 de întrebări, ca la a doua rulare. Peste 7.000 MB → oprești, `oprit`, scrii cifrele.
 - tip: procesor (rădăcinile, RRF) + placă scurt (reordonarea: ~20 × 1.000–1.200 de evaluări, estimat sub 1 oră)
 - fereastră: oricând — la prima verificare a cozii după S27 `gata`, cu placa liberă
 - durată maximă: 6 ore în total; cel mult 1,5 ore pe placă; RAM cel mult ~40 GB; placa sub 7.000 MB și 83 °C
@@ -1124,9 +1142,10 @@ cea de dinainte e `gata`** și S27 e `gata` cu verdictul scris. Nu întrerupe S2
   `lucru/e3/index.sqlite` (doar citire), `unelte/verificator_text.py`, #415 și linia w2. Nimic antrenat, nimic descărcat, nimic instalat,
   nimic în interfață, nimic din `lucru/e3/` în Git.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
-- pre-înregistrare: docs/preinregistrari/2026-10-2x_E3_cautare_v2.md (urcată înainte de pasul 6)
-- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
-- raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md
+- pre-înregistrare: docs/preinregistrari/2026-10-2x_E3_cautare_v2.md (urcată înainte de pasul 6; setul = cele 100 S26)
+- aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15; setul decisiv
+  ales de supraveghetor, 26 oct 23:15 (varianta 1 din raport)
+- raport: docs/rapoarte/2026-10-26_2158_S29_E3_cautare_v2.md (pașii 0–3); pașii 5–7: docs/rapoarte/2026-10-2x_<ora>_S29_E3_cautare_v2_verdict.md
 
 ### S30 — C-21.2, pregătirea: optimizatorul Muon + răcire lungă — codul, testul pe procesor și proba de 10 minute pe placă
 - stare: aprobat — pornește DOAR după S29 `gata`

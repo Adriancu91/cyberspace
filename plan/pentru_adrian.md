@@ -2,6 +2,20 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 octombrie 2026, 23:15 — S27 CONFIRMAT (la limită); S29 s-a oprit la alegerea setului — am ales eu varianta recomandată
+
+- **S27 (memoria + model) e gata și verificat: CONFIRMAT, la limită.** Kronos își caută singur textul și răspunde corect la **60 din 100**
+  de întrebări noi (pragul tău: ≥ 60), fără să strice „răspunsul din textul dat” (69/70 și 39/60). Am verificat cifrele față de pre-înregistrare.
+  Spus cinstit: modelul vechi #415, fără antrenare, face 57 → antrenarea a adus doar +3; reușita vine mai ales din căutare.
+- **S29 (căutarea mai bună) s-a oprit la jumătate**, corect: setul nou de 100 de întrebări nu se mai poate alege (S27 le-a folosit pe aproape toate).
+  Am ales varianta recomandată de executant: **examenul decisiv = cele 100 de întrebări S26** (nimic n-a fost ales pe ele; pragul tău rămâne același).
+  Pe probe, câștigul e mic (+1,2 puncte, pragul cere +5) → cel mai probabil INFIRMAT. Durează sub o oră; apoi urmează S30 (Muon).
+- **De știut:** la 21:47 placa a urcat o clipă la **7.942 MB** (peste 7.000); **paznicul a oprit-o imediat**, executantul a reparat, iar a doua rulare a
+  stat sub 1.500 MB. Nu e nevoie să faci nimic.
+- Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Dacă preferi altă variantă la S29, scrie în coadă înainte să pornească. Rămân cele două mici întrebări
+  (ora raportului de dimineață 06:40/07:40, închiderea S28) și una nouă, fără grabă: un „port” nou `cautare` în `kronos/` (S29 îl propune) — doar cu „da”-ul tău.
+
 ## 26 octombrie 2026, 20:15 — S27 încă rulează; comanda ta C-21 e pusă în coadă, după S27
 
 - **S27 (memoria + model)** e încă pe placă: antrenarea trebuia să se termine pe la ~20:10, apoi examenele (placa ocupată până pe la ~20:45).
@@ -217,11 +231,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **Pus în coadă (S14, aprobat de mine, 30 de minute pe procesor):** raportul de dimineață face `git pull` înainte de a-și citi
   instrucțiunea, ca schimbarea ta de azi (cele 20 de răspunsuri alese după data zilei) să fie sigur folosită mâine.
 - Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
-
-## 21 octombrie 2026, 12:20 — cele 20 de răspunsuri (scris de centrul de comandă)
-
-- Adrian a cerut ca cele 20 de răspunsuri din raportul de dimineață să fie altele în fiecare zi: în `unelte/raport_dimineata.txt`
-  sămânța fixă 1019 e înlocuită cu data zilei (AAAALLZZ), scrisă în raport. `unelte/conversatie_text.py` (sămânța datelor) rămâne neschimbat.
-- Cele 20 din raportul de azi au fost verificate de centrul de comandă la cererea lui Adrian: 19 identice cu referința, nr. 16 cu prenumele greșit.
-- Supraveghetor: dacă sarcina Windows „Kronos raport dimineata” nu face `git pull` înainte, pune în coadă pentru executant să verifice că fișierul local e la zi.
-
