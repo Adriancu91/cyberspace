@@ -45,6 +45,7 @@ from unelte.verificator_text import cuvinte  # noqa: E402
 
 K_RRF = 60
 CATE_REORDONATE = 20
+LOT_JUDECATOR = 10
 K_S29 = (1, 3, 5, 20)
 VARIANTE_S29 = ("s25", "rrf", "s25_reord", "rrf_reord")  # de la cea mai simplă la cea mai complicată
 IESIRE_VALIDARE = "validare_s29.json"
@@ -271,18 +272,22 @@ def scoruri_intrebare(model: Any, intrebare: str, texte: list[str]) -> list[tupl
         p = tok.codifica(prompt_judecator(t))[-(ctx - len(q)):]
         secvente.append(p + q)
         inceputuri.append(len(p))
-    lung = max(len(s) for s in secvente)
-    x = torch.zeros((len(secvente), lung), dtype=torch.long)
-    for i, s in enumerate(secvente):
-        x[i, : len(s)] = torch.tensor(s, dtype=torch.long)
     model.retea.eval()
     tinta = torch.tensor(q, dtype=torch.long, device=model.dispozitiv)
     rez = []
     with torch.no_grad():
-        logp = F.log_softmax(model.retea(x.to(model.dispozitiv), None).float(), dim=-1)
-        for i, start in enumerate(inceputuri):
-            parte = logp[i, start - 1: start - 1 + len(q)]
-            rez.append((float(parte.gather(-1, tinta[:, None]).sum()), len(q)))
+        for j in range(0, len(secvente), LOT_JUDECATOR):  # loturi mici: placa sub 7.000 MB (S29, prima rulare: 7.942)
+            lot = secvente[j:j + LOT_JUDECATOR]
+            x = torch.zeros((len(lot), max(len(s) for s in lot)), dtype=torch.long)
+            for i, s in enumerate(lot):
+                x[i, : len(s)] = torch.tensor(s, dtype=torch.long)
+            logits = model.retea(x.to(model.dispozitiv), None)
+            for i, start in enumerate(inceputuri[j:j + LOT_JUDECATOR]):
+                logp = F.log_softmax(logits[i, start - 1: start - 1 + len(q)].float(), dim=-1)  # doar pozițiile întrebării
+                rez.append((float(logp.gather(-1, tinta[:, None]).sum()), len(q)))
+            del logits
+    if model.dispozitiv.type == "cuda":
+        torch.cuda.empty_cache()  # loturile au lungimi diferite; altfel memoria păstrată crește
     return rez
 
 
