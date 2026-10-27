@@ -1398,7 +1398,8 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-27_1733_S36_reteta_D.md (NECLAR)
 
 ### S37 — Motorul S32: adunări în float64 la LayerNorm și softmax, apoi o singură remăsurare fp32 (doar procesor)
-- stare: in_lucru (executant, 27 oct 18:00)
+- stare: gata (executant, 27 oct 18:06; măsurarea 18:00, cod 0; **fp32 NU TRECE** (dif. maximă 1,364e-4 > 1e-4, la S32 1,335e-4:
+  float64 la LayerNorm/softmax/atenție nu ajută); argmax și textul identice; 41,3 simboluri/s; 961 teste trec, 1 sărit)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând, **după S36** (ca să nu încetinească antrenarea)
 - durată maximă: 3 ore; RAM cel mult ~10 GB
@@ -1419,7 +1420,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; pragul se scrie în raport și se urcă înainte de pasul 3
 - aprobat de: supraveghetor, 27 oct 14:15 (granițele 5 și 6 din REGULI_CASCADA.md; varianta (a) a executantului din raportul S32)
-- raport: docs/rapoarte/2026-10-2x_<ora>_S37_inferenta_fp64.md
+- raport: docs/rapoarte/2026-10-27_1800_S37_inferenta_fp64.md (NU TRECE; pragul relativ propus, de hotărât de Adrian)
 
 ### S38 — Continuarea liniei w2 cu rețeta A, din #441 (o noapte pe placă)
 - stare: aprobat (Adrian, 27 oct 18:00, prin centrul de comandă)
