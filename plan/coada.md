@@ -1398,7 +1398,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-27_1733_S36_reteta_D.md (NECLAR)
 
 ### S37 — Motorul S32: adunări în float64 la LayerNorm și softmax, apoi o singură remăsurare fp32 (doar procesor)
-- stare: aprobat
+- stare: in_lucru (executant, 27 oct 18:00)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând, **după S36** (ca să nu încetinească antrenarea)
 - durată maximă: 3 ore; RAM cel mult ~10 GB
