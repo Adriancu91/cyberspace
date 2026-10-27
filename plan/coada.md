@@ -176,7 +176,7 @@ S34: pre-înregistrarea 46951db (09:00:45) înaintea pornirii (09:00:52) ✓; C 
 **NU TRECE** ✓ (argmax și textul identice, bpb +0,0000005); Q8_0 **+0,0000187 ≤ 0,005** → **TRECE** ✓. 960 teste trec. C-21 e acum închisă (S29–S32).
 Pun: **S36** (granițele 1 și 2, ~2,2 ore pe placă, pornește acum): proba D = rețeta A fără adunarea pe 8 loturi — aflăm dacă răcirea singură aduce câștigul;
 apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la LayerNorm/softmax și se remăsoară o dată, cu același prag 1e-4.
-**S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `propus — necesită Adrian` (direcția din 22 oct: fără nopți de antrenare fără „da”-ul lui).
+**S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `aprobat` (Adrian, 27 oct 18:00, prin centrul de comandă — delegarea din 26 oct 17:45: aprobă ce se potrivește direcției).
 „Reordonarea doar la definiții” (propunerea S35) cere întâi un set nou de întrebări — o las pentru o trecere următoare.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
@@ -1422,7 +1422,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-2x_<ora>_S37_inferenta_fp64.md
 
 ### S38 — Continuarea liniei w2 cu rețeta A, din #441 (o noapte pe placă)
-- stare: propus — necesită Adrian
+- stare: aprobat (Adrian, 27 oct 18:00, prin centrul de comandă)
 - tip: placă (~6 ore de antrenare + examene)
 - fereastră: noapte, după S36 (cel mai devreme noaptea 27→28)
 - de ce: S34 a confirmat că rețeta A (AdamW + adunare pe 8 loturi + răcire 25 %) aduce câștig real; #441 e cel mai bun model pe română curat (1,2332).
@@ -1432,4 +1432,4 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
   `durata_scaderii_secunde = 21600`, linie nouă `w2_reteta_A_cont`; `--ore 6 --porneste-din 441`. Pre-înregistrare înainte: **CONFIRMAT** dacă română
   curat ≤ **1,2232** (−0,010 față de #441), fără regresie > 0,005 la cod curat și TinyStories R2; **INFIRMAT** dacă > 1,2282; între ele NECLAR.
   Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #441 în aceeași rulare. Modelul nu intră în interfață.
-- aprobat de: — (aștept „da”-ul lui Adrian)
+- aprobat de: Adrian, 27 oct 18:00 (centrul de comandă, delegarea din DECIZII 26 oct 17:45). Pornește în noaptea 27→28, după S36; dacă S36 dă CONFIRMAT, cu rețeta D, cum scrie mai sus. Pre-înregistrarea se urcă înainte.
