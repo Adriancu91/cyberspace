@@ -1363,7 +1363,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-27_1338_S32_inferenta_bruta.md (fp32 NU TRECE, Q8_0 TRECE)
 
 ### S36 — Proba D: rețeta A fără adunarea pe 8 loturi (aduce răcirea singură câștigul?) (placa)
-- stare: in_lucru (executant, 27 oct 15:00)
+- stare: in_lucru (executant, 27 oct 15:00; lanțul `lucru/cascada/S36_proba/s36.py`, sfârșit estimat ~17:15)
 - tip: placă (~2,2 ore în total)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10) — pornește la prima verificare a cozii
 - durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
@@ -1392,7 +1392,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
   `w2_conv_text_v3`, `w2_muon_A`, `w2_reteta_C` și configurările lor. Modelul nou NU intră în interfață. Nimic descărcat sau instalat.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport. Peste 7.000 MB → oprești, `oprit`, scrii cifrele.
 - Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S36 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
-- pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_D.md (de urcat înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_D.md (urcată 27 oct 15:00, înainte de pornire)
 - aprobat de: supraveghetor, 27 oct 14:15 (granițele 1 și 2 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S34)
 - raport: docs/rapoarte/2026-10-27_<ora>_S36_reteta_D.md
 
