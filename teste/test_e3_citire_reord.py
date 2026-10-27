@@ -81,3 +81,48 @@ def test_examenul_o_singura_rulare_si_amprenta(tmp_path):
     assert (lucru / c.IESIRE_EXAMEN).exists()
     with pytest.raises(SystemExit):
         c.cmd_examen(lucru, 438, sha_examen=sha, **argumente)
+
+
+def test_verdictul_validare_in_puncte():
+    assert c.verdict_validare(52.0, 50.0)["verdict"] == "CONFIRMAT"
+    assert c.verdict_validare(51.9, 50.0)["verdict"] == "NECLAR"
+    assert c.verdict_validare(50.5, 50.0)["verdict"] == "NECLAR"
+    assert c.verdict_validare(50.4, 50.0)["verdict"] == "INFIRMAT"
+    assert c.verdict_validare(48.0, 50.0) == {"verdict": "INFIRMAT", "diferenta_puncte": -2.0}
+
+
+def test_examenul_pe_validare_scoate_cele_vazute(tmp_path):
+    lucru = tmp_path / "e3"
+    randuri = [("Satele din Brașov sunt mici.", "w2"), ("Orașul Brașov are o cetate veche din 1400.", "w1"),
+               ("Cluj are o universitate mare.", "w3")]
+    _index(lucru / "index.sqlite", randuri).close()
+    r.cmd_index_radacini(lucru)
+    q1 = {"intrebare": "Ce are orașul Brașov?", "raspuns": "o cetate veche", "tip": "definitie",
+          "loc": {"s25": 9, "rrf_reord": 9}}
+    q2 = {"intrebare": "Ce are Cluj?", "raspuns": "o universitate", "tip": "an", "loc": {}}
+    (lucru / r.IESIRE_VALIDARE).write_text(json.dumps({"toate": {"s2048": [q1, q2], "s1024": [q2]}},
+                                                      ensure_ascii=False), encoding="utf-8")
+    (lucru / c.DATE_438).write_text(json.dumps({"intrebare": "Ce are Cluj?"}, ensure_ascii=False) + "\n",
+                                    encoding="utf-8")
+    (lucru / "validare_s25.json").write_text(json.dumps({"aleasa": "nume_obligatorii_liste"}), encoding="utf-8")
+    (lucru / "liste_s25.json").write_text(json.dumps({"fraze_lista": [], "randuri_scurte": []}), encoding="utf-8")
+
+    class Model:
+        tok = _Tok()
+
+    paznic = []
+    argumente = dict(incarca=lambda exp: (Model(), {"id": exp, "linie": "proba"}),
+                     raspunde=lambda model, prompt: prompt[len("Text: "):].split("\n")[0],
+                     paznic=lambda: paznic.append(1),
+                     judecator=lambda q, texte: [(float("cetate" in t), 1) for t in texte], set_="validare")
+    info = c.cmd_examen(lucru, 438, **argumente)
+    assert info["intrebari"] == 3 and paznic == [1]
+    assert info["vazute_de_438"] == {"s2048": 1, "s1024": 1}
+    assert info["parti"]["s2048_decide"]["intrebari"] == 1  # „Cluj” a fost văzută de #438 → scoasă din decizie
+    assert info["parti"]["s2048_toate"]["intrebari"] == 2 and info["parti"]["s1024_nevazute"]["intrebari"] == 0
+    d = info["parti"]["s2048_decide"]["procent"]
+    assert info["diferenta_puncte"] == round(d["rrf_reord"] - d["s25"], 4)
+    assert info["verdict"] in {"CONFIRMAT", "NECLAR", "INFIRMAT"} and info["sursa"]["intrebari_438"] == 1
+    assert (lucru / c.IESIRE_EXAMEN_VALIDARE).exists() and not (lucru / c.IESIRE_EXAMEN).exists()
+    with pytest.raises(SystemExit):
+        c.cmd_examen(lucru, 438, **argumente)

@@ -13,6 +13,12 @@ răspunde corect mai des:
 
     python -X utf8 unelte/e3_citire_reord.py amestec               # lucru/e3/amestec_s33.json
     python -X utf8 unelte/e3_citire_reord.py examen --model 438    # O SINGURĂ DATĂ → lucru/e3/examen_s33.json
+    python -X utf8 unelte/e3_citire_reord.py examen --model 438 --set validare   # S35, O SINGURĂ DATĂ → examen_s35.json
+
+S35 (27 oct 2026, supraveghetor 11:15, granița 2; pre-înregistrarea docs/preinregistrari/2026-10-27_E3_citire_validare.md):
+`--set validare` face aceeași citire pe eșantioanele 2048 și 1024 din validare_s29.json (cele 1.000 de întrebări ale
+validării S29). Întrebările văzute de #438 la antrenare (date_antrenare_s27.jsonl) se scot din măsura care decide; decide
+Δ în puncte procentuale pe eșantionul 2048: CONFIRMAT dacă Δ ≥ +2,0, INFIRMAT dacă Δ < +0,5, altfel NECLAR.
 
 Nu atinge kronos/, examenul BPB, paznicul, jurnalul, datele de examen, text_v3, lista S26, indexurile (doar citite),
 unelte/verificator_text.py, modelele.
@@ -43,8 +49,11 @@ from unelte.verificator_text import verifica  # noqa: E402
 TIPURI = ("definitie", "nascut", "an", "regizat")  # restul intră la „rest”
 IESIRE_AMESTEC = "amestec_s33.json"
 IESIRE_EXAMEN = "examen_s33.json"
+IESIRE_EXAMEN_VALIDARE = "examen_s35.json"
+DATE_438 = "date_antrenare_s27.jsonl"
 VARIANTE = ("s25", "rrf_reord")
 PAZNIC_LA = 20
+PAZNIC_LA_VALIDARE = 50
 
 
 def tip_grup(tip: str | None) -> str:
@@ -131,21 +140,87 @@ def verdict(corecte_reord: int, corecte_s25: int) -> dict[str, Any]:
     return {"verdict": "CONFIRMAT" if d >= 5 else "INFIRMAT" if d < 2 else "NECLAR", "diferenta": d}
 
 
+def verdict_validare(procent_reord: float, procent_s25: float) -> dict[str, Any]:
+    """Pragurile S35 (în puncte procentuale, aceeași rulare, eșantionul 2048 fără cele văzute de #438): CONFIRMAT dacă
+    Δ ≥ +2,0; INFIRMAT dacă Δ < +0,5 (inclusiv negativ); între ele NECLAR."""
+    d = round(procent_reord - procent_s25, 4)
+    return {"verdict": "CONFIRMAT" if d >= 2.0 else "INFIRMAT" if d < 0.5 else "NECLAR", "diferenta_puncte": d}
+
+
+def intrebari_validare(lucru: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Cele 1.000 de întrebări ale validării S29 (întâi 2048, apoi 1024), fiecare cu eșantionul ei, locurile din S29
+    (pentru reper) și dacă a fost văzută de #438 la antrenare (aceeași întrebare, literă cu literă)."""
+    cale = lucru / r.IESIRE_VALIDARE
+    toate = json.loads(cale.read_text(encoding="utf-8"))["toate"]
+    vazute = set()
+    with open(lucru / DATE_438, encoding="utf-8") as f:
+        for rand in f:
+            vazute.add(json.loads(rand)["intrebare"])
+    out = []
+    for es in ("s2048", "s1024"):
+        for q in toate[es]:
+            out.append({"intrebare": q["intrebare"], "raspuns": q["raspuns"], "tip": q.get("tip"), "esantion": es,
+                        "vazuta_de_438": q["intrebare"] in vazute, "loc_s29": q.get("loc", {})})
+    return out, {"fisier": cale.name, "sha256": hashlib.sha256(cale.read_bytes()).hexdigest(),
+                 "intrebari_438": len(vazute)}
+
+
+def _parte(rez: list[dict[str, Any]]) -> dict[str, Any]:
+    """Pe o parte a validării: ambele variante, procentele, reparate / stricate."""
+    pe = {v: rezumat_varianta(rez, v) for v in VARIANTE}
+    procent = {v: round(100 * pe[v]["total"]["corecte"] / len(rez), 2) if rez else 0.0 for v in VARIANTE}
+    return {"intrebari": len(rez), "variante": pe, "procent": procent,
+            "diferenta_puncte": round(procent["rrf_reord"] - procent["s25"], 2),
+            "reparate": sum(1 for x in rez if x["rrf_reord"]["corect"] and not x["s25"]["corect"]),
+            "stricate": sum(1 for x in rez if x["s25"]["corect"] and not x["rrf_reord"]["corect"]),
+            "aceleasi_bucati": sum(x["s25"]["articole_date"] == x["rrf_reord"]["articole_date"] for x in rez)}
+
+
+def _scrie_validare(iesire: Path, rez: list[dict[str, Any]], sursa: dict[str, Any], fisa: dict[str, Any],
+                    varianta: str, memorie: float | None, start: float) -> dict[str, Any]:
+    decide = [x for x in rez if x["esantion"] == "s2048" and not x["vazuta_de_438"]]
+    parti = {"s2048_decide": _parte(decide),
+             "s2048_toate": _parte([x for x in rez if x["esantion"] == "s2048"]),
+             "s1024_toate": _parte([x for x in rez if x["esantion"] == "s1024"]),
+             "s1024_nevazute": _parte([x for x in rez if x["esantion"] == "s1024" and not x["vazuta_de_438"]])}
+    d = parti["s2048_decide"]["procent"]
+    # reperul S29: același loc al primului răspuns bun în ordinea fiecărei variante (fără întâmplare, trebuie să fie toate)
+    reper = {v: sum(x[v]["loc"] == x["loc_s29"].get(v) for x in rez) for v in VARIANTE}
+    secunde = lambda cheie: {"median": round(statistics.median(x[cheie] for x in rez), 3),  # noqa: E731
+                             "maxim": round(max(x[cheie] for x in rez), 3)} if rez else None
+    info = {"set": "validare S29 (eșantioanele 2048 și 1024)", "sursa": sursa, "intrebari": len(rez),
+            "vazute_de_438": {es: sum(x["vazuta_de_438"] for x in rez if x["esantion"] == es)
+                              for es in ("s2048", "s1024")},
+            "varianta_s25": varianta, "model": fisa["id"], "model_linie": fisa.get("linie"),
+            **verdict_validare(d["rrf_reord"], d["s25"]), "parti": parti, "reper_s29_acelasi_loc": reper,
+            "secunde_cautare": secunde("secunde_cautare"), "secunde_judecator": secunde("secunde_judecator"),
+            "memorie_placa_max_mb": memorie, "ram_maxim_mb": e3._ram_maxim_mb(),
+            "secunde": round(time.time() - start, 1), "scris": datetime.now().isoformat(timespec="seconds"),
+            "toate": rez}
+    e3._scrie_json(iesire, info)
+    return info
+
+
 def cmd_examen(lucru: Path, model_exp: int, incarca: Callable[..., Any] | None = None,
                raspunde: Callable[[Any, str], str] | None = None, paznic: Callable[[], None] | None = None,
                judecator: Callable[[str, list[str]], list[tuple[float, int]]] | None = None,
-               sha_examen: str = e3.SHA_EXAMEN_NOU) -> dict[str, Any]:
+               sha_examen: str = e3.SHA_EXAMEN_NOU, set_: str = "s26") -> dict[str, Any]:
     from unelte import e1_intrebari_nascute as e1
 
-    iesire = lucru / IESIRE_EXAMEN
+    pe_validare = set_ == "validare"
+    iesire = lucru / (IESIRE_EXAMEN_VALIDARE if pe_validare else IESIRE_EXAMEN)
     if iesire.exists():
-        raise SystemExit("examenul S33 s-a rulat deja (o singură rulare)")
-    cale = lucru / "examen_nou_4096.json"
-    sha = hashlib.sha256(cale.read_bytes()).hexdigest()
-    if sha != sha_examen:
-        raise SystemExit(f"lista S26 nu are amprenta așteptată ({sha})")
+        raise SystemExit(f"examenul {'S35' if pe_validare else 'S33'} s-a rulat deja (o singură rulare)")
+    if pe_validare:
+        intrebari, sursa = intrebari_validare(lucru)
+        sha, paznic_la = sursa["sha256"], PAZNIC_LA_VALIDARE
+    else:
+        cale = lucru / "examen_nou_4096.json"
+        sha, paznic_la = hashlib.sha256(cale.read_bytes()).hexdigest(), PAZNIC_LA
+        if sha != sha_examen:
+            raise SystemExit(f"lista S26 nu are amprenta așteptată ({sha})")
+        intrebari = json.loads(cale.read_text(encoding="utf-8"))
     start = time.time()
-    intrebari = json.loads(cale.read_text(encoding="utf-8"))
     varianta = json.loads((lucru / "validare_s25.json").read_text(encoding="utf-8"))["aleasa"]
     liste = e3.incarca_liste(lucru)
     model, fisa = (incarca or e1.modelul)(model_exp)
@@ -162,11 +237,13 @@ def cmd_examen(lucru: Path, model_exp: int, incarca: Callable[..., Any] | None =
     con_r = sqlite3.connect(f"file:{(lucru / 'index_radacini.sqlite').as_posix()}?mode=ro", uri=True)
     rez = []
     for i, q in enumerate(intrebari):
-        if i % PAZNIC_LA == 0:
+        if i % paznic_la == 0:
             paznic()
         p = pregateste(con, con_r, q, varianta, liste, judecator, model.tok)
         rand = {"intrebare": q["intrebare"], "raspuns": q["raspuns"], "tip": q.get("tip"),
                 "secunde_cautare": p["secunde_cautare"], "secunde_judecator": p["secunde_judecator"]}
+        if pe_validare:
+            rand.update({k: q[k] for k in ("esantion", "vazuta_de_438", "loc_s29")})
         for v in VARIANTE:
             t0 = time.perf_counter()
             elev = raspunde(model, p["pe"][v]["prompt"])
@@ -174,7 +251,7 @@ def cmd_examen(lucru: Path, model_exp: int, incarca: Callable[..., Any] | None =
             rand[v] = {**{k: x for k, x in p["pe"][v].items() if k != "prompt"}, "raspuns_elev": elev,
                        "corect": nota["corect"], "motiv": nota["motiv"], "secunde_raspuns": time.perf_counter() - t0}
         rez.append(rand)
-        if (i + 1) % PAZNIC_LA == 0:
+        if (i + 1) % paznic_la == 0:
             print(f"{datetime.now():%H:%M:%S} {i + 1}/{len(intrebari)}: "
                   + ", ".join(f"{v} {sum(x[v]['corect'] for x in rez)}" for v in VARIANTE), flush=True)
     con.close()
@@ -182,6 +259,8 @@ def cmd_examen(lucru: Path, model_exp: int, incarca: Callable[..., Any] | None =
     memorie = None
     if torch is not None and torch.cuda.is_available():
         memorie = round(torch.cuda.max_memory_allocated() / 2**20, 1)
+    if pe_validare:
+        return _scrie_validare(iesire, rez, sursa, fisa, varianta, memorie, start)
     # reperul S27: aceleași bucăți la (i)? (articolele date, întrebare cu întrebare)
     reper = None
     cale27 = lucru / "examen_s27.json"
@@ -219,12 +298,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("amestec")
     x = sub.add_parser("examen")
     x.add_argument("--model", type=int, required=True)
+    x.add_argument("--set", dest="set_", choices=("s26", "validare"), default="s26")
     args = parser.parse_args(argv)
     lucru = RADACINA / args.lucru
     if args.pas == "amestec":
         info = cmd_amestec(lucru)
     else:
-        info = {k: v for k, v in cmd_examen(lucru, args.model).items() if k != "toate"}
+        info = {k: v for k, v in cmd_examen(lucru, args.model, set_=args.set_).items() if k != "toate"}
     print(json.dumps(info, ensure_ascii=False, indent=1))
     return 0
 
