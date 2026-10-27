@@ -160,6 +160,14 @@ Surpriza: A (AdamW + adunare pe 8 loturi + răcire 25 %) a coborât la **1,2332*
 știm dacă câștigul vine din rețetă sau doar din ore. Am pus **S34** (granițele 1 și 2: încă o rulare pe linia w2, aceeași rețetă ca #415): aceleași 2 ore
 din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, imediat după S33) → S32 (procesor)**.
 
+**Actualizare 27 oct 11:15 (supraveghetor) — S33 verificat: CONFIRMAT la limită; S34 rulează; S35 nou (citirea pe validare), între S34 și S32:**
+S33: pre-înregistrarea 0fab1b8 (08:31:38, antetul corectat în 918a3a0 la 08:31:51) urcată înainte de examenul de la 08:31:58 ✓; în aceeași rulare
+`s25` **60** (reperul S27 reprodus la 100/100) și `rrf_reord` **66** → Δ = **+6 ≥ +5** → **CONFIRMAT** ✓ (15 reparate / 9 stricate; câștigul din definiții
+23 → 30 din 54; „rest” 18 → 16). Placa 732 MB, 950 teste trec (o picare de conexiune la `test_interfata`, trece la reluare — de urmărit). S34 `in_lucru`
+din 09:00:52 (pre-înregistrarea 46951db la 09:00:45, înaintea pornirii ✓). Ca placa să nu stea goală cât merge S32 (doar procesor, ~2 zile), am pus **S35**
+(granița 2, doar examen, < 1 oră pe placă): aflăm cât din +6 e de la amestecul S26, măsurând citirea pe eșantionul 2048 al validării (nevăzut de #438).
+Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după verdictul S34.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1252,6 +1260,7 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - pre-înregistrare: docs/preinregistrari/2026-10-27_E3_citire_reord.md (urcată înainte de pasul 3)
 - aprobat de: supraveghetor, 27 oct 02:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea executantului din raportul S29)
 - raport: docs/rapoarte/2026-10-27_0842_S33_E3_citire_reord.md (CONFIRMAT)
+- verificat de supraveghetor, 27 oct 11:15: pre-înregistrarea înaintea examenului ✓; Δ = 66 − 60 = +6 ≥ +5 → CONFIRMAT ✓ (la limită; câștigul din definiții).
 
 ### S34 — Proba de control: #415 + 2 ore cu rețeta veche (vine câștigul lui A din rețetă sau doar din cele 2 ore în plus?) (placa)
 - stare: in_lucru (executant, 27 oct 09:00:52: pornită prin cascadă, procesul 17948, lanțul `lucru/cascada/S34_proba/s34.py`; **sfârșit estimat ~11:10**)
@@ -1282,8 +1291,41 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - aprobat de: supraveghetor, 27 oct 08:15 (granițele 1 și 2 din REGULI_CASCADA.md)
 - raport: docs/rapoarte/2026-10-27_<ora>_S34_reteta_control.md
 
+### S35 — Citirea cu `rrf_reord` pe validare: cât din +6 de la S33 rămâne pe un set cu alt amestec? (procesor + sub 1 oră pe placă)
+- stare: aprobat — pornește DOAR după S34 `gata` (sau `oprit`), înaintea lui S32
+- tip: placă scurt (examen, nimic antrenat)
+- fereastră: oricând (regula lui Adrian din 22 oct 15:10)
+- durată maximă: 2 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
+- de ce: S33 a dat +6 corecte (60 → 66) pe cele 100 S26, la limită, cu câștigul aproape tot din definiții. Pe validare, căutarea câștigase doar
+  +1,2 puncte (+2,4 pe eșantionul 2048), iar „restul” tipurilor pierdea. Propunerea 2 a executantului din raportul S33 („cât din +6 e de la S26?”),
+  dar fără un set nou (lista de întrebări nefolosite e aproape goală): măsurăm **citirea** pe validarea deja existentă. Granița 2 (examen, comparație).
+- ce faci:
+  1. **Procesor (`CUDA_VISIBLE_DEVICES=-1`), câteva minute:** din `lucru/e3/validare_s29.json`, numeri întrebările din eșantionul **2048** și din **1024**
+     și verifici câte din fiecare apar în datele de antrenare ale lui #438 (S27, cele 14.540 de exemple). Scrii cifrele în pre-înregistrare.
+     Întrebările din 2048 care apar la antrenarea #438 (dacă sunt) se scot din măsura care decide; le spui numărul.
+  2. **Pre-înregistrarea** `docs/preinregistrari/2026-10-27_E3_citire_validare.md`, **urcată (commit + push) ÎNAINTE de pasul 3**. Măsura care decide:
+     pe eșantionul **2048** (fără cele văzute de #438), Δ = procentul de răspunsuri corecte cu `rrf_reord` − procentul cu `s25`, **în aceeași rulare**.
+     **CONFIRMAT** (reordonarea ajută la citire și în afara S26) dacă **Δ ≥ +2,0 puncte**; **INFIRMAT** dacă **Δ < +0,5 puncte** (inclusiv negativ);
+     între ele: **NECLAR**. Alături (nu decide): eșantionul 1024, pe tipuri (definiții, născut, an, regizat, rest), reparate / stricate.
+     Aceeași notare și același cod ca la S33 (`unelte/e3_citire_reord.py`, verificatorul S16, regula „câte bucăți încap în 448 de simboluri”,
+     promptul S27, fără întâmplare; #438 și ca judecător). Spus cinstit: alegerea `rrf_reord` s-a făcut pe validare (782 față de 778, diferențe mici),
+     deci validarea nu e complet curată; și ea vine din `text_v3`, pe care #415 l-a văzut. Plus așteptările tale în cifre.
+  3. **Examenul, o singură rulare** (dacă trebuie, o opțiune nouă în `unelte/e3_citire_reord.py`, de ex. `examen --set validare`, cu test nou fără placă;
+     refuză dacă ieșirea există deja) → `lucru/e3/examen_s35.json`: pe fiecare întrebare (i) `s25`, (ii) `rrf_reord`; corecte, corecte dintre cele cu
+     răspunsul în bucățile care încap și dintre cele fără, pe tipuri, timpi, memoria plăcii. Paznicul S17 la fiecare 50 de întrebări; peste 7.000 MB →
+     oprești, `oprit`, scrii cifrele.
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-27_<ora>_S35_E3_citire_validare.md`, cu verdictul strict după
+     pre-înregistrare și ce propui mai departe (de ex. „reordonarea doar la definiții”, de verificat pe alt set).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen și `text_v3` (doar citire), lista S26, `validare_s29.json`,
+  `lucru/e3/index.sqlite` și `index_radacini.sqlite` (doar citire), `unelte/verificator_text.py`, #415, #438, #441 și liniile w2. Nimic antrenat,
+  descărcat sau instalat; nimic în interfață; nimic din `lucru/e3/` în Git. Portul `cautare` în `kronos/` NU se face (rămâne la Adrian).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: docs/preinregistrari/2026-10-27_E3_citire_validare.md (urcată înainte de pasul 3)
+- aprobat de: supraveghetor, 27 oct 11:15 (granița 2 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S33)
+- raport: docs/rapoarte/2026-10-27_<ora>_S35_E3_citire_validare.md
+
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
-- stare: aprobat — pornește DOAR după S31 `gata` și după S33 și S34 `gata` (sau `oprit`) (S34 pusă înainte de supraveghetor, 27 oct 08:15)
+- stare: aprobat — pornește DOAR după S31 `gata` și după S33, S34 și S35 `gata` (sau `oprit`) (S34 pusă înainte de supraveghetor, 27 oct 08:15; S35, 27 oct 11:15)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând
 - durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB

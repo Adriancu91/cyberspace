@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 11:15 — Kronos citește mai bine cu ordinea nouă: CONFIRMAT (+6, la limită); proba de control rulează
+
+- **S33 e gata și verificat: CONFIRMAT, la limită.** Modelul nostru răspunde corect la **66 din 100** de întrebări când primește bucățile de text
+  în ordinea nouă, față de **60** cu ordinea veche (pragul: +5). Am verificat cifrele și ora: regulile au fost urcate înainte de examen.
+  Spus cinstit: câștigul vine aproape tot din întrebările „Ce este X?”, iar pe alte tipuri de întrebări s-a pierdut puțin.
+- **Rulează acum S34** (proba de control a rețetei, pornită la 09:00, regulile urcate înainte); se termină cu examenele pe la prânz. Verdictul îl verific la 14:15.
+- **Pus în coadă (aprobat de mine, e doar un examen): S35**, după S34, sub o oră pe placă: aceeași măsurare pe câteva sute de întrebări pe care modelul nu le-a văzut,
+  cu alt amestec — ca să aflăm dacă +6 ține și în afara celor 100. Apoi S32 (doar procesor, ~2 zile). Noaptea o decid după S34.
+- Totul a mers fără erori (placa ~730 MB, 950 teste trec; un test al interfeței a picat o dată din cauza unei conexiuni și a trecut imediat — îl urmăresc).
+  Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
+
 ## 27 octombrie 2026, 08:15 — Muon: INFIRMAT, dar rețeta veche „îmbunătățită” a dat cel mai bun rezultat pe română; pun o probă de control
 
 - **S31 (AdamW contra Muon) e gata și verificat: INFIRMAT.** Muon a ieșit mai slab pe română (1,3019 față de 1,2332; mai mic = mai bine) și
@@ -224,15 +236,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   compar cu #415 notat tot de verificator (cifrele lui Qwen, 6/50 și 30/30, rămân scrise alături).
 - Ziua de 22 oct: nimic pe placă (cum cere direcția nouă, fără nopți cu rețeta veche). Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
-
-## 21 octombrie 2026, 23:15 — noaptea 12: INFIRMAT, fără regresie (verificat)
-
-- **Noaptea 12 (S12) s-a terminat fără erori** (antrenare 19:00–22:12, examene până la 22:34; placa max 6.319 MB, 64 °C).
-  Am renumărat singur: la **tipuri de întrebări nevăzute** Kronos a rămas la **2 din 15** (pragul de infirmare era ≤ 2) →
-  **INFIRMAT**: mai multe tipuri de întrebări la antrenare nu l-au învățat să răspundă la alte tipuri. Dar n-a stricat nimic:
-  examenul nopții 10 a ieșit **50/50** (cel mai bun de până acum), româna, codul și poveștile în praguri. Teste: 851 trec, 1 sărit.
-- Cele 20 de răspunsuri din raport le-am citit: toate 20 bune. Interfața rămâne pe #407 (noul #415 a uitat „Mă numesc Kronos.”).
-- **Pus în coadă (S15, aprobat de mine, doar examen):** un examen mai mare — 50 de întrebări de tipuri nevăzute în loc de 15,
-  plus 30 din tipurile pe care le-a văzut azi, pe texte noi — pe #401, #407, #415. Așa aflăm dacă „2 din 15” e chiar zero și
-  dacă măcar tipurile antrenate s-au învățat. Rulează în noaptea asta sau prima dimineață; de aici decid ziua de mâine.
-- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
