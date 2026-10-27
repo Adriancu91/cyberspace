@@ -1190,7 +1190,8 @@ se face **după S31 și ÎNAINTEA lui S32**, ca placa să nu stea degeaba ziua (
 - raport: docs/rapoarte/2026-10-27_0024_S30_muon_pregatire.md
 
 ### S31 — C-21.2, rularea: AdamW (A) contra Muon (B), câte 2 ore din #415 (placa)
-- stare: in_lucru (executant, 27 oct 01:15; S30 `gata`, proba 5.917 MB; S30 a propus doar lr-ul: rata Muon 0,01; sfârșit estimat ~05:50)
+- stare: gata (executant, 27 oct 05:35: lanțul 01:01–05:16, cod 0; **INFIRMAT** — română curat A 1,2332 / B 1,3019 (B ≥ A);
+  B mai rău și pe TinyStories R2 0,4472/0,4154, cod 0,8042/0,7460, fapte noi 73/76; A a coborât sub #415 (1,2858); placa ≤ 5.374 MB; 946 teste trec)
 - tip: placă (~5–6 ore în total)
 - fereastră: noapte (19:00–07:00) de preferat; altfel oricând, dacă A + B + examenele încap în aceeași fereastră
 - durată maximă: 2 ore A + 2 ore B + examene; cel mult 6 ore pe placă
@@ -1208,7 +1209,7 @@ se face **după S31 și ÎNAINTEA lui S32**, ca placa să nu stea degeaba ziua (
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-10-27_muon.md (urcată înainte de pornire)
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
-- raport: docs/rapoarte/2026-10-2x_<ora>_S31_muon.md
+- raport: docs/rapoarte/2026-10-27_0535_S31_muon.md (INFIRMAT)
 
 ### S33 — E3 citește cu căutarea nouă: examenul S27 refăcut cu `rrf_reord` (procesor + sub 1 oră pe placă)
 - stare: aprobat — pornește DOAR după S31 `gata`, în fereastra de zi (08:00–18:30); se face ÎNAINTEA lui S32
