@@ -1363,7 +1363,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-27_1338_S32_inferenta_bruta.md (fp32 NU TRECE, Q8_0 TRECE)
 
 ### S36 — Proba D: rețeta A fără adunarea pe 8 loturi (aduce răcirea singură câștigul?) (placa)
-- stare: aprobat
+- stare: in_lucru (executant, 27 oct 15:00)
 - tip: placă (~2,2 ore în total)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10) — pornește la prima verificare a cozii
 - durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
