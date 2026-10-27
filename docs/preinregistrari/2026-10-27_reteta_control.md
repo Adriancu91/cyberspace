@@ -65,3 +65,36 @@ a mers la 5.374 MB; rețeta veche are același lot (12) și aceeași rețea; paz
 
 - C ≤ 1,2382 pe română (Δ < 0,005): câștigul lui A vine din orele în plus, nu din rețetă → INFIRMAT.
 - C sub A pe română (Δ < 0): rețeta veche e chiar mai bună în 2 ore.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-27 11:59, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 446 | w2_reteta_C | 27.10 09:01 | 0,4420 | pastrat | — | — | — |  |
+| 447 | w2_reteta_C | 27.10 10:05 | 0,4452 | pastrat | — | — | — |  |
+| 448 | examen_validari_ws | 27.10 11:08 | — | masurat | — | — | — |  |
+| 449 | examen_validari_ws | 27.10 11:08 | — | masurat | — | — | — |  |
+
+- **w2_reteta_C:** 2 ore, 2 păstrate; val_bpb de la 0,4420 la 0,4452; cel mai bun păstrat: #446 (0,4420); pornită din #415 (0,4411).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Cifrele din examene (aceeași rulare, 11:07–11:08; `lucru/examen_validari_ws/experiment_447_20261027_110808.json` și
+`experiment_441_20261027_110820.json`):
+
+| | română curat | română | cod curat | TinyStories R2 (ora 2) | fapte noi |
+|---|---|---|---|---|---|
+| #415 (reper, S31) | 1,2858 | — | 0,7920 | 0,4411 | 68 |
+| C = #447 (rețeta veche, 2 ore) | **1,2903** | 1,3111 | 0,7911 | 0,4452 | 67 |
+| A = #441 (re-măsurat) | **1,2332** | 1,2521 | 0,7460 | 0,4154 | 76 (S31) |
+
+A re-măsurat = 1,2332, exact ca la S31. Placa: cel mult 5.991 MB, 63 °C.
+
+## Verdictul
+
+**Δ = C − A = 1,2903 − 1,2332 = +0,0571 ≥ 0,010 → CONFIRMAT** (rețeta A aduce câștig real; cele 2 ore în plus cu rețeta
+veche nu ajută deloc: C e chiar puțin mai rău decât #415 pe română curat, +0,0045, și pe TinyStories, +0,0041).
+Așteptarea mea pentru C (~1,265) a fost prea optimistă: rețeta veche era deja în platou. Rezervele din „Să nu uite” rămân:
+o singură sămânță; CONFIRMAT spune că pachetul A (AdamW prin model_muon + adunare pe 8 loturi + răcire 25 %) ajută, nu care parte.

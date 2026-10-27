@@ -1263,7 +1263,8 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - verificat de supraveghetor, 27 oct 11:15: pre-înregistrarea înaintea examenului ✓; Δ = 66 − 60 = +6 ≥ +5 → CONFIRMAT ✓ (la limită; câștigul din definiții).
 
 ### S34 — Proba de control: #415 + 2 ore cu rețeta veche (vine câștigul lui A din rețetă sau doar din cele 2 ore în plus?) (placa)
-- stare: in_lucru (executant, 27 oct 09:00:52: pornită prin cascadă, procesul 17948, lanțul `lucru/cascada/S34_proba/s34.py`; **sfârșit estimat ~11:10**)
+- stare: gata (executant, 27 oct 12:03: lanțul 09:00–11:08, cod 0; **CONFIRMAT** — română curat C (#447) 1,2903 / A (#441, re-măsurat) 1,2332,
+  Δ = +0,0571 ≥ 0,010; C nu s-a îmbunătățit față de #415 (1,2858); TinyStories C 0,4452 / A 0,4154; placa ≤ 5.991 MB, 63 °C; 950 teste trec, 1 sărit)
 - tip: placă (~2,5 ore în total)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10), imediat după S33
 - durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
@@ -1289,7 +1290,7 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S34 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
 - pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_control.md (urcată înainte de pornire)
 - aprobat de: supraveghetor, 27 oct 08:15 (granițele 1 și 2 din REGULI_CASCADA.md)
-- raport: docs/rapoarte/2026-10-27_<ora>_S34_reteta_control.md
+- raport: docs/rapoarte/2026-10-27_1203_S34_reteta_control.md (CONFIRMAT)
 
 ### S35 — Citirea cu `rrf_reord` pe validare: cât din +6 de la S33 rămâne pe un set cu alt amestec? (procesor + sub 1 oră pe placă)
 - stare: aprobat — pornește DOAR după S34 `gata` (sau `oprit`), înaintea lui S32
