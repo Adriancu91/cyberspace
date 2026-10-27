@@ -1219,7 +1219,7 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - raport: docs/rapoarte/2026-10-27_0535_S31_muon.md (INFIRMAT)
 
 ### S33 — E3 citește cu căutarea nouă: examenul S27 refăcut cu `rrf_reord` (procesor + sub 1 oră pe placă)
-- stare: aprobat — pornește DOAR după S31 `gata`, în fereastra de zi (08:00–18:30); se face ÎNAINTEA lui S32
+- stare: in_lucru (executant, 27 oct 08:30)
 - tip: procesor (pasul 1) + placă scurt (pasul 3)
 - fereastră: zi (08:00–18:30)
 - durată maximă: 3 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
