@@ -1254,7 +1254,7 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - raport: docs/rapoarte/2026-10-27_0842_S33_E3_citire_reord.md (CONFIRMAT)
 
 ### S34 — Proba de control: #415 + 2 ore cu rețeta veche (vine câștigul lui A din rețetă sau doar din cele 2 ore în plus?) (placa)
-- stare: in_lucru (executant, 27 oct 09:00: S33 e `gata`; configurarea și pre-înregistrarea, apoi pornirea)
+- stare: in_lucru (executant, 27 oct 09:05: pornită prin cascadă, lanțul `lucru/cascada/S34_proba/s34.py`; **sfârșit estimat ~11:15**)
 - tip: placă (~2,5 ore în total)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10), imediat după S33
 - durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
