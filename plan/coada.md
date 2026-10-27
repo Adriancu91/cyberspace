@@ -153,6 +153,13 @@ probabil mai mic: validarea a dat +1,2; câștigul e la definiții, aproape tot 
 din ~01:00 (pre-înregistrarea ccc947d 01:01, înaintea antrenării ✓), sfârșit estimat ~05:50. **S33** (scurtă: procesor + < 1 oră pe placă, ziua 27 oct)
 se face **după S31 și ÎNAINTEA lui S32**, ca placa să nu stea degeaba ziua (S32 e doar procesor, ~2 zile).
 
+**Actualizare 27 oct 08:15 (supraveghetor) — S31 verificat: INFIRMAT; S34 nou (proba de control a rețetei A), între S33 și S32:** S31: pre-înregistrarea
+ccc947d (01:01:05) urcată înainte de antrenarea de la 01:01:14 ✓; română curat B 1,3019 ≥ A 1,2332 → **INFIRMAT** ✓ (plus regresii la B: TinyStories R2
++0,032, cod +0,058, fapte noi −3). Placa ≤ 5.374 MB, cod 0 la toți pașii, 946 teste trec. **Muon se închide** (altă încercare Muon doar cu Adrian).
+Surpriza: A (AdamW + adunare pe 8 loturi + răcire 25 %) a coborât la **1,2332** față de #415 1,2858. Dar A a avut și **2 ore în plus** de antrenare, deci nu
+știm dacă câștigul vine din rețetă sau doar din ore. Am pus **S34** (granițele 1 și 2: încă o rulare pe linia w2, aceeași rețetă ca #415): aceleași 2 ore
+din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, imediat după S33) → S32 (procesor)**.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1244,8 +1251,37 @@ se face **după S31 și ÎNAINTEA lui S32**, ca placa să nu stea degeaba ziua (
 - aprobat de: supraveghetor, 27 oct 02:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea executantului din raportul S29)
 - raport: docs/rapoarte/2026-10-27_<ora>_S33_E3_citire_reord.md
 
+### S34 — Proba de control: #415 + 2 ore cu rețeta veche (vine câștigul lui A din rețetă sau doar din cele 2 ore în plus?) (placa)
+- stare: aprobat — pornește DOAR după S33 `gata` (sau `oprit`); se face ÎNAINTEA lui S32
+- tip: placă (~2,5 ore în total)
+- fereastră: oricând (regula lui Adrian din 22 oct 15:10), imediat după S33
+- durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
+- de ce: la S31, A (#441: AdamW + adunare pe 8 loturi + răcire 25 %) a dat română curat **1,2332**, față de #415 **1,2858**. Dar #441 are 2 ore de
+  antrenare în plus față de #415. Fără un reper cu **aceleași 2 ore și rețeta veche**, nu știm dacă merită să păstrăm rețeta A. Granițele 1 și 2
+  (încă o rulare pe linia w2 existentă, aceeași rețetă ca #415; comparație). Nu e o noapte „ca să crească scorul pe tipuri nevăzute” (Adrian, 22 oct).
+- ce faci:
+  1. **Configurarea** `config/conv_w2_reteta_C.toml` = copie exactă a `config/conv_w2_text_v3.toml` (rețeta lui #415, `module.model_conversatie`,
+     fără adunare, fără răcire), cu DOAR: `nume = "w2_reteta_C"`, `cale_stare = "lucru/w2_reteta_C/gpt.pt"`, eticheta și un antet scurt. Verifici
+     că `lucru/w2_reteta_C/` nu există. Arăți în raport `diff` față de `conv_w2_text_v3.toml` și față de `conv_w2_muon_A.toml`.
+  2. **Pre-înregistrarea** `docs/preinregistrari/2026-10-27_reteta_control.md`, **urcată (commit + push) ÎNAINTE de pornire**, cu pragul, cuvânt cu cuvânt:
+     măsura = `bpb_romana_curat` din `unelte/examen_validari_ws.py`; Δ = C − A (A = #441, re-măsurat în aceeași rulare; reper 1,2332).
+     **CONFIRMAT** (rețeta A aduce câștig real) dacă **Δ ≥ 0,010**; **INFIRMAT** (câștigul vine din cele 2 ore, nu din rețetă) dacă **Δ < 0,005**;
+     între ele: **NECLAR**. Alături (nu decid): TinyStories R2 (val_bpb oficial, ora 2), `bpb_cod_curat`, fapte noi, pentru A, C și #415.
+     Plus așteptările tale în cifre și ora estimată de sfârșit (scrisă și în coadă la pornire).
+  3. **Rularea**, prin cascadă: `cascada.py porneste S34 -- python unelte/antrenare_lunga.py --config config/conv_w2_reteta_C.toml --ore 2 --porneste-din 415`.
+  4. **Examenele, o singură rulare:** `unelte/examen_validari_ws.py --linie w2_reteta_C` (ultimul model, ora 2) și, în aceeași rulare,
+     `--linie w2_muon_A` (#441) ca reper. Verdictul strict după pre-înregistrare.
+  5. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-27_<ora>_S34_reteta_control.md`, cu propunerea ta pentru pasul următor.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, #415, #441, linia w2 existentă (`w2_conv_text_v3`) și configurările
+  S31. Modelul nou NU intră în interfață. Nimic descărcat sau instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport. Peste 7.000 MB → oprești, `oprit`, scrii cifrele.
+- Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S34 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
+- pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_control.md (urcată înainte de pornire)
+- aprobat de: supraveghetor, 27 oct 08:15 (granițele 1 și 2 din REGULI_CASCADA.md)
+- raport: docs/rapoarte/2026-10-27_<ora>_S34_reteta_control.md
+
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
-- stare: aprobat — pornește DOAR după S31 `gata` și după S33 `gata` (sau `oprit`)
+- stare: aprobat — pornește DOAR după S31 `gata` și după S33 și S34 `gata` (sau `oprit`) (S34 pusă înainte de supraveghetor, 27 oct 08:15)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând
 - durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB

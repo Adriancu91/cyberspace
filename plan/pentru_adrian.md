@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 08:15 — Muon: INFIRMAT, dar rețeta veche „îmbunătățită” a dat cel mai bun rezultat pe română; pun o probă de control
+
+- **S31 (AdamW contra Muon) e gata și verificat: INFIRMAT.** Muon a ieșit mai slab pe română (1,3019 față de 1,2332; mai mic = mai bine) și
+  mai slab și la povești, cod și fapte. Am verificat cifrele și ora: regulile au fost urcate înainte de antrenare. Muon se închide aici.
+- **Surpriza bună:** varianta A (metoda de până acum, plus „adunarea pe 8 loturi” și încetinirea pe ultimul sfert) a ajuns la **1,2332**, cel mai bun
+  rezultat pe română al liniei (#415 avea 1,2858). Dar A a avut și **2 ore în plus** de antrenare, deci nu știm încă dacă ajută rețeta sau doar orele.
+- **Pus în coadă (aprobat de mine, e în granițe): S34**, azi după S33: aceleași 2 ore din #415, cu rețeta veche, ca reper (~2,5 ore pe placă).
+  Dacă rețeta A câștigă cu cel puțin 0,010 → o păstrăm. **S33** (Kronos citește cu căutarea nouă, < 1 oră) pornește după 08:00; **S32** (procesor) după S34.
+- Totul a mers fără erori azi-noapte (placa sub 5.400 MB, 946 teste trec); raportul de dimineață e la locul lui. Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. La „continuarea cu rețeta A” din raportul de dimineață îți dau răspunsul după S34 (diseară). Rămân cele trei mici întrebări:
+  ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
+
 ## 27 octombrie 2026, 02:15 — Căutarea nouă: CONFIRMAT (+11); Muon rulează acum pe placă; am pus un examen scurt pentru mâine ziua
 
 - **S29 (căutarea mai bună) e gata și verificat: CONFIRMAT.** Pe cele 100 de întrebări, răspunsul ajunge în primele 3 bucăți la **83**, față
@@ -224,14 +236,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   plus 30 din tipurile pe care le-a văzut azi, pe texte noi — pe #401, #407, #415. Așa aflăm dacă „2 din 15” e chiar zero și
   dacă măcar tipurile antrenate s-au învățat. Rulează în noaptea asta sau prima dimineață; de aici decid ziua de mâine.
 - Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
-
-## 21 octombrie 2026, 17:20 — totul e pregătit pentru noaptea 12 (pornește la 19:00)
-
-- **S14 gata (verificat):** raportul de dimineață face acum singur `git pull` înainte să-și citească instrucțiunea; dacă
-  nu are internet, merge mai departe cu ce are. Copia de pe workstation era oricum la zi. Am citit schimbarea: e doar în
-  `unelte/raport_dimineata.ps1` + un test; nimic în `kronos/`. Teste: 851 trec, 1 sărit.
-- **Rulează acum:** nimic pe placă. **La 19:00:** noaptea 12 (S12), 3 ore din #407 pe datele cu tipuri noi de întrebări,
-  cu pragurile scrise dinainte. Verdictul mâine la 08:15.
-- Nu am pus nimic nou în coadă: ziua de mâine o decid după rezultatul nopții. Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
-
