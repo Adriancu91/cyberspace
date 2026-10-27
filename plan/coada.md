@@ -1326,7 +1326,8 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - raport: docs/rapoarte/2026-10-27_1303_S35_E3_citire_validare.md (NECLAR)
 
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
-- stare: in_lucru (executant, 27 oct 13:30; S31, S33, S34, S35 `gata`)
+- stare: in_lucru (executant, 27 oct 13:30; S31, S33, S34, S35 `gata`; pașii 1–2 + testele în 190bd38, pragurile urcate în
+  2903257; măsurarea pe #415 pornită 13:39, procesul 20664, procesor)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând
 - durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB
