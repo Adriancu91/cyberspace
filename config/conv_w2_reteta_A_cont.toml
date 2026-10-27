@@ -1,0 +1,59 @@
+# S38 (aprobat de Adrian, 27 oct 2026 18:00): continuarea liniei w2 cu rețeta A, din #441, o noapte (6 ore).
+# Copie exactă a config/conv_w2_muon_A.toml, cu DOAR: `nume`, `cale_stare`, eticheta, acest antet și
+# durata_scaderii_secunde = 21600 (răcirea în ultimele 25% din cele 6 ore). S36 a dat NECLAR, deci rețeta A (cu adunare).
+#   python unelte/antrenare_lunga.py --config config/conv_w2_reteta_A_cont.toml --ore 6 --porneste-din 441
+
+[platforma]
+# Linie nouă, ca `--porneste-din 441` să se aplice (lucru/w2_reteta_A_cont/ nu există la 27 oct 19:30).
+nume = "w2_reteta_A_cont"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_reteta_A_cont/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "date/conversatie/text_v3/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 21600, adunare_loturi = 8, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S38: rețeta A, continuare 6 ore din #441"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [12] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

@@ -1434,3 +1434,5 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
   curat ≤ **1,2232** (−0,010 față de #441), fără regresie > 0,005 la cod curat și TinyStories R2; **INFIRMAT** dacă > 1,2282; între ele NECLAR.
   Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #441 în aceeași rulare. Modelul nu intră în interfață.
 - aprobat de: Adrian, 27 oct 18:00 (centrul de comandă, delegarea din DECIZII 26 oct 17:45). Pornește în noaptea 27→28, după S36; dacă S36 dă CONFIRMAT, cu rețeta D, cum scrie mai sus. Pre-înregistrarea se urcă înainte.
+- pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_A_cont.md (urcată 27 oct ~19:35, înainte de pornire); sfârșit estimat ~01:55
+- raport: (după antrenare și examene)
