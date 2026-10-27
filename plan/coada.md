@@ -1293,7 +1293,7 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - raport: docs/rapoarte/2026-10-27_1203_S34_reteta_control.md (CONFIRMAT)
 
 ### S35 — Citirea cu `rrf_reord` pe validare: cât din +6 de la S33 rămâne pe un set cu alt amestec? (procesor + sub 1 oră pe placă)
-- stare: in_lucru (executant, 27 oct 12:30; S34 e `gata`)
+- stare: gata (executant, 27 oct 13:03; NECLAR: Δ +1,0 punct pe 2048, 336 față de 331; 952 teste trec)
 - tip: placă scurt (examen, nimic antrenat)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10)
 - durată maximă: 2 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
@@ -1323,7 +1323,7 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-10-27_E3_citire_validare.md (urcată înainte de pasul 3)
 - aprobat de: supraveghetor, 27 oct 11:15 (granița 2 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S33)
-- raport: docs/rapoarte/2026-10-27_<ora>_S35_E3_citire_validare.md
+- raport: docs/rapoarte/2026-10-27_1303_S35_E3_citire_validare.md (NECLAR)
 
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
 - stare: aprobat — pornește DOAR după S31 `gata` și după S33, S34 și S35 `gata` (sau `oprit`) (S34 pusă înainte de supraveghetor, 27 oct 08:15; S35, 27 oct 11:15)

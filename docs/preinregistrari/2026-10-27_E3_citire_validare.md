@@ -87,3 +87,43 @@ negativ). Alături (nu decide): eșantionul 1024, pe tipuri (definiții, născut
 - 1024 (văzute): ambele variante mult peste 2048 (~75–85 %), Δ în jur de 0 (plafonul `rrf_reord` e chiar mai mic: 345 față de 352).
 - Timpi ca la S33 (căutarea ~0,1 s, judecătorul ~0,14 s, răspunsul ~0,2 s); placa < 1.500 MB.
 - **Verdictul așteptat: NECLAR ~50 %, INFIRMAT ~35 %, CONFIRMAT ~15 %.**
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-27 13:03, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+**Examenul** (o singură rulare, 12:36:26–12:48:16, 708 s, cod 0, `unelte/e3_citire_reord.py examen --model 438 --set validare`
+→ `lucru/e3/examen_s35.json`; amprenta `validare_s29.json` `d036774a…2dca`; #438, linia `w2_conv_e3_memorie`; văzute de #438:
+2048 → 0, 1024 → 485):
+
+| eșantion | varianta | corecte din 500 | răspunsul în bucățile care încap | corecte dintre acestea | corecte dintre celelalte |
+|---|---|---|---|---|---|
+| **2048 (decide)** | (i) `s25` | **331 (66,2 %)** | 343 | 323 | 8 din 157 |
+| **2048 (decide)** | (ii) `rrf_reord` | **336 (67,2 %)** | 352 | 329 | 7 din 148 |
+| 1024 (văzute) | (i) `s25` | 365 (73,0 %) | 352 | 338 | 27 din 148 |
+| 1024 (văzute) | (ii) `rrf_reord` | 345 (69,0 %) | 345 | 334 | 11 din 155 |
+
+- Reperul S29: **același loc la toate 1.000 de întrebări**, la ambele variante (1000 / 1000).
+- 2048: **69 reparate, 64 stricate** (net +5); la 113 întrebări bucățile date sunt aceleași.
+- Pe tipuri, 2048 (corecte, (i) → (ii)): definiții 151 → **169** din 252 (+18); născut 36 → 36 din 45; an 12 → 10 din 21;
+  regizat 9 → 15 din 23 (+6); **rest 123 → 106 din 159 (−17)**.
+- 1024: Δ = **−4,0 puncte** (49 reparate, 69 stricate); cele 15 nevăzute: 11 → 10.
+- Timpi (mediane): căutarea 0,075 s, judecătorul 0,136 s, răspunsul 0,132 s (i) / 0,142 s (ii). Placa: 734 MB alocați
+  de PyTorch; RAM 1,1 GB.
+
+## Verdictul
+
+**NECLAR:** pe eșantionul 2048 (500 de întrebări, niciuna văzută de #438), #438 cu `rrf_reord` răspunde corect la **336**,
+față de **331** cu `s25`, în aceeași rulare: **Δ = +1,0 punct (+5 întrebări)**, între +0,5 și +2,0.
+
+Ce trebuie spus la fel de clar:
+- **Câștigul de la S33 (+6 din 100) nu se păstrează la aceeași mărime pe validare:** aici e +1 punct, de 6 ori mai mic,
+  exact cât am așteptat (~+1,0).
+- Reordonarea **mută mult**: 69 reparate și 64 stricate. Câștigă la definiții (+18) și regizat (+6), pierde aproape tot
+  înapoi la „rest” (−17) și an (−2). Pe un set cu mai puțin de jumătate definiții, câștigul se topește.
+- #438 citește bine ce primește (94 % din cele cu răspunsul în bucăți, la ambele variante); limita e tot plafonul găsirii.
+- Pe 1024 (văzute de #438 la antrenare) reordonarea pierde 4 puncte, dar setul nu spune mare lucru despre cititul adevărat.
