@@ -180,7 +180,8 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 (1) Pragul motorului fără PyTorch: verdictele S32/S37 rămân cum au fost măsurate (NU TRECE la F32); pentru **testele viitoare** se folosește un
 prag relativ, scris înainte de măsurare (propunerea executantului din raportul S37), plus condiția „argmax și textul identice”. Q8_0 rămâne formatul de lucru.
 (2) Raportul de dimineață rămâne la ora de acum (06:40). (3) S28 (oprirea workstation-ului) se închide ca `anulat — nu mai e nevoie`.
-(4) Porturile `cautare`/`inferenta` în `kronos/` (nucleu) rămân la Adrian — întrebat prin centrul de comandă.
+(4) **Porturile `cautare` și `inferenta` în `kronos/` (nucleu): APROBATE de Adrian** („Da”, 27 oct 23:49, prin centrul de comandă) — doar cele două
+porturi + contractele lor, fără alte schimbări în `kronos/`; `teste/test_arhitectura.py` și toate testele trebuie să treacă; se face pe procesor, fără să încurce S38.
 
 **S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `aprobat` (Adrian, 27 oct 18:00, prin centrul de comandă — delegarea din 26 oct 17:45: aprobă ce se potrivește direcției).
 „Reordonarea doar la definiții” (propunerea S35) cere întâi un set nou de întrebări — o las pentru o trecere următoare.
