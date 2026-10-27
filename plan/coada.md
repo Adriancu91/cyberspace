@@ -147,6 +147,12 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 (setul decisiv = cele 100 S26; pragul C-21 neschimbat) și am trecut S29 pe `aprobat` pentru pașii 5–7 (sub o oră). Incidentul plăcii de la 21:47
 (7.942 MB, oprit de paznic în câteva secunde, reparat, a doua rulare ≤ 1.500 MB) e notat; nu se repetă. Apoi S30 → S31 → S32, ca până acum.
 
+**Actualizare 27 oct 02:15 (supraveghetor) — S29 verificat: CONFIRMAT; S30 gata; S31 rulează; S33 nou, înaintea lui S32:** S29: pre-înregistrarea
+c381094 (23:35:21) urcată înainte de măsurarea de la 23:35:30 ✓; Δ3 = 83 − 72 = **+11 ≥ +5** ✓, k = 20: 95 ≥ 94 ✓ → **CONFIRMAT** (efectul real e
+probabil mai mic: validarea a dat +1,2; câștigul e la definiții, aproape tot din reordonare). S30 `gata` (5.917 MB, 64 °C, 946 teste). S31 `in_lucru`
+din ~01:00 (pre-înregistrarea ccc947d 01:01, înaintea antrenării ✓), sfârșit estimat ~05:50. **S33** (scurtă: procesor + < 1 oră pe placă, ziua 27 oct)
+se face **după S31 și ÎNAINTEA lui S32**, ca placa să nu stea degeaba ziua (S32 e doar procesor, ~2 zile).
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1204,8 +1210,41 @@ antrenarea a adus doar +3; câștigul vine din căutare. S29 `oprit` la pasul 4 
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
 - raport: docs/rapoarte/2026-10-2x_<ora>_S31_muon.md
 
+### S33 — E3 citește cu căutarea nouă: examenul S27 refăcut cu `rrf_reord` (procesor + sub 1 oră pe placă)
+- stare: aprobat — pornește DOAR după S31 `gata`, în fereastra de zi (08:00–18:30); se face ÎNAINTEA lui S32
+- tip: procesor (pasul 1) + placă scurt (pasul 3)
+- fereastră: zi (08:00–18:30)
+- durată maximă: 3 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
+- de ce: propunerile executantului din raportul S29 (verdict). S29 a ieșit CONFIRMAT (+11 la k = 3), dar validarea arătase doar +1,2.
+  Întrebarea care contează pentru Kronos: **dacă #438 primește bucățile în ordinea nouă, răspunde corect la mai multe întrebări?**
+  (S27: 60/100; plafonul urcă de la 64 la 72.) Granița 2 („examene, comparații”): nimic antrenat.
+- ce faci:
+  1. **Procesor (`CUDA_VISIBLE_DEVICES=-1`), câteva minute:** din `lucru/e3/validare_s29.json`, amestecul de tipuri (definiții „Ce este X?”,
+     născut, an, regizat, rest) pe eșantioanele 1024 și 2048 și câștigul `rrf_reord` față de `s25` la k = 3 **pe fiecare tip**. Comparat cu
+     amestecul celor 100 S26 (54 % definiții). Scrii tabelul în raport. Nu se alege nimic pe baza lui.
+  2. **Pre-înregistrarea** `docs/preinregistrari/2026-10-27_E3_citire_reord.md`, **urcată (commit + push) ÎNAINTE de pasul 3**:
+     **CONFIRMAT** dacă #438 cu `rrf_reord` răspunde corect la **cel puțin 5 întrebări mai mult** decât #438 cu căutarea S25 simplă,
+     măsurat în **aceeași rulare** pe cele 100 S26; **INFIRMAT** dacă diferența e **sub 2**; între ele: NECLAR. Aceeași notare ca la S27
+     (verificatorul S16, potrivirea S16), același prompt, aceeași regulă „câte bucăți încap în 448 de simboluri”, fără întâmplare.
+     **Spus cinstit:** setul S26 e folosit a patra oară (S26, S27, S29 — doar măsurat, nimic ales pe el); #438 a văzut `text_v3` la antrenare;
+     reperul S27 (60) trebuie să iasă din nou ~60 la varianta S25 simplă — dacă iese altceva, contează cifra din rulare și o spui.
+     Plus așteptările tale în cifre.
+  3. **Examenul, o singură rulare** (comandă nouă în `unelte/e3_examen.py` sau `unelte/e3_reordonare.py`, cu test nou fără placă):
+     #438 pe cele 100 S26, (i) cu bucățile S25 simple, (ii) cu bucățile `rrf_reord` (judecătorul #438, ca la S29). Pe fiecare: corecte din
+     100, corecte dintre cele cu răspunsul în bucățile care încap și dintre cele fără, timpul pe întrebare, memoria plăcii. Paznicul S17
+     verificat la fiecare 20 de întrebări; peste 7.000 MB → oprești, `oprit`, scrii cifrele.
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-27_<ora>_S33_E3_citire_reord.md`, cu verdictul strict după
+     pre-înregistrare și ce propui mai departe.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen și `text_v3` (doar citire), lista S26,
+  `lucru/e3/index.sqlite` și `index_radacini.sqlite` (doar citire), `unelte/verificator_text.py`, #415, #438 și linia w2. Nimic antrenat,
+  descărcat sau instalat; nimic în interfață; nimic din `lucru/e3/` în Git. Portul `cautare` în `kronos/` NU se face (rămâne la Adrian).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: docs/preinregistrari/2026-10-27_E3_citire_reord.md (urcată înainte de pasul 3)
+- aprobat de: supraveghetor, 27 oct 02:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea executantului din raportul S29)
+- raport: docs/rapoarte/2026-10-27_<ora>_S33_E3_citire_reord.md
+
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
-- stare: aprobat — pornește DOAR după S31 `gata`
+- stare: aprobat — pornește DOAR după S31 `gata` și după S33 `gata` (sau `oprit`)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând
 - durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB

@@ -2,6 +2,19 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 02:15 — Căutarea nouă: CONFIRMAT (+11); Muon rulează acum pe placă; am pus un examen scurt pentru mâine ziua
+
+- **S29 (căutarea mai bună) e gata și verificat: CONFIRMAT.** Pe cele 100 de întrebări, răspunsul ajunge în primele 3 bucăți la **83**, față
+  de **72** înainte (pragul tău: +5 → a ieșit +11), iar la primele 20 nu scade (95 față de 94). Am verificat cifrele și ora: regulile au fost
+  urcate înainte de măsurare. Spus cinstit: pe probe câștigul fusese doar +1,2, deci efectul real e probabil mai mic; vine aproape tot din
+  „reordonarea” bucăților de modelul nostru.
+- **S30 (pregătirea Muon) gata**, fără probleme (placa 5.917 MB, 64 °C, 946 teste trec). **S31 (AdamW contra Muon, câte 2 ore) rulează acum**,
+  cu regulile urcate înainte; se termină pe la **~05:50**. Verdictul îl verific la trecerea de 08:15.
+- **Pus în coadă (aprobat de mine, e doar un examen): S33**, mâine ziua, sub o oră pe placă: Kronos răspunde la cele 100 de întrebări citind
+  bucățile în ordinea nouă. Întrebarea: urcă de la 60 de răspunsuri corecte? (prag: +5). S32 (motorul fără PyTorch, doar procesor) vine după.
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
+
 ## 26 octombrie 2026, 23:15 — S27 CONFIRMAT (la limită); S29 s-a oprit la alegerea setului — am ales eu varianta recomandată
 
 - **S27 (memoria + model) e gata și verificat: CONFIRMAT, la limită.** Kronos își caută singur textul și răspunde corect la **60 din 100**
@@ -222,12 +235,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - Nu am pus nimic nou în coadă: ziua de mâine o decid după rezultatul nopții. Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
 
-## 21 octombrie 2026, 14:20 — datele pentru noaptea 12 sunt bune; la 19:00 pornește
-
-- **S11 gata și verificat:** 3.319 întrebări noi de antrenare (familii de specii, deputați și partide, râuri, raioane, anul
-  fondării). Am citit singur cele 30 alese la întâmplare: **toate 30 corecte după text**; nicio întrebare de tipul celor din
-  examen. Am scris „perechi verificate: da” → **noaptea 12 (S12) pornește la 19:00**, 3 ore din #407. Verdictul mâine la 08:15.
-- **S13 gata:** fila „Întreabă din text” folosește acum #407 (4 din 4 exemple bune). Teste: 850 trec, 1 sărit.
-- **Pus în coadă (S14, aprobat de mine, 30 de minute pe procesor):** raportul de dimineață face `git pull` înainte de a-și citi
-  instrucțiunea, ca schimbarea ta de azi (cele 20 de răspunsuri alese după data zilei) să fie sigur folosită mâine.
-- Cyber Hub: nicio comandă nouă pentru Kronos. **Aștept de la tine:** nimic.
