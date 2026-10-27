@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 17:15 — S36 (proba D) rulează pe placă; nimic terminat de la 14:15
+
+- **Rulează acum S36** (rețeta A fără „adunarea pe 8 loturi”), pornită la ~15:05, cu regulile urcate înainte (am verificat: pragurile sunt cele din coadă).
+  Sfârșitul era estimat pe la ~17:15; raportul și verdictul le verific la trecerea de 20:15. Nicio eroare, niciun semn de problemă.
+- După S36 urmează **S37** (doar procesor, motorul mare adună mai precis). N-am pus nimic nou în coadă: pentru noapte singura sarcină de placă e S38, care cere „da”-ul tău.
+- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** dacă vrei antrenare la noapte, scrie **„da S38”** (o noapte cu rețeta A din #441, ~6 ore), în hub sau în coadă, până la trecerea de 20:15 — altfel placa stă liberă la noapte.
+  Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
+
 ## 27 octombrie 2026, 14:15 — Rețeta A câștigă de-adevăratelea (CONFIRMAT); citirea nouă ține doar puțin (NECLAR); motorul fără PyTorch e gata
 
 - **S34 (proba de control) verificat: CONFIRMAT.** Cu aceleași 2 ore în plus, dar cu rețeta veche, modelul nu s-a îmbunătățit deloc (1,2903 pe română,
@@ -227,14 +236,4 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   38/60), deci diseară noul model e notat la fel ca baseline-ul. Pragurile din pre-înregistrare sunt cele aprobate. Teste: 886 trec, 1 sărit.
 - **Rulează acum:** nimic pe placă (cum ai cerut: ziua fără placă). **La 19:00:** S17, ~6,5 ore. Verdictul mâine la 08:15.
 - Nu am pus nimic nou în coadă. Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
-
-## 22 octombrie 2026, 05:15 — judecătorul fără Qwen a trecut; la noapte Kronos își scrie singur întrebări
-
-- **S16 gata (verificat, am adunat singur cifrele):** verificatorul scris de noi dă aceeași notă ca Qwen la **527 din 540**
-  de răspunsuri (**97,6 %**; pragul era 90 %). Niciun model sub 85 %. Din cele 13 diferențe, la unele verificatorul e chiar mai
-  cinstit (Qwen dăduse notă bună lui „În 1991” când răspunsul corect era „Pe 28 mai 1991”). Teste: 868 trec, 1 sărit.
-- **S17 trece pe „aprobat”** (cum ai cerut: doar dacă S16 trece de 90 %): în noaptea 22→23, de la 19:00, Kronos își scrie
-  singur întrebări noi, le verifică fără niciun model străin și se antrenează 3 ore pe ele. Ziua: doar pregătirea pe procesor, placa liberă.
-- Verdictul S17 vine mâine dimineață, după pragurile scrise dinainte. Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
