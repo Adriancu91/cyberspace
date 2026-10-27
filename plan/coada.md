@@ -176,6 +176,12 @@ S34: pre-înregistrarea 46951db (09:00:45) înaintea pornirii (09:00:52) ✓; C 
 **NU TRECE** ✓ (argmax și textul identice, bpb +0,0000005); Q8_0 **+0,0000187 ≤ 0,005** → **TRECE** ✓. 960 teste trec. C-21 e acum închisă (S29–S32).
 Pun: **S36** (granițele 1 și 2, ~2,2 ore pe placă, pornește acum): proba D = rețeta A fără adunarea pe 8 loturi — aflăm dacă răcirea singură aduce câștigul;
 apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la LayerNorm/softmax și se remăsoară o dată, cu același prag 1e-4.
+**Actualizare 27 oct 23:50 (centrul de comandă, prin delegarea lui Adrian din 26 oct 17:45) — răspunsuri la întrebările mici:**
+(1) Pragul motorului fără PyTorch: verdictele S32/S37 rămân cum au fost măsurate (NU TRECE la F32); pentru **testele viitoare** se folosește un
+prag relativ, scris înainte de măsurare (propunerea executantului din raportul S37), plus condiția „argmax și textul identice”. Q8_0 rămâne formatul de lucru.
+(2) Raportul de dimineață rămâne la ora de acum (06:40). (3) S28 (oprirea workstation-ului) se închide ca `anulat — nu mai e nevoie`.
+(4) Porturile `cautare`/`inferenta` în `kronos/` (nucleu) rămân la Adrian — întrebat prin centrul de comandă.
+
 **S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `aprobat` (Adrian, 27 oct 18:00, prin centrul de comandă — delegarea din 26 oct 17:45: aprobă ce se potrivește direcției).
 „Reordonarea doar la definiții” (propunerea S35) cere întâi un set nou de întrebări — o las pentru o trecere următoare.
 **Actualizare 27 oct 20:15 (supraveghetor) — S36 și S37 verificate; S38 rulează (noaptea 27→28):**
