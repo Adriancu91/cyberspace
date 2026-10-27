@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 23:15 — S38 rulează normal; comanda ta C-24 (Kronos în OS) e pusă în coadă ca S39
+
+- **Nimic terminat de la 20:15.** S38 (noaptea cu rețeta A din #441) rulează din ~19:35; executantul nu scrie nimic până la final, deci e normal.
+  Se termină pe la **~01:55**; verdictul îl verific la trecerea de 02:15.
+- **Comanda ta C-24 (prin centrul de comandă) → S39, aprobată, doar procesor, fără să încurce S38:** acum, executantul pregătește pentru OS
+  un model minuscul de probă (greutăți aleatoare, ≤ 1 MB) + „răspunsurile corecte” pe 3 texte, ca OS-ul să-și verifice motorul. După S38, exportă
+  cel mai bun model (S38 dacă e CONFIRMAT, altfel #441) în formatul comprimat (~111 MB) ca Release în depozitul privat. Executantul nu scrie în hub,
+  așa că eu copiez pachetul în hub la trecerea următoare.
+- **Aștept de la tine:** nimic urgent. Rămân: pragul pentru motorul fără PyTorch (fix 0,0001 sau relativ, din raportul S37), ora raportului
+  de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
+
 ## 27 octombrie 2026, 20:15 — Proba D: NECLAR; motorul fără PyTorch: tot NU TRECE la limită; antrenarea de noapte (S38) rulează
 
 - **S36 (proba D) verificat: NECLAR.** Fără „adunarea pe 8 loturi”, modelul ajunge la **1,2520** pe română, față de **1,2332** cu rețeta A întreagă
@@ -228,14 +239,4 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **Pus în coadă, cum ai cerut la 15:10:** **S18 = repetarea cu 3× întrebări** (aprobat; pornește la prima verificare a cozii, ~7 ore,
   gata pe la ~07:00). E ultima rundă: dacă iese iar „neclar”, nu se mai repetă și decizi tu. Verdictul la trecerea de 08:15.
 - Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
-
-## 22 octombrie 2026, 17:15 — S17 rulează pe placă de la 15:30 (cum ai cerut)
-
-- **Am văzut decizia ta de la 15:10:** placa se folosește oricând, ziua și noaptea; S17 pornește imediat. Executantul a pornit
-  S17 la 15:30 (placa era liberă: 681 MB, 30 °C). Durează ~6,5 ore → gata pe la **~22:00**.
-- **Rulează acum:** S17 („întrebări născute de Kronos”). Nicio problemă: e normal să nu scrie nimic până termină.
-- Nu am pus nimic nou în coadă: placa e ocupată până diseară, iar pasul următor depinde de verdictul S17. **La trecerea de 23:15**
-  verific cifrele față de praguri și pun imediat pe placă pasul următor (repetarea cu 3× date dacă e „neclar”, altfel E2), ca placa
-  să nu stea liberă mâine ziua. Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.

@@ -1442,3 +1442,44 @@ Ziua de 28 oct o decid după verdictul S38 (de ex. proba E „fără adunare, ra
 - aprobat de: Adrian, 27 oct 18:00 (centrul de comandă, delegarea din DECIZII 26 oct 17:45). Pornește în noaptea 27→28, după S36; dacă S36 dă CONFIRMAT, cu rețeta D, cum scrie mai sus. Pre-înregistrarea se urcă înainte.
 - pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_A_cont.md (urcată 27 oct ~19:35, înainte de pornire); sfârșit estimat ~01:55
 - raport: (după antrenare și examene)
+
+### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu întrerupe și nu încetinește S38
+- fereastră: **partea A oricând, chiar în timpul S38** (e ușoară: minute, RAM < 2 GB); **partea B după ce S38 s-a terminat și raportul S38 e urcat**
+- durată maximă: 2 ore în total; RAM cel mult ~6 GB
+- de ce: comanda lui Adrian C-24 (hub, 27 oct 23:20): sesiunea OS (`cyber-universe`, C-25) scrie un motor KGR1 propriu în Rust și trebuie să-l
+  verifice fără să vadă codul Kronos. Conform `CLAUDE.md`, executantul nu scrie în hub: pregătești totul în `integrare/kronos/` din cyberspace,
+  iar supraveghetorul copiază dosarul în hub (`integrare/kronos/`) la trecerea următoare.
+- ce faci:
+  **Partea A (acum, în timpul S38):**
+  1. Unealtă nouă `unelte/vectori_kgr1.py` (fără să atingi `kronos/` sau examenul): construiește un model GPT **minuscul**, cu aceeași arhitectură ca
+     linia w2 (aceleași nume de tensori, LayerNorm, cap legat), dar cu dimensiuni mici (de ex. 2 straturi, n_emb 64, 4 capete, context 64) și
+     **greutăți aleatoare** cu sămânță fixă (scrisă în fișier), plus tokenizerul nostru BPE inclus ca în KGR1. Îl scrie în KGR1 **F32** și **Q8_0**
+     cu aceeași cale de scriere ca `unelte/exporta_greutati.py` (refolosești funcțiile, nu le copiezi). Fiecare fișier ≤ 1 MB (dacă tokenizerul
+     îl face mai mare, micșorezi modelul; dacă tot nu încape, scrii de ce și mărimea).
+  2. 3 texte fixe în română (scurte, de ex. „Ana are mere.”, „Capitala României este”, „def suma(a, b):”), tokenizate cu tokenizerul din fișier;
+     pentru fiecare: lista de simboluri și **logit-urile** date de `unelte/inferenta_bruta.py` pe ultimul simbol (tot vectorul) și argmax-ul pe
+     fiecare poziție, pentru F32 și Q8_0. Plus primele 5 simboluri generate greedy. Alături, pentru F32, diferența maximă față de PyTorch pe procesor.
+  3. În `integrare/kronos/` (dosar nou în cyberspace): `format_greutati.md` (copie exactă a `docs/format_greutati.md`), `vectori/mic_f32.kgr`,
+     `vectori/mic_q8_0.kgr`, `vectori/vectori.json` (texte, simboluri, logit-uri, argmax, greedy, sumele SHA-256 ale celor două fișiere) și
+     `README.md` scurt, în română: ce e fiecare fișier, cum se verifică un motor, **toleranța declarată** (propunerea ta, în cifre, pentru F32 și
+     pentru Q8_0, sprijinită pe diferențele măsurate; spune clar că pragul pentru modelul mare rămâne întrebarea deschisă către Adrian din S37).
+     Fără greutăți reale aici. Test nou în `teste/`: fișierele din `integrare/kronos/vectori/` se recitesc și dau aceleași logit-uri (± toleranța).
+  4. `python -m pytest`: toate trec. Commit + push.
+  **Partea B (după S38):**
+  5. Alegi modelul după verdictul S38 din pre-înregistrare: dacă S38 = **CONFIRMAT** → ultimul model S38; altfel → **#441**. Exporți în **KGR1 Q8_0**:
+     `python unelte/exporta_greutati.py --experiment <nr> --fel q8_0 --iesire lucru/export/kronos_<nr>_q8_0.kgr` (fișierul rămâne în `lucru/`, NU în Git).
+     Calculezi SHA-256 și mărimea; cu `unelte/inferenta_bruta.py` generezi greedy primele 5 simboluri pe cele 3 texte de la pasul 2.
+  6. **Release** în repo-ul privat `Adriancu91/cyberspace` (NU în hub, NU în repo-uri publice): eticheta `kronos-kgr1-<nr>`, cu fișierul ca anexă:
+     `gh release create kronos-kgr1-<nr> lucru/export/kronos_<nr>_q8_0.kgr --repo Adriancu91/cyberspace --title "Kronos #<nr> KGR1 Q8_0" --notes "<suma și mărimea>"`.
+     Dacă `gh` nu există sau nu e autentificat: **nu instalezi nimic**, nu te autentifici; scrii în raport unde e fișierul și suma, și treci mai departe.
+  7. `integrare/kronos/MODEL.md`: numele modelului (#nr, linia, rețeta), mărimea în octeți, SHA-256, eticheta Release-ului (sau „Release nefăcut: motivul”),
+     cele 3 texte cu primele 5 simboluri generate greedy (numere și text) — testul pe hardware pentru OS.
+  8. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-28_<ora>_S39_kgr1_pentru_os.md`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (doar citire), S38 și configurările lui. Nimic descărcat sau instalat.
+  Nu scrii în hub și nici în alte repo-uri decât Release-ul de la pasul 6.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; nu e nevoie
+- aprobat de: Adrian (COMENZI.md C-24, 27 oct 23:20, prin centrul de comandă; DECIZII 27 oct 23:20); pașii scriși de supraveghetor, 27 oct 23:15
+- raport: (după partea B)
