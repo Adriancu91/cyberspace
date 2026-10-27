@@ -1326,8 +1326,8 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - raport: docs/rapoarte/2026-10-27_1303_S35_E3_citire_validare.md (NECLAR)
 
 ### S32 — C-21.3: motorul de inferență fără PyTorch (fp32 + Q8_0), doar procesor
-- stare: in_lucru (executant, 27 oct 13:30; S31, S33, S34, S35 `gata`; pașii 1–2 + testele în 190bd38, pragurile urcate în
-  2903257; măsurarea pe #415 pornită 13:39, procesul 20664, procesor)
+- stare: gata (executant, 27 oct 14:03; măsurarea 13:39–13:53, cod 0; **fp32 NU TRECE** (dif. maximă 1,34e-4 > 1e-4; argmax și
+  textul generat identice cu PyTorch), **Q8_0 TRECE** (bpb +0,00002); 960 teste trec)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând
 - durată maximă: 2 zile de lucru, în pași (fiecare pas reușit: commit + push); RAM cel mult ~40 GB
@@ -1349,4 +1349,4 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; pragul se scrie în raport și se urcă înainte de pasul 3
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
-- raport: docs/rapoarte/2026-10-2x_<ora>_S32_inferenta_bruta.md
+- raport: docs/rapoarte/2026-10-27_1338_S32_inferenta_bruta.md (fp32 NU TRECE, Q8_0 TRECE)

@@ -36,4 +36,73 @@ Pe #415, pe procesor (`CUDA_VISIBLE_DEVICES=-1`), o singură rulare: `lucru/casc
 
 ## Ce a ieșit
 
-(se completează după măsurare)
+Completat de executant la 14:03. Rularea: `lucru/cascada/S32_proba/s32.py`, pornită prin cascadă la 13:39:47 (procesul
+20664), încheiată la 13:53:55 cu **cod 0** (~14 minute, procesor, 18 fire). Rezultatul: `lucru/s32/s32.json` (nu e în Git).
+RAM-ul procesului la final: 1.299 MB. Placa nefolosită (400 MB, 28 °C la verificare).
+
+**Exportul** (#415, 98.032.128 de parametri):
+
+| varianta | fișierul | mărime | timp export | memoria greutăților în motor |
+|---|---|---|---|---|
+| F32 | `lucru/s32/experiment_415_f32.kgr` | 392,4 MB | 0,3 s | 374,0 MB |
+| Q8_0 | `lucru/s32/experiment_415_q8_0.kgr` | 110,9 MB | 0,8 s | 374,0 MB (desfăcut la încărcare) / 105,5 MB („la_pas”) |
+
+**fp32 — logits pe cele 3 texte fixe, față de PyTorch pe procesor:**
+
+| text | simboluri | logit maxim (abs) | dif. maximă F32 | dif. maximă Q8_0 | argmax la fel F32 / Q8_0 |
+|---|---|---|---|---|---|
+| „Capitala României este București…” | 17 | 15,89 | **1,23e-4** | 0,159 | 100 % / 100 % |
+| „Întrebare: Cine a scris poezia „Luceafărul”?…” | 21 | 16,67 | **1,34e-4** | 0,154 | 100 % / 100 % |
+| „Once upon a time…” | 21 | 17,28 | 9,7e-5 | 0,162 | 100 % / 95,2 % |
+
+Diferența maximă F32: **1,335e-4** (prag < 1e-4).
+
+**Q8_0 — val_bpb pe română curat** (media pe octeți; același motor):
+
+| validarea | octeți | PyTorch | motor F32 | motor Q8_0 | timp PyTorch / F32 / Q8_0 |
+|---|---|---|---|---|---|
+| Wikipedia | 103.501 | 1,095326 | 1,095327 | 1,095389 | 9,3 / 150,9 / 150,3 s |
+| web | 98.395 | 1,381078 | 1,381078 | 1,381076 | 8,8 / 132,7 / 132,6 s |
+| cărți | 80.259 | 1,414674 | 1,414675 | 1,414664 | 6,6 / 106,9 / 107,0 s |
+| **total** | 282.155 | **1,285814** | **1,285815** | **1,285833** | |
+
+Creșterea Q8_0 față de F32: **+0,0000187** (prag ≤ +0,005). Motorul F32 față de PyTorch la bpb: +0,0000005.
+
+**Viteza** (completare fără întâmplare, 64 de simboluri după „Ana a mers la piață să cumpere”):
+
+| | simboluri/s | text identic cu PyTorch |
+|---|---|---|
+| motor F32 | 42,4 | da |
+| motor Q8_0 desfăcut la încărcare | 43,2 | da |
+| motor Q8_0 „la_pas” | 2,2 | da |
+| PyTorch pe procesor (fără cache) | 36,1 | — |
+
+Toate patru dau același text (o repetiție: „…o mașină de lux, care a fost cumpărată de la un preț de 5 lei…”).
+
+## Verdictul (strict după pragurile de mai sus)
+
+- **fp32: NU TRECE.** Diferența maximă e 1,34e-4, peste pragul de 1e-4 (pe 2 din 3 texte). Spus cinstit, ce înseamnă:
+  diferența e ~8 milionimi din mărimea logits-urilor (până la ~17), argmax-ul e identic pe toate pozițiile, bpb-ul diferă
+  cu 0,0000005, iar textul generat e identic cu PyTorch. Cel mai probabil e ordinea adunărilor în fp32 (numpy față de
+  PyTorch, 12 straturi); pe modelul mic din teste diferența era < 1e-4. Dar pragul scris înainte era 1e-4 și nu e atins;
+  nu l-am mutat după măsurare.
+- **Q8_0: TRECE**, cu mult: +0,00002 bpb față de pragul de +0,005.
+
+Față de așteptările mele: fp32 am așteptat ~1e-5 (a ieșit de ~13 ori mai mult); Q8_0 am așteptat +0,001…+0,002 (a ieșit
+de ~50–100 de ori mai puțin); fișierele exact cât am așteptat (392 / 111 MB); F32 42 simboluri/s, peste intervalul de
+10–30 așteptat; „la_pas” de ~19 ori mai încet decât F32 (am așteptat 3–6 ori).
+
+## Testele
+
+`CUDA_VISIBLE_DEVICES=-1 .venv/Scripts/python -m pytest -q`: **960 trec, 1 sărit** (226 s).
+
+## Ce aștept de la Adrian / ce propun
+
+1. **fp32**: decide dacă pragul de 1e-4 (absolut) rămâne. Variante: (a) îl păstrezi și cer o sarcină nouă: motorul
+   adună în float64 la LayerNorm / softmax și remăsor o dată (pragul rămâne 1e-4); (b) accepți ca prag un criteriu
+   relativ (de ex. dif. maximă < 1e-5 × logitul maxim, plus argmax identic) — dar asta ar fi un prag nou, pentru o
+   măsurare nouă, nu pentru aceasta.
+2. **Contractul pentru Cyber Universe OS** (`docs/format_greutati.md` + fișierul Q8_0 de 111 MB) e gata de folosit:
+   Q8_0 nu pierde practic nimic la bpb. Varianta „la_pas” e prea încetă în numpy (2,2 simboluri/s); în motorul lor
+   (cod nativ) înmulțirea pe un octet ar trebui să fie rapidă.
+3. Portul „inferenta” în `kronos/` (ca motorul să devină modul) rămâne la tine.
