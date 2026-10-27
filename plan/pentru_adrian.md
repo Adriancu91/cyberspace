@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 20:15 — Proba D: NECLAR; motorul fără PyTorch: tot NU TRECE la limită; antrenarea de noapte (S38) rulează
+
+- **S36 (proba D) verificat: NECLAR.** Fără „adunarea pe 8 loturi”, modelul ajunge la **1,2520** pe română, față de **1,2332** cu rețeta A întreagă
+  (mai mic = mai bine). Deci ambele părți ale rețetei ajută; răcirea singură aduce cam două treimi din câștig. Placa a stat sub 6.000 MB, 63 °C.
+- **S37 verificat: NU TRECE.** Motorul fără PyTorch, cu adunări mai precise, are tot o diferență de **0,000136** (pragul cerea sub 0,0001); textul generat e identic.
+- **Rulează acum S38**, noaptea de antrenare cu rețeta A din #441 (aprobată în numele tău de centrul de comandă, la 18:00), cu regulile urcate înainte.
+  Se termină pe la **~01:55**; verdictul îl verific la trecerea de 02:15. Ziua de mâine o decid după rezultat.
+- Totul a mers fără erori (961 teste trec). Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
+- **Aștept de la tine:** nimic urgent. O întrebare nouă, fără grabă: pentru motorul fără PyTorch, accepți un prag „relativ” în locul celui fix de 0,0001
+  (propunerea executantului din raportul S37)? Rămân: ora raportului de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
+
 ## 27 octombrie 2026, 17:15 — S36 (proba D) rulează pe placă; nimic terminat de la 14:15
 
 - **Rulează acum S36** (rețeta A fără „adunarea pe 8 loturi”), pornită la ~15:05, cu regulile urcate înainte (am verificat: pragurile sunt cele din coadă).
@@ -227,13 +238,4 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - Nu am pus nimic nou în coadă: placa e ocupată până diseară, iar pasul următor depinde de verdictul S17. **La trecerea de 23:15**
   verific cifrele față de praguri și pun imediat pe placă pasul următor (repetarea cu 3× date dacă e „neclar”, altfel E2), ca placa
   să nu stea liberă mâine ziua. Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
-
-## 22 octombrie 2026, 14:15 — totul e gata pentru diseară (S17 pornește la 19:00)
-
-- **Pregătirea S17 e gata (verificat):** executantul a scris unealta „întrebări născute de Kronos”, 18 teste noi și a pus deoparte
-  2.000 de articole noi (verificat automat: **0** texte de examen). Proba pe procesor dă pe #415 exact cifrele de ieri (6/50, 30/30,
-  38/60), deci diseară noul model e notat la fel ca baseline-ul. Pragurile din pre-înregistrare sunt cele aprobate. Teste: 886 trec, 1 sărit.
-- **Rulează acum:** nimic pe placă (cum ai cerut: ziua fără placă). **La 19:00:** S17, ~6,5 ore. Verdictul mâine la 08:15.
-- Nu am pus nimic nou în coadă. Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.

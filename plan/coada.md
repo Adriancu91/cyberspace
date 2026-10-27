@@ -178,6 +178,12 @@ Pun: **S36** (granițele 1 și 2, ~2,2 ore pe placă, pornește acum): proba D =
 apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la LayerNorm/softmax și se remăsoară o dată, cu același prag 1e-4.
 **S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `aprobat` (Adrian, 27 oct 18:00, prin centrul de comandă — delegarea din 26 oct 17:45: aprobă ce se potrivește direcției).
 „Reordonarea doar la definiții” (propunerea S35) cere întâi un set nou de întrebări — o las pentru o trecere următoare.
+**Actualizare 27 oct 20:15 (supraveghetor) — S36 și S37 verificate; S38 rulează (noaptea 27→28):**
+S36: pre-înregistrarea 9729c73 (15:00:44) înaintea pornirii (15:00:54) ✓; D #451 **1,2520**, A #441 re-măsurat **1,2332** → Δ = **+0,0188**, între 0,010 și 0,040 →
+**NECLAR** ✓ (D păstrează ~67 % din câștigul A față de C; placa ≤ 5.991 MB, 63 °C). S37: pragul 5b03138 (18:00:17) înaintea măsurării (18:00:25) ✓; fp32 dif. maximă
+**1,364e-4 > 1e-4** → **NU TRECE** ✓ (float64 la LayerNorm/softmax nu ajută; argmax și textul identice); 961 teste trec. Pragul fp32 (relativ sau nu) rămâne la Adrian.
+**S38** rulează cu rețeta A (corect, fiindcă S36 a dat NECLAR), pre-înregistrarea 61c3c7d (19:34:14) urcată, pragurile identice cu cele din coadă; sfârșit estimat ~01:55.
+Ziua de 28 oct o decid după verdictul S38 (de ex. proba E „fără adunare, rată mai mare”, propusă la S36), nu acum.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
