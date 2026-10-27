@@ -49,12 +49,16 @@ def gelu(x: np.ndarray) -> np.ndarray:
 
 
 def layer_norm(x: np.ndarray, w: np.ndarray, b: np.ndarray, eps: float) -> np.ndarray:
+    """S37: media și varianța adunate în float64; rezultatul înapoi în float32."""
+    x = np.asarray(x, dtype=np.float64)
     m = x.mean(axis=-1, keepdims=True)
     v = ((x - m) ** 2).mean(axis=-1, keepdims=True)
     return ((x - m) / np.sqrt(v + eps) * w + b).astype(np.float32)
 
 
 def softmax(x: np.ndarray) -> np.ndarray:
+    """S37: în float64 (și suma); cine vrea float32 convertește după."""
+    x = np.asarray(x, dtype=np.float64)
     e = np.exp(x - x.max(axis=-1, keepdims=True))
     return e / e.sum(axis=-1, keepdims=True)
 
@@ -106,11 +110,12 @@ class MotorBrut:
                 v = np.concatenate([cache[i][1], v], axis=2)
             cache[i] = (k, v)
         n = k.shape[2]
-        scor = (q @ k.transpose(0, 1, 3, 2)) / math.sqrt(d)
+        # S37: produsele de atenție (q·k și ponderile · v) în float64, înapoi în float32 înainte de out_proj
+        scor = (q.astype(np.float64) @ k.astype(np.float64).transpose(0, 1, 3, 2)) / math.sqrt(d)
         # interogarea j (poziția start + j) vede cheile 0 … start + j
         masca = np.arange(n)[None, :] > (start + np.arange(t))[:, None]
         scor = np.where(masca, -np.inf, scor)
-        a = softmax(scor) @ v
+        a = (softmax(scor) @ v.astype(np.float64)).astype(np.float32)
         a = a.transpose(0, 2, 1, 3).reshape(lot, t, e)
         return (a @ self._w(p + "out_proj.weight").T + self.t[p + "out_proj.bias"]).astype(np.float32)
 

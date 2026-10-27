@@ -16,7 +16,7 @@ from module.tokenizer_bpe import TokenizerBPE, antreneaza_bpe  # noqa: E402
 from unelte.exporta_greutati import (  # noqa: E402
     ALINIERE, BLOC_Q8, TensorQ8, citeste, cuantizeaza_q8, exporta_model, scrie,
 )
-from unelte.inferenta_bruta import MotorBrut, erf, gelu  # noqa: E402
+from unelte.inferenta_bruta import MotorBrut, erf, gelu, layer_norm, softmax  # noqa: E402
 
 RADACINA = Path(__file__).resolve().parents[1]
 TEXTE = ["Ana are mere și pere.", "Once upon a time, a little dog ran to the park.", "Capitala României este București."]
@@ -74,6 +74,25 @@ def test_erf_si_gelu_ca_pytorch():
     x = np.linspace(-6, 6, 2001, dtype=np.float32)
     assert np.abs(erf(x) - torch.erf(torch.from_numpy(x).double()).numpy()).max() < 2e-7
     assert np.abs(gelu(x) - torch.nn.functional.gelu(torch.from_numpy(x)).numpy()).max() < 1e-6
+
+
+def test_layer_norm_si_softmax_aduna_in_float64():
+    """S37: pe valori mari cu abateri mici, adunarea în float32 pierde cifre; motorul trebuie să dea ce dă float64."""
+    rng = np.random.default_rng(1)
+    x = (3000.0 + 0.05 * rng.normal(size=(4, 768))).astype(np.float32)
+    w = rng.normal(size=768).astype(np.float32)
+    b = rng.normal(size=768).astype(np.float32)
+    x64 = x.astype(np.float64)
+    m = x64.mean(-1, keepdims=True)
+    asteptat = (x64 - m) / np.sqrt(((x64 - m) ** 2).mean(-1, keepdims=True) + 1e-5) * w + b
+    y = layer_norm(x, w, b, 1e-5)
+    assert y.dtype == np.float32
+    assert np.abs(y - asteptat).max() < 1e-5
+    m32 = x.mean(-1, keepdims=True)  # ce dădea adunarea în float32 (S32): testul chiar deosebește cele două
+    vechi = (x - m32) / np.sqrt(((x - m32) ** 2).mean(-1, keepdims=True) + 1e-5) * w + b
+    assert np.abs(vechi - asteptat).max() > 1e-3
+    s = softmax(rng.normal(size=(2, 50)).astype(np.float32))
+    assert s.dtype == np.float64 and np.allclose(s.sum(-1), 1.0, atol=1e-15)
 
 
 def test_q8_doar_pe_greutati(fisiere):
