@@ -1293,7 +1293,7 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - raport: docs/rapoarte/2026-10-27_1203_S34_reteta_control.md (CONFIRMAT)
 
 ### S35 — Citirea cu `rrf_reord` pe validare: cât din +6 de la S33 rămâne pe un set cu alt amestec? (procesor + sub 1 oră pe placă)
-- stare: aprobat — pornește DOAR după S34 `gata` (sau `oprit`), înaintea lui S32
+- stare: in_lucru (executant, 27 oct 12:30; S34 e `gata`)
 - tip: placă scurt (examen, nimic antrenat)
 - fereastră: oricând (regula lui Adrian din 22 oct 15:10)
 - durată maximă: 2 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
