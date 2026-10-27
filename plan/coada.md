@@ -1423,7 +1423,7 @@ apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la Laye
 - raport: docs/rapoarte/2026-10-27_1800_S37_inferenta_fp64.md (NU TRECE; pragul relativ propus, de hotărât de Adrian)
 
 ### S38 — Continuarea liniei w2 cu rețeta A, din #441 (o noapte pe placă)
-- stare: aprobat (Adrian, 27 oct 18:00, prin centrul de comandă)
+- stare: in_lucru (executant, 27 oct 19:30; rețeta A, fiindcă S36 a dat NECLAR)
 - tip: placă (~6 ore de antrenare + examene)
 - fereastră: noapte, după S36 (cel mai devreme noaptea 27→28)
 - de ce: S34 a confirmat că rețeta A (AdamW + adunare pe 8 loturi + răcire 25 %) aduce câștig real; #441 e cel mai bun model pe română curat (1,2332).
