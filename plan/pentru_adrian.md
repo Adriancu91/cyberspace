@@ -2,6 +2,20 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 octombrie 2026, 14:15 — Rețeta A câștigă de-adevăratelea (CONFIRMAT); citirea nouă ține doar puțin (NECLAR); motorul fără PyTorch e gata
+
+- **S34 (proba de control) verificat: CONFIRMAT.** Cu aceleași 2 ore în plus, dar cu rețeta veche, modelul nu s-a îmbunătățit deloc (1,2903 pe română,
+  chiar puțin mai slab decât #415, 1,2858), pe când rețeta A a dat **1,2332** (mai mic = mai bine). Deci câștigul vine din rețetă, nu din ore.
+- **S35 verificat: NECLAR.** Pe 500 de întrebări noi pentru model, citirea cu ordinea nouă dă **336** corecte față de **331** (+1 punct; pragul cerea +2).
+  Ajută clar la „Ce este X?”, dar strică la alte tipuri. +6 de la S33 venea mai ales din setul acela.
+- **S32 (motorul fără PyTorch, comanda ta C-21) verificat:** varianta mică (**111 MB** în loc de 392 MB) nu pierde practic nimic (**TRECE** cu mult);
+  varianta mare **NU TRECE** la limită (diferență 0,000134 față de pragul 0,0001), deși textul generat e identic. C-21 e acum închisă în întregime.
+- **Pus în coadă (aprobat de mine):** **S36**, acum, ~2,2 ore pe placă: rețeta A fără „adunarea pe 8 loturi”, ca să aflăm ce anume ajută; apoi **S37**
+  (doar procesor): motorul mare adună mai precis și se remăsoară o dată, cu același prag.
+- **Aștept de la tine:** răspunsul la întrebarea de azi-dimineață — **vrei o noapte de antrenare cu rețeta A, din #441 (S38, ~6 ore)?** Scrie „da S38”
+  (sau o comandă în hub). Fără „da”, placa stă liberă la noapte. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28
+  și portul `cautare` în `kronos/`.
+
 ## 27 octombrie 2026, 11:15 — Kronos citește mai bine cu ordinea nouă: CONFIRMAT (+6, la limită); proba de control rulează
 
 - **S33 e gata și verificat: CONFIRMAT, la limită.** Modelul nostru răspunde corect la **66 din 100** de întrebări când primește bucățile de text
@@ -223,16 +237,4 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **S17 trece pe „aprobat”** (cum ai cerut: doar dacă S16 trece de 90 %): în noaptea 22→23, de la 19:00, Kronos își scrie
   singur întrebări noi, le verifică fără niciun model străin și se antrenează 3 ore pe ele. Ziua: doar pregătirea pe procesor, placa liberă.
 - Verdictul S17 vine mâine dimineață, după pragurile scrise dinainte. Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
-
-## 22 octombrie 2026, 02:15 — direcția nouă a pornit: primul pas e „judecătorul fără Qwen”
-
-- **S15 gata (verificat, am adunat singur cifrele pe tipuri):** Kronos (#415) a învățat **toate** tipurile de întrebări pe care
-  le-a văzut (**30 din 30**, pe texte noi), dar la tipuri nevăzute stă la **6 din 50** — cât modelul vechi. Se învață, nu se transferă.
-- **Pus în coadă, cum ai aprobat:** **S16 (E0)**, aprobat de mine, doar pe procesor, fără placă: un verificator scris de noi care
-  notează răspunsurile fără Qwen, comparat cu notele lui Qwen pe examenele S15 și S4 deja făcute. Poate rula chiar acum.
-- **S17 (E1, „întrebări născute de Kronos”)** e scris, dar pornește (o noapte pe placă, țintă 22→23 oct) doar dacă S16 arată
-  că verificatorul și Qwen sunt de acord în cel puțin 90 % din cazuri. O precizare: S17 va fi notat de verificator, deci îl
-  compar cu #415 notat tot de verificator (cifrele lui Qwen, 6/50 și 30/30, rămân scrise alături).
-- Ziua de 22 oct: nimic pe placă (cum cere direcția nouă, fără nopți cu rețeta veche). Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.

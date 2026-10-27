@@ -168,6 +168,17 @@ din 09:00:52 (pre-înregistrarea 46951db la 09:00:45, înaintea pornirii ✓). C
 (granița 2, doar examen, < 1 oră pe placă): aflăm cât din +6 e de la amestecul S26, măsurând citirea pe eșantionul 2048 al validării (nevăzut de #438).
 Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după verdictul S34.
 
+**Actualizare 27 oct 14:15 (supraveghetor) — S34, S35, S32 verificate; S36 nou (proba D: doar răcirea), apoi S37 (fp32 în float64, procesor):**
+S34: pre-înregistrarea 46951db (09:00:45) înaintea pornirii (09:00:52) ✓; C #447 **1,2903**, A #441 re-măsurat **1,2332** → Δ = **+0,0571 ≥ 0,010** →
+**CONFIRMAT** ✓ (C chiar puțin mai slab decât #415: 1,2903 față de 1,2858; A mai bun pe toate validările). S35: pre-înregistrarea 14cd40e (12:36:17) înaintea examenului
+(12:36:26) ✓; pe 2048 (0 din 500 văzute de #438) `s25` **331**, `rrf_reord` **336** → Δ = 5/500 = **+1,0 punct**, între +0,5 și +2,0 → **NECLAR** ✓
+(definiții +18, regizat +6, „rest” −17). S32: pragurile 2903257 (13:39:03) înaintea măsurării (13:39:47) ✓; fp32 dif. maximă **1,335e-4 > 1e-4** →
+**NU TRECE** ✓ (argmax și textul identice, bpb +0,0000005); Q8_0 **+0,0000187 ≤ 0,005** → **TRECE** ✓. 960 teste trec. C-21 e acum închisă (S29–S32).
+Pun: **S36** (granițele 1 și 2, ~2,2 ore pe placă, pornește acum): proba D = rețeta A fără adunarea pe 8 loturi — aflăm dacă răcirea singură aduce câștigul;
+apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la LayerNorm/softmax și se remăsoară o dată, cu același prag 1e-4.
+**S38** (continuarea liniei w2 cu rețeta A, din #441, o noapte): `propus — necesită Adrian` (direcția din 22 oct: fără nopți de antrenare fără „da”-ul lui).
+„Reordonarea doar la definiții” (propunerea S35) cere întâi un set nou de întrebări — o las pentru o trecere următoare.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
@@ -1350,3 +1361,74 @@ Ordinea: **S34 → S35 → S32**. Noaptea 27→28 o decid la 17:15/20:15, după 
 - pre-înregistrare: nu e antrenare; pragul se scrie în raport și se urcă înainte de pasul 3
 - aprobat de: Adrian (COMENZI.md C-21, 26 oct 17:45, prin centrul de comandă); pașii scriși de supraveghetor, 26 oct 20:15
 - raport: docs/rapoarte/2026-10-27_1338_S32_inferenta_bruta.md (fp32 NU TRECE, Q8_0 TRECE)
+
+### S36 — Proba D: rețeta A fără adunarea pe 8 loturi (aduce răcirea singură câștigul?) (placa)
+- stare: aprobat
+- tip: placă (~2,2 ore în total)
+- fereastră: oricând (regula lui Adrian din 22 oct 15:10) — pornește la prima verificare a cozii
+- durată maximă: 2 ore de antrenare + examene; cel mult 3 ore pe placă; placa sub 7.000 MB și 83 °C
+- de ce: S34 a CONFIRMAT că **pachetul** A (AdamW din `module.model_muon` + adunare pe 8 loturi + răcire 25 %) aduce câștig real (A 1,2332 față de
+  C 1,2903 pe română curat, aceleași 2 ore din #415). Nu știm care parte îl aduce. D păstrează tot din A, **fără adunare** (adunare_loturi = 1):
+  dacă D ≈ A, răcirea e cea care contează (rețeta mai simplă); dacă D ≈ C, adunarea contează. Propunerea 2 a executantului din raportul S34.
+  Granițele 1 și 2 (încă o rulare pe linia w2 existentă; comparație). E o probă de 2 ore, nu o noapte de antrenare.
+- ce faci:
+  1. **Configurarea** `config/conv_w2_reteta_D.toml` = copie exactă a `config/conv_w2_muon_A.toml`, cu DOAR: `nume = "w2_reteta_D"`,
+     `cale_stare = "lucru/w2_reteta_D/gpt.pt"`, **`adunare_loturi` scos din `setari`** (implicit 1), eticheta `"S36 D: răcire fără adunare"` și un antet scurt.
+     Păstrezi `modul = "module.model_muon:ModelGPTConversatieMuon"`, `optimizator = "adamw"`, `racire_finala = 0.25`, `durata_scaderii_secunde = 7200`.
+     Verifici că `lucru/w2_reteta_D/` nu există. Arăți în raport `diff` față de `conv_w2_muon_A.toml` și față de `conv_w2_reteta_C.toml`.
+  2. **Pre-înregistrarea** `docs/preinregistrari/2026-10-27_reteta_D.md`, **urcată (commit + push) ÎNAINTE de pornire**, cu pragul, cuvânt cu cuvânt:
+     măsura = `bpb_romana_curat` din `unelte/examen_validari_ws.py`; Δ = D − A (A = #441, re-măsurat în aceeași rulare; reper 1,2332; C #447 = 1,2903).
+     **CONFIRMAT** (răcirea singură aduce câștigul; adunarea nu e necesară) dacă **Δ ≤ 0,010**; **INFIRMAT** (fără adunare se pierde cea mai mare parte
+     a câștigului) dacă **Δ ≥ 0,040**; între ele: **NECLAR** (ambele părți contribuie). Alături (nu decid): TinyStories R2 (val_bpb oficial, ora 2),
+     `bpb_cod_curat`, fapte noi, pentru D și A; pașii optimizatorului (D face de ~8 ori mai mulți pași decât A). Plus așteptările tale în cifre și
+     ora estimată de sfârșit (scrisă și în coadă la pornire). Spus cinstit în pre-înregistrare: o singură sămânță; D are aceeași rată ca A, deci
+     schimbă și mărimea pasului efectiv, nu doar adunarea.
+  3. **Rularea**, prin cascadă: `cascada.py porneste S36 -- python unelte/antrenare_lunga.py --config config/conv_w2_reteta_D.toml --ore 2 --porneste-din 415`.
+     Înainte: o probă de memorie nu e necesară (aceleași loturi ca A, care a stat sub 6.000 MB), dar urmărești placa ca la S34.
+  4. **Examenele, o singură rulare:** `unelte/examen_validari_ws.py --linie w2_reteta_D` (ultimul model, ora 2) și, în aceeași rulare,
+     `--linie w2_muon_A` (#441) ca reper. Verdictul strict după pre-înregistrare; închizi pre-înregistrarea cu `unelte/preinregistrare.py --inchide reteta_D`.
+  5. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-27_<ora>_S36_reteta_D.md`, cu propunerea ta pentru pasul următor.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, `module/model_muon.py`, paznicul, jurnalul, datele de examen, #415, #441, #447, liniile
+  `w2_conv_text_v3`, `w2_muon_A`, `w2_reteta_C` și configurările lor. Modelul nou NU intră în interfață. Nimic descărcat sau instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport. Peste 7.000 MB → oprești, `oprit`, scrii cifrele.
+- Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S36 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
+- pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_D.md (de urcat înainte de pornire)
+- aprobat de: supraveghetor, 27 oct 14:15 (granițele 1 și 2 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S34)
+- raport: docs/rapoarte/2026-10-27_<ora>_S36_reteta_D.md
+
+### S37 — Motorul S32: adunări în float64 la LayerNorm și softmax, apoi o singură remăsurare fp32 (doar procesor)
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
+- fereastră: oricând, **după S36** (ca să nu încetinească antrenarea)
+- durată maximă: 3 ore; RAM cel mult ~10 GB
+- de ce: la S32, fp32 NU TRECE (dif. maximă 1,335e-4 față de pragul 1e-4 din C-21, aprobat de Adrian), deși argmax și textul sunt identice.
+  Varianta (a) a executantului: pragul rămâne 1e-4, schimbăm doar felul în care motorul adună. Granița 6 (repararea unei unelte care n-a trecut)
+  și 5 (unealta e în `unelte/`, nu atinge `kronos/`). Q8_0 a trecut deja și nu se remăsoară.
+- ce faci:
+  1. În `unelte/inferenta_bruta.py`: media și varianța din LayerNorm și suma din softmax (și, dacă ajută, produsele de atenție) calculate în float64,
+     rezultatul convertit înapoi în float32. Greutățile și formatul KGR1 rămân neschimbate (`docs/format_greutati.md` nu se schimbă; dacă
+     totuși trebuie, scrii de ce). Testele existente trec; adaugi un test mic că LayerNorm-ul adună în float64.
+  2. **Înainte de măsurare**, scrii în raport (commit + push): pragul rămâne **dif. maximă < 1e-4** pe aceleași 3 texte fixe față de aceleași logits
+     PyTorch pe procesor; măsura e una singură, pe #415 F32. Plus așteptarea ta în cifre.
+  3. O singură rulare (ca la S32, prin cascadă), scrii diferența maximă pe fiecare text, argmax, viteza (simboluri/s, F32) față de S32 (42,4).
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2x_<ora>_S37_inferenta_fp64.md`: TRECE / NU TRECE strict după prag.
+     Dacă NU TRECE, nu mai încerci altceva: scrii ce propui (de ex. un prag relativ, de hotărât de Adrian pentru o măsurare nouă).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, #415 (doar citire), logits-urile de control din `teste/`. Fișierele exportate
+  stau în `lucru/`, nu în Git. Nimic descărcat sau instalat. Portul „inferenta” în `kronos/` NU se face (rămâne la Adrian).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e antrenare; pragul se scrie în raport și se urcă înainte de pasul 3
+- aprobat de: supraveghetor, 27 oct 14:15 (granițele 5 și 6 din REGULI_CASCADA.md; varianta (a) a executantului din raportul S32)
+- raport: docs/rapoarte/2026-10-2x_<ora>_S37_inferenta_fp64.md
+
+### S38 — Continuarea liniei w2 cu rețeta A, din #441 (o noapte pe placă)
+- stare: propus — necesită Adrian
+- tip: placă (~6 ore de antrenare + examene)
+- fereastră: noapte, după S36 (cel mai devreme noaptea 27→28)
+- de ce: S34 a confirmat că rețeta A (AdamW + adunare pe 8 loturi + răcire 25 %) aduce câștig real; #441 e cel mai bun model pe română curat (1,2332).
+  Direcția din 22 oct spune însă că nu se mai programează nopți de antrenare fără „da”-ul lui Adrian → aștept decizia lui. Dacă S36 dă CONFIRMAT,
+  continuarea folosește rețeta mai simplă D (fără adunare).
+- ce ar face (dacă Adrian spune „da”): configurarea `config/conv_w2_reteta_A_cont.toml` = copie a `conv_w2_muon_A.toml` (sau D, după S36) cu
+  `durata_scaderii_secunde = 21600`, linie nouă `w2_reteta_A_cont`; `--ore 6 --porneste-din 441`. Pre-înregistrare înainte: **CONFIRMAT** dacă română
+  curat ≤ **1,2232** (−0,010 față de #441), fără regresie > 0,005 la cod curat și TinyStories R2; **INFIRMAT** dacă > 1,2282; între ele NECLAR.
+  Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #441 în aceeași rulare. Modelul nu intră în interfață.
+- aprobat de: — (aștept „da”-ul lui Adrian)
