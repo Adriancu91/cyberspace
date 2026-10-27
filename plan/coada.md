@@ -1219,7 +1219,9 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - raport: docs/rapoarte/2026-10-27_0535_S31_muon.md (INFIRMAT)
 
 ### S33 — E3 citește cu căutarea nouă: examenul S27 refăcut cu `rrf_reord` (procesor + sub 1 oră pe placă)
-- stare: in_lucru (executant, 27 oct 08:30)
+- stare: gata (executant, 27 oct 08:42: **CONFIRMAT la limită** — #438 cu `rrf_reord` 66/100 față de S25 simplă 60 (Δ +6 ≥ 5),
+  în aceeași rulare; reperul S27 reprodus exact (aceleași bucăți și răspunsuri la 100/100); 15 reparate / 9 stricate; câștigul din
+  definiții (23 → 30 din 54); placa 732 MB; 950 teste trec, 1 sărit)
 - tip: procesor (pasul 1) + placă scurt (pasul 3)
 - fereastră: zi (08:00–18:30)
 - durată maximă: 3 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
@@ -1249,7 +1251,7 @@ din #415, cu rețeta veche, ca reper. Ordinea: **S33 (ziua) → S34 (oricând, i
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-10-27_E3_citire_reord.md (urcată înainte de pasul 3)
 - aprobat de: supraveghetor, 27 oct 02:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea executantului din raportul S29)
-- raport: docs/rapoarte/2026-10-27_<ora>_S33_E3_citire_reord.md
+- raport: docs/rapoarte/2026-10-27_0842_S33_E3_citire_reord.md (CONFIRMAT)
 
 ### S34 — Proba de control: #415 + 2 ore cu rețeta veche (vine câștigul lui A din rețetă sau doar din cele 2 ore în plus?) (placa)
 - stare: aprobat — pornește DOAR după S33 `gata` (sau `oprit`); se face ÎNAINTEA lui S32

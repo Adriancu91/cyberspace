@@ -69,3 +69,42 @@ fără întâmplare.
 - Pe tipuri: aproape tot câștigul la definiții (S27: 23 din 54 corecte; aștept ~29).
 - Timpul: căutarea ~0,09 s, judecătorul ~0,14 s, răspunsul ~0,3–0,6 s pe întrebare și variantă (mediane). Placa < 1.500 MB.
 - **Verdictul așteptat: CONFIRMAT ~55 %, NECLAR ~30 %, INFIRMAT ~15 %.**
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-27 08:41, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+**Examenul** (o singură rulare, 08:31:58–08:33:15, 77 s, cod 0, `unelte/e3_citire_reord.py examen --model 438` →
+`lucru/e3/examen_s33.json`; amprenta listei `3501f307…f523` ✓; #438, linia `w2_conv_e3_memorie`):
+
+| varianta | corecte din 100 | răspunsul în bucățile care încap | corecte dintre acestea | corecte dintre celelalte | încap 1 / 2 / 3 |
+|---|---|---|---|---|---|
+| (i) S25 simplă (`s25`, baza) | **60** | 64 | 60 | 0 din 36 | 17 / 64 / 19 |
+| (ii) **`rrf_reord`** | **66** | 72 | 66 | 0 din 28 | 19 / 67 / 14 |
+
+- Reperul S27 a ieșit exact: la (i) **aceleași bucăți la toate 100 de întrebări și același răspuns la toate 100**, 60 corecte.
+- Față de (i): **15 reparate, 9 stricate** (net +6); la 22 de întrebări bucățile date sunt aceleași. Din cele 9 stricate,
+  la 7 răspunsul nu mai e în bucățile care încap; la 2 e acolo, dar #438 a greșit (o definiție tăiată la 80 de simboluri,
+  un an greșit).
+- Pe tipuri (corecte, (i) → (ii)): definiții 23 → **30** din 54; născut 12 → 13 din 15; an 1 → 2 din 4; regizat 6 → 5 din 8;
+  rest 18 → 16 din 19.
+- Timpi (mediane): căutarea 0,083 s, judecătorul 0,135 s, răspunsul 0,187 s (i) / 0,178 s (ii). Placa: 732 MB alocați de
+  PyTorch, 47 °C la sfârșit; RAM 1,1 GB.
+
+## Verdictul
+
+**CONFIRMAT:** #438 cu bucățile `rrf_reord` răspunde corect la **66** din 100, față de **60** cu bucățile S25 simple, în
+aceeași rulare: **Δ = +6 ≥ 5**.
+
+Ce trebuie spus la fel de clar:
+- **E la limită:** +6 față de pragul +5. Cu 100 de întrebări, o întrebare = un punct; 15 reparate și 9 stricate înseamnă că
+  reordonarea mută mult, nu doar adaugă.
+- Câștigul vine **din definiții** (+7 din 54), exact tipul care pe validare câștigă puțin (+3,3 puncte la k = 3) și care pe
+  S26 e 54 %. Pe „rest” se pierd 2, ca pe validare (−4,0 puncte). **Pe un set cu alt amestec, câștigul ar fi probabil mai mic.**
+- #438 citește bine ce primește: corect la 66 din cele 72 cu răspunsul în bucăți (92 %; la (i): 60 din 64, 94 %) și la **0** dintre cele fără.
+  Plafonul, nu cititul, rămâne limita.
+- Riscul scris înainte rămâne: #438 a văzut cele 100 de întrebări cu textul lor în `text_v3` (prin #415), și ca judecător.
