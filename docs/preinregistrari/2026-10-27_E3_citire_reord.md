@@ -1,7 +1,7 @@
 # Pre-înregistrare: E3 citește cu căutarea nouă (S33) — #438 răspunde cu bucățile `rrf_reord` față de S25 simplă, pe cele 100 S26
 
-<!-- scrisa: 2026-10-27T08:33:00 -->
-*Scrisă la 2026-10-27 08:31–08:35, la S33 pasul 2, ÎNAINTE de examenul de la pasul 3 (din S33 pe placă nu s-a rulat nimic;
+<!-- scrisa: 2026-10-27T08:31:00 -->
+*Scrisă la 2026-10-27 ~08:30–08:31 (urcată în commit-ul 0fab1b8, 08:31:38; ora din antet corectată înainte de examen), la S33 pasul 2, ÎNAINTE de examenul de la pasul 3 (din S33 pe placă nu s-a rulat nimic;
 pasul 1 a fost doar o numărare pe procesor din fișiere deja măsurate). După ce examenul începe, textul de mai jos nu se mai
 schimbă; la închidere se adaugă doar „Ce a ieșit” și „Verdictul”. Nu e o antrenare: nimic nu se antrenează.*
 
