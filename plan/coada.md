@@ -1600,7 +1600,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
 - (istoric) stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
 - motiv: linia `w2_e3_reteta_A` are deja ora 1 (#462) în jurnal → `antrenare_lunga.py` sare peste `--porneste-din 459` și, fără gpt.pt, antrenează DE LA ZERO („orele 2–3”); `taskkill` cere aprobare → am apăsat `python -m kronos opreste` (lucru/STOP): ora în curs se termină ~13:30, apoi stop; după aceea executantul resetează cu `python -m kronos porneste --config config/conv_w2_e3_reteta_A.toml`. Propunere: linie nouă `w2_e3_reteta_A2` (doar `nume` + `cale_stare`), la 19:00 — o aprobă supraveghetorul
-- stare: in_lucru (executant, 28 oct 22:31: antrenarea 19:00–22:12, cod 0 (jurnalul cascadei mutat în lucru/cascada/S42_1900.*); examenele pornite 22:30 prin cascadă, `python -X utf8 unelte/e3_reteta_A.py` (unealtă nouă, d725f43), proces 15912; sfârșit estimat ~23:15. Înainte: 19:02 linia `w2_e3_reteta_A2`, 0 ore în jurnal, dosarul nu exista; amestec sha 2cb23401… același)
+- stare: gata (executant, 28 oct 23:03: examenele 22:30–22:50, cod 0; **INFIRMAT** — S26 `rrf_reord` #466 66 / #438 66 (Δ 0 ≤ +1); noaptea 10 70 / 69; S4 36 / 39 (−3); română curat #466 1,2148 / #459 1,2162; 1003 teste trec, 1 sărit)
+- stare veche: in_lucru (executant, 28 oct 22:31: antrenarea 19:00–22:12, cod 0 (jurnalul cascadei mutat în lucru/cascada/S42_1900.*); examenele pornite 22:30 prin cascadă, `python -X utf8 unelte/e3_reteta_A.py` (unealtă nouă, d725f43), proces 15912; sfârșit estimat ~23:15. Înainte: 19:02 linia `w2_e3_reteta_A2`, 0 ore în jurnal, dosarul nu exista; amestec sha 2cb23401… același)
 - (istoric) stare: aprobat — **a doua reluare, ca linie nouă `w2_e3_reteta_A2`, la 19:00 (fereastra de noapte)** (supraveghetor, 28 oct 14:25)
 - **A doua reluare (supraveghetor, 28 oct 14:25) — înlocuiește data și numele de mai jos; tot restul pașilor rămâne:**
   - Oprirea de la 12:36 a fost corectă (antrena de la zero). Aleg **propunerea 1** a executantului: linie nouă, fiindcă jurnalul nu se editează.
@@ -1665,7 +1666,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S42 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
 - pre-înregistrare: docs/preinregistrari/2026-10-28_E3_reteta_A2.md (nouă, praguri copiate din E3_reteta_A; urcată înainte de pornire)
 - aprobat de: supraveghetor, 28 oct 08:20 (granițele 1 și 2 din REGULI_CASCADA.md; continuarea a ce a mers: S33 + S34 + S38); a doua reluare (linia A2, 19:00): supraveghetor, 28 oct 14:25
-- raport: docs/rapoarte/2026-10-28_1236_S42_oprit_reluare.md (înainte: docs/rapoarte/2026-10-28_1100_S42_oprit_repornire.md)
+- raport: docs/rapoarte/2026-10-28_2303_S42_E3_reteta_A.md (INFIRMAT); înainte: docs/rapoarte/2026-10-28_1236_S42_oprit_reluare.md, docs/rapoarte/2026-10-28_1100_S42_oprit_repornire.md
 
 ### S40a — Pasul 1 din S40: porturile `cautare` și `inferenta` în `kronos/contracte.py` (cu Adrian de față)
 - stare: gata — făcut împreună cu S40b în S40 (28 oct 11:15, porturi opționale; vezi S40). Executantul nu mai are nimic de făcut la S40.
