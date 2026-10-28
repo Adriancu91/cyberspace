@@ -1677,6 +1677,9 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 
 ### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
 - stare: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
+- **Supraveghetor, 28 oct 20:25:** oprirea a fost corectă (regula cere unealta numită în „ce faci”). Aleg **varianta 1** a executantului:
+  întâi **S43a** (mai jos) scrie unealta pilotului și testele ei, **fără rețea**; la trecerea următoare după S43a verific unealta și trec aici
+  comanda exactă, apoi S43 redevine `aprobat` (pe „da”-ul lui Adrian din 28 oct 18:00, care rămâne valabil doar pentru pilot). Până atunci S43 rămâne `oprit`.
 - motiv: cere aprobarea lui Adrian: descărcare — „ce faci” nu numește unealta de descărcare (nu există încă); regula executantului cere „prin unealta scrisă acolo”. Propunerile în raport.
 - tip: procesor + rețea (fără placă); pilotul ~1 oră; descărcarea întreagă ~20 de ore (2–3 nopți, în flux, fără arhive pe disc); curățarea 3–5 ore; tokenizerul 3–6 ore
 - fereastră: oricând (nu încurcă placa)
@@ -1691,3 +1694,30 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - aprobat de: Adrian, 28 oct 18:00, prin centrul de comandă. Răspunsuri: (1) **da** pentru pilot; descărcarea întreagă după ce supraveghetorul verifică pilotul; (2) data-limită **29 iunie 2021** (fără cod scris de LLM); (3) dintre sursele „necesită Adrian”: **niciuna deocamdată** (cum recomanzi); (4) cutia mai tare: înainte de etapa 3, nu acum. Tokenizerul nou: tot după al doilea „da”.
 - raport: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
+### S43a — Kronos-Cod etapa 1b, pregătirea: unealta pilotului de descărcare + testele ei, FĂRĂ rețea (doar procesor)
+- stare: aprobat
+- tip: procesor (fără placă, fără rețea)
+- fereastră: oricând, **după ce S42 e `gata` sau `oprit`** (o singură sarcină odată; nu întrerupe S42)
+- durată maximă: ~2 ore
+- de ce: S43 (pilotul, aprobat de Adrian 28 oct 18:00) s-a oprit corect pentru că nu exista unealta de descărcare numită în „ce faci”.
+  Granița 5 din REGULI_CASCADA.md (unealtă nouă în `unelte/` + teste noi, fără `kronos/` și fără examen). **Aici nu se descarcă nimic.**
+- ce faci:
+  1. Scrii `unelte/kronos_cod/descarca.py`, cu un mod `pilot` (500 PyPI + 500 crates + numpy, tokio, libuv, exact ca la §5 din raportul S41)
+     și toate regulile din `docs/kronos_cod/SURSE.md`: doar licențele permise de acolo (verificate din metadate **și** din fișierul LICENSE),
+     data-limită **29 iunie 2021** (versiunea publicată cel târziu atunci), filtrele de cod generat/duplicat/fișiere mari de acolo; politețe:
+     crates.io ≤ 1 cerere/s, PyPI ≤ 5 cereri/s, un User-Agent care spune cine descarcă; în flux (arhivele se citesc din memorie, nu se scriu pe disc);
+     ieșirea în `lucru/kronos_cod/pilot/` (nimic din `lucru/` în Git); **se oprește singură dacă spațiul liber pe C: scade sub 40 GB**;
+     se poate relua de unde a rămas; la final scrie un rezumat JSON: GB brut → curat, fișiere, simboluri estimate, cât a aruncat fiecare filtru,
+     câte pachete respinse pentru licență și de ce.
+  2. Teste noi `teste/test_kronos_cod_descarca.py`, **fără rețea** (răspunsuri false din fișiere mici scrise în test): licența respinsă,
+     versiunea după 29 iunie 2021 respinsă, filtrele, oprirea sub 40 GB (spațiu simulat), reluarea, ritmul cererilor, faptul că nu scrie arhive pe disc.
+     Testele nu au voie să deschidă conexiuni (dacă vreuna încearcă, testul pică).
+  3. `python -m pytest`: toate trec. Commit + push.
+  4. În raport `docs/rapoarte/2026-10-2X_<ora>_S43a_unealta_pilot.md`: **comanda exactă** a pilotului (de copiat în S43), ce face fiecare filtru,
+     cât estimezi că durează și cât spațiu ia pilotul. **Nu pornești pilotul** — îl pornești doar după ce supraveghetorul trece comanda în S43 și o face `aprobat`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `docs/kronos_cod/EXAMEN.md`, examenul de cod ascuns, `unelte/kronos_cod/cutie.py`. Nimic instalat
+  (dacă îți trebuie o bibliotecă care nu e instalată, te oprești și scrii asta — instalarea cere „da”-ul lui Adrian).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
+- aprobat de: supraveghetor, 28 oct 20:25 (granița 5; varianta 1 propusă de executant în raportul 2026-10-28_1803)
+- raport: docs/rapoarte/2026-10-2X_<ora>_S43a_unealta_pilot.md

@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 20:25 — S42 rulează (pornită corect la 19:02); pilotul Kronos-Cod (S43) s-a oprit corect: îi lipsea unealta, o scrie executantul azi-noapte
+
+- **Rulează acum S42** (cititorul E3 refăcut din #459), ca linia nouă `w2_e3_reteta_A2`, pornită la **19:02**, cu regulile urcate înainte (am verificat: pragurile sunt copiate exact).
+  Antrenarea se termină pe la **~22:15**, examenele pe la **~23:15**; verdictul îl verific la trecerea de 23:15 sau 02:15.
+- **S43 oprit (corect, nu e o defecțiune):** ai spus „da” pentru pilot, dar regula executantului cere ca unealta de descărcare să fie numită dinainte în sarcină,
+  iar ea încă nu exista. Nu s-a descărcat nimic.
+- **Pus în coadă (aprobat de mine, în granițe): S43a**, după S42, doar procesor, **fără internet**: executantul scrie unealta pilotului și testele ei
+  (data-limită 29 iunie 2021, doar licențele permise, se oprește sub 40 GB liberi). Eu o verific, scriu comanda exactă în S43, iar pilotul pornește pe „da”-ul tău de azi.
+- **Aștept de la tine:** nimic.
+
 ## 28 octombrie 2026, 14:25 — Kronos-Cod etapa 1a gata (S41); S42 a pornit greșit și a fost oprită corect — o reiau diseară la 19:00
 
 - **REZOLVAT:** Release-ul privat `kronos-kgr1-459` e publicat (l-ai făcut tu, 13:08). Mulțumesc — nu mai e nimic de făcut la el.
@@ -219,14 +229,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **Placa rămâne liberă la noapte** (nimic aprobat pentru ea). Dacă te întorci, workstation-ul e liber pentru fereastra OS/GPU oricând.
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. După S24 (raportul vine probabil la noapte), un „da”/„nu” pentru E3 cu antrenare pe placă.
-
-## 23 octombrie 2026, 11:15 — Pregătirea E2 (S22) e gata și corectă; cei 3 specialiști se antrenează acum (S23, până pe la 18:10)
-
-- **S22 gata (verificat, doar procesor):** întrebările sunt împărțite în 3 familii (20.564 fapte/nume/ani/locuri, 4.083 da/nu, 2.821 tipurile
-  din S11). „Ruterul” (alege familia după primele cuvinte) a nimerit **189 din 210 = 90,0 %** la examene → condiția ta (≥ 90 %) e îndeplinită,
-  **exact la limită**. Greșește mai ales la întrebările care încep cu un nume propriu. #415 are 144 din 210 — ținta pentru sistemul nou. Teste: 900 trec.
-- **S23 rulează pe placă de la ~11:05:** cei 3 specialiști, câte 2 ore fiecare, apoi examenele. **Sfârșit estimat ~18:10** (cel târziu ~19:05) —
-  până atunci workstation-ul e ocupat. Verdictul îl verific la trecerea de 20:15.
-- Executantul se așteaptă mai degrabă la „infirmat” (~65 %); un rezultat negativ e tot un rezultat și ne spune dacă merită ruterul mai bun.
-- Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
