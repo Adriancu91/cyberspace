@@ -1521,6 +1521,13 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 
 ### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
 - stare: oprit (executant, 28 oct 07:33; nimic atins în `kronos/`; 965 teste trec)
+- **Actualizare 28 oct 08:40 (centrul de comandă):** am încercat pasul 1 într-o copie din cloud (doar `kronos/contracte.py`, cum scrie mai sus) și am
+  rulat toate testele: **160 picate + 13 erori**, pentru că `kronos/config.py` cere ca **orice** port din `PORTURI` să fie în fiecare configurare
+  (`lipsesc porturile: cautare, inferenta`), iar orchestratorul și `cli` le încarcă pe toate. Am **anulat schimbarea** (nimic urcat în `kronos/`).
+  Concluzie: porturile noi trebuie să fie **opționale** (un `PORTURI_OPTIONALE` în `contracte.py` + 3 locuri mici în `config.py`, `orchestrator.py`,
+  `cli.py`, `registru.py`), apoi modulele și testele de contract — totul într-un singur commit, ca testele să treacă la fiecare pas.
+  **Se face într-o sesiune cu Adrian de față la workstation** (el aprobă scrierile în `kronos/`), nu de executant. Până atunci S40 rămâne `oprit`, fără grabă.
+- **S41 nu depinde de S40** (doar `docs/` și `unelte/`, procesor): poate porni acum.
 - motiv: cere aprobarea lui Adrian: schimbare în `kronos/contracte.py` (executantul n-are voie în `kronos/`, iar regula `Edit(kronos/**)` o blochează); variante în raport
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu încurcă S38/S39
 - fereastră: oricând, după S39 partea A
