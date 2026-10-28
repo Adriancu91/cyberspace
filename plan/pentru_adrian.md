@@ -2,6 +2,17 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 08:20 — REZOLVAT: calculatorul a revenit; modelul nou #459 e cel mai bun (CONFIRMAT); am nevoie de tine pentru 2 comenzi mici
+
+- **REZOLVAT:** tăcerea de azi-noapte a fost **internetul** workstation-ului (căzut ~01:00–06:01). Antrenarea n-a fost afectată; executantul a reluat singur la 06:28. Nu mai trebuie să verifici calculatorul.
+- **S38 verificat: CONFIRMAT.** Modelul nou **#459** dă **1,2162** pe română (față de 1,2332 la #441; pragul cerea ≤ 1,2232; mai mic = mai bine); codul și poveștile s-au îmbunătățit și ele. 965 de teste trec.
+- **S39 gata:** pachetul pentru OS (modelul minuscul de probă, descrierea tokenizerului, testul pe hardware) e acum în hub. Modelul #459 e exportat (106 MB), dar **Release-ul n-a putut fi făcut** de executant (cere aprobare).
+- **S40 oprit (corect):** schimbarea mică din nucleul `kronos/` nu are voie s-o facă executantul singur. Am împărțit-o: partea din nucleu (S40a) cu tine de față, restul (S40b) executantul după.
+- **Pe placă, azi (S42, ~4 ore, aprobat de mine):** refacem „cititorul” (modelul care caută singur textul și răspunde) din #459 cu rețeta bună; pragurile se scriu înainte. Pe procesor: S41 (primul pas Kronos-Cod), care nu depinde de S40.
+- **Aștept de la tine (când ești la workstation, ~10 minute):** (1) în dosarul `C:\Kronos\cyberspace`, comanda:
+  `gh release create kronos-kgr1-459 lucru/export/kronos_459_q8_0.kgr --repo Adriancu91/cyberspace --title "Kronos #459 KGR1 Q8_0" --notes "SHA-256 e80618b4ef555983085c3127acb10114e4f4915d939734207aa849ba0f6d382e, 110859040 octeți"`;
+  (2) deschide Claude Code în același dosar și scrie-i: „Fă S40a din plan/coada.md”. Opțional, un „da” pentru ca executantul să poată face singur Release-uri data viitoare (regula `Bash(gh release*)`).
+
 ## 28 octombrie 2026, 05:15 — PROBLEMĂ: calculatorul Kronos (workstation) tace de aproape 10 ore; S38 n-a raportat
 
 - **Ultimul semn de la executant: 27 oct, 19:34** (pornirea S38). S38 trebuia să se termine pe la **~01:55**, cu raport și commit;
@@ -222,16 +233,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   dacă alegi 2, poarta strictă (F1 ≥ 0,8) e nevoie doar pe tipurile nevăzute.
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns). Până atunci placa stă liberă.
-
-## 23 octombrie 2026, 05:15 — S19: creșterea 6 → 13 vine mai ales din răspunsuri lungi; părerea mea: închidem E1 (varianta 1)
-
-- **S19 gata (verificat, 3 minute, fără erori):** pe tipurile de întrebări pe care Kronos nu le-a atins când și-a scris întrebările,
-  #425 tot câștigă **+7** (11/42 față de 4/42) → după regula scrisă dinainte, creșterea „nu vine doar din tipurile atinse”.
-  **Dar:** 7 din cele 13 răspunsuri bune sunt „lungi” (bucăți copiate care conțin răspunsul). Fără ele: **6 față de 4**; cu nota
-  strictă (F1 ≥ 0,8): **2 față de 4**, adică mai slab decât înainte. Kronos a învățat să copieze mai mult text, nu clar să răspundă mai exact.
-- E1 rămâne **NECLAR**. **Părerea mea s-a schimbat:** acum recomand **varianta 1** (închidem E1, trecem la E2). Dacă alegi totuși
-  varianta 2, poarta nouă trebuie să ceară și nota strictă, nu doar verificatorul.
-- **Pus în coadă (S21, aprobat de mine, doar pe procesor, ~1 oră, fără placă):** aceeași numărătoare pe toate examenele, ca să vedem
-  dacă și „fără regresie” de la S17 stă pe răspunsuri lungi. Placa e liberă și rămâne așa până alegi. Teste: 893 trec.
-- Cyber Hub: nicio comandă nouă pentru Kronos; a apărut proiectul nou **Cyber-GPU**, care va cere o fereastră pe workstation doar cu acordul tău.
-- **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns).

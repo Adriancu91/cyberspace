@@ -198,6 +198,14 @@ Pun: **S40** (porturile `cautare` și `inferenta` în `kronos/`, cu „da”-ul 
 **S41** (C-28 E4 Kronos-Cod, **doar etapa 1a**: lista surselor + licențe, examenul de cod scris înainte, cutia izolată; fără descărcări, fără placă).
 Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o decid la 05:15, după verdictul S38.
 
+**Actualizare 28 oct 08:20 (supraveghetor) — S38 verificat: CONFIRMAT; S39 gata (Release la Adrian); S40 oprit (pasul din `kronos/` cere om de față); S42 nou pe placă:**
+S38: pre-înregistrarea 61c3c7d (19:34:14) înaintea pornirii ✓; #459 română curat **1,2162 ≤ 1,2232** → **CONFIRMAT** ✓; cod curat 0,7321 (#441 0,7460) și R2 0,4084
+(#441 0,4154): ambele mai bune, fără regresie ✓; placa ≤ 6.002 MB, 64 °C. Tăcerea de azi-noapte = workstation-ul fără internet ~01:00–06:01 (11 rulări picate), REZOLVAT.
+S39: vectorii verificați de mine (SHA-256 identice cu raportul), copiați în hub cu README și MODEL; Release-ul #459 îl face Adrian (`gh` cere aprobare).
+S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a** (doar `kronos/contracte.py`) = o sesiune cu Adrian de față; **S40b** (modulele + testele) = executantul, după S40a.
+**S41 nu depinde de S40** → poate porni. Pun **S42** pe placă (ziua 28 oct, ~4 ore): cititorul E3 refăcut din cel mai bun model (#459) cu rețeta A.
+**Ordinea pentru executant: întâi S42 (placa; pre-înregistrarea înainte), apoi S41 (procesor) la rularea următoare, cât merge S42.**
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1460,6 +1468,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
   Executantule, la revenire: verifică întâi dacă antrenarea S38 s-a terminat (jurnalul și modelul din `lucru/`); dacă da, rulează examenele și scrie
   raportul cu verdictul față de pre-înregistrare; dacă s-a întrerupt, pune S38 pe `oprit`, scrie în raport până unde a ajuns și **nu** o reporni singur.
 - raport: docs/rapoarte/2026-10-28_0635_S38_reteta_A_cont.md (CONFIRMAT)
+- verificat de supraveghetor, 28 oct 08:20: pre-înregistrarea înaintea pornirii ✓; 1,2162 ≤ 1,2232 → CONFIRMAT ✓; cod 0,7321 ≤ 0,7510 ✓, R2 0,4084 ≤ 0,4204 ✓.
 
 ### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
 - stare: gata (executant, 28 oct 07:12: partea A + B; vectorii în integrare/kronos/ (F32 2,42 MB > 1 MB din cauza tokenizerului de 16.384, Q8_0 0,84 MB);
@@ -1508,6 +1517,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (COMENZI.md C-24, 27 oct 23:20, prin centrul de comandă; DECIZII 27 oct 23:20); pașii scriși de supraveghetor, 27 oct 23:15
 - raport: docs/rapoarte/2026-10-28_0712_S39_kgr1_pentru_os.md
+- verificat de supraveghetor, 28 oct 08:20: sumele SHA-256 ale vectorilor identice cu raportul; `integrare/kronos/` (format + vectori) și `docs/integrare_kronos/` (README, MODEL) copiate în hub, `integrare/kronos/`. **Rămas la Adrian:** comanda `gh release create kronos-kgr1-459 …` din raport (pasul 6).
 
 ### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
 - stare: oprit (executant, 28 oct 07:33; nimic atins în `kronos/`; 965 teste trec)
@@ -1539,11 +1549,14 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (27 oct 23:49, „Da” prin centrul de comandă; DECIZII.md din hub; nota din coadă 27 oct 23:50); pașii scriși de supraveghetor, 28 oct 02:15
 - raport: docs/rapoarte/2026-10-28_0733_S40_oprit_kronos.md
+- notă supraveghetor (28 oct 08:20): oprirea e corectă. Varianta 2 a executantului: **S40a** = pasul 1 (doar `kronos/contracte.py`, exact cum scrie mai sus),
+  făcut de o sesiune Claude Code cu Adrian de față (`propus — necesită Adrian`); **S40b** = pașii 2–5 (modulele, testele, raportul), executantul, abia după
+  ce S40a e `gata` și toate testele trec. Când văd S40a gata, trec S40b pe `aprobat`. Executantule: nu reîncerca S40.
 
 ### S41 — C-28 E4 „Kronos-Cod”, etapa 1a: sursele + licențele, examenul de cod scris înainte, cutia izolată (doar procesor, fără descărcări)
 - stare: aprobat
 - tip: procesor (fără placă); nu încurcă S38–S40
-- fereastră: oricând, după S40
+- fereastră: oricând — **nu depinde de S40** (supraveghetor, 28 oct 08:20); dacă S42 e `aprobat` și nepornită, pornește întâi S42
 - durată maximă: 4 ore
 - de ce: comanda lui Adrian C-28 (hub, 27 oct 23:45): model separat ~150M doar pe cod, apoi auto-îmbunătățire cu teste care rulează. Înainte de orice
   descărcare și antrenare trebuie: lista surselor cu licențele verificate, examenul scris și pus deoparte, și cutia în care rulează codul generat.
@@ -1571,3 +1584,50 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - pre-înregistrare: nu e antrenare încă; pragurile pentru etapa 2 (pass@10 pe setul ascuns) le scriu eu după etapa 1a, înainte de orice antrenare
 - aprobat de: Adrian (COMENZI.md C-28, 27 oct 23:45, prin centrul de comandă; DECIZII 27 oct 23:45); pașii (doar etapa 1a) scriși de supraveghetor, 28 oct 02:15
 - raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
+
+### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
+- stare: aprobat
+- tip: placă (~3 ore de antrenare + ~1 oră examene)
+- fereastră: zi (28 oct) — pornește la prima verificare a cozii, **înaintea S41**
+- durată maximă: 3 ore de antrenare; cel mult 5 ore pe placă în total; placa sub 7.000 MB și 83 °C
+- de ce: S38 a CONFIRMAT #459 (cel mai bun pe română, 1,2162) și rețeta A (S34). Cititorul E3 de azi, #438, e făcut din #415 cu rețeta veche
+  (S27) și dă 66/100 cu `rrf_reord` (S33). Întrebarea: **dacă refacem cititorul din #459 cu rețeta A, răspunde corect la mai multe întrebări?**
+  Granițele 1 și 2: încă o rulare pe linia E3 existentă (altă copie de plecare, rețeta deja confirmată) + examene. Linia română (#459) nu se atinge.
+- ce faci:
+  1. **Datele:** verifici că `lucru/e3/amestec_s27.jsonl` există și are aceeași sumă SHA-256 ca la S27 (o scrii în raport). Dacă lipsește, îl refaci
+     cu exact comanda din S27 (`unelte/e3_memorie.py date-antrenare`) și verifici că iese același număr de exemple; dacă nu iese la fel, te oprești (`oprit`).
+  2. **Configurarea** `config/conv_w2_e3_reteta_A.toml` = copie exactă a `config/conv_w2_reteta_A_cont.toml`, cu DOAR: `nume = "w2_e3_reteta_A"`,
+     `cale_stare = "lucru/w2_e3_reteta_A/gpt.pt"`, `conversatie = "lucru/e3/amestec_s27.jsonl"` (amestecul E3 al lui #438), `durata_scaderii_secunde = 10800`
+     (răcirea în ultimele 25 % din 3 ore), eticheta `"S42: E3 din #459, rețeta A"` și un antet scurt. Verifici că `lucru/w2_e3_reteta_A/` nu există.
+     Arăți în raport `diff` față de `conv_w2_reteta_A_cont.toml` și față de `conv_w2_e3_memorie.toml`.
+  3. **Pre-înregistrarea** `docs/preinregistrari/2026-10-28_E3_reteta_A.md`, **urcată (commit + push) ÎNAINTE de pornire**, cu pragurile cuvânt cu cuvânt:
+     măsura = corecte din cele 100 S26, sistemul primește doar întrebarea, bucățile `rrf_reord` (ca la S33, judecătorul = modelul examinat), notat cu
+     verificatorul S16, aceeași regulă „câte bucăți încap în 448 de simboluri”, fără întâmplare. Δ = nou − #438, **în aceeași rulare**.
+     **CONFIRMAT** dacă **Δ ≥ +5** **și** pe noaptea 10 și S4 (cu textul dat) noul nu pierde **mai mult de 2 puncte** față de #438;
+     **INFIRMAT** dacă **Δ ≤ +1**; între ele: **NECLAR**. Alături (nu decid): aceleași 100 cu bucățile S25 simple pentru ambele; eșantionul 2048
+     al validării (ca la S35) pentru ambele; `unelte/examen_validari_ws.py` pe noul model și pe #459 (română curat, cod curat, R2, fapte noi).
+     **Spus cinstit:** setul S26 e folosit a cincea oară (doar măsurat, nimic ales pe el); noul diferă de #438 prin două lucruri (copia de plecare și
+     rețeta), deci un câștig nu spune care din ele l-a adus. Plus așteptările tale în cifre și ora estimată de sfârșit (scrisă și în coadă la pornire).
+  4. **Rularea**, prin cascadă: `cascada.py porneste S42 -- python unelte/antrenare_lunga.py --config config/conv_w2_e3_reteta_A.toml --ore 3 --porneste-din 459`.
+     Dacă pornirea din #459 nu merge cu configurarea asta (de ex. starea nu se încarcă), te oprești la prima eroare, `oprit`, scrii eroarea; nu schimbi modulul.
+  5. **Examenele, o singură rulare**, pe ultimul model nou și pe #438: cele de la pasul 3 (100 S26 cu `rrf_reord` și cu S25 simplă, noaptea 10, S4,
+     2048) + validările. Paznicul verificat la fiecare 20 de întrebări; peste 7.000 MB → oprești, `oprit`, scrii cifrele. Verdictul strict după
+     pre-înregistrare; o închizi cu `unelte/preinregistrare.py --inchide E3_reteta_A`.
+  6. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-28_<ora>_S42_E3_reteta_A.md`, cu propunerea ta pentru pasul următor.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, `module/model_muon.py`, paznicul, jurnalul, datele de examen, `text_v3`, lista S26, indexurile din
+  `lucru/e3/` (doar citire), `unelte/verificator_text.py`, #415, #438, #441, #459 și configurările lor. Modelul nou NU intră în interfață. Nimic descărcat
+  sau instalat; nimic din `lucru/` în Git.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S42 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
+- pre-înregistrare: docs/preinregistrari/2026-10-28_E3_reteta_A.md (urcată înainte de pasul 4)
+- aprobat de: supraveghetor, 28 oct 08:20 (granițele 1 și 2 din REGULI_CASCADA.md; continuarea a ce a mers: S33 + S34 + S38)
+- raport: docs/rapoarte/2026-10-28_<ora>_S42_E3_reteta_A.md
+
+### S40a — Pasul 1 din S40: porturile `cautare` și `inferenta` în `kronos/contracte.py` (cu Adrian de față)
+- stare: propus — necesită Adrian
+- tip: procesor, ~20 de minute
+- ce: exact pasul 1 din S40 (doar `kronos/contracte.py`: `PORTURI`, două contracte, `CONTRACT_PENTRU_PORT`; `VERSIUNE_CONTRACTE` rămâne 1), apoi
+  `python -m pytest` (toate trec, inclusiv `teste/test_arhitectura.py`), commit + push, S40a `gata`. O face o sesiune Claude Code deschisă de Adrian pe
+  workstation, în `C:\Kronos\cyberspace`, cu el de față (executantul programat n-are voie în `kronos/`). Apoi S40b = pașii 2–5 din S40, pentru executant.
+- aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
+
