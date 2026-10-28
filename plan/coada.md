@@ -1462,7 +1462,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - raport: docs/rapoarte/2026-10-28_0635_S38_reteta_A_cont.md (CONFIRMAT)
 
 ### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
-- stare: aprobat
+- stare: in_lucru (executant, 28 oct 06:59)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu întrerupe și nu încetinește S38
 - fereastră: **partea A oricând, chiar în timpul S38** (e ușoară: minute, RAM < 2 GB); **partea B după ce S38 s-a terminat și raportul S38 e urcat**
 - durată maximă: 2 ore în total; RAM cel mult ~6 GB
