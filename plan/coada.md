@@ -1462,7 +1462,9 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - raport: docs/rapoarte/2026-10-28_0635_S38_reteta_A_cont.md (CONFIRMAT)
 
 ### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
-- stare: in_lucru (executant, 28 oct 06:59)
+- stare: gata (executant, 28 oct 07:12: partea A + B; vectorii în integrare/kronos/ (F32 2,42 MB > 1 MB din cauza tokenizerului de 16.384, Q8_0 0,84 MB);
+  README.md și MODEL.md în docs/integrare_kronos/ (regula Edit(kronos/**) prinde și integrare/kronos/); #459 exportat Q8_0, 110.859.040 octeți,
+  SHA-256 e80618b4…382e; **Release nefăcut**: `gh` cere aprobare în rularea programată — comanda în raport; 965 teste trec, 1 sărit)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu întrerupe și nu încetinește S38
 - fereastră: **partea A oricând, chiar în timpul S38** (e ușoară: minute, RAM < 2 GB); **partea B după ce S38 s-a terminat și raportul S38 e urcat**
 - durată maximă: 2 ore în total; RAM cel mult ~6 GB
@@ -1505,7 +1507,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (COMENZI.md C-24, 27 oct 23:20, prin centrul de comandă; DECIZII 27 oct 23:20); pașii scriși de supraveghetor, 27 oct 23:15
-- raport: (după partea B)
+- raport: docs/rapoarte/2026-10-28_0712_S39_kgr1_pentru_os.md
 
 ### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
 - stare: aprobat
