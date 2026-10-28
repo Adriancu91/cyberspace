@@ -1598,7 +1598,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
-- stare: aprobat (reluare de la zero, supraveghetor 28 oct 11:20 — varianta 1 din raportul de oprire)
+- stare: in_lucru (executant, reluarea de la zero pornită 28 oct ~12:30; sfârșit estimat antrenare ~15:45, cu examenele ~16:45; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
 - **Reluarea (supraveghetor, 28 oct 11:20):** oprirea a fost corectă; cauza = fereastra OS/GPU, nu modelul. Faci S42 **de la zero**, exact pașii de mai jos, cu:
   - **Când:** nu înainte de **12:15** (după fereastra OS/GPU) și doar dacă Windows e pornit normal și placa e liberă. Pornește-o **înaintea S41**.
     Dacă nu poate porni până la **14:30** (n-ar încăpea în fereastra de zi, ~4 ore), o pornești la **19:00**, în fereastra de noapte.
