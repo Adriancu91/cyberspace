@@ -9,6 +9,7 @@ from __future__ import annotations
 import importlib.util
 import math
 import time
+from pathlib import Path
 
 import pytest
 
@@ -16,6 +17,7 @@ from kronos.contracte import CONTRACT_PENTRU_PORT, Propunere, RezultatRulare
 from kronos.registru import Registru
 
 ARE_TORCH = importlib.util.find_spec("torch") is not None
+KGR_MIC = Path(__file__).resolve().parents[1] / "integrare" / "kronos" / "vectori" / "mic_f32.kgr"  # din S39, în git
 GPT_MIC = {"n_straturi": 1, "n_capete": 2, "n_emb": 32, "context": 32, "lot": 8, "dispozitiv": "cpu"}
 
 
@@ -97,7 +99,37 @@ MODULE = [
     ("traducere", "module.jucarii:TraducereIdentitate", {}),
     ("memorie", "module.jucarii:MemorieGoala", {}),
     ("memorie", "module.memorie_ierarhica:MemorieIerarhica", {"cale": "__biblioteca_mica__", "nivele": 6}),
+    ("cautare", "module.cautare_e3:CautareE3", {"cale_index": "__index_e3_mic__"}),
+    ("inferenta", "module.inferenta_kgr1:InferentaKGR1", {"cale": str(KGR_MIC)}),
+    ("inferenta", "module.inferenta_kgr1:InferentaKGR1", {"cale": str(KGR_MIC), "desfacere": "la_pas"}),
 ]
+
+BUCATI_E3_MICI = [
+    ("Orașul Brașov are o cetate veche pe deal.", "w0"),
+    ("Orașele mari ale țării sunt București și Cluj.", "w1"),
+    ("Satele din jurul Brașovului sunt mici.", "w2"),
+    ("Brașov se poate referi la oraș sau la județ.", "w3"),
+    ("Clujul are o universitate veche.", "w4"),
+]
+
+
+def index_e3_mic(tmp_path) -> dict[str, str]:
+    """Cele două baze E3 (obișnuită și cu rădăcini) și listele, pe câteva bucăți; fără bazele mari din lucru/."""
+    import json
+
+    from unelte import e3_memorie as e3
+    from unelte import e3_reordonare as r
+
+    lucru = tmp_path / "e3"
+    con = e3.creeaza(lucru / "index.sqlite")
+    con.executemany("INSERT INTO bucati(rowid, text, articol, nr, sursa) VALUES (?, ?, ?, ?, ?)",
+                    [(i, t, a, 0, "wikipedia") for i, (t, a) in enumerate(BUCATI_E3_MICI, 1)])
+    con.commit()
+    con.close()
+    r.cmd_index_radacini(lucru)
+    (lucru / "liste_s25.json").write_text(json.dumps({"fraze_lista": ["w3"], "randuri_scurte": []}), encoding="utf-8")
+    return {"cale_index": str(lucru / "index.sqlite"), "cale_index_radacini": str(lucru / "index_radacini.sqlite"),
+            "cale_liste": str(lucru / "liste_s25.json")}
 
 
 @pytest.fixture
@@ -133,6 +165,8 @@ def _setari_reale(setari, tmp_path):
         setari["director"] = str(tmp_path / "stocare")
     if setari.get("cale_plasa") == "__plasa_temporara__":  # nu atinge plasa din lucru/
         setari["cale_plasa"] = str(tmp_path / "plasa.json")
+    if setari.get("cale_index") == "__index_e3_mic__":
+        setari.update(index_e3_mic(tmp_path))
     if setari.get("director") == "__wikipedia_mic__":
         from teste.wikipedia_mic import scrie_wikipedia
 
@@ -238,6 +272,33 @@ def _memorie(m, tmp_path, _, nou):
     assert isinstance(m.statistici(), dict)
 
 
+def _cautare(c, tmp_path, _, nou):
+    intrebare = "Ce are orașul Brașov?"
+    gasite = c.cauta(intrebare, 3)
+    assert isinstance(gasite, list) and 0 < len(gasite) <= 3
+    assert all(isinstance(g, dict) and isinstance(g["text"], str) and isinstance(g["scor"], float) for g in gasite)
+    scoruri = [g["scor"] for g in gasite]
+    assert scoruri == sorted(scoruri, reverse=True)  # de la cea mai potrivită în jos
+    assert c.cauta(intrebare, 3) == gasite and nou().cauta(intrebare, 3) == gasite  # aceeași ordine
+    assert len(c.cauta(intrebare, 1)) == 1 and c.cauta(intrebare, 0) == []
+    assert c.cauta("?!", 3) == []  # nu crapă la o întrebare fără cuvinte
+    assert isinstance(c.statistici(), dict)
+
+
+def _inferenta(m, tmp_path, _, nou):
+    st = m.statistici()
+    assert isinstance(st, dict) and {"vocabular", "context", "format"} <= set(st)
+    simboluri = [1, 2, 3, 40, 500]
+    lg = m.logits(simboluri)
+    assert isinstance(lg, list) and len(lg) == st["vocabular"] and all(isinstance(x, float) and math.isfinite(x) for x in lg)
+    noi = m.genereaza(simboluri, 4)
+    assert isinstance(noi, list) and len(noi) == 4 and all(isinstance(x, int) and 0 <= x < st["vocabular"] for x in noi)
+    assert noi[0] == max(range(len(lg)), key=lg.__getitem__)  # greedy: primul e cel mai probabil
+    assert m.genereaza(simboluri, 4) == noi and nou().genereaza(simboluri, 4) == noi  # fără întâmplare
+    assert m.genereaza(simboluri, 0) == []
+    assert len(m.logits(list(range(st["context"] + 5)))) == st["vocabular"]  # peste context nu crapă
+
+
 VERIFICARI = {
     "model": _model,
     "date": _date,
@@ -249,6 +310,8 @@ VERIFICARI = {
     "interfata": _interfata,
     "traducere": _traducere,
     "memorie": _memorie,
+    "cautare": _cautare,
+    "inferenta": _inferenta,
 }
 
 

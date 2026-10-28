@@ -1524,7 +1524,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - verificat de supraveghetor, 28 oct 08:20: sumele SHA-256 ale vectorilor identice cu raportul; `integrare/kronos/` (format + vectori) și `docs/integrare_kronos/` (README, MODEL) copiate în hub, `integrare/kronos/`. **Rămas la Adrian:** comanda `gh release create kronos-kgr1-459 …` din raport (pasul 6).
 
 ### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
-- stare: oprit (executant, 28 oct 07:33; nimic atins în `kronos/`; 965 teste trec)
+- stare: gata (28 oct 11:15, sesiune Claude Code cu aprobarea explicită a lui Adrian; porturile noi **opționale** (`PORTURI_OPTIONALE`), `PORTURI` neschimbat; în `kronos/` doar `contracte.py`, `registru.py`, `config.py`; 979 teste trec, 1 sărit; raport docs/rapoarte/2026-10-28_1115_S40_porturi_cautare_inferenta.md)
+- (istoric) oprit (executant, 28 oct 07:33; nimic atins în `kronos/`; 965 teste trec)
 - **Actualizare 28 oct 08:40 (centrul de comandă):** am încercat pasul 1 într-o copie din cloud (doar `kronos/contracte.py`, cum scrie mai sus) și am
   rulat toate testele: **160 picate + 13 erori**, pentru că `kronos/config.py` cere ca **orice** port din `PORTURI` să fie în fiecare configurare
   (`lipsesc porturile: cautare, inferenta`), iar orchestratorul și `cli` le încarcă pe toate. Am **anulat schimbarea** (nimic urcat în `kronos/`).
@@ -1636,7 +1637,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_1100_S42_oprit_repornire.md
 
 ### S40a — Pasul 1 din S40: porturile `cautare` și `inferenta` în `kronos/contracte.py` (cu Adrian de față)
-- stare: propus — necesită Adrian
+- stare: gata — făcut împreună cu S40b în S40 (28 oct 11:15, porturi opționale; vezi S40). Executantul nu mai are nimic de făcut la S40.
 - tip: procesor, ~20 de minute
 - ce: exact pasul 1 din S40 (doar `kronos/contracte.py`: `PORTURI`, două contracte, `CONTRACT_PENTRU_PORT`; `VERSIUNE_CONTRACTE` rămâne 1), apoi
   `python -m pytest` (toate trec, inclusiv `teste/test_arhitectura.py`), commit + push, S40a `gata`. O face o sesiune Claude Code deschisă de Adrian pe

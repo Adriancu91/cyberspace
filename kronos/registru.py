@@ -10,7 +10,7 @@ import importlib
 from dataclasses import dataclass
 from typing import Any
 
-from .contracte import CONTRACT_PENTRU_PORT, PORTURI, VERSIUNE_CONTRACTE, membrii_contract
+from .contracte import CONTRACT_PENTRU_PORT, PORTURI, PORTURI_OPTIONALE, VERSIUNE_CONTRACTE, membrii_contract
 
 CHEI_MANIFEST = ("nume", "port", "versiune", "versiune_contract")
 
@@ -36,8 +36,8 @@ class Registru:
     def creeaza(self, port: str, cale: str, setari: dict[str, Any] | None = None) -> ModulIncarcat:
         """Încarcă și verifică un modul, FĂRĂ să-l pună pe port."""
         setari = dict(setari or {})
-        if port not in PORTURI:
-            raise EroareModul(f"Portul „{port}” nu există. Porturi valide: {', '.join(PORTURI)}")
+        if port not in PORTURI + PORTURI_OPTIONALE:
+            raise EroareModul(f"Portul „{port}” nu există. Porturi valide: {', '.join(PORTURI + PORTURI_OPTIONALE)}")
         if ":" not in cale:
             raise EroareModul(f"Calea „{cale}” trebuie să fie de forma pachet.fisier:Clasa")
 

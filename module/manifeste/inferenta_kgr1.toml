@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "inferenta_kgr1"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Un model din fișierul KGR1 (F32 sau Q8_0), citit fără PyTorch prin MotorBrut; doar citire."
+format = "modul-v0"
+
+[contract]
+port = "inferenta"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"logits" = "scorurile simbolurilor pentru poziția următoare"
+"genereaza" = "simboluri noi, mereu cel mai probabil (fără întâmplare)"
+"statistici" = "vocabularul, contextul și formatul greutăților"
+
+[rulare]
+limbaj = "python"
+intrare = "module.inferenta_kgr1:InferentaKGR1"
+teste = "python -m pytest teste_contracte -k InferentaKGR1"

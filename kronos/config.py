@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .contracte import PORTURI
+from .contracte import PORTURI, PORTURI_OPTIONALE
 
 
 class EroareConfig(Exception):
@@ -61,7 +61,7 @@ def citeste_config(cale: str | Path) -> Config:
     lipsa = [p for p in PORTURI if p not in porturi]
     if lipsa:
         raise EroareConfig(f"În „{cale}” lipsesc porturile: {', '.join(lipsa)}")
-    necunoscute = [p for p in porturi if p not in PORTURI]
+    necunoscute = [p for p in porturi if p not in PORTURI + PORTURI_OPTIONALE]
     if necunoscute:
         raise EroareConfig(f"În „{cale}” sunt porturi necunoscute: {', '.join(necunoscute)}")
     for port, valoare in porturi.items():

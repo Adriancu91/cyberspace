@@ -29,6 +29,13 @@ PORTURI = (
     "memorie",
 )
 
+# Porturi pe care o configurare le POATE avea, dar nu e obligată (configurările vechi merg neschimbate).
+# Orchestratorul nu le încarcă singur; le folosește cine are nevoie de ele.
+PORTURI_OPTIONALE = (
+    "cautare",
+    "inferenta",
+)
+
 
 @dataclass
 class Propunere:
@@ -170,6 +177,38 @@ class Memorie(Protocol):
     def statistici(self) -> dict[str, Any]: ...
 
 
+@runtime_checkable
+class Cautare(Protocol):
+    """Căutarea de bucăți de text: o întrebare → bucățile cele mai potrivite, în ordine.
+
+    Fiecare bucată e un dicționar cu cel puțin `text` (str) și `scor` (float, mai mare = mai potrivit).
+    Aceeași întrebare dă mereu aceeași ordine (fără întâmplare).
+    """
+
+    def cauta(self, intrebare: str, k: int) -> list[dict[str, Any]]:
+        """Cel mult `k` bucăți, de la cea mai potrivită la cea mai puțin potrivită."""
+        ...
+
+    def statistici(self) -> dict[str, Any]: ...
+
+
+@runtime_checkable
+class Inferenta(Protocol):
+    """Un model gata antrenat, doar citit: simboluri → următorul simbol. Nu antrenează nimic."""
+
+    def logits(self, simboluri: list[int]) -> list[float]:
+        """Scorul fiecărui simbol din vocabular pentru poziția de după ultimul simbol primit."""
+        ...
+
+    def genereaza(self, simboluri: list[int], cate: int) -> list[int]:
+        """Exact `cate` simboluri noi, mereu cel mai probabil (fără întâmplare, același rezultat la fiecare rulare)."""
+        ...
+
+    def statistici(self) -> dict[str, Any]:
+        """Cel puțin mărimea vocabularului, contextul și formatul greutăților (de ex. F32 sau Q8_0)."""
+        ...
+
+
 CONTRACT_PENTRU_PORT: dict[str, type] = {
     "model": Model,
     "date": Date,
@@ -181,6 +220,8 @@ CONTRACT_PENTRU_PORT: dict[str, type] = {
     "interfata": Interfata,
     "traducere": Traducere,
     "memorie": Memorie,
+    "cautare": Cautare,
+    "inferenta": Inferenta,
 }
 
 

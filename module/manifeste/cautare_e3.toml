@@ -1,0 +1,22 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "cautare_e3"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Căutarea E3 aleasă la S29/S33 (S25 + rădăcini românești + RRF, fără judecător-model), doar pe procesor."
+format = "modul-v0"
+
+[contract]
+port = "cautare"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"cauta" = "bucățile cele mai potrivite pentru o întrebare, în ordine, cu text și scor"
+"statistici" = "câte bucăți are indexul și varianta folosită"
+
+[rulare]
+limbaj = "python"
+intrare = "module.cautare_e3:CautareE3"
+teste = "python -m pytest teste_contracte -k CautareE3"
