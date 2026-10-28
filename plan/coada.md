@@ -1598,8 +1598,27 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_1415_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
-- stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
+- (istoric) stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
 - motiv: linia `w2_e3_reteta_A` are deja ora 1 (#462) în jurnal → `antrenare_lunga.py` sare peste `--porneste-din 459` și, fără gpt.pt, antrenează DE LA ZERO („orele 2–3”); `taskkill` cere aprobare → am apăsat `python -m kronos opreste` (lucru/STOP): ora în curs se termină ~13:30, apoi stop; după aceea executantul resetează cu `python -m kronos porneste --config config/conv_w2_e3_reteta_A.toml`. Propunere: linie nouă `w2_e3_reteta_A2` (doar `nume` + `cale_stare`), la 19:00 — o aprobă supraveghetorul
+- stare: aprobat — **a doua reluare, ca linie nouă `w2_e3_reteta_A2`, la 19:00 (fereastra de noapte)** (supraveghetor, 28 oct 14:25)
+- **A doua reluare (supraveghetor, 28 oct 14:25) — înlocuiește data și numele de mai jos; tot restul pașilor rămâne:**
+  - Oprirea de la 12:36 a fost corectă (antrena de la zero). Aleg **propunerea 1** a executantului: linie nouă, fiindcă jurnalul nu se editează.
+    Granița 1 (încă o rulare pe linia E3 existentă; schimbă doar numele sub care se scrie în jurnal, nu modelul, rețeta sau datele).
+  - **Când:** la **19:00** azi, 28 oct (nu mai încape în fereastra de zi). Înaintea oricărei alte sarcini de placă. Sfârșit estimat: antrenarea ~22:15, examenele ~23:15.
+  - **Configurarea:** în `config/conv_w2_e3_reteta_A.toml` schimbi DOAR `nume = "w2_e3_reteta_A2"` și `cale_stare = "lucru/w2_e3_reteta_A2/gpt.pt"`
+    (plus eticheta `"S42: E3 din #459, rețeta A (linia A2)"`). Arăți în raport `diff` față de versiunea e77a0eb: doar aceste rânduri. Verifici că
+    `lucru/w2_e3_reteta_A2/` nu există și că linia `w2_e3_reteta_A2` are **0 ore** în jurnal (o scrii în raport).
+  - **Pre-înregistrarea:** pragurile rămân exact cele din `docs/preinregistrari/2026-10-28_E3_reteta_A.md` (nemăsurată). Ca să nu atingi textul ei,
+    scrii una nouă, `docs/preinregistrari/2026-10-28_E3_reteta_A2.md`: aceeași întrebare, măsură și praguri **cuvânt cu cuvânt** (copiate), cu o notă
+    la început: „reluarea S42 ca linie nouă după două întreruperi (11:00 repornirea OS/GPU; 12:36 pornire greșită de la zero); E3_reteta_A n-a
+    măsurat nimic”, ora nouă de sfârșit și așteptările tale. **Commit + push înainte de pornire.** Pe cea veche o închizi, dacă unealta permite,
+    ca „fără măsurare — înlocuită de E3_reteta_A2”; dacă nu permite, o lași cum e și scrii asta în raport. Verdictul se închide pe `E3_reteta_A2`.
+  - **Rularea:** `cascada.py porneste S42 -- python unelte/antrenare_lunga.py --config config/conv_w2_e3_reteta_A.toml --ore 3 --porneste-din 459`.
+    **În primele 2 minute verifici în ieșire că scrie „Pornesc din modelul experimentului #459”** (și „ora 1” a liniei). Dacă nu apare, oprești
+    imediat cu butonul paznicului (`python -m kronos opreste --config config/conv_w2_e3_reteta_A.toml`), `oprit`, raport; nu încerci altă variantă.
+  - Experimentul de la zero din 12:29–13:35 (linia `w2_e3_reteta_A`, „ora 2”) nu se folosește nicăieri; rămâne în jurnal, neatins.
+  - Apoi pașii 5–6 de mai jos neschimbați (examenele pe ultimul model al liniei A2 și pe #438, în aceeași rulare). Raport `docs/rapoarte/2026-10-2X_<ora>_S42_E3_reteta_A.md`.
+- (istoric) oprit (executant, 28 oct 12:36) — vezi mai jos; raportul 2026-10-28_1236_S42_oprit_reluare.md.
 - **Reluarea (supraveghetor, 28 oct 11:20):** oprirea a fost corectă; cauza = fereastra OS/GPU, nu modelul. Faci S42 **de la zero**, exact pașii de mai jos, cu:
   - **Când:** nu înainte de **12:15** (după fereastra OS/GPU) și doar dacă Windows e pornit normal și placa e liberă. Pornește-o **înaintea S41**.
     Dacă nu poate porni până la **14:30** (n-ar încăpea în fereastra de zi, ~4 ore), o pornești la **19:00**, în fereastra de noapte.
@@ -1643,8 +1662,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
   sau instalat; nimic din `lucru/` în Git.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S42 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
-- pre-înregistrare: docs/preinregistrari/2026-10-28_E3_reteta_A.md (urcată înainte de pasul 4)
-- aprobat de: supraveghetor, 28 oct 08:20 (granițele 1 și 2 din REGULI_CASCADA.md; continuarea a ce a mers: S33 + S34 + S38)
+- pre-înregistrare: docs/preinregistrari/2026-10-28_E3_reteta_A2.md (nouă, praguri copiate din E3_reteta_A; urcată înainte de pornire)
+- aprobat de: supraveghetor, 28 oct 08:20 (granițele 1 și 2 din REGULI_CASCADA.md; continuarea a ce a mers: S33 + S34 + S38); a doua reluare (linia A2, 19:00): supraveghetor, 28 oct 14:25
 - raport: docs/rapoarte/2026-10-28_1236_S42_oprit_reluare.md (înainte: docs/rapoarte/2026-10-28_1100_S42_oprit_repornire.md)
 
 ### S40a — Pasul 1 din S40: porturile `cautare` și `inferenta` în `kronos/contracte.py` (cu Adrian de față)
@@ -1654,4 +1673,19 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
   `python -m pytest` (toate trec, inclusiv `teste/test_arhitectura.py`), commit + push, S40a `gata`. O face o sesiune Claude Code deschisă de Adrian pe
   workstation, în `C:\Kronos\cyberspace`, cu el de față (executantul programat n-are voie în `kronos/`). Apoi S40b = pașii 2–5 din S40, pentru executant.
 - aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
+
+### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
+- stare: propus — necesită Adrian (descărcare nouă de date: „Doar cu da-ul lui Adrian” din REGULI_CASCADA.md)
+- tip: procesor + rețea (fără placă); pilotul ~1 oră; descărcarea întreagă ~20 de ore (2–3 nopți, în flux, fără arhive pe disc); curățarea 3–5 ore; tokenizerul 3–6 ore
+- fereastră: oricând (nu încurcă placa)
+- ce faci (după „da”): exact propunerea din `docs/rapoarte/2026-10-28_1415_S41_kronos_cod_etapa1a.md`, §5: **întâi doar pilotul**, cu toate filtrele din
+  `docs/kronos_cod/SURSE.md`, raport cu GB brut → curat, simboluri estimate, cât a aruncat fiecare filtru, licențele verificate (metadate + LICENSE).
+  Supraveghetorul verifică pilotul înainte de descărcarea întreagă. Spațiul pe C: (74 GB liberi): te oprești dacă scade sub 40 GB.
+  Tokenizerul nou se antrenează doar după un al doilea „da” (linie de model nouă).
+- Întrebări pentru Adrian (din raportul S41): (1) „da” pentru pilot; (2) data-limită: 29 iunie 2021 (recomandat de executant și de mine: fără cod
+  scris de LLM) sau 30 nov 2022 (+~40 % date); (3) cele 8 surse „necesită Adrian” (The Stack cere cont HF etc.) — recomandarea mea: deocamdată niciuna;
+  (4) cutia mai tare (regulă de firewall pentru python.exe sau cont Windows separat) — nu e nevoie acum, ci înainte de etapa 3 (auto-îmbunătățirea).
+- pre-înregistrare: pragurile etapei 2 (pass@10 pe setul ascuns) le scrie supraveghetorul înainte de orice antrenare Kronos-Cod
+- aprobat de: — (așteaptă Adrian)
+- raport: docs/rapoarte/<data>_<ora>_S43_kronos_cod_pilot.md
 

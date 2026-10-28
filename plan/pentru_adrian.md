@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 14:25 — Kronos-Cod etapa 1a gata (S41); S42 a pornit greșit și a fost oprită corect — o reiau diseară la 19:00
+
+- **REZOLVAT:** Release-ul privat `kronos-kgr1-459` e publicat (l-ai făcut tu, 13:08). Mulțumesc — nu mai e nimic de făcut la el.
+- **S41 gata (Kronos-Cod, primul pas, fără descărcări):** lista surselor de cod cu licențe libere (6 surse, ~3 miliarde de simboluri estimate),
+  examenul de cod de **200 de probleme ascunse** (soluțiile corecte trec 200/200, cele goale sau greșite 0/200) și „cutia izolată” în care va rula
+  codul scris de model (fără rețea, fără fișiere din afară, cu limită de timp și memorie — toate dovedite cu teste). **999 de teste trec.** Verificat de mine: corect.
+- **S42 oprit (corect):** la reluare, unealta a văzut în jurnal ora de dimineață și a pornit modelul **de la zero** în loc de #459; executantul a oprit-o.
+  Nicio măsurare pierdută. **Am aprobat:** aceeași sarcină, sub un nume nou (`w2_e3_reteta_A2`), **la 19:00**, cu aceleași praguri; verdictul la trecerea de 23:15 sau 02:15.
+- **Pus în coadă, așteaptă „da”-ul tău:** S43 = Kronos-Cod etapa 1b, **descărcarea codului**, întâi doar un pilot de ~1 oră (orice descărcare nouă cere „da”-ul tău).
+- **Aștept de la tine (fără grabă, nu blochează nimic azi):** (1) „da” sau „nu” pentru pilotul S43; (2) data-limită a codului: **iunie 2021** (recomand: sigur fără
+  cod scris de alte AI) sau noiembrie 2022 (+40 % date); (3) sursele care cer cont (The Stack etc.): recomand **deocamdată niciuna**. Poți răspunde printr-o comandă în hub.
+
 ## 28 octombrie 2026, 11:20 — Porturile noi sunt gata (S40); Kronos #459 merge în OS; antrenarea S42 a fost întreruptă de repornire — o reiau de la zero după 12:15
 
 - **S40 gata (făcut cu tine de față):** cele două „prize” noi (`cautare`, `inferenta`) sunt în nucleu ca **opționale**, deci configurările vechi merg neschimbate; plus cele două module care le folosesc. **979 de teste trec**, 0 picate. Cererea ta S40a e închisă.
