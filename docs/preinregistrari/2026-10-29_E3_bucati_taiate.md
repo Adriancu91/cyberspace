@@ -82,3 +82,32 @@ regizat, rest); reparate / stricate; eșantionul 1024.
 - 1024 (văzute): același semn, Δ negativ.
 - Timpi ca la S35; placa < 1.500 MB.
 - **Verdictul așteptat: INFIRMAT ~85 %, NECLAR ~10 %, CONFIRMAT ~5 %.**
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-29 00:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Examenul (o singură rulare, 29 oct 00:03:26–00:15:35, 728 s, cod 0) → `lucru/e3/examen_s44.json`; setul `validare_s29.json`
+(sha256 d036774a…2dca), modelul #438, ordinea `rrf_reord` în ambele brațe. Placa: maxim 734 MB; paznicul S17 la fiecare 50
+de întrebări, n-a oprit nimic.
+
+| eșantion | `intregi` | `taiate` | Δ | plafon întregi / tăiate | bucăți date (medie) | reparate / stricate |
+|---|---|---|---|---|---|---|
+| **2048 (decide, 500, 0 văzute)** | **336 (67,2 %)** | **297 (59,4 %)** | **−7,8 p (−39)** | 352 / 316 | 1,93 / 2,66 | 35 / 74 |
+| 1024 (500, 485 văzute) | 345 (69,0 %) | 278 (55,6 %) | −13,4 p | 345 / 286 | 1,88 / 2,66 | 23 / 90 |
+| 1024 nevăzute (15) | 10 | 7 | −20,0 p | 11 / 6 | 1,87 / 2,67 | 0 / 3 |
+
+Pe tipuri (2048, întregi → tăiate): definiții 169 → 148, născut 36 → 18, an 10 → 13, regizat 15 → 16, rest 106 → 102.
+Răspunsul în cele 3 aduse: 395 întregi, 326 după tăiere (tăierea scoate propoziția cu răspunsul). Promptul identic la 31 de întrebări.
+Brațul `intregi` = 336, exact ca la S35 (cum era așteptat).
+
+## Verdictul
+
+**INFIRMAT** — Δ = −7,8 puncte pe 2048 (pragul de infirmare: Δ < +0,5). Tăierea bagă mai multe bucăți (2,66 față de 1,93), dar
+scoate prea des chiar propoziția cu răspunsul (plafonul scade de la 352 la 316), iar #438 răspunde mai prost. Așteptarea mea
+(~−7, între −12 și +1) s-a potrivit; pierderea cea mai mare a fost la „născut” (36 → 18) și la definiții, nu la „an”/„rest” cum
+scrisesem.
