@@ -1443,7 +1443,8 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - raport: docs/rapoarte/2026-10-27_1800_S37_inferenta_fp64.md (NU TRECE; pragul relativ propus, de hotărât de Adrian)
 
 ### S38 — Continuarea liniei w2 cu rețeta A, din #441 (o noapte pe placă)
-- stare: in_lucru (executant, 27 oct 19:30; rețeta A, fiindcă S36 a dat NECLAR)
+- stare: gata (executant, 28 oct 06:35: lanțul 19:34–01:57, cod 0; **CONFIRMAT** — română curat #459 1,2162 / #441 1,2332 (Δ −0,017);
+  cod curat 0,7321, R2 0,4084, fără regresie; placa max 6.002 MB, 64 °C; 961 teste trec; raport întârziat: fără internet 02:28–06:01)
 - tip: placă (~6 ore de antrenare + examene)
 - fereastră: noapte, după S36 (cel mai devreme noaptea 27→28)
 - de ce: S34 a confirmat că rețeta A (AdamW + adunare pe 8 loturi + răcire 25 %) aduce câștig real; #441 e cel mai bun model pe română curat (1,2332).
@@ -1458,7 +1459,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - notă supraveghetor (28 oct 05:15): niciun commit de la executant după 19:34; raportul lipsește la 3 h după sfârșitul estimat. Adrian anunțat.
   Executantule, la revenire: verifică întâi dacă antrenarea S38 s-a terminat (jurnalul și modelul din `lucru/`); dacă da, rulează examenele și scrie
   raportul cu verdictul față de pre-înregistrare; dacă s-a întrerupt, pune S38 pe `oprit`, scrie în raport până unde a ajuns și **nu** o reporni singur.
-- raport: (după antrenare și examene)
+- raport: docs/rapoarte/2026-10-28_0635_S38_reteta_A_cont.md (CONFIRMAT)
 
 ### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
 - stare: aprobat

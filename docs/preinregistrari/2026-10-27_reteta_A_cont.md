@@ -69,3 +69,39 @@ regresii depășește 0,005, verdictul e **NECLAR** (câștig pe română, cu pr
 
 - Română > 1,2282: continuarea din modelul răcit nu mai aduce câștig real (eventual reîncălzirea strică ce a adus răcirea) → INFIRMAT.
 - Cod curat sau TinyStories R2 cu peste 0,005 mai rău: câștigul pe română se plătește pe celelalte → cel mult NECLAR.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-28 06:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 454 | w2_reteta_A_cont | 27.10 19:34 | 0,4233 | pastrat | — | — | — |  |
+| 455 | w2_reteta_A_cont | 27.10 20:38 | 0,4194 | pastrat | — | — | — |  |
+| 456 | w2_reteta_A_cont | 27.10 21:42 | 0,4193 | pastrat | — | — | — |  |
+| 457 | w2_reteta_A_cont | 27.10 22:46 | 0,4182 | pastrat | — | — | — |  |
+| 458 | w2_reteta_A_cont | 27.10 23:50 | 0,4153 | pastrat | — | — | — |  |
+| 459 | w2_reteta_A_cont | 28.10 00:54 | 0,4084 | pastrat | — | — | — |  |
+| 460 | examen_validari_ws | 28.10 01:57 | — | masurat | — | — | — |  |
+| 461 | examen_validari_ws | 28.10 01:57 | — | masurat | — | — | — |  |
+
+- **w2_reteta_A_cont:** 6 ore, 6 păstrate; val_bpb de la 0,4233 la 0,4084; cel mai bun păstrat: #459 (0,4084); pornită din #441 (0,4154).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Examenele (`unelte/examen_validari_ws.py`, aceeași rulare, 28 oct 01:57):
+
+| măsura | #459 (ora 6) | #441 (re-măsurat) | Δ | pragul |
+|---|---|---|---|---|
+| română curat | **1,2162** | 1,2332 | −0,0170 | ≤ 1,2232 CONFIRMAT / > 1,2282 INFIRMAT |
+| cod curat | 0,7321 | 0,7460 | −0,0139 | ≤ 0,7510 |
+| TinyStories R2 (val_bpb) | 0,4084 | 0,4154 | −0,0070 | ≤ 0,4204 |
+| fapte noi (din 150, nu decide) | 73 | 76 | −3 | — |
+| română necurățat (nu decide) | 1,2339 | 1,2521 | −0,0182 | — |
+
+## Verdictul
+
+**CONFIRMAT** (scris de executant, 28 oct 06:33). Română curat 1,2162 ≤ 1,2232 (Δ −0,0170 față de #441, 1,2332 și în rularea asta);
+cod curat 0,7321 ≤ 0,7510 și TinyStories R2 0,4084 ≤ 0,4204 — nicio regresie, ba chiar ambele mai bune. Așteptarea mea (~1,220,
+Δ ~−0,013) a fost puțin prea prudentă. Ca de obicei: o singură sămânță și o singură rulare. Faptele noi au scăzut ușor (76 → 73),
+dar nu decid. Primele 4 ore au fost mai rele decât #441 la val_bpb (cum scria la „Să nu uite”); câștigul a venit în răcire (orele 5–6).
