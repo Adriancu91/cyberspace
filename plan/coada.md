@@ -191,9 +191,16 @@ S36: pre-înregistrarea 9729c73 (15:00:44) înaintea pornirii (15:00:54) ✓; D 
 **1,364e-4 > 1e-4** → **NU TRECE** ✓ (float64 la LayerNorm/softmax nu ajută; argmax și textul identice); 961 teste trec. Pragul fp32 (relativ sau nu) rămâne la Adrian.
 **S38** rulează cu rețeta A (corect, fiindcă S36 a dat NECLAR), pre-înregistrarea 61c3c7d (19:34:14) urcată, pragurile identice cu cele din coadă; sfârșit estimat ~01:55.
 Ziua de 28 oct o decid după verdictul S38 (de ex. proba E „fără adunare, rată mai mare”, propusă la S36), nu acum.
+**Actualizare 28 oct 02:15 (supraveghetor) — S38 încă fără raport; S40 (porturile aprobate de Adrian) și S41 (C-28, etapa 1a) puse în coadă, doar procesor:**
+S38 trebuia să se termine pe la ~01:55; raportul nu e încă urcat (executantul scrie abia la final) — îl verific la 05:15. S39 (C-24) e tot `aprobat`, nimic urcat încă.
+Am copiat eu în hub `integrare/kronos/format_greutati.md` (doar specificația, ca sesiunea OS să poată începe); vectorii și `MODEL.md` vin după S39.
+Pun: **S40** (porturile `cautare` și `inferenta` în `kronos/`, cu „da”-ul lui Adrian din 27 oct 23:49; doar ele + contractele + două module-adaptor) și
+**S41** (C-28 E4 Kronos-Cod, **doar etapa 1a**: lista surselor + licențe, examenul de cod scris înainte, cutia izolată; fără descărcări, fără placă).
+Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o decid la 05:15, după verdictul S38.
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
-- stare: oprit
+- stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
+- stare veche: oprit
 - motiv: cere aprobarea lui Adrian: comanda `shutdown` e blocată de permisiunile executantului (pașii 1–3 făcuți, push d68bd85; calculatorul rămâne pornit, fără lucru)
 - tip: procesor (fără placă)
 - fereastră: oricând — prima verificare a cozii după 24 oct 04:05
@@ -1490,3 +1497,65 @@ Ziua de 28 oct o decid după verdictul S38 (de ex. proba E „fără adunare, ra
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (COMENZI.md C-24, 27 oct 23:20, prin centrul de comandă; DECIZII 27 oct 23:20); pașii scriși de supraveghetor, 27 oct 23:15
 - raport: (după partea B)
+
+### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
+- stare: aprobat
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu încurcă S38/S39
+- fereastră: oricând, după S39 partea A
+- durată maximă: 2 ore
+- de ce: Adrian a spus „Da” (27 oct 23:49, prin centrul de comandă; DECIZII 27 oct 23:49) ca piesele din `unelte/` (căutarea E3 și motorul KGR1
+  fără PyTorch) să devină module înlocuibile pe platformă. Propunerile tale: raportul S29 (`cauta(intrebare, k) → bucăți ordonate`) și raportul S32.
+- ce faci:
+  1. În `kronos/contracte.py` **doar**: adaugi `"cautare"` și `"inferenta"` în `PORTURI`, două contracte noi (Protocol, `@runtime_checkable`, cu
+     docstring în română) și le treci în `CONTRACT_PENTRU_PORT`:
+     - `Cautare`: `cauta(self, intrebare: str, k: int) -> list[dict[str, Any]]` (bucăți ordonate, fiecare cel puțin cu `text` și `scor`;
+       cel mult `k`; aceeași întrebare → aceeași ordine) + `statistici(self) -> dict[str, Any]`.
+     - `Inferenta`: `logits(self, simboluri: list[int]) -> list[float]` (pe ultima poziție), `genereaza(self, simboluri: list[int], cate: int) -> list[int]`
+       (greedy, determinist) + `statistici(self) -> dict[str, Any]` (mărimea vocabularului, contextul, formatul F32/Q8_0).
+       Fără `antreneaza`: e doar citire.
+     `VERSIUNE_CONTRACTE` rămâne 1 (porturile noi nu schimbă porturile vechi). Dacă un test existent cere altfel, te oprești și scrii de ce.
+     **Nimic altceva în `kronos/`** (nici registru, nici orchestrator, nici paznic, nici config).
+  2. Două module noi în `module/`, cu `MANIFEST` (nume, port, versiune 0.1.0, versiune_contract 1, resurse gpu: False), care **refolosesc** codul din
+     `unelte/` (import, nu copie): `module/cautare_e3.py:CautareE3` (varianta aleasă la S29/S33: S25 + rădăcini + RRF; fără judecător-model în
+     varianta implicită, ca să meargă fără placă) și `module/inferenta_kgr1.py:InferentaKGR1` (în jurul `MotorBrut` din `unelte/inferenta_bruta.py`).
+  3. Le adaugi în lista `MODULE` din `teste_contracte/test_contracte.py`, pe date mici de probă (o bază SQLite minusculă creată în test; modelul KGR1
+     minuscul din S39 sau unul creat în test) — fără bazele mari din `lucru/`. Plus un test că modulul de inferență dă aceleași logit-uri ca `MotorBrut`.
+  4. `teste/test_arhitectura.py` trece (kronos/ nu importă din module/); `python -m pytest`: **toate** trec. Commit + push.
+  5. Raport scurt `docs/rapoarte/2026-10-28_<ora>_S40_porturi_cautare_inferenta.md`: diff-ul din `kronos/` (întreg, e mic), modulele, numărul de teste.
+- Nu atingi `module/examen_bpb.py`, paznicul, jurnalul, modelele, S38/S39, interfața. Nimic descărcat sau instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport; **nu** ocoli testele.
+- pre-înregistrare: nu e antrenare; nu e nevoie
+- aprobat de: Adrian (27 oct 23:49, „Da” prin centrul de comandă; DECIZII.md din hub; nota din coadă 27 oct 23:50); pașii scriși de supraveghetor, 28 oct 02:15
+- raport: docs/rapoarte/2026-10-28_<ora>_S40_porturi_cautare_inferenta.md
+
+### S41 — C-28 E4 „Kronos-Cod”, etapa 1a: sursele + licențele, examenul de cod scris înainte, cutia izolată (doar procesor, fără descărcări)
+- stare: aprobat
+- tip: procesor (fără placă); nu încurcă S38–S40
+- fereastră: oricând, după S40
+- durată maximă: 4 ore
+- de ce: comanda lui Adrian C-28 (hub, 27 oct 23:45): model separat ~150M doar pe cod, apoi auto-îmbunătățire cu teste care rulează. Înainte de orice
+  descărcare și antrenare trebuie: lista surselor cu licențele verificate, examenul scris și pus deoparte, și cutia în care rulează codul generat.
+  Linia română (#441 și urmașii) **nu se atinge**.
+- ce faci:
+  1. `docs/kronos_cod/SURSE.md`: propunerea de surse **doar cod scris de oameni, licențe MIT / Apache-2.0 / BSD**, Python + Rust (+ puțin C), fără nimic
+     generat de un LLM. Pentru fiecare sursă: ce e, licența (cu legătura către textul licenței), mărimea estimată în GB și în simboluri, cum se descarcă
+     **fără cont și fără autentificare** (dacă o sursă cere cont, acceptarea unor termeni sau o cheie, o treci separat la „necesită Adrian” și propui alta),
+     cum se elimină duplicatele și cum se scot fișierele generate automat. Ținta: ~3 miliarde de simboluri. Doar documentezi, **nu descarci încă**
+     (descărcarea = etapa 1b, după ce verific lista).
+  2. **Examenul de cod**, scris ACUM, înainte de date și antrenare: `unelte/kronos_cod/examen_cod.py` + probleme mici în Python cu teste unitare,
+     din șabloane proprii (de ex. 20 de șabloane × variante) + un **set ascuns** generat cu sămânță fixă, ținut în `lucru/kronos_cod/examen_ascuns/`
+     (NU în Git; în Git doar suma SHA-256 a setului și numărul de probleme). Măsoară pass@1 și pass@10. Verificare: soluțiile de referință scrise de
+     tine trec 100 %, iar o soluție goală/greșită trece 0 %. Problemele nu au voie să vină de la un LLM străin (le scrii tu, din șabloane).
+  3. **Cutia izolată** `unelte/kronos_cod/cutie.py`: rulează codul de verificat într-un **proces separat**, într-un dosar temporar, cu limită de timp
+     și de memorie, fără rețea și fără acces la fișiere în afara dosarului: listă de module permise (fără `os`, `subprocess`, `shutil`, `socket`,
+     `ctypes`, `importlib`, `open` în afara dosarului etc.). Teste care arată că sunt **blocate**: citirea unui fișier din afară, scrierea în afară,
+     o conexiune de rețea, pornirea unui proces, o buclă infinită (limita de timp), o alocare uriașă (limita de memorie). Dacă pe Windows o limită
+     nu se poate pune fără să instalezi ceva sau să schimbi setări, **nu instalezi**: scrii clar în raport ce lipsește și ce ar trebui.
+  4. Tot în `unelte/` (fără port nou în `kronos/`; dacă pare nevoie de unul, doar propui în raport). `python -m pytest`: toate trec. Commit + push.
+  5. Raport `docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md`: lista surselor pe scurt, examenul (câte probleme, cum arată unul), testele
+     cutiei (ce e blocat, ce nu), și propunerea ta pentru etapa 1b (descărcare + curățare + tokenizer BPE pe cod: cât spațiu, cât timp).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele, linia română, interfața. **Nimic descărcat sau instalat.**
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare încă; pragurile pentru etapa 2 (pass@10 pe setul ascuns) le scriu eu după etapa 1a, înainte de orice antrenare
+- aprobat de: Adrian (COMENZI.md C-28, 27 oct 23:45, prin centrul de comandă; DECIZII 27 oct 23:45); pașii (doar etapa 1a) scriși de supraveghetor, 28 oct 02:15
+- raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md

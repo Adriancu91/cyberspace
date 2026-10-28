@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 02:15 — S38 (noaptea) încă fără raport; porturile aprobate de tine și Kronos-Cod (etapa 1a) puse în coadă
+
+- **S38** (antrenarea de noapte cu rețeta A) trebuia să se termine pe la ~01:55; raportul nu e încă urcat (executantul scrie abia la final). Verdictul îl verific la **05:15**.
+- **Am pus în coadă, doar pe procesor (fără placă), după S39:** **S40** = cele două „prize” noi în nucleu (`cautare` și `inferenta`), cum ai spus „Da” aseară,
+  plus două module care le folosesc; și **S41** = prima bucată din Kronos-Cod (comanda ta C-28): lista surselor de cod cu licențele, examenul de cod scris
+  dinainte și „cutia izolată” în care va rula codul scris de model. **Nu se descarcă nimic încă** — lista o verific eu înainte.
+- Am trecut S28 (oprirea workstation-ului) pe „anulat”, cum ai hotărât. Am pus în hub specificația formatului KGR1, ca sesiunea OS să poată începe motorul.
+- **Aștept de la tine:** nimic.
+
 ## 27 octombrie 2026, 23:15 — S38 rulează normal; comanda ta C-24 (Kronos în OS) e pusă în coadă ca S39
 
 - **Nimic terminat de la 20:15.** S38 (noaptea cu rețeta A din #441) rulează din ~19:35; executantul nu scrie nimic până la final, deci e normal.
@@ -228,15 +237,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   Părerea mea: dacă S19 arată că creșterea nu vine doar din tipurile atinse → (2), e ieftină; altfel → (1).
 - Cyber Hub: nicio comandă nouă pentru Kronos; am scris poziția Kronos la propunerea nouă „Kronos bare-metal v0.2”.
 - **Aștept de la tine:** alegerea 1, 2 sau 3 (o comandă în centrul de comandă e de ajuns); până atunci placa face doar S19.
-
-## 22 octombrie 2026, 23:15 — S17: NECLAR (13 din 50, de la 6); repetarea cu 3× date pornește acum
-
-- **S17 gata (verificat față de pragurile scrise dinainte):** după 3 ore pe întrebările scrise de el însuși, Kronos (#425) răspunde
-  la **13 din 50** de tipuri de întrebări nevăzute (înainte: 6). Pragurile: „confirmat” de la 16, „infirmat” până la 9 → **NECLAR**.
-  Fără regresie: tipurile văzute 29/30, examenul nopții 10 49/50 și 20/20, S4 40/60. Placa: max 6.274 MB, 64 °C. Teste: 886 trec.
-- **De știut:** din ~30.000 de întrebări scrise de Kronos, doar 516 au trecut toate verificările; o parte din creștere poate veni din
-  răspunsuri lungi care conțin răspunsul corect — le număr separat la repetare, fără să schimb regula de notare.
-- **Pus în coadă, cum ai cerut la 15:10:** **S18 = repetarea cu 3× întrebări** (aprobat; pornește la prima verificare a cozii, ~7 ore,
-  gata pe la ~07:00). E ultima rundă: dacă iese iar „neclar”, nu se mai repetă și decizi tu. Verdictul la trecerea de 08:15.
-- Cyber Hub: nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** nimic.
