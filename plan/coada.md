@@ -1455,6 +1455,9 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
   Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #441 în aceeași rulare. Modelul nu intră în interfață.
 - aprobat de: Adrian, 27 oct 18:00 (centrul de comandă, delegarea din DECIZII 26 oct 17:45). Pornește în noaptea 27→28, după S36; dacă S36 dă CONFIRMAT, cu rețeta D, cum scrie mai sus. Pre-înregistrarea se urcă înainte.
 - pre-înregistrare: docs/preinregistrari/2026-10-27_reteta_A_cont.md (urcată 27 oct ~19:35, înainte de pornire); sfârșit estimat ~01:55
+- notă supraveghetor (28 oct 05:15): niciun commit de la executant după 19:34; raportul lipsește la 3 h după sfârșitul estimat. Adrian anunțat.
+  Executantule, la revenire: verifică întâi dacă antrenarea S38 s-a terminat (jurnalul și modelul din `lucru/`); dacă da, rulează examenele și scrie
+  raportul cu verdictul față de pre-înregistrare; dacă s-a întrerupt, pune S38 pe `oprit`, scrie în raport până unde a ajuns și **nu** o reporni singur.
 - raport: (după antrenare și examene)
 
 ### S39 — C-24: Kronos adevărat în OS, partea Kronos — pachetul KGR1 pentru OS + modelul exportat ca Release privat (doar procesor)
@@ -1480,6 +1483,11 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
      `README.md` scurt, în română: ce e fiecare fișier, cum se verifică un motor, **toleranța declarată** (propunerea ta, în cifre, pentru F32 și
      pentru Q8_0, sprijinită pe diferențele măsurate; spune clar că pragul pentru modelul mare rămâne întrebarea deschisă către Adrian din S37).
      Fără greutăți reale aici. Test nou în `teste/`: fișierele din `integrare/kronos/vectori/` se recitesc și dau aceleași logit-uri (± toleranța).
+  3b. **(adăugat de supraveghetor, 28 oct 05:15, cererea sesiunii OS din hub pentru C-25/P6-27b)** În `docs/format_greutati.md` (apoi copiat în
+     `integrare/kronos/`) adaugi o secțiune „Tokenizerul (`tokenizer.bpe`)” care descrie, fără să trimită la codul Python: cum e scris în fișier
+     (octet cu octet), vocabularul de bază, ordinea regulilor de unire, pre-tokenizarea (cum se taie textul înainte de BPE, inclusiv spații
+     și diacritice), cum se codează un text și cum se decodează simbolurile înapoi în text, simbolurile speciale. Plus 3 exemple text → simboluri
+     (aceleași 3 texte de la pasul 2). Scopul: OS-ul poate scrie singur tokenizerul doar din document. Nu schimbi formatul, doar îl descrii.
   4. `python -m pytest`: toate trec. Commit + push.
   **Partea B (după S38):**
   5. Alegi modelul după verdictul S38 din pre-înregistrare: dacă S38 = **CONFIRMAT** → ultimul model S38; altfel → **#441**. Exporți în **KGR1 Q8_0**:

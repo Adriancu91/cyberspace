@@ -2,6 +2,18 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 05:15 — PROBLEMĂ: calculatorul Kronos (workstation) tace de aproape 10 ore; S38 n-a raportat
+
+- **Ultimul semn de la executant: 27 oct, 19:34** (pornirea S38). S38 trebuia să se termine pe la **~01:55**, cu raport și commit;
+  acum e 05:15 și nu e nimic, nici pe alte ramuri. Nici S39 partea A (ușoară, pe procesor, „chiar în timpul S38”) n-a pornit.
+  Regula din `REGULI_CASCADA.md` spune: peste 3 ore fără semn = te anunț.
+- **Ce poți face (când ajungi la calculator):** verifică dacă workstation-ul e pornit și treaz (nu în somn / repornit de o actualizare Windows)
+  și dacă fereastra lui Claude Code (executantul) mai e deschisă. Dacă s-a închis, pornește-l din nou în dosarul `cyberspace`;
+  el reia singur din `plan/coada.md` (S38 e `in_lucru`: o să vadă dacă antrenarea s-a terminat și o să scrie raportul).
+  Nu șterge nimic din `lucru/`.
+- Între timp, ca să nu blochez OS-ul: am adăugat la S39 partea A o descriere a tokenizerului în specificația KGR1 (sesiunea OS a cerut-o în hub).
+- **Aștept de la tine:** doar verificarea calculatorului de mai sus. Nicio decizie nouă.
+
 ## 28 octombrie 2026, 02:15 — S38 (noaptea) încă fără raport; porturile aprobate de tine și Kronos-Cod (etapa 1a) puse în coadă
 
 - **S38** (antrenarea de noapte cu rețeta A) trebuia să se termine pe la ~01:55; raportul nu e încă urcat (executantul scrie abia la final). Verdictul îl verific la **05:15**.
@@ -223,17 +235,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
   dacă și „fără regresie” de la S17 stă pe răspunsuri lungi. Placa e liberă și rămâne așa până alegi. Teste: 893 trec.
 - Cyber Hub: nicio comandă nouă pentru Kronos; a apărut proiectul nou **Cyber-GPU**, care va cere o fereastră pe workstation doar cu acordul tău.
 - **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns).
-
-## 23 octombrie 2026, 02:15 — S18 n-a putut strânge destule întrebări; acum decizi tu pasul următor
-
-- **S18 gata (verificat față de pre-înregistrare):** repetarea a adunat doar **402** întrebări noi → **918** în total (516 + 402),
-  adică 1,78×; poarta cerea cel puțin **1.032** → după regula scrisă dinainte **nu s-a antrenat și nu există verdict**. Cauza:
-  articolele din Wikipedia pe care le avem s-au terminat (1.497 în loc de 4.000). Fără erori, placa liberă de la 00:33. Teste: 893 trec.
-- **E1 rămâne cu un singur rezultat: S17, NECLAR (13 din 50, de la 6).** Regula: nu se mai repetă, decizi tu.
-- **Pus în coadă (S19, aprobat de mine, doar examen, ~1 oră, acum):** analiza care n-a mai rulat la S18 — cât din creșterea 6 → 13
-  vine din tipuri de întrebări pe care Kronos le-a „atins” direct când și-a scris întrebările. Cifrele vin la trecerea de 05:15.
-- **Variantele tale (S20 în coadă):** (1) închidem E1 și trecem la E2 (specialiști + ruter); (2) o antrenare de 3 ore pe cele 918
-  întrebări care există deja, cu aceleași praguri (~4 ore pe placă); (3) altă metodă sau articole noi (descărcarea cere „da”-ul tău).
-  Părerea mea: dacă S19 arată că creșterea nu vine doar din tipurile atinse → (2), e ieftină; altfel → (1).
-- Cyber Hub: nicio comandă nouă pentru Kronos; am scris poziția Kronos la propunerea nouă „Kronos bare-metal v0.2”.
-- **Aștept de la tine:** alegerea 1, 2 sau 3 (o comandă în centrul de comandă e de ajuns); până atunci placa face doar S19.
