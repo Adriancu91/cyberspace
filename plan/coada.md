@@ -1703,7 +1703,7 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - raport: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
 ### S43a — Kronos-Cod etapa 1b, pregătirea: unealta pilotului de descărcare + testele ei, FĂRĂ rețea (doar procesor)
-- stare: aprobat
+- stare: in_lucru (executant, 28 oct 23:30)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând, **după ce S42 e `gata` sau `oprit`** (o singură sarcină odată; nu întrerupe S42)
 - durată maximă: ~2 ore
