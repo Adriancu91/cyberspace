@@ -176,6 +176,10 @@ S34: pre-înregistrarea 46951db (09:00:45) înaintea pornirii (09:00:52) ✓; C 
 **NU TRECE** ✓ (argmax și textul identice, bpb +0,0000005); Q8_0 **+0,0000187 ≤ 0,005** → **TRECE** ✓. 960 teste trec. C-21 e acum închisă (S29–S32).
 Pun: **S36** (granițele 1 și 2, ~2,2 ore pe placă, pornește acum): proba D = rețeta A fără adunarea pe 8 loturi — aflăm dacă răcirea singură aduce câștigul;
 apoi **S37** (granița 6, doar procesor): motorul S32 adună în float64 la LayerNorm/softmax și se remăsoară o dată, cu același prag 1e-4.
+**FEREASTRĂ OS/GPU pe workstation — 28 oct, de la ~10:05 până pe la ~12:00 (Adrian e de față, prin centrul de comandă):** workstation-ul se
+repornește în Cyber Universe OS (de pe stick). Executantul nu pornește **nicio sarcină nouă de placă** până după fereastră. O sarcină de procesor
+întreruptă de repornire (ex. S41) se reia normal la prima rulare după ce Windows revine.
+
 **Actualizare 27 oct 23:50 (centrul de comandă, prin delegarea lui Adrian din 26 oct 17:45) — răspunsuri la întrebările mici:**
 (1) Pragul motorului fără PyTorch: verdictele S32/S37 rămân cum au fost măsurate (NU TRECE la F32); pentru **testele viitoare** se folosește un
 prag relativ, scris înainte de măsurare (propunerea executantului din raportul S37), plus condiția „argmax și textul identice”. Q8_0 rămâne formatul de lucru.
