@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 11:20 — Porturile noi sunt gata (S40); Kronos #459 merge în OS; antrenarea S42 a fost întreruptă de repornire — o reiau de la zero după 12:15
+
+- **S40 gata (făcut cu tine de față):** cele două „prize” noi (`cautare`, `inferenta`) sunt în nucleu ca **opționale**, deci configurările vechi merg neschimbate; plus cele două module care le folosesc. **979 de teste trec**, 0 picate. Cererea ta S40a e închisă.
+- **Vestea bună din hub:** modelul #459 rulează în Cyber Universe OS și dă **exact** aceleași cuvinte ca Kronos pe Windows. E încă lent (~8 cuvinte/s); sesiunea OS are cererea C-29 pentru viteză.
+- **S42 oprit (corect, nu e o defecțiune):** antrenarea a mers normal o oră (placa 6.264 MB, 64 °C), apoi s-a oprit când ai repornit workstation-ul în OS. Nu există verdict.
+- **Pus în coadă (aprobat de mine, în granițe):** S42 se reia **de la zero**, cu aceleași reguli scrise dinainte, nu mai devreme de 12:15; dacă nu pornește până la 14:30, pornește la 19:00. Sesiunea veche se mută deoparte, nu se șterge nimic. S41 (Kronos-Cod, pe procesor) rămâne după ea.
+- **Aștept de la tine:** nimic urgent. Rămâne opțional Release-ul #459 (comanda `gh release create …` din rezumatul de la 08:20) — modelul a ajuns oricum pe stick prin copiere, deci OS-ul nu e blocat. Te rog doar: **la următoarea fereastră OS, spune-i centrului de comandă să oprească întâi antrenarea**, ca să nu pierdem ore pe placă.
+
 ## 28 octombrie 2026, 08:20 — REZOLVAT: calculatorul a revenit; modelul nou #459 e cel mai bun (CONFIRMAT); am nevoie de tine pentru 2 comenzi mici
 
 - **REZOLVAT:** tăcerea de azi-noapte a fost **internetul** workstation-ului (căzut ~01:00–06:01). Antrenarea n-a fost afectată; executantul a reluat singur la 06:28. Nu mai trebuie să verifici calculatorul.
@@ -223,13 +231,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - Raportul de dimineață (07:44) a fost în regulă: 895 teste trec, nicio eroare. Cyber Hub: nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
 
-## 23 octombrie 2026, 08:15 — S21: „n-a uitat nimic” e adevărat și cu nota strictă; placa liberă, aștept alegerea ta la S20
-
-- **S21 gata (verificat, câteva secunde pe procesor, fără erori):** răspunsurile „lungi” apar **doar** la tipurile de întrebări nevăzute (b2).
-  Pe restul examenelor, răspunsurile bune fără cele lungi: **117 la #415, 116 la #425** (−1; regula spunea „≤ 2 = în regulă”).
-  Deci „fără regresie” de la S17 e real, iar verificatorul nostru e corect pe tipurile învățate.
-- Raportul de dimineață (07:44) e la locul lui: toate lucrările cu cod 0, **895 teste trec**, placa liberă (681 MB, 30 °C). Nicio problemă.
-- **Nu am pus nimic nou pe placă:** pasul următor depinde de alegerea ta. Recomandarea mea rămâne **varianta 1** (închidem E1, trecem la E2);
-  dacă alegi 2, poarta strictă (F1 ≥ 0,8) e nevoie doar pe tipurile nevăzute.
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** alegerea 1, 2 sau 3 la S20 (o comandă în centrul de comandă e de ajuns). Până atunci placa stă liberă.

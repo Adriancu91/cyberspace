@@ -1598,10 +1598,20 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
-- stare: oprit (executant, 28 oct 11:00; ora 1 gata = #462 la 09:37, val_bpb 0,4158; procesul întrerupt fără cod după 09:59 de fereastra OS/GPU; fără examene, fără verdict)
+- stare: aprobat (reluare de la zero, supraveghetor 28 oct 11:20 — varianta 1 din raportul de oprire)
+- **Reluarea (supraveghetor, 28 oct 11:20):** oprirea a fost corectă; cauza = fereastra OS/GPU, nu modelul. Faci S42 **de la zero**, exact pașii de mai jos, cu:
+  - **Când:** nu înainte de **12:15** (după fereastra OS/GPU) și doar dacă Windows e pornit normal și placa e liberă. Pornește-o **înaintea S41**.
+    Dacă nu poate porni până la **14:30** (n-ar încăpea în fereastra de zi, ~4 ore), o pornești la **19:00**, în fereastra de noapte.
+  - **Înainte de pasul 4:** muți (nu ștergi) `lucru/w2_e3_reteta_A/` în `lucru/w2_e3_reteta_A_intrerupt_1028/` (pleacă și `ruleaza.lock` cu el),
+    ca regula „dosarul nu există” să fie respectată. `experiment_462.pt` rămâne în jurnal, neatins; nu e modelul examinat.
+  - **Pre-înregistrarea rămâne aceeași** (`docs/preinregistrari/2026-10-28_E3_reteta_A.md`, încă deschisă; nu s-a măsurat nimic din ea). N-o modifici;
+    în raport scrii că e reluarea după întrerupere și ora nouă de sfârșit (o scrii și aici în coadă la pornire).
+  - Pașii 1–3 deja făcuți (date, configurare, pre-înregistrare): îi verifici doar (aceeași sumă SHA-256 a amestecului, `diff` neschimbat).
+  - Nu continui din #462 (varianta 2): răcirea e programată pe 3 ore de la pornire.
+- (istoric) oprit (executant, 28 oct 11:00; ora 1 gata = #462 la 09:37, val_bpb 0,4158; procesul întrerupt fără cod după 09:59 de fereastra OS/GPU; fără examene, fără verdict)
 - motiv: antrenarea întreruptă de repornirea workstation-ului (fereastra OS/GPU 28 oct ~10:05–12:00; Windows repornit 10:50); n-am reluat-o — propunerile în raport
 - tip: placă (~3 ore de antrenare + ~1 oră examene)
-- fereastră: zi (28 oct) — pornește la prima verificare a cozii, **înaintea S41**
+- fereastră: zi (28 oct), reluarea de la 12:15 până cel târziu 14:30; altfel noaptea de la 19:00 — **înaintea S41**
 - durată maximă: 3 ore de antrenare; cel mult 5 ore pe placă în total; placa sub 7.000 MB și 83 °C
 - de ce: S38 a CONFIRMAT #459 (cel mai bun pe română, 1,2162) și rețeta A (S34). Cititorul E3 de azi, #438, e făcut din #415 cu rețeta veche
   (S27) și dă 66/100 cu `rrf_reord` (S33). Întrebarea: **dacă refacem cititorul din #459 cu rețeta A, răspunde corect la mai multe întrebări?**
