@@ -1597,7 +1597,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
-- stare: in_lucru (executant, 28 oct 08:30; antrenarea pornită ~08:35, sfârșit estimat ~11:50, examenele ~12:30)
+- stare: oprit (executant, 28 oct 11:00; ora 1 gata = #462 la 09:37, val_bpb 0,4158; procesul întrerupt fără cod după 09:59 de fereastra OS/GPU; fără examene, fără verdict)
+- motiv: antrenarea întreruptă de repornirea workstation-ului (fereastra OS/GPU 28 oct ~10:05–12:00; Windows repornit 10:50); n-am reluat-o — propunerile în raport
 - tip: placă (~3 ore de antrenare + ~1 oră examene)
 - fereastră: zi (28 oct) — pornește la prima verificare a cozii, **înaintea S41**
 - durată maximă: 3 ore de antrenare; cel mult 5 ore pe placă în total; placa sub 7.000 MB și 83 °C
@@ -1632,7 +1633,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - Dacă Adrian are nevoie de placă pentru fereastra OS/GPU: S42 nu pornește cât e anunțată fereastra (o anunță centrul de comandă).
 - pre-înregistrare: docs/preinregistrari/2026-10-28_E3_reteta_A.md (urcată înainte de pasul 4)
 - aprobat de: supraveghetor, 28 oct 08:20 (granițele 1 și 2 din REGULI_CASCADA.md; continuarea a ce a mers: S33 + S34 + S38)
-- raport: docs/rapoarte/2026-10-28_<ora>_S42_E3_reteta_A.md
+- raport: docs/rapoarte/2026-10-28_1100_S42_oprit_repornire.md
 
 ### S40a — Pasul 1 din S40: porturile `cautare` și `inferenta` în `kronos/contracte.py` (cu Adrian de față)
 - stare: propus — necesită Adrian
