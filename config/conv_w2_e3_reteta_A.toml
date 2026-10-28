@@ -5,7 +5,7 @@
 
 [platforma]
 # Linie nouă, ca `--porneste-din 459` să se aplice (lucru/w2_e3_reteta_A/ nu există la 28 oct 08:30).
-nume = "w2_e3_reteta_A"
+nume = "w2_e3_reteta_A2"
 director_lucru = "lucru"
 buget_antrenare_secunde = 3600
 experimente = 3
@@ -23,10 +23,10 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_muon:ModelGPTConversatieMuon"
-setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_e3_reteta_A/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/e3/amestec_s27.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 10800, adunare_loturi = 8, racire_finala = 0.25, optimizator = "adamw" }
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_e3_reteta_A2/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/e3/amestec_s27.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 10800, adunare_loturi = 8, racire_finala = 0.25, optimizator = "adamw" }
 
 [antrenare_lunga]
-eticheta = "S42: E3 din #459, rețeta A"
+eticheta = "S42: E3 din #459, rețeta A (linia A2)"
 
 [porturi.date]
 modul = "module.date_amestec:DateAmestec"

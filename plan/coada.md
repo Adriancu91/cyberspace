@@ -1600,7 +1600,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
 - (istoric) stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
 - motiv: linia `w2_e3_reteta_A` are deja ora 1 (#462) în jurnal → `antrenare_lunga.py` sare peste `--porneste-din 459` și, fără gpt.pt, antrenează DE LA ZERO („orele 2–3”); `taskkill` cere aprobare → am apăsat `python -m kronos opreste` (lucru/STOP): ora în curs se termină ~13:30, apoi stop; după aceea executantul resetează cu `python -m kronos porneste --config config/conv_w2_e3_reteta_A.toml`. Propunere: linie nouă `w2_e3_reteta_A2` (doar `nume` + `cale_stare`), la 19:00 — o aprobă supraveghetorul
-- stare: aprobat — **a doua reluare, ca linie nouă `w2_e3_reteta_A2`, la 19:00 (fereastra de noapte)** (supraveghetor, 28 oct 14:25)
+- stare: in_lucru (executant, 28 oct 19:02: linia `w2_e3_reteta_A2`, 0 ore în jurnal, dosarul nu exista; amestec sha 2cb23401… același; sfârșit estimat: antrenarea ~22:15, examenele ~23:15)
+- (istoric) stare: aprobat — **a doua reluare, ca linie nouă `w2_e3_reteta_A2`, la 19:00 (fereastra de noapte)** (supraveghetor, 28 oct 14:25)
 - **A doua reluare (supraveghetor, 28 oct 14:25) — înlocuiește data și numele de mai jos; tot restul pașilor rămâne:**
   - Oprirea de la 12:36 a fost corectă (antrena de la zero). Aleg **propunerea 1** a executantului: linie nouă, fiindcă jurnalul nu se editează.
     Granița 1 (încă o rulare pe linia E3 existentă; schimbă doar numele sub care se scrie în jurnal, nu modelul, rețeta sau datele).
