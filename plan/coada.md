@@ -1566,7 +1566,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
   ce S40a e `gata` și toate testele trec. Când văd S40a gata, trec S40b pe `aprobat`. Executantule: nu reîncerca S40.
 
 ### S41 — C-28 E4 „Kronos-Cod”, etapa 1a: sursele + licențele, examenul de cod scris înainte, cutia izolată (doar procesor, fără descărcări)
-- stare: in_lucru (executant, 28 oct 14:05; S42 e `oprit`, nu `aprobat`, deci S41 e următoarea; butonul STOP al S42 resetat după ce procesul 21116 s-a încheiat la 13:35)
+- stare: gata (executant, 28 oct 14:15, cbac20a: SURSE.md ~3,0 mld simboluri estimate, 6 surse fără cont, 8 la „necesită Adrian”; examenul ascuns 200 de probleme, sha 90fc64cd…3749, referințe 100 %, gol/None 0 %; cutia: tot ce cerea e blocat, fără nimic instalat, fără firewall; 999 teste trec, 1 sărit)
 - tip: procesor (fără placă); nu încurcă S38–S40
 - fereastră: oricând — **nu depinde de S40** (supraveghetor, 28 oct 08:20); dacă S42 e `aprobat` și nepornită, pornește întâi S42
 - durată maximă: 4 ore
@@ -1595,7 +1595,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare încă; pragurile pentru etapa 2 (pass@10 pe setul ascuns) le scriu eu după etapa 1a, înainte de orice antrenare
 - aprobat de: Adrian (COMENZI.md C-28, 27 oct 23:45, prin centrul de comandă; DECIZII 27 oct 23:45); pașii (doar etapa 1a) scriși de supraveghetor, 28 oct 02:15
-- raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
+- raport: docs/rapoarte/2026-10-28_1415_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
 - stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
