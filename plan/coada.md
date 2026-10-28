@@ -1566,7 +1566,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
   ce S40a e `gata` și toate testele trec. Când văd S40a gata, trec S40b pe `aprobat`. Executantule: nu reîncerca S40.
 
 ### S41 — C-28 E4 „Kronos-Cod”, etapa 1a: sursele + licențele, examenul de cod scris înainte, cutia izolată (doar procesor, fără descărcări)
-- stare: aprobat
+- stare: in_lucru (executant, 28 oct 14:05; S42 e `oprit`, nu `aprobat`, deci S41 e următoarea; butonul STOP al S42 resetat după ce procesul 21116 s-a încheiat la 13:35)
 - tip: procesor (fără placă); nu încurcă S38–S40
 - fereastră: oricând — **nu depinde de S40** (supraveghetor, 28 oct 08:20); dacă S42 e `aprobat` și nepornită, pornește întâi S42
 - durată maximă: 4 ore
