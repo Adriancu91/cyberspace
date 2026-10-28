@@ -1675,7 +1675,8 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
 
 ### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
-- stare: aprobat (Adrian, prin centrul de comandă, 28 oct 18:00 — delegarea din 26 oct 17:45; Kronos-Cod e ideea lui, C-28)
+- stare: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
+- motiv: cere aprobarea lui Adrian: descărcare — „ce faci” nu numește unealta de descărcare (nu există încă); regula executantului cere „prin unealta scrisă acolo”. Propunerile în raport.
 - tip: procesor + rețea (fără placă); pilotul ~1 oră; descărcarea întreagă ~20 de ore (2–3 nopți, în flux, fără arhive pe disc); curățarea 3–5 ore; tokenizerul 3–6 ore
 - fereastră: oricând (nu încurcă placa)
 - ce faci (după „da”): exact propunerea din `docs/rapoarte/2026-10-28_1415_S41_kronos_cod_etapa1a.md`, §5: **întâi doar pilotul**, cu toate filtrele din
@@ -1687,5 +1688,5 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
   (4) cutia mai tare (regulă de firewall pentru python.exe sau cont Windows separat) — nu e nevoie acum, ci înainte de etapa 3 (auto-îmbunătățirea).
 - pre-înregistrare: pragurile etapei 2 (pass@10 pe setul ascuns) le scrie supraveghetorul înainte de orice antrenare Kronos-Cod
 - aprobat de: Adrian, 28 oct 18:00, prin centrul de comandă. Răspunsuri: (1) **da** pentru pilot; descărcarea întreagă după ce supraveghetorul verifică pilotul; (2) data-limită **29 iunie 2021** (fără cod scris de LLM); (3) dintre sursele „necesită Adrian”: **niciuna deocamdată** (cum recomanzi); (4) cutia mai tare: înainte de etapa 3, nu acum. Tokenizerul nou: tot după al doilea „da”.
-- raport: docs/rapoarte/<data>_<ora>_S43_kronos_cod_pilot.md
+- raport: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
