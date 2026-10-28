@@ -1510,7 +1510,8 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - raport: docs/rapoarte/2026-10-28_0712_S39_kgr1_pentru_os.md
 
 ### S40 — Porturile `cautare` și `inferenta` în nucleul `kronos/` + două module-adaptor (doar procesor)
-- stare: aprobat
+- stare: oprit (executant, 28 oct 07:33; nimic atins în `kronos/`; 965 teste trec)
+- motiv: cere aprobarea lui Adrian: schimbare în `kronos/contracte.py` (executantul n-are voie în `kronos/`, iar regula `Edit(kronos/**)` o blochează); variante în raport
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`); nu încurcă S38/S39
 - fereastră: oricând, după S39 partea A
 - durată maximă: 2 ore
@@ -1537,7 +1538,7 @@ Ordinea pe procesor: **S39 → S40 → S41**. Placa pentru ziua de 28 oct o deci
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport; **nu** ocoli testele.
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (27 oct 23:49, „Da” prin centrul de comandă; DECIZII.md din hub; nota din coadă 27 oct 23:50); pașii scriși de supraveghetor, 28 oct 02:15
-- raport: docs/rapoarte/2026-10-28_<ora>_S40_porturi_cautare_inferenta.md
+- raport: docs/rapoarte/2026-10-28_0733_S40_oprit_kronos.md
 
 ### S41 — C-28 E4 „Kronos-Cod”, etapa 1a: sursele + licențele, examenul de cod scris înainte, cutia izolată (doar procesor, fără descărcări)
 - stare: aprobat
