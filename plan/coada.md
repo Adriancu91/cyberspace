@@ -1586,7 +1586,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - raport: docs/rapoarte/2026-10-28_<ora>_S41_kronos_cod_etapa1a.md
 
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
-- stare: aprobat
+- stare: in_lucru (executant, 28 oct 08:30)
 - tip: placă (~3 ore de antrenare + ~1 oră examene)
 - fereastră: zi (28 oct) — pornește la prima verificare a cozii, **înaintea S41**
 - durată maximă: 3 ore de antrenare; cel mult 5 ore pe placă în total; placa sub 7.000 MB și 83 °C
