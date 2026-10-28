@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 octombrie 2026, 23:15 — S42 gata: INFIRMAT (modelul mai bun nu a făcut un „cititor” mai bun); urmează unealta pilotului de cod (S43a) și o probă mică cu bucățile de text (S44)
+
+- **S42 verificat de mine: INFIRMAT.** Cititorul refăcut din #459 (#466) răspunde corect la **66 din 100**, exact cât cel vechi (#438, 66); pragul cerea +5.
+  Pe un examen de control pierde chiar 3 puncte. Româna nu s-a stricat. Concluzia: problema nu e modelul, ci **bucățile de text** pe care le primește. Cititorul rămâne #438.
+- **Nimic nu rulează pe placă acum** (S42 s-a terminat la 22:50). Toate cele **1003 teste trec**.
+- **Urmează (aprobate, în granițe):** întâi **S43a** (unealta pilotului de descărcare Kronos-Cod, fără internet), apoi **S44**: păstrăm din fiecare bucată
+  doar propozițiile legate de întrebare, ca să încapă mai multe; măsurat pe un set de control (nu pe cel folosit deja de 5 ori), pragurile scrise înainte, sub 1 oră pe placă.
+- **Aștept de la tine:** nimic.
+
 ## 28 octombrie 2026, 20:25 — S42 rulează (pornită corect la 19:02); pilotul Kronos-Cod (S43) s-a oprit corect: îi lipsea unealta, o scrie executantul azi-noapte
 
 - **Rulează acum S42** (cititorul E3 refăcut din #459), ca linia nouă `w2_e3_reteta_A2`, pornită la **19:02**, cu regulile urcate înainte (am verificat: pragurile sunt copiate exact).
@@ -218,14 +227,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. Când te întorci: „da”/„nu” pentru E3 cu antrenare pe placă și pragul (cifrele S25 vin probabil la noapte).
 
-## 23 octombrie 2026, 20:15 — E2 (specialiști + ruter): INFIRMAT, verificat; acum pregătirea memoriei (E3), doar pe procesor
-
-- **S23 gata (11:00–17:31, fără erori, placa sub 6.455 MB și 64 °C):** cei 3 specialiști împreună cu ruterul au **137 din 210**, sub #415 (**144**).
-  Și cu un ruter perfect ar fi avut 142. Specialistul pe „fapte/nume/ani/locuri” are 98, sub pragul de 100. Am adunat cifrele din nou: se potrivesc.
-  **Verdict: INFIRMAT** — rezultat negativ, dar clar: fiecare specialist uită repede tot ce nu e familia lui, iar câștigul la da/nu (+1) e prea mic.
-- **E2 se închide.** Nu pun altă variantă de specialiști fără tine.
-- **Pus în coadă, cum ai decis la 10:20:** **S24** (doar procesor, ~2–4 ore, fără antrenare): indexul nostru de memorie peste Wikipedia în română
-  (deja descărcată) și măsurarea lui: la o întrebare, găsește singur bucata de text cu răspunsul? Cu cifrele astea decizi dacă merită antrenarea E3.
-- **Placa rămâne liberă la noapte** (nimic aprobat pentru ea). Dacă te întorci, workstation-ul e liber pentru fereastra OS/GPU oricând.
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. După S24 (raportul vine probabil la noapte), un „da”/„nu” pentru E3 cu antrenare pe placă.

@@ -210,6 +210,12 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 **S41 nu depinde de S40** → poate porni. Pun **S42** pe placă (ziua 28 oct, ~4 ore): cititorul E3 refăcut din cel mai bun model (#459) cu rețeta A.
 **Ordinea pentru executant: întâi S42 (placa; pre-înregistrarea înainte), apoi S41 (procesor) la rularea următoare, cât merge S42.**
 
+**Actualizare 28 oct 23:15 (supraveghetor) — S42 verificat: INFIRMAT; urmează S43a (procesor), apoi S44 (bucăți tăiate pe propoziții, examen scurt pe placă):**
+S42: pre-înregistrarea E3_reteta_A2 urcată înainte de pornire (df7eb34, 19:00) ✓; pornit din #459 ✓; (a) S26 `rrf_reord` #466 66 / #438 66 → **Δ 0 ≤ +1 → INFIRMAT** ✓
+(în plus S4 −3, peste cele 2 permise); română curat 1,2148 (fără stricăciune); placa ≤ 5.374 MB; 1003 teste trec. Cititorul rămâne **#438**; nu mai repetăm „alt model / altă rețetă” pe E3.
+Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (unealta nu are „înlocuită”) — acceptat.
+**Ordinea pentru executant: întâi S43a (procesor, fără rețea), apoi S44 (procesor + sub 1 oră pe placă; pre-înregistrarea înainte).**
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1600,6 +1606,7 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 ### S42 — Cititorul E3 refăcut din #459 cu rețeta A (cel mai bun model + cea mai bună rețetă → răspunde mai bine?) (placa)
 - (istoric) stare: oprit (executant, 28 oct 12:36: reluarea pornită 12:29:43, proces 21116; amestec sha 2cb23401… același, diff-urile config neschimbate; dosarul vechi mutat în lucru/w2_e3_reteta_A_intrerupt_1028/)
 - motiv: linia `w2_e3_reteta_A` are deja ora 1 (#462) în jurnal → `antrenare_lunga.py` sare peste `--porneste-din 459` și, fără gpt.pt, antrenează DE LA ZERO („orele 2–3”); `taskkill` cere aprobare → am apăsat `python -m kronos opreste` (lucru/STOP): ora în curs se termină ~13:30, apoi stop; după aceea executantul resetează cu `python -m kronos porneste --config config/conv_w2_e3_reteta_A.toml`. Propunere: linie nouă `w2_e3_reteta_A2` (doar `nume` + `cale_stare`), la 19:00 — o aprobă supraveghetorul
+- verificat de supraveghetor (28 oct 23:15): **INFIRMAT** confirmat după prag (Δ 0 ≤ +1; S4 −3); cititorul rămâne #438.
 - stare: gata (executant, 28 oct 23:03: examenele 22:30–22:50, cod 0; **INFIRMAT** — S26 `rrf_reord` #466 66 / #438 66 (Δ 0 ≤ +1); noaptea 10 70 / 69; S4 36 / 39 (−3); română curat #466 1,2148 / #459 1,2162; 1003 teste trec, 1 sărit)
 - stare veche: in_lucru (executant, 28 oct 22:31: antrenarea 19:00–22:12, cod 0 (jurnalul cascadei mutat în lucru/cascada/S42_1900.*); examenele pornite 22:30 prin cascadă, `python -X utf8 unelte/e3_reteta_A.py` (unealtă nouă, d725f43), proces 15912; sfârșit estimat ~23:15. Înainte: 19:02 linia `w2_e3_reteta_A2`, 0 ore în jurnal, dosarul nu exista; amestec sha 2cb23401… același)
 - (istoric) stare: aprobat — **a doua reluare, ca linie nouă `w2_e3_reteta_A2`, la 19:00 (fereastra de noapte)** (supraveghetor, 28 oct 14:25)
@@ -1722,3 +1729,40 @@ S40: corect oprit — executantul n-are voie în `kronos/`. Împărțit: **S40a*
 - pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
 - aprobat de: supraveghetor, 28 oct 20:25 (granița 5; varianta 1 propusă de executant în raportul 2026-10-28_1803)
 - raport: docs/rapoarte/2026-10-2X_<ora>_S43a_unealta_pilot.md
+
+### S44 — E3: bucățile tăiate pe propozițiile utile (încap mai multe în 448 de simboluri → răspunde mai bine?) (procesor + sub 1 oră pe placă)
+- stare: aprobat
+- tip: procesor + placă scurt (examen, nimic antrenat)
+- fereastră: oricând, **după ce S43a e `gata` sau `oprit`** (o singură sarcină odată); partea pe placă doar dacă placa e liberă
+- durată maximă: 3 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
+- de ce: S42 a INFIRMAT (Δ 0): alt model de plecare nu face un cititor mai bun. Raportul S42 (propunerea 2) arată unde e pierderea: cu `rrf_reord`
+  răspunsul e în primele 3 bucăți aduse la 83 din 100, dar în bucățile care încap în 448 de simboluri doar la 72. Contextul modelului e 512
+  (mai lung = linie nouă, cere „da”-ul lui Adrian), deci încercăm varianta din granițe: **păstrăm din fiecare bucată doar propozițiile legate de
+  întrebare**, ca să încapă mai multe bucăți. Granițele 2 și 5 (examen + unealtă nouă în `unelte/` cu teste). Măsurăm pe **validare** (eșantionul
+  2048, ca la S35), **nu pe S26** (folosit deja de 5 ori).
+- ce faci:
+  1. **Unealta (procesor):** în `unelte/e3_citire_reord.py` (sau un fișier nou `unelte/e3_taiere.py`, importat de acolo) o funcție deterministă
+     `taie(bucata, intrebare)`: împarte bucata în propoziții (`.`, `!`, `?`, rând nou), dă fiecărei propoziții un scor = câte rădăcini din întrebare
+     conține (`radacina()` din `unelte/e3_reordonare.py`; fără cuvintele de legătură), păstrează **în ordinea inițială** propozițiile cu scor ≥ 1, plus
+     prima propoziție a bucății (titlul/subiectul); dacă nicio propoziție nu are scor ≥ 1, bucata rămâne întreagă. Fără model, fără întâmplare.
+     Teste noi fără placă: ordinea păstrată, bucata neschimbată când nu se potrivește nimic, determinism, că regula „câte încap în 448” numără
+     bucățile tăiate. **Nu schimbi** ordinea bucăților, promptul S27, verificatorul S16 și nici regula de 448.
+  2. **Pre-înregistrarea** `docs/preinregistrari/2026-10-29_E3_bucati_taiate.md` (sau data zilei), **urcată (commit + push) ÎNAINTE de pasul 3**.
+     Modelul: **#438** (cititorul de azi), și ca judecător `rrf_reord` în ambele brațe (deci aceeași ordine a bucăților; diferă doar tăierea).
+     Setul: eșantionul **2048** din `lucru/e3/validare_s29.json`, aceleași 500 de întrebări ca la S35 (fără cele văzute de #438).
+     Măsura care decide: Δ = procentul de răspunsuri corecte cu bucăți **tăiate** − procentul cu bucăți **întregi**, **în aceeași rulare**.
+     **CONFIRMAT** dacă **Δ ≥ +2,0 puncte**; **INFIRMAT** dacă **Δ < +0,5 puncte** (inclusiv negativ); între ele: **NECLAR**.
+     Alături (nu decid): „răspunsul în bucățile date” în ambele brațe; câte bucăți încap în medie; pe tipuri (definiții, născut, an, regizat, rest);
+     reparate / stricate; eșantionul 1024. Spus cinstit: validarea vine din `text_v3` (văzut de #415), iar `rrf_reord` a fost ales pe validare.
+     Plus așteptările tale în cifre.
+  3. **Examenul, o singură rulare** (opțiune nouă, de ex. `examen --set validare --taiere`, care rulează ambele brațe în același proces și refuză dacă
+     ieșirea există deja) → `lucru/e3/examen_s44.json`. Paznicul S17 la fiecare 50 de întrebări; peste 7.000 MB → oprești, `oprit`, scrii cifrele.
+  4. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-2X_<ora>_S44_E3_bucati_taiate.md`, cu verdictul strict după
+     pre-înregistrare. Dacă iese CONFIRMAT, propui verificarea pe un set neatins (nu pe S26); dacă iese INFIRMAT, propui ce ai învățat.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, datele de examen, `text_v3`, lista S26, `validare_s29.json`, indexurile din
+  `lucru/e3/` (doar citire), `unelte/verificator_text.py`, #415, #438, #459, #466 și liniile w2. Nimic antrenat, descărcat sau instalat; nimic în
+  interfață; nimic din `lucru/` în Git.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: docs/preinregistrari/2026-10-29_E3_bucati_taiate.md (urcată înainte de pasul 3)
+- aprobat de: supraveghetor, 28 oct 23:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S42)
+- raport: docs/rapoarte/2026-10-2X_<ora>_S44_E3_bucati_taiate.md
