@@ -1703,7 +1703,7 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - raport: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
 ### S43a — Kronos-Cod etapa 1b, pregătirea: unealta pilotului de descărcare + testele ei, FĂRĂ rețea (doar procesor)
-- stare: in_lucru (executant, 28 oct 23:30)
+- stare: gata (executant, 28 oct 23:39, e650232: `unelte/kronos_cod/descarca.py pilot` + 48 de teste fără rețea; 1051 teste trec, 1 sărit; nimic descărcat, pilotul NEpornit; comanda pentru S43 în raport)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând, **după ce S42 e `gata` sau `oprit`** (o singură sarcină odată; nu întrerupe S42)
 - durată maximă: ~2 ore
@@ -1728,7 +1728,7 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
 - aprobat de: supraveghetor, 28 oct 20:25 (granița 5; varianta 1 propusă de executant în raportul 2026-10-28_1803)
-- raport: docs/rapoarte/2026-10-2X_<ora>_S43a_unealta_pilot.md
+- raport: docs/rapoarte/2026-10-28_2339_S43a_unealta_pilot.md
 
 ### S44 — E3: bucățile tăiate pe propozițiile utile (încap mai multe în 448 de simboluri → răspunde mai bine?) (procesor + sub 1 oră pe placă)
 - stare: aprobat
