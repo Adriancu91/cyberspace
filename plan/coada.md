@@ -1731,7 +1731,7 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - raport: docs/rapoarte/2026-10-28_2339_S43a_unealta_pilot.md
 
 ### S44 — E3: bucățile tăiate pe propozițiile utile (încap mai multe în 448 de simboluri → răspunde mai bine?) (procesor + sub 1 oră pe placă)
-- stare: aprobat
+- stare: in_lucru (executant, 29 oct 00:00)
 - tip: procesor + placă scurt (examen, nimic antrenat)
 - fereastră: oricând, **după ce S43a e `gata` sau `oprit`** (o singură sarcină odată); partea pe placă doar dacă placa e liberă
 - durată maximă: 3 ore în total; cel mult 1 oră pe placă; placa sub 7.000 MB și 83 °C
