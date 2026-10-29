@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 05:15 — Pilotul de descărcare a codului (S43) e gata și verificat: bun; descărcarea întreagă așteaptă „da”-ul tău
+
+- **S43 (pilotul Kronos-Cod) verificat de mine: bun.** În 22 de minute, din 1.003 pachete de cod au rămas **688** cu licență liberă și dinainte de iunie 2021;
+  după curățare: **0,38 GB de cod curat, ~107 milioane de simboluri** (filtrele au aruncat 33 % — cod generat, copiat, duplicat). Cifrele se adună. Pe disc rămân 73 GB liberi. 1058 de teste trec.
+- **Estimarea pentru tot:** ~10–22 GB de cod curat, **~3–6 miliarde de simboluri** (ținta era ~3), cam **15–25 de ore** de descărcare (2–3 nopți), doar pe procesor și internet.
+- **Pus în coadă, aprobat de mine (în granițe): S46a** — executantul adaugă uneltei modul „complet” și testele lui, **fără internet**, ca descărcarea să poată porni imediat după „da”.
+- **Propus, așteaptă „da”-ul tău: S46 = descărcarea întreagă** (nu folosește placa). Rămâne și **S45** (o noapte de antrenare din #459); fără „da”, placa video stă liberă.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea întreagă) și pentru **S45** — o comandă în hub ajunge.
+
 ## 29 octombrie 2026, 02:15 — S44 gata: INFIRMAT (tăierea bucăților strică); unealta de descărcare a codului e verificată → pilotul pornește
 
 - **S44 verificat de mine: INFIRMAT.** Cu bucățile de text tăiate, cititorul răspunde corect la **297 din 500**, față de **336** cu bucățile întregi (−7,8 puncte).
@@ -211,15 +220,3 @@
 - **Aștept de la tine:** nimic urgent. Două mici întrebări din raportul de azi al executantului, când ai timp: (1) raportul de dimineață rămâne la 06:40 (ora de iarnă) sau îl muți la 07:40? (2) S28 (oprirea) o închidem ca „nu mai e nevoie”?
 
 S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: nimic în lucru (nicio sarcină `in_lucru`, niciun proces Python greu, placa fără calcule), `git status` curat, push reușit (d68bd85). Dar comanda `shutdown /s /t 120` e blocată de permisiunile rulării fără om („requires approval”), așa că n-am putut-o da. Calculatorul rămâne pornit, fără să lucreze nimic; executantul doar verifică la 30 de minute. Ca să-l oprești: din centrul de comandă sau direct, `shutdown /s /t 120`; sau adaugi `Bash(shutdown:*)` la permisiunile executantului și pui S28 înapoi pe `aprobat`.
-
-## 24 octombrie 2026, 02:15 — Căutarea mai bună (S25): pe întrebări noi câștigul e în zgomot; acum un examen nou, curat (doar procesor)
-
-- **S25 gata și verificat (doar procesor, 23:38–00:05, fără erori):** am încercat 6 feluri de căutare mai bună. Cea aleasă pe **întrebări noi**
-  găsește răspunsul în primele 5 la **84,8 %**, față de **84,6 %** înainte: **+0,2 puncte**, sub pragul meu de 3 → **nu e un câștig real**.
-  Pe cele 160 de întrebări de examen urcă mult (**86,9 %** și articolul **90,6 %**), dar cifrele sunt umflate: ideile au venit chiar din
-  greșelile de acolo. Ce e bun: n-a stricat nimic și e mai rapidă. Am adunat cifrele din nou: se potrivesc. Teste: 907 trec.
-- **Pus în coadă: S26** (doar procesor, ~1 oră): un examen nou de 100 de întrebări pe care nu le-a văzut nimeni, măsurat o singură dată —
-  cifra curată pentru pragul tău. Plus cât de des e răspunsul în primele 3 bucăți (ce ar primi modelul în E3).
-- **S27 = E3 cu antrenare pe placă (~4 ore): propus, așteaptă „da”-ul tău.** Criterii propuse: ≥ 60 % răspunsuri corecte fără text dat. **Placa rămâne liberă.**
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Când te întorci (după cifrele S26): „da”/„nu” pentru S27 și pragul E3.

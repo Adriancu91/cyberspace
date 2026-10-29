@@ -1719,6 +1719,10 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   (4) cutia mai tare (regulă de firewall pentru python.exe sau cont Windows separat) — nu e nevoie acum, ci înainte de etapa 3 (auto-îmbunătățirea).
 - pre-înregistrare: pragurile etapei 2 (pass@10 pe setul ascuns) le scrie supraveghetorul înainte de orice antrenare Kronos-Cod
 - aprobat de: Adrian, 28 oct 18:00, prin centrul de comandă. Răspunsuri: (1) **da** pentru pilot; descărcarea întreagă după ce supraveghetorul verifică pilotul; (2) data-limită **29 iunie 2021** (fără cod scris de LLM); (3) dintre sursele „necesită Adrian”: **niciuna deocamdată** (cum recomanzi); (4) cutia mai tare: înainte de etapa 3, nu acum. Tokenizerul nou: tot după al doilea „da”.
+- verificat de supraveghetor, 29 oct 05:15: cifrele se adună (330 + 355 + 3 = 688 păstrate; 315 respinse = 180 + 67 + 51 + 11 + 4 + 2, și pe surse 170 / 145;
+  filtrele însumează 32,7 % = 0,5583 → 0,3757 GB; 0,3757 GB / 3,5 octeți ≈ 107 mil. simboluri; pe surse 280,7 + 74,1 + 21,0 = 375,8 MB); C: 73 GB > 40 GB;
+  21,7 min < 3 ore; nimic instalat, nimic în `kronos/`/examen. **Pilotul e bun.** Estimarea pentru tot: ~10–22 GB curat, ~3–6 mld simboluri, ~15–25 de ore —
+  în ținta din SURSE.md (~3 mld). Unealta are doar modul `pilot` → S46a (modul `complet`, fără rețea, în granițe), apoi S46 (descărcarea întreagă, cere „da”).
 - raport: docs/rapoarte/2026-10-29_0303_S43_pilot.md (pilotul); înainte: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
 ### S43a — Kronos-Cod etapa 1b, pregătirea: unealta pilotului de descărcare + testele ei, FĂRĂ rețea (doar procesor)
@@ -1804,3 +1808,40 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
 - raport: —
 
+### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
+- stare: aprobat (supraveghetor, 29 oct 05:15)
+- tip: procesor (fără placă, fără rețea)
+- fereastră: oricând (nu încurcă placa); o singură sarcină odată
+- durată maximă: ~2 ore
+- de ce: pilotul S43 a ieșit bun (verificat mai sus), dar `unelte/kronos_cod/descarca.py` are doar modurile `pilot` și `rezumat`. Ca descărcarea întreagă (S46)
+  să poată porni imediat după „da”-ul lui Adrian, unealta trebuie să existe și să fie testată dinainte. Granița 5 din REGULI_CASCADA.md. **Aici nu se descarcă nimic.**
+- ce faci:
+  1. În `unelte/kronos_cod/descarca.py` adaugi modul `complet`, care folosește **aceleași** filtre, licențe, data-limită 29 iunie 2021, ritm (crates ≤ 1 cerere/s,
+     PyPI ≤ 5 cereri/s), User-Agent, arhive doar în memorie și oprirea sub 40 GB liberi ca modul `pilot` (nu le copiezi: le refolosești). Sursele = toate cele 6
+     din `docs/kronos_cod/SURSE.md`, exact cum sunt scrise acolo: PyPI top **30.000** (`hugovk/top-pypi-packages`), crates.io din dump-ul public (`db-dump.tar.gz`;
+     ultima versiune dinainte de dată), depozitele Git din rândurile 3, 4, 6 la un tag dinainte de dată, FreeBSD `release/13.0.0` doar fișierele cu antet BSD,
+     fără `contrib/` și `gnu/`. Ieșirea în `lucru/kronos_cod/complet/` (nimic din `lucru/` în Git). Implicit `--iesire lucru/kronos_cod/complet`.
+  2. **Reluarea e obligatorie** (descărcarea ține 2–3 nopți): după o oprire (rețea, repornire, Ctrl+C), aceeași comandă continuă de unde a rămas, fără să
+     dubleze nimic; deduplicarea (exactă + aproape-duplicat) e globală, peste toate sursele, în ordinea din SURSE.md (depozitele mari întâi, apoi PyPI, apoi crates).
+  3. Opțiunea `--limita-ore N` (oprire curată după N ore, cu rezumatul scris), ca descărcarea să poată fi împărțită pe nopți.
+  4. Rezumatul JSON la fel ca la pilot (GB brut → curat, fișiere, simboluri, fiecare filtru, respinse pe motive), plus pe sursă.
+  5. Teste noi în `teste/test_kronos_cod_descarca.py`, **fără rețea** (orice conexiune face testul să pice): reluarea fără dubluri, deduplicarea între surse,
+     filtrul FreeBSD pe antet + dosarele aruncate, `--limita-ore` (timp simulat), oprirea sub 40 GB, că `pilot` dă exact aceleași rezultate ca înainte.
+  6. `python -m pytest`: toate trec. Commit + push. Raport `docs/rapoarte/2026-10-29_<ora>_S46a_unealta_complet.md` cu **comanda exactă** pentru S46
+     și estimarea de timp/spațiu. **Nu pornești descărcarea.**
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `docs/kronos_cod/EXAMEN.md`, examenul de cod ascuns, `unelte/kronos_cod/cutie.py`,
+  `lucru/kronos_cod/pilot/`. Nimic instalat (dacă îți lipsește o bibliotecă, te oprești și scrii asta).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
+- pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
+- aprobat de: supraveghetor, 29 oct 05:15 (granița 5)
+- raport: —
+
+### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
+- stare: **propus — necesită Adrian** (supraveghetor, 29 oct 05:15; orice descărcare nouă cere „da”-ul lui; „da”-ul din 28 oct 18:00 a fost doar pentru pilot)
+- tip: procesor + rețea (fără placă); se poate rula și cât e ceva pe placă
+- fereastră: după S46a `gata` și verificat de supraveghetor, și după „da”
+- ce ar face: comanda din raportul S46a (modul `complet`), pe bucăți cu `--limita-ore`; ~10–22 GB cod curat pe disc (C: ar rămâne ~50–63 GB liberi;
+  oprire automată sub 40 GB), ~3–6 mld simboluri estimate, doar sursele fără cont, data-limită 29 iunie 2021. Raport după fiecare bucată. Tokenizerul pe cod
+  NU se antrenează (al doilea „da”, separat).
+- aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
+- raport: —
