@@ -11,6 +11,10 @@ Firele OpenBLAS se aleg doar la pornirea procesului (OPENBLAS_NUM_THREADS), așa
 Folosire:
     python -X utf8 -m module.calcul.banc toate --kgr lucru/export/kronos_459_q8_0.kgr --iesire lucru/ccm/s47.json
     python -X utf8 -m module.calcul.banc incearca --varianta transpus --kgr ...    # un singur proces, fără fire schimbate
+    python -X utf8 -m module.calcul.banc placa --iesire lucru/ccm/s49.json        # S49: procesor (referința) + placa
+
+S49: variantele pe placă (`placa_fp32/fp16/bf16`) trec prin aceeași verificare; una respinsă se măsoară totuși (ca
+informație), dar nu poate fi aleasă. Memoria plăcii se notează la fiecare (PyTorch maxim + nvidia-smi la final).
 """
 
 from __future__ import annotations
@@ -128,17 +132,42 @@ def incearca(varianta: str, kgr: str | Path, simboluri: int = SIMBOLURI, repetar
              vectori: bool = True) -> dict[str, Any]:
     """În procesul de acum: verificarea pe vectorii KGR1 (5 simboluri, ca în vectori.json) și pe `kgr`, apoi măsurarea
     (doar dacă e acceptată)."""
-    from module.calcul.variante import VARIANTE
+    from module.calcul.variante import TOATE, VARIANTE_PLACA
 
-    fabrica = VARIANTE[varianta]
+    fabrica = TOATE[varianta]
     asteptate = _asteptate_vectori() if vectori else {}
     v_vec = (verifica(fabrica, sorted(VECTORI.glob("*.kgr")), TEXTE_VERIFICARE, 5, asteptate=asteptate)
              if asteptate else None)
     v_kgr = verifica(fabrica, [kgr], TEXTE_VERIFICARE, simboluri)
     acceptata = v_kgr["acceptata"] and (v_vec is None or v_vec["acceptata"])
-    return {"varianta": varianta, "fire": os.environ.get("OPENBLAS_NUM_THREADS", "toate"), "acceptata": acceptata,
-            "verificare_vectori": v_vec, "verificare_model": v_kgr,
-            "masurare": masoara(fabrica, kgr, TEXT_MASURARE, simboluri, repetari) if acceptata else None}
+    rez = {"varianta": varianta, "fire": os.environ.get("OPENBLAS_NUM_THREADS", "toate"), "acceptata": acceptata,
+           "verificare_vectori": v_vec, "verificare_model": v_kgr,
+           # S49: o variantă de placă respinsă se măsoară totuși (doar ca informație, nu intră în alegere)
+           "masurare": (masoara(fabrica, kgr, TEXT_MASURARE, simboluri, repetari)
+                        if acceptata or varianta in VARIANTE_PLACA else None)}
+    if varianta in VARIANTE_PLACA:
+        rez["memorie_placa_mb"] = _memorie_placa()
+    return rez
+
+
+def _memorie_placa() -> dict[str, Any] | None:
+    """S49: maximul PyTorch în procesul acesta + ce vede nvidia-smi pe toată placa (cu contextul CUDA), la final."""
+    try:
+        import torch
+    except ImportError:
+        return None
+    if not torch.cuda.is_available():
+        return None
+    rez: dict[str, Any] = {"alocat_max": torch.cuda.max_memory_allocated() / 2 ** 20,
+                           "rezervat_max": torch.cuda.max_memory_reserved() / 2 ** 20}
+    try:
+        r = subprocess.run(["nvidia-smi", "--query-gpu=memory.used,temperature.gpu", "--format=csv,noheader,nounits"],
+                           capture_output=True, text=True, timeout=20)
+        mem, temp = (float(x) for x in r.stdout.strip().splitlines()[0].split(","))
+        rez.update(nvidia_smi_mb=mem, temperatura=temp)
+    except (OSError, ValueError, IndexError, subprocess.SubprocessError):
+        pass
+    return rez
 
 
 def in_proces_nou(varianta: str, fire: str, kgr: str | Path, simboluri: int = SIMBOLURI,
@@ -159,21 +188,34 @@ def in_proces_nou(varianta: str, fire: str, kgr: str | Path, simboluri: int = SI
 
 
 def toate(kgr: str | Path, variante: list[str] | None = None, fire: tuple[str, ...] = FIRE,
-          simboluri: int = SIMBOLURI, repetari: int = REPETARI) -> dict[str, Any]:
+          simboluri: int = SIMBOLURI, repetari: int = REPETARI,
+          combinatii: list[tuple[str, str]] | None = None) -> dict[str, Any]:
+    """`combinatii` (S49): perechile (variantă, fire) de încercat, în locul tuturor variantelor × toate firele."""
     from module.calcul.variante import REFERINTA, VARIANTE
 
-    rez = [in_proces_nou(v, f, kgr, simboluri, repetari) for v in (variante or list(VARIANTE)) for f in fire]
+    if combinatii is None:
+        combinatii = [(v, f) for v in (variante or list(VARIANTE)) for f in fire]
+    rez = [in_proces_nou(v, f, kgr, simboluri, repetari) for v, f in combinatii]
     ref = next((r for r in rez if r["varianta"] == REFERINTA and r["fire"] == "toate" and r["acceptata"]), None)
     for r in rez:
         if r["acceptata"] and ref is not None:
             r["fata_de_referinta_total"] = ref["masurare"]["total"]["median"] / r["masurare"]["total"]["median"]
             r["fata_de_referinta_simb_s"] = (r["masurare"]["simboluri_pe_secunda"]["median"]
                                              / ref["masurare"]["simboluri_pe_secunda"]["median"])
-    acceptate = [r for r in rez if r["acceptata"]]
-    alesa = min(acceptate, key=lambda r: r["masurare"]["total"]["median"]) if acceptate else None
+    from module.calcul.variante import VARIANTE_PLACA
+
+    def cea_mai_rapida(lista: list[dict[str, Any]]) -> dict[str, str] | None:
+        lista = [r for r in lista if r["acceptata"]]
+        if not lista:
+            return None
+        r = min(lista, key=lambda r: r["masurare"]["total"]["median"])
+        return {"varianta": r["varianta"], "fire": r["fire"]}
+
     return {"kgr": str(kgr), "text": TEXT_MASURARE, "simboluri": simboluri, "repetari": repetari,
             "toleranta_logits": TOLERANTA_LOGITS, "nuclee": os.cpu_count(), "rezultate": rez,
-            "cea_mai_rapida_pe_total": None if alesa is None else {"varianta": alesa["varianta"], "fire": alesa["fire"]}}
+            "cea_mai_rapida_pe_total": cea_mai_rapida(rez),
+            "cea_mai_rapida_pe_procesor": cea_mai_rapida([r for r in rez if r["varianta"] not in VARIANTE_PLACA]),
+            "cea_mai_rapida_pe_placa": cea_mai_rapida([r for r in rez if r["varianta"] in VARIANTE_PLACA])}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -184,7 +226,9 @@ def main(argv: list[str] | None = None) -> int:
     t = sub.add_parser("toate")
     t.add_argument("--iesire", required=True)
     t.add_argument("--profil", action="store_true", help="și profilul pe operații (la_incarcare și la_pas)")
-    for x in (i, t):
+    pl = sub.add_parser("placa", help="S49: referința pe procesor (1 fir, toate) și variantele pe placă, în aceeași rulare")
+    pl.add_argument("--iesire", required=True)
+    for x in (i, t, pl):
         x.add_argument("--kgr", default="lucru/export/kronos_459_q8_0.kgr")
         x.add_argument("--simboluri", type=int, default=SIMBOLURI)
         x.add_argument("--repetari", type=int, default=REPETARI)
@@ -196,8 +240,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     iesire = Path(a.iesire)
     if iesire.exists():
-        raise SystemExit(f"{iesire} există deja: măsurarea S47 se face o singură dată")
-    rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari)
+        raise SystemExit(f"{iesire} există deja: măsurarea se face o singură dată")
+    if a.comanda == "placa":
+        from module.calcul.variante import REFERINTA, VARIANTE_PLACA
+
+        combinatii = [(REFERINTA, "1"), (REFERINTA, "toate")] + [(v, "toate") for v in VARIANTE_PLACA]
+        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari, combinatii=combinatii)
+    else:
+        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari)
     if a.profil:
         from module.calcul.profil import profil
 
@@ -205,6 +255,7 @@ def main(argv: list[str] | None = None) -> int:
     iesire.parent.mkdir(parents=True, exist_ok=True)
     iesire.write_bytes(json.dumps(rez, ensure_ascii=False, indent=1).encode("utf-8"))
     print(json.dumps({"cea_mai_rapida_pe_total": rez["cea_mai_rapida_pe_total"],
+                      "cea_mai_rapida_pe_placa": rez["cea_mai_rapida_pe_placa"],
                       "pe_variante": [(r["varianta"], r["fire"], r["acceptata"],
                                        r["masurare"] and round(r["masurare"]["total"]["median"], 3),
                                        r["masurare"] and round(r["masurare"]["simboluri_pe_secunda"]["median"], 1))

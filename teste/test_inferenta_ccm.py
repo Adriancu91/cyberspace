@@ -97,6 +97,7 @@ def test_varianta_care_crapa_la_incarcare_duce_la_rezerva(kgr, tmp_path, monkeyp
         raise MemoryError("prea mare")
 
     monkeypatch.setitem(variante.VARIANTE, "referinta", crapa)
+    monkeypatch.setitem(variante.TOATE, "referinta", crapa)
     st = InferentaCCM(str(kgr), str(_scrie_reglaj(tmp_path / "r.json", kgr))).statistici()["ccm"]
     assert not st["folosit"] and "nu s-a încărcat" in st["motive"][0]
 

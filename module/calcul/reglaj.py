@@ -50,17 +50,25 @@ def sha256(cale: str | Path) -> str:
     return h.hexdigest()
 
 
-def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) -> dict[str, Any]:
-    """Reglajul din rezultatul `banc toate`: varianta + firele cele mai rapide pe timpul total, doar dacă e acceptată."""
-    alesa = banc.get("cea_mai_rapida_pe_total")
-    if not alesa:
-        raise ValueError("bancul n-a acceptat nicio variantă: nu am ce scrie în reglaj")
+def _rezultat(banc: dict[str, Any], alesa: dict[str, str]) -> dict[str, Any]:
     r = next(r for r in banc["rezultate"] if r["varianta"] == alesa["varianta"] and r["fire"] == alesa["fire"])
     if not r["acceptata"]:
         raise ValueError("varianta aleasă nu e acceptată")
+    return r
+
+
+def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) -> dict[str, Any]:
+    """Reglajul din rezultatul `banc toate` / `banc placa`: varianta + firele cele mai rapide pe procesor (timpul total),
+    doar dacă e acceptată. S49: dacă bancul a încercat și placa, cea mai rapidă acceptată pe placă intră la „placa”, iar
+    „alegere” spune cine e mai rapid pe timpul total ("placa" sau "procesor")."""
+    alesa = banc.get("cea_mai_rapida_pe_procesor") if "cea_mai_rapida_pe_procesor" in banc else banc.get(
+        "cea_mai_rapida_pe_total")
+    if not alesa:
+        raise ValueError("bancul n-a acceptat nicio variantă pe procesor: nu am ce scrie în reglaj")
+    r = _rezultat(banc, alesa)
     kgr = Path(kgr or banc["kgr"])
     m = r["masurare"]
-    return {
+    reglaj = {
         "format": FORMAT, "versiune": VERSIUNE, "calculator": nume_calculator(), "nuclee": os.cpu_count(),
         "scris": time.strftime("%Y-%m-%dT%H:%M"), "sursa_masurarii": sursa,
         "model": {"nume": kgr.name, "sha256": sha256(kgr)},
@@ -72,6 +80,37 @@ def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) ->
             "fata_de_referinta_total": r.get("fata_de_referinta_total"),
         }},
     }
+    if banc.get("cea_mai_rapida_pe_placa"):
+        p = _rezultat(banc, banc["cea_mai_rapida_pe_placa"])
+        mp = p["masurare"]
+        reglaj["placa"] = {
+            "varianta": p["varianta"], "acceptata": True, "dif_logits_max": p["verificare_model"]["dif_logits_max"],
+            "total_secunde": mp["total"]["median"], "simboluri_pe_secunda": mp["simboluri_pe_secunda"]["median"],
+            "fata_de_procesor_total": m["total"]["median"] / mp["total"]["median"],
+            "memorie_placa_mb": p.get("memorie_placa_mb"),
+        }
+        reglaj["alegere"] = "placa" if mp["total"]["median"] < m["total"]["median"] else "procesor"
+    return reglaj
+
+
+def motive_fara_placa(reglaj: dict[str, Any]) -> list[str]:
+    """S49: gol = varianta de placă din reglaj se poate folosi (e acolo, e acceptată, e mai rapidă, există CUDA)."""
+    from module.calcul.variante import VARIANTE_PLACA
+    from module.calcul.variante.placa import placa_disponibila
+
+    p = reglaj.get("placa")
+    if not isinstance(p, dict):
+        return ["reglajul nu are variantă pe placă"]
+    motive = []
+    if p.get("varianta") not in VARIANTE_PLACA:
+        motive.append(f"variantă de placă necunoscută: {p.get('varianta')!r}")
+    if p.get("acceptata") is not True:
+        motive.append("varianta de placă nu e acceptată de banc")
+    if reglaj.get("alegere") != "placa":
+        motive.append("după măsurători procesorul e mai rapid")
+    if not motive and not placa_disponibila():
+        motive.append("fără placă video (CUDA) în procesul acesta")
+    return motive
 
 
 def motive_nepotrivire(reglaj: Any, kgr: str | Path) -> list[str]:
@@ -109,9 +148,12 @@ def motive_nepotrivire(reglaj: Any, kgr: str | Path) -> list[str]:
     return motive
 
 
-def alege(cale_reglaj: str | Path, kgr: str | Path) -> dict[str, Any]:
-    """{"folosit", "varianta", "fire", "motive", "reglaj"}: ce poate folosi modulul pentru `kgr`."""
-    rez = {"folosit": False, "varianta": None, "fire": None, "motive": [], "reglaj": str(cale_reglaj)}
+def alege(cale_reglaj: str | Path, kgr: str | Path, placa: bool = False) -> dict[str, Any]:
+    """{"folosit", "varianta", "fire", "motive", "reglaj", "dispozitiv"}: ce poate folosi modulul pentru `kgr`.
+    `placa=True` (S49): dacă reglajul e bun și placa e aleasă de măsurători, varianta de placă; altfel cea de procesor,
+    cu motivele la „motive_placa”. Implicit (False) placa nu se folosește deloc."""
+    rez = {"folosit": False, "varianta": None, "fire": None, "motive": [], "reglaj": str(cale_reglaj),
+           "dispozitiv": "procesor"}
     cale_reglaj = Path(cale_reglaj)
     if not cale_reglaj.exists():
         rez["motive"] = [f"fără reglaj: {cale_reglaj.name}"]
@@ -125,6 +167,10 @@ def alege(cale_reglaj: str | Path, kgr: str | Path) -> dict[str, Any]:
     if not rez["motive"]:
         inm = reglaj["operatii"]["inmultire"]
         rez.update(folosit=True, varianta=inm["varianta"], fire=str(inm["fire"]))
+        if placa:
+            rez["motive_placa"] = motive_fara_placa(reglaj)
+            if not rez["motive_placa"]:
+                rez.update(varianta=reglaj["placa"]["varianta"], fire="toate", dispozitiv="placa")
     return rez
 
 
@@ -139,6 +185,7 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("verifica")
     v.add_argument("--kgr", default="lucru/export/kronos_459_q8_0.kgr")
     v.add_argument("--reglaj", default=None)
+    v.add_argument("--placa", action="store_true", help="S49: și varianta de placă, dacă e aleasă de măsurători")
     a = p.parse_args(argv)
     if a.comanda == "scrie":
         iesire = Path(a.iesire) if a.iesire else cale_implicita()
@@ -150,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
         iesire.write_bytes(json.dumps(reglaj, ensure_ascii=False, indent=1).encode("utf-8"))
         print(json.dumps({"scris": str(iesire), **reglaj}, ensure_ascii=False, indent=1))
         return 0
-    rez = alege(a.reglaj or cale_implicita(), a.kgr)
+    rez = alege(a.reglaj or cale_implicita(), a.kgr, a.placa)
     print(json.dumps(rez, ensure_ascii=False, indent=1))
     return 0 if rez["folosit"] else 1
 

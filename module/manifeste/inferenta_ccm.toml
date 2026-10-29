@@ -2,7 +2,7 @@
 [modul]
 nume = "inferenta_ccm"
 proiect = "kronos"
-versiune = "0.1.0"
+versiune = "0.2.0"
 descriere = "Inferența KGR1 cu varianta și firele alese de bancul CCM pe calculatorul acesta (lucru/ccm/reglaj-<calculator>.json); fără reglaj sau la orice nepotrivire, calea inferenta_kgr1."
 format = "modul-v0"
 
