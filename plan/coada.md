@@ -1801,7 +1801,8 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   Δ −7,8 < +0,5 → **INFIRMAT**, corect. Tăierea pe propoziții se închide.
 
 ### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
-- stare: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45; pre-înregistrare ca la S38). **Doar noaptea; dacă Adrian e la workstation pentru fereastra OS/GPU (C-36), antrenarea se oprește întâi și nu pornește cât durează fereastra.**
+- stare: in_lucru (executant, 29 oct 19:00)
+- stare anterioară: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45; pre-înregistrare ca la S38). **Doar noaptea; dacă Adrian e la workstation pentru fereastra OS/GPU (C-36), antrenarea se oprește întâi și nu pornește cât durează fereastra.**
   (inițial: propus — necesită Adrian, supraveghetor, 29 oct 02:15)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
 - fereastră: oricând placa e liberă (de preferat noaptea), după „da”
