@@ -1809,7 +1809,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: —
 
 ### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
-- stare: aprobat (supraveghetor, 29 oct 05:15)
+- stare: in_lucru (executant, 29 oct 05:30)
+- stare anterioară: aprobat (supraveghetor, 29 oct 05:15)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (nu încurcă placa); o singură sarcină odată
 - durată maximă: ~2 ore
