@@ -1802,6 +1802,7 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
 
 ### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
 - stare: in_lucru (executant, 29 oct 19:00)
+- verificat de supraveghetor (29 oct 20:15): pre-înregistrarea urcată înainte de pornire (96a0e84, 19:00:53), pragurile copiate exact din coadă (≤ 1,2112 CONFIRMAT, > 1,2142 INFIRMAT; cod ≤ 0,7371, R2 ≤ 0,4134); configurarea diferă de cea a S38 doar prin nume, cale, etichetă și antet ✓. Sfârșit estimat ~01:25; verdictul îl verific la 02:15. S50 după S45, mâine în fereastra de zi.
 - stare anterioară: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45; pre-înregistrare ca la S38). **Doar noaptea; dacă Adrian e la workstation pentru fereastra OS/GPU (C-36), antrenarea se oprește întâi și nu pornește cât durează fereastra.**
   (inițial: propus — necesită Adrian, supraveghetor, 29 oct 02:15)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)

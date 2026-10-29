@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 20:15 — Antrenarea de noapte S45 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
+
+- **Rulează S45** (încă 6 ore de antrenare din #459, cea mai bună rețetă). Am verificat: pragurile au fost urcate înainte de pornire, exact cum le-am fixat
+  (CONFIRMAT dacă româna coboară la 1,2112 sau mai jos, fără să strice codul și poveștile), iar configurarea e copia celei de la S38. **Sfârșit estimat ~01:25**; verdictul îl verific la 02:15.
+- Nimic terminat de la 17:30; nicio comandă nouă pentru Kronos în hub. Calculatorul raportează normal (ultimul commit 19:00), **1113 teste trec**.
+- **Mâine ziua: S50** (măsurarea „rece/cald” a vitezei, doar procesor), după ce S45 se termină.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă).
+
 ## 29 octombrie 2026, 17:30 — Kronos are acum un modul de viteză (S48) și poate folosi și placa video (S49); ambele verificate: bune; diseară S45
 
 - **S48 verificat: bun.** Modulul nou alege singur cel mai rapid mod de calcul pe calculatorul ăsta și dă exact aceleași cuvinte ca originalul:
@@ -198,16 +206,3 @@
 - Totul a mers fără erori azi-noapte (placa sub 5.400 MB, 946 teste trec); raportul de dimineață e la locul lui. Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. La „continuarea cu rețeta A” din raportul de dimineață îți dau răspunsul după S34 (diseară). Rămân cele trei mici întrebări:
   ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
-
-## 27 octombrie 2026, 02:15 — Căutarea nouă: CONFIRMAT (+11); Muon rulează acum pe placă; am pus un examen scurt pentru mâine ziua
-
-- **S29 (căutarea mai bună) e gata și verificat: CONFIRMAT.** Pe cele 100 de întrebări, răspunsul ajunge în primele 3 bucăți la **83**, față
-  de **72** înainte (pragul tău: +5 → a ieșit +11), iar la primele 20 nu scade (95 față de 94). Am verificat cifrele și ora: regulile au fost
-  urcate înainte de măsurare. Spus cinstit: pe probe câștigul fusese doar +1,2, deci efectul real e probabil mai mic; vine aproape tot din
-  „reordonarea” bucăților de modelul nostru.
-- **S30 (pregătirea Muon) gata**, fără probleme (placa 5.917 MB, 64 °C, 946 teste trec). **S31 (AdamW contra Muon, câte 2 ore) rulează acum**,
-  cu regulile urcate înainte; se termină pe la **~05:50**. Verdictul îl verific la trecerea de 08:15.
-- **Pus în coadă (aprobat de mine, e doar un examen): S33**, mâine ziua, sub o oră pe placă: Kronos răspunde la cele 100 de întrebări citind
-  bucățile în ordinea nouă. Întrebarea: urcă de la 60 de răspunsuri corecte? (prag: +5). S32 (motorul fără PyTorch, doar procesor) vine după.
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
