@@ -248,7 +248,7 @@ def main(argv: list[str] | None = None) -> int:
         rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari, combinatii=combinatii)
     else:
         rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari)
-    if a.profil:
+    if getattr(a, "profil", False):  # `placa` n-are --profil (S49: prima pornire a căzut aici)
         from module.calcul.profil import profil
 
         rez["profil"] = [profil(a.kgr, TEXT_MASURARE, a.simboluri, d) for d in ("la_incarcare", "la_pas")]

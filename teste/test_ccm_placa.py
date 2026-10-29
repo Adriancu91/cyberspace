@@ -82,6 +82,23 @@ def test_bancul_alege_separat_pe_procesor_si_pe_placa(monkeypatch):
     assert r["rezultate"][2]["fata_de_referinta_total"] == pytest.approx(3.4 / 1.5)
 
 
+def test_comanda_placa_scrie_fisierul_si_refuza_a_doua_oara(tmp_path, monkeypatch):
+    vazute = []
+
+    def fals(v, f, *a, **k):
+        vazute.append((v, f))
+        return _rezultat(v, f, 1.0 if v.startswith("placa") else 2.0, acceptata=v != "placa_bf16")
+
+    monkeypatch.setattr(banc, "in_proces_nou", fals)
+    iesire = tmp_path / "s49.json"
+    assert banc.main(["placa", "--iesire", str(iesire)]) == 0
+    assert vazute == [("referinta", "1"), ("referinta", "toate"), ("placa_fp32", "toate"), ("placa_fp16", "toate"),
+                      ("placa_bf16", "toate")]
+    assert json.loads(iesire.read_text(encoding="utf-8"))["cea_mai_rapida_pe_placa"]["varianta"] == "placa_fp32"
+    with pytest.raises(SystemExit, match="există deja"):
+        banc.main(["placa", "--iesire", str(iesire)])
+
+
 def _banc_cu_placa(kgr, total_procesor=2.5, total_placa=1.5):
     rez = [_rezultat("referinta", "toate", total_procesor), _rezultat("placa_fp32", "toate", total_placa)]
     return {"kgr": str(kgr), "toleranta_logits": 1e-3, "rezultate": rez,
