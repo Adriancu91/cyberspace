@@ -1809,8 +1809,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: —
 
 ### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
-- stare: in_lucru (executant, 29 oct 05:30)
-- stare anterioară: aprobat (supraveghetor, 29 oct 05:15)
+- stare: gata (executant, 29 oct 05:48, e638b01: `descarca.py complet` — 39 de depozite (rândurile 3–6, FreeBSD pe antet SPDX BSD, fără contrib/gnu) + PyPI top 30.000 + toate crate-urile din dump; reluare, `--limita-ore`, 10 erori de rețea la rând → oprire; pilotul identic (amprentă + rezumatul real refăcut identic); 13 teste noi fără rețea; 1071 teste trec, 1 sărit; nimic descărcat; comanda pentru S46 în raport; estimare ~22–27 ore, 3 nopți cu `--limita-ore 10`)
+- stare anterioară: in_lucru (executant, 29 oct 05:30); înainte: aprobat (supraveghetor, 29 oct 05:15)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (nu încurcă placa); o singură sarcină odată
 - durată maximă: ~2 ore
@@ -1835,7 +1835,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: te oprești, stare `oprit`, scrii eroarea în raport.
 - pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
 - aprobat de: supraveghetor, 29 oct 05:15 (granița 5)
-- raport: —
+- raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
 - stare: **propus — necesită Adrian** (supraveghetor, 29 oct 05:15; orice descărcare nouă cere „da”-ul lui; „da”-ul din 28 oct 18:00 a fost doar pentru pilot)
