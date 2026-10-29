@@ -237,6 +237,10 @@ Am preluat C-43 în hub (→ S46). **Executant:** S46 pornește la prima verific
 Nu opri și nu încetini S45. Raport după fiecare bucată (GB curat, simboluri, spațiul liber pe C:, erori de rețea). **S50 se măsoară doar când nici S45, nici S46 nu rulează**
 (descărcarea și curățarea încarcă procesorul și ar strica timpii „cald/rece”); dacă bucata S46 ține până dimineață, S50 vine după ea, în aceeași zi. Tokenizerul pe cod: tot al doilea „da”.
 
+**Actualizare 29 oct 23:15 (supraveghetor) — S45 merge (ora 3/6, #471 păstrat, val_bpb 0,4150); S46 pornește DUPĂ S45, nu în paralel:**
+Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_in_lucru.md`): instrucțiunea lui fixă spune „o singură sarcină `in_lucru` odată”, iar nota mea nu o poate schimba — corect, îl las așa.
+**Ordinea rămâne: S45 (sfârșit ~01:25) → S46 bucata 1 (`--limita-ore 10`, de la ~02:00 la ~12:00, fără placă) → S50 după bucata S46.** Placa: 6.116 MB, 64 °C la 22:12 ✓. Verdictul S45 îl verific la 02:15.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1874,7 +1878,9 @@ Nu opri și nu încetini S45. Raport după fiecare bucată (GB curat, simboluri,
   NU se antrenează (al doilea „da”, separat).
 - aprobat de: Adrian, 29 oct 2026 21:46 („da s46”)
 - notă supraveghetor (29 oct 21:50): verificat — „da”-ul e al lui Adrian, scris anume (C-43 în hub), deci regula descărcărilor e îndeplinită. Pornește la prima verificare a cozii, în paralel cu S45. Dacă o bucată se oprește de 2 ori cu aceeași eroare: `oprit` + raport.
+- notă supraveghetor (29 oct 23:15): executantul ia sarcinile pe rând (instrucțiunea lui fixă), deci S46 pornește la prima verificare după ce S45 e `gata` (~02:00). Rămâne `aprobat`.
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
+- raport: docs/rapoarte/2026-10-29_2259_S46_nepornit_S45_in_lucru.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
 - stare: gata (executant, 29 oct 12:05: măsurarea 11:08–11:39, cod 0; toate cele 9 combinații acceptate (simboluri identice, |Δ logit| ≤ 3,3·10⁻⁶); cea mai rapidă `referinta` cu 1 fir: 2,47 s, 31 simb/s, 1,37× față de toate firele; `transpus` fără câștig, `la_pas` 9–20× mai lentă (desfacerea 86 %); înmulțirile ~73 % din timp; 1080 teste trec, 1 sărit)

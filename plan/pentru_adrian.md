@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 23:15 — Antrenarea S45 merge bine (jumătate făcută); descărcarea S46 pornește după ea, pe la 02:00
+
+- **Rulează S45:** ora 3 din 6 încheiată la 22:12, cel mai bun punct de până acum păstrat (#471). Placa: 6,1 GB din 8 și 64 °C — în limite. Sfârșit ~01:25; verdictul îl verific la 02:15.
+- **S46 (descărcarea codului) n-a pornit încă** — nu e o defecțiune: executantul are regula fixă „o singură sarcină odată”, deci o ia **după** S45, pe la 02:00, și ține ~10 ore (fără placă). Nimic descărcat încă.
+- **S50** (măsurarea vitezei) vine după prima bucată a S46, mâine.
+- **Aștept de la tine:** nimic. Opțional: dacă vrei ca descărcările să poată merge în paralel cu antrenările pe placă, asta trebuie scris în instrucțiunea executantului (spune-mi și ți-o pregătesc); altfel le ia pe rând, ceea ce merge bine.
+
 ## 29 octombrie 2026, 21:50 — Ai spus „da” la S46: descărcarea codului pornește la următoarea trecere a executantului; S45 rulează în continuare
 
 - **S46 aprobat de tine** („da s46”, 21:46, comanda C-43 din hub) — am verificat că e scris pe sarcină cum cere regula descărcărilor. Executantul o pornește la
@@ -192,14 +199,3 @@
   (sau o comandă în hub). Fără „da”, placa stă liberă la noapte. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28
   și portul `cautare` în `kronos/`.
 
-## 27 octombrie 2026, 11:15 — Kronos citește mai bine cu ordinea nouă: CONFIRMAT (+6, la limită); proba de control rulează
-
-- **S33 e gata și verificat: CONFIRMAT, la limită.** Modelul nostru răspunde corect la **66 din 100** de întrebări când primește bucățile de text
-  în ordinea nouă, față de **60** cu ordinea veche (pragul: +5). Am verificat cifrele și ora: regulile au fost urcate înainte de examen.
-  Spus cinstit: câștigul vine aproape tot din întrebările „Ce este X?”, iar pe alte tipuri de întrebări s-a pierdut puțin.
-- **Rulează acum S34** (proba de control a rețetei, pornită la 09:00, regulile urcate înainte); se termină cu examenele pe la prânz. Verdictul îl verific la 14:15.
-- **Pus în coadă (aprobat de mine, e doar un examen): S35**, după S34, sub o oră pe placă: aceeași măsurare pe câteva sute de întrebări pe care modelul nu le-a văzut,
-  cu alt amestec — ca să aflăm dacă +6 ține și în afara celor 100. Apoi S32 (doar procesor, ~2 zile). Noaptea o decid după S34.
-- Totul a mers fără erori (placa ~730 MB, 950 teste trec; un test al interfeței a picat o dată din cauza unei conexiuni și a trecut imediat — îl urmăresc).
-  Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
