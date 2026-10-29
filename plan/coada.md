@@ -1861,7 +1861,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
-- stare: in_lucru (executant, 29 oct 10:30; codul + 9 teste în e9c20a1, 1080 teste trec; măsurarea pornită prin cascadă 11:17, procesul 18752, ~35 min)
+- stare: gata (executant, 29 oct 12:05: măsurarea 11:08–11:39, cod 0; toate cele 9 combinații acceptate (simboluri identice, |Δ logit| ≤ 3,3·10⁻⁶); cea mai rapidă `referinta` cu 1 fir: 2,47 s, 31 simb/s, 1,37× față de toate firele; `transpus` fără câștig, `la_pas` 9–20× mai lentă (desfacerea 86 %); înmulțirile ~73 % din timp; 1080 teste trec, 1 sărit)
+- stare anterioară: in_lucru (executant, 29 oct 10:30; codul + 9 teste în e9c20a1, 1080 teste trec; măsurarea pornită prin cascadă 11:17, procesul 18752, ~35 min)
 - stare anterioară: **aprobat** (centrul de comandă, 29 oct 10:20, ideea lui Adrian, prin delegarea din 26 oct 17:45). Planul: `docs/CCM_plan.md`.
 - tip: procesor (fără placă, fără rețea); fereastră: oricând, o singură sarcină odată; durată maximă: ~3 ore
 - ce faci:
@@ -1875,6 +1876,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `module/inferenta_kgr1.py`, `unelte/inferenta_bruta.py` (doar le folosești). Nimic instalat.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - aprobat de: centrul de comandă (delegare), 29 oct 10:20
+- raport: docs/rapoarte/2026-10-29_1037_S47_ccm_profil.md
 
 ### S48 — CCM etapa 2: modulul `inferenta_ccm` pe portul `inferenta` + reglajul salvat + rezerva (doar procesor)
 - stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor
