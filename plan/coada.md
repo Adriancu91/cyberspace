@@ -1863,7 +1863,8 @@ Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_i
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: **aprobat** (Adrian, 29 oct 21:46, scris în conversația cu centrul de comandă: „da s46”; comanda în hub C-43)
+- stare: in_lucru (executant, 30 oct 00:30 — prima bucată, `--limita-ore 10`; S45 e `oprit`, deci nimic altceva în lucru)
+- stare anterioară: **aprobat** (Adrian, 29 oct 21:46, scris în conversația cu centrul de comandă: „da s46”; comanda în hub C-43)
 - stare anterioară: oprit (executant, 29 oct 08:34)
 - motiv: cere aprobarea lui Adrian: descărcare — la „aprobat de:” scrie „—” (nu „Adrian”), iar aprobarea e doar a centrului de comandă, prin delegare; regula descărcărilor (varianta b, 19 oct) cere „aprobat de: Adrian” pe sarcină. Nimic descărcat.
 - notă supraveghetor (29 oct 11:15): oprirea e corectă. Supraveghetorul nu are voie să aprobe descărcări (REGULI_CASCADA.md), deci S46 așteaptă un „da” al lui Adrian
