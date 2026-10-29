@@ -1856,7 +1856,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
-- stare: in_lucru (executant, 29 oct 10:30)
+- stare: in_lucru (executant, 29 oct 10:30; codul + 9 teste în e9c20a1, 1080 teste trec; măsurarea pornită prin cascadă 11:17, procesul 18752, ~35 min)
 - stare anterioară: **aprobat** (centrul de comandă, 29 oct 10:20, ideea lui Adrian, prin delegarea din 26 oct 17:45). Planul: `docs/CCM_plan.md`.
 - tip: procesor (fără placă, fără rețea); fereastră: oricând, o singură sarcină odată; durată maximă: ~3 ore
 - ce faci:
