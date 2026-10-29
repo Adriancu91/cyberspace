@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 02:15 — S44 gata: INFIRMAT (tăierea bucăților strică); unealta de descărcare a codului e verificată → pilotul pornește
+
+- **S44 verificat de mine: INFIRMAT.** Cu bucățile de text tăiate, cititorul răspunde corect la **297 din 500**, față de **336** cu bucățile întregi (−7,8 puncte).
+  Tăierea scoate des chiar propoziția cu răspunsul. Ideea se închide. Toate testele trec (1058).
+- **S43a verificat: unealta pilotului Kronos-Cod e bună** (doar licențe libere, doar cod publicat înainte de 29 iunie 2021, se oprește singură sub 40 GB liberi).
+  **Am trecut pilotul S43 pe „aprobat”** (pe „da”-ul tău de ieri): ~30–45 de minute, pe procesor și internet, ~1 GB pe disc. Descărcarea întreagă vine abia după ce verific cifrele pilotului.
+- **Placa video stă liberă:** încercările pe „memorie” (E3) din granițele mele s-au terminat. Am propus **S45 = încă o noapte de antrenare din #459** (ultima a adus cel mai bun model).
+- **Aștept de la tine (fără grabă):** „da” sau „nu” pentru S45 (o comandă în hub ajunge). Fără „da”, placa rămâne liberă.
+
 ## 28 octombrie 2026, 23:15 — S42 gata: INFIRMAT (modelul mai bun nu a făcut un „cititor” mai bun); urmează unealta pilotului de cod (S43a) și o probă mică cu bucățile de text (S44)
 
 - **S42 verificat de mine: INFIRMAT.** Cititorul refăcut din #459 (#466) răspunde corect la **66 din 100**, exact cât cel vechi (#438, 66); pragul cerea +5.
@@ -214,16 +223,3 @@ S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: ni
 - **S27 = E3 cu antrenare pe placă (~4 ore): propus, așteaptă „da”-ul tău.** Criterii propuse: ≥ 60 % răspunsuri corecte fără text dat. **Placa rămâne liberă.**
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. Când te întorci (după cifrele S26): „da”/„nu” pentru S27 și pragul E3.
-
-## 23 octombrie 2026, 23:15 — Memoria (S24): indexul găsește răspunsul în 4 din 5 cazuri, fără niciun model; acum îmbunătățim căutarea (doar procesor)
-
-- **S24 gata și verificat (doar procesor, 20:34–21:05, fără erori):** am făcut un „index” peste toată Wikipedia în română (277.357 de articole).
-  La 160 de întrebări de examen, bucata de text cu răspunsul e în primele 5 găsite la **80,6 %** și în primele 20 la **92,5 %**, în ~65 ms
-  pe întrebare. Articolul corect e în primele 5 la **84,4 %**. Am adunat cifrele din nou: se potrivesc. Executantul și-a scris așteptările
-  înainte de rulare (corect). Cifrele sunt chiar puțin mai mici decât realitatea: la 17 întrebări „În 1966.” nu se potrivește cu „1966”.
-- Pragul propus de executant pentru E3 (≥ 80 % și ≥ 85 %): primul trece la limită, al doilea **cade cu o singură întrebare**.
-- **Pus în coadă: S25** (doar procesor, ~2–3 ore, fără antrenare): căutare mai bună (numele proprii contează mai mult, paginile-listă coborâte),
-  ajustată doar pe întrebări de antrenament, apoi o singură rulare pe examene. **Placa rămâne liberă la noapte.**
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Când te întorci: „da”/„nu” pentru E3 cu antrenare pe placă și pragul (cifrele S25 vin probabil la noapte).
-

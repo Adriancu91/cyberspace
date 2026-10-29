@@ -216,6 +216,15 @@ S42: pre-înregistrarea E3_reteta_A2 urcată înainte de pornire (df7eb34, 19:00
 Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (unealta nu are „înlocuită”) — acceptat.
 **Ordinea pentru executant: întâi S43a (procesor, fără rețea), apoi S44 (procesor + sub 1 oră pe placă; pre-înregistrarea înainte).**
 
+**Actualizare 29 oct 02:15 (supraveghetor) — S44 verificat: INFIRMAT; S43a verificat; pilotul S43 trece pe `aprobat` (procesor + rețea); S45 propus pentru Adrian:**
+S44: pre-înregistrarea urcată înainte de examen (32ce496, 00:03:16; examenul 00:03:26) ✓; 2048: întregi 169+36+10+15+106 = **336** ✓, tăiate 148+18+13+16+102 = **297** ✓
+(din 252+45+21+23+159 = 500 ✓); Δ = 59,4 − 67,2 = **−7,8 < +0,5 → INFIRMAT** ✓; reparate 35 − stricate 74 = −39 ✓; brațul `intregi` = 336, identic cu S35 ✓; placa ≤ 734 MB.
+Lecția: răspunsul stă des în propoziții fără cuvinte din întrebare (la „născut” jumătate pierdute). **Tăierea pe propoziții se închide**; nu pun varianta „cu vecinii”.
+S43a: unealta citită de mine (data-limită strictă `< 29 iunie 2021 00:00 UTC`, oprire sub 40 GB înaintea fiecărui pachet, ritm pe gazdă, arhive doar în memorie);
+cele 48 de teste ale ei trec și în cloud, fără rețea ✓. Accept data „înainte de 29 iunie” (mai strict cu o zi). **S43 = doar pilotul, `aprobat`** (pe „da”-ul lui Adrian din 28 oct 18:00).
+Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model”, „altă rețetă” și „tăierea” sunt închise). **S45** (încă o noapte pe linia w2 din #459, rețeta A) = `propus — necesită Adrian`
+(direcția din 22 oct: nopți de antrenare doar cu „da”-ul lui). **Ordinea pentru executant: S43 (pilotul, procesor + rețea), apoi nimic pe placă până la „da”.**
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1684,7 +1693,16 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
 
 ### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
-- stare: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
+- stare: **aprobat — DOAR PILOTUL** (supraveghetor, 29 oct 02:15, după verificarea uneltei S43a; pe „da”-ul lui Adrian din 28 oct 18:00)
+- stare veche: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
+- **comanda exactă (supraveghetor, 29 oct 02:15):** prin cascadă, oricând (nu folosește placa; poate rula și cât e ceva pe placă):
+  `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S43 -- .venv/Scripts/python -X utf8 unelte/kronos_cod/descarca.py pilot`
+  (implicit `--iesire lucru/kronos_cod/pilot --pypi 500 --crates 500` + numpy v1.21.0, tokio-1.7.0, libuv v1.41.0). Dacă se oprește (rețea, cădere), aceeași
+  comandă o reia; a doua cădere cu aceeași eroare → `oprit` și raport. Durată maximă: 3 ore. **Nu porni descărcarea întreagă** și nu antrena tokenizerul.
+  Raport `docs/rapoarte/2026-10-2X_<ora>_S43_pilot.md` cu cifrele din `rezumat.json`: GB arhive, GB brut → curat, fișiere brut → curat, simboluri estimate,
+  procentul aruncat de fiecare filtru, pachetele respinse pe motive (cu numărul separat pentru `fara_fisier_licenta` la crates și ce s-a întâmplat cu
+  numpy/tokio/libuv), spațiul liber pe C: la final, timpul. Plus o estimare pentru descărcarea întreagă (GB curat, simboluri, ore, spațiu) din cifrele pilotului.
+  Nimic din `lucru/` în Git; nimic instalat; nimic în `kronos/`, examen, paznic, jurnal, `EXAMEN.md`, `cutie.py`.
 - **Supraveghetor, 28 oct 20:25:** oprirea a fost corectă (regula cere unealta numită în „ce faci”). Aleg **varianta 1** a executantului:
   întâi **S43a** (mai jos) scrie unealta pilotului și testele ei, **fără rețea**; la trecerea următoare după S43a verific unealta și trec aici
   comanda exactă, apoi S43 redevine `aprobat` (pe „da”-ul lui Adrian din 28 oct 18:00, care rămâne valabil doar pentru pilot). Până atunci S43 rămâne `oprit`.
@@ -1729,6 +1747,8 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - pre-înregistrare: nu e nevoie (nu se antrenează și nu se măsoară nimic)
 - aprobat de: supraveghetor, 28 oct 20:25 (granița 5; varianta 1 propusă de executant în raportul 2026-10-28_1803)
 - raport: docs/rapoarte/2026-10-28_2339_S43a_unealta_pilot.md
+- verificat de supraveghetor, 29 oct 02:15: unealta citită (dată, licențe, oprirea sub 40 GB, reluarea, ritmul, fără arhive pe disc); cele 48 de teste trec
+  și în cloud, fără rețea. Comanda trecută în S43, care e acum `aprobat` (doar pilotul).
 
 ### S44 — E3: bucățile tăiate pe propozițiile utile (încap mai multe în 448 de simboluri → răspunde mai bine?) (procesor + sub 1 oră pe placă)
 - stare: gata (executant, 29 oct 00:33) — INFIRMAT, Δ −7,8 puncte (297 vs 336 din 500)
@@ -1766,3 +1786,20 @@ Pre-înregistrarea veche E3_reteta_A rămâne deschisă, fără măsurare (uneal
 - pre-înregistrare: docs/preinregistrari/2026-10-29_E3_bucati_taiate.md (urcată înainte de pasul 3)
 - aprobat de: supraveghetor, 28 oct 23:15 (granițele 2 și 5 din REGULI_CASCADA.md; propunerea 2 a executantului din raportul S42)
 - raport: docs/rapoarte/2026-10-29_0033_S44_E3_bucati_taiate.md
+- verificat de supraveghetor, 29 oct 02:15: pre-înregistrarea (32ce496, 00:03:16) înaintea examenului (00:03:26) ✓; 336 și 297 din 500, adunate din nou pe tipuri ✓;
+  Δ −7,8 < +0,5 → **INFIRMAT**, corect. Tăierea pe propoziții se închide.
+
+### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
+- stare: **propus — necesită Adrian** (supraveghetor, 29 oct 02:15; direcția din 22 oct: nopți de antrenare doar cu „da”-ul lui Adrian, ca la S38)
+- tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
+- fereastră: oricând placa e liberă (de preferat noaptea), după „da”
+- de ce: singura linie care a crescut sigur în ultimele zile: S38 (#441 → #459) a dat −0,017 pe română curat, cu cod și povești mai bune. Pe E3 toate încercările
+  din granițe s-au închis (S42, S44); placa altfel stă liberă. Continuarea a ce merge.
+- ce ar face (după „da”): `config/conv_w2_reteta_A_cont2.toml` = copie a `config/conv_w2_reteta_A_cont.toml` (cea de la S38), linie nouă `w2_reteta_A_cont2`,
+  `--ore 6 --porneste-din 459`, același amestec de date, nimic descărcat. Pre-înregistrare urcată înainte: **CONFIRMAT** dacă română curat ≤ **1,2112**
+  (−0,005 față de #459; pragul e mai mic decât la S38 fiindcă a doua noapte aduce de obicei mai puțin), fără regresie > 0,005 la cod curat (0,7321) și R2 (0,4084);
+  **INFIRMAT** dacă > 1,2142; între ele NECLAR. Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #459 în aceeași rulare. Modelul nu intră în interfață
+  și nu înlocuiește #459 în OS fără alt „da”. Placa sub 7.000 MB și 83 °C. Nu atinge `kronos/`, examenul BPB, paznicul, jurnalul.
+- aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
+- raport: —
+
