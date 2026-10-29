@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 17:30 — Kronos are acum un modul de viteză (S48) și poate folosi și placa video (S49); ambele verificate: bune; diseară S45
+
+- **S48 verificat: bun.** Modulul nou alege singur cel mai rapid mod de calcul pe calculatorul ăsta și dă exact aceleași cuvinte ca originalul:
+  **28 de simboluri pe secundă față de 20** (1,22× mai rapid la răspunsuri repetate). Dacă ceva nu se potrivește, trece singur pe calea veche.
+- **S49 verificat: bun.** Pe placa video, doar precizia completă (fp32) dă cuvinte corecte — și e de **1,19× mai rapidă** decât procesorul (52 față de 41 simb/s);
+  variantele „pe jumătate” (fp16/bf16) greșesc și nici nu sunt mai rapide. Placa a folosit doar 1,7 GB și 36 °C. Pornirea pe placă costă ~3 s în plus.
+- **Am pus în coadă S50 (aprobat de mine, doar procesor, mâine după S45):** măsurarea învață diferența dintre primul răspuns și următoarele — azi a ales greșit „toate nucleele”, care sunt rapide doar la primul răspuns.
+- **Diseară de la 19:00: S45** (noaptea de antrenare din #459), neschimbat. Calculatorul raportează normal (ultimul commit 15:50), **1113 teste trec**.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului). Opțional, mai târziu: dacă interfața să folosească placa video (mai rapid, dar ține ~1,7 GB ocupați lângă antrenări).
+
 ## 29 octombrie 2026, 14:35 — Măsurarea vitezei (S47, CCM) e gata și verificată: pe workstation, Kronos merge mai repede pe un singur nucleu; urmează S48, diseară S45
 
 - **S47 verificat de mine: bun.** Toate cele 9 variante de calcul dau exact aceleași cuvinte ca originalul. Cea mai rapidă: calculul obișnuit **pe un singur nucleu**
@@ -201,17 +211,3 @@
   bucățile în ordinea nouă. Întrebarea: urcă de la 60 de răspunsuri corecte? (prag: +5). S32 (motorul fără PyTorch, doar procesor) vine după.
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
-
-## 26 octombrie 2026, 23:15 — S27 CONFIRMAT (la limită); S29 s-a oprit la alegerea setului — am ales eu varianta recomandată
-
-- **S27 (memoria + model) e gata și verificat: CONFIRMAT, la limită.** Kronos își caută singur textul și răspunde corect la **60 din 100**
-  de întrebări noi (pragul tău: ≥ 60), fără să strice „răspunsul din textul dat” (69/70 și 39/60). Am verificat cifrele față de pre-înregistrare.
-  Spus cinstit: modelul vechi #415, fără antrenare, face 57 → antrenarea a adus doar +3; reușita vine mai ales din căutare.
-- **S29 (căutarea mai bună) s-a oprit la jumătate**, corect: setul nou de 100 de întrebări nu se mai poate alege (S27 le-a folosit pe aproape toate).
-  Am ales varianta recomandată de executant: **examenul decisiv = cele 100 de întrebări S26** (nimic n-a fost ales pe ele; pragul tău rămâne același).
-  Pe probe, câștigul e mic (+1,2 puncte, pragul cere +5) → cel mai probabil INFIRMAT. Durează sub o oră; apoi urmează S30 (Muon).
-- **De știut:** la 21:47 placa a urcat o clipă la **7.942 MB** (peste 7.000); **paznicul a oprit-o imediat**, executantul a reparat, iar a doua rulare a
-  stat sub 1.500 MB. Nu e nevoie să faci nimic.
-- Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Dacă preferi altă variantă la S29, scrie în coadă înainte să pornească. Rămân cele două mici întrebări
-  (ora raportului de dimineață 06:40/07:40, închiderea S28) și una nouă, fără grabă: un „port” nou `cautare` în `kronos/` (S29 îl propune) — doar cu „da”-ul tău.

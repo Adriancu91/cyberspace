@@ -1892,6 +1892,7 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   pe #459 CCM 2,89 s / 28,3 simb/s față de 3,54 s / 20,3 → 1,22× total, 1,39× generare; ATENȚIE: la primul răspuns într-un proces nou
   referința face ~40 simb/s (mai rapidă decât CCM); 1099 teste trec, 1 sărit)
 - raport: docs/rapoarte/2026-10-29_1510_S48_inferenta_ccm.md
+- verificat de supraveghetor (29 oct 17:30): **bun** — trece `teste_contracte/` (cu reglaj și cu rezerva); simboluri identice cu `inferenta_kgr1`; cifrele se adună (3,544/2,888 = 1,23× total, 28,3/20,3 = 1,39× simb/s); doar `module/`, `teste/`, `teste_contracte/`, `docs/CCM_plan.md`, raportul și coada atinse, nimic în `kronos/`; 1099 teste trec, 1 sărit. Observația „referința e rapidă doar la primul răspuns” → S50.
 - (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor — **S47 verificat 29 oct 14:35: poate porni acum** (doar procesor; nu încurcă S45 de la 19:00)
 - ce faci: `module/inferenta_ccm.py` (MANIFEST pe portul `inferenta`) folosește variantele alese din `lucru/ccm/reglaj-<calculator>.json`;
   fără reglaj sau la orice nepotrivire → calea `inferenta_kgr1`. Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.
@@ -1902,5 +1903,22 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   măsurarea 15:41–15:44 cod 0 (prima pornire 15:39 căzută înainte să scrie ceva, reparată, în raport); **placa_fp32 acceptată** (Δ 1,5·10⁻⁴), 1,686 s vs procesor 2,009 s → 1,19×, alegere = placa;
   fp16 respinsă (Δ 0,028), bf16 respinsă (alte simboluri); placa max 1.679 MB, 36 °C; pornirea CUDA +3 s; ATENȚIE: „toate firele” rapid doar la primul răspuns → decizie la supraveghetor; 1113 teste trec, 1 sărit)
 - raport: docs/rapoarte/2026-10-29_1538_S49_ccm_placa.md
+- verificat de supraveghetor (29 oct 17:30): **bun** — regulile măsurării urcate înainte (b922b58 15:38; prima pornire 15:39 a căzut fără să scrie nimic, reparată în dbdea59, măsurarea 15:41–15:44); cifrele se adună (2,009/1,686 = 1,19×; 52,1/40,6 = 1,28× simb/s); fp16/bf16 respinse corect (toleranță, bf16 și alte simboluri); placa max 1.679 MB, 36 °C (sub 7.000 MB / 83 °C); `placa=False` implicit, interfața neatinsă; 1113 teste trec, 1 sărit. **Decizia la punctul 3: varianta (a)** — S50 (bancul măsoară și răspunsul al doilea din același motor; alegerea pe procesor se face pe acela). Reglajul de acum (procesor = toate firele) rămâne până la S50; nu-l schimbăm de mână. Folosirea plăcii în interfață (`placa=True`) rămâne decizia lui Adrian.
 - (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S48; **doar cu placa liberă** (nu în timpul antrenării, nu în ferestrele OS/GPU cu Adrian), VRAM < 7 GB, ~1 oră pe placă
 - verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
+
+### S50 — CCM etapa 4: bancul măsoară „rece” (primul răspuns dintr-un motor nou) și „cald” (răspunsurile următoare din același motor); alegerea pe procesor după „cald” (doar procesor)
+- stare: **aprobat** (supraveghetor, 29 oct 17:30 — granițele 2 și 5: măsurători + unealtă în `module/calcul/` și teste, fără `kronos/`, fără examen, nimic descărcat/instalat)
+- tip: procesor (fără placă, fără rețea); durată maximă ~2 ore
+- fereastră: **doar după ce S45 s-a terminat** (nu în timpul antrenării de noapte: antrenarea încarcă procesorul și ar strica măsurătorile); cel mai devreme 30 oct dimineață, în fereastra de zi.
+- de ce: S48 și S49 au arătat că pe Windows referința cu toate firele e rapidă doar la primul calcul dintr-un motor nou (~40 simb/s), apoi cade la ~20–22; cu 1 fir rămâne constant ~28–31. Bancul face un motor nou la fiecare repetare, deci vede doar cazul „rece” și a ales în S49 „toate firele” pentru procesor — greșit pentru interfață și pentru OS, care țin modelul deschis.
+- ce faci:
+  1. `module/calcul/banc.py`: pentru fiecare variantă (procesor și, la comanda `placa`, placă) măsori în același proces și același motor: răspunsul 1 („rece”) și răspunsurile 2–6 („cald”, median + împrăștiere), 64 de simboluri, „Ana are mere.”, #459 Q8_0. Verificarea simbolurilor față de referință ca la S47/S49 (aceleași simboluri, |Δ logit| ≤ 0,001), la fiecare răspuns.
+  2. `module/calcul/reglaj.py`: alegerea pe procesor (și alegerea procesor/placă) se face pe timpul **„cald”** (median pe răspunsurile 2–6, fără încărcare); timpul „rece” și pornirea se scriu în reglaj doar ca informație. Un reglaj vechi (fără câmpurile noi) rămâne citibil; formatul descris în `docs/CCM_plan.md`.
+  3. Teste noi (fără rețea, modele mici sintetice, fără placă): „cald” se măsoară în același motor; alegerea folosește „cald”; reglajul vechi rămâne bun.
+  4. Regulile măsurării scrise în raport și urcate (commit + push) ÎNAINTE de măsurare; apoi o singură măsurare oficială: `banc placa --iesire lucru/ccm/s50.json` (dacă placa e liberă; altfel doar procesorul și scrii de ce). Reglajul nou din `s50.json`; cel de acum păstrat întâi ca `lucru/ccm/reglaj-desktop-br58s2c_s49.json`.
+  5. `python -m pytest` verde; commit + push; raport `docs/rapoarte/2026-10-30_<ora>_S50_ccm_cald_rece.md` cu tabelul rece/cald pe fiecare variantă și ce s-a ales.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, interfața (`placa` rămâne `False` implicit). Nimic instalat, nimic descărcat. Placa sub 7.000 MB și 83 °C.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- aprobat de: supraveghetor, 29 oct 17:30 (granițele 2 și 5 din REGULI_CASCADA.md)
+- raport: —
