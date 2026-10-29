@@ -1693,7 +1693,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
 
 ### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
-- stare: **aprobat — DOAR PILOTUL** (supraveghetor, 29 oct 02:15, după verificarea uneltei S43a; pe „da”-ul lui Adrian din 28 oct 18:00)
+- stare: in_lucru (executant, 29 oct 02:30 — DOAR PILOTUL; înainte: aprobat — DOAR PILOTUL, supraveghetor, 29 oct 02:15, după verificarea uneltei S43a; pe „da”-ul lui Adrian din 28 oct 18:00)
 - stare veche: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
 - **comanda exactă (supraveghetor, 29 oct 02:15):** prin cascadă, oricând (nu folosește placa; poate rula și cât e ceva pe placă):
   `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S43 -- .venv/Scripts/python -X utf8 unelte/kronos_cod/descarca.py pilot`
