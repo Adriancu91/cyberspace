@@ -1811,7 +1811,9 @@ Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_i
   Δ −7,8 < +0,5 → **INFIRMAT**, corect. Tăierea pe propoziții se închide.
 
 ### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
-- stare: in_lucru (executant, 29 oct 19:00)
+- stare: oprit (executant, 29 oct 23:34)
+- motiv: procesul (14764) a căzut la 23:09:36, în ora 4 din 6, fără eroare în jurnal și fără cod de ieșire (repornire sau oprire din afară; cauza n-am putut-o vedea). Salvate orele 1–3: #469 0,4185, #470 0,4167, #471 0,4150 (gpt.pt 22:10); placa în limite (6.116 MB, 64 °C). Examenele n-au rulat, deci nu există verdict, iar pre-înregistrarea rămâne deschisă. N-am reluat-o singur: la aceeași comandă `antrenare_lunga.py` ar sări peste `--porneste-din 459` (capcana S42). Decizia (reluare din #471 / doar examenele / închidere) e la supraveghetor sau la Adrian.
+- stare anterioară: in_lucru (executant, 29 oct 19:00)
 - verificat de supraveghetor (29 oct 20:15): pre-înregistrarea urcată înainte de pornire (96a0e84, 19:00:53), pragurile copiate exact din coadă (≤ 1,2112 CONFIRMAT, > 1,2142 INFIRMAT; cod ≤ 0,7371, R2 ≤ 0,4134); configurarea diferă de cea a S38 doar prin nume, cale, etichetă și antet ✓. Sfârșit estimat ~01:25; verdictul îl verific la 02:15. S50 după S45, mâine în fereastra de zi.
 - stare anterioară: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45; pre-înregistrare ca la S38). **Doar noaptea; dacă Adrian e la workstation pentru fereastra OS/GPU (C-36), antrenarea se oprește întâi și nu pornește cât durează fereastra.**
   (inițial: propus — necesită Adrian, supraveghetor, 29 oct 02:15)
@@ -1828,7 +1830,7 @@ Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_i
 - fereastră fixată (supraveghetor, 29 oct 11:15): **noaptea 29 → 30 oct, de la 19:00**; dacă Adrian e la workstation pentru fereastra OS/GPU, întâi se oprește/așteaptă.
 - aprobat de: centrul de comandă (delegarea lui Adrian din 26 oct 17:45), 29 oct 08:25; **confirmat de supraveghetor, 29 oct 11:15 — intră în granița 1**
   din REGULI_CASCADA.md (încă o rulare pe linia w2 existentă, același amestec, nimic descărcat), deci nu mai așteaptă alt „da”.
-- raport: —
+- raport: docs/rapoarte/2026-10-29_2334_S45_oprit_cadere.md
 
 ### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
 - stare: gata (executant, 29 oct 05:48, e638b01: `descarca.py complet` — 39 de depozite (rândurile 3–6, FreeBSD pe antet SPDX BSD, fără contrib/gnu) + PyPI top 30.000 + toate crate-urile din dump; reluare, `--limita-ore`, 10 erori de rețea la rând → oprire; pilotul identic (amprentă + rezumatul real refăcut identic); 13 teste noi fără rețea; 1071 teste trec, 1 sărit; nimic descărcat; comanda pentru S46 în raport; estimare ~22–27 ore, 3 nopți cu `--limita-ore 10`)
