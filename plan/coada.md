@@ -1806,7 +1806,10 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   (−0,005 față de #459; pragul e mai mic decât la S38 fiindcă a doua noapte aduce de obicei mai puțin), fără regresie > 0,005 la cod curat (0,7321) și R2 (0,4084);
   **INFIRMAT** dacă > 1,2142; între ele NECLAR. Examenele: `unelte/examen_validari_ws.py` pe ultimul model și pe #459 în aceeași rulare. Modelul nu intră în interfață
   și nu înlocuiește #459 în OS fără alt „da”. Placa sub 7.000 MB și 83 °C. Nu atinge `kronos/`, examenul BPB, paznicul, jurnalul.
-- aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
+- pre-înregistrare: `docs/preinregistrari/2026-10-29_reteta_A_cont2.md`, cu pragurile de mai sus copiate exact, commit + push ÎNAINTE de pornire.
+- fereastră fixată (supraveghetor, 29 oct 11:15): **noaptea 29 → 30 oct, de la 19:00**; dacă Adrian e la workstation pentru fereastra OS/GPU, întâi se oprește/așteaptă.
+- aprobat de: centrul de comandă (delegarea lui Adrian din 26 oct 17:45), 29 oct 08:25; **confirmat de supraveghetor, 29 oct 11:15 — intră în granița 1**
+  din REGULI_CASCADA.md (încă o rulare pe linia w2 existentă, același amestec, nimic descărcat), deci nu mai așteaptă alt „da”.
 - raport: —
 
 ### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
@@ -1842,6 +1845,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
 - stare: oprit (executant, 29 oct 08:34)
 - motiv: cere aprobarea lui Adrian: descărcare — la „aprobat de:” scrie „—” (nu „Adrian”), iar aprobarea e doar a centrului de comandă, prin delegare; regula descărcărilor (varianta b, 19 oct) cere „aprobat de: Adrian” pe sarcină. Nimic descărcat.
+- notă supraveghetor (29 oct 11:15): oprirea e corectă. Supraveghetorul nu are voie să aprobe descărcări (REGULI_CASCADA.md), deci S46 așteaptă un „da” al lui Adrian
+  scris anume pentru descărcare (de ex. o comandă în hub „da S46”), apoi pe sarcină: „aprobat de: Adrian, <data>” și starea `aprobat`.
 - stare anterioară: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45: aceleași reguli ca pilotul — data-limită 29 iunie 2021, fără surse cu cont, licențe permisive, proveniență pe fișier). Tokenizerul pe cod rămâne pentru un „da” separat, după verificarea descărcării.
   (inițial: propus — necesită Adrian, supraveghetor, 29 oct 05:15)
 - tip: procesor + rețea (fără placă); se poate rula și cât e ceva pe placă

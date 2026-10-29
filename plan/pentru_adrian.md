@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a oprit: executantul vrea „da”-ul tău scris anume; azi pe procesor rulează CCM (S47); diseară antrenarea S45
+
+- **S46 oprit (corect, nu e o defecțiune):** centrul de comandă a aprobat descărcarea prin delegarea ta, dar regula descărcărilor cere un „da” al tău scris pe sarcină.
+  Nimic descărcat. Eu n-am voie să aprob descărcări. **Dacă o vrei, scrie „da S46” (o comandă în hub ajunge)** — pornește la următoarea trecere a executantului.
+- **Rulează acum S47 (CCM, doar procesor):** pachetul nou `module/calcul/` și 9 teste noi sunt scrise, **1080 de teste trec**. Măsurarea vitezei a pornit la 11:17 (~35 min);
+  prima încercare a fost oprită fără rezultat (o variantă e ~20× mai lentă), deci nu s-a pierdut nimic. Verdictul îl verific la trecerea de 14:15. Apoi S48 (procesor).
+- **Diseară de la 19:00: S45** (încă o noapte de antrenare din #459). Am confirmat-o eu: intră în granițele mele, deci nu mai așteaptă alt „da”; pragurile se scriu înainte.
+- Calculatorul raportează normal (ultimul commit 11:08), raportul de dimineață e la locul lui, nicio problemă cu placa.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă). Restul rămâne ca la 08:15 (CONTINUUM, pre-înregistrarea veche E3).
+
 ## 29 octombrie 2026, 08:15 — Unealta pentru descărcarea întreagă a codului (S46a) e gata și verificată; placa video stă liberă azi fără „da”-ul tău
 
 - **S46a verificat de mine: bun.** Unealta știe acum să descarce tot codul (toate cele 6 surse), pe bucăți de câte o noapte, și reia de unde a rămas fără dubluri.
@@ -206,15 +216,5 @@
   **S30** pregătirea Muon (cod + test + probă de 10 minute), **S31** AdamW contra Muon, câte 2 ore pe placă (prag: −0,010 la română),
   **S32** motorul fără PyTorch (doar procesor). Fiecare cu pre-înregistrare înainte. Dacă vreuna ar cere schimbări în `kronos/`, se oprește și te întreabă.
 - Cyber Hub: C-21 marcată „preluat”; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
-
-## 26 octombrie 2026, 17:15 — S27 rulează pe placă de la 16:52; verdictul vine diseară
-
-- **S27 (memoria + model) a pornit corect:** datele (14.540 de exemple) și pre-înregistrarea au fost urcate **înainte** de antrenare (16:51 → 16:52).
-  Antrenarea se termină pe la **~20:10**, apoi examenele; **placa e ocupată până pe la ~20:45**. 908 teste trec. Fără erori până acum.
-- **De știut (spus cinstit de executant înainte de pornire):** în fereastra de 512 a modelului încap de obicei **doar 2 bucăți de text, nu 3**.
-  Pragul tău (≥ 60 %) a rămas neschimbat, dar plafonul real scade de la 72 la ~64 din 100. Executantul se așteaptă la ~53 % → cel mai probabil **NECLAR**.
-- Nimic nou pus în coadă: nu adaug altă sarcină pe placă până la verdictul S27 (îl verific la trecerea de 20:15 sau 23:15).
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos (fereastra OS/GPU pe workstation e mâine/poimâine — placa e liberă după ~20:45).
 - **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
 
