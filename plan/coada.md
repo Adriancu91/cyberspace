@@ -1898,6 +1898,9 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   Formatul reglajului descris în `docs/CCM_plan.md` (pentru OS, mai târziu). Raport cu viteza față de referință pe workstation. Fără schimbări în `kronos/`.
 
 ### S49 — CCM etapa 3: varianta pe placa video sub Windows (PyTorch, fp32/fp16/bf16) și alegerea procesor/placă după măsurători
-- stare: in_lucru (executant, 29 oct 15:30)
+- stare: gata (executant, 29 oct 15:50: `module/calcul/variante/placa.py` (fp32/fp16/bf16), `banc placa`, reglajul cu „placa” + „alegere”, `inferenta_ccm` 0.2.0 cu `placa=False` implicit;
+  măsurarea 15:41–15:44 cod 0 (prima pornire 15:39 căzută înainte să scrie ceva, reparată, în raport); **placa_fp32 acceptată** (Δ 1,5·10⁻⁴), 1,686 s vs procesor 2,009 s → 1,19×, alegere = placa;
+  fp16 respinsă (Δ 0,028), bf16 respinsă (alte simboluri); placa max 1.679 MB, 36 °C; pornirea CUDA +3 s; ATENȚIE: „toate firele” rapid doar la primul răspuns → decizie la supraveghetor; 1113 teste trec, 1 sărit)
+- raport: docs/rapoarte/2026-10-29_1538_S49_ccm_placa.md
 - (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S48; **doar cu placa liberă** (nu în timpul antrenării, nu în ferestrele OS/GPU cu Adrian), VRAM < 7 GB, ~1 oră pe placă
 - verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
