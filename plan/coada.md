@@ -1898,5 +1898,6 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   Formatul reglajului descris în `docs/CCM_plan.md` (pentru OS, mai târziu). Raport cu viteza față de referință pe workstation. Fără schimbări în `kronos/`.
 
 ### S49 — CCM etapa 3: varianta pe placa video sub Windows (PyTorch, fp32/fp16/bf16) și alegerea procesor/placă după măsurători
-- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S48; **doar cu placa liberă** (nu în timpul antrenării, nu în ferestrele OS/GPU cu Adrian), VRAM < 7 GB, ~1 oră pe placă
+- stare: in_lucru (executant, 29 oct 15:30)
+- (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S48; **doar cu placa liberă** (nu în timpul antrenării, nu în ferestrele OS/GPU cu Adrian), VRAM < 7 GB, ~1 oră pe placă
 - verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
