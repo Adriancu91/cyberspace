@@ -1840,7 +1840,9 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45: aceleași reguli ca pilotul — data-limită 29 iunie 2021, fără surse cu cont, licențe permisive, proveniență pe fișier). Tokenizerul pe cod rămâne pentru un „da” separat, după verificarea descărcării.
+- stare: oprit (executant, 29 oct 08:34)
+- motiv: cere aprobarea lui Adrian: descărcare — la „aprobat de:” scrie „—” (nu „Adrian”), iar aprobarea e doar a centrului de comandă, prin delegare; regula descărcărilor (varianta b, 19 oct) cere „aprobat de: Adrian” pe sarcină. Nimic descărcat.
+- stare anterioară: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45: aceleași reguli ca pilotul — data-limită 29 iunie 2021, fără surse cu cont, licențe permisive, proveniență pe fișier). Tokenizerul pe cod rămâne pentru un „da” separat, după verificarea descărcării.
   (inițial: propus — necesită Adrian, supraveghetor, 29 oct 05:15)
 - tip: procesor + rețea (fără placă); se poate rula și cât e ceva pe placă
 - fereastră: S46a e gata și verificat (29 oct 08:15) → doar după „da”-ul lui Adrian
@@ -1851,4 +1853,4 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   oprire automată sub 40 GB), ~3–6 mld simboluri estimate, doar sursele fără cont, data-limită 29 iunie 2021. Raport după fiecare bucată. Tokenizerul pe cod
   NU se antrenează (al doilea „da”, separat).
 - aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
-- raport: —
+- raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
