@@ -1795,7 +1795,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   Δ −7,8 < +0,5 → **INFIRMAT**, corect. Tăierea pe propoziții se închide.
 
 ### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
-- stare: **propus — necesită Adrian** (supraveghetor, 29 oct 02:15; direcția din 22 oct: nopți de antrenare doar cu „da”-ul lui Adrian, ca la S38)
+- stare: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45; pre-înregistrare ca la S38). **Doar noaptea; dacă Adrian e la workstation pentru fereastra OS/GPU (C-36), antrenarea se oprește întâi și nu pornește cât durează fereastra.**
+  (inițial: propus — necesită Adrian, supraveghetor, 29 oct 02:15)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
 - fereastră: oricând placa e liberă (de preferat noaptea), după „da”
 - de ce: singura linie care a crescut sigur în ultimele zile: S38 (#441 → #459) a dat −0,017 pe română curat, cu cod și povești mai bune. Pe E3 toate încercările
@@ -1839,7 +1840,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: **propus — necesită Adrian** (supraveghetor, 29 oct 05:15; orice descărcare nouă cere „da”-ul lui; „da”-ul din 28 oct 18:00 a fost doar pentru pilot)
+- stare: **aprobat** (centrul de comandă, 29 oct 08:25, prin delegarea lui Adrian din 26 oct 17:45: aceleași reguli ca pilotul — data-limită 29 iunie 2021, fără surse cu cont, licențe permisive, proveniență pe fișier). Tokenizerul pe cod rămâne pentru un „da” separat, după verificarea descărcării.
+  (inițial: propus — necesită Adrian, supraveghetor, 29 oct 05:15)
 - tip: procesor + rețea (fără placă); se poate rula și cât e ceva pe placă
 - fereastră: S46a e gata și verificat (29 oct 08:15) → doar după „da”-ul lui Adrian
 - comanda exactă (din raportul S46a), o dată pe noapte până când `lucru/kronos_cod/complet/rezumat.json` are `"terminat": true`:
