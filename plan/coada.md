@@ -1851,7 +1851,8 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: oprit (executant, 29 oct 08:34)
+- stare: **aprobat** (Adrian, 29 oct 21:46, scris în conversația cu centrul de comandă: „da s46”; comanda în hub C-43)
+- stare anterioară: oprit (executant, 29 oct 08:34)
 - motiv: cere aprobarea lui Adrian: descărcare — la „aprobat de:” scrie „—” (nu „Adrian”), iar aprobarea e doar a centrului de comandă, prin delegare; regula descărcărilor (varianta b, 19 oct) cere „aprobat de: Adrian” pe sarcină. Nimic descărcat.
 - notă supraveghetor (29 oct 11:15): oprirea e corectă. Supraveghetorul nu are voie să aprobe descărcări (REGULI_CASCADA.md), deci S46 așteaptă un „da” al lui Adrian
   scris anume pentru descărcare (de ex. o comandă în hub „da S46”), apoi pe sarcină: „aprobat de: Adrian, <data>” și starea `aprobat`.
@@ -1865,7 +1866,7 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
 - ce ar face: comanda din raportul S46a (modul `complet`), pe bucăți cu `--limita-ore`; ~10–22 GB cod curat pe disc (C: ar rămâne ~50–63 GB liberi;
   oprire automată sub 40 GB), ~3–6 mld simboluri estimate, doar sursele fără cont, data-limită 29 iunie 2021. Raport după fiecare bucată. Tokenizerul pe cod
   NU se antrenează (al doilea „da”, separat).
-- aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
+- aprobat de: Adrian, 29 oct 2026 21:46 („da s46”)
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
