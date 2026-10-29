@@ -1693,7 +1693,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - aprobat de: Adrian a spus „Da” la porturi (27 oct 23:49); lipsește doar omul de față la scriere
 
 ### S43 — C-28 E4 „Kronos-Cod”, etapa 1b: pilotul de descărcare (500 PyPI + 500 crates + numpy, tokio, libuv), apoi descărcarea întreagă, curățarea și tokenizerul (procesor + rețea)
-- stare: in_lucru (executant, 29 oct 02:30 — DOAR PILOTUL; înainte: aprobat — DOAR PILOTUL, supraveghetor, 29 oct 02:15, după verificarea uneltei S43a; pe „da”-ul lui Adrian din 28 oct 18:00)
+- stare: gata — DOAR PILOTUL (executant, 29 oct 03:03: 02:29–02:51, cod 0; 688 din 1.003 pachete păstrate + numpy/tokio/libuv; 0,558 → 0,376 GB cod, 55.847 → 37.088 fișiere, ~107 mil. simboluri; 1,01 GB trași din rețea; C: 73 GB liberi; 1058 teste trec, 1 sărit). Descărcarea întreagă NEpornită — aștept verificarea supraveghetorului și aprobarea.
+- stare anterioară: in_lucru (executant, 29 oct 02:30 — DOAR PILOTUL; înainte: aprobat — DOAR PILOTUL, supraveghetor, 29 oct 02:15, după verificarea uneltei S43a; pe „da”-ul lui Adrian din 28 oct 18:00)
 - stare veche: oprit (executant, 28 oct 18:03; nepornită, nimic descărcat; înainte: aprobat de Adrian, 28 oct 18:00)
 - **comanda exactă (supraveghetor, 29 oct 02:15):** prin cascadă, oricând (nu folosește placa; poate rula și cât e ceva pe placă):
   `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S43 -- .venv/Scripts/python -X utf8 unelte/kronos_cod/descarca.py pilot`
@@ -1718,7 +1719,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   (4) cutia mai tare (regulă de firewall pentru python.exe sau cont Windows separat) — nu e nevoie acum, ci înainte de etapa 3 (auto-îmbunătățirea).
 - pre-înregistrare: pragurile etapei 2 (pass@10 pe setul ascuns) le scrie supraveghetorul înainte de orice antrenare Kronos-Cod
 - aprobat de: Adrian, 28 oct 18:00, prin centrul de comandă. Răspunsuri: (1) **da** pentru pilot; descărcarea întreagă după ce supraveghetorul verifică pilotul; (2) data-limită **29 iunie 2021** (fără cod scris de LLM); (3) dintre sursele „necesită Adrian”: **niciuna deocamdată** (cum recomanzi); (4) cutia mai tare: înainte de etapa 3, nu acum. Tokenizerul nou: tot după al doilea „da”.
-- raport: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
+- raport: docs/rapoarte/2026-10-29_0303_S43_pilot.md (pilotul); înainte: docs/rapoarte/2026-10-28_1803_S43_oprit_descarcare.md (oprit înainte de pornire)
 
 ### S43a — Kronos-Cod etapa 1b, pregătirea: unealta pilotului de descărcare + testele ei, FĂRĂ rețea (doar procesor)
 - stare: gata (executant, 28 oct 23:39, e650232: `unelte/kronos_cod/descarca.py pilot` + 48 de teste fără rețea; 1051 teste trec, 1 sărit; nimic descărcat, pilotul NEpornit; comanda pentru S43 în raport)
