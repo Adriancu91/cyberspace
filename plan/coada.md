@@ -1856,7 +1856,8 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
-- stare: **aprobat** (centrul de comandă, 29 oct 10:20, ideea lui Adrian, prin delegarea din 26 oct 17:45). Planul: `docs/CCM_plan.md`.
+- stare: in_lucru (executant, 29 oct 10:30)
+- stare anterioară: **aprobat** (centrul de comandă, 29 oct 10:20, ideea lui Adrian, prin delegarea din 26 oct 17:45). Planul: `docs/CCM_plan.md`.
 - tip: procesor (fără placă, fără rețea); fereastră: oricând, o singură sarcină odată; durată maximă: ~3 ore
 - ce faci:
   1. Citești `docs/CCM_plan.md`. Profil pe #459 (`lucru/export/kronos_459_q8_0.kgr`) cu `unelte/inferenta_bruta.py`: timpul pe operații pentru
