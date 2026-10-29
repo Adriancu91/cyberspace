@@ -1810,6 +1810,7 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 
 ### S46a — Kronos-Cod etapa 1b: modul `complet` al uneltei de descărcare + teste, FĂRĂ rețea (doar procesor)
 - stare: gata (executant, 29 oct 05:48, e638b01: `descarca.py complet` — 39 de depozite (rândurile 3–6, FreeBSD pe antet SPDX BSD, fără contrib/gnu) + PyPI top 30.000 + toate crate-urile din dump; reluare, `--limita-ore`, 10 erori de rețea la rând → oprire; pilotul identic (amprentă + rezumatul real refăcut identic); 13 teste noi fără rețea; 1071 teste trec, 1 sărit; nimic descărcat; comanda pentru S46 în raport; estimare ~22–27 ore, 3 nopți cu `--limita-ore 10`)
+- verificat de supraveghetor (29 oct 08:15): **bun** — commit-ul atinge doar `unelte/kronos_cod/descarca.py` și testele lui; pilotul dă exact aceeași ieșire (amprentă + rezumatul real refăcut identic); 1071 teste trec, 1 sărit; nimic descărcat. S46 poate porni imediat după „da”.
 - stare anterioară: in_lucru (executant, 29 oct 05:30); înainte: aprobat (supraveghetor, 29 oct 05:15)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (nu încurcă placa); o singură sarcină odată
@@ -1840,7 +1841,10 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
 - stare: **propus — necesită Adrian** (supraveghetor, 29 oct 05:15; orice descărcare nouă cere „da”-ul lui; „da”-ul din 28 oct 18:00 a fost doar pentru pilot)
 - tip: procesor + rețea (fără placă); se poate rula și cât e ceva pe placă
-- fereastră: după S46a `gata` și verificat de supraveghetor, și după „da”
+- fereastră: S46a e gata și verificat (29 oct 08:15) → doar după „da”-ul lui Adrian
+- comanda exactă (din raportul S46a), o dată pe noapte până când `lucru/kronos_cod/complet/rezumat.json` are `"terminat": true`:
+  `.venv/Scripts/python -X utf8 unelte/cascada.py porneste S46 -- .venv/Scripts/python -X utf8 unelte/kronos_cod/descarca.py complet --limita-ore 10`
+  (estimare S46a: ~22–27 de ore, 3 nopți; C: ar rămâne ~50–62 GB liberi)
 - ce ar face: comanda din raportul S46a (modul `complet`), pe bucăți cu `--limita-ore`; ~10–22 GB cod curat pe disc (C: ar rămâne ~50–63 GB liberi;
   oprire automată sub 40 GB), ~3–6 mld simboluri estimate, doar sursele fără cont, data-limită 29 iunie 2021. Raport după fiecare bucată. Tokenizerul pe cod
   NU se antrenează (al doilea „da”, separat).

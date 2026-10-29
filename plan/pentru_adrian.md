@@ -2,6 +2,16 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 08:15 — Unealta pentru descărcarea întreagă a codului (S46a) e gata și verificată; placa video stă liberă azi fără „da”-ul tău
+
+- **S46a verificat de mine: bun.** Unealta știe acum să descarce tot codul (toate cele 6 surse), pe bucăți de câte o noapte, și reia de unde a rămas fără dubluri.
+  Pilotul de ieri dă exact aceleași cifre cu unealta nouă. **1071 de teste trec**, niciunul nu pică. Nu s-a descărcat nimic. Raportul de dimineață e la locul lui; noaptea a mers fără erori.
+- **Descărcarea întreagă (S46):** ~22–27 de ore, adică 3 nopți, ~10–22 GB pe disc (rămân ~50–62 GB liberi). Nu folosește placa video. Pornește imediat după „da”.
+- **Nu am pus nimic nou pe placă:** încercările din granițele mele s-au terminat (ultimele două au ieșit INFIRMAT), iar o noapte nouă de antrenare (S45) e decizia ta.
+- **CONTINUUM** (bucla care doar „observă” noaptea) e oprit de ieri 12:36, după butonul STOP folosit la S42. Nu strică nimic cât merge cascada; eu nu am voie să-l pornesc.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului) și **S45** (o noapte de antrenare din #459); dacă vrei CONTINUUM repornit;
+  dacă pre-înregistrarea veche `2026-10-28_E3_reteta_A.md` să fie închisă ca „oprită, înlocuită de E3_reteta_A2” (recomand: da). O comandă în hub ajunge pentru toate.
+
 ## 29 octombrie 2026, 05:15 — Pilotul de descărcare a codului (S43) e gata și verificat: bun; descărcarea întreagă așteaptă „da”-ul tău
 
 - **S43 (pilotul Kronos-Cod) verificat de mine: bun.** În 22 de minute, din 1.003 pachete de cod au rămas **688** cu licență liberă și dinainte de iunie 2021;
@@ -208,15 +218,3 @@
 - Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos (fereastra OS/GPU pe workstation e mâine/poimâine — placa e liberă după ~20:45).
 - **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
 
-## 26 octombrie 2026, 16:15 — Bine ai revenit: S27 (memoria + model) pornește pe placă; cifrele S26 verificate
-
-- **S26 verificat (făcut pe 24 oct, doar procesor):** pe 100 de întrebări noi, neatinse, căutarea noastră găsește răspunsul în primele 5 bucăți la
-  **80 %** și în primele 3 la **72 %**. Am adunat cifrele din nou: se potrivesc. Cifrele vechi (86,9 %) erau umflate, cum bănuiam.
-- **S27 e aprobat de tine** și l-am scris pas cu pas pentru executant: datele (întrebare + primele 3 bucăți găsite), 3 ore de antrenare din #415,
-  apoi examenul oficial pe cele 100 de întrebări noi. Pre-înregistrarea se urcă înainte de pornire. Probabil gata diseară (~21:00–22:00).
-- De știut dinainte: cum răspunsul e în cele 3 bucăți doar la 72 %, pragul tău de 60 % cere ca modelul să nimerească ~5 din 6 când are textul în față. E greu, dar e o întrebare cinstită.
-- Workstation-ul a rămas pornit (S28 nu l-a putut opri), executantul a mers toată pauza fără erori; 908 teste trec.
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Două mici întrebări din raportul de azi al executantului, când ai timp: (1) raportul de dimineață rămâne la 06:40 (ora de iarnă) sau îl muți la 07:40? (2) S28 (oprirea) o închidem ca „nu mai e nevoie”?
-
-S28: workstation-ul NU s-a oprit (24 oct, 04:31). Pașii 1–3 sunt făcuți: nimic în lucru (nicio sarcină `in_lucru`, niciun proces Python greu, placa fără calcule), `git status` curat, push reușit (d68bd85). Dar comanda `shutdown /s /t 120` e blocată de permisiunile rulării fără om („requires approval”), așa că n-am putut-o da. Calculatorul rămâne pornit, fără să lucreze nimic; executantul doar verifică la 30 de minute. Ca să-l oprești: din centrul de comandă sau direct, `shutdown /s /t 120`; sau adaugi `Bash(shutdown:*)` la permisiunile executantului și pui S28 înapoi pe `aprobat`.
