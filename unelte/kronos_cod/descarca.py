@@ -1,9 +1,15 @@
 """Kronos-Cod, etapa 1b: descărcarea codului sursă, în flux, cu filtrele din `docs/kronos_cod/SURSE.md` (S43a, 28 octombrie 2026).
 
-Deocamdată doar modul `pilot` (aprobat de Adrian la 28 oct 18:00, doar pilotul): 500 de pachete PyPI + 500 de crate-uri
-+ trei depozite mari (numpy, tokio, libuv), apoi un rezumat JSON cu GB brut → curat, fișiere, simboluri estimate, cât a
-aruncat fiecare filtru și de ce au fost respinse pachetele la licență. Descărcarea întreagă vine după ce supraveghetorul
-vede cifrele pilotului.
+Modul `pilot` (aprobat de Adrian la 28 oct 18:00, doar pilotul): 500 de pachete PyPI + 500 de crate-uri + trei depozite
+mari (numpy, tokio, libuv), apoi un rezumat JSON cu GB brut → curat, fișiere, simboluri estimate, cât a aruncat fiecare
+filtru și de ce au fost respinse pachetele la licență.
+
+Modul `complet` (S46a, 29 oct; pornirea cere „da”-ul lui Adrian, S46): toate cele 6 surse din SURSE.md, cu aceleași
+filtre, licențe, dată, ritm și oprire sub 40 GB: depozitele Git din rândurile 3, 4, 6 la un tag dinainte de dată,
+FreeBSD `release/13.0.0` (doar fișierele cu antet SPDX BSD, fără `contrib/` și `gnu/`), apoi PyPI top 30.000, apoi toate
+crate-urile din dump-ul public `db-dump.tar.gz` (ultima versiune dinainte de dată, cele mai descărcate întâi). Ține 2–3
+nopți: se reia de unde a rămas, `--limita-ore N` o oprește curat; o eroare de rețea trecătoare nu închide pachetul (se
+reîncearcă la reluare), iar după 10 erori de rețea la rând se oprește singură.
 
 Regulile (din SURSE.md):
 - licențe doar MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause (și combinațiile lor), verificate de DOUĂ ori: metadatele
@@ -18,7 +24,7 @@ Regulile (din SURSE.md):
 - în flux: arhivele se citesc din memorie, nu se scriu pe disc; pe disc ajung doar fișierele de cod care trec filtrele;
 - se oprește singură dacă spațiul liber pe disc scade sub 40 GB; se poate relua de unde a rămas.
 
-Ce scrie, în dosarul de ieșire (implicit `lucru/kronos_cod/pilot/`, nimic în Git):
+Ce scrie, în dosarul de ieșire (implicit `lucru/kronos_cod/pilot/` sau `lucru/kronos_cod/complet/`, nimic în Git):
     cod.jsonl          un rând pe fișier păstrat: sursa, pachetul, versiunea, calea, licența, sha256, textul
     pachete.jsonl      un rând pe pachet încheiat (păstrat / respins și de ce), cu poziția din cod.jsonl (pentru reluare)
     aproape_duplicate.json   ce a scos MinHash la final (indicii rândurilor din cod.jsonl)
@@ -26,12 +32,14 @@ Ce scrie, în dosarul de ieșire (implicit `lucru/kronos_cod/pilot/`, nimic în 
 
 Comenzile:
     python unelte/kronos_cod/descarca.py pilot                       # tot pilotul (rețea!); se reia singur de unde a rămas
+    python unelte/kronos_cod/descarca.py complet --limita-ore 10     # descărcarea întreagă, pe bucăți (rețea! cere „da”)
     python unelte/kronos_cod/descarca.py rezumat                     # doar refacerea rezumatului din ce e pe disc (fără rețea)
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import io
 import json
@@ -78,6 +86,68 @@ DEPOZITE_PILOT = [
     {"nume": "libuv", "depozit": "libuv/libuv", "tag": "v1.41.0", "licenta": "MIT", "limbaj": "c"},
 ]
 
+IESIRE_COMPLET = RADACINA / "lucru" / "kronos_cod" / "complet"
+COMPLET_PYPI = 30_000
+DUMP_CRATES = "https://static.crates.io/db-dump.tar.gz"
+DUMP_MAX = 4 * 1024**3  # dump-ul bazei crates.io, citit din memorie (~1 GB comprimat)
+ARHIVA_MAX_DEPOZIT = 1024**3  # depozitele mari (FreeBSD, rust) trec de 300 MB comprimat
+DESPACHETAT_MAX_DEPOZIT = 4 * 1024**3
+ERORI_RETEA_LA_RAND = 10
+
+# Rândurile 3–6 din SURSE.md, în ordinea de acolo (contează la duplicate: depozitele mari întâi). Tag-urile sunt dinainte
+# de 29 iunie 2021; data se verifică oricum din arhivă (un tag greșit = pachet respins, se vede în rezumat).
+#   dosar            doar fișierele de sub acest dosar (și fișierul de licență din el): lz4 = BSD-2 doar în `lib/`
+#   fara_dosare      dosare sărite înainte de citire (oriunde în cale): FreeBSD `contrib/`, `gnu/`; redis `deps/` (copiate)
+#   fisiere_licenta  doar aceste fișiere de licență contează: zstd e „BSD sau GPLv2” → îl luăm ca BSD (SURSE.md)
+#   licenta_pe_fisier  FreeBSD: licența se ia din antetul SPDX al fiecărui fișier; fără antet BSD, fișierul nu intră
+_PY, _RS, _C = "git_py", "git_rs", "git_c"
+DEPOZITE_COMPLET = [
+    {"sursa": _PY, "nume": "numpy", "depozit": "numpy/numpy", "tag": "v1.21.0", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "scipy", "depozit": "scipy/scipy", "tag": "v1.6.3", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "pandas", "depozit": "pandas-dev/pandas", "tag": "v1.2.5", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "scikit-learn", "depozit": "scikit-learn/scikit-learn", "tag": "0.24.2", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "sympy", "depozit": "sympy/sympy", "tag": "sympy-1.8", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "networkx", "depozit": "networkx/networkx", "tag": "networkx-2.5.1", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "django", "depozit": "django/django", "tag": "3.2.4", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "flask", "depozit": "pallets/flask", "tag": "2.0.1", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "click", "depozit": "pallets/click", "tag": "8.0.1", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "jinja", "depozit": "pallets/jinja", "tag": "3.0.1", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "httpx", "depozit": "encode/httpx", "tag": "0.18.2", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "scrapy", "depozit": "scrapy/scrapy", "tag": "2.5.0", "licenta": "BSD-3-Clause"},
+    {"sursa": _PY, "nume": "tornado", "depozit": "tornadoweb/tornado", "tag": "v6.1.0", "licenta": "Apache-2.0"},
+    {"sursa": _PY, "nume": "requests", "depozit": "psf/requests", "tag": "v2.25.1", "licenta": "Apache-2.0"},
+    {"sursa": _PY, "nume": "pytest", "depozit": "pytest-dev/pytest", "tag": "6.2.4", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "black", "depozit": "psf/black", "tag": "21.6b0", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "attrs", "depozit": "python-attrs/attrs", "tag": "21.2.0", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "rich", "depozit": "Textualize/rich", "tag": "v10.4.0", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "sqlalchemy", "depozit": "sqlalchemy/sqlalchemy", "tag": "rel_1_4_18", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "pydantic", "depozit": "pydantic/pydantic", "tag": "v1.8.2", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "twisted", "depozit": "twisted/twisted", "tag": "twisted-21.2.0", "licenta": "MIT"},
+    {"sursa": _PY, "nume": "pytorch", "depozit": "pytorch/pytorch", "tag": "v1.9.0", "licenta": "BSD-3-Clause"},
+    {"sursa": _RS, "nume": "rust", "depozit": "rust-lang/rust", "tag": "1.53.0", "licenta": "MIT OR Apache-2.0"},
+    {"sursa": _RS, "nume": "cargo", "depozit": "rust-lang/cargo", "tag": "0.54.0", "licenta": "MIT OR Apache-2.0"},
+    {"sursa": _RS, "nume": "tokio", "depozit": "tokio-rs/tokio", "tag": "tokio-1.7.0", "licenta": "MIT"},
+    {"sursa": _RS, "nume": "serde", "depozit": "serde-rs/serde", "tag": "v1.0.126", "licenta": "MIT OR Apache-2.0"},
+    {"sursa": _RS, "nume": "rust-analyzer", "depozit": "rust-lang/rust-analyzer", "tag": "2021-06-21", "licenta": "MIT OR Apache-2.0"},
+    {"sursa": _RS, "nume": "bevy", "depozit": "bevyengine/bevy", "tag": "v0.5.0", "licenta": "MIT"},
+    {"sursa": _RS, "nume": "alacritty", "depozit": "alacritty/alacritty", "tag": "v0.8.0", "licenta": "Apache-2.0"},
+    {"sursa": _RS, "nume": "deno", "depozit": "denoland/deno", "tag": "v1.11.2", "licenta": "MIT"},
+    {"sursa": _RS, "nume": "ripgrep", "depozit": "BurntSushi/ripgrep", "tag": "13.0.0", "licenta": "MIT"},
+    {"sursa": "freebsd", "nume": "freebsd", "depozit": "freebsd/freebsd-src", "tag": "release/13.0.0",
+     "licenta": "BSD-2-Clause OR BSD-3-Clause", "licenta_pe_fisier": True, "fara_dosare": ["contrib", "gnu"]},
+    {"sursa": _C, "nume": "libuv", "depozit": "libuv/libuv", "tag": "v1.41.0", "licenta": "MIT"},
+    {"sursa": _C, "nume": "lua", "depozit": "lua/lua", "tag": "v5.4.3", "licenta": "MIT"},
+    {"sursa": _C, "nume": "jq", "depozit": "jqlang/jq", "tag": "jq-1.6", "licenta": "MIT"},
+    {"sursa": _C, "nume": "cjson", "depozit": "DaveGamble/cJSON", "tag": "v1.7.14", "licenta": "MIT"},
+    {"sursa": _C, "nume": "redis", "depozit": "redis/redis", "tag": "6.2.4", "licenta": "BSD-3-Clause", "fara_dosare": ["deps"]},
+    {"sursa": _C, "nume": "zstd", "depozit": "facebook/zstd", "tag": "v1.5.0", "licenta": "BSD-3-Clause",
+     "fisiere_licenta": ["LICENSE"]},
+    {"sursa": _C, "nume": "lz4", "depozit": "lz4/lz4", "tag": "v1.9.3", "licenta": "BSD-2-Clause", "dosar": "lib"},
+]
+for _d in DEPOZITE_COMPLET:
+    _d.setdefault("arhiva_max", ARHIVA_MAX_DEPOZIT)
+    _d.setdefault("despachetat_max", DESPACHETAT_MAX_DEPOZIT)
+
 EXTENSII = {".py": "python", ".pyi": "python", ".rs": "rust", ".c": "c", ".h": "c"}
 PERMISE = {"MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause"}
 ARHIVA_MAX = 300 * 1024**2  # o arhivă mai mare nu se descarcă (pilotul nu are nevoie)
@@ -101,11 +171,19 @@ NEPERMISE_TEXT = {
 }
 
 FILTRE = ["extensie", "copiat", "generat_nume", "prea_mare", "utf8", "generat_antet", "licenta_fisier", "rand_lung",
-          "rand_mediu", "alfanumeric", "date_test", "sintaxa", "duplicat_exact"]
+          "rand_mediu", "alfanumeric", "date_test", "sintaxa", "antet_bsd", "duplicat_exact"]
 
 
 class OprireSpatiu(RuntimeError):
     """Spațiul liber pe disc a scăzut sub prag; pilotul se oprește (se reia cu aceeași comandă)."""
+
+
+class OprireTimp(RuntimeError):
+    """A trecut `--limita-ore`: oprire curată, cu rezumatul scris (se reia cu aceeași comandă)."""
+
+
+class OprireRetea(RuntimeError):
+    """Prea multe erori de rețea la rând: rețeaua pare căzută (se reia cu aceeași comandă)."""
 
 
 # ---------------------------------------------------------------- rețeaua (politicoasă) -----------------------------------
@@ -131,6 +209,8 @@ class EroareRetea(RuntimeError):
     def __init__(self, url: str, cod: int | None, mesaj: str):
         super().__init__(f"{url}: {cod} {mesaj}")
         self.cod = cod
+        # lipsește sau e prea mare: nu se rezolvă la o nouă încercare
+        self.permanenta = cod in (403, 404, 410) or mesaj.startswith("prea mare")
 
 
 class Retea:
@@ -276,13 +356,67 @@ def e_fisier_licenta(cale: str) -> bool:
 SPDX_ANTET = re.compile(r"SPDX-License-Identifier:\s*([^\n*]+)")
 
 
-def licenta_fisier_ok(text: str) -> bool:
-    """Antetul fișierului (primele 40 de rânduri): SPDX cu altă licență sau text GPL/MPL/ISC ⇒ fișierul se aruncă."""
+# variantele BSD-2 folosite de FreeBSD/NetBSD (același text, plus o propoziție de declinare); doar la `licenta_pe_fisier`
+VARIANTE_BSD = {"BSD-2-Clause-FreeBSD": "BSD-2-Clause", "BSD-2-Clause-NetBSD": "BSD-2-Clause",
+                "BSD-2-Clause-Views": "BSD-2-Clause"}
+BSD = {"BSD-2-Clause", "BSD-3-Clause"}
+
+
+def _spdx_din_antet(text: str, variante_bsd: bool = False) -> str | None:
     antet = "\n".join(text.split("\n", 40)[:40])
     m = SPDX_ANTET.search(antet)
-    if m and licente_din_spdx(m.group(1).strip().rstrip("*/ ").strip()) is None:
+    if not m:
+        return None
+    expr = m.group(1).strip().rstrip("*/ ").strip()
+    if variante_bsd:
+        for vechi, nou in VARIANTE_BSD.items():
+            expr = expr.replace(vechi, nou)
+    return expr
+
+
+def licenta_fisier_ok(text: str, variante_bsd: bool = False) -> bool:
+    """Antetul fișierului (primele 40 de rânduri): SPDX cu altă licență sau text GPL/MPL/ISC ⇒ fișierul se aruncă."""
+    antet = "\n".join(text.split("\n", 40)[:40])
+    expr = _spdx_din_antet(text, variante_bsd)
+    if expr is not None and licente_din_spdx(expr) is None:
         return False
     return not any(rx.search(" ".join(antet.split())) for rx in NEPERMISE_TEXT.values())
+
+
+def licenta_antet_bsd(text: str) -> str | None:
+    """FreeBSD: licența fișierului din antetul SPDX, doar dacă e BSD-2/BSD-3 (cu variantele lor). Altfel None."""
+    expr = _spdx_din_antet(text, variante_bsd=True)
+    lic = licente_din_spdx(expr) if expr else None
+    if not lic or not lic <= BSD:
+        return None
+    return " OR ".join(sorted(lic))
+
+
+def reguli_depozit(d: dict) -> tuple[Callable[[str], bool] | None, Callable[[str], bool]]:
+    """(pastreaza, e_licenta) din opțiunile `dosar`, `fara_dosare`, `fisiere_licenta` ale unui depozit.
+
+    Fără opțiuni: (None, e_fisier_licenta), adică exact ca la pilot. Căile din arhivă încep cu dosarul de sus al ei.
+    """
+    if not any(d.get(k) for k in ("dosar", "fara_dosare", "fisiere_licenta")):
+        return None, e_fisier_licenta
+    dosar = PurePosixPath(d["dosar"]).parts if d.get("dosar") else ()
+    fara = {x.lower() for x in d.get("fara_dosare") or ()}
+    numai = {x.upper() for x in d.get("fisiere_licenta") or ()}
+
+    def pastreaza(cale: str) -> bool:
+        rel = PurePosixPath(cale).parts[1:]
+        if rel[:len(dosar)] != dosar:
+            return False
+        return not ({p.lower() for p in rel[len(dosar):-1]} & fara)
+
+    def e_licenta(cale: str) -> bool:
+        rel = PurePosixPath(cale).parts[1:]
+        if len(rel) != len(dosar) + 1 or rel[:len(dosar)] != dosar:
+            return False
+        nume = rel[-1].upper()
+        return nume in numai if numai else nume.startswith(("LICENSE", "LICENCE", "COPYING"))
+
+    return pastreaza, e_licenta
 
 
 # ---------------------------------------------------------------- filtrele pe fișier --------------------------------------
@@ -333,10 +467,11 @@ def paranteze_echilibrate(text: str, limbaj: str) -> bool:
     return not stiva
 
 
-def filtreaza(cale: str, date: bytes | None) -> tuple[str | None, str | None]:
+def filtreaza(cale: str, date: bytes | None, variante_bsd: bool = False) -> tuple[str | None, str | None]:
     """Aplică filtrele din SURSE.md pe un fișier. Întoarce (textul, None) dacă rămâne, altfel (None, filtrul).
 
-    `date` = None înseamnă un fișier prea mare, necitit din arhivă.
+    `date` = None înseamnă un fișier prea mare, necitit din arhivă. `variante_bsd` (doar FreeBSD): antetele SPDX
+    `BSD-2-Clause-FreeBSD`/`-NetBSD` se citesc ca BSD-2-Clause.
     """
     p = PurePosixPath(cale)
     limbaj = EXTENSII.get(p.suffix.lower())
@@ -358,7 +493,7 @@ def filtreaza(cale: str, date: bytes | None) -> tuple[str | None, str | None]:
     antet = "\n".join(text.split("\n", 20)[:20]).lower()
     if any(s in antet for s in SEMNE_GENERAT) or any(s in antet for s in SEMNE_GENERAT_SPECIAL):
         return None, "generat_antet"
-    if not licenta_fisier_ok(text):
+    if not licenta_fisier_ok(text, variante_bsd):
         return None, "licenta_fisier"
     randuri = text.split("\n")
     if max((len(r) for r in randuri), default=0) > 1000:
@@ -378,38 +513,42 @@ def filtreaza(cale: str, date: bytes | None) -> tuple[str | None, str | None]:
 
 # ---------------------------------------------------------------- arhivele, din memorie -----------------------------------
 
-def _de_citit(cale: str) -> bool:
-    return PurePosixPath(cale).suffix.lower() in EXTENSII or e_fisier_licenta(cale)
-
-
-def fisiere_din_arhiva(date: bytes, nume: str) -> Iterator[tuple[str, bytes | None, float | None, int]]:
+def fisiere_din_arhiva(date: bytes, nume: str, pastreaza: Callable[[str], bool] | None = None,
+                       e_licenta: Callable[[str], bool] = e_fisier_licenta,
+                       despachetat_max: int = DESPACHETAT_MAX) -> Iterator[tuple[str, bytes | None, float | None, int]]:
     """(calea, conținutul, data modificării, mărimea) pentru fișierele de cod și de licență din arhivă.
 
     Totul din memorie, nimic pe disc. Un fișier de cod mai mare de 1 MB nu se citește deloc (conținutul = None).
+    `pastreaza` (opțiunile unui depozit) sare fișierele înainte să fie citite.
     """
+    def de_citit(cale: str) -> bool:
+        if pastreaza is not None and not pastreaza(cale):
+            return False
+        return PurePosixPath(cale).suffix.lower() in EXTENSII or e_licenta(cale)
+
     citit = 0
     if nume.endswith(".zip"):
         with zipfile.ZipFile(io.BytesIO(date)) as z:
             for info in z.infolist():
-                if info.is_dir() or not _de_citit(info.filename):
+                if info.is_dir() or not de_citit(info.filename):
                     continue
                 if info.file_size > FISIER_MAX:
                     yield info.filename, None, None, info.file_size
                     continue
                 citit += info.file_size
-                if citit > DESPACHETAT_MAX:
+                if citit > despachetat_max:
                     raise ValueError("arhivă prea mare la despachetare")
                 yield info.filename, z.read(info), None, info.file_size
         return
     with tarfile.open(fileobj=io.BytesIO(date), mode="r:*") as t:
         for m in t:
-            if not m.isfile() or not _de_citit(m.name):
+            if not m.isfile() or not de_citit(m.name):
                 continue
             if m.size > FISIER_MAX:
                 yield m.name, None, float(m.mtime), m.size
                 continue
             citit += m.size
-            if citit > DESPACHETAT_MAX:
+            if citit > despachetat_max:
                 raise ValueError("arhivă prea mare la despachetare")
             f = t.extractfile(m)
             if f is not None:
@@ -438,14 +577,75 @@ def _prerelease(versiune: str) -> bool:
         return True
 
 
+def _data_dump(text: str) -> datetime:
+    """Data din dump-ul crates.io („2021-06-01 12:34:56.123456+00”, mereu UTC)."""
+    return datetime.strptime(text.strip()[:19].replace("T", " "), "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+
+
+def citeste_dump_crates(date: bytes, data_limita: datetime = DATA_LIMITA) -> dict:
+    """Din `db-dump.tar.gz` (în memorie): pentru fiecare crate, ultima versiune nescoasă (nu yanked), nu pre-lansare,
+    publicată înainte de data-limită, cu licența ei SPDX și mărimea. Cele mai descărcate întâi.
+
+    Citește doar `crates.csv`, `versions.csv` și (în dump-urile noi) `crate_downloads.csv`; restul se sare.
+    """
+    csv.field_size_limit(2**31 - 1)
+    nume: dict[str, str] = {}
+    descarcari: Counter = Counter()
+    descarcari_versiuni: Counter = Counter()
+    alese: dict[str, dict] = {}
+    with tarfile.open(fileobj=io.BytesIO(date), mode="r:*") as t:
+        for m in t:
+            baza = PurePosixPath(m.name).name
+            if not m.isfile() or baza not in ("crates.csv", "versions.csv", "crate_downloads.csv"):
+                continue
+            text = io.TextIOWrapper(t.extractfile(m), encoding="utf-8", newline="")
+            for r in csv.DictReader(text):
+                if baza == "crates.csv":
+                    nume[r["id"]] = r["name"]
+                    if r.get("downloads"):
+                        descarcari[r["id"]] = int(r["downloads"])
+                elif baza == "crate_downloads.csv":
+                    descarcari[r["crate_id"]] = int(r["downloads"])
+                else:
+                    cid = r["crate_id"]
+                    if r.get("downloads"):
+                        descarcari_versiuni[cid] += int(r["downloads"])
+                    if (r.get("yanked") or "f").strip().lower() in ("t", "true"):
+                        continue
+                    creat = _data_dump(r["created_at"])
+                    if creat >= data_limita or _prerelease(r["num"]):
+                        continue
+                    vechi = alese.get(cid)
+                    if vechi is None or creat > vechi["creat"]:
+                        alese[cid] = {"num": r["num"], "license": r.get("license") or "",
+                                      "crate_size": int(r.get("crate_size") or 0), "creat": creat}
+    if not descarcari:
+        descarcari = descarcari_versiuni
+    lista = [{"nume": nume[cid], "num": v["num"], "license": v["license"], "crate_size": v["crate_size"],
+              "creat": v["creat"].isoformat(), "descarcari": descarcari.get(cid, 0)}
+             for cid, v in alese.items() if cid in nume]
+    lista.sort(key=lambda e: (-e["descarcari"], e["nume"]))
+    return {"total_crates": len(nume), "fara_versiune_inainte_de_data": len(nume) - len(lista), "crates": lista}
+
+
 class Pilot:
-    """Descărcarea în flux, cu reluare. `retea` și `spatiu` se pot înlocui (testele nu ating rețeaua)."""
+    """Descărcarea în flux, cu reluare. `retea`, `spatiu` și `ceas` se pot înlocui (testele nu ating rețeaua).
+
+    Numele a rămas de la pilot; aceeași clasă face și descărcarea întreagă (`ruleaza_complet`).
+    """
 
     def __init__(self, iesire: Path, retea: Retea | None = None, spatiu: Callable[[Path], int] = spatiu_liber,
-                 data_limita: datetime = DATA_LIMITA, spatiu_minim: int = SPATIU_MINIM, scrie: Callable[[str], None] = print):
+                 data_limita: datetime = DATA_LIMITA, spatiu_minim: int = SPATIU_MINIM, scrie: Callable[[str], None] = print,
+                 ceas: Callable[[], float] = time.monotonic):
         self.iesire = Path(iesire)
         self.retea = retea or Retea()
         self.spatiu, self.data_limita, self.spatiu_minim, self.scrie = spatiu, data_limita, spatiu_minim, scrie
+        self.ceas = ceas
+        self.termen: float | None = None  # --limita-ore, doar la `complet`
+        self.limita_ore: float | None = None
+        self.complet = False  # la `complet`: erorile trecătoare nu închid pachetul, iar o eroare neașteptată nu oprește tot
+        self.erori_la_rand = 0
+        self.amanate = 0  # pachete lăsate pentru reluare (erori de rețea trecătoare) în rularea asta
         self.iesire.mkdir(parents=True, exist_ok=True)
         self.f_cod = self.iesire / "cod.jsonl"
         self.f_pachete = self.iesire / "pachete.jsonl"
@@ -479,6 +679,10 @@ class Pilot:
         if liber < self.spatiu_minim:
             raise OprireSpatiu(f"spațiul liber {liber / 1024**3:.1f} GB < {self.spatiu_minim / 1024**3:.0f} GB: mă opresc")
 
+    def _verifica_timpul(self) -> None:
+        if self.termen is not None and self.ceas() >= self.termen:
+            raise OprireTimp(f"au trecut cele {self.limita_ore:g} ore (--limita-ore): mă opresc curat; aceeași comandă reia")
+
     def _incheie(self, rezultat: dict) -> None:
         rezultat["pozitie_cod"] = self.f_cod.stat().st_size if self.f_cod.exists() else 0
         with open(self.f_pachete, "a", encoding="utf-8") as f:
@@ -487,7 +691,10 @@ class Pilot:
 
     # -- un pachet: licența, apoi fiecare fișier prin filtre
     def proceseaza(self, sursa: str, nume: str, versiune: str, metadate: set[str] | None, date: bytes,
-                   nume_arhiva: str, verifica_data_fisiere: bool = False) -> dict:
+                   nume_arhiva: str, verifica_data_fisiere: bool = False, pastreaza: Callable[[str], bool] | None = None,
+                   e_licenta: Callable[[str], bool] = e_fisier_licenta, licenta_pe_fisier: bool = False,
+                   despachetat_max: int = DESPACHETAT_MAX) -> dict:
+        """`licenta_pe_fisier` (FreeBSD): fără fișierul LICENSE al pachetului; fiecare fișier intră doar cu antet SPDX BSD."""
         rez = {"cheie": f"{sursa}:{nume}", "sursa": sursa, "pachet": nume, "versiune": versiune,
                "octeti_arhiva": len(date), "octeti_cod_brut": 0, "fisiere_cod_brut": 0,
                "pastrate": 0, "octeti_pastrati": 0, "aruncate": {}, "aruncate_octeti": {}}
@@ -497,10 +704,10 @@ class Pilot:
         candidati = []
         data_maxima = 0.0
         try:
-            for cale, continut, mtime, marime in fisiere_din_arhiva(date, nume_arhiva):
+            for cale, continut, mtime, marime in fisiere_din_arhiva(date, nume_arhiva, pastreaza, e_licenta, despachetat_max):
                 if mtime:
                     data_maxima = max(data_maxima, mtime)
-                if e_fisier_licenta(cale) and continut is not None:
+                if e_licenta(cale) and continut is not None:
                     are_licenta = True
                     p, n = licente_din_text(continut.decode("utf-8", "replace"))
                     lic_permise |= p
@@ -517,22 +724,28 @@ class Pilot:
         if metadate is None:
             rez.update(stare="respins", motiv="metadate_nepermise")
             return rez
-        if not are_licenta:
-            rez.update(stare="respins", motiv="fara_fisier_licenta")
-            return rez
-        if lic_nepermise:
-            rez.update(stare="respins", motiv="fisier_licenta_nepermisa")
-            return rez
-        if not se_potrivesc(metadate, lic_permise):
-            rez.update(stare="respins", motiv="licente_nepotrivite")
-            return rez
+        if not licenta_pe_fisier:
+            if not are_licenta:
+                rez.update(stare="respins", motiv="fara_fisier_licenta")
+                return rez
+            if lic_nepermise:
+                rez.update(stare="respins", motiv="fisier_licenta_nepermisa")
+                return rez
+            if not se_potrivesc(metadate, lic_permise):
+                rez.update(stare="respins", motiv="licente_nepotrivite")
+                return rez
         licenta = " OR ".join(sorted(metadate))
         aruncate, aruncate_oct = Counter(), Counter()
         randuri = []
         for cale, continut, marime in candidati:
             rez["fisiere_cod_brut"] += 1
             rez["octeti_cod_brut"] += marime
-            text, filtru = filtreaza(cale, continut)
+            text, filtru = filtreaza(cale, continut, variante_bsd=licenta_pe_fisier)
+            lic_fisier = licenta
+            if text is not None and licenta_pe_fisier:
+                lic_fisier = licenta_antet_bsd(text)
+                if lic_fisier is None:
+                    text, filtru = None, "antet_bsd"
             if text is not None:
                 sha = hashlib.sha256(normalizeaza(text).encode("utf-8")).hexdigest()
                 if sha in self.hashuri:
@@ -543,7 +756,7 @@ class Pilot:
                 continue
             self.hashuri.add(sha)
             randuri.append(json.dumps({"sursa": sursa, "pachet": nume, "versiune": versiune, "cale": cale,
-                                       "limbaj": EXTENSII[PurePosixPath(cale).suffix.lower()], "licenta": licenta,
+                                       "limbaj": EXTENSII[PurePosixPath(cale).suffix.lower()], "licenta": lic_fisier,
                                        "sha256": sha, "text": text}, ensure_ascii=False))
             rez["pastrate"] += 1
             rez["octeti_pastrati"] += len(text.encode("utf-8"))
@@ -556,13 +769,28 @@ class Pilot:
     def _ruleaza_pachet(self, cheie: str, functie: Callable[[], dict]) -> None:
         if cheie in self.gata:
             return
+        self._verifica_timpul()
         self._verifica_spatiul()
+        sursa, nume = cheie.split(":", 1)
         try:
             rez = functie()
         except EroareRetea as e:
-            sursa, nume = cheie.split(":", 1)
+            if self.complet and not e.permanenta:
+                # trecătoare: pachetul nu se închide, se reîncearcă la reluare; multe la rând = rețeaua e căzută
+                self.erori_la_rand += 1
+                self.amanate += 1
+                self.scrie(f"{cheie}: eroare de rețea, rămâne pentru reluare ({str(e)[:150]})")
+                if self.erori_la_rand >= ERORI_RETEA_LA_RAND:
+                    raise OprireRetea(f"{self.erori_la_rand} erori de rețea la rând: mă opresc; aceeași comandă reia") from None
+                return
             rez = {"cheie": cheie, "sursa": sursa, "pachet": nume, "stare": "respins", "motiv": "retea",
                    "detaliu": str(e)[:200]}
+        except Exception as e:  # noqa: BLE001 — la `complet` o arhivă ciudată nu oprește 2–3 nopți de descărcare
+            if not self.complet:
+                raise
+            rez = {"cheie": cheie, "sursa": sursa, "pachet": nume, "stare": "respins", "motiv": "eroare",
+                   "detaliu": f"{type(e).__name__}: {e}"[:200]}
+        self.erori_la_rand = 0
         rez["cheie"] = cheie
         self._incheie(rez)
         self.scrie(f"{cheie}: {rez['stare']}" + (f" ({rez.get('motiv')})" if rez["stare"] != "pastrat" else
@@ -571,8 +799,12 @@ class Pilot:
     # -- sursele
     def depozit(self, d: dict) -> dict:
         url = f"https://codeload.github.com/{d['depozit']}/tar.gz/refs/tags/{d['tag']}"
-        date = self.retea.ia(url)
-        return self.proceseaza("git", d["nume"], d["tag"], {d["licenta"]}, date, url, verifica_data_fisiere=True)
+        date = self.retea.ia(url, maxim=d.get("arhiva_max", ARHIVA_MAX))
+        pastreaza, e_licenta = reguli_depozit(d)
+        return self.proceseaza(d.get("sursa", "git"), d["nume"], d["tag"], licente_din_spdx(d["licenta"]), date, url,
+                               verifica_data_fisiere=True, pastreaza=pastreaza, e_licenta=e_licenta,
+                               licenta_pe_fisier=d.get("licenta_pe_fisier", False),
+                               despachetat_max=d.get("despachetat_max", DESPACHETAT_MAX))
 
     def alege_pypi(self, date_json: dict) -> tuple[str, dict] | None:
         """Ultima versiune (nu pre-lansare) cu sdist publicat înainte de data-limită."""
@@ -619,6 +851,13 @@ class Pilot:
         v = self.alege_crate(versiuni)
         if v is None:
             return {"sursa": "crates", "pachet": nume, "stare": "respins", "motiv": "fara_versiune_inainte_de_data"}
+        return self._crate_versiune(nume, v)
+
+    def crate_din_dump(self, e: dict) -> dict:
+        """Un crate din lista scoasă din dump: versiunea e deja aleasă, rămâne o singură cerere (arhiva)."""
+        return self._crate_versiune(e["nume"], {"num": e["num"], "license": e["license"], "crate_size": e["crate_size"]})
+
+    def _crate_versiune(self, nume: str, v: dict) -> dict:
         metadate = licente_din_spdx(v.get("license"))
         if metadate is None:
             return {"sursa": "crates", "pachet": nume, "versiune": v["num"], "stare": "respins",
@@ -673,6 +912,65 @@ class Pilot:
         (self.iesire / "rezumat.json").write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
         return rez
 
+    # -- descărcarea întreagă
+    def lista_crates_dump(self, n: int | None = None) -> list[dict]:
+        """Lista crate-urilor din dump-ul public (o singură cerere, o dată; apoi din `lista_crates_dump.json`)."""
+        f = self.iesire / "lista_crates_dump.json"
+        if not f.exists():
+            info = citeste_dump_crates(self.retea.ia(DUMP_CRATES, maxim=DUMP_MAX), self.data_limita)
+            f.write_text(json.dumps(info, ensure_ascii=False), encoding="utf-8")
+        lista = json.loads(f.read_text(encoding="utf-8"))["crates"]
+        return lista[:n] if n is not None else lista
+
+    def _info_liste(self) -> dict:
+        info = {}
+        f_p = self.iesire / "lista_pypi.json"
+        if f_p.exists():
+            info["pypi_in_lista"] = len(json.loads(f_p.read_text(encoding="utf-8")))
+        f_c = self.iesire / "lista_crates_dump.json"
+        if f_c.exists():
+            c = json.loads(f_c.read_text(encoding="utf-8"))
+            info["crates_din_dump"] = {"total": c["total_crates"], "cu_versiune_inainte_de_data": len(c["crates"]),
+                                       "fara_versiune_inainte_de_data": c["fara_versiune_inainte_de_data"]}
+        return info
+
+    def ruleaza_complet(self, depozite: Iterable[dict] = DEPOZITE_COMPLET, n_pypi: int = COMPLET_PYPI,
+                        n_crates: int | None = None, limita_ore: float | None = None) -> dict:
+        """Toate sursele, în ordinea din SURSE.md: depozitele (rândurile 3–6), PyPI, crates. Duplicatele exacte se scot
+        peste toate sursele (și peste reluări); aproape-duplicatele, o singură dată, când s-a terminat tot."""
+        inceput = time.time()
+        self.complet = True
+        self.limita_ore = limita_ore
+        self.termen = self.ceas() + limita_ore * 3600 if limita_ore else None
+        try:
+            for d in depozite:
+                self._ruleaza_pachet(f"{d.get('sursa', 'git')}:{d['nume']}", lambda d=d: self.depozit(d))
+            self._verifica_timpul()
+            self._verifica_spatiul()
+            for nume in self.lista_pypi(n_pypi) if n_pypi else []:
+                self._ruleaza_pachet(f"pypi:{nume}", lambda nume=nume: self.pypi(nume))
+            self._verifica_timpul()
+            self._verifica_spatiul()
+            for e in self.lista_crates_dump(n_crates) if n_crates != 0 else []:
+                self._ruleaza_pachet(f"crates:{e['nume']}", lambda e=e: self.crate_din_dump(e))
+            oprit = None
+            if self.amanate:
+                oprit = f"{self.amanate} pachete amânate după erori de rețea: nu e gata; aceeași comandă le reia"
+        except (OprireSpatiu, OprireTimp, OprireRetea, EroareRetea) as e:
+            oprit = str(e) if not isinstance(e, EroareRetea) else f"lista nu s-a putut lua: {e}; aceeași comandă reia"
+        if oprit:
+            self.scrie(oprit)
+        rez = rezumat(self.iesire, aproape=oprit is None)
+        if oprit:
+            rez["oprit"] = oprit
+        rez["terminat"] = oprit is None
+        rez.update(self._info_liste())
+        rez["secunde_rularea_asta"] = round(time.time() - inceput)
+        rez["cereri_rularea_asta"] = self.retea.cereri
+        rez["octeti_descarcati_rularea_asta"] = self.retea.octeti
+        (self.iesire / "rezumat.json").write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+        return rez
+
 
 # ---------------------------------------------------------------- aproape-duplicatele (MinHash) ----------------------------
 
@@ -692,15 +990,21 @@ def semnatura(text: str, a, b):
     return ((np.outer(h, a) + b) % PRIM).min(axis=0)
 
 
-def aproape_duplicate(texte: list[str], prag: float = 0.85, benzi: int = 16, randuri: int = 8, samanta: int = 0) -> list[int]:
-    """Indicii de scos: în fiecare grup cu Jaccard estimat ≥ prag rămâne cel mai lung text."""
+def aproape_duplicate(texte: Iterable[str], prag: float = 0.85, benzi: int = 16, randuri: int = 8, samanta: int = 0) -> list[int]:
+    """Indicii de scos: în fiecare grup cu Jaccard estimat ≥ prag rămâne cel mai lung text.
+
+    `texte` se parcurge o singură dată (poate fi un generator peste cod.jsonl): în memorie rămân doar semnăturile.
+    """
     import numpy as np
     rng = np.random.default_rng(samanta)
     n_perm = benzi * randuri
     a = rng.integers(1, PRIM, n_perm, dtype=np.int64)
     b = rng.integers(0, PRIM, n_perm, dtype=np.int64)
-    sem = [semnatura(t, a, b) for t in texte]
-    parinte = list(range(len(texte)))
+    sem, lungimi = [], []
+    for t in texte:
+        sem.append(semnatura(t, a, b))
+        lungimi.append(len(t))
+    parinte = list(range(len(sem)))
 
     def radacina(i: int) -> int:
         while parinte[i] != i:
@@ -718,17 +1022,24 @@ def aproape_duplicate(texte: list[str], prag: float = 0.85, benzi: int = 16, ran
                 if radacina(i) != radacina(j) and float(np.mean(sem[i] == sem[j])) >= prag:
                     parinte[radacina(j)] = radacina(i)
     grupuri: dict[int, list[int]] = {}
-    for i in range(len(texte)):
+    for i in range(len(sem)):
         grupuri.setdefault(radacina(i), []).append(i)
     scoase = []
     for membri in grupuri.values():
         if len(membri) > 1:
-            pastrat = max(membri, key=lambda i: (len(texte[i]), -i))
+            pastrat = max(membri, key=lambda i: (lungimi[i], -i))
             scoase += [i for i in membri if i != pastrat]
     return sorted(scoase)
 
 
 # ---------------------------------------------------------------- rezumatul -----------------------------------------------
+
+def _randuri_cod(f_cod: Path) -> Iterator[dict]:
+    with open(f_cod, encoding="utf-8") as f:
+        for rand in f:
+            if rand.strip():
+                yield json.loads(rand)
+
 
 def rezumat(iesire: Path, aproape: bool = True) -> dict:
     iesire = Path(iesire)
@@ -759,14 +1070,17 @@ def rezumat(iesire: Path, aproape: bool = True) -> dict:
     scoase_aproape, oct_aproape = [], 0
     f_cod = iesire / "cod.jsonl"
     if aproape and f_cod.exists():
-        randuri = [json.loads(r) for r in f_cod.read_text(encoding="utf-8").splitlines() if r.strip()]
-        scoase_aproape = aproape_duplicate([r["text"] for r in randuri])
-        oct_aproape = sum(len(randuri[i]["text"].encode("utf-8")) for i in scoase_aproape)
+        scoase_aproape = aproape_duplicate(r["text"] for r in _randuri_cod(f_cod))
         (iesire / "aproape_duplicate.json").write_text(json.dumps(scoase_aproape), encoding="utf-8")
-        for i in scoase_aproape:
-            s = pe_sursa[randuri[i]["sursa"]]
-            s["octeti_curat"] -= len(randuri[i]["text"].encode("utf-8"))
-            s["fisiere_curat"] -= 1
+        de_scos = set(scoase_aproape)
+        if de_scos:
+            for i, r in enumerate(_randuri_cod(f_cod)):
+                if i in de_scos:
+                    marime = len(r["text"].encode("utf-8"))
+                    oct_aproape += marime
+                    s = pe_sursa[r["sursa"]]
+                    s["octeti_curat"] -= marime
+                    s["fisiere_curat"] -= 1
         aruncate["aproape_duplicat"] = len(scoase_aproape)
         aruncate_oct["aproape_duplicat"] = oct_aproape
     brut = sum(s["octeti_cod_brut"] for s in pe_sursa.values())
@@ -799,11 +1113,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--iesire", type=Path, default=IESIRE_PILOT)
     p.add_argument("--pypi", type=int, default=PILOT_PYPI)
     p.add_argument("--crates", type=int, default=PILOT_CRATES)
+    c = sub.add_parser("complet", help="descărcarea întreagă: toate cele 6 surse din SURSE.md (folosește rețeaua; cere „da”)")
+    c.add_argument("--iesire", type=Path, default=IESIRE_COMPLET)
+    c.add_argument("--pypi", type=int, default=COMPLET_PYPI, help="câte pachete din lista PyPI (implicit 30.000)")
+    c.add_argument("--crates", type=int, default=None, help="câte crate-uri din dump (implicit toate)")
+    c.add_argument("--limita-ore", type=float, default=None, help="oprire curată după N ore; aceeași comandă reia")
     r = sub.add_parser("rezumat", help="refă rezumatul din ce e deja pe disc (fără rețea)")
     r.add_argument("--iesire", type=Path, default=IESIRE_PILOT)
     a = ap.parse_args(argv)
     if a.comanda == "pilot":
         rez = Pilot(a.iesire).ruleaza(n_pypi=a.pypi, n_crates=a.crates)
+    elif a.comanda == "complet":
+        rez = Pilot(a.iesire).ruleaza_complet(n_pypi=a.pypi, n_crates=a.crates, limita_ore=a.limita_ore)
     else:
         rez = rezumat(a.iesire)
         (a.iesire / "rezumat.json").write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
