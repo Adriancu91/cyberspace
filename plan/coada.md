@@ -1887,7 +1887,8 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   doar `module/calcul/`, testul lui, raportul și coada atinse; 1080 teste trec, 1 sărit. Rezultat: pe workstation cea mai rapidă e `referinta` cu 1 fir (2,47 s, 31 simb/s).
 
 ### S48 — CCM etapa 2: modulul `inferenta_ccm` pe portul `inferenta` + reglajul salvat + rezerva (doar procesor)
-- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor — **S47 verificat 29 oct 14:35: poate porni acum** (doar procesor; nu încurcă S45 de la 19:00)
+- stare: in_lucru (executant, 29 oct 15:00)
+- (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor — **S47 verificat 29 oct 14:35: poate porni acum** (doar procesor; nu încurcă S45 de la 19:00)
 - ce faci: `module/inferenta_ccm.py` (MANIFEST pe portul `inferenta`) folosește variantele alese din `lucru/ccm/reglaj-<calculator>.json`;
   fără reglaj sau la orice nepotrivire → calea `inferenta_kgr1`. Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.
   Formatul reglajului descris în `docs/CCM_plan.md` (pentru OS, mai târziu). Raport cu viteza față de referință pe workstation. Fără schimbări în `kronos/`.
