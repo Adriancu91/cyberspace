@@ -225,6 +225,12 @@ cele 48 de teste ale ei trec și în cloud, fără rețea ✓. Accept data „î
 Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model”, „altă rețetă” și „tăierea” sunt închise). **S45** (încă o noapte pe linia w2 din #459, rețeta A) = `propus — necesită Adrian`
 (direcția din 22 oct: nopți de antrenare doar cu „da”-ul lui). **Ordinea pentru executant: S43 (pilotul, procesor + rețea), apoi nimic pe placă până la „da”.**
 
+**Actualizare 29 oct 14:35 (supraveghetor) — S47 verificat: bun; S48 poate porni acum (procesor); S45 rămâne diseară de la 19:00:**
+S47: regulile (toleranța |Δ logit| ≤ 1e-3, regula „cea mai rapidă”) urcate înainte de măsurare (e9c20a1, 10:38; măsurarea oficială 11:08–11:39) ✓; prima încercare
+oprită fără `s47.json`, deci nu se numără ✓; toate 9 combinațiile acceptate (Δ ≤ 3,3·10⁻⁶) ✓; 3,382 / 2,471 = **1,37×** ✓; împrăștieri 0,6 % și 15,7 % ✓;
+profilul 1200+568+510+326+252+231+90+52+3+1,6 = 3.233 ms ✓, înmulțirile 2.368 / 3.233 = **73,2 %** ✓; la_pas 43.240 / 50.174 = 86,2 % ✓; 1080 teste trec. Reglajul pentru
+S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48 o poate re-măsura o dată, cu regula scrisă înainte). **Ordinea: S48 (procesor) acum → S45 la 19:00 pe placă → S49 după S45, cu placa liberă.** S46 așteaptă „da”-ul lui Adrian.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1877,9 +1883,11 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - aprobat de: centrul de comandă (delegare), 29 oct 10:20
 - raport: docs/rapoarte/2026-10-29_1037_S47_ccm_profil.md
+- verificat de supraveghetor (29 oct 14:35): **bun** — regulile urcate înainte de măsurare (e9c20a1, 10:38; măsurarea 11:08–11:39); cifrele se adună (1,37×; înmulțirile 73,2 % din timp);
+  doar `module/calcul/`, testul lui, raportul și coada atinse; 1080 teste trec, 1 sărit. Rezultat: pe workstation cea mai rapidă e `referinta` cu 1 fir (2,47 s, 31 simb/s).
 
 ### S48 — CCM etapa 2: modulul `inferenta_ccm` pe portul `inferenta` + reglajul salvat + rezerva (doar procesor)
-- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor
+- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor — **S47 verificat 29 oct 14:35: poate porni acum** (doar procesor; nu încurcă S45 de la 19:00)
 - ce faci: `module/inferenta_ccm.py` (MANIFEST pe portul `inferenta`) folosește variantele alese din `lucru/ccm/reglaj-<calculator>.json`;
   fără reglaj sau la orice nepotrivire → calea `inferenta_kgr1`. Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.
   Formatul reglajului descris în `docs/CCM_plan.md` (pentru OS, mai târziu). Raport cu viteza față de referință pe workstation. Fără schimbări în `kronos/`.

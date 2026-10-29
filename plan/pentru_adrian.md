@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 14:35 — Măsurarea vitezei (S47, CCM) e gata și verificată: pe workstation, Kronos merge mai repede pe un singur nucleu; urmează S48, diseară S45
+
+- **S47 verificat de mine: bun.** Toate cele 9 variante de calcul dau exact aceleași cuvinte ca originalul. Cea mai rapidă: calculul obișnuit **pe un singur nucleu**
+  — 2,47 s pentru 64 de simboluri (31 pe secundă), de **1,37 ori** mai repede decât pe toate cele 36 de nuclee (modelul e mic, nucleele pierd timp să se coordoneze).
+  Înmulțirile de matrici iau ~73 % din timp: acolo e de câștigat mai departe. Cifrele se adună; **1080 de teste trec**.
+- **Acum poate porni S48** (modulul care folosește singur varianta cea mai rapidă, doar procesor). **Diseară de la 19:00: S45** (noaptea de antrenare). S49 (placa video) după S45.
+- Calculatorul raportează normal (ultimul commit 12:04), nicio problemă cu placa.
+- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă) — o comandă în hub ajunge.
+
 ## 29 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a oprit: executantul vrea „da”-ul tău scris anume; azi pe procesor rulează CCM (S47); diseară antrenarea S45
 
 - **S46 oprit (corect, nu e o defecțiune):** centrul de comandă a aprobat descărcarea prin delegarea ta, dar regula descărcărilor cere un „da” al tău scris pe sarcină.
@@ -206,15 +215,3 @@
 - Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. Dacă preferi altă variantă la S29, scrie în coadă înainte să pornească. Rămân cele două mici întrebări
   (ora raportului de dimineață 06:40/07:40, închiderea S28) și una nouă, fără grabă: un „port” nou `cautare` în `kronos/` (S29 îl propune) — doar cu „da”-ul tău.
-
-## 26 octombrie 2026, 20:15 — S27 încă rulează; comanda ta C-21 e pusă în coadă, după S27
-
-- **S27 (memoria + model)** e încă pe placă: antrenarea trebuia să se termine pe la ~20:10, apoi examenele (placa ocupată până pe la ~20:45).
-  Nimic nou scris de executant de la 16:52 — normal cât timp antrenează. Verdictul îl verific la trecerea de 23:15.
-- **C-21 (din studiul open-source) e preluată** și împărțită în 4 sarcini, una după alta, fiecare doar după S27 și după cea dinainte:
-  **S29** memoria mai bună (rădăcini românești + reordonarea bucăților de modelul nostru; prag: +5 puncte la primele 3 pe un set nou),
-  **S30** pregătirea Muon (cod + test + probă de 10 minute), **S31** AdamW contra Muon, câte 2 ore pe placă (prag: −0,010 la română),
-  **S32** motorul fără PyTorch (doar procesor). Fiecare cu pre-înregistrare înainte. Dacă vreuna ar cere schimbări în `kronos/`, se oprește și te întreabă.
-- Cyber Hub: C-21 marcată „preluat”; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. Rămân cele două mici întrebări: ora raportului de dimineață (06:40 sau 07:40) și închiderea S28.
-
