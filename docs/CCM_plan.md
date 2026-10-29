@@ -27,6 +27,30 @@ pentru fiecare operație, le verifică față de o referință, le măsoară și
   Rezerva: dacă o variantă lipsește sau nu e verificată → calea din `inferenta_kgr1` (referința).
 - Reglajul: `lucru/ccm/reglaj-<calculator>.json` (în afara Git); formatul se pune în hub (`integrare/kronos/CCM_REGLAJ.md`), ca OS-ul să-l poată folosi.
 
+## Formatul reglajului (S48, `ccm-reglaj` versiunea 1)
+Un fișier JSON per calculator, scris din măsurarea bancului (`python -X utf8 -m module.calcul.reglaj scrie --banc lucru/ccm/s47.json`),
+nu de mână. Verificare: `python -X utf8 -m module.calcul.reglaj verifica --kgr <model>` (cod 0 = se folosește).
+
+```json
+{
+ "format": "ccm-reglaj", "versiune": 1,
+ "calculator": "desktop-br58s2c",          // platform.node(), litere mici, doar [a-z0-9_-]
+ "nuclee": 36,                              // os.cpu_count() când s-a măsurat
+ "scris": "2026-10-29T15:02", "sursa_masurarii": "lucru/ccm/s47.json",
+ "model": {"nume": "kronos_459_q8_0.kgr", "sha256": "e80618b4…"},   // modelul pe care s-a verificat varianta
+ "toleranta_logits": 0.001,
+ "operatii": {
+  "inmultire": {"varianta": "referinta", "fire": "1", "acceptata": true, "dif_logits_max": 0.0,
+                "total_secunde": 2.47, "simboluri_pe_secunda": 31.1, "fata_de_referinta_total": 1.37}
+ }
+}
+```
+- `fire`: „toate” (nu se schimbă nimic) sau un număr ≥ 1; se pun doar pe durata calculului, apoi înapoi.
+- Se folosește doar dacă TOT se potrivește: format + versiune, calculatorul, nucleele, sha256-ul modelului, operații cunoscute
+  (acum doar `inmultire`), varianta există și e `acceptata: true`, firele se pot pune. Altfel: rezerva (`inferenta_kgr1`), cu motivele
+  în `statistici()["ccm"]`.
+- Numele variantelor sunt cele din `module/calcul/variante/` (Kronos pe Windows); OS-ul poate citi același format, cu numele lui.
+
 ## Reguli (judecătorul rămâne în afara lui Kronos)
 1. O variantă intră doar dacă dă **aceleași simboluri** ca referința la vectorii KGR1 (greedy), iar logit-urile sunt în toleranța scrisă înainte.
 2. Viteza se raportează doar din măsurători repetate (median + împrăștiere), cu timpul complet: pregătire + transfer + calcul.

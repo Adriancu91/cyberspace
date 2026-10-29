@@ -1887,7 +1887,11 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   doar `module/calcul/`, testul lui, raportul și coada atinse; 1080 teste trec, 1 sărit. Rezultat: pe workstation cea mai rapidă e `referinta` cu 1 fir (2,47 s, 31 simb/s).
 
 ### S48 — CCM etapa 2: modulul `inferenta_ccm` pe portul `inferenta` + reglajul salvat + rezerva (doar procesor)
-- stare: in_lucru (executant, 29 oct 15:00)
+- stare: gata (executant, 29 oct 15:10: `module/inferenta_ccm.py` + `module/calcul/reglaj.py` + `fire.py`; trece `teste_contracte/` (cu reglaj și cu rezerva);
+  reglajul `lucru/ccm/reglaj-desktop-br58s2c.json` = referinta, 1 fir, #459 sha e80618b4…; aceleași simboluri ca `inferenta_kgr1`;
+  pe #459 CCM 2,89 s / 28,3 simb/s față de 3,54 s / 20,3 → 1,22× total, 1,39× generare; ATENȚIE: la primul răspuns într-un proces nou
+  referința face ~40 simb/s (mai rapidă decât CCM); 1099 teste trec, 1 sărit)
+- raport: docs/rapoarte/2026-10-29_1510_S48_inferenta_ccm.md
 - (istoric) stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor — **S47 verificat 29 oct 14:35: poate porni acum** (doar procesor; nu încurcă S45 de la 19:00)
 - ce faci: `module/inferenta_ccm.py` (MANIFEST pe portul `inferenta`) folosește variantele alese din `lucru/ccm/reglaj-<calculator>.json`;
   fără reglaj sau la orice nepotrivire → calea `inferenta_kgr1`. Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.

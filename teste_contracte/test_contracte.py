@@ -102,6 +102,8 @@ MODULE = [
     ("cautare", "module.cautare_e3:CautareE3", {"cale_index": "__index_e3_mic__"}),
     ("inferenta", "module.inferenta_kgr1:InferentaKGR1", {"cale": str(KGR_MIC)}),
     ("inferenta", "module.inferenta_kgr1:InferentaKGR1", {"cale": str(KGR_MIC), "desfacere": "la_pas"}),
+    ("inferenta", "module.inferenta_ccm:InferentaCCM", {"cale": str(KGR_MIC), "cale_reglaj": "__reglaj_mic__"}),
+    ("inferenta", "module.inferenta_ccm:InferentaCCM", {"cale": str(KGR_MIC), "cale_reglaj": "__fara_reglaj__"}),
 ]
 
 BUCATI_E3_MICI = [
@@ -171,6 +173,19 @@ def _setari_reale(setari, tmp_path):
         from teste.wikipedia_mic import scrie_wikipedia
 
         setari = scrie_wikipedia(tmp_path)
+    if setari.get("cale_reglaj") == "__reglaj_mic__":  # reglaj CCM pentru modelul mic, pe calculatorul acesta
+        import json
+
+        from module.calcul import reglaj
+
+        banc = {"kgr": setari["cale"], "toleranta_logits": 1e-3, "cea_mai_rapida_pe_total": {"varianta": "transpus", "fire": "toate"},
+                "rezultate": [{"varianta": "transpus", "fire": "toate", "acceptata": True,
+                               "masurare": {"total": {"median": 1.0}, "simboluri_pe_secunda": {"median": 1.0}},
+                               "verificare_model": {"dif_logits_max": 0.0}}]}
+        (tmp_path / "reglaj.json").write_text(json.dumps(reglaj.din_banc(banc, "test")), encoding="utf-8")
+        setari["cale_reglaj"] = str(tmp_path / "reglaj.json")
+    if setari.get("cale_reglaj") == "__fara_reglaj__":  # rezerva: calea inferenta_kgr1
+        setari["cale_reglaj"] = str(tmp_path / "nu_exista.json")
     return setari
 
 

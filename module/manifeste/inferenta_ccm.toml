@@ -1,0 +1,24 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "inferenta_ccm"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Inferența KGR1 cu varianta și firele alese de bancul CCM pe calculatorul acesta (lucru/ccm/reglaj-<calculator>.json); fără reglaj sau la orice nepotrivire, calea inferenta_kgr1."
+format = "modul-v0"
+
+[contract]
+port = "inferenta"
+versiune_contract = "1"
+
+[depinde]
+"inferenta_kgr1" = ">=0.1.0"
+
+[ofera]
+"logits" = "scorurile simbolurilor pentru poziția următoare"
+"genereaza" = "simboluri noi, mereu cel mai probabil (fără întâmplare)"
+"statistici" = "vocabularul, contextul, formatul greutăților și ce a ales CCM (sau de ce a luat rezerva)"
+
+[rulare]
+limbaj = "python"
+intrare = "module.inferenta_ccm:InferentaCCM"
+teste = "python -m pytest teste/test_inferenta_ccm.py && python -m pytest teste_contracte -k InferentaCCM"
