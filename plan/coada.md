@@ -231,6 +231,12 @@ oprită fără `s47.json`, deci nu se numără ✓; toate 9 combinațiile accept
 profilul 1200+568+510+326+252+231+90+52+3+1,6 = 3.233 ms ✓, înmulțirile 2.368 / 3.233 = **73,2 %** ✓; la_pas 43.240 / 50.174 = 86,2 % ✓; 1080 teste trec. Reglajul pentru
 S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48 o poate re-măsura o dată, cu regula scrisă înainte). **Ordinea: S48 (procesor) acum → S45 la 19:00 pe placă → S49 după S45, cu placa liberă.** S46 așteaptă „da”-ul lui Adrian.
 
+**Actualizare 29 oct 21:50 (supraveghetor) — „da S46” de la Adrian (C-43): descărcarea codului poate porni; S45 continuă neatins; S50 după S45 ȘI după bucata de noapte a S46:**
+Adrian a scris „da s46” (21:46, comanda C-43 din hub); centrul de comandă a trecut S46 pe `aprobat` cu „aprobat de: Adrian, 29 oct 21:46” — exact ce cerea oprirea din 08:34 ✓.
+Am preluat C-43 în hub (→ S46). **Executant:** S46 pornește la prima verificare a cozii, cu comanda exactă din sarcină (`--limita-ore 10`), în paralel cu S45 (S46 nu folosește placa).
+Nu opri și nu încetini S45. Raport după fiecare bucată (GB curat, simboluri, spațiul liber pe C:, erori de rețea). **S50 se măsoară doar când nici S45, nici S46 nu rulează**
+(descărcarea și curățarea încarcă procesorul și ar strica timpii „cald/rece”); dacă bucata S46 ține până dimineață, S50 vine după ea, în aceeași zi. Tokenizerul pe cod: tot al doilea „da”.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1867,6 +1873,7 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
   oprire automată sub 40 GB), ~3–6 mld simboluri estimate, doar sursele fără cont, data-limită 29 iunie 2021. Raport după fiecare bucată. Tokenizerul pe cod
   NU se antrenează (al doilea „da”, separat).
 - aprobat de: Adrian, 29 oct 2026 21:46 („da s46”)
+- notă supraveghetor (29 oct 21:50): verificat — „da”-ul e al lui Adrian, scris anume (C-43 în hub), deci regula descărcărilor e îndeplinită. Pornește la prima verificare a cozii, în paralel cu S45. Dacă o bucată se oprește de 2 ori cu aceeași eroare: `oprit` + raport.
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
@@ -1913,7 +1920,7 @@ S48 pe workstation: `referinta`, 1 fir (diferența față de 4 fire e mică; S48
 ### S50 — CCM etapa 4: bancul măsoară „rece” (primul răspuns dintr-un motor nou) și „cald” (răspunsurile următoare din același motor); alegerea pe procesor după „cald” (doar procesor)
 - stare: **aprobat** (supraveghetor, 29 oct 17:30 — granițele 2 și 5: măsurători + unealtă în `module/calcul/` și teste, fără `kronos/`, fără examen, nimic descărcat/instalat)
 - tip: procesor (fără placă, fără rețea); durată maximă ~2 ore
-- fereastră: **doar după ce S45 s-a terminat** (nu în timpul antrenării de noapte: antrenarea încarcă procesorul și ar strica măsurătorile); cel mai devreme 30 oct dimineață, în fereastra de zi.
+- fereastră: **doar după ce S45 s-a terminat și cât timp S46 nu rulează** (supraveghetor, 29 oct 21:50; descărcarea încarcă procesorul) (nu în timpul antrenării de noapte: antrenarea încarcă procesorul și ar strica măsurătorile); cel mai devreme 30 oct dimineață, în fereastra de zi.
 - de ce: S48 și S49 au arătat că pe Windows referința cu toate firele e rapidă doar la primul calcul dintr-un motor nou (~40 simb/s), apoi cade la ~20–22; cu 1 fir rămâne constant ~28–31. Bancul face un motor nou la fiecare repetare, deci vede doar cazul „rece” și a ales în S49 „toate firele” pentru procesor — greșit pentru interfață și pentru OS, care țin modelul deschis.
 - ce faci:
   1. `module/calcul/banc.py`: pentru fiecare variantă (procesor și, la comanda `placa`, placă) măsori în același proces și același motor: răspunsul 1 („rece”) și răspunsurile 2–6 („cald”, median + împrăștiere), 64 de simboluri, „Ana are mere.”, #459 Q8_0. Verificarea simbolurilor față de referință ca la S47/S49 (aceleași simboluri, |Δ logit| ≤ 0,001), la fiecare răspuns.

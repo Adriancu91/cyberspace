@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 29 octombrie 2026, 21:50 — Ai spus „da” la S46: descărcarea codului pornește la următoarea trecere a executantului; S45 rulează în continuare
+
+- **S46 aprobat de tine** („da s46”, 21:46, comanda C-43 din hub) — am verificat că e scris pe sarcină cum cere regula descărcărilor. Executantul o pornește la
+  prima verificare a cozii: ~10 ore pe noapte, cam 3 nopți, **fără placă**, oprire automată dacă pe C: rămân sub 40 GB. După fiecare noapte primești cifrele.
+- **Rulează S45** (antrenarea de noapte din #459, de la 19:00), neatinsă. Sfârșit estimat ~01:25; verdictul îl verific la 02:15.
+- **S50** (măsurarea vitezei „rece/cald”) mutată după S45 **și** după bucata de noapte a S46, ca descărcarea să nu strice cronometrarea.
+- Nicio problemă: placa și calculatorul în regulă (ultimul commit al executantului 19:00, normal în timpul antrenării).
+- **Aștept de la tine:** nimic acum. Mai târziu: al doilea „da” pentru tokenizerul pe cod, după ce se termină descărcarea.
+
 ## 29 octombrie 2026, 20:15 — Antrenarea de noapte S45 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
 
 - **Rulează S45** (încă 6 ore de antrenare din #459, cea mai bună rețetă). Am verificat: pragurile au fost urcate înainte de pornire, exact cum le-am fixat
@@ -194,15 +203,3 @@
 - Totul a mers fără erori (placa ~730 MB, 950 teste trec; un test al interfeței a picat o dată din cauza unei conexiuni și a trecut imediat — îl urmăresc).
   Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
-
-## 27 octombrie 2026, 08:15 — Muon: INFIRMAT, dar rețeta veche „îmbunătățită” a dat cel mai bun rezultat pe română; pun o probă de control
-
-- **S31 (AdamW contra Muon) e gata și verificat: INFIRMAT.** Muon a ieșit mai slab pe română (1,3019 față de 1,2332; mai mic = mai bine) și
-  mai slab și la povești, cod și fapte. Am verificat cifrele și ora: regulile au fost urcate înainte de antrenare. Muon se închide aici.
-- **Surpriza bună:** varianta A (metoda de până acum, plus „adunarea pe 8 loturi” și încetinirea pe ultimul sfert) a ajuns la **1,2332**, cel mai bun
-  rezultat pe română al liniei (#415 avea 1,2858). Dar A a avut și **2 ore în plus** de antrenare, deci nu știm încă dacă ajută rețeta sau doar orele.
-- **Pus în coadă (aprobat de mine, e în granițe): S34**, azi după S33: aceleași 2 ore din #415, cu rețeta veche, ca reper (~2,5 ore pe placă).
-  Dacă rețeta A câștigă cu cel puțin 0,010 → o păstrăm. **S33** (Kronos citește cu căutarea nouă, < 1 oră) pornește după 08:00; **S32** (procesor) după S34.
-- Totul a mers fără erori azi-noapte (placa sub 5.400 MB, 946 teste trec); raportul de dimineață e la locul lui. Cyber Hub: nicio comandă nouă; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. La „continuarea cu rețeta A” din raportul de dimineață îți dau răspunsul după S34 (diseară). Rămân cele trei mici întrebări:
-  ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
