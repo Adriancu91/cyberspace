@@ -1854,3 +1854,28 @@ Placa: nimic în granițele mele care să merite o oră acum (E3: „alt model�
   NU se antrenează (al doilea „da”, separat).
 - aprobat de: — (aștept „da”/„nu” de la Adrian, prin comandă în hub)
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
+
+### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
+- stare: **aprobat** (centrul de comandă, 29 oct 10:20, ideea lui Adrian, prin delegarea din 26 oct 17:45). Planul: `docs/CCM_plan.md`.
+- tip: procesor (fără placă, fără rețea); fereastră: oricând, o singură sarcină odată; durată maximă: ~3 ore
+- ce faci:
+  1. Citești `docs/CCM_plan.md`. Profil pe #459 (`lucru/export/kronos_459_q8_0.kgr`) cu `unelte/inferenta_bruta.py`: timpul pe operații pentru
+     `Ana are mere.` → 64 de simboluri (încărcare, desfacere Q8_0, înmulțiri pe straturi, atenție, normalizare, softmax, eșantionare).
+  2. `module/calcul/` nou: `banc.py` (rulează o variantă, verifică față de referință: simboluri identice pe vectorii KGR1 + toleranța logit-urilor scrisă
+     înainte în raport; măsoară median + împrăștiere pe ≥ 5 repetări, timp complet), `variante/` cu 2–4 variante pe procesor pentru înmulțire
+     (de ex. desfacere o dată vs. la fiecare pas, fire numpy 1/toate, blocuri) — doar cu ce e deja instalat.
+  3. Teste noi în `teste/` (fără rețea, pe modele mici sintetice): o variantă greșită e respinsă, o variantă corectă e acceptată, măsurarea e repetabilă.
+  4. `python -m pytest` verde; commit + push; raport `docs/rapoarte/2026-10-29_<ora>_S47_ccm_profil.md` cu tabelul de cifre (simb/s, ms pe operație).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `module/inferenta_kgr1.py`, `unelte/inferenta_bruta.py` (doar le folosești). Nimic instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- aprobat de: centrul de comandă (delegare), 29 oct 10:20
+
+### S48 — CCM etapa 2: modulul `inferenta_ccm` pe portul `inferenta` + reglajul salvat + rezerva (doar procesor)
+- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S47 verificat de supraveghetor
+- ce faci: `module/inferenta_ccm.py` (MANIFEST pe portul `inferenta`) folosește variantele alese din `lucru/ccm/reglaj-<calculator>.json`;
+  fără reglaj sau la orice nepotrivire → calea `inferenta_kgr1`. Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.
+  Formatul reglajului descris în `docs/CCM_plan.md` (pentru OS, mai târziu). Raport cu viteza față de referință pe workstation. Fără schimbări în `kronos/`.
+
+### S49 — CCM etapa 3: varianta pe placa video sub Windows (PyTorch, fp32/fp16/bf16) și alegerea procesor/placă după măsurători
+- stare: **aprobat** (centrul de comandă, 29 oct 10:20), după S48; **doar cu placa liberă** (nu în timpul antrenării, nu în ferestrele OS/GPU cu Adrian), VRAM < 7 GB, ~1 oră pe placă
+- verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
