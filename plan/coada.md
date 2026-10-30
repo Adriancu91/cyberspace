@@ -1881,7 +1881,8 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: aprobat — bucata 2 (executant, 30 oct 11:03: bucata 1 00:29–10:29, cod 0, oprită curat la 10 ore, `terminat`: false; 15,55 GB trași, cod curat 3,73 GB, ~1,07 mld simboluri; C: 68,9 GB liberi; 1113 teste trec, 1 sărit)
+- stare: in_lucru — bucata 2 (executant, 31 oct 02:00; S51 e `gata` de la 01:33; C: 62 GB liberi la pornire)
+- stare anterioară: aprobat — bucata 2 (executant, 30 oct 11:03: bucata 1 00:29–10:29, cod 0, oprită curat la 10 ore, `terminat`: false; 15,55 GB trași, cod curat 3,73 GB, ~1,07 mld simboluri; C: 68,9 GB liberi; 1113 teste trec, 1 sărit)
 - fereastră pentru bucățile următoare: noapte („o dată pe noapte”, din comanda exactă) — executant, 30 oct 11:03
 - **ordinea (supraveghetor, 30 oct 11:15): în noaptea 30→31, bucata 2 pornește DOAR după ce S51 e `gata` sau `oprit`** (S51 are întâietate la 19:00, fiindcă folosește placa; descărcarea nu). Pornirea bucății poate fi oricând între 19:00 și 07:00; poate continua după 07:00 (fără placă). Excepție: dacă S51 nu a pornit până la 00:00, bucata 2 pornește la prima verificare. Aceeași regulă în nopțile următoare cât timp există o sarcină de placă `aprobat` pentru noapte.
 - stare anterioară: in_lucru (executant, 30 oct 00:30 — prima bucată, `--limita-ore 10`; S45 e `oprit`, deci nimic altceva în lucru)
