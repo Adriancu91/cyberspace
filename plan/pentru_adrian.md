@@ -186,14 +186,3 @@
   așa că eu copiez pachetul în hub la trecerea următoare.
 - **Aștept de la tine:** nimic urgent. Rămân: pragul pentru motorul fără PyTorch (fix 0,0001 sau relativ, din raportul S37), ora raportului
   de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
-
-## 27 octombrie 2026, 20:15 — Proba D: NECLAR; motorul fără PyTorch: tot NU TRECE la limită; antrenarea de noapte (S38) rulează
-
-- **S36 (proba D) verificat: NECLAR.** Fără „adunarea pe 8 loturi”, modelul ajunge la **1,2520** pe română, față de **1,2332** cu rețeta A întreagă
-  (mai mic = mai bine). Deci ambele părți ale rețetei ajută; răcirea singură aduce cam două treimi din câștig. Placa a stat sub 6.000 MB, 63 °C.
-- **S37 verificat: NU TRECE.** Motorul fără PyTorch, cu adunări mai precise, are tot o diferență de **0,000136** (pragul cerea sub 0,0001); textul generat e identic.
-- **Rulează acum S38**, noaptea de antrenare cu rețeta A din #441 (aprobată în numele tău de centrul de comandă, la 18:00), cu regulile urcate înainte.
-  Se termină pe la **~01:55**; verdictul îl verific la trecerea de 02:15. Ziua de mâine o decid după rezultat.
-- Totul a mers fără erori (961 teste trec). Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** nimic urgent. O întrebare nouă, fără grabă: pentru motorul fără PyTorch, accepți un prag „relativ” în locul celui fix de 0,0001
-  (propunerea executantului din raportul S37)? Rămân: ora raportului de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
