@@ -249,6 +249,11 @@ Nu reluăm din #471 (ar fi alt experiment: optimizatorul și rata pornesc de la 
 **Ordinea: S46 bucata 1 (in_lucru de la 00:30, ~10:30) → S50 (procesor, ~1–2 ore) → S46 bucata 2 (`--limita-ore 10`, neschimbat) → S51 imediat după, doar dacă poate porni până la 00:00 (altfel în noaptea următoare, de la 19:00); apoi S46 bucata 3.**
 Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `pentru_adrian.md`.
 
+**Actualizare 30 oct 11:15 (supraveghetor) — S46 bucata 1 gata (cod 0, oprită curat la 10 ore; 3,73 GB cod curat, ~1,07 mld simboluri); ORDINEA DE DISEARĂ SCHIMBATĂ: S51 întâi, apoi S46 bucata 2:**
+Verificat raportul `2026-10-30_1103_S46_bucata1.md`: cifrele se adună (15,55 GB trași, 9,89 GB arhive păstrate, cod curat 3,73 GB ≈ 1,07 mld simboluri la 3,5 o/simbol), C: 68,9 GB liberi (> 40 GB), `terminat`: false, 1113 teste trec, 1 sărit — **bun**.
+Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, deci placa ar fi stat iar liberă o noapte întreagă, și tot așa la fiecare bucată. Descărcarea nu folosește placa și nu are termen, deci:
+**Acum (zi): S50** (procesor, ~1–2 ore). **De la 19:00: S51** (placa, ~7 ore, sfârșit ~02:00). **Imediat după ce S51 e `gata` sau `oprit`: S46 bucata 2** (`--limita-ore 10`, aceeași comandă; poate porni oricând între 19:00 și 07:00 și poate continua dimineața, nu folosește placa). Dacă S51 nu poate porni până la 00:00, bucata 2 pornește în locul ei, ca înainte.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1874,6 +1879,7 @@ Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `p
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
 - stare: aprobat — bucata 2 (executant, 30 oct 11:03: bucata 1 00:29–10:29, cod 0, oprită curat la 10 ore, `terminat`: false; 15,55 GB trași, cod curat 3,73 GB, ~1,07 mld simboluri; C: 68,9 GB liberi; 1113 teste trec, 1 sărit)
 - fereastră pentru bucățile următoare: noapte („o dată pe noapte”, din comanda exactă) — executant, 30 oct 11:03
+- **ordinea (supraveghetor, 30 oct 11:15): în noaptea 30→31, bucata 2 pornește DOAR după ce S51 e `gata` sau `oprit`** (S51 are întâietate la 19:00, fiindcă folosește placa; descărcarea nu). Pornirea bucății poate fi oricând între 19:00 și 07:00; poate continua după 07:00 (fără placă). Excepție: dacă S51 nu a pornit până la 00:00, bucata 2 pornește la prima verificare. Aceeași regulă în nopțile următoare cât timp există o sarcină de placă `aprobat` pentru noapte.
 - stare anterioară: in_lucru (executant, 30 oct 00:30 — prima bucată, `--limita-ore 10`; S45 e `oprit`, deci nimic altceva în lucru)
 - stare anterioară: **aprobat** (Adrian, 29 oct 21:46, scris în conversația cu centrul de comandă: „da s46”; comanda în hub C-43)
 - stare anterioară: oprit (executant, 29 oct 08:34)
@@ -1957,7 +1963,8 @@ Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `p
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
 - stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
-- fereastră: **noaptea; pornește doar dacă poate începe între 19:00 și 00:00** (ca să se termine cu examene înainte de 07:00). Ordinea: după S50 și după bucata 2 a S46 (executantul ia sarcinile pe rând); dacă bucata 2 a S46 se termină după 00:00, S51 așteaptă noaptea următoare, de la 19:00. **Dacă Adrian e la workstation pentru o fereastră OS/GPU, nu pornește cât durează fereastra.**
+- fereastră: **noaptea; pornește doar dacă poate începe între 19:00 și 00:00** (ca să se termine cu examene înainte de 07:00). **Ordinea nouă (supraveghetor, 30 oct 11:15): S51 pornește la 19:00 în seara asta, ÎNAINTEA bucății 2 a S46** (care așteaptă să se termine S51). S50 trebuie să fie terminat înainte.
+- fereastră veche (30 oct 02:15): după S50 și după bucata 2 a S46. **Dacă Adrian e la workstation pentru o fereastră OS/GPU, nu pornește cât durează fereastra.**
 - de ce: S45 a căzut la ora 4/6 (23:09, fără eroare, fără cod de ieșire), deci întrebarea „mai aduce încă o noapte din #459 un câștig real pe română?” n-are răspuns. Continuarea a ce merge (S38 CONFIRMAT, #441 → #459).
 - ce faci:
   1. *(FĂCUT deja în raportul de dimineață, 30 oct 06:46 — doar verifici că `2026-10-29_reteta_A_cont2.md` e închisă și treci la pasul 2.)* **Întâi** închizi pre-înregistrarea veche: `python unelte/preinregistrare.py --inchide reteta_A_cont2` cu „Ce a ieșit: întreruptă la 23:09:36, ora 4/6, orele 1–3 #469 0,4185 / #470 0,4167 / #471 0,4150 (R2); examenele n-au rulat” și „Verdictul: fără verdict (întreruptă); se repetă ca S51”.

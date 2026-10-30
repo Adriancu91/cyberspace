@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 30 octombrie 2026, 11:15 — Prima bucată din descărcarea codului e gata (bun); diseară antrenarea S51 trece înaintea descărcării, ca placa să nu stea liberă
+
+- **S46 bucata 1 verificată: bună.** A mers 00:29–10:29 și s-a oprit curat la limita de 10 ore: **3,73 GB de cod curat (~1,07 miliarde de simboluri)**, doar licențe bune. Mai trebuie cel puțin încă o bucată. Pe disc: 68,9 GB liberi. **1113 teste trec.**
+- **Acum (ziua): S50** (măsurarea vitezei „rece/cald”, doar procesor, ~1–2 ore) pornește la următoarea verificare a executantului.
+- **Am schimbat ordinea de diseară:** **S51** (noaptea de antrenare, repetarea S45 din #459, aceleași praguri) pornește **la 19:00**, iar bucata 2 a descărcării vine **după** ea (~02:00). Altfel descărcarea ar fi ocupat toată noaptea și placa ar fi stat degeaba. Descărcarea nu folosește placa și nu are termen.
+- Nicio problemă: calculatorul raportează normal (ultimul commit 11:04).
+- **Aștept de la tine:** doar întrebarea rămasă de dimineață — de ce s-a repornit calculatorul aseară la ~23:10; dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), altfel și S51 poate cădea la fel.
+
 ## 30 octombrie 2026, 08:15 — Confirmat: S45 a căzut pentru că s-a repornit calculatorul (~23:10); descărcarea codului (S46) merge bine
 
 - **Raportul de dimineață e la locul lui (06:46).** Din jurnale: Windows a pornit din nou la 23:12, deci antrenarea S45 s-a oprit din cauza unei **reporniri a calculatorului**, nu a plăcii (6,1 GB, 64 °C). Cine/ce a cerut repornirea nu se vede. Pre-înregistrarea S45 e închisă „fără verdict”.
