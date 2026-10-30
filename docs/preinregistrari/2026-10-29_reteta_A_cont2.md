@@ -72,3 +72,38 @@ chiar dacă #459 re-măsurat iese puțin altfel.
 
 - Română > 1,2142: a doua continuare din modelul răcit nu mai aduce câștig real (linia s-a plafonat la rata asta) → INFIRMAT.
 - Cod curat sau TinyStories R2 cu peste 0,005 mai rău: câștigul pe română se plătește pe celelalte → cel mult NECLAR.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-30 06:41, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 469 | w2_reteta_A_cont2 | 29.10 19:01 | 0,4185 | pastrat | — | — | — |  |
+| 470 | w2_reteta_A_cont2 | 29.10 20:06 | 0,4167 | pastrat | — | — | — |  |
+| 471 | w2_reteta_A_cont2 | 29.10 21:09 | 0,4150 | pastrat | — | — | — |  |
+
+- **w2_reteta_A_cont2:** 3 ore, 3 păstrate; val_bpb de la 0,4185 la 0,4150; cel mai bun păstrat: #471 (0,4150); pornită din #459 (0,4084).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+- **Întreruptă la 23:09:36, în ora 4 din 6** (procesul 14764, fără eroare în jurnal, fără cod de ieșire). Orele 1–3 salvate
+  (#469 0,4185 / #470 0,4167 / #471 0,4150 pe TinyStories R2); ora 4 nu s-a salvat. **Examenele (`examen_validari_ws.py`) n-au rulat.**
+- Indiciu despre cauză (citit la raportul de dimineață, 30 oct 06:41): `lucru/dupa_logare.log` are la 23:12:16 „Logare la 0.4 minute
+  după pornirea calculatorului”, iar CONTINUUM (`lucru/continuum_ws/bucla.log`) are ultimul ciclu la 23:05 și repornirea la 23:12:16.
+  Deci calculatorul s-a oprit/repornit între 23:09 și 23:12 (cine sau ce a cerut repornirea nu se vede în jurnalele din `lucru/`).
+
+## Verdictul
+
+*Scris la 2026-10-30 06:41, de raportul de dimineață, strict după pragurile de mai sus.*
+
+**Fără verdict (întreruptă); se repetă ca S51.** Toate cele trei măsuri care decid sunt pe ultimul model al liniei (ora 6) și din
+examenele de la final; ora 6 n-a existat și examenele n-au rulat, deci:
+
+- română curat (prag CONFIRMAT ≤ 1,2112, INFIRMAT > 1,2142): **nu se poate măsura**;
+- cod curat (≤ 0,7371): **nu se poate măsura**;
+- TinyStories R2 al ultimului model, ora 6 (≤ 0,4134): **nu se poate măsura** (#471, ora 3, are 0,4150, dar pre-înregistrarea spune
+  că „contează doar ultimul model (ora 6), nu se aleg orele după rezultat”, deci #471 nu se notează).
+
+Nu e nici CONFIRMAT, nici INFIRMAT, nici NECLAR: întrebarea n-are răspuns. Supraveghetorul a închis-o la fel (30 oct 02:15, `plan/coada.md`
+la S45) și a pus repetarea ca S51, pe linie nouă `w2_reteta_A_cont3`, cu aceleași praguri.
