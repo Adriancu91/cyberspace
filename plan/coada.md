@@ -241,6 +241,14 @@ Nu opri și nu încetini S45. Raport după fiecare bucată (GB curat, simboluri,
 Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_in_lucru.md`): instrucțiunea lui fixă spune „o singură sarcină `in_lucru` odată”, iar nota mea nu o poate schimba — corect, îl las așa.
 **Ordinea rămâne: S45 (sfârșit ~01:25) → S46 bucata 1 (`--limita-ore 10`, de la ~02:00 la ~12:00, fără placă) → S50 după bucata S46.** Placa: 6.116 MB, 64 °C la 22:12 ✓. Verdictul S45 îl verific la 02:15.
 
+**Actualizare 30 oct 02:15 (supraveghetor) — S45 a căzut la 23:09 (ora 4/6), fără verdict; o repet curat ca S51; S46 rulează:**
+S45: procesul a căzut fără eroare și fără cod de ieșire (raport `2026-10-29_2334_S45_oprit_cadere.md`); placa era în limite (6.116 MB, 64 °C), deci nu e paznicul.
+Am ales varianta 3 a executantului: **S45 se închide fără verdict** (pre-înregistrarea `reteta_A_cont2` se închide ca „întreruptă la ora 4/6, fără verdict”, la pornirea S51).
+Nu reluăm din #471 (ar fi alt experiment: optimizatorul și rata pornesc de la capăt) și nu notăm #471 (n-a fost pre-înregistrat așa).
+**S51 = aceeași întrebare, de la capăt din #459, pe linie nouă `w2_reteta_A_cont3`, aceleași praguri** (granița 1, aprobat de mine).
+**Ordinea: S46 bucata 1 (in_lucru de la 00:30, ~10:30) → S50 (procesor, ~1–2 ore) → S46 bucata 2 (`--limita-ore 10`, neschimbat) → S51 imediat după, doar dacă poate porni până la 00:00 (altfel în noaptea următoare, de la 19:00); apoi S46 bucata 3.**
+Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `pentru_adrian.md`.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1812,6 +1820,7 @@ Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_i
 
 ### S45 — Încă o noapte pe linia w2 cu rețeta A, din #459 (placa)
 - stare: oprit (executant, 29 oct 23:34)
+- notă supraveghetor (30 oct 02:15): **închisă fără verdict** (varianta 3 din raport). Orele 1–3 (#469–#471) rămân în jurnal ca informație, fără notare. Întrebarea se repetă de la capăt ca **S51**. Nu se reia din #471 și nu se notează #471. `ruleaza.lock` din `lucru/w2_reteta_A_cont2/` rămâne neatins (linia nu se mai folosește).
 - motiv: procesul (14764) a căzut la 23:09:36, în ora 4 din 6, fără eroare în jurnal și fără cod de ieșire (repornire sau oprire din afară; cauza n-am putut-o vedea). Salvate orele 1–3: #469 0,4185, #470 0,4167, #471 0,4150 (gpt.pt 22:10); placa în limite (6.116 MB, 64 °C). Examenele n-au rulat, deci nu există verdict, iar pre-înregistrarea rămâne deschisă. N-am reluat-o singur: la aceeași comandă `antrenare_lunga.py` ar sări peste `--porneste-din 459` (capcana S42). Decizia (reluare din #471 / doar examenele / închidere) e la supraveghetor sau la Adrian.
 - stare anterioară: in_lucru (executant, 29 oct 19:00)
 - verificat de supraveghetor (29 oct 20:15): pre-înregistrarea urcată înainte de pornire (96a0e84, 19:00:53), pragurile copiate exact din coadă (≤ 1,2112 CONFIRMAT, > 1,2142 INFIRMAT; cod ≤ 0,7371, R2 ≤ 0,4134); configurarea diferă de cea a S38 doar prin nume, cale, etichetă și antet ✓. Sfârșit estimat ~01:25; verdictul îl verific la 02:15. S50 după S45, mâine în fereastra de zi.
@@ -1940,4 +1949,21 @@ Executantul nu a pornit S46 la 22:59 (raport `2026-10-29_2259_S46_nepornit_S45_i
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, interfața (`placa` rămâne `False` implicit). Nimic instalat, nimic descărcat. Placa sub 7.000 MB și 83 °C.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - aprobat de: supraveghetor, 29 oct 17:30 (granițele 2 și 5 din REGULI_CASCADA.md)
+- raport: —
+
+### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
+- stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
+- tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
+- fereastră: **noaptea; pornește doar dacă poate începe între 19:00 și 00:00** (ca să se termine cu examene înainte de 07:00). Ordinea: după S50 și după bucata 2 a S46 (executantul ia sarcinile pe rând); dacă bucata 2 a S46 se termină după 00:00, S51 așteaptă noaptea următoare, de la 19:00. **Dacă Adrian e la workstation pentru o fereastră OS/GPU, nu pornește cât durează fereastra.**
+- de ce: S45 a căzut la ora 4/6 (23:09, fără eroare, fără cod de ieșire), deci întrebarea „mai aduce încă o noapte din #459 un câștig real pe română?” n-are răspuns. Continuarea a ce merge (S38 CONFIRMAT, #441 → #459).
+- ce faci:
+  1. **Întâi** închizi pre-înregistrarea veche: `python unelte/preinregistrare.py --inchide reteta_A_cont2` cu „Ce a ieșit: întreruptă la 23:09:36, ora 4/6, orele 1–3 #469 0,4185 / #470 0,4167 / #471 0,4150 (R2); examenele n-au rulat” și „Verdictul: fără verdict (întreruptă); se repetă ca S51”.
+  2. `config/conv_w2_reteta_A_cont3.toml` = copie a `config/conv_w2_reteta_A_cont2.toml` (S45), cu doar `nume = "w2_reteta_A_cont3"`, `cale_stare`, eticheta și antetul schimbate (diff-ul în raport). Linia `lucru/w2_reteta_A_cont3/` trebuie să NU existe înainte de pornire (verifici și scrii în pre-înregistrare), ca `--porneste-din 459` să fie folosit (capcana S42).
+  3. Pre-înregistrarea `docs/preinregistrari/2026-10-30_reteta_A_cont3.md`, cu **aceleași praguri ca S45, copiate exact**: **CONFIRMAT** dacă română curat ≤ **1,2112**, fără regresie > 0,005 la cod curat (≤ **0,7371**) și R2 (≤ **0,4134**); **INFIRMAT** dacă > **1,2142**; între ele NECLAR. Reperele #459: română 1,2162, cod 0,7321, R2 0,4084 (re-măsurate în aceeași rulare). Scrii că e repetarea S45 (căzută). Commit + push ÎNAINTE de pornire.
+  4. Pornești prin cascadă, lanțul ca la S45 (`lucru/cascada/S51_proba/s51.py`): `python unelte/antrenare_lunga.py --config config/conv_w2_reteta_A_cont3.toml --ore 6 --porneste-din 459`, apoi în același proces `unelte/examen_validari_ws.py --linie w2_reteta_A_cont3` și `unelte/examen_validari_ws.py --experiment 459`.
+  5. La sfârșit: închizi pre-înregistrarea cu cifrele, `python -m pytest` verde, commit + push, raport `docs/rapoarte/2026-10-3x_<ora>_S51_reteta_A_cont3.md` (tabelul pe ore, examenele, verdictul față de praguri, placa max MB/°C).
+- Dacă procesul cade din nou fără eroare: `oprit`, raport, **nu** reporni singur; scrie ora exactă a căderii (ajută la aflarea cauzei).
+- Modelul nu intră în interfață și nu înlocuiește #459 în OS fără alt „da”. Placa sub 7.000 MB și 83 °C. Nu atinge `kronos/`, examenul BPB, paznicul, jurnalul.
+- pre-înregistrare: docs/preinregistrari/2026-10-30_reteta_A_cont3.md (de scris înainte de pornire)
+- aprobat de: supraveghetor, 30 oct 02:15 (granița 1 din REGULI_CASCADA.md)
 - raport: —
