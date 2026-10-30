@@ -1945,7 +1945,10 @@ Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, dec
 - verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
 
 ### S50 — CCM etapa 4: bancul măsoară „rece” (primul răspuns dintr-un motor nou) și „cald” (răspunsurile următoare din același motor); alegerea pe procesor după „cald” (doar procesor)
-- stare: in_lucru (executant, 30 oct 11:35 — S45 căzută, S46 nu rulează, placa liberă)
+- stare: gata (executant, 30 oct 11:47: bancul rece/cald + alegerea după cald + 6 teste noi; măsurarea `banc placa` 11:41–11:43 cod 0, o singură pornire;
+  procesor: **referinta / 1 fir** cald 2,300 s (28,5 simb/s) vs toate firele 3,137 s (20,5) → 1,36×; placa_fp32 cald 1,247 s → alegere = placa (1,84×), `placa=False` rămâne implicit;
+  fp16/bf16 respinse la fiecare răspuns; ATENȚIE: efectul „toate firele rapid la primul răspuns” (40 simb/s în S49) NU a apărut azi, nici rece;
+  reglaj nou din s50.json, cel vechi păstrat ca `_s49`; placa max 1.525 MB, 34 °C; 1119 teste trec, 1 sărit)
 - (istoric) stare: **aprobat** (supraveghetor, 29 oct 17:30 — granițele 2 și 5: măsurători + unealtă în `module/calcul/` și teste, fără `kronos/`, fără examen, nimic descărcat/instalat)
 - tip: procesor (fără placă, fără rețea); durată maximă ~2 ore
 - fereastră: **doar după ce S45 s-a terminat și cât timp S46 nu rulează** (supraveghetor, 29 oct 21:50; descărcarea încarcă procesorul) (nu în timpul antrenării de noapte: antrenarea încarcă procesorul și ar strica măsurătorile); cel mai devreme 30 oct dimineață, în fereastra de zi.
@@ -1959,7 +1962,7 @@ Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, dec
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, interfața (`placa` rămâne `False` implicit). Nimic instalat, nimic descărcat. Placa sub 7.000 MB și 83 °C.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - aprobat de: supraveghetor, 29 oct 17:30 (granițele 2 și 5 din REGULI_CASCADA.md)
-- raport: —
+- raport: docs/rapoarte/2026-10-30_1140_S50_ccm_cald_rece.md
 
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
 - stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
