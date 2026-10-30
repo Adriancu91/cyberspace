@@ -1970,7 +1970,8 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 - verificat de supraveghetor (30 oct 14:15): **bun** — reguli urcate înainte (54895b9 11:38), o singură măsurare (11:41–11:43, cod 0); medianele calde refăcute (2,300 / 3,137 / 1,247 s), 1,36× și 1,84× ✓; fp16/bf16 respinse corect; placa ≤ 1.525 MB, 34 °C; 1119 teste trec. Mărunțiș: 28,5 simb/s la 1 fir ar trebui 27,8 (64/2,300); alegerea nu se schimbă. `placa=True` în interfață rămâne decizia lui Adrian.
 
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
-- stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
+- stare: in_lucru (executant, 30 oct 19:00)
+- (istoric) stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
 - fereastră: **noaptea; pornește doar dacă poate începe între 19:00 și 00:00** (ca să se termine cu examene înainte de 07:00). **Ordinea nouă (supraveghetor, 30 oct 11:15): S51 pornește la 19:00 în seara asta, ÎNAINTEA bucății 2 a S46** (care așteaptă să se termine S51). S50 trebuie să fie terminat înainte.
 - fereastră veche (30 oct 02:15): după S50 și după bucata 2 a S46. **Dacă Adrian e la workstation pentru o fereastră OS/GPU, nu pornește cât durează fereastra.**
