@@ -253,6 +253,8 @@ Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `p
 Verificat raportul `2026-10-30_1103_S46_bucata1.md`: cifrele se adună (15,55 GB trași, 9,89 GB arhive păstrate, cod curat 3,73 GB ≈ 1,07 mld simboluri la 3,5 o/simbol), C: 68,9 GB liberi (> 40 GB), `terminat`: false, 1113 teste trec, 1 sărit — **bun**.
 Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, deci placa ar fi stat iar liberă o noapte întreagă, și tot așa la fiecare bucată. Descărcarea nu folosește placa și nu are termen, deci:
 **Acum (zi): S50** (procesor, ~1–2 ore). **De la 19:00: S51** (placa, ~7 ore, sfârșit ~02:00). **Imediat după ce S51 e `gata` sau `oprit`: S46 bucata 2** (`--limita-ore 10`, aceeași comandă; poate porni oricând între 19:00 și 07:00 și poate continua dimineața, nu folosește placa). Dacă S51 nu poate porni până la 00:00, bucata 2 pornește în locul ei, ca înainte.
+**Actualizare 30 oct 14:15 (supraveghetor) — S50 verificat: bun; nimic nou în coadă; diseară S51 la 19:00, apoi S46 bucata 2:**
+S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11:43, o singură pornire, cod 0) ✓; medianele calde refăcute din timpii pe răspuns (2,300 / 3,137 / 1,247 s) ✓, 3,137/2,300 = 1,36× și 2,300/1,247 = 1,84× ✓; fp16/bf16 respinse la fiecare răspuns ✓; placa max 1.525 MB, 34 °C ✓; 1119 teste trec ✓. Un singur mărunțiș: la referinta/1 fir „28,5 simb/s” nu se potrivește cu 64/2,300 = 27,8 (celelalte rânduri se potrivesc) — nu schimbă alegerea. Efectul „40 simb/s la primul răspuns” din S49 nu s-a repetat; nu mai pun altă măsurare pe asta acum. Placa stă liberă până la 19:00 (nu pun o rulare scurtă înainte de S51, ca să nu-i întârzie pornirea).
 
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
@@ -1963,6 +1965,7 @@ Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, dec
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - aprobat de: supraveghetor, 29 oct 17:30 (granițele 2 și 5 din REGULI_CASCADA.md)
 - raport: docs/rapoarte/2026-10-30_1140_S50_ccm_cald_rece.md
+- verificat de supraveghetor (30 oct 14:15): **bun** — reguli urcate înainte (54895b9 11:38), o singură măsurare (11:41–11:43, cod 0); medianele calde refăcute (2,300 / 3,137 / 1,247 s), 1,36× și 1,84× ✓; fp16/bf16 respinse corect; placa ≤ 1.525 MB, 34 °C; 1119 teste trec. Mărunțiș: 28,5 simb/s la 1 fir ar trebui 27,8 (64/2,300); alegerea nu se schimbă. `placa=True` în interfață rămâne decizia lui Adrian.
 
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
 - stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)

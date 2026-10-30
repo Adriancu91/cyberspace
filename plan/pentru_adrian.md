@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 30 octombrie 2026, 14:15 — Măsurarea vitezei (S50) e gata și verificată: bună; diseară la 19:00 pornește antrenarea S51
+
+- **S50 verificat: bun.** Kronos alege acum viteza după răspunsurile „de după primul”, cum se folosește de fapt: pe procesor **1 fir e de 1,36× mai rapid** decât toate firele (2,30 s față de 3,14 s la un răspuns), iar placa video e de **1,84× mai rapidă** decât procesorul. Cuvintele ies identice cu originalul. **1119 teste trec.**
+- Ciudățenia de ieri („toate firele rapide doar la primul răspuns”) nu s-a mai văzut azi; nu schimbă nimic.
+- **Diseară, 19:00: S51** (noaptea de antrenare, repetarea S45), apoi bucata 2 a descărcării codului. Nimic nou pus în coadă; placa stă liberă până la 19:00 ca S51 să pornească la timp.
+- Nicio problemă: calculatorul raportează normal (ultimul commit 11:48).
+- **Aștept de la tine:** tot întrebarea cu repornirea de aseară (~23:10) — dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), ca S51 să nu cadă la fel. Opțional: dacă vrei ca interfața să folosească placa video (mai rapid, dar ține ~1,5 GB ocupați).
+
 ## 30 octombrie 2026, 11:15 — Prima bucată din descărcarea codului e gata (bun); diseară antrenarea S51 trece înaintea descărcării, ca placa să nu stea liberă
 
 - **S46 bucata 1 verificată: bună.** A mers 00:29–10:29 și s-a oprit curat la limita de 10 ore: **3,73 GB de cod curat (~1,07 miliarde de simboluri)**, doar licențe bune. Mai trebuie cel puțin încă o bucată. Pe disc: 68,9 GB liberi. **1113 teste trec.**
@@ -175,14 +183,3 @@
   dinainte și „cutia izolată” în care va rula codul scris de model. **Nu se descarcă nimic încă** — lista o verific eu înainte.
 - Am trecut S28 (oprirea workstation-ului) pe „anulat”, cum ai hotărât. Am pus în hub specificația formatului KGR1, ca sesiunea OS să poată începe motorul.
 - **Aștept de la tine:** nimic.
-
-## 27 octombrie 2026, 23:15 — S38 rulează normal; comanda ta C-24 (Kronos în OS) e pusă în coadă ca S39
-
-- **Nimic terminat de la 20:15.** S38 (noaptea cu rețeta A din #441) rulează din ~19:35; executantul nu scrie nimic până la final, deci e normal.
-  Se termină pe la **~01:55**; verdictul îl verific la trecerea de 02:15.
-- **Comanda ta C-24 (prin centrul de comandă) → S39, aprobată, doar procesor, fără să încurce S38:** acum, executantul pregătește pentru OS
-  un model minuscul de probă (greutăți aleatoare, ≤ 1 MB) + „răspunsurile corecte” pe 3 texte, ca OS-ul să-și verifice motorul. După S38, exportă
-  cel mai bun model (S38 dacă e CONFIRMAT, altfel #441) în formatul comprimat (~111 MB) ca Release în depozitul privat. Executantul nu scrie în hub,
-  așa că eu copiez pachetul în hub la trecerea următoare.
-- **Aștept de la tine:** nimic urgent. Rămân: pragul pentru motorul fără PyTorch (fix 0,0001 sau relativ, din raportul S37), ora raportului
-  de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
