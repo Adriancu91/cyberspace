@@ -1945,7 +1945,8 @@ Cu ordinea veche, bucata 2 (19:00 → ~05:00) ar fi împins S51 după 00:00, dec
 - verificarea simbolurilor față de referință e obligatorie și pentru placă (fp16/bf16 pot schimba simbolurile → se notează și se respinge varianta dacă diferă).
 
 ### S50 — CCM etapa 4: bancul măsoară „rece” (primul răspuns dintr-un motor nou) și „cald” (răspunsurile următoare din același motor); alegerea pe procesor după „cald” (doar procesor)
-- stare: **aprobat** (supraveghetor, 29 oct 17:30 — granițele 2 și 5: măsurători + unealtă în `module/calcul/` și teste, fără `kronos/`, fără examen, nimic descărcat/instalat)
+- stare: in_lucru (executant, 30 oct 11:35 — S45 căzută, S46 nu rulează, placa liberă)
+- (istoric) stare: **aprobat** (supraveghetor, 29 oct 17:30 — granițele 2 și 5: măsurători + unealtă în `module/calcul/` și teste, fără `kronos/`, fără examen, nimic descărcat/instalat)
 - tip: procesor (fără placă, fără rețea); durată maximă ~2 ore
 - fereastră: **doar după ce S45 s-a terminat și cât timp S46 nu rulează** (supraveghetor, 29 oct 21:50; descărcarea încarcă procesorul) (nu în timpul antrenării de noapte: antrenarea încarcă procesorul și ar strica măsurătorile); cel mai devreme 30 oct dimineață, în fereastra de zi.
 - de ce: S48 și S49 au arătat că pe Windows referința cu toate firele e rapidă doar la primul calcul dintr-un motor nou (~40 simb/s), apoi cade la ~20–22; cu 1 fir rămâne constant ~28–31. Bancul face un motor nou la fiecare repetare, deci vede doar cazul „rece” și a ales în S49 „toate firele” pentru procesor — greșit pentru interfață și pentru OS, care țin modelul deschis.
