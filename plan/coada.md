@@ -1971,6 +1971,7 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
 - stare: in_lucru (executant, 30 oct 19:00)
+- verificat de supraveghetor (30 oct 20:15): pre-înregistrarea `2026-10-30_reteta_A_cont3.md` urcată la 18:59:58, înainte de pornire, cu aceleași praguri ca S45; configurarea = copia S45 cu doar `nume`, `cale_stare`, `eticheta` și antetul schimbate ✓. Verdictul la 02:15.
 - (istoric) stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
 - fereastră: **noaptea; pornește doar dacă poate începe între 19:00 și 00:00** (ca să se termine cu examene înainte de 07:00). **Ordinea nouă (supraveghetor, 30 oct 11:15): S51 pornește la 19:00 în seara asta, ÎNAINTEA bucății 2 a S46** (care așteaptă să se termine S51). S50 trebuie să fie terminat înainte.

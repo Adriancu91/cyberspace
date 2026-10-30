@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 30 octombrie 2026, 20:15 — Antrenarea de noapte S51 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
+
+- **Rulează S51** (repetarea S45: 6 ore de antrenare din #459). Am verificat: pre-înregistrarea a fost urcată la 19:00, înainte de pornire, și e identică cu a S45 (aceleași praguri); configurarea diferă doar prin nume și dosar. Sfârșit estimat ~02:00; verdictul îl verific la 02:15.
+- **După S51:** bucata 2 a descărcării codului (S46), fără placă.
+- Nicio problemă: executantul a scris la 18:59, normal la pornirea antrenării. Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** nimic nou. Rămâne, fără grabă, întrebarea cu repornirea de aseară (comanda de citit jurnalul Windows e în raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 30 octombrie 2026, 17:15 — Diagnosticul repornirii (S52) s-a oprit: executantul n-are voie să citească jurnalele Windows; placa sigur nu a fost de vină; diseară S51 la 19:00
 
 - **S52 oprit (corect, nu e o defecțiune):** comenzile care citesc jurnalele Windows sunt blocate pentru executant, iar el n-a încercat să ocolească blocarea.
@@ -169,15 +176,3 @@
 - **Aștept de la tine (când ești la workstation, ~10 minute):** (1) în dosarul `C:\Kronos\cyberspace`, comanda:
   `gh release create kronos-kgr1-459 lucru/export/kronos_459_q8_0.kgr --repo Adriancu91/cyberspace --title "Kronos #459 KGR1 Q8_0" --notes "SHA-256 e80618b4ef555983085c3127acb10114e4f4915d939734207aa849ba0f6d382e, 110859040 octeți"`;
   (2) deschide Claude Code în același dosar și scrie-i: „Fă S40a din plan/coada.md”. Opțional, un „da” pentru ca executantul să poată face singur Release-uri data viitoare (regula `Bash(gh release*)`).
-
-## 28 octombrie 2026, 05:15 — PROBLEMĂ: calculatorul Kronos (workstation) tace de aproape 10 ore; S38 n-a raportat
-
-- **Ultimul semn de la executant: 27 oct, 19:34** (pornirea S38). S38 trebuia să se termine pe la **~01:55**, cu raport și commit;
-  acum e 05:15 și nu e nimic, nici pe alte ramuri. Nici S39 partea A (ușoară, pe procesor, „chiar în timpul S38”) n-a pornit.
-  Regula din `REGULI_CASCADA.md` spune: peste 3 ore fără semn = te anunț.
-- **Ce poți face (când ajungi la calculator):** verifică dacă workstation-ul e pornit și treaz (nu în somn / repornit de o actualizare Windows)
-  și dacă fereastra lui Claude Code (executantul) mai e deschisă. Dacă s-a închis, pornește-l din nou în dosarul `cyberspace`;
-  el reia singur din `plan/coada.md` (S38 e `in_lucru`: o să vadă dacă antrenarea s-a terminat și o să scrie raportul).
-  Nu șterge nimic din `lucru/`.
-- Între timp, ca să nu blochez OS-ul: am adăugat la S39 partea A o descriere a tokenizerului în specificația KGR1 (sesiunea OS a cerut-o în hub).
-- **Aștept de la tine:** doar verificarea calculatorului de mai sus. Nicio decizie nouă.
