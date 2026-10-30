@@ -51,6 +51,19 @@ nu de mână. Verificare: `python -X utf8 -m module.calcul.reglaj verifica --kgr
   în `statistici()["ccm"]`.
 - Numele variantelor sunt cele din `module/calcul/variante/` (Kronos pe Windows); OS-ul poate citi același format, cu numele lui.
 
+### Câmpurile noi din S50 (tot versiunea 1; un reglaj fără ele rămâne bun)
+Bancul măsoară acum și într-un singur motor ținut deschis: răspunsul 1 = „rece”, răspunsurile 2–6 = „cald”. Alegerea se face pe „cald”
+(cum lucrează interfața și OS-ul, cu modelul încărcat o dată), nu pe timpul cu încărcarea dintr-un motor nou.
+```json
+ "alegere_dupa": "cald",
+ "operatii": {"inmultire": {…ca mai sus…, "fata_de_referinta_cald": 1.4,
+   "cald": {"total_secunde": 2.1, "simboluri_pe_secunda": 30.0, "imprastiere_relativa": 0.05,   // median pe răspunsurile 2–6
+            "rece_total_secunde": 1.6, "rece_simboluri_pe_secunda": 40.0, "pornire_secunde": 0.9, "raspunsuri": 6}}},  // doar informație
+ "placa": {…ca în S49…, "cald": {…la fel…}, "fata_de_procesor_cald": 1.2},
+ "alegere": "placa" | "procesor"     // după „cald” când „alegere_dupa” = „cald”; altfel după timpul total, ca în S49
+```
+- Cine citește reglajul folosește doar `operatii.inmultire.varianta/fire` (și `placa`/`alegere`); câmpurile `cald` sunt informație.
+
 ## Reguli (judecătorul rămâne în afara lui Kronos)
 1. O variantă intră doar dacă dă **aceleași simboluri** ca referința la vectorii KGR1 (greedy), iar logit-urile sunt în toleranța scrisă înainte.
 2. Viteza se raportează doar din măsurători repetate (median + împrăștiere), cu timpul complet: pregătire + transfer + calcul.

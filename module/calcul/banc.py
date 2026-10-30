@@ -15,6 +15,10 @@ Folosire:
 
 S49: variantele pe placă (`placa_fp32/fp16/bf16`) trec prin aceeași verificare; una respinsă se măsoară totuși (ca
 informație), dar nu poate fi aleasă. Memoria plăcii se notează la fiecare (PyTorch maxim + nvidia-smi la final).
+
+S50: pe Windows, referința cu toate firele e rapidă doar la primul răspuns dintr-un motor nou. `masoara_cald` ține un
+singur motor deschis (ca interfața și OS-ul): răspunsul 1 „rece”, 2–6 „cald”; alegerea pe procesor și procesor/placă se
+face pe medianul „cald”, fără încărcare. Simbolurile și logit-urile se verifică la fiecare răspuns.
 """
 
 from __future__ import annotations
@@ -41,6 +45,7 @@ TOLERANTA_LOGITS = 1e-3  # |Δ logit| maxim, absolut (scrisă înainte în rapor
 TEXT_MASURARE = "Ana are mere."
 SIMBOLURI = 64
 REPETARI = 5
+RASPUNSURI = 6  # S50: răspunsul 1 „rece”, 2–6 „cald”, în același motor
 VECTORI = RADACINA / "integrare/kronos/vectori"
 TEXTE_VERIFICARE = ["Ana are mere.", "Capitala României este", "def suma(a, b):"]
 FIRE = ("1", "4", "toate")
@@ -120,6 +125,53 @@ def masoara(fabrica: Callable[[Any], Any], cale: str | Path, text: str | list[in
             **{k: rezumat(k) for k in ("incarcare", "inceput", "restul", "total", "simboluri_pe_secunda")}}
 
 
+def _rezumat(v: list[float]) -> dict[str, float]:
+    med = statistics.median(v)
+    return {"median": med, "min": min(v), "max": max(v),
+            "imprastiere_relativa": (max(v) - min(v)) / med if med else 0.0}
+
+
+def masoara_cald(fabrica: Callable[[Any], Any], cale: str | Path, text: str | list[int] = TEXT_MASURARE,
+                 simboluri: int = SIMBOLURI, raspunsuri: int = RASPUNSURI,
+                 toleranta: float = TOLERANTA_LOGITS) -> dict[str, Any]:
+    """S50: un singur motor, `raspunsuri` răspunsuri la rând: primul e „rece”, următoarele „cald” (median + împrăștiere),
+    fără încărcare (pornirea se notează separat). La fiecare răspuns, după ceas: simbolurile și logit-urile motorului
+    măsurat; referința se face abia după toate răspunsurile (ca să nu încălzească procesul înainte de „rece”)."""
+    if raspunsuri < 2:
+        raise ValueError("cel puțin două răspunsuri (unul rece, unul cald)")
+    t0 = time.perf_counter()
+    m = fabrica(cale)
+    pornire = time.perf_counter() - t0
+    intrare = _simboluri(m, text)
+    rand: list[dict[str, float]] = []
+    iesiri: list[tuple[list[int], np.ndarray]] = []
+    for _ in range(raspunsuri):
+        noi, timpi = m.completeaza_simboluri(intrare, simboluri)
+        noi = [int(x) for x in noi]
+        rand.append({"inceput": timpi["secunde_inceput"], "restul": timpi["secunde_restul"],
+                     "total": timpi["secunde_inceput"] + timpi["secunde_restul"],
+                     "simboluri_pe_secunda": timpi["simboluri_pe_secunda"]})
+        sir = (intrare + noi[:-1])[-m.context:]
+        iesiri.append((noi, np.asarray(m.logits(sir), dtype=np.float64)))
+    ref = _referinta(cale)
+    g_ref = [int(x) for x in ref.completeaza_simboluri(intrare, simboluri)[0]]
+    l_ref = np.asarray(ref.logits((intrare + g_ref[:-1])[-ref.context:]), dtype=np.float64)
+    identice, dif, motive = [], [], []
+    for j, (noi, lg) in enumerate(iesiri, 1):
+        identice.append(noi == g_ref)
+        dif.append(float(np.abs(lg - l_ref).max()) if noi == g_ref else float("inf"))
+        if noi != g_ref:
+            motive.append(f"răspunsul {j}: alte simboluri greedy")
+        elif not dif[-1] <= toleranta:
+            motive.append(f"răspunsul {j}: |Δ logit| {dif[-1]:.3g} > {toleranta:g}")
+    chei = ("inceput", "restul", "total", "simboluri_pe_secunda")
+    return {"raspunsuri": raspunsuri, "simboluri": simboluri, "pornire_secunde": pornire, "pe_raspuns": rand,
+            "rece": {k: rand[0][k] for k in chei},
+            "cald": {k: _rezumat([r[k] for r in rand[1:]]) for k in chei},
+            "verificare": {"acceptata": not motive, "motive": motive, "toleranta": toleranta,
+                           "simboluri_identice": identice, "dif_logits_max": dif}}
+
+
 def _asteptate_vectori() -> dict[str, list[list[int]]]:
     j = VECTORI / "vectori.json"
     if not j.exists():
@@ -129,9 +181,9 @@ def _asteptate_vectori() -> dict[str, list[list[int]]]:
 
 
 def incearca(varianta: str, kgr: str | Path, simboluri: int = SIMBOLURI, repetari: int = REPETARI,
-             vectori: bool = True) -> dict[str, Any]:
-    """În procesul de acum: verificarea pe vectorii KGR1 (5 simboluri, ca în vectori.json) și pe `kgr`, apoi măsurarea
-    (doar dacă e acceptată)."""
+             vectori: bool = True, raspunsuri: int = RASPUNSURI) -> dict[str, Any]:
+    """În procesul de acum: verificarea pe vectorii KGR1 (5 simboluri, ca în vectori.json) și pe `kgr`, apoi măsurările
+    (doar dacă e acceptată): timpul complet pe motoare noi și (S50) rece/cald în același motor."""
     from module.calcul.variante import TOATE, VARIANTE_PLACA
 
     fabrica = TOATE[varianta]
@@ -140,11 +192,15 @@ def incearca(varianta: str, kgr: str | Path, simboluri: int = SIMBOLURI, repetar
              if asteptate else None)
     v_kgr = verifica(fabrica, [kgr], TEXTE_VERIFICARE, simboluri)
     acceptata = v_kgr["acceptata"] and (v_vec is None or v_vec["acceptata"])
+    # S49: o variantă de placă respinsă se măsoară totuși (doar ca informație, nu intră în alegere)
+    de_masurat = acceptata or varianta in VARIANTE_PLACA
     rez = {"varianta": varianta, "fire": os.environ.get("OPENBLAS_NUM_THREADS", "toate"), "acceptata": acceptata,
            "verificare_vectori": v_vec, "verificare_model": v_kgr,
-           # S49: o variantă de placă respinsă se măsoară totuși (doar ca informație, nu intră în alegere)
-           "masurare": (masoara(fabrica, kgr, TEXT_MASURARE, simboluri, repetari)
-                        if acceptata or varianta in VARIANTE_PLACA else None)}
+           "masurare": masoara(fabrica, kgr, TEXT_MASURARE, simboluri, repetari) if de_masurat else None,
+           # S50: rece/cald în același motor; simbolurile verificate la fiecare răspuns
+           "masurare_cald": masoara_cald(fabrica, kgr, TEXT_MASURARE, simboluri, raspunsuri) if de_masurat else None}
+    if rez["masurare_cald"] and not rez["masurare_cald"]["verificare"]["acceptata"]:
+        rez["acceptata"] = False
     if varianta in VARIANTE_PLACA:
         rez["memorie_placa_mb"] = _memorie_placa()
     return rez
@@ -171,14 +227,15 @@ def _memorie_placa() -> dict[str, Any] | None:
 
 
 def in_proces_nou(varianta: str, fire: str, kgr: str | Path, simboluri: int = SIMBOLURI,
-                  repetari: int = REPETARI, vectori: bool = True) -> dict[str, Any]:
+                  repetari: int = REPETARI, vectori: bool = True, raspunsuri: int = RASPUNSURI) -> dict[str, Any]:
     env = dict(os.environ)
     for k in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
         env.pop(k, None)
         if fire != "toate":
             env[k] = str(fire)
     cmd = [sys.executable, "-X", "utf8", "-m", "module.calcul.banc", "incearca", "--varianta", varianta,
-           "--kgr", str(kgr), "--simboluri", str(simboluri), "--repetari", str(repetari)]
+           "--kgr", str(kgr), "--simboluri", str(simboluri), "--repetari", str(repetari),
+           "--raspunsuri", str(raspunsuri)]
     if not vectori:
         cmd.append("--fara-vectori")
     r = subprocess.run(cmd, cwd=RADACINA, env=env, capture_output=True, text=True, encoding="utf-8")
@@ -187,35 +244,48 @@ def in_proces_nou(varianta: str, fire: str, kgr: str | Path, simboluri: int = SI
     return json.loads(r.stdout)
 
 
+def cald_total(r: dict[str, Any]) -> float:
+    """S50: timpul după care se alege = medianul „cald” (răspunsurile 2–6 din același motor, fără încărcare)."""
+    return r["masurare_cald"]["cald"]["total"]["median"]
+
+
 def toate(kgr: str | Path, variante: list[str] | None = None, fire: tuple[str, ...] = FIRE,
           simboluri: int = SIMBOLURI, repetari: int = REPETARI,
-          combinatii: list[tuple[str, str]] | None = None) -> dict[str, Any]:
-    """`combinatii` (S49): perechile (variantă, fire) de încercat, în locul tuturor variantelor × toate firele."""
+          combinatii: list[tuple[str, str]] | None = None, raspunsuri: int = RASPUNSURI) -> dict[str, Any]:
+    """`combinatii` (S49): perechile (variantă, fire) de încercat, în locul tuturor variantelor × toate firele.
+    S50: „cea mai rapidă” pe procesor și pe placă se alege după timpul „cald”; cea „pe total” (cu încărcarea, motor nou
+    la fiecare repetare, ca în S47–S49) rămâne doar ca informație."""
     from module.calcul.variante import REFERINTA, VARIANTE
 
     if combinatii is None:
         combinatii = [(v, f) for v in (variante or list(VARIANTE)) for f in fire]
-    rez = [in_proces_nou(v, f, kgr, simboluri, repetari) for v, f in combinatii]
+    rez = [in_proces_nou(v, f, kgr, simboluri, repetari, raspunsuri=raspunsuri) for v, f in combinatii]
     ref = next((r for r in rez if r["varianta"] == REFERINTA and r["fire"] == "toate" and r["acceptata"]), None)
     for r in rez:
         if r["acceptata"] and ref is not None:
             r["fata_de_referinta_total"] = ref["masurare"]["total"]["median"] / r["masurare"]["total"]["median"]
             r["fata_de_referinta_simb_s"] = (r["masurare"]["simboluri_pe_secunda"]["median"]
                                              / ref["masurare"]["simboluri_pe_secunda"]["median"])
+            r["fata_de_referinta_cald"] = cald_total(ref) / cald_total(r)
     from module.calcul.variante import VARIANTE_PLACA
 
-    def cea_mai_rapida(lista: list[dict[str, Any]]) -> dict[str, str] | None:
+    def cea_mai_rapida(lista: list[dict[str, Any]], timp: Callable[[dict[str, Any]], float]) -> dict[str, str] | None:
         lista = [r for r in lista if r["acceptata"]]
         if not lista:
             return None
-        r = min(lista, key=lambda r: r["masurare"]["total"]["median"])
+        r = min(lista, key=timp)
         return {"varianta": r["varianta"], "fire": r["fire"]}
 
+    def pe_total(r: dict[str, Any]) -> float:
+        return r["masurare"]["total"]["median"]
+
     return {"kgr": str(kgr), "text": TEXT_MASURARE, "simboluri": simboluri, "repetari": repetari,
+            "raspunsuri": raspunsuri, "alegere_dupa": "cald",
             "toleranta_logits": TOLERANTA_LOGITS, "nuclee": os.cpu_count(), "rezultate": rez,
-            "cea_mai_rapida_pe_total": cea_mai_rapida(rez),
-            "cea_mai_rapida_pe_procesor": cea_mai_rapida([r for r in rez if r["varianta"] not in VARIANTE_PLACA]),
-            "cea_mai_rapida_pe_placa": cea_mai_rapida([r for r in rez if r["varianta"] in VARIANTE_PLACA])}
+            "cea_mai_rapida_pe_total": cea_mai_rapida(rez, pe_total),
+            "cea_mai_rapida_pe_procesor": cea_mai_rapida([r for r in rez if r["varianta"] not in VARIANTE_PLACA],
+                                                         cald_total),
+            "cea_mai_rapida_pe_placa": cea_mai_rapida([r for r in rez if r["varianta"] in VARIANTE_PLACA], cald_total)}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -232,11 +302,12 @@ def main(argv: list[str] | None = None) -> int:
         x.add_argument("--kgr", default="lucru/export/kronos_459_q8_0.kgr")
         x.add_argument("--simboluri", type=int, default=SIMBOLURI)
         x.add_argument("--repetari", type=int, default=REPETARI)
+        x.add_argument("--raspunsuri", type=int, default=RASPUNSURI, help="S50: răspunsuri în același motor (1 rece)")
     i.add_argument("--fara-vectori", action="store_true")
     a = p.parse_args(argv)
     if a.comanda == "incearca":
-        sys.stdout.write(json.dumps(incearca(a.varianta, a.kgr, a.simboluri, a.repetari, not a.fara_vectori),
-                                    ensure_ascii=False))
+        sys.stdout.write(json.dumps(incearca(a.varianta, a.kgr, a.simboluri, a.repetari, not a.fara_vectori,
+                                             a.raspunsuri), ensure_ascii=False))
         return 0
     iesire = Path(a.iesire)
     if iesire.exists():
@@ -245,21 +316,27 @@ def main(argv: list[str] | None = None) -> int:
         from module.calcul.variante import REFERINTA, VARIANTE_PLACA
 
         combinatii = [(REFERINTA, "1"), (REFERINTA, "toate")] + [(v, "toate") for v in VARIANTE_PLACA]
-        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari, combinatii=combinatii)
+        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari, combinatii=combinatii, raspunsuri=a.raspunsuri)
     else:
-        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari)
+        rez = toate(a.kgr, simboluri=a.simboluri, repetari=a.repetari, raspunsuri=a.raspunsuri)
     if getattr(a, "profil", False):  # `placa` n-are --profil (S49: prima pornire a căzut aici)
         from module.calcul.profil import profil
 
         rez["profil"] = [profil(a.kgr, TEXT_MASURARE, a.simboluri, d) for d in ("la_incarcare", "la_pas")]
     iesire.parent.mkdir(parents=True, exist_ok=True)
     iesire.write_bytes(json.dumps(rez, ensure_ascii=False, indent=1).encode("utf-8"))
+    def scurt(r: dict[str, Any]) -> list[Any]:
+        m, c = r["masurare"], r["masurare_cald"]
+        return [r["varianta"], r["fire"], r["acceptata"],
+                m and round(m["total"]["median"], 3), m and round(m["simboluri_pe_secunda"]["median"], 1),
+                c and round(c["rece"]["total"], 3), c and round(c["cald"]["total"]["median"], 3),
+                c and round(c["cald"]["simboluri_pe_secunda"]["median"], 1)]
+
     print(json.dumps({"cea_mai_rapida_pe_total": rez["cea_mai_rapida_pe_total"],
+                      "cea_mai_rapida_pe_procesor": rez["cea_mai_rapida_pe_procesor"],
                       "cea_mai_rapida_pe_placa": rez["cea_mai_rapida_pe_placa"],
-                      "pe_variante": [(r["varianta"], r["fire"], r["acceptata"],
-                                       r["masurare"] and round(r["masurare"]["total"]["median"], 3),
-                                       r["masurare"] and round(r["masurare"]["simboluri_pe_secunda"]["median"], 1))
-                                      for r in rez["rezultate"]]}, ensure_ascii=False, indent=1))
+                      "coloane": ["varianta", "fire", "acceptata", "total_s", "simb_s", "rece_s", "cald_s", "cald_simb_s"],
+                      "pe_variante": [scurt(r) for r in rez["rezultate"]]}, ensure_ascii=False, indent=1))
     return 0
 
 

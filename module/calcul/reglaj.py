@@ -57,10 +57,23 @@ def _rezultat(banc: dict[str, Any], alesa: dict[str, str]) -> dict[str, Any]:
     return r
 
 
+def _cald(r: dict[str, Any]) -> dict[str, Any] | None:
+    """S50: timpii „cald” (median pe răspunsurile 2–6, fără încărcare), „rece” și pornirea — doar ca informație."""
+    c = r.get("masurare_cald")
+    if not c:
+        return None
+    return {"total_secunde": c["cald"]["total"]["median"],
+            "simboluri_pe_secunda": c["cald"]["simboluri_pe_secunda"]["median"],
+            "imprastiere_relativa": c["cald"]["total"]["imprastiere_relativa"],
+            "rece_total_secunde": c["rece"]["total"], "rece_simboluri_pe_secunda": c["rece"]["simboluri_pe_secunda"],
+            "pornire_secunde": c["pornire_secunde"], "raspunsuri": c["raspunsuri"]}
+
+
 def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) -> dict[str, Any]:
-    """Reglajul din rezultatul `banc toate` / `banc placa`: varianta + firele cele mai rapide pe procesor (timpul total),
-    doar dacă e acceptată. S49: dacă bancul a încercat și placa, cea mai rapidă acceptată pe placă intră la „placa”, iar
-    „alegere” spune cine e mai rapid pe timpul total ("placa" sau "procesor")."""
+    """Reglajul din rezultatul `banc toate` / `banc placa`: varianta + firele cele mai rapide pe procesor, doar dacă e
+    acceptată. S49: dacă bancul a încercat și placa, cea mai rapidă acceptată pe placă intră la „placa”, iar „alegere”
+    spune cine e mai rapid ("placa" sau "procesor"). S50: un banc cu „alegere_dupa”: „cald” alege după timpul cald
+    (scris la „cald”, cu „rece” și pornirea ca informație); un banc vechi, după timpul total, ca înainte."""
     alesa = banc.get("cea_mai_rapida_pe_procesor") if "cea_mai_rapida_pe_procesor" in banc else banc.get(
         "cea_mai_rapida_pe_total")
     if not alesa:
@@ -68,6 +81,9 @@ def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) ->
     r = _rezultat(banc, alesa)
     kgr = Path(kgr or banc["kgr"])
     m = r["masurare"]
+    dupa_cald = banc.get("alegere_dupa") == "cald"
+    if dupa_cald and not r.get("masurare_cald"):
+        raise ValueError("bancul alege după „cald”, dar varianta aleasă n-are măsurarea caldă")
     reglaj = {
         "format": FORMAT, "versiune": VERSIUNE, "calculator": nume_calculator(), "nuclee": os.cpu_count(),
         "scris": time.strftime("%Y-%m-%dT%H:%M"), "sursa_masurarii": sursa,
@@ -80,6 +96,9 @@ def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) ->
             "fata_de_referinta_total": r.get("fata_de_referinta_total"),
         }},
     }
+    if dupa_cald:
+        reglaj["alegere_dupa"] = "cald"
+        reglaj["operatii"]["inmultire"].update(cald=_cald(r), fata_de_referinta_cald=r.get("fata_de_referinta_cald"))
     if banc.get("cea_mai_rapida_pe_placa"):
         p = _rezultat(banc, banc["cea_mai_rapida_pe_placa"])
         mp = p["masurare"]
@@ -89,7 +108,12 @@ def din_banc(banc: dict[str, Any], sursa: str, kgr: str | Path | None = None) ->
             "fata_de_procesor_total": m["total"]["median"] / mp["total"]["median"],
             "memorie_placa_mb": p.get("memorie_placa_mb"),
         }
-        reglaj["alegere"] = "placa" if mp["total"]["median"] < m["total"]["median"] else "procesor"
+        if dupa_cald and p.get("masurare_cald"):
+            cp, cr = _cald(p), _cald(r)
+            reglaj["placa"].update(cald=cp, fata_de_procesor_cald=cr["total_secunde"] / cp["total_secunde"])
+            reglaj["alegere"] = "placa" if cp["total_secunde"] < cr["total_secunde"] else "procesor"
+        else:
+            reglaj["alegere"] = "placa" if mp["total"]["median"] < m["total"]["median"] else "procesor"
     return reglaj
 
 

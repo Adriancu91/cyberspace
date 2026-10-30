@@ -62,9 +62,13 @@ def test_listele_de_variante():
     assert variante.TOATE == {**variante.VARIANTE, **variante.VARIANTE_PLACA}
 
 
-def _rezultat(v, fire_, total, acceptata=True):
+def _rezultat(v, fire_, total, acceptata=True, cald=None):
+    """S50: și măsurarea „caldă” (implicit cu același timp ca totalul)."""
     m = {"total": {"median": total}, "simboluri_pe_secunda": {"median": 64 / total}}
-    return {"varianta": v, "fire": fire_, "acceptata": acceptata, "masurare": m,
+    cald = total if cald is None else cald
+    c = {"raspunsuri": 6, "pornire_secunde": 0.1, "rece": {"total": total, "simboluri_pe_secunda": 64 / total},
+         "cald": {"total": {"median": cald, "imprastiere_relativa": 0.0}, "simboluri_pe_secunda": {"median": 64 / cald}}}
+    return {"varianta": v, "fire": fire_, "acceptata": acceptata, "masurare": m, "masurare_cald": c,
             "verificare_model": {"dif_logits_max": 0.0}, "memorie_placa_mb": None}
 
 
