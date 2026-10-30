@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 30 octombrie 2026, 08:15 — Confirmat: S45 a căzut pentru că s-a repornit calculatorul (~23:10); descărcarea codului (S46) merge bine
+
+- **Raportul de dimineață e la locul lui (06:46).** Din jurnale: Windows a pornit din nou la 23:12, deci antrenarea S45 s-a oprit din cauza unei **reporniri a calculatorului**, nu a plăcii (6,1 GB, 64 °C). Cine/ce a cerut repornirea nu se vede. Pre-înregistrarea S45 e închisă „fără verdict”.
+- **Rulează S46** (descărcarea codului, fără placă): 10.921 de pachete păstrate, ~3,2 GB; se oprește singură pe la 10:30. Pe disc: 64 GB liberi. **1113 teste trec.** CONTINUUM a pornit din nou odată cu calculatorul (doar observă).
+- **Urmează:** S50 (măsurarea vitezei, doar procesor) după S46, apoi bucata 2 a S46 și S51 (repetarea S45). Nimic nou pus în coadă; placa stă liberă ziua (nu am altă încercare în granițele mele).
+- **Aștept de la tine:** (1) dacă știi de ce s-a repornit calculatorul; dacă e Windows Update: **Setări → Windows Update → Opțiuni avansate → Ore active, 18:00–08:00**, altfel S51 poate cădea la fel; (2) opțional „S51 întâi” dacă vrei antrenarea în seara asta înaintea bucății 2 a descărcării.
+
 ## 30 octombrie 2026, 02:15 — PROBLEMĂ: antrenarea de noapte S45 s-a oprit brusc la 23:09 (ora 4 din 6); o repet de la capăt ca S51; descărcarea codului (S46) a pornit
 
 - **S45 a căzut la 23:09**, fără nicio eroare scrisă — așa arată de obicei o **repornire a calculatorului** (de exemplu o actualizare Windows) sau o oprire de mână. Placa era în limite (6,1 GB, 64 °C), deci nu e de la ea. Primele 3 ore sunt salvate, dar **nu există verdict**.
@@ -182,12 +189,3 @@
 - Totul a mers fără erori (961 teste trec). Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
 - **Aștept de la tine:** nimic urgent. O întrebare nouă, fără grabă: pentru motorul fără PyTorch, accepți un prag „relativ” în locul celui fix de 0,0001
   (propunerea executantului din raportul S37)? Rămân: ora raportului de dimineață (06:40/07:40), închiderea S28 și porturile `cautare`/`inferenta` în `kronos/`.
-
-## 27 octombrie 2026, 17:15 — S36 (proba D) rulează pe placă; nimic terminat de la 14:15
-
-- **Rulează acum S36** (rețeta A fără „adunarea pe 8 loturi”), pornită la ~15:05, cu regulile urcate înainte (am verificat: pragurile sunt cele din coadă).
-  Sfârșitul era estimat pe la ~17:15; raportul și verdictul le verific la trecerea de 20:15. Nicio eroare, niciun semn de problemă.
-- După S36 urmează **S37** (doar procesor, motorul mare adună mai precis). N-am pus nimic nou în coadă: pentru noapte singura sarcină de placă e S38, care cere „da”-ul tău.
-- Cyber Hub: nicio comandă nouă pentru Kronos; am actualizat starea Kronos.
-- **Aștept de la tine:** dacă vrei antrenare la noapte, scrie **„da S38”** (o noapte cu rețeta A din #441, ~6 ore), în hub sau în coadă, până la trecerea de 20:15 — altfel placa stă liberă la noapte.
-  Rămân cele trei mici întrebări: ora raportului de dimineață (06:40/07:40), închiderea S28 și portul `cautare` în `kronos/`.
