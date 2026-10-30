@@ -1986,7 +1986,8 @@ S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11
 - raport: —
 
 ### S52 — Diagnostic: de ce s-a repornit workstation-ul pe 29 oct ~23:10 (doar citire, procesor, ~10 min)
-- stare: **aprobat** (centrul de comandă, 30 oct 15:00, la cererea lui Adrian: „poți să ceri un raport complet”; delegarea din 26 oct 17:45). Adrian crede că a fost o pană de curent.
+- stare: in_lucru (executant, 30 oct 15:30)
+- stare anterioară: **aprobat** (centrul de comandă, 30 oct 15:00, la cererea lui Adrian: „poți să ceri un raport complet”; delegarea din 26 oct 17:45). Adrian crede că a fost o pană de curent.
 - tip: procesor, **doar citire** (nu schimbă nicio setare Windows, nu instalează nimic); fereastră: imediat ce e liber un loc în coadă, poate rula în paralel cu S46; durată ~10 min
 - ce faci (PowerShell, fără drepturi de administrator dacă se poate; dacă un jurnal cere administrator, notezi asta și treci mai departe):
   1. Evenimentele din `System` între 29 oct 22:30 și 23:30: `Get-WinEvent -FilterHashtable @{LogName='System'; StartTime='2026-10-29 22:30'; EndTime='2026-10-29 23:30'}`
