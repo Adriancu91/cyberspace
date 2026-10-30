@@ -1872,7 +1872,9 @@ Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `p
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: in_lucru (executant, 30 oct 00:30 — prima bucată, `--limita-ore 10`; S45 e `oprit`, deci nimic altceva în lucru)
+- stare: aprobat — bucata 2 (executant, 30 oct 11:03: bucata 1 00:29–10:29, cod 0, oprită curat la 10 ore, `terminat`: false; 15,55 GB trași, cod curat 3,73 GB, ~1,07 mld simboluri; C: 68,9 GB liberi; 1113 teste trec, 1 sărit)
+- fereastră pentru bucățile următoare: noapte („o dată pe noapte”, din comanda exactă) — executant, 30 oct 11:03
+- stare anterioară: in_lucru (executant, 30 oct 00:30 — prima bucată, `--limita-ore 10`; S45 e `oprit`, deci nimic altceva în lucru)
 - stare anterioară: **aprobat** (Adrian, 29 oct 21:46, scris în conversația cu centrul de comandă: „da s46”; comanda în hub C-43)
 - stare anterioară: oprit (executant, 29 oct 08:34)
 - motiv: cere aprobarea lui Adrian: descărcare — la „aprobat de:” scrie „—” (nu „Adrian”), iar aprobarea e doar a centrului de comandă, prin delegare; regula descărcărilor (varianta b, 19 oct) cere „aprobat de: Adrian” pe sarcină. Nimic descărcat.
@@ -1893,6 +1895,7 @@ Cauza căderii (repornire Windows? oprire de mână?) o întreb pe Adrian în `p
 - notă supraveghetor (29 oct 23:15): executantul ia sarcinile pe rând (instrucțiunea lui fixă), deci S46 pornește la prima verificare după ce S45 e `gata` (~02:00). Rămâne `aprobat`.
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 - raport: docs/rapoarte/2026-10-29_2259_S46_nepornit_S45_in_lucru.md
+- raport: docs/rapoarte/2026-10-30_1103_S46_bucata1.md (bucata 1)
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
 - stare: gata (executant, 29 oct 12:05: măsurarea 11:08–11:39, cod 0; toate cele 9 combinații acceptate (simboluri identice, |Δ logit| ≤ 3,3·10⁻⁶); cea mai rapidă `referinta` cu 1 fir: 2,47 s, 31 simb/s, 1,37× față de toate firele; `transpus` fără câștig, `la_pas` 9–20× mai lentă (desfacerea 86 %); înmulțirile ~73 % din timp; 1080 teste trec, 1 sărit)
