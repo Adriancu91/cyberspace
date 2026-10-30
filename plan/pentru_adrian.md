@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 30 octombrie 2026, 17:15 — Diagnosticul repornirii (S52) s-a oprit: executantul n-are voie să citească jurnalele Windows; placa sigur nu a fost de vină; diseară S51 la 19:00
+
+- **S52 oprit (corect, nu e o defecțiune):** comenzile care citesc jurnalele Windows sunt blocate pentru executant, iar el n-a încercat să ocolească blocarea.
+- **Ce s-a aflat totuși:** placa video a mers normal până în ultima secundă (23:09:36: **64 °C, 6.116 MB**, sub limite), fără niciun semn înainte. Deci **nu a fost supraîncălzire**; o oprire bruscă, totul în aceeași secundă, se potrivește cu **pana de curent** pe care o bănuiești. Sigur spune doar jurnalul Windows.
+- **Diseară, 19:00: S51** (antrenarea de noapte, repetarea S45), apoi bucata 2 a descărcării codului — neschimbat. **1119 teste trec.** Calculatorul raportează normal (ultimul commit 15:34).
+- **Aștept de la tine (fără grabă, alege una):** (1) deschizi PowerShell pe workstation și lipești comanda din raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md` (doar citește), apoi îmi trimiți ce iese; **sau** (2) îmi spui „da, executantul poate citi jurnalele Windows” și repun S52. Dacă a fost pana de curent, o sursă UPS ar proteja antrenările de noapte.
+
 ## 30 octombrie 2026, 14:15 — Măsurarea vitezei (S50) e gata și verificată: bună; diseară la 19:00 pornește antrenarea S51
 
 - **S50 verificat: bun.** Kronos alege acum viteza după răspunsurile „de după primul”, cum se folosește de fapt: pe procesor **1 fir e de 1,36× mai rapid** decât toate firele (2,30 s față de 3,14 s la un răspuns), iar placa video e de **1,84× mai rapidă** decât procesorul. Cuvintele ies identice cu originalul. **1119 teste trec.**
@@ -174,12 +181,3 @@
   Nu șterge nimic din `lucru/`.
 - Între timp, ca să nu blochez OS-ul: am adăugat la S39 partea A o descriere a tokenizerului în specificația KGR1 (sesiunea OS a cerut-o în hub).
 - **Aștept de la tine:** doar verificarea calculatorului de mai sus. Nicio decizie nouă.
-
-## 28 octombrie 2026, 02:15 — S38 (noaptea) încă fără raport; porturile aprobate de tine și Kronos-Cod (etapa 1a) puse în coadă
-
-- **S38** (antrenarea de noapte cu rețeta A) trebuia să se termine pe la ~01:55; raportul nu e încă urcat (executantul scrie abia la final). Verdictul îl verific la **05:15**.
-- **Am pus în coadă, doar pe procesor (fără placă), după S39:** **S40** = cele două „prize” noi în nucleu (`cautare` și `inferenta`), cum ai spus „Da” aseară,
-  plus două module care le folosesc; și **S41** = prima bucată din Kronos-Cod (comanda ta C-28): lista surselor de cod cu licențele, examenul de cod scris
-  dinainte și „cutia izolată” în care va rula codul scris de model. **Nu se descarcă nimic încă** — lista o verific eu înainte.
-- Am trecut S28 (oprirea workstation-ului) pe „anulat”, cum ai hotărât. Am pus în hub specificația formatului KGR1, ca sesiunea OS să poată începe motorul.
-- **Aștept de la tine:** nimic.
