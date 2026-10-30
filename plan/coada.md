@@ -1984,3 +1984,20 @@ S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11
 - pre-înregistrare: docs/preinregistrari/2026-10-30_reteta_A_cont3.md (de scris înainte de pornire)
 - aprobat de: supraveghetor, 30 oct 02:15 (granița 1 din REGULI_CASCADA.md)
 - raport: —
+
+### S52 — Diagnostic: de ce s-a repornit workstation-ul pe 29 oct ~23:10 (doar citire, procesor, ~10 min)
+- stare: **aprobat** (centrul de comandă, 30 oct 15:00, la cererea lui Adrian: „poți să ceri un raport complet”; delegarea din 26 oct 17:45). Adrian crede că a fost o pană de curent.
+- tip: procesor, **doar citire** (nu schimbă nicio setare Windows, nu instalează nimic); fereastră: imediat ce e liber un loc în coadă, poate rula în paralel cu S46; durată ~10 min
+- ce faci (PowerShell, fără drepturi de administrator dacă se poate; dacă un jurnal cere administrator, notezi asta și treci mai departe):
+  1. Evenimentele din `System` între 29 oct 22:30 și 23:30: `Get-WinEvent -FilterHashtable @{LogName='System'; StartTime='2026-10-29 22:30'; EndTime='2026-10-29 23:30'}`
+     → toate cu nivel Critic/Eroare/Avertisment + ID-urile cheie: **41** (Kernel-Power: oprire fără închidere curată = de obicei curent/blocare),
+     **6008** (oprire neașteptată), **1074** (repornire cerută de un program/Windows Update, cu numele lui), **1076**, **6005/6006** (pornire/oprire jurnal),
+     **19/20/43** (WindowsUpdateClient), **1001** (BugCheck = ecran albastru, cu codul), WHEA-Logger (erori hardware).
+  2. `Get-WinEvent -LogName Setup` și istoricul Windows Update din 29–30 oct (`Get-HotFix` + `Microsoft-Windows-WindowsUpdateClient/Operational` dacă există).
+  3. Dacă există `C:\Windows\Minidump\*.dmp` din 29–30 oct: doar numele, data, mărimea (nu le deschide).
+  4. Ultimele rânduri din jurnalul S45 (`lucru/`) înainte de 23:09: temperatura și memoria plăcii, ca să excludem supraîncălzirea.
+  5. Setările care pot reporni noaptea, **doar citite**: orele active Windows Update (`HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings` ActiveHoursStart/End), planul de alimentare.
+  6. Raport `docs/rapoarte/2026-10-30_<ora>_S52_repornire.md`, în română simplă pentru Adrian: **cauza cea mai probabilă** (curent / Windows Update / ecran albastru / hardware)
+     cu dovezile (ID-urile și orele), ce s-ar putea face (de ex. UPS, ore active) — **fără să schimbi nimic**; commit + push.
+- Nu atingi `kronos/`, examenul, paznicul, jurnalul, S46 care rulează. Nimic instalat, nicio setare schimbată.
+- aprobat de: centrul de comandă (delegare, diagnostic doar citire), 30 oct 15:00
