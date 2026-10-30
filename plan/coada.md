@@ -1986,7 +1986,8 @@ S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11
 - raport: —
 
 ### S52 — Diagnostic: de ce s-a repornit workstation-ul pe 29 oct ~23:10 (doar citire, procesor, ~10 min)
-- stare: in_lucru (executant, 30 oct 15:30)
+- stare: oprit (executant, 30 oct 15:33) — placa din S45 normală până la 23:09:36 (64 °C, 6.116 MB); niciun minidump găsit; jurnalele Windows necitite
+- motiv: cere aprobarea lui Adrian: citirea jurnalelor Windows (`Get-WinEvent`, `wevtutil`) e blocată de permisiunile executantului; comanda pentru Adrian e în raport
 - stare anterioară: **aprobat** (centrul de comandă, 30 oct 15:00, la cererea lui Adrian: „poți să ceri un raport complet”; delegarea din 26 oct 17:45). Adrian crede că a fost o pană de curent.
 - tip: procesor, **doar citire** (nu schimbă nicio setare Windows, nu instalează nimic); fereastră: imediat ce e liber un loc în coadă, poate rula în paralel cu S46; durată ~10 min
 - ce faci (PowerShell, fără drepturi de administrator dacă se poate; dacă un jurnal cere administrator, notezi asta și treci mai departe):
@@ -2002,3 +2003,4 @@ S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11
      cu dovezile (ID-urile și orele), ce s-ar putea face (de ex. UPS, ore active) — **fără să schimbi nimic**; commit + push.
 - Nu atingi `kronos/`, examenul, paznicul, jurnalul, S46 care rulează. Nimic instalat, nicio setare schimbată.
 - aprobat de: centrul de comandă (delegare, diagnostic doar citire), 30 oct 15:00
+- raport: docs/rapoarte/2026-10-30_1533_S52_repornire.md
