@@ -80,3 +80,59 @@ puțin altfel.
 - Cod curat sau TinyStories R2 cu peste 0,005 mai rău: câștigul pe română se plătește pe celelalte → cel mult NECLAR.
 
 ## Ce a ieșit
+
+*Notă (executant): titlul „## Ce a ieșit” era deja pus, gol, în fișierul urcat la 18:59:58 (5344b50), așa că --inchide a refuzat
+(„deja închisă”). Conținutul de mai jos e generat cu aceleași funcții ale uneltei (ce_a_iesit), adăugat doar sub titlul gol; textul
+de deasupra n-a fost atins.*
+
+
+*Adăugat la 2026-10-31 01:30, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 472 | w2_reteta_A_cont3 | 30.10 19:00 | 0,4187 | pastrat | — | — | — |  |
+| 473 | w2_reteta_A_cont3 | 30.10 20:05 | 0,4162 | pastrat | — | — | — |  |
+| 474 | w2_reteta_A_cont3 | 30.10 21:08 | 0,4151 | pastrat | — | — | — |  |
+| 475 | w2_reteta_A_cont3 | 30.10 22:12 | 0,4155 | pastrat | — | — | — |  |
+| 476 | w2_reteta_A_cont3 | 30.10 23:16 | 0,4118 | pastrat | — | — | — |  |
+| 477 | w2_reteta_A_cont3 | 31.10 00:20 | 0,4060 | pastrat | — | — | — |  |
+| 478 | examen_validari_ws | 31.10 01:23 | — | masurat | — | — | — |  |
+| 479 | examen_validari_ws | 31.10 01:23 | — | masurat | — | — | — |  |
+
+- **w2_reteta_A_cont3:** 6 ore, 6 păstrate; val_bpb de la 0,4187 la 0,4060; cel mai bun păstrat: #477 (0,4060); pornită din #459 (0,4084).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+- Antrenarea: 19:00:09 → 01:22:57, cod 0; rândul „Pornesc din modelul experimentului #459 (linia „w2_reteta_A_cont”, ora 6,
+  val_bpb 0.4084)” e în log ✓ (nu a pornit de la zero). 137.824 de pași, 847 M de simboluri, 6,4 pași/s. **Procesul NU a căzut.**
+- Pe ore (TinyStories R2): 0,4187 / 0,4162 / 0,4151 / 0,4155 / 0,4118 / **0,4060**; fapte noi 72 / 80 / 71 / 79 / 75 / **75** (din 150).
+  Orele 1–3 aproape identice cu ale S45 (0,4185 / 0,4167 / 0,4150).
+- Examenele (`examen_validari_ws.py`, aceeași rulare, 01:22:57–01:23:26, cod 0):
+
+| măsura | #477 (ora 6, linia nouă) | #459 (reper, re-măsurat) | Δ |
+|---|---|---|---|
+| **română curat** | **1,2097** | 1,2162 | −0,0065 |
+| **cod curat** | **0,7270** | 0,7321 | −0,0051 |
+| **TinyStories R2** (val_bpb oficial) | **0,4060** | 0,4084 | −0,0024 |
+| română necurățat | 1,2274 | 1,2339 | −0,0065 |
+| cod necurățat | 0,6606 | 0,6654 | −0,0048 |
+
+- #459 re-măsurat a ieșit exact ca reperul (1,2162 / 0,7321).
+- Placa (`lucru/w2_reteta_A_cont3/placa_20261030_1900.csv`, 2.276 de citiri): maxim **6.002 MB**, maxim **64 °C** (sub 7.000 MB și 83 °C).
+
+## Verdictul
+
+*Scris la 2026-10-31 01:30, de executant, strict după pragurile de mai sus.*
+
+**CONFIRMAT.**
+
+- română curat **1,2097 ≤ 1,2112** ✓ (pragul CONFIRMAT; INFIRMAT ar fi fost > 1,2142);
+- cod curat **0,7270 ≤ 0,7371** ✓ (mai bun cu 0,005 decât #459, nu regresie);
+- TinyStories R2 **0,4060 ≤ 0,4134** ✓ (mai bun cu 0,0024).
+
+Față de așteptări: Δ română −0,0065 (așteptat ~−0,009; câștig mai mic decât credeam, dar trece pragul cu 0,0015). Cod 0,727 și
+R2 0,406, aproape exact cum le așteptam (~0,725 / ~0,404). Fapte noi 75 (așteptat 70–75).
+
+Ce NU spune: o singură sămânță; marja față de pragul CONFIRMAT e mică (0,0015), deci o parte din câștig poate fi noroc. Câștigul
+celei de-a doua nopți (−0,0065) e mai mic decât al primei (−0,017 la S38): linia începe să se aplatizeze la rata asta. Modelul #477
+NU intră în interfață și nu înlocuiește #459 în OS fără alt „da”.

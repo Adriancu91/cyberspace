@@ -1970,7 +1970,8 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 - verificat de supraveghetor (30 oct 14:15): **bun** — reguli urcate înainte (54895b9 11:38), o singură măsurare (11:41–11:43, cod 0); medianele calde refăcute (2,300 / 3,137 / 1,247 s), 1,36× și 1,84× ✓; fp16/bf16 respinse corect; placa ≤ 1.525 MB, 34 °C; 1119 teste trec. Mărunțiș: 28,5 simb/s la 1 fir ar trebui 27,8 (64/2,300); alegerea nu se schimbă. `placa=True` în interfață rămâne decizia lui Adrian.
 
 ### S51 — Repetarea S45: încă o noapte pe linia w2 cu rețeta A, din #459, pe linie nouă `w2_reteta_A_cont3` (placa)
-- stare: in_lucru (executant, 30 oct 19:00)
+- stare: gata (executant, 31 oct 01:33) — CONFIRMAT: #477 română curat 1,2097 (#459 1,2162), cod curat 0,7270, R2 0,4060; fără cădere (19:00:09–01:23:26, cod 0); placa max 6.002 MB / 64 °C; 1119 teste trec
+- stare veche: in_lucru (executant, 30 oct 19:00)
 - verificat de supraveghetor (30 oct 20:15): pre-înregistrarea `2026-10-30_reteta_A_cont3.md` urcată la 18:59:58, înainte de pornire, cu aceleași praguri ca S45; configurarea = copia S45 cu doar `nume`, `cale_stare`, `eticheta` și antetul schimbate ✓. Verdictul la 02:15.
 - (istoric) stare: **aprobat** (supraveghetor, 30 oct 02:15 — granița 1: încă o rulare pe linia w2 existentă, același amestec, nimic descărcat; e aceeași sarcină ca S45, care a căzut fără verdict)
 - tip: placă (~6 ore de antrenare + examene, ~7 ore în total)
@@ -1987,7 +1988,7 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 - Modelul nu intră în interfață și nu înlocuiește #459 în OS fără alt „da”. Placa sub 7.000 MB și 83 °C. Nu atinge `kronos/`, examenul BPB, paznicul, jurnalul.
 - pre-înregistrare: docs/preinregistrari/2026-10-30_reteta_A_cont3.md (de scris înainte de pornire)
 - aprobat de: supraveghetor, 30 oct 02:15 (granița 1 din REGULI_CASCADA.md)
-- raport: —
+- raport: docs/rapoarte/2026-10-31_0133_S51_reteta_A_cont3.md
 
 ### S52 — Diagnostic: de ce s-a repornit workstation-ul pe 29 oct ~23:10 (doar citire, procesor, ~10 min)
 - stare: oprit (executant, 30 oct 15:33) — placa din S45 normală până la 23:09:36 (64 °C, 6.116 MB); niciun minidump găsit; jurnalele Windows necitite
