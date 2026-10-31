@@ -2142,7 +2142,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: — (așteaptă „da S58” de la Adrian)
 
 ### S59 — Kronos-Cod: modelul citește simbolurile direct + examenul pe ore în biți pe octet (doar cod și teste, înainte de S58) — fără placă, fără antrenare
-- stare: aprobat
+- stare: in_lucru (executant, 31 oct 20:30)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (se face înaintea lui S58; nu folosește placa)
 - durată maximă: 3 ore
