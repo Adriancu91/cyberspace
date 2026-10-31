@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 17:15 — Tokenizerul pe cod (S55) a ieșit BUN; varianta rapidă pe placă pentru #477 (S56) e gata; prima antrenare pe cod așteaptă „da”-ul tău
+
+- **S55 (comanda ta C-45) gata și verificat: BUN.** Tokenizerul nou pune **3,46 octeți într-un simbol** (prag 3,0), cu **22 % mai mult** decât tokenizerul vechi pe același cod (prag 15 %), și refacere 100 % identică (5.686 din 5.686 fișiere). Tot codul e transformat: **1,08 miliarde de simboluri**, în doar 18 minute. Examenul ascuns a rămas neatins.
+- **S56 gata și verificat: corect.** Kronos are acum și pentru #477 varianta pe placă: **1,75× mai rapidă** decât procesorul (la #459 era 1,84×), cuvinte identice. Placa a folosit doar 1,5 GB. **1132 teste trec.**
+- **Am pus în coadă S57** (aprobată de mine, doar procesor, ~câteva ore): pregătirea codului pentru prima antrenare pe cod — fără să antreneze nimic.
+- **S58 = prima antrenare Kronos-Cod** (o noapte de 10 ore pe placă, model nou de ~110 milioane, de la zero). E un **model nou**, deci **doar cu „da”-ul tău**. Pragurile sunt scrise dinainte în coadă. Placa stă liberă diseară dacă nu spui „da” până la ~18:30.
+- **Aștept de la tine:** (1) **„da S58”** dacă vrei prima antrenare pe cod (cel mai devreme în noaptea asta, după S57); (2) **Release-ul #477** (comanda de la 14:20, mai jos — e singurul lucru care lipsește ca OS-ul să-l pună pe stick); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 31 octombrie 2026, 14:20 — #477 e acum modelul în uz (S54 gata și verificat); OS-ul îl poate lua; Release-ul îl faci tu
 
 - **S54 (comanda ta C-44) gata și verificat: corect.** #477 exportat (110.859.040 octeți, aceeași mărime ca #459, suma `bcbe8187…3963`), modulele Kronos folosesc acum #477, **#459 rămâne neatins, ca rezervă**. Interfața nu s-a schimbat (filele ei folosesc alte modele, #312 și #407). **1126 teste trec.**
@@ -157,11 +165,3 @@
 - **Propus, așteaptă „da”-ul tău: S46 = descărcarea întreagă** (nu folosește placa). Rămâne și **S45** (o noapte de antrenare din #459); fără „da”, placa video stă liberă.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea întreagă) și pentru **S45** — o comandă în hub ajunge.
 
-## 29 octombrie 2026, 02:15 — S44 gata: INFIRMAT (tăierea bucăților strică); unealta de descărcare a codului e verificată → pilotul pornește
-
-- **S44 verificat de mine: INFIRMAT.** Cu bucățile de text tăiate, cititorul răspunde corect la **297 din 500**, față de **336** cu bucățile întregi (−7,8 puncte).
-  Tăierea scoate des chiar propoziția cu răspunsul. Ideea se închide. Toate testele trec (1058).
-- **S43a verificat: unealta pilotului Kronos-Cod e bună** (doar licențe libere, doar cod publicat înainte de 29 iunie 2021, se oprește singură sub 40 GB liberi).
-  **Am trecut pilotul S43 pe „aprobat”** (pe „da”-ul tău de ieri): ~30–45 de minute, pe procesor și internet, ~1 GB pe disc. Descărcarea întreagă vine abia după ce verific cifrele pilotului.
-- **Placa video stă liberă:** încercările pe „memorie” (E3) din granițele mele s-au terminat. Am propus **S45 = încă o noapte de antrenare din #459** (ultima a adus cel mai bun model).
-- **Aștept de la tine (fără grabă):** „da” sau „nu” pentru S45 (o comandă în hub ajunge). Fără „da”, placa rămâne liberă.

@@ -2069,6 +2069,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 ### S55 — C-45: Kronos-Cod, tokenizerul pe cod din descărcarea S46 (cu excluderea S53) + propunerea primei antrenări (doar procesor)
 - stare: gata (executant, 31 oct 15:05) — verdict BUN: (c) 5.686/5.686 identice, (a) 3,46 octeți/simbol, +22,1 % față de w2; setul tokenizat, 1.080.537.399 simboluri; ~18 min; setul ascuns neschimbat; propunerea primei antrenări în raport (nepornită); 1132 teste trec, 1 sărit
 - raport: docs/rapoarte/2026-10-31_1505_S55_tokenizer_cod.md
+- verificat (supraveghetor, 31 oct 17:15): **BUN, corect** — 3,4617 ≥ 3,0; 3,4617 / 2,8344 − 1 = +22,1 % ≥ 15 %; 5.686/5.686 identice; pre-înregistrarea urcată 14:39, înainte de rulare (14:39:19), pragurile neschimbate. Propunerea primei antrenări → S57 (pregătire, aprobată) și S58 (antrenarea, la Adrian).
 - tip: procesor (fără placă, fără rețea); poate rula și noaptea (placa e liberă, nu o folosește)
 - fereastră: oricând, **după S54**
 - durată maximă: 10 ore în total (tokenizerul ~1–2 ore; tokenizarea întregului set restul); RAM cel mult ~60 GB; te oprești dacă spațiul liber pe C: scade sub 40 GB
@@ -2092,6 +2093,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 ### S56 — CCM: partea de placă a reglajului pentru #477 (măsurare scurtă pe placă)
 - stare: gata (executant, 31 oct 15:38: măsurarea 15:29–15:33, cod 0; placa_fp32 acceptată (|Δ logit| 0,000155), cald 1,226 s / 52,2 simb/s, 1,75× față de referinta 1 fir 2,143 s; fp16/bf16 respinse; reglajul nou `alegere: placa`, `verifica --placa` → folosit: true; vechiul păstrat ca `_s54`; placa max 1.544 MB / 32 °C; 1132 teste trec, 1 sărit)
 - raport: docs/rapoarte/2026-10-31_1538_S56_placa_477.md
+- verificat (supraveghetor, 31 oct 17:15): **corect** — |Δ logit| 0,000155 ≤ 0,001; 2,143 / 1,226 = 1,75× (la #459: 1,84×); `folosit: true`; placa 1.544 MB / 32 °C.
 - tip: placă (scurtă: ~2–5 minute; la S50 aceeași măsurare a durat 2 minute, max 1.525 MB, 34 °C)
 - fereastră: **după S55** (nu în paralel cu S55: bancul măsoară și procesorul, iar S55 îl ține ocupat). Prima fereastră a plăcii după ce S55 e `gata` sau `oprit` (zi 08:00–18:30 sau noapte 19:00–07:00).
 - durată maximă: 30 de minute; placa sub 7.000 MB și 83 °C (paznicul)
@@ -2105,3 +2107,35 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare; regulile de acceptare sunt cele deja în cod din S49/S50
 - aprobat de: supraveghetor, 31 oct 2026 14:20 (granița 2: comparații/măsurători pe placă; o rulare pe linia de model existentă #477)
+
+### S57 — Kronos-Cod: pregătirea primei antrenări, DOAR cod și teste (modulul de date, configurarea, examenul pe validare) — fără placă, fără antrenare
+- stare: aprobat
+- tip: procesor (fără placă, fără rețea)
+- fereastră: oricând (acum e liber și procesorul, și placa)
+- durată maximă: 3 ore
+- de ce: S55 a ieșit BUN (3,46 octeți/simbol, +22,1 % față de w2). Propunerea primei antrenări (raportul S55, punctul 6) spune ce lipsește în cod. Pregătirea nu antrenează nimic și nu folosește placa (granițele 3 și 5); antrenarea însăși (S58) e linie de model nouă → așteaptă „da”-ul lui Adrian. Dacă Adrian spune „da”, noaptea poate porni fără o zi de așteptare.
+- ce faci:
+  1. Modul nou de date `module/date_cod.py` (port-ul de date, ca `date_fisier.py`), cu `MANIFEST` și fișa `module/manifeste/date_cod.toml`: citește `lucru/kronos_cod/simboluri/` (uint16, sfârșit de fișier = 32.764), dă bucăți de 512 simboluri pentru antrenare și, separat, validarea (cele 5.686 fișiere, niciodată amestecate în antrenare). Îl adaugi în lista `MODULE` din `teste_contracte/` și trebuie să treacă.
+  2. Unealtă `unelte/kronos_cod/examen_validare.py`: pierderea pe validare → **biți pe octet** = pierdere / ln 2 / (octeți pe simbol măsurați pe aceleași fișiere), pe tot și pe Python / Rust / C. `module/examen_bpb.py` NU se atinge.
+  3. Configurarea `config/cod_c1.toml` (linie nouă `cod_c1`), exact după propunerea din raportul S55: 12 straturi, 12 capete, 768, context 512, vocabular 32.768, de la zero, AdamW, rata max 6·10⁻⁴, încălzire 1.000 pași, scădere la 10 %, lot 8 cu adunare de loturi (același lot efectiv ca linia w2), sămânța 0, limită 10 ore. **Doar scrisă — NU o pornești, nici măcar proba de 10 minute.**
+  4. Teste fără placă și fără date reale (fișiere mici uint16 făcute în test): bucățile au 512 simboluri, validarea nu apare în antrenare, biții/octet pe un exemplu calculat de mână, configurarea se încarcă (fără să pornească).
+  5. `python -m pytest`: toate trec. Commit + push. Raport scurt `docs/rapoarte/2026-<data>_<ora>_S57_pregatire_cod_c1.md`: ce fișiere, ce teste, **estimarea memoriei pe placă** pentru lot 8 (calcul, nu măsurare) și orice schimbare pe care o propui la S58.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele, linia română (#477), setul ascuns (nu-l deschizi), datele din `lucru/kronos_cod/` (doar citire). Nimic pe placă, nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare (pre-înregistrarea vine la S58)
+- aprobat de: supraveghetor, 31 oct 2026 17:15 (granițele 3 și 5: pregătirea datelor deja aprobate + unelte/teste; fără `kronos/`, fără examen, fără antrenare)
+
+### S58 — Kronos-Cod: prima antrenare `cod_c1` pe placă (o noapte, de la zero) — LINIE DE MODEL NOUĂ
+- stare: propus — necesită Adrian
+- tip: placă
+- fereastră: noapte (19:00–07:00), prima noapte după S57 `gata` și după „da”-ul lui Adrian
+- durată maximă: proba de 10 minute + 10 ore; placa sub 7.000 MB și 83 °C (paznicul); proba se oprește dacă trece de 6.500 MB
+- de ce: etapa următoare din Kronos-Cod (C-28/C-45). E linie de model nouă (alt tokenizer) → după `REGULI_CASCADA.md` doar cu „da”-ul lui Adrian.
+- ce faci (după „da”):
+  1. **Pre-înregistrarea ÎNAINTE de probă:** `docs/preinregistrari/<data>_cod_c1.md`, commit + push. Cu pragurile de mai jos copiate neschimbate și cu așteptările tale în cifre.
+  2. Proba de 10 minute cu `config/cod_c1.toml` (fără jurnal, ca la S30): memoria maximă a plăcii și simboluri/s. Peste 6.500 MB → oprești și raportezi (nu micșorezi singur modelul).
+  3. Noaptea: 10 ore cu `config/cod_c1.toml`, prin `unelte/cascada.py`.
+  4. Măsori (i) biți pe octet pe validarea de 5.686 fișiere (tot + Python/Rust/C) cu `unelte/kronos_cod/examen_validare.py`; (ii) o singură dată pass@1 și pass@10 pe cele 200 de probleme ascunse cu `unelte/kronos_cod/examen_cod.py` și cutia.
+- pragurile (propuse de executant la S55, păstrate de supraveghetor): **ÎNVAȚĂ** = biți/octet pe validare ≤ 1,10 **și** pass@10 ≥ 10/200; **NU ÎNVAȚĂ** = biți/octet > 1,40 **sau** pass@10 = 0/200; altfel **NECLAR** (a doua noapte, tot cu „da”-ul lui Adrian sau în granița 1, pe linia acum existentă).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477 și linia română. Raport `docs/rapoarte/<data>_<ora>_S58_cod_c1.md`.
+- aprobat de: — (așteaptă „da S58” de la Adrian)
