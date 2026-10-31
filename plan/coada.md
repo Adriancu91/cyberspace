@@ -2064,6 +2064,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare; nu e nevoie
 - aprobat de: Adrian (COMENZI.md C-44, 31 oct 2026 13:50, „da la amândouă”, prin centrul de comandă); pașii scriși de supraveghetor, 31 oct 14:15
+- verificat de supraveghetor (31 oct 14:20): **gata, corect.** Mărimea 110.859.040 octeți = #459 (aceeași arhitectură) ✓; SHA-256 bcbe8187…3963 scrisă în `.sha256` ✓; `kronos_459_q8_0.kgr` neatins (e80618b4…382e) ✓; vectorii: 2 din 3 texte identice cu #459, al doilea diferă („Bacău” în loc de „Baia Mare”, firesc la alt model), marjele minime 0,026 / 0,024 / 0,016 ✓; MODEL.md cu „Rezerva: #459” ✓; doar căile implicite schimbate în 4 module, MANIFEST neschimbat ✓; reglajul CCM refăcut pe procesor (1 fir, 27,8 simb/s) ✓; 1126 teste trec ✓. Release-ul `kronos-kgr1-477` nefăcut (`gh` cere aprobare) — rămâne la Adrian, ca la #459. MODEL.md copiat în hub (`integrare/kronos/MODEL.md`) → C-44 gata, C-46 deblocat.
 
 ### S55 — C-45: Kronos-Cod, tokenizerul pe cod din descărcarea S46 (cu excluderea S53) + propunerea primei antrenări (doar procesor)
 - stare: aprobat
@@ -2086,3 +2087,19 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-10-31_kronos_cod_tokenizer.md (scrisă și urcată ÎNAINTE de antrenarea tokenizerului)
 - aprobat de: Adrian (COMENZI.md C-45, 31 oct 2026 13:50, „da la amândouă”, prin centrul de comandă); pașii și pragurile scrise de supraveghetor, 31 oct 14:15. Prima antrenare pe placă NU e aprobată aici.
+
+### S56 — CCM: partea de placă a reglajului pentru #477 (măsurare scurtă pe placă)
+- stare: aprobat
+- tip: placă (scurtă: ~2–5 minute; la S50 aceeași măsurare a durat 2 minute, max 1.525 MB, 34 °C)
+- fereastră: **după S55** (nu în paralel cu S55: bancul măsoară și procesorul, iar S55 îl ține ocupat). Prima fereastră a plăcii după ce S55 e `gata` sau `oprit` (zi 08:00–18:30 sau noapte 19:00–07:00).
+- durată maximă: 30 de minute; placa sub 7.000 MB și 83 °C (paznicul)
+- de ce: la S54 reglajul CCM pentru #477 s-a refăcut doar pe procesor, deci cu `placa=True` modulul ar rămâne acum pe procesor (la #459 avea și varianta de placă fp32, 1,84× mai rapidă). Executantul a propus-o în raportul S54.
+- ce faci:
+  1. Verifici că placa e liberă (`nvidia-smi`: niciun proces mare, sub ~1.000 MB) și că S55 nu mai rulează.
+  2. O singură măsurare oficială: `python -X utf8 -m module.calcul.banc placa --kgr lucru/export/kronos_477_q8_0.kgr --iesire lucru/ccm/s56_placa.json` (aceleași setări ca la S50: 64 simboluri, 5 repetări, 6 răspunsuri). Regulile de acceptare sunt cele din S49/S50, deja în cod (aceleași simboluri ca referința, |Δ logit| ≤ 0,001; fp16/bf16 respinse dacă nu le îndeplinesc).
+  3. Păstrezi reglajul de acum ca `lucru/ccm/reglaj-desktop-br58s2c_s54.json`, apoi `python -X utf8 -m module.calcul.reglaj scrie --banc lucru/ccm/s56_placa.json --inlocuieste` și `python -X utf8 -m module.calcul.reglaj verifica --kgr lucru/export/kronos_477_q8_0.kgr --placa` → trebuie `folosit: true`.
+  4. `python -m pytest`: toate trec. Commit + push. Raport scurt `docs/rapoarte/2026-<data>_<ora>_S56_placa_477.md`: tabelul variantelor (acceptată, dif. logit-uri, cald s, simb/s), ce s-a ales pe procesor și pe placă, comparația cu #459 la S50 (1 fir 2,30 s, placa fp32 1,25 s), memoria maximă și temperatura plăcii.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (doar citire), linia de cod. Implicitul `placa=False` rămâne. Nimic descărcat, nimic instalat, nimic șters.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare; regulile de acceptare sunt cele deja în cod din S49/S50
+- aprobat de: supraveghetor, 31 oct 2026 14:20 (granița 2: comparații/măsurători pe placă; o rulare pe linia de model existentă #477)

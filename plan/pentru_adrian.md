@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 14:20 — #477 e acum modelul în uz (S54 gata și verificat); OS-ul îl poate lua; Release-ul îl faci tu
+
+- **S54 (comanda ta C-44) gata și verificat: corect.** #477 exportat (110.859.040 octeți, aceeași mărime ca #459, suma `bcbe8187…3963`), modulele Kronos folosesc acum #477, **#459 rămâne neatins, ca rezervă**. Interfața nu s-a schimbat (filele ei folosesc alte modele, #312 și #407). **1126 teste trec.**
+- **Am copiat `MODEL.md` cu #477 în hub** → C-44 e gata, iar Cyber Universe OS poate începe C-46 (#477 pe stick).
+- **Urmează:** S55 (tokenizerul pe cod, doar procesor, până la ~10 ore). **Am pus după el S56** (aprobată de mine, în granițe): o măsurare de câteva minute pe placă, ca modulul să aibă și pentru #477 varianta rapidă pe placă, cum avea la #459.
+- **Aștept de la tine:** (1) **Release-ul #477** — pe workstation, în PowerShell, din `C:\Kronos\cyberspace`:
+  `gh release create kronos-kgr1-477 lucru/export/kronos_477_q8_0.kgr lucru/export/kronos_477_q8_0.kgr.sha256 --repo Adriancu91/cyberspace --title "Kronos #477 KGR1 Q8_0" --notes "SHA-256 bcbe8187087dbb3e531a8a7b10991cd24ea14a6e067d07c0fcbb8d3edd753963, 110859040 octeți"`
+  (comanda e și în `docs/integrare_kronos/MODEL.md`); (2) opțional, excluderea mai îngustă de la S53; (3) fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 31 octombrie 2026, 14:15 — Am primit „da la amândouă”: întâi #477 în locul lui #459, apoi tokenizerul pe cod; verificarea examenului de cod: „de curățat”
 
 - **S53 gata și verificat: DE CURĂȚAT.** Nicio problemă din examenul de cod ascuns nu apare întreagă în datele descărcate (0 din 200), dar 87 au bucăți mici comune (cea mai lungă: 26 de simboluri, mai ales liste scurte de numere). După regula scrisă înainte, scoatem **3.821 de fișiere (3 %)** la pasul tokenizerului. Examenul rămâne bun. **1126 teste trec.**
@@ -156,13 +165,3 @@
   **Am trecut pilotul S43 pe „aprobat”** (pe „da”-ul tău de ieri): ~30–45 de minute, pe procesor și internet, ~1 GB pe disc. Descărcarea întreagă vine abia după ce verific cifrele pilotului.
 - **Placa video stă liberă:** încercările pe „memorie” (E3) din granițele mele s-au terminat. Am propus **S45 = încă o noapte de antrenare din #459** (ultima a adus cel mai bun model).
 - **Aștept de la tine (fără grabă):** „da” sau „nu” pentru S45 (o comandă în hub ajunge). Fără „da”, placa rămâne liberă.
-
-## 28 octombrie 2026, 23:15 — S42 gata: INFIRMAT (modelul mai bun nu a făcut un „cititor” mai bun); urmează unealta pilotului de cod (S43a) și o probă mică cu bucățile de text (S44)
-
-- **S42 verificat de mine: INFIRMAT.** Cititorul refăcut din #459 (#466) răspunde corect la **66 din 100**, exact cât cel vechi (#438, 66); pragul cerea +5.
-  Pe un examen de control pierde chiar 3 puncte. Româna nu s-a stricat. Concluzia: problema nu e modelul, ci **bucățile de text** pe care le primește. Cititorul rămâne #438.
-- **Nimic nu rulează pe placă acum** (S42 s-a terminat la 22:50). Toate cele **1003 teste trec**.
-- **Urmează (aprobate, în granițe):** întâi **S43a** (unealta pilotului de descărcare Kronos-Cod, fără internet), apoi **S44**: păstrăm din fiecare bucată
-  doar propozițiile legate de întrebare, ca să încapă mai multe; măsurat pe un set de control (nu pe cel folosit deja de 5 ori), pragurile scrise înainte, sub 1 oră pe placă.
-- **Aștept de la tine:** nimic.
-
