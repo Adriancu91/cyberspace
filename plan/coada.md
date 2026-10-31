@@ -2109,7 +2109,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 14:20 (granița 2: comparații/măsurători pe placă; o rulare pe linia de model existentă #477)
 
 ### S57 — Kronos-Cod: pregătirea primei antrenări, DOAR cod și teste (modulul de date, configurarea, examenul pe validare) — fără placă, fără antrenare
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (acum e liber și procesorul, și placa)
 - durată maximă: 3 ore
