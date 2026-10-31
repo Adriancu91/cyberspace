@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 08:15 — Raportul de dimineață e la locul lui; totul în regulă, nimic nou de decis
+
+- **Raportul de dimineață (06:45) confirmă verdictul S51: CONFIRMAT** — #477 română 1,2097 (prag 1,2112). Placa liberă (440 MB, 30 °C). **1119 teste trec, 0 picate.** Noaptea n-a mai fost nicio repornire.
+- **Rulează S46 bucata 2** (descărcarea codului, fără placă): ~21.100 pachete noi în noaptea asta, fișierul de cod are 4,67 GB; 61 GB liberi pe disc. Se oprește singură pe la ~12:00; o verific la 14:15.
+- Nimic nou pus în coadă; nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine (fără grabă, aceleași 3 de la 02:15):** „da #477”; ce să facă placa de acum; comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 31 octombrie 2026, 02:15 — Antrenarea de noapte S51 a mers până la capăt: CONFIRMAT (#477 e acum cel mai bun model); descărcarea codului continuă
 
 - **S51 verificat: CONFIRMAT, la limită.** Noaptea a mers fără cădere (19:00–01:23). Modelul nou **#477**: română **1,2097** (față de 1,2162 la #459; prag 1,2112), cod 0,7270, povești 0,4060 — toate mai bune, toate 7 validările puțin mai bune. Placa: max 6.002 MB, 64 °C. **1119 teste trec.**
@@ -164,11 +171,3 @@
 - **Pus în coadă, așteaptă „da”-ul tău:** S43 = Kronos-Cod etapa 1b, **descărcarea codului**, întâi doar un pilot de ~1 oră (orice descărcare nouă cere „da”-ul tău).
 - **Aștept de la tine (fără grabă, nu blochează nimic azi):** (1) „da” sau „nu” pentru pilotul S43; (2) data-limită a codului: **iunie 2021** (recomand: sigur fără
   cod scris de alte AI) sau noiembrie 2022 (+40 % date); (3) sursele care cer cont (The Stack etc.): recomand **deocamdată niciuna**. Poți răspunde printr-o comandă în hub.
-
-## 28 octombrie 2026, 11:20 — Porturile noi sunt gata (S40); Kronos #459 merge în OS; antrenarea S42 a fost întreruptă de repornire — o reiau de la zero după 12:15
-
-- **S40 gata (făcut cu tine de față):** cele două „prize” noi (`cautare`, `inferenta`) sunt în nucleu ca **opționale**, deci configurările vechi merg neschimbate; plus cele două module care le folosesc. **979 de teste trec**, 0 picate. Cererea ta S40a e închisă.
-- **Vestea bună din hub:** modelul #459 rulează în Cyber Universe OS și dă **exact** aceleași cuvinte ca Kronos pe Windows. E încă lent (~8 cuvinte/s); sesiunea OS are cererea C-29 pentru viteză.
-- **S42 oprit (corect, nu e o defecțiune):** antrenarea a mers normal o oră (placa 6.264 MB, 64 °C), apoi s-a oprit când ai repornit workstation-ul în OS. Nu există verdict.
-- **Pus în coadă (aprobat de mine, în granițe):** S42 se reia **de la zero**, cu aceleași reguli scrise dinainte, nu mai devreme de 12:15; dacă nu pornește până la 14:30, pornește la 19:00. Sesiunea veche se mută deoparte, nu se șterge nimic. S41 (Kronos-Cod, pe procesor) rămâne după ea.
-- **Aștept de la tine:** nimic urgent. Rămâne opțional Release-ul #459 (comanda `gh release create …` din rezumatul de la 08:20) — modelul a ajuns oricum pe stick prin copiere, deci OS-ul nu e blocat. Te rog doar: **la următoarea fereastră OS, spune-i centrului de comandă să oprească întâi antrenarea**, ca să nu pierdem ore pe placă.
