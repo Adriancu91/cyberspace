@@ -20,7 +20,7 @@ class InferentaKGR1:
         "permisiuni": [],
     }
 
-    def __init__(self, cale: str = "lucru/export/kronos_459_q8_0.kgr", desfacere: str = "la_incarcare") -> None:
+    def __init__(self, cale: str = "lucru/export/kronos_477_q8_0.kgr", desfacere: str = "la_incarcare") -> None:
         self.cale = cale
         self.motor = MotorBrut(cale, desfacere)
 

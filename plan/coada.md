@@ -2046,7 +2046,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - verificat de supraveghetor (31 oct 14:15): **gata, corect — DE CURĂȚAT.** 0/200 soluții întregi (prag 0), 87/200 cu suprapuneri de 13 (prag ≤ 10 pentru „curat”), 0 > 50 deci nu e compromis; suma setului ascuns neschimbată; 3,06 % de exclus. Lista se aplică întreagă la S55.
 
 ### S54 — C-44: #477 îl înlocuiește pe #459 (modelul în uz + pachetul KGR1 pentru OS), #459 păstrat ca rezervă (doar procesor)
-- stare: in_lucru (executant, 31 oct 14:00)
+- stare: gata (executant, 31 oct 14:08) — #477 exportat (110.859.040 octeți, SHA-256 bcbe8187…3963), MODEL.md rescris cu rezerva #459, modulele KGR1/CCM pe #477, reglajul CCM refăcut pe procesor (referinta, 1 fir, 27,8 simb/s; fără partea de placă); Release NEfăcut (`gh` cere aprobare, comanda în raport); 1126 teste trec, 1 sărit
+- raport: docs/rapoarte/2026-10-31_1408_S54_model_477.md
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând (de preferat azi, 31 oct, înaintea S55)
 - durată maximă: 2 ore; RAM cel mult ~6 GB
