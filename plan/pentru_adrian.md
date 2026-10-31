@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 23:15 — Uneltele (S60) și proba de 10 minute (S58) au trecut; o comparație mică în noaptea asta, ca să alegi pe cifre cum pornește antrenarea pe cod
+
+- **S60 gata și verificat: corect.** Kronos are proba „de la zero” și comanda care pune modelul să scrie răspunsurile la problemele de cod. Examenul ascuns a rămas închis. **1165 teste trec.**
+- **S58, pașii 1–2 gata și verificați: corecți.** Pragurile au fost scrise înainte de probă. Proba de 10 minute: placa **6.078 MB** (sub 6.500), **63 °C**, fără erori. Cele 10 ore pornesc **mâine (1 nov) de la 19:00**, cum am stabilit.
+- **Executantul a observat ceva:** modelul pornește „prea sigur pe el” (greșeala de început 474, normal ar fi ~10) din cauza felului în care sunt alese numerele de pornire. Învață oricum (6,8 după 10 minute), dar pierde primii pași reparând asta.
+- **Am pus în coadă S61** (aprobată de mine, ~2 ore de cod + 10 minute pe placă, în noaptea asta): aceeași probă cu numere de pornire mai mici (ca la GPT-2), pe o configurare SEPARATĂ, cu praguri scrise înainte. S58 nu se schimbă.
+- **Aștept de la tine:** (1) mâine, după raportul S61, alegi: cele 10 ore pornesc **cum sunt aprobate** (dacă nu spui nimic, așa rămâne) sau **cu varianta S61** — scrie „S58 cu init002” înainte de 19:00; (2) dacă vii mâine la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 31 octombrie 2026, 20:56 — Am primit „da S58”; prima antrenare pe cod pornește mâine-seară, după o ultimă bucată mică de cod (S60)
 
 - **S59 gata și verificat: corect.** Kronos are acum modelul care citește direct simbolurile de cod și examenul pe ore (biți pe octet, pe 1.000 de fișiere fixe). Drumul întreg al antrenării a fost probat cap-coadă pe un set mic. Nucleul, examenul oficial și #477 neatinse. **1159 teste trec.**
@@ -151,13 +159,3 @@
 - **Acum poate porni S48** (modulul care folosește singur varianta cea mai rapidă, doar procesor). **Diseară de la 19:00: S45** (noaptea de antrenare). S49 (placa video) după S45.
 - Calculatorul raportează normal (ultimul commit 12:04), nicio problemă cu placa.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă) — o comandă în hub ajunge.
-
-## 29 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a oprit: executantul vrea „da”-ul tău scris anume; azi pe procesor rulează CCM (S47); diseară antrenarea S45
-
-- **S46 oprit (corect, nu e o defecțiune):** centrul de comandă a aprobat descărcarea prin delegarea ta, dar regula descărcărilor cere un „da” al tău scris pe sarcină.
-  Nimic descărcat. Eu n-am voie să aprob descărcări. **Dacă o vrei, scrie „da S46” (o comandă în hub ajunge)** — pornește la următoarea trecere a executantului.
-- **Rulează acum S47 (CCM, doar procesor):** pachetul nou `module/calcul/` și 9 teste noi sunt scrise, **1080 de teste trec**. Măsurarea vitezei a pornit la 11:17 (~35 min);
-  prima încercare a fost oprită fără rezultat (o variantă e ~20× mai lentă), deci nu s-a pierdut nimic. Verdictul îl verific la trecerea de 14:15. Apoi S48 (procesor).
-- **Diseară de la 19:00: S45** (încă o noapte de antrenare din #459). Am confirmat-o eu: intră în granițele mele, deci nu mai așteaptă alt „da”; pragurile se scriu înainte.
-- Calculatorul raportează normal (ultimul commit 11:08), raportul de dimineață e la locul lui, nicio problemă cu placa.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă). Restul rămâne ca la 08:15 (CONTINUUM, pre-înregistrarea veche E3).
