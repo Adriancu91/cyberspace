@@ -2046,7 +2046,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - verificat de supraveghetor (31 oct 14:15): **gata, corect — DE CURĂȚAT.** 0/200 soluții întregi (prag 0), 87/200 cu suprapuneri de 13 (prag ≤ 10 pentru „curat”), 0 > 50 deci nu e compromis; suma setului ascuns neschimbată; 3,06 % de exclus. Lista se aplică întreagă la S55.
 
 ### S54 — C-44: #477 îl înlocuiește pe #459 (modelul în uz + pachetul KGR1 pentru OS), #459 păstrat ca rezervă (doar procesor)
-- stare: aprobat
+- stare: in_lucru (executant, 31 oct 14:00)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: oricând (de preferat azi, 31 oct, înaintea S55)
 - durată maximă: 2 ore; RAM cel mult ~6 GB
