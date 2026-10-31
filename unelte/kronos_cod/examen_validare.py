@@ -82,7 +82,8 @@ def bucati_fisier(simboluri: np.ndarray, context: int, sfarsit: int) -> list[tup
 
 def pierderi(logits: Callable, fisiere: list[np.ndarray], context: int, sfarsit: int, lot: int = 16) -> list[float]:
     """Suma pierderilor (nats) pe fiecare fișier. `logits(x)` primește un tensor (lot, lungime) și dă
-    (lot, lungime, vocabular); bucățile mai scurte se completează la dreapta (umplutura nu se notează)."""
+    (lot, lungime, vocabular); bucățile mai scurte se completează la dreapta (umplutura nu se notează). Pierderea se
+    socotește unde sunt răspunsurile (pe placă, dacă modelul e pe placă): pe procesor urcă doar sumele."""
     import torch
     import torch.nn.functional as F
 
@@ -97,9 +98,10 @@ def pierderi(logits: Callable, fisiere: list[np.ndarray], context: int, sfarsit:
             for r, (_, xi, yi) in enumerate(grup):
                 x[r, : len(xi)] = torch.from_numpy(xi)
                 y[r, : len(yi)] = torch.from_numpy(yi)
-            iesire = logits(x).float().cpu()
+            iesire = logits(x).float()
+            y = y.to(iesire.device)
             p = F.cross_entropy(iesire.reshape(-1, iesire.size(-1)), y.reshape(-1), ignore_index=-100, reduction="none")
-            p = p.view(len(grup), t).sum(dim=1)
+            p = p.view(len(grup), t).sum(dim=1).cpu()
             for r, (k, _, _) in enumerate(grup):
                 suma[k] += float(p[r])
     return suma

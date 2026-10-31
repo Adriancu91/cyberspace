@@ -2142,7 +2142,9 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: — (așteaptă „da S58” de la Adrian)
 
 ### S59 — Kronos-Cod: modelul citește simbolurile direct + examenul pe ore în biți pe octet (doar cod și teste, înainte de S58) — fără placă, fără antrenare
-- stare: in_lucru (executant, 31 oct 20:30)
+- stare: gata (executant, 31 oct 20:48: `module/model_gpt_cod.py` + `module/examen_cod_validare.py` (ambele trec `teste_contracte/`), `cod_c1.toml` pe ele + `previzualizare = true` (testul rapid din kronos) + `hrana = ""` (altfel antrenare_lunga pune hrana implicită); eșantionul 1.000 fișiere = 2,10 mil. simboluri, examen estimat ~30–90 s pe placă; cap-coadă prin `antrenare_lunga.main` pe setul mic; fără `kronos/`; 1159 teste trec, 1 sărit. **S58 încă nu poate porni întreagă: lipsesc proba de la zero (`proba_muon.py` cere `--porneste-din`) și comanda care face modelul să scrie răspunsurile pentru pass@k** — propunerea S60 în raport)
+- raport: docs/rapoarte/2026-10-31_2048_S59_cod_c1_gata_de_pornire.md
+- stare anterioară: in_lucru (executant, 31 oct 20:30)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (se face înaintea lui S58; nu folosește placa)
 - durată maximă: 3 ore

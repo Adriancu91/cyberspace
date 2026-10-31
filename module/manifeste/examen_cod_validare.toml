@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "examen_cod_validare"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Examenul de la fiecare oră al lui Kronos-Cod (S59): biți pe octet pe un eșantion fix de 1.000 de fișiere de validare (sămânța 0)."
+format = "modul-v0"
+
+[contract]
+port = "examen"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"examineaza" = "notează un model pe textul de validare și întoarce scorurile"
+"scor_principal" = "numele scorului după care se decide"
+"mai_mic_e_mai_bun" = "în ce direcție e mai bun scorul"
+
+[rulare]
+limbaj = "python"
+intrare = "module.examen_cod_validare:ExamenCodValidare"
+teste = "python -m pytest teste_contracte -k ExamenCodValidare"

@@ -69,6 +69,10 @@ MODULE = [
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
     pytest.param(
+        "model", "module.model_gpt_cod:ModelGPTCod", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
+    pytest.param(
         "model", "module.model_racit:ModelGPTRacit", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
@@ -87,6 +91,7 @@ MODULE = [
     ("date", "module.date_amestec:DateAmestec", {"cale_antrenare": "__amestec_temporar__", "cale_validare": ""}),
     ("date", "module.date_cod:DateCod", {"director": "__simboluri_cod__", "context": 16, "previzualizare": True}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
+    ("examen", "module.examen_cod_validare:ExamenCodValidare", {}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("profesor", "module.jucarii:ProfesorGol", {}),
