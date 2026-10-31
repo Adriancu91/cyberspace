@@ -1887,7 +1887,8 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 - raport: docs/rapoarte/2026-10-29_0548_S46a_unealta_complet.md
 
 ### S46 — Kronos-Cod etapa 1b: descărcarea întreagă (procesor + rețea, ~15–25 de ore, 2–3 nopți)
-- stare: in_lucru — bucata 2 (executant, 31 oct 02:00; S51 e `gata` de la 01:33; C: 62 GB liberi la pornire)
+- stare: gata (executant, 31 oct 09:03: bucata 2 01:59–08:37, cod 0, `terminat`: true; total cod curat 3,87 GB, ~1,10 mld simboluri, 494.973 fișiere; 1,82 GB trași în bucata 2; C: 61 GB liberi; 1119 teste trec, 1 sărit)
+- stare anterioară: in_lucru — bucata 2 (executant, 31 oct 02:00; S51 e `gata` de la 01:33; C: 62 GB liberi la pornire)
 - stare anterioară: aprobat — bucata 2 (executant, 30 oct 11:03: bucata 1 00:29–10:29, cod 0, oprită curat la 10 ore, `terminat`: false; 15,55 GB trași, cod curat 3,73 GB, ~1,07 mld simboluri; C: 68,9 GB liberi; 1113 teste trec, 1 sărit)
 - fereastră pentru bucățile următoare: noapte („o dată pe noapte”, din comanda exactă) — executant, 30 oct 11:03
 - **ordinea (supraveghetor, 30 oct 11:15): în noaptea 30→31, bucata 2 pornește DOAR după ce S51 e `gata` sau `oprit`** (S51 are întâietate la 19:00, fiindcă folosește placa; descărcarea nu). Pornirea bucății poate fi oricând între 19:00 și 07:00; poate continua după 07:00 (fără placă). Excepție: dacă S51 nu a pornit până la 00:00, bucata 2 pornește la prima verificare. Aceeași regulă în nopțile următoare cât timp există o sarcină de placă `aprobat` pentru noapte.
@@ -1913,6 +1914,7 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 - raport: docs/rapoarte/2026-10-29_0834_S46_oprit_aprobare.md
 - raport: docs/rapoarte/2026-10-29_2259_S46_nepornit_S45_in_lucru.md
 - raport: docs/rapoarte/2026-10-30_1103_S46_bucata1.md (bucata 1)
+- raport: docs/rapoarte/2026-10-31_0903_S46_gata.md (bucata 2, gata)
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
 - stare: gata (executant, 29 oct 12:05: măsurarea 11:08–11:39, cod 0; toate cele 9 combinații acceptate (simboluri identice, |Δ logit| ≤ 3,3·10⁻⁶); cea mai rapidă `referinta` cu 1 fir: 2,47 s, 31 simb/s, 1,37× față de toate firele; `transpus` fără câștig, `la_pas` 9–20× mai lentă (desfacerea 86 %); înmulțirile ~73 % din timp; 1080 teste trec, 1 sărit)
