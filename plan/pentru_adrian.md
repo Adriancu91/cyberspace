@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a terminat: 1,1 miliarde de simboluri de cod curat, mai puțin decât estimarea
+
+- **S46 gata și verificat:** descărcarea s-a încheiat în 2 nopți (nu 3), fără erori: **3,87 GB de cod curat (~1,10 miliarde de simboluri)**, doar licențe bune, 61 GB liberi pe disc. **1119 teste trec.**
+- **Cinstit: e cam o treime din cât estimam (3–6 miliarde).** Multe pachete Rust au fost respinse pentru că n-au fișier de licență, iar lista Python de la sursă are 15.000 de pachete, nu 30.000.
+- **Am pus în coadă S53** (doar procesor, ~1–2 ore, azi): verific că problemele examenului de cod ascuns nu apar deja în datele descărcate — altfel orice scor viitor pe cod ar fi fals. Nu șterge nimic, doar face o listă de excludere. Placa rămâne liberă.
+- Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine (fără grabă):** (1) dacă 1,1 miliarde îți ajung și dai „da” pentru tokenizerul pe cod, sau vrei mai multe surse (descărcare nouă = tot „da”-ul tău); (2) „da #477”; (3) ce să facă placa; (4) comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 31 octombrie 2026, 08:15 — Raportul de dimineață e la locul lui; totul în regulă, nimic nou de decis
 
 - **Raportul de dimineață (06:45) confirmă verdictul S51: CONFIRMAT** — #477 română 1,2097 (prag 1,2112). Placa liberă (440 MB, 30 °C). **1119 teste trec, 0 picate.** Noaptea n-a mai fost nicio repornire.
@@ -159,15 +167,3 @@
 - **Pus în coadă (aprobat de mine, în granițe): S43a**, după S42, doar procesor, **fără internet**: executantul scrie unealta pilotului și testele ei
   (data-limită 29 iunie 2021, doar licențele permise, se oprește sub 40 GB liberi). Eu o verific, scriu comanda exactă în S43, iar pilotul pornește pe „da”-ul tău de azi.
 - **Aștept de la tine:** nimic.
-
-## 28 octombrie 2026, 14:25 — Kronos-Cod etapa 1a gata (S41); S42 a pornit greșit și a fost oprită corect — o reiau diseară la 19:00
-
-- **REZOLVAT:** Release-ul privat `kronos-kgr1-459` e publicat (l-ai făcut tu, 13:08). Mulțumesc — nu mai e nimic de făcut la el.
-- **S41 gata (Kronos-Cod, primul pas, fără descărcări):** lista surselor de cod cu licențe libere (6 surse, ~3 miliarde de simboluri estimate),
-  examenul de cod de **200 de probleme ascunse** (soluțiile corecte trec 200/200, cele goale sau greșite 0/200) și „cutia izolată” în care va rula
-  codul scris de model (fără rețea, fără fișiere din afară, cu limită de timp și memorie — toate dovedite cu teste). **999 de teste trec.** Verificat de mine: corect.
-- **S42 oprit (corect):** la reluare, unealta a văzut în jurnal ora de dimineață și a pornit modelul **de la zero** în loc de #459; executantul a oprit-o.
-  Nicio măsurare pierdută. **Am aprobat:** aceeași sarcină, sub un nume nou (`w2_e3_reteta_A2`), **la 19:00**, cu aceleași praguri; verdictul la trecerea de 23:15 sau 02:15.
-- **Pus în coadă, așteaptă „da”-ul tău:** S43 = Kronos-Cod etapa 1b, **descărcarea codului**, întâi doar un pilot de ~1 oră (orice descărcare nouă cere „da”-ul tău).
-- **Aștept de la tine (fără grabă, nu blochează nimic azi):** (1) „da” sau „nu” pentru pilotul S43; (2) data-limită a codului: **iunie 2021** (recomand: sigur fără
-  cod scris de alte AI) sau noiembrie 2022 (+40 % date); (3) sursele care cer cont (The Stack etc.): recomand **deocamdată niciuna**. Poți răspunde printr-o comandă în hub.

@@ -1915,6 +1915,7 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 - raport: docs/rapoarte/2026-10-29_2259_S46_nepornit_S45_in_lucru.md
 - raport: docs/rapoarte/2026-10-30_1103_S46_bucata1.md (bucata 1)
 - raport: docs/rapoarte/2026-10-31_0903_S46_gata.md (bucata 2, gata)
+- verificat de supraveghetor (31 oct 11:15): **gata, corect.** `terminat`: true, cod 0, tot în regulă (licențe, data-limită, 61 GB liberi). Rezultatul: **3,87 GB cod curat, ~1,10 mld simboluri** — sub estimarea de 3–6 mld (crates respinse mai ales pentru lipsa fișierului de licență; lista PyPI de la sursă are 15.000 de pachete, nu 30.000). Scăderea pe surse față de bucata 1 e deduplicarea globală, cerută. Tokenizerul pe cod și eventuale surse în plus: doar cu „da”-ul lui Adrian.
 
 ### S47 — CCM (Cyber-Compute-Module), etapa 1: profilul timpului + bancul de măsurare + variantele de bază pe procesor (doar procesor)
 - stare: gata (executant, 29 oct 12:05: măsurarea 11:08–11:39, cod 0; toate cele 9 combinații acceptate (simboluri identice, |Δ logit| ≤ 3,3·10⁻⁶); cea mai rapidă `referinta` cu 1 fir: 2,47 s, 31 simb/s, 1,37× față de toate firele; `transpus` fără câștig, `la_pas` 9–20× mai lentă (desfacerea 86 %); înmulțirile ~73 % din timp; 1080 teste trec, 1 sărit)
@@ -2020,3 +2021,20 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 - aprobat de: centrul de comandă (delegare, diagnostic doar citire), 30 oct 15:00
 - notă supraveghetor (30 oct 17:15): oprirea verificată, corectă. Rămâne `oprit` până la răspunsul lui Adrian (fie rulează el comanda din raport, fie aprobă citirea jurnalelor Windows de către executant). Nu blochează S51.
 - raport: docs/rapoarte/2026-10-30_1533_S52_repornire.md
+
+### S53 — Kronos-Cod: verificarea scurgerii examenului de cod în datele descărcate (doar procesor, fără rețea, fără placă)
+- stare: aprobat
+- tip: procesor (fără placă, fără rețea); poate rula în paralel cu orice sarcină de placă
+- fereastră: oricând (de preferat ziua, 31 oct)
+- durată maximă: 2 ore
+- de ce: înainte de orice tokenizer sau antrenare pe cod (care cer „da”-ul lui Adrian) trebuie să știm că setul ascuns din S41 (200 de probleme) nu apare în cele 3,87 GB de cod curat din S46. Altfel scorul pass@k de mai târziu n-ar însemna nimic.
+- ce faci:
+  1. O unealtă nouă `unelte/kronos_cod/scurgere.py` (+ teste fără rețea pe date mici făcute în test): pentru fiecare problemă din `lucru/kronos_cod/examen_ascuns/` ia enunțul, numele funcției, testele și soluția de referință; normalizează (litere mici, spații comprimate, fără comentarii) și caută în tot codul curat din `lucru/kronos_cod/complet/` **suprapuneri de 13 simboluri la rând** (n-grame de cuvinte/simboluri Python) și potriviri exacte ale corpului soluției de referință (după normalizare).
+  2. Rulezi o singură dată pe tot setul. Pentru fiecare problemă: numărul de fișiere cu suprapunere, cea mai lungă suprapunere, dacă soluția întreagă apare exact.
+  3. Scrii lista fișierelor atinse în `lucru/kronos_cod/scurgere/fisiere_de_exclus.txt` (NU în Git). **Nu ștergi și nu muți nimic din date** (ștergerea cere Adrian); excluderea se va aplica la pasul tokenizerului.
+  4. Raport `docs/rapoarte/2026-10-31_<ora>_S53_scurgere.md`, în română simplă: câte probleme din 200 au vreo suprapunere, câte au soluția întreagă în date, câte fișiere/ce parte din cei 3,87 GB ar ieși la excludere, și ce înseamnă (praguri scrise acum, înainte: **curat** = 0 probleme cu soluția întreagă și ≤ 10 probleme cu suprapuneri de 13; **de curățat** = altfel, cu excluderea fișierelor listate; **examenul compromis** = > 50 de probleme cu soluția întreagă → propui în raport un set ascuns nou, nu-l faci). **În Git nu pui textul niciunei probleme din setul ascuns** — doar numere și numele șabloanelor.
+  5. `python -m pytest`: toate trec. Commit + push.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele, setul ascuns (doar îl citești; suma SHA-256 trebuie să rămână `90fc64cd…3749` — verifici la început și la sfârșit). Nimic descărcat, nimic instalat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare; pragurile sunt scrise mai sus, înainte de rulare
+- aprobat de: supraveghetor, 31 oct 2026 11:15 (granițele 2 și 3: examene/verificări și curățarea datelor deja descărcate și aprobate; unealtă nouă în `unelte/`)
