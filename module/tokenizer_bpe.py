@@ -21,9 +21,18 @@ Regulile „ws” (tokenizer-ul workstation-ului, 12 octombrie 2026; docs/MUTARE
   paranteze), la antrenare forma fără spațiu primește o parte din numărul de apariții al formei cu spațiu.
 Regulile vechi („gpt2”) și fișierele lor rămân exact cum erau.
 
+Regulile „cod” (Kronos-Cod, S55, 31 octombrie 2026), pentru Python / Rust / C:
+- sfârșitul de rând e o bucată separată (unul sau mai multe sfârșituri de rând la rând, și cele de Windows);
+  indentarea de la început de rând e o bucată separată, întreagă (cuvântul de după ea nu primește spațiu în față);
+- șirurile de spații (1–16) și de tab-uri (1–8) sunt simboluri întregi, puse în vocabular de la început; un șir mai
+  lung se taie în bucăți de 16 spații / 8 tab-uri, de la stânga, iar șirurile acestea nu intră în învățare;
+- un identificator e o bucată întreagă (litere, cifre, „_”: „__init__”, „snake_case”), cu spațiul dinainte; numerele
+  sunt grupe de cel mult 3 cifre, fără spațiul dinainte (ca la „ws”, dar lipirile lor se învață ca restul).
+
 Nu e un modul de port: îl folosește GPT-ul (setarea tokenizer = "bpe"). Se antrenează cu:
     python unelte/antreneaza_tokenizer.py        # regulile vechi, pe TinyStories
     python unelte/antreneaza_tokenizer_ws.py     # regulile „ws”, pe amestecul engleză + română + cod + numere
+    python unelte/kronos_cod/tokenizer_cod.py    # regulile „cod”, pe codul descărcat la S46
 """
 
 from __future__ import annotations
@@ -44,10 +53,42 @@ SPECIALE_IMPLICITE = ("<|endoftext|>",)
 BUCATI = re.compile(r"""'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+| ?\d+| ?(?:[^\s\w]|_)+|\s+(?!\S)|\s+""")
 # Regulile „ws”: la fel, dar un număr e o grupă de cel mult 3 cifre, fără spațiul dinainte.
 BUCATI_WS = re.compile(r"""'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+|\d{1,3}| ?(?:[^\s\w]|_)+|\s+(?!\S)|\s+""")
-REGULI = {"gpt2": BUCATI, "ws": BUCATI_WS}
-VERSIUNI = {"gpt2": 1, "ws": 2}
+# Regulile „cod”: sfârșituri de rând, indentarea de la început de rând, identificator întreg cu spațiul dinainte, grupe
+# de cel mult 3 cifre, semne cu spațiul dinainte, spații (ultimul spațiu rămâne lângă ce urmează, ca la GPT-2).
+BUCATI_COD = re.compile(r"""(?:\r?\n)+|(?<![^\n])[^\S\n]+| ?[^\W\d]\w*|\d{1,3}| ?[^\s\w]+|[^\S\n]+(?!\S)|\s+""")
+REGULI = {"gpt2": BUCATI, "ws": BUCATI_WS, "cod": BUCATI_COD}
+VERSIUNI = {"gpt2": 1, "ws": 2, "cod": 3}
 _CIFRE = "0123456789"
 _FARA_RANG = float("inf")
+SPATII_MAX, TABURI_MAX = 16, 8
+
+
+def imbinari_spatii() -> list[tuple[int, int]]:
+    """Lipirile fixe ale regulilor „cod”, primele din vocabular: 2–16 spații (simbolurile 256–270), apoi 2–8 tab-uri
+    (simbolurile 271–277), fiecare = cel de dinainte + încă unul."""
+    spatii = [(32, 32)] + [(256 + k, 32) for k in range(SPATII_MAX - 2)]
+    t0 = 256 + len(spatii)
+    return spatii + [(9, 9)] + [(t0 + k, 9) for k in range(TABURI_MAX - 2)]
+
+
+def _simbol_sir(caracter: str, k: int) -> int:
+    if k == 1:
+        return ord(caracter)
+    return 256 + k - 2 if caracter == " " else 256 + SPATII_MAX - 1 + k - 2
+
+
+def tabel_spatii(maxim: int = 64) -> dict[str, list[int]]:
+    """Fiecare șir de 1–`maxim` spații sau tab-uri → simbolurile lui (bucăți de 16 spații / 8 tab-uri, de la stânga)."""
+    tabel: dict[str, list[int]] = {}
+    for caracter, plafon in ((" ", SPATII_MAX), ("\t", TABURI_MAX)):
+        for n in range(1, maxim + 1):
+            tabel[caracter * n] = [_simbol_sir(caracter, plafon)] * (n // plafon) + (
+                [_simbol_sir(caracter, n % plafon)] if n % plafon else [])
+    return tabel
+
+
+def _doar_spatii(bucata: str) -> bool:
+    return bool(bucata) and (set(bucata) == {" "} or set(bucata) == {"\t"})
 
 
 def imbinari_numere() -> list[tuple[int, int]]:
@@ -95,6 +136,9 @@ class TokenizerBPE:
         self.imbinari: list[tuple[int, int]] = [(int(a), int(b)) for a, b in imbinari]
         if reguli == "ws" and self.imbinari[:1100] != imbinari_numere():
             raise ValueError("Tokenizerul cu regulile „ws” trebuie să înceapă cu lipirile fixe ale numerelor")
+        fixe_cod = imbinari_spatii()
+        if reguli == "cod" and self.imbinari[:len(fixe_cod)] != fixe_cod:
+            raise ValueError("Tokenizerul cu regulile „cod” trebuie să înceapă cu lipirile fixe ale spațiilor")
         self.speciale: dict[str, int] = {s: 256 + len(self.imbinari) + k for k, s in enumerate(speciale)}
         self.marime = 256 + len(self.imbinari) + len(self.speciale)
         self._rang = {p: k for k, p in enumerate(self.imbinari)}
@@ -106,11 +150,15 @@ class TokenizerBPE:
         self._memorie: dict[str, list[int]] = {}  # bucăți deja codificate
         if reguli == "ws":
             self._memorie.update(_tabel_numere())
+        if reguli == "cod":
+            self._memorie.update(tabel_spatii())
 
     # --- codificare ---------------------------------------------------------------
 
     def _bucata(self, bucata: str) -> list[int]:
         cod = self._memorie.get(bucata)
+        if cod is None and self.reguli == "cod" and _doar_spatii(bucata):
+            cod = tabel_spatii(len(bucata))[bucata]
         if cod is None:
             simboluri = list(bucata.encode("utf-8"))
             while len(simboluri) > 1:
@@ -146,6 +194,13 @@ class TokenizerBPE:
                     capat = min(taieturi)
             yield self.codifica(text[start:capat])
             start = capat
+
+    def codifica_fara_speciale(self, text: str) -> list[int]:
+        """Ca codifica, dar un simbol special scris în text (ex. „<|endoftext|>” într-un fișier de cod) rămâne text."""
+        simboluri: list[int] = []
+        for bucata in self._bucati.findall(text):
+            simboluri.extend(self._bucata(bucata))
+        return simboluri
 
     def decodeaza(self, simboluri: Iterable[int]) -> str:
         return b"".join(self._octeti[s] for s in simboluri).decode("utf-8", errors="replace")
@@ -225,12 +280,15 @@ def antreneaza_din_frecvente(frecvente: dict[str, float], marime: int = 4096,
     """Învață lipirile dintr-un tabel bucată → de câte ori apare (pentru texte mari, numărate pe bucăți, în paralel).
     Cu regulile „ws”, lipirile fixe ale numerelor sunt primele, iar grupele de cifre nu intră în învățare."""
     speciale = list(speciale)
-    fixe = imbinari_numere() if reguli == "ws" else []
+    fixe = imbinari_numere() if reguli == "ws" else imbinari_spatii() if reguli == "cod" else []
     numar_imbinari = marime - 256 - len(speciale)
     if numar_imbinari < len(fixe):
         raise ValueError(f"marime trebuie să fie cel puțin {256 + len(fixe) + len(speciale)}")
-    if fixe:
+    if reguli == "ws":
         frecvente = {b: n for b, n in frecvente.items() if not (b.isascii() and b.isdigit())}
+    if reguli == "cod":
+        frecvente = {b: n for b, n in frecvente.items() if not _doar_spatii(b)}
+    deja = set(fixe) if reguli == "cod" else set()  # o pereche fixă (ex. două spații între tab-uri) nu se învață a doua oară
 
     # 1. Bucățile, scrise ca octeți, și de câte ori apare fiecare.
     cuvinte = [list(bucata.encode("utf-8")) for bucata in frecvente]
@@ -250,7 +308,7 @@ def antreneaza_din_frecvente(frecvente: dict[str, float], marime: int = 4096,
     imbinari: list[tuple[int, int]] = list(fixe)
     while len(imbinari) < numar_imbinari and coada:
         minus_n, pereche = heapq.heappop(coada)
-        if minus_n == 0 or -minus_n != perechi.get(pereche, 0):
+        if minus_n == 0 or -minus_n != perechi.get(pereche, 0) or pereche in deja:
             continue  # intrare veche din coadă
         nou = 256 + len(imbinari)
         imbinari.append(pereche)
