@@ -2023,7 +2023,8 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 - raport: docs/rapoarte/2026-10-30_1533_S52_repornire.md
 
 ### S53 — Kronos-Cod: verificarea scurgerii examenului de cod în datele descărcate (doar procesor, fără rețea, fără placă)
-- stare: in_lucru (executant, 31 oct 11:30)
+- stare: gata (executant, 31 oct 11:38) — DE CURĂȚAT: 0/200 cu soluția întreagă, 87/200 cu suprapuneri de 13 (cea mai lungă 26); de exclus 3.821 fișiere curate = 3,06 % (118 MB), lista în lucru/kronos_cod/scurgere/; SHA set ascuns neschimbat; 1126 teste trec, 1 sărit
+- raport: docs/rapoarte/2026-10-31_1138_S53_scurgere.md
 - tip: procesor (fără placă, fără rețea); poate rula în paralel cu orice sarcină de placă
 - fereastră: oricând (de preferat ziua, 31 oct)
 - durată maximă: 2 ore
