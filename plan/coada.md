@@ -2128,6 +2128,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 
 ### S58 — Kronos-Cod: prima antrenare `cod_c1` pe placă (o noapte, de la zero) — LINIE DE MODEL NOUĂ
 - stare: **aprobat** (Adrian, 31 oct 20:53, „da s58”; pornește în prima noapte după S57 + S59 `gata`)
+- programare (supraveghetor, 31 oct 20:56): **întâi S60** (proba de la zero + răspunsurile pentru pass@k; raportul S59 arată că pașii 2 și 4(ii) n-au încă unealta). **În noaptea 31 oct → 1 nov:** după S60 `gata`, doar pașii 1–2 (pre-înregistrarea, apoi proba de 10 minute), dacă poți începe proba până la 06:30. **Pasul 3 (cele 10 ore): noaptea 1 → 2 nov, de la 19:00** (porniți acum, cele 10 ore ar trece de dimineață, iar pe 1 nov Adrian poate veni la workstation). Dacă pe 1 nov Adrian e la workstation pentru fereastra OS/GPU (C-47): nu pornești nimic pe placă până nu se termină fereastra; dacă pornești după 20:50, rulezi tot 10 ore, iar fereastra de zi de pe 2 nov rămâne liberă până se termină. La pasul 3 adaugă `--inceput "def "` (sugestia din raportul S59; nu schimbă antrenarea). Dacă proba trece de 6.500 MB: oprești, raportezi, nu pornești pasul 3.
 - stare anterioară: propus — necesită Adrian
 - tip: placă
 - fereastră: noapte (19:00–07:00), prima noapte după S57 și S59 `gata` și după „da”-ul lui Adrian
@@ -2161,3 +2162,21 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare (pre-înregistrarea vine la S58)
 - aprobat de: supraveghetor, 31 oct 2026 20:15 (granițele 2, 3 și 5: examen nou și unelte/module noi + teste, fără `kronos/`, fără `examen_bpb.py`, fără antrenare; modulele liniei w2 neatinse)
+
+### S60 — Kronos-Cod: proba de la zero + comanda care scrie răspunsurile pentru pass@k (doar cod și teste, înainte de S58) — fără placă, fără antrenare
+- stare: aprobat
+- tip: procesor (fără placă, fără rețea)
+- fereastră: acum (31 oct seara/noaptea); se face înaintea pașilor 2 și 4(ii) din S58
+- durată maximă: 3 ore
+- de ce: raportul S59 („Poate porni S58 așa cum e scrisă?”): proba de 10 minute nu poate porni de la zero (`unelte/proba_muon.py` cere `--porneste-din`), iar `unelte/kronos_cod/examen_cod.py` notează răspunsuri, dar nu are comanda care face modelul să le scrie. Unelte + teste, fără `kronos/` și fără examenul oficial (granița 5). S58 e aprobată de Adrian (C-47).
+- ce faci:
+  1. `unelte/proba_muon.py`: `--porneste-din` devine opțional. Fără el: model nou, de la zero, fără stare de pornire; cu el: exact ca acum (testele vechi trec neschimbate). Test nou: proba de la zero pe `config/cod_c1.toml` micșorat (rețea mică, setul mic din `teste/cod_mic.py`, câteva secunde, procesor) — pornește, scrie memoria maximă și simboluri/s, nu scrie în jurnal.
+  2. `unelte/kronos_cod/examen_cod.py`: o comandă nouă `model` care, din modelul salvat (`--config`, `--stare`), scrie pentru fiecare problemă **n = 10** corpuri de funcție (temperatură fixă scrisă în raport, de ex. 0,8; sămânța 0; oprire la sfârșitul funcției sau la o limită de simboluri), într-un fișier pe care `noteaza` îl citește direct. Notarea (`noteaza`, cutia) NU se schimbă.
+  3. Teste NUMAI pe setul de PROBĂ (`proba`), niciodată pe cel ascuns (rămâne nedeschis până la pasul 4(ii) din S58): cu un model mic, netreinat, comanda scrie 10 răspunsuri pe problemă, aceleași la două rulări cu aceeași sămânță, iar `noteaza` le primește fără eroare (pass@k poate fi 0 — contează că drumul merge cap-coadă).
+  4. `python -m pytest`: toate trec. Commit + push. Raport scurt `docs/rapoarte/2026-<data>_<ora>_S60_unelte_S58.md`: ce fișiere, ce teste, comenzile exacte pentru pașii 2 și 4(ii) din S58 și cât estimezi că durează pasul 4(ii) pe placă (200 × 10 răspunsuri).
+- După ce S60 e `gata`: treci la S58 după programarea scrisă la S58.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele, linia română (#477), setul ascuns (nu-l deschizi), datele din `lucru/kronos_cod/` (doar citire), `unelte/kronos_cod/examen_validare.py` (de acum îl tratăm ca examen). Nimic pe placă, nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
+- Dacă un pas cere o schimbare în `kronos/`: te oprești, stare `oprit`, scrii exact ce ar trebui schimbat.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare (pre-înregistrarea vine la S58)
+- aprobat de: supraveghetor, 31 oct 2026 20:56 (granița 5: unelte noi + teste, fără `kronos/`, fără examenul oficial, fără antrenare; propunerea executantului din raportul S59)

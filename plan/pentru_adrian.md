@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 20:56 — Am primit „da S58”; prima antrenare pe cod pornește mâine-seară, după o ultimă bucată mică de cod (S60)
+
+- **S59 gata și verificat: corect.** Kronos are acum modelul care citește direct simbolurile de cod și examenul pe ore (biți pe octet, pe 1.000 de fișiere fixe). Drumul întreg al antrenării a fost probat cap-coadă pe un set mic. Nucleul, examenul oficial și #477 neatinse. **1159 teste trec.**
+- **„da S58” primit (C-47).** Executantul a găsit însă că mai lipsesc două unelte: proba de 10 minute „de la zero” și comanda care pune modelul să scrie răspunsurile la problemele de cod (pentru nota pass@10).
+- **Am pus în coadă S60** (aprobată de mine, doar procesor, ~1–3 ore, acum): exact aceste două unelte, cu teste doar pe setul de probă (examenul ascuns rămâne închis).
+- **Programarea S58:** în noaptea asta, după S60, doar pre-înregistrarea și proba de 10 minute (măsoară memoria plăcii). **Cele 10 ore: mâine-seară (1 nov), de la 19:00.** Dacă ești la workstation pentru fereastra OS/GPU, antrenarea pornește abia după ce termini.
+- **Aștept de la tine:** (1) **Release-ul #477** (comanda de la 14:20, mai jos); (2) mâine: spune-mi dacă vii la workstation și când, ca să nu se suprapună cu antrenarea; (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 31 octombrie 2026, 20:15 — Pregătirea pentru antrenarea pe cod (S57) e gata; mai lipsește o bucată mică de cod (S59) înainte ca S58 să poată porni
 
 - **S57 gata și verificat: corect.** Kronos are acum modulul de date pentru cod, examenul pe validare (biți pe octet) și configurarea `cod_c1` (scrisă, nepornită). Pe datele reale, examenul dă exact cifrele de la S55 (5.686 fișiere, 3,4617 octeți/simbol). Memoria estimată pe placă: ~5,3–5,8 GB (sub limită; proba de 10 minute o va măsura). **1145 teste trec.**
@@ -153,13 +161,3 @@
 - **Diseară de la 19:00: S45** (încă o noapte de antrenare din #459). Am confirmat-o eu: intră în granițele mele, deci nu mai așteaptă alt „da”; pragurile se scriu înainte.
 - Calculatorul raportează normal (ultimul commit 11:08), raportul de dimineață e la locul lui, nicio problemă cu placa.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă). Restul rămâne ca la 08:15 (CONTINUUM, pre-înregistrarea veche E3).
-
-## 29 octombrie 2026, 08:15 — Unealta pentru descărcarea întreagă a codului (S46a) e gata și verificată; placa video stă liberă azi fără „da”-ul tău
-
-- **S46a verificat de mine: bun.** Unealta știe acum să descarce tot codul (toate cele 6 surse), pe bucăți de câte o noapte, și reia de unde a rămas fără dubluri.
-  Pilotul de ieri dă exact aceleași cifre cu unealta nouă. **1071 de teste trec**, niciunul nu pică. Nu s-a descărcat nimic. Raportul de dimineață e la locul lui; noaptea a mers fără erori.
-- **Descărcarea întreagă (S46):** ~22–27 de ore, adică 3 nopți, ~10–22 GB pe disc (rămân ~50–62 GB liberi). Nu folosește placa video. Pornește imediat după „da”.
-- **Nu am pus nimic nou pe placă:** încercările din granițele mele s-au terminat (ultimele două au ieșit INFIRMAT), iar o noapte nouă de antrenare (S45) e decizia ta.
-- **CONTINUUM** (bucla care doar „observă” noaptea) e oprit de ieri 12:36, după butonul STOP folosit la S42. Nu strică nimic cât merge cascada; eu nu am voie să-l pornesc.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului) și **S45** (o noapte de antrenare din #459); dacă vrei CONTINUUM repornit;
-  dacă pre-înregistrarea veche `2026-10-28_E3_reteta_A.md` să fie închisă ca „oprită, înlocuită de E3_reteta_A2” (recomand: da). O comandă în hub ajunge pentru toate.
