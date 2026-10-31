@@ -2188,7 +2188,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 20:56 (granița 5: unelte noi + teste, fără `kronos/`, fără examenul oficial, fără antrenare; propunerea executantului din raportul S59)
 
 ### S61 — Kronos-Cod: inițializarea încorporărilor (abaterea 0,02) pe o configurare SEPARATĂ + o probă de 10 minute de comparație (procesor + 10 min pe placă) — S58 rămâne neschimbată
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor + 10 minute pe placă (doar proba, fără antrenare salvată)
 - fereastră: **noaptea asta (31 oct → 1 nov)**, proba pornită până la 06:30. Dacă nu se poate: ziua de 1 nov (08:00–18:00), DAR nu cât timp Adrian e la workstation pentru fereastra OS/GPU (C-47) și în niciun caz nu întârzie pasul 3 din S58 (1 nov 19:00).
 - durată maximă: 2 ore de cod + proba de 10 minute; placa: oprire peste 6.500 MB (paznicul: 7.000 MB / 83 °C)
