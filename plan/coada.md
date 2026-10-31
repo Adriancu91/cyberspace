@@ -2127,7 +2127,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 17:15 (granițele 3 și 5: pregătirea datelor deja aprobate + unelte/teste; fără `kronos/`, fără examen, fără antrenare)
 
 ### S58 — Kronos-Cod: prima antrenare `cod_c1` pe placă (o noapte, de la zero) — LINIE DE MODEL NOUĂ
-- stare: **aprobat** (Adrian, 31 oct 20:53, „da s58”; pornește în prima noapte după S57 + S59 `gata`)
+- stare: in_lucru (executant, 31 oct 21:30 — DOAR pașii 1–2 în noaptea asta: pre-înregistrarea, apoi proba de 10 minute; cele 10 ore abia 1 nov de la 19:00)
+- stare anterioară: **aprobat** (Adrian, 31 oct 20:53, „da s58”; pornește în prima noapte după S57 + S59 `gata`)
 - programare (supraveghetor, 31 oct 20:56): **întâi S60** (proba de la zero + răspunsurile pentru pass@k; raportul S59 arată că pașii 2 și 4(ii) n-au încă unealta). **În noaptea 31 oct → 1 nov:** după S60 `gata`, doar pașii 1–2 (pre-înregistrarea, apoi proba de 10 minute), dacă poți începe proba până la 06:30. **Pasul 3 (cele 10 ore): noaptea 1 → 2 nov, de la 19:00** (porniți acum, cele 10 ore ar trece de dimineață, iar pe 1 nov Adrian poate veni la workstation). Dacă pe 1 nov Adrian e la workstation pentru fereastra OS/GPU (C-47): nu pornești nimic pe placă până nu se termină fereastra; dacă pornești după 20:50, rulezi tot 10 ore, iar fereastra de zi de pe 2 nov rămâne liberă până se termină. La pasul 3 adaugă `--inceput "def "` (sugestia din raportul S59; nu schimbă antrenarea). Dacă proba trece de 6.500 MB: oprești, raportezi, nu pornești pasul 3.
 - stare anterioară: propus — necesită Adrian
 - tip: placă
