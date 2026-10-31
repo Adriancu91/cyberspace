@@ -2067,7 +2067,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - verificat de supraveghetor (31 oct 14:20): **gata, corect.** Mărimea 110.859.040 octeți = #459 (aceeași arhitectură) ✓; SHA-256 bcbe8187…3963 scrisă în `.sha256` ✓; `kronos_459_q8_0.kgr` neatins (e80618b4…382e) ✓; vectorii: 2 din 3 texte identice cu #459, al doilea diferă („Bacău” în loc de „Baia Mare”, firesc la alt model), marjele minime 0,026 / 0,024 / 0,016 ✓; MODEL.md cu „Rezerva: #459” ✓; doar căile implicite schimbate în 4 module, MANIFEST neschimbat ✓; reglajul CCM refăcut pe procesor (1 fir, 27,8 simb/s) ✓; 1126 teste trec ✓. Release-ul `kronos-kgr1-477` nefăcut (`gh` cere aprobare) — rămâne la Adrian, ca la #459. MODEL.md copiat în hub (`integrare/kronos/MODEL.md`) → C-44 gata, C-46 deblocat.
 
 ### S55 — C-45: Kronos-Cod, tokenizerul pe cod din descărcarea S46 (cu excluderea S53) + propunerea primei antrenări (doar procesor)
-- stare: aprobat
+- stare: in_lucru
 - tip: procesor (fără placă, fără rețea); poate rula și noaptea (placa e liberă, nu o folosește)
 - fereastră: oricând, **după S54**
 - durată maximă: 10 ore în total (tokenizerul ~1–2 ore; tokenizarea întregului set restul); RAM cel mult ~60 GB; te oprești dacă spațiul liber pe C: scade sub 40 GB
