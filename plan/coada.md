@@ -2164,8 +2164,9 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 20:15 (granițele 2, 3 și 5: examen nou și unelte/module noi + teste, fără `kronos/`, fără `examen_bpb.py`, fără antrenare; modulele liniei w2 neatinse)
 
 ### S60 — Kronos-Cod: proba de la zero + comanda care scrie răspunsurile pentru pass@k (doar cod și teste, înainte de S58) — fără placă, fără antrenare
-- stare: in_lucru (executant, 31 oct 21:00)
-- stare anterioară: aprobat
+- stare: gata (executant, 31 oct 21:09: `proba_muon.py` fără `--porneste-din` = de la zero (fără jurnal, fără starea liniei) + simboluri/s; `examen_cod.py model` (10 corpuri/problemă, temperatura 0,8, sămânța 0, oprire la ieșirea din funcție sau 256 simboluri; SHA-ul setului ascuns verificat) + `noteaza` (cutia neschimbată); 6 teste noi pe setul de probă; setul ascuns nedeschis; 1165 teste trec, 1 sărit; pasul 4(ii) estimat ~20–35 min)
+- raport: docs/rapoarte/2026-10-31_2109_S60_unelte_S58.md
+- stare anterioară: in_lucru (executant, 31 oct 21:00)
 - tip: procesor (fără placă, fără rețea)
 - fereastră: acum (31 oct seara/noaptea); se face înaintea pașilor 2 și 4(ii) din S58
 - durată maximă: 3 ore

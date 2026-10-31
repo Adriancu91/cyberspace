@@ -16,6 +16,14 @@ Comenzile:
     python unelte/kronos_cod/examen_cod.py proba                      # arată o problemă din setul de probă
     python unelte/kronos_cod/examen_cod.py ascuns --dosar lucru/kronos_cod/examen_ascuns   # o singură dată
     python unelte/kronos_cod/examen_cod.py verifica --dosar lucru/kronos_cod/examen_ascuns
+
+Răspunsurile modelului (S60, pentru S58): `model` scrie, din modelul salvat, n corpuri pe problemă (temperatura fixă,
+sămânța fixă, oprire la primul rând care nu mai e în corpul funcției sau la --max-simboluri); `noteaza` le dă cutiei
+prin `noteaza` (neschimbată) și scrie pass@1 și pass@10. Ambele refuză să scrie peste un fișier care există.
+    python unelte/kronos_cod/examen_cod.py model --config config/cod_c1.toml --stare lucru/cod_c1/gpt.pt \
+        --set ascuns --iesire lucru/kronos_cod/raspunsuri_cod_c1.json
+    python unelte/kronos_cod/examen_cod.py noteaza --raspunsuri lucru/kronos_cod/raspunsuri_cod_c1.json \
+        --nota lucru/kronos_cod/nota_cod_c1.json
 """
 
 from __future__ import annotations
@@ -527,14 +535,159 @@ def cmd_ascuns(dosar: Path) -> dict:
     return info
 
 
+# ---------------------------------------------------------------------------------------------------- răspunsurile modelului
+
+RASPUNSURI_PE_PROBLEMA = 10
+TEMPERATURA = 0.8
+SAMANTA_RASPUNSURI = 0
+MAX_SIMBOLURI = 256
+
+
+def probleme_setului(fel: str, dosar: Path) -> list[Problema]:
+    """Setul de probă (în cod) sau cel ascuns (din dosar, doar dacă SHA-256 e cel din info.json)."""
+    if fel == "proba":
+        return set_proba()
+    cale = dosar / "probleme.jsonl"
+    asteptat = json.loads((dosar / "info.json").read_text(encoding="utf-8"))["sha256"]
+    if hashlib.sha256(cale.read_bytes()).hexdigest() != asteptat:
+        raise SystemExit(f"{cale}: SHA-256 nu e cel din info.json; setul ascuns s-a schimbat, nu-l folosesc.")
+    return citeste_jsonl(cale)
+
+
+def taie_corp(text: str) -> str:
+    """Corpul funcției: rândurile până la primul care începe fără spațiu (o definiție nouă, codul de la nivelul fișierului)."""
+    out = []
+    for linie in text.splitlines(keepends=True):
+        if linie.strip() and not linie[0].isspace():
+            break
+        out.append(linie)
+    return "".join(out)
+
+
+def incarca_model(config: str | Path, stare: str | Path, dispozitiv: str = ""):
+    """Modelul din configurare cu greutățile din `stare`: fie starea liniei (cale_stare: „retea”, ca lucru/cod_c1/gpt.pt),
+    fie modelul salvat în jurnal (salveaza: „stare” + tokenizerul). Fără cale_stare: nu scrie nimic."""
+    import torch
+
+    from kronos.config import citeste_config
+    from kronos.registru import Registru
+    from module.tokenizer_bpe import TokenizerBPE
+
+    cfg = citeste_config(config)
+    setari = {**cfg.setari_port("model"), "cale_stare": "", **({"dispozitiv": dispozitiv} if dispozitiv else {})}
+    model = Registru().creeaza("model", cfg.porturi["model"]["modul"], setari).instanta
+    salvat = torch.load(stare, map_location="cpu", weights_only=True)
+    if "retea" in salvat:
+        if salvat["setari"] != model.setari:
+            raise ValueError(f"starea din „{stare}” e a altui model ({salvat['setari']})")
+        model.tok = TokenizerBPE.incarca(model.cale_tokenizer)
+        model._construieste()
+        model.retea.load_state_dict(salvat["retea"])
+    else:
+        model.incarca(str(stare))
+    model.retea.eval()
+    return model
+
+
+def scrie_corpuri(model, p: Problema, n: int, temperatura: float, generator, max_simboluri: int) -> list[str]:
+    """n corpuri pentru enunțul lui p, deodată (un lot din același început). Începutul = sfârșitul de fișier + enunțul,
+    ca la antrenare (fiecare fișier vine după un <|endoftext|>)."""
+    import torch
+    import torch.nn.functional as F
+
+    tok, ctx = model.tok, model.setari["context"]
+    sfarsit = tok.speciale["<|endoftext|>"]
+    x = torch.tensor([[sfarsit] + tok.codifica_fara_speciale(p.enunt)] * n, dtype=torch.long, device=model.dispozitiv)
+    noi: list[list[int]] = [[] for _ in range(n)]
+    gata = [False] * n
+    with torch.no_grad():
+        for _ in range(max_simboluri):
+            with model._autocast():
+                logits = model.retea(x[:, -ctx:], None)[:, -1, :]
+            prob = F.softmax(logits.float() / temperatura, dim=-1).cpu()
+            urm = torch.multinomial(prob, 1, generator=generator)
+            x = torch.cat([x, urm.to(model.dispozitiv)], dim=1)
+            for i in range(n):
+                if gata[i]:
+                    continue
+                s = int(urm[i, 0])
+                if s == sfarsit:
+                    gata[i] = True
+                    continue
+                noi[i].append(s)
+                text = tok.decodeaza(noi[i])
+                gata[i] = taie_corp(text) != text
+            if all(gata):
+                break
+    return [taie_corp(tok.decodeaza(s)) for s in noi]
+
+
+def cmd_model(a) -> dict:
+    import torch
+
+    if a.iesire.exists():
+        raise SystemExit(f"{a.iesire} există deja: răspunsurile se scriu o singură dată.")
+    probleme = probleme_setului(a.set, a.dosar)[: a.probleme or None]
+    model = incarca_model(a.config, a.stare, a.dispozitiv)
+    t0 = time.perf_counter()
+    raspunsuri = {}
+    for k, p in enumerate(probleme):
+        generator = torch.Generator(device="cpu").manual_seed(a.samanta * 1_000_003 + k)
+        raspunsuri[p.id] = scrie_corpuri(model, p, a.n, a.temperatura, generator, a.max_simboluri)
+    meta = {"set": a.set, "probleme": len(probleme), "n": a.n, "temperatura": a.temperatura, "samanta": a.samanta,
+            "max_simboluri": a.max_simboluri, "config": str(a.config), "stare": str(a.stare),
+            "dispozitiv": str(model.dispozitiv), "secunde": round(time.perf_counter() - t0, 1)}
+    a.iesire.parent.mkdir(parents=True, exist_ok=True)
+    a.iesire.write_text(json.dumps({"meta": meta, "raspunsuri": raspunsuri}, ensure_ascii=False, indent=1),
+                        encoding="utf-8")
+    return meta
+
+
+def cmd_noteaza(a) -> dict:
+    if a.nota.exists():
+        raise SystemExit(f"{a.nota} există deja: nota se dă o singură dată.")
+    date = json.loads(a.raspunsuri.read_text(encoding="utf-8"))
+    meta = date["meta"]
+    toate = probleme_setului(meta["set"], a.dosar)
+    probleme = [p for p in toate if p.id in date["raspunsuri"]]
+    t0 = time.perf_counter()
+    nota = noteaza(probleme, date["raspunsuri"])
+    rez = {"set": meta["set"], "complet": len(probleme) == len(toate), "raspunsuri": meta,
+           **nota, "secunde_cutie": round(time.perf_counter() - t0, 1)}
+    a.nota.parent.mkdir(parents=True, exist_ok=True)
+    a.nota.write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    return {k: rez[k] for k in ("set", "complet", "probleme", "pass@1", "pass@10", "stari", "secunde_cutie")}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("proba")
+    ascuns = RADACINA / "lucru/kronos_cod/examen_ascuns"
     for nume in ("ascuns", "verifica"):
-        sub.add_parser(nume).add_argument("--dosar", type=Path, default=RADACINA / "lucru/kronos_cod/examen_ascuns")
+        sub.add_parser(nume).add_argument("--dosar", type=Path, default=ascuns)
+    m = sub.add_parser("model", help="modelul scrie n corpuri pe problemă")
+    m.add_argument("--config", type=Path, required=True)
+    m.add_argument("--stare", type=Path, required=True)
+    m.add_argument("--set", choices=["proba", "ascuns"], required=True)
+    m.add_argument("--dosar", type=Path, default=ascuns)
+    m.add_argument("--iesire", type=Path, required=True)
+    m.add_argument("--n", type=int, default=RASPUNSURI_PE_PROBLEMA)
+    m.add_argument("--temperatura", type=float, default=TEMPERATURA)
+    m.add_argument("--samanta", type=int, default=SAMANTA_RASPUNSURI)
+    m.add_argument("--max-simboluri", type=int, default=MAX_SIMBOLURI)
+    m.add_argument("--probleme", type=int, default=0, help="doar primele N (pentru teste); 0 = toate")
+    m.add_argument("--dispozitiv", default="")
+    n = sub.add_parser("noteaza", help="cutia notează răspunsurile scrise de `model`")
+    n.add_argument("--raspunsuri", type=Path, required=True)
+    n.add_argument("--nota", type=Path, required=True)
+    n.add_argument("--dosar", type=Path, default=ascuns)
     a = ap.parse_args(argv)
-    if a.cmd == "proba":
+    if a.cmd == "model":
+        print(json.dumps(cmd_model(a), indent=1, ensure_ascii=False))
+    elif a.cmd == "noteaza":
+        print(json.dumps(cmd_noteaza(a), indent=1, ensure_ascii=False))
+    elif a.cmd == "proba":
         p = set_proba()[0]
         print(p.enunt + p.referinta)
         print("\n".join(p.teste))
