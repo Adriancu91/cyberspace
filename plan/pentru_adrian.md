@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 02:15 — Antrenarea de noapte S51 a mers până la capăt: CONFIRMAT (#477 e acum cel mai bun model); descărcarea codului continuă
+
+- **S51 verificat: CONFIRMAT, la limită.** Noaptea a mers fără cădere (19:00–01:23). Modelul nou **#477**: română **1,2097** (față de 1,2162 la #459; prag 1,2112), cod 0,7270, povești 0,4060 — toate mai bune, toate 7 validările puțin mai bune. Placa: max 6.002 MB, 64 °C. **1119 teste trec.**
+- **Câștigul scade:** a doua noapte a adus −0,0065, prima adusese −0,017. O a treia noapte la fel probabil n-ar mai merita, deci **n-o pun**.
+- **Rulează S46 bucata 2** (descărcarea codului, fără placă, de la 02:00, până pe la ~12:00). **Placa stă liberă** până îmi spui ce vrei pe ea.
+- **Aștept de la tine (fără grabă):** (1) „da #477” dacă vrei ca #477 să-l înlocuiască pe #459 (în interfață și în Cyber Universe OS); (2) ce să facă placa de acum (de ex. tokenizerul pe cod după descărcare, sau altă idee); (3) rămâne întrebarea cu repornirea din 29 oct (comanda în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 30 octombrie 2026, 20:15 — Antrenarea de noapte S51 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
 
 - **Rulează S51** (repetarea S45: 6 ore de antrenare din #459). Am verificat: pre-înregistrarea a fost urcată la 19:00, înainte de pornire, și e identică cu a S45 (aceleași praguri); configurarea diferă doar prin nume și dosar. Sfârșit estimat ~02:00; verdictul îl verific la 02:15.
@@ -165,14 +172,3 @@
 - **S42 oprit (corect, nu e o defecțiune):** antrenarea a mers normal o oră (placa 6.264 MB, 64 °C), apoi s-a oprit când ai repornit workstation-ul în OS. Nu există verdict.
 - **Pus în coadă (aprobat de mine, în granițe):** S42 se reia **de la zero**, cu aceleași reguli scrise dinainte, nu mai devreme de 12:15; dacă nu pornește până la 14:30, pornește la 19:00. Sesiunea veche se mută deoparte, nu se șterge nimic. S41 (Kronos-Cod, pe procesor) rămâne după ea.
 - **Aștept de la tine:** nimic urgent. Rămâne opțional Release-ul #459 (comanda `gh release create …` din rezumatul de la 08:20) — modelul a ajuns oricum pe stick prin copiere, deci OS-ul nu e blocat. Te rog doar: **la următoarea fereastră OS, spune-i centrului de comandă să oprească întâi antrenarea**, ca să nu pierdem ore pe placă.
-
-## 28 octombrie 2026, 08:20 — REZOLVAT: calculatorul a revenit; modelul nou #459 e cel mai bun (CONFIRMAT); am nevoie de tine pentru 2 comenzi mici
-
-- **REZOLVAT:** tăcerea de azi-noapte a fost **internetul** workstation-ului (căzut ~01:00–06:01). Antrenarea n-a fost afectată; executantul a reluat singur la 06:28. Nu mai trebuie să verifici calculatorul.
-- **S38 verificat: CONFIRMAT.** Modelul nou **#459** dă **1,2162** pe română (față de 1,2332 la #441; pragul cerea ≤ 1,2232; mai mic = mai bine); codul și poveștile s-au îmbunătățit și ele. 965 de teste trec.
-- **S39 gata:** pachetul pentru OS (modelul minuscul de probă, descrierea tokenizerului, testul pe hardware) e acum în hub. Modelul #459 e exportat (106 MB), dar **Release-ul n-a putut fi făcut** de executant (cere aprobare).
-- **S40 oprit (corect):** schimbarea mică din nucleul `kronos/` nu are voie s-o facă executantul singur. Am împărțit-o: partea din nucleu (S40a) cu tine de față, restul (S40b) executantul după.
-- **Pe placă, azi (S42, ~4 ore, aprobat de mine):** refacem „cititorul” (modelul care caută singur textul și răspunde) din #459 cu rețeta bună; pragurile se scriu înainte. Pe procesor: S41 (primul pas Kronos-Cod), care nu depinde de S40.
-- **Aștept de la tine (când ești la workstation, ~10 minute):** (1) în dosarul `C:\Kronos\cyberspace`, comanda:
-  `gh release create kronos-kgr1-459 lucru/export/kronos_459_q8_0.kgr --repo Adriancu91/cyberspace --title "Kronos #459 KGR1 Q8_0" --notes "SHA-256 e80618b4ef555983085c3127acb10114e4f4915d939734207aa849ba0f6d382e, 110859040 octeți"`;
-  (2) deschide Claude Code în același dosar și scrie-i: „Fă S40a din plan/coada.md”. Opțional, un „da” pentru ca executantul să poată face singur Release-uri data viitoare (regula `Bash(gh release*)`).

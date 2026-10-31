@@ -258,6 +258,12 @@ S50: regulile urcate înainte de măsurare (54895b9 11:38; măsurarea 11:41–11
 **Actualizare 30 oct 17:15 (supraveghetor) — S52 (diagnosticul repornirii) `oprit`: jurnalele Windows nu se pot citi de executant; S51 neschimbat la 19:00:**
 Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-WinEvent`/`wevtutil` cer aprobare; executantul nu a ocolit blocarea) ✓. Ce s-a putut afla: jurnalul plăcii S45 merge normal până la ultimul rând, 23:09:36 (64 °C, 6.116 MB, 98–100 %), fără niciun semn înainte → supraîncălzirea plăcii exclusă; oprirea bruscă se potrivește cu pana de curent pe care o bănuiește Adrian (sau o blocare), dar fără jurnalul Windows nu e sigur. Nu repun S52 `aprobat`: permisiunea de citire a jurnalelor Windows e a lui Adrian (comanda de copiat e în raport). **S51 pornește la 19:00 ca până acum**, apoi S46 bucata 2; dacă S51 cade iar fără eroare: `oprit` cu ora exactă, fără repornire.
 
+**Actualizare 31 oct 02:15 (supraveghetor) — S51 verificat: CONFIRMAT (la limită); S46 bucata 2 rulează; placa rămâne liberă până la „da”-ul lui Adrian:**
+S51: pre-înregistrarea (5344b50, 18:59:58) urcată înaintea pornirii (19:00:09) ✓; pornit din #459 (rândul din log) ✓; #459 re-măsurat exact ca reperul (1,2162 / 0,7321) ✓.
+Față de praguri: română curat **1,2097 ≤ 1,2112** ✓ (Δ −0,0065; marjă 0,0015); cod curat **0,7270 ≤ 0,7371** ✓; R2 **0,4060 ≤ 0,4134** ✓ → **CONFIRMAT**, corect. Placa max 6.002 MB / 64 °C; 1119 teste trec.
+Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — linia w2 cu rețeta A se aplatizează. **Nu pun o a treia noapte la fel**: după direcția din 22 oct, o nouă noapte de antrenare cere oricum „da”-ul lui Adrian, iar cifrele nu o susțin.
+**S46 bucata 2** `in_lucru` de la 02:00 (fără placă, ~10 ore, până pe la ~12:00). **Placa rămâne liberă** (nicio sarcină de placă în granițele mele care să merite acum); întreb pe Adrian: #477 în locul lui #459 (interfață/OS) și ce vrea pe placă.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -1990,6 +1996,7 @@ Verificat raportul `2026-10-30_1533_S52_repornire.md`: oprirea e corectă (`Get-
 - pre-înregistrare: docs/preinregistrari/2026-10-30_reteta_A_cont3.md (de scris înainte de pornire)
 - aprobat de: supraveghetor, 30 oct 02:15 (granița 1 din REGULI_CASCADA.md)
 - raport: docs/rapoarte/2026-10-31_0133_S51_reteta_A_cont3.md
+- verificat de supraveghetor, 31 oct 02:15: pre-înregistrarea (5344b50, 18:59:58) înaintea pornirii (19:00:09) ✓; 1,2097 ≤ 1,2112, 0,7270 ≤ 0,7371, 0,4060 ≤ 0,4134 → **CONFIRMAT** ✓ (la limită, marjă 0,0015). #477 nu intră în interfață/OS fără „da”-ul lui Adrian.
 
 ### S52 — Diagnostic: de ce s-a repornit workstation-ul pe 29 oct ~23:10 (doar citire, procesor, ~10 min)
 - stare: oprit (executant, 30 oct 15:33) — placa din S45 normală până la 23:09:36 (64 °C, 6.116 MB); niciun minidump găsit; jurnalele Windows necitite
