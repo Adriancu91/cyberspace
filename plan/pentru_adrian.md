@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 14:15 — Am primit „da la amândouă”: întâi #477 în locul lui #459, apoi tokenizerul pe cod; verificarea examenului de cod: „de curățat”
+
+- **S53 gata și verificat: DE CURĂȚAT.** Nicio problemă din examenul de cod ascuns nu apare întreagă în datele descărcate (0 din 200), dar 87 au bucăți mici comune (cea mai lungă: 26 de simboluri, mai ales liste scurte de numere). După regula scrisă înainte, scoatem **3.821 de fișiere (3 %)** la pasul tokenizerului. Examenul rămâne bun. **1126 teste trec.**
+- **S54 (comanda ta C-44), acum, doar procesor:** #477 devine modelul în uz, #459 rămâne rezervă; pachetul pentru OS (sumă, vectori, MODEL.md). Când e gata, îl copiez în hub și OS-ul (C-46) îl poate lua.
+- **S55 (comanda ta C-45), după S54, doar procesor:** tokenizerul pe cod (32.768 de simboluri), cu pragurile scrise înainte, apoi o propunere pentru prima antrenare Kronos-Cod pe placă (nu pornește singură).
+- Placa stă liberă diseară (nu am o antrenare care să merite în granițele mele).
+- **Aștept de la tine:** (1) probabil comanda pentru Release-ul #477 (dacă executantul n-o poate rula singur, ți-o scriu exact, ca la #459); (2) opțional: executantul propune să scoatem doar fișierele care seamănă cu enunțurile/soluțiile, nu și pe cele cu liste de numere comune — fără „da”-ul tău, se scot toate 3.821; (3) rămâne, fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
+
 ## 31 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a terminat: 1,1 miliarde de simboluri de cod curat, mai puțin decât estimarea
 
 - **S46 gata și verificat:** descărcarea s-a încheiat în 2 nopți (nu 3), fără erori: **3,87 GB de cod curat (~1,10 miliarde de simboluri)**, doar licențe bune, 61 GB liberi pe disc. **1119 teste trec.**
@@ -158,12 +166,3 @@
   doar propozițiile legate de întrebare, ca să încapă mai multe; măsurat pe un set de control (nu pe cel folosit deja de 5 ori), pragurile scrise înainte, sub 1 oră pe placă.
 - **Aștept de la tine:** nimic.
 
-## 28 octombrie 2026, 20:25 — S42 rulează (pornită corect la 19:02); pilotul Kronos-Cod (S43) s-a oprit corect: îi lipsea unealta, o scrie executantul azi-noapte
-
-- **Rulează acum S42** (cititorul E3 refăcut din #459), ca linia nouă `w2_e3_reteta_A2`, pornită la **19:02**, cu regulile urcate înainte (am verificat: pragurile sunt copiate exact).
-  Antrenarea se termină pe la **~22:15**, examenele pe la **~23:15**; verdictul îl verific la trecerea de 23:15 sau 02:15.
-- **S43 oprit (corect, nu e o defecțiune):** ai spus „da” pentru pilot, dar regula executantului cere ca unealta de descărcare să fie numită dinainte în sarcină,
-  iar ea încă nu exista. Nu s-a descărcat nimic.
-- **Pus în coadă (aprobat de mine, în granițe): S43a**, după S42, doar procesor, **fără internet**: executantul scrie unealta pilotului și testele ei
-  (data-limită 29 iunie 2021, doar licențele permise, se oprește sub 40 GB liberi). Eu o verific, scriu comanda exactă în S43, iar pilotul pornește pe „da”-ul tău de azi.
-- **Aștept de la tine:** nimic.
