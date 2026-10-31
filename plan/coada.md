@@ -2188,7 +2188,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 20:56 (granița 5: unelte noi + teste, fără `kronos/`, fără examenul oficial, fără antrenare; propunerea executantului din raportul S59)
 
 ### S61 — Kronos-Cod: inițializarea încorporărilor (abaterea 0,02) pe o configurare SEPARATĂ + o probă de 10 minute de comparație (procesor + 10 min pe placă) — S58 rămâne neschimbată
-- stare: in_lucru
+- stare: gata (executant, 1 nov 00:06: proba cod 0, de la zero; primul lot **10,67** (S58: 473,9), media ultimelor 100 **3,769** (S58: 6,818), 4.777 loturi, 6.078 MB, 63 °C, 32.344 simb/s → **AJUTĂ**; o probă pe parte, zgomotul nemăsurat; 1168 teste trec, 1 sărit. Alegerea configurării pentru S58 pasul 3 = Adrian; implicit `cod_c1.toml`)
+- stare anterioară: in_lucru (executant, 31 oct 23:29)
 - tip: procesor + 10 minute pe placă (doar proba, fără antrenare salvată)
 - fereastră: **noaptea asta (31 oct → 1 nov)**, proba pornită până la 06:30. Dacă nu se poate: ziua de 1 nov (08:00–18:00), DAR nu cât timp Adrian e la workstation pentru fereastra OS/GPU (C-47) și în niciun caz nu întârzie pasul 3 din S58 (1 nov 19:00).
 - durată maximă: 2 ore de cod + proba de 10 minute; placa: oprire peste 6.500 MB (paznicul: 7.000 MB / 83 °C)
@@ -2207,5 +2208,5 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Nu atingi `kronos/`, `module/examen_bpb.py`, `module/model_gpt.py`, `module/model_muon.py`, paznicul, jurnalul, #477, linia română, setul ascuns (nu-l deschizi), `unelte/kronos_cod/examen_validare.py`, `unelte/kronos_cod/examen_cod.py`, datele din `lucru/kronos_cod/` (doar citire). Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
 - Dacă un pas cere o schimbare în `kronos/`: te oprești, stare `oprit`, scrii exact ce ar trebui schimbat. Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-11-01_cod_c1_init002.md (înainte de probă)
-- raport: docs/rapoarte/2026-11-01_<ora>_S61_init_cod.md
+- raport: docs/rapoarte/2026-11-01_0006_S61_init_cod.md
 - aprobat de: supraveghetor, 31 oct 2026 23:15 (granițele 2 și 5: o comparație de 10 minute fără model salvat + o setare opțională într-un modul, cu testul că fără ea nimic nu se schimbă; fără `kronos/`, fără examen; S58 neatinsă; alegerea configurării pentru S58 = Adrian)
