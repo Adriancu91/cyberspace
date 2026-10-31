@@ -2127,7 +2127,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 17:15 (granițele 3 și 5: pregătirea datelor deja aprobate + unelte/teste; fără `kronos/`, fără examen, fără antrenare)
 
 ### S58 — Kronos-Cod: prima antrenare `cod_c1` pe placă (o noapte, de la zero) — LINIE DE MODEL NOUĂ
-- stare: propus — necesită Adrian
+- stare: **aprobat** (Adrian, 31 oct 20:53, „da s58”; pornește în prima noapte după S57 + S59 `gata`)
+- stare anterioară: propus — necesită Adrian
 - tip: placă
 - fereastră: noapte (19:00–07:00), prima noapte după S57 și S59 `gata` și după „da”-ul lui Adrian
 - durată maximă: proba de 10 minute + 10 ore; placa sub 7.000 MB și 83 °C (paznicul); proba se oprește dacă trece de 6.500 MB
@@ -2139,7 +2140,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   4. Măsori (i) biți pe octet pe validarea de 5.686 fișiere (tot + Python/Rust/C) cu `unelte/kronos_cod/examen_validare.py`; (ii) o singură dată pass@1 și pass@10 pe cele 200 de probleme ascunse cu `unelte/kronos_cod/examen_cod.py` și cutia.
 - pragurile (propuse de executant la S55, păstrate de supraveghetor): **ÎNVAȚĂ** = biți/octet pe validare ≤ 1,10 **și** pass@10 ≥ 10/200; **NU ÎNVAȚĂ** = biți/octet > 1,40 **sau** pass@10 = 0/200; altfel **NECLAR** (a doua noapte, tot cu „da”-ul lui Adrian sau în granița 1, pe linia acum existentă).
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477 și linia română. Raport `docs/rapoarte/<data>_<ora>_S58_cod_c1.md`.
-- aprobat de: — (așteaptă „da S58” de la Adrian)
+- aprobat de: **Adrian, 31 oct 2026 20:53** („da s58”, COMENZI.md C-47)
 
 ### S59 — Kronos-Cod: modelul citește simbolurile direct + examenul pe ore în biți pe octet (doar cod și teste, înainte de S58) — fără placă, fără antrenare
 - stare: gata (executant, 31 oct 20:48: `module/model_gpt_cod.py` + `module/examen_cod_validare.py` (ambele trec `teste_contracte/`), `cod_c1.toml` pe ele + `previzualizare = true` (testul rapid din kronos) + `hrana = ""` (altfel antrenare_lunga pune hrana implicită); eșantionul 1.000 fișiere = 2,10 mil. simboluri, examen estimat ~30–90 s pe placă; cap-coadă prin `antrenare_lunga.main` pe setul mic; fără `kronos/`; 1159 teste trec, 1 sărit. **S58 încă nu poate porni întreagă: lipsesc proba de la zero (`proba_muon.py` cere `--porneste-din`) și comanda care face modelul să scrie răspunsurile pentru pass@k** — propunerea S60 în raport)
