@@ -1,0 +1,63 @@
+# S57 (aprobat de supraveghetor, 31 oct 2026 17:15): configurarea primei antrenări Kronos-Cod, linia nouă `cod_c1`, după
+# propunerea din docs/rapoarte/2026-10-31_1505_S55_tokenizer_cod.md (punctele 1–5). DOAR SCRISĂ: n-a pornit, nici măcar
+# proba de 10 minute. Pornirea (S58) e linie de model nouă → doar cu „da”-ul lui Adrian și cu pre-înregistrarea înainte.
+# De la zero (nu din #477), 12 straturi × 12 capete × 768, context 512, vocabularul de cod 32.768 (~110 mil. parametri);
+# AdamW, rata max 6·10⁻⁴, încălzire 1.000 pași, scădere la 10 % în cele 10 ore; lot 8 × 12 adunate = 96 (ca linia w2:
+# 12 × 8); sămânța 0.
+# ATENȚIE: modelele de acum citesc date.text_antrenare(); date_cod dă simboluri și refuză textul (fără previzualizare),
+# deci rularea asta se oprește la început până când modelul citește simbolurile (vezi raportul S57, schimbările pentru S58).
+#   python unelte/antrenare_lunga.py --config config/cod_c1.toml --ore 10
+
+[platforma]
+nume = "cod_c1"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 10
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 8, adunare_loturi = 12, rata_invatare = 0.0006, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 0.1, durata_scaderii_secunde = 36000, tokenizer = "bpe", cale_tokenizer = "lucru/kronos_cod/tokenizer/bpe_cod_32768.json", cale_stare = "lucru/cod_c1/gpt.pt", director_cache = "lucru/cache", samanta = 0, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S58: cod_c1, prima antrenare Kronos-Cod, de la zero, 10 ore"
+
+[porturi.date]
+modul = "module.date_cod:DateCod"
+setari = { director = "lucru/kronos_cod/simboluri", context = 512, sfarsit_de_fisier = 32764, cale_tokenizer = "lucru/kronos_cod/tokenizer/bpe_cod_32768.json" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [8] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

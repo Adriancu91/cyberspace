@@ -1,0 +1,25 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "date_cod"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Simbolurile Kronos-Cod (uint16, tokenizerul de cod S55): bucăți de antrenare și validarea separată, nefolosită la antrenare."
+format = "modul-v0"
+
+[contract]
+port = "date"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"text_antrenare" = "textul de antrenare, mereu același"
+"text_validare" = "textul de validare, nefolosit la antrenare"
+"bucati_antrenare" = "bucăți de context + 1 simboluri, la întâmplare, doar din antrenare"
+"bucati_validare" = "validarea în bucăți una după alta, fără suprapunere"
+"fisiere_validare" = "simbolurile fiecărui fișier de validare, pentru examenul în biți pe octet"
+
+[rulare]
+limbaj = "python"
+intrare = "module.date_cod:DateCod"
+teste = "python -m pytest teste/test_date_cod.py && python -m pytest teste_contracte -k DateCod"

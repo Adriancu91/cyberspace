@@ -2109,7 +2109,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 14:20 (granița 2: comparații/măsurători pe placă; o rulare pe linia de model existentă #477)
 
 ### S57 — Kronos-Cod: pregătirea primei antrenări, DOAR cod și teste (modulul de date, configurarea, examenul pe validare) — fără placă, fără antrenare
-- stare: in_lucru
+- stare: gata (executant, 31 oct 17:47: `module/date_cod.py` (trece `teste_contracte/`), `unelte/kronos_cod/examen_validare.py`, `config/cod_c1.toml` (nepornită), 13 teste noi; indexul validării pe datele reale = S55 exact (5.686 fișiere, 3,4617 octeți/simbol); memoria estimată lot 8 ~5,3–5,8 GB; **înainte de S58: modelul trebuie să citească simbolurile + examen pe ore pentru cod** (propunerile în raport); 1145 teste trec, 1 sărit)
+- raport: docs/rapoarte/2026-10-31_1747_S57_pregatire_cod_c1.md
 - tip: procesor (fără placă, fără rețea)
 - fereastră: oricând (acum e liber și procesorul, și placa)
 - durată maximă: 3 ore

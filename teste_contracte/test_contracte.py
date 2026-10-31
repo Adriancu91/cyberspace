@@ -85,6 +85,7 @@ MODULE = [
     ("date", "module.date_fisier:DateFisier", {"cale": "__fisier_temporar__"}),
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
     ("date", "module.date_amestec:DateAmestec", {"cale_antrenare": "__amestec_temporar__", "cale_validare": ""}),
+    ("date", "module.date_cod:DateCod", {"director": "__simboluri_cod__", "context": 16, "previzualizare": True}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
@@ -149,6 +150,10 @@ def _setari_reale(setari, tmp_path):
         (tmp_path / "antrenare.txt").write_text("the cat sat on the mat.\n" * 100, encoding="utf-8")
         (tmp_path / "validare.txt").write_text("the dog ran to the tree.\n" * 20, encoding="utf-8")
         setari.update(cale_antrenare=str(tmp_path / "antrenare.txt"), cale_validare=str(tmp_path / "validare.txt"))
+    if setari.get("director") == "__simboluri_cod__":  # simboluri uint16 mici, nu cele din lucru/kronos_cod/
+        from teste.cod_mic import scrie_simboluri
+
+        setari.update(scrie_simboluri(tmp_path))
     if setari.get("cale_tokenizer") == "__tokenizer_mic__":
         from module.date_mostra import DateMostra
         from module.tokenizer_bpe import antreneaza_bpe
