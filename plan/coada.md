@@ -2090,7 +2090,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: Adrian (COMENZI.md C-45, 31 oct 2026 13:50, „da la amândouă”, prin centrul de comandă); pașii și pragurile scrise de supraveghetor, 31 oct 14:15. Prima antrenare pe placă NU e aprobată aici.
 
 ### S56 — CCM: partea de placă a reglajului pentru #477 (măsurare scurtă pe placă)
-- stare: in_lucru
+- stare: gata (executant, 31 oct 15:38: măsurarea 15:29–15:33, cod 0; placa_fp32 acceptată (|Δ logit| 0,000155), cald 1,226 s / 52,2 simb/s, 1,75× față de referinta 1 fir 2,143 s; fp16/bf16 respinse; reglajul nou `alegere: placa`, `verifica --placa` → folosit: true; vechiul păstrat ca `_s54`; placa max 1.544 MB / 32 °C; 1132 teste trec, 1 sărit)
+- raport: docs/rapoarte/2026-10-31_1538_S56_placa_477.md
 - tip: placă (scurtă: ~2–5 minute; la S50 aceeași măsurare a durat 2 minute, max 1.525 MB, 34 °C)
 - fereastră: **după S55** (nu în paralel cu S55: bancul măsoară și procesorul, iar S55 îl ține ocupat). Prima fereastră a plăcii după ce S55 e `gata` sau `oprit` (zi 08:00–18:30 sau noapte 19:00–07:00).
 - durată maximă: 30 de minute; placa sub 7.000 MB și 83 °C (paznicul)
