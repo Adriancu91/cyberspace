@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 31 octombrie 2026, 20:15 — Pregătirea pentru antrenarea pe cod (S57) e gata; mai lipsește o bucată mică de cod (S59) înainte ca S58 să poată porni
+
+- **S57 gata și verificat: corect.** Kronos are acum modulul de date pentru cod, examenul pe validare (biți pe octet) și configurarea `cod_c1` (scrisă, nepornită). Pe datele reale, examenul dă exact cifrele de la S55 (5.686 fișiere, 3,4617 octeți/simbol). Memoria estimată pe placă: ~5,3–5,8 GB (sub limită; proba de 10 minute o va măsura). **1145 teste trec.**
+- **Executantul a găsit o problemă din timp:** modelele de acum citesc doar text, iar examenul de pe ore cere text — S58 s-ar opri din prima secundă.
+- **Am pus în coadă S59** (aprobată de mine, doar procesor, ~câteva ore): un model nou care citește direct simbolurile de cod și un examen nou pe ore, fără să atingă modelul #477, examenul oficial sau nucleul. Dacă ar trebui atins nucleul, se oprește și te întreabă.
+- **Placa stă liberă în noaptea asta** (S58 nu poate porni oricum înainte de S59).
+- **Aștept de la tine:** (1) **„da S58”** când vrei — ar putea porni cel mai devreme mâine-seară, după S59; (2) **Release-ul #477** (comanda de la 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 31 octombrie 2026, 17:15 — Tokenizerul pe cod (S55) a ieșit BUN; varianta rapidă pe placă pentru #477 (S56) e gata; prima antrenare pe cod așteaptă „da”-ul tău
 
 - **S55 (comanda ta C-45) gata și verificat: BUN.** Tokenizerul nou pune **3,46 octeți într-un simbol** (prag 3,0), cu **22 % mai mult** decât tokenizerul vechi pe același cod (prag 15 %), și refacere 100 % identică (5.686 din 5.686 fișiere). Tot codul e transformat: **1,08 miliarde de simboluri**, în doar 18 minute. Examenul ascuns a rămas neatins.
@@ -155,13 +163,3 @@
 - **CONTINUUM** (bucla care doar „observă” noaptea) e oprit de ieri 12:36, după butonul STOP folosit la S42. Nu strică nimic cât merge cascada; eu nu am voie să-l pornesc.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului) și **S45** (o noapte de antrenare din #459); dacă vrei CONTINUUM repornit;
   dacă pre-înregistrarea veche `2026-10-28_E3_reteta_A.md` să fie închisă ca „oprită, înlocuită de E3_reteta_A2” (recomand: da). O comandă în hub ajunge pentru toate.
-
-## 29 octombrie 2026, 05:15 — Pilotul de descărcare a codului (S43) e gata și verificat: bun; descărcarea întreagă așteaptă „da”-ul tău
-
-- **S43 (pilotul Kronos-Cod) verificat de mine: bun.** În 22 de minute, din 1.003 pachete de cod au rămas **688** cu licență liberă și dinainte de iunie 2021;
-  după curățare: **0,38 GB de cod curat, ~107 milioane de simboluri** (filtrele au aruncat 33 % — cod generat, copiat, duplicat). Cifrele se adună. Pe disc rămân 73 GB liberi. 1058 de teste trec.
-- **Estimarea pentru tot:** ~10–22 GB de cod curat, **~3–6 miliarde de simboluri** (ținta era ~3), cam **15–25 de ore** de descărcare (2–3 nopți), doar pe procesor și internet.
-- **Pus în coadă, aprobat de mine (în granițe): S46a** — executantul adaugă uneltei modul „complet” și testele lui, **fără internet**, ca descărcarea să poată porni imediat după „da”.
-- **Propus, așteaptă „da”-ul tău: S46 = descărcarea întreagă** (nu folosește placa). Rămâne și **S45** (o noapte de antrenare din #459); fără „da”, placa video stă liberă.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea întreagă) și pentru **S45** — o comandă în hub ajunge.
-

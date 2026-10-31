@@ -2129,7 +2129,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 ### S58 — Kronos-Cod: prima antrenare `cod_c1` pe placă (o noapte, de la zero) — LINIE DE MODEL NOUĂ
 - stare: propus — necesită Adrian
 - tip: placă
-- fereastră: noapte (19:00–07:00), prima noapte după S57 `gata` și după „da”-ul lui Adrian
+- fereastră: noapte (19:00–07:00), prima noapte după S57 și S59 `gata` și după „da”-ul lui Adrian
 - durată maximă: proba de 10 minute + 10 ore; placa sub 7.000 MB și 83 °C (paznicul); proba se oprește dacă trece de 6.500 MB
 - de ce: etapa următoare din Kronos-Cod (C-28/C-45). E linie de model nouă (alt tokenizer) → după `REGULI_CASCADA.md` doar cu „da”-ul lui Adrian.
 - ce faci (după „da”):
@@ -2140,3 +2140,21 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - pragurile (propuse de executant la S55, păstrate de supraveghetor): **ÎNVAȚĂ** = biți/octet pe validare ≤ 1,10 **și** pass@10 ≥ 10/200; **NU ÎNVAȚĂ** = biți/octet > 1,40 **sau** pass@10 = 0/200; altfel **NECLAR** (a doua noapte, tot cu „da”-ul lui Adrian sau în granița 1, pe linia acum existentă).
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477 și linia română. Raport `docs/rapoarte/<data>_<ora>_S58_cod_c1.md`.
 - aprobat de: — (așteaptă „da S58” de la Adrian)
+
+### S59 — Kronos-Cod: modelul citește simbolurile direct + examenul pe ore în biți pe octet (doar cod și teste, înainte de S58) — fără placă, fără antrenare
+- stare: aprobat
+- tip: procesor (fără placă, fără rețea)
+- fereastră: oricând (se face înaintea lui S58; nu folosește placa)
+- durată maximă: 3 ore
+- de ce: raportul S57 (punctele 1 și 2) arată că S58 s-ar opri din prima secundă: modelele de acum cer text, iar examenul de pe ore (`examen_bpb.py`) cere text de validare. Pregătirea e cod + teste, fără antrenare (granițele 2, 3 și 5). S58 rămâne doar cu „da”-ul lui Adrian.
+- ce faci:
+  1. **Model care citește simboluri, fără să atingi linia w2:** un modul NOU (de ex. `module/model_gpt_cod.py`, urmaș al clasei din `model_gpt`), cu `MANIFEST` + fișa din `module/manifeste/`, adăugat în `MODULE` din `teste_contracte/` (trebuie să treacă). Dacă datele au `simboluri_antrenare()`, le ia direct (în RAM ca int32; pe placă urcă doar lotul), fără tokenizare. `module/model_gpt.py` și `module/model_muon.py` NU se schimbă (#477 și linia română rămân identice).
+  2. **Examen nou pe ore, separat:** un modul NOU de examen (de ex. `module/examen_cod_validare.py`) care folosește `unelte/kronos_cod/examen_validare.py` pe un **eșantion fix** al validării (aceleași fișiere de fiecare dată, alese cu sămânța 0, ~1 minut pe placă), în biți pe octet. Examenul întreg (toate cele 5.686) rămâne pentru după noapte. `module/examen_bpb.py`, paznicul și `kronos/` NU se ating.
+  3. `config/cod_c1.toml` trece pe modulul de model nou și pe examenul nou. Tot nepornită (nici proba de 10 minute).
+  4. Teste fără placă și fără date reale: modelul nou face un pas de antrenare pe procesor pe setul mic din `teste/cod_mic.py` și pierderea scade în câțiva pași; eșantionul examenului e același la două rulări; config-ul se încarcă și construiește modelul fără să pornească.
+  5. `python -m pytest`: toate trec. Commit + push. Raport scurt `docs/rapoarte/2026-<data>_<ora>_S59_cod_c1_gata_de_pornire.md`: ce fișiere, ce teste, cât durează examenul pe eșantion (estimare), și dacă S58 poate porni așa cum e scrisă.
+- **Dacă vreun pas cere o schimbare în `kronos/` (orchestrator, paznic, registru, contracte) ca orchestratorul să accepte modelul sau examenul nou: te oprești, stare `oprit`, scrii exact ce ar trebui schimbat — e decizia lui Adrian.**
+- Nu atingi `kronos/`, `module/examen_bpb.py`, `module/model_gpt.py`, `module/model_muon.py`, paznicul, jurnalul, modelele, linia română (#477), setul ascuns (nu-l deschizi), datele din `lucru/kronos_cod/` (doar citire). Nimic pe placă, nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare (pre-înregistrarea vine la S58)
+- aprobat de: supraveghetor, 31 oct 2026 20:15 (granițele 2, 3 și 5: examen nou și unelte/module noi + teste, fără `kronos/`, fără `examen_bpb.py`, fără antrenare; modulele liniei w2 neatinse)
