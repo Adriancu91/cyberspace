@@ -189,6 +189,65 @@ def config_cod_c1_mic(tmp_path) -> Path:
     return cale
 
 
+# --- S61: inițializarea încorporărilor (abatere_incorporari) ------------------------------------
+
+# Amprenta greutăților de pornire ale lui config_cod_c1_mic, calculată ÎNAINTE de S61 cu module/model_gpt_cod.py din
+# 614cc17 (lucru/cascada/S61_proba/amprenta.py). Fără setare, rețeaua de pornire trebuie să rămână bit cu bit aceeași.
+AMPRENTA_PORNIRE_COD_C1_MIC = "cf071a34f39ee153e0c05dfc2aada301dc4ea6da7af2112435ac55ccf84d510f"
+
+
+def _amprenta_pornire(setari: dict) -> str:
+    import hashlib
+
+    from module.tokenizer_bpe import TokenizerBPE
+
+    model = ModelGPTCod(**setari)
+    model.tok = TokenizerBPE.incarca(setari["cale_tokenizer"])
+    model._construieste()
+    h = hashlib.sha256()
+    for k, v in sorted(model.retea.state_dict().items()):
+        h.update(k.encode())
+        h.update(v.detach().cpu().contiguous().numpy().tobytes())
+    return h.hexdigest()
+
+
+def test_fara_abatere_reteaua_de_pornire_e_cea_de_dinainte(tmp_path):
+    from kronos.config import citeste_config
+
+    setari = citeste_config(config_cod_c1_mic(tmp_path)).setari_port("model")
+    assert "abatere_incorporari" not in setari
+    assert _amprenta_pornire(setari) == AMPRENTA_PORNIRE_COD_C1_MIC
+    assert _amprenta_pornire({**setari, "abatere_incorporari": 0.02}) != AMPRENTA_PORNIRE_COD_C1_MIC
+
+
+def test_cu_abatere_002_primul_lot_e_sub_dublul_hazardului(cod):
+    """Cu încorporările mici, la pornire modelul nu mai e sigur pe simboluri greșite: pierderea primului lot pe setul
+    mic e sub 2 × ln(mărimea vocabularului)."""
+    from module.tokenizer_bpe import TokenizerBPE
+
+    date, setari = cod
+    model = ModelGPTCod(**setari, pasi_max=1, abatere_incorporari=0.02)
+    st = model.antreneaza(date, 600.0)
+    assert st["pierdere_finala"] < 2 * math.log(TokenizerBPE.incarca(setari["cale_tokenizer"]).marime)
+    e = model.retea.emb_token.weight
+    assert model.retea.cap.weight is e  # capul rămâne legat de încorporări
+    with pytest.raises(ValueError, match="abatere_incorporari"):
+        ModelGPTCod(**setari, abatere_incorporari=0.0)
+
+
+def test_cod_c1_init002_difera_de_cod_c1_doar_prin_abatere():
+    from kronos.config import citeste_config
+
+    a = citeste_config(RADACINA / "config" / "cod_c1.toml")
+    b = citeste_config(RADACINA / "config" / "cod_c1_init002.toml")
+    assert b.setari_port("model") == {**a.setari_port("model"), "abatere_incorporari": 0.02}
+    assert b.porturi.keys() == a.porturi.keys()
+    for port in a.porturi:
+        assert b.porturi[port]["modul"] == a.porturi[port]["modul"]
+        if port != "model":
+            assert b.setari_port(port) == a.setari_port(port), port
+
+
 def test_cod_c1_cap_coada_prin_antrenare_lunga_pe_setul_mic(tmp_path, monkeypatch):
     """Comanda din S58 (`antrenare_lunga.py --config config/cod_c1.toml`), cu kronos/ neschimbat, pe config-ul micșorat:
     testul rapid, antrenarea pe simboluri, examenul pe eșantion, decizia, starea salvată și ora a doua din ea."""

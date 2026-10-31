@@ -39,15 +39,30 @@ class ModelGPTCod(ModelGPTConversatieMuon):
     MANIFEST = {
         "nume": "model_gpt_cod",
         "port": "model",
-        "versiune": "0.1.0",
+        "versiune": "0.2.0",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 6500},
         "permisiuni": ["citire_fisier", "scriere_fisier"],
     }
 
-    def __init__(self, **setari: Any) -> None:
+    def __init__(self, abatere_incorporari: float | None = None, **setari: Any) -> None:
         super().__init__(**setari)
+        if abatere_incorporari is not None and abatere_incorporari <= 0:
+            raise ValueError("abatere_incorporari pozitivă (sau lipsă: inițializarea implicită)")
+        self.abatere_incorporari = abatere_incorporari
         self._date_simboluri: Any = None
+
+    def _construieste(self) -> None:
+        """S61: cu `abatere_incorporari`, încorporările (simbolurile, deci și capul legat de ele, și pozițiile) pornesc din
+        normala cu media 0 și abaterea dată, ca la GPT-2. Fără ea: exact rețeaua de până acum, bit cu bit. La continuare,
+        greutățile din starea salvată le înlocuiesc oricum."""
+        super()._construieste()
+        if self.abatere_incorporari is None:
+            return
+        assert self.retea is not None
+        with torch.no_grad():
+            self.retea.emb_token.weight.normal_(0.0, self.abatere_incorporari)
+            self.retea.emb_pozitie.weight.normal_(0.0, self.abatere_incorporari)
 
     @staticmethod
     def citeste_simboluri(date: Any) -> bool:

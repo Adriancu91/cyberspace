@@ -2,7 +2,7 @@
 [modul]
 nume = "model_gpt_cod"
 proiect = "kronos"
-versiune = "0.1.0"
+versiune = "0.2.0"
 descriere = "GPT-ul Kronos-Cod (S59): ca model_muon, dar ia direct simbolurile gata făcute ale datelor de cod, fără tokenizare"
 format = "modul-v0"
 
