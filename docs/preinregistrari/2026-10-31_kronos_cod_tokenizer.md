@@ -78,3 +78,30 @@ rânduri, reluare de unde a rămas, oprire curată la limita de ore sau sub 40 G
 - Nimic din `lucru/` în Git; datele din `lucru/kronos_cod/complet/` doar citite.
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
 - Propunerea pentru prima antrenare pe placă o scriu în raport, **nu o pornesc**.
+
+## Ce a ieșit
+
+*Adăugat la 2026-10-31 15:04, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Cifrele (din `lucru/kronos_cod/tokenizer/masurare.json`, `impartire.json`, `lucru/kronos_cod/simboluri/rezumat.json`;
+rularea 14:39:19 → 14:57:13, cod 0):
+
+- **(c)** codare → decodare identică: **5.686 / 5.686 fișiere de validare (100 %)**.
+- **(a)** octeți pe simbol, tokenizerul de cod: **tot 3,4617**; Python 3,7179; Rust 3,3499; C 3,0954.
+- **(b)** tokenizerul w2 pe aceleași fișiere: tot 2,8344; Python 3,2107; Rust 2,6892; C 2,3425.
+- față de w2: **tot +22,1 %**; Python +15,8 %; Rust +24,6 %; C +32,1 %.
+- **(d)** setul de antrenare tokenizat: **1.080.537.399 de simboluri** (485.466 fișiere); validarea 12.619.825 (5.686).
+- Timpul: numărătoarea 37 s, antrenarea BPE 768 s, măsurarea 27 s, tokenizarea 241 s (în total ~18 minute).
+- Setul ascuns: `90fc64cd…3749` la început și la sfârșit (neschimbat).
+
+Față de așteptări: (a) 3,46 față de ~3,6 (în intervalul 3,2–4,0, dar mai jos pe fiecare limbaj); w2 2,83 ≈ 2,8; câștigul
++22 % față de ~+28 %; (d) 1,08 miliarde ≈ ~1,0; timpul mult mai scurt decât credeam (18 min față de 2–5 ore).
+
+## Verdictul
+
+**BUN** — strict după praguri: (c) 100 % ✓; (a) pe tot 3,46 ≥ 3,0 ✓; față de w2 +22,1 % ≥ 15 % ✓. Setul s-a tokenizat.
+De știut: Python trece doar la limită (+15,8 %), dar pragul e pe tot, nu pe limbaj.
