@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 1 noiembrie 2026, 20:15 — Antrenarea pe cod (S58) a pornit la 19:00, cum era planificat
+
+- **Rulează: S58**, cele 10 ore de antrenare pe cod cu varianta `cod_c1_init002` aleasă de tine (C-50). Executantul a scris la 18:59, **înainte de pornire**, actualizarea pre-înregistrării: pragurile sunt copiate neschimbate (ÎNVAȚĂ = biți/octet ≤ 1,10 și pass@10 ≥ 10/200), iar așteptarea lui e cel mai probabil NECLAR (~57 %).
+- **Nimic terminat** de la 17:15 și nicio problemă. Rezultatul vine mâine dimineață (~05:00–06:00 se termină antrenarea, apoi examenul pass@k).
+- **Ce urmează pe placă mâine ziuă:** decid la trecerea de 05:15/08:15, după cifrele S58 (continuare dacă învață, reparare dacă nu).
+- **Văzut în hub:** ai aprobat „bucla automată” (teste doar de citire, doar ziua, nu în nopțile de antrenare); pregătirea ei se face cu tine pe ~3 nov. Nu atinge antrenarea de la Kronos.
+- **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.
+
 ## 1 noiembrie 2026, 17:15 — Totul gata pentru antrenarea pe cod de la 19:00; #477 merge deja în Cyber Universe
 
 - **Nimic nou terminat la Kronos** de la 11:55 (placa liberă ziua, cum era planificat). Nicio problemă: 1168 teste trec, raportul de dimineață e la locul lui.
@@ -146,21 +154,3 @@
 - **S46 (descărcarea codului) n-a pornit încă** — nu e o defecțiune: executantul are regula fixă „o singură sarcină odată”, deci o ia **după** S45, pe la 02:00, și ține ~10 ore (fără placă). Nimic descărcat încă.
 - **S50** (măsurarea vitezei) vine după prima bucată a S46, mâine.
 - **Aștept de la tine:** nimic. Opțional: dacă vrei ca descărcările să poată merge în paralel cu antrenările pe placă, asta trebuie scris în instrucțiunea executantului (spune-mi și ți-o pregătesc); altfel le ia pe rând, ceea ce merge bine.
-
-## 29 octombrie 2026, 21:50 — Ai spus „da” la S46: descărcarea codului pornește la următoarea trecere a executantului; S45 rulează în continuare
-
-- **S46 aprobat de tine** („da s46”, 21:46, comanda C-43 din hub) — am verificat că e scris pe sarcină cum cere regula descărcărilor. Executantul o pornește la
-  prima verificare a cozii: ~10 ore pe noapte, cam 3 nopți, **fără placă**, oprire automată dacă pe C: rămân sub 40 GB. După fiecare noapte primești cifrele.
-- **Rulează S45** (antrenarea de noapte din #459, de la 19:00), neatinsă. Sfârșit estimat ~01:25; verdictul îl verific la 02:15.
-- **S50** (măsurarea vitezei „rece/cald”) mutată după S45 **și** după bucata de noapte a S46, ca descărcarea să nu strice cronometrarea.
-- Nicio problemă: placa și calculatorul în regulă (ultimul commit al executantului 19:00, normal în timpul antrenării).
-- **Aștept de la tine:** nimic acum. Mai târziu: al doilea „da” pentru tokenizerul pe cod, după ce se termină descărcarea.
-
-## 29 octombrie 2026, 20:15 — Antrenarea de noapte S45 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
-
-- **Rulează S45** (încă 6 ore de antrenare din #459, cea mai bună rețetă). Am verificat: pragurile au fost urcate înainte de pornire, exact cum le-am fixat
-  (CONFIRMAT dacă româna coboară la 1,2112 sau mai jos, fără să strice codul și poveștile), iar configurarea e copia celei de la S38. **Sfârșit estimat ~01:25**; verdictul îl verific la 02:15.
-- Nimic terminat de la 17:30; nicio comandă nouă pentru Kronos în hub. Calculatorul raportează normal (ultimul commit 19:00), **1113 teste trec**.
-- **Mâine ziua: S50** (măsurarea „rece/cald” a vitezei, doar procesor), după ce S45 se termină.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă).
-
