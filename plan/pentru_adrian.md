@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 1 noiembrie 2026, 11:55 — Am primit „da init002”: antrenarea pe cod de diseară pornește cu varianta S61
+
+- **Comanda ta C-50 preluată.** Cele 10 ore de la 19:00 (S58) folosesc acum configurarea `cod_c1_init002` (numerele de pornire mici, care la S61 au dat greșeala 3,77 în loc de 6,82). Pragurile rămân exact cele scrise înainte.
+- **Executantul scrie întâi** în pre-înregistrare ce configurare folosește, apoi pornește. Proba de memorie nu se mai repetă (S61 a măsurat deja 6.078 MB, sub limită).
+- **Rulează:** nimic; placa e liberă până la 19:00. Raportul de dimineață e la locul lui, **1168 teste trec**, nicio problemă.
+- **Aștept de la tine:** (1) dacă vii azi la workstation, spune-mi când (antrenarea pornește după ce termini); (2) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 1 noiembrie 2026, 02:15 — Comparația de noapte (S61) a ieșit AJUTĂ, cu diferență mare; azi alegi cum pornesc cele 10 ore de la 19:00
 
 - **S61 gata și verificat de mine: AJUTĂ, corect.** Cu numerele de pornire mici, modelul de cod pornește de la greșeala **10,7** (în loc de 474) și după aceleași 10 minute ajunge la **3,77** (în loc de 6,82) — de ~10 ori mai bine decât pragul cerut. Memoria plăcii (6.078 MB), temperatura (63 °C) și viteza: identice. Pragurile au fost scrise înainte. **1168 teste trec.** O singură probă pe fiecare parte, deci „zgomotul” nu e măsurat, dar diferența e foarte mare.
@@ -149,12 +156,3 @@
 - **Mâine ziua: S50** (măsurarea „rece/cald” a vitezei, doar procesor), după ce S45 se termină.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă).
 
-## 29 octombrie 2026, 17:30 — Kronos are acum un modul de viteză (S48) și poate folosi și placa video (S49); ambele verificate: bune; diseară S45
-
-- **S48 verificat: bun.** Modulul nou alege singur cel mai rapid mod de calcul pe calculatorul ăsta și dă exact aceleași cuvinte ca originalul:
-  **28 de simboluri pe secundă față de 20** (1,22× mai rapid la răspunsuri repetate). Dacă ceva nu se potrivește, trece singur pe calea veche.
-- **S49 verificat: bun.** Pe placa video, doar precizia completă (fp32) dă cuvinte corecte — și e de **1,19× mai rapidă** decât procesorul (52 față de 41 simb/s);
-  variantele „pe jumătate” (fp16/bf16) greșesc și nici nu sunt mai rapide. Placa a folosit doar 1,7 GB și 36 °C. Pornirea pe placă costă ~3 s în plus.
-- **Am pus în coadă S50 (aprobat de mine, doar procesor, mâine după S45):** măsurarea învață diferența dintre primul răspuns și următoarele — azi a ales greșit „toate nucleele”, care sunt rapide doar la primul răspuns.
-- **Diseară de la 19:00: S45** (noaptea de antrenare din #459), neschimbat. Calculatorul raportează normal (ultimul commit 15:50), **1113 teste trec**.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului). Opțional, mai târziu: dacă interfața să folosească placa video (mai rapid, dar ține ~1,7 GB ocupați lângă antrenări).
