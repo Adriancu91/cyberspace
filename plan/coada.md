@@ -2209,4 +2209,5 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas cere o schimbare în `kronos/`: te oprești, stare `oprit`, scrii exact ce ar trebui schimbat. Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: docs/preinregistrari/2026-11-01_cod_c1_init002.md (înainte de probă)
 - raport: docs/rapoarte/2026-11-01_0006_S61_init_cod.md
+- verificat (supraveghetor, 1 nov 02:15): **AJUTĂ, corect** — pre-înregistrarea urcată 23:37 (commit 8d6337a), proba pornită 23:37:01, pragurile copiate neschimbate; 10,67 ≤ 15 și 3,769 ≤ 6,52 (3,769 = 6,818 − 3,049, deci ≥ 0,30 sub S58); 4.777 loturi ≥ 4.500; 6.078 MB < 6.500, 63 °C; de la zero, fără model păstrat; 1168 teste trec. Zgomotul nemăsurat (o probă pe parte). S58 pasul 3 rămâne cu `config/cod_c1.toml` dacă Adrian nu alege `cod_c1_init002.toml` înainte de 1 nov 19:00.
 - aprobat de: supraveghetor, 31 oct 2026 23:15 (granițele 2 și 5: o comparație de 10 minute fără model salvat + o setare opțională într-un modul, cu testul că fără ea nimic nu se schimbă; fără `kronos/`, fără examen; S58 neatinsă; alegerea configurării pentru S58 = Adrian)

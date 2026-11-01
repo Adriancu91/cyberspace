@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 1 noiembrie 2026, 02:15 — Comparația de noapte (S61) a ieșit AJUTĂ, cu diferență mare; azi alegi cum pornesc cele 10 ore de la 19:00
+
+- **S61 gata și verificat de mine: AJUTĂ, corect.** Cu numerele de pornire mici, modelul de cod pornește de la greșeala **10,7** (în loc de 474) și după aceleași 10 minute ajunge la **3,77** (în loc de 6,82) — de ~10 ori mai bine decât pragul cerut. Memoria plăcii (6.078 MB), temperatura (63 °C) și viteza: identice. Pragurile au fost scrise înainte. **1168 teste trec.** O singură probă pe fiecare parte, deci „zgomotul” nu e măsurat, dar diferența e foarte mare.
+- **Ce NU spune proba:** unde ajunge modelul după 10 ore (acolo diferența poate fi mai mică).
+- **Rulează:** nimic; placa e liberă. Nu pun nimic pe placă azi-ziuă, ca să fie liberă dacă vii la workstation și ca să nu întârzie antrenarea de la 19:00.
+- **Recomandarea executantului și a mea, după cifre:** varianta S61 (`cod_c1_init002`).
+- **Aștept de la tine:** (1) **până azi la 19:00**: scrie **„S58 cu init002”** dacă vrei varianta S61 (dacă nu scrii nimic, cele 10 ore pornesc cu varianta aprobată, cea veche); (2) dacă vii azi la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
+
 ## 31 octombrie 2026, 23:15 — Uneltele (S60) și proba de 10 minute (S58) au trecut; o comparație mică în noaptea asta, ca să alegi pe cifre cum pornește antrenarea pe cod
 
 - **S60 gata și verificat: corect.** Kronos are proba „de la zero” și comanda care pune modelul să scrie răspunsurile la problemele de cod. Examenul ascuns a rămas închis. **1165 teste trec.**
@@ -150,12 +158,3 @@
 - **Am pus în coadă S50 (aprobat de mine, doar procesor, mâine după S45):** măsurarea învață diferența dintre primul răspuns și următoarele — azi a ales greșit „toate nucleele”, care sunt rapide doar la primul răspuns.
 - **Diseară de la 19:00: S45** (noaptea de antrenare din #459), neschimbat. Calculatorul raportează normal (ultimul commit 15:50), **1113 teste trec**.
 - **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului). Opțional, mai târziu: dacă interfața să folosească placa video (mai rapid, dar ține ~1,7 GB ocupați lângă antrenări).
-
-## 29 octombrie 2026, 14:35 — Măsurarea vitezei (S47, CCM) e gata și verificată: pe workstation, Kronos merge mai repede pe un singur nucleu; urmează S48, diseară S45
-
-- **S47 verificat de mine: bun.** Toate cele 9 variante de calcul dau exact aceleași cuvinte ca originalul. Cea mai rapidă: calculul obișnuit **pe un singur nucleu**
-  — 2,47 s pentru 64 de simboluri (31 pe secundă), de **1,37 ori** mai repede decât pe toate cele 36 de nuclee (modelul e mic, nucleele pierd timp să se coordoneze).
-  Înmulțirile de matrici iau ~73 % din timp: acolo e de câștigat mai departe. Cifrele se adună; **1080 de teste trec**.
-- **Acum poate porni S48** (modulul care folosește singur varianta cea mai rapidă, doar procesor). **Diseară de la 19:00: S45** (noaptea de antrenare). S49 (placa video) după S45.
-- Calculatorul raportează normal (ultimul commit 12:04), nicio problemă cu placa.
-- **Aștept de la tine (fără grabă):** „da”/„nu” pentru **S46** (descărcarea codului, ~3 nopți, fără placă) — o comandă în hub ajunge.
