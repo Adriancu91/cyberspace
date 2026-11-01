@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 1 noiembrie 2026, 17:15 — Totul gata pentru antrenarea pe cod de la 19:00; #477 merge deja în Cyber Universe
+
+- **Nimic nou terminat la Kronos** de la 11:55 (placa liberă ziua, cum era planificat). Nicio problemă: 1168 teste trec, raportul de dimineață e la locul lui.
+- **Diseară la 19:00 pornește S58** (10 ore, prima antrenare pe cod, cu varianta `cod_c1_init002` aleasă de tine). Executantul actualizează întâi pre-înregistrarea; pragurile rămân cele scrise dinainte. Rezultatul: mâine dimineață.
+- **Văzut în hub:** testul tău de azi de la workstation (11:35–11:50) arată că **#477 merge în Cyber Universe** (controlul TRECE, simbolurile identice cu ale lui Kronos). Deci Release-ul #477 nu mai blochează OS-ul (fișierul e deja pe stick) — rămâne doar ca copie de siguranță pe GitHub, fără grabă.
+- **Atenție:** OS-ul îți cere o probă scurtă cu `os-211` (~6 min pe workstation). Dacă o faci, **fă-o înainte de 19:00 sau mâine după ~07:00** — altfel repornirea oprește antrenarea.
+- **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.
+
 ## 1 noiembrie 2026, 11:55 — Am primit „da init002”: antrenarea pe cod de diseară pornește cu varianta S61
 
 - **Comanda ta C-50 preluată.** Cele 10 ore de la 19:00 (S58) folosesc acum configurarea `cod_c1_init002` (numerele de pornire mici, care la S61 au dat greșeala 3,77 în loc de 6,82). Pragurile rămân exact cele scrise înainte.
