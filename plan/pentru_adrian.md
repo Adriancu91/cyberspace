@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 1 noiembrie 2026, 23:15 — S58 rulează; o mică nepotrivire de ore la bucla automată, de reglat la pregătirea din ~3 nov
+
+- **Rulează: S58** (10 ore pe cod, `cod_c1_init002`, pornit la 19:00). Nimic terminat de la 20:15, nicio problemă (executantul nu scrie în timpul antrenării — e normal). Rezultatul: mâine dimineață.
+- **Văzut în hub:** Cyber Universe a terminat partea OS a buclei automate (C-53, `os-213`). Scriptul lor pentru Windows pornește doar între **08:00 și 22:00** — dar în nopțile de antrenare Kronos folosește placa de la **19:00**. Ai hotărât „doar ziua, nu în nopțile de antrenare”, deci am cerut în hub ca ora limită să fie ~18:30 (sau să verifice că nu rulează antrenarea). Nu e urgent: scriptul nu rulează până nu îl pregătești tu (~3 nov).
+- **Pus în coadă:** nimic nou; pasul următor pe placă îl decid mâine la 05:15/08:15, după cifrele S58.
+- **Aștept de la tine:** nimic urgent. La pregătirea buclei (~3 nov): ora limită 18:30 în nopțile de antrenare. Fără grabă: Release-ul #477, excluderea mai îngustă de la S53, repornirea din 29 oct.
+
 ## 1 noiembrie 2026, 20:15 — Antrenarea pe cod (S58) a pornit la 19:00, cum era planificat
 
 - **Rulează: S58**, cele 10 ore de antrenare pe cod cu varianta `cod_c1_init002` aleasă de tine (C-50). Executantul a scris la 18:59, **înainte de pornire**, actualizarea pre-înregistrării: pragurile sunt copiate neschimbate (ÎNVAȚĂ = biți/octet ≤ 1,10 și pass@10 ≥ 10/200), iar așteptarea lui e cel mai probabil NECLAR (~57 %).
@@ -147,10 +154,3 @@
 - **Ce am hotărât:** S45 se închide fără verdict; **S51 = aceeași noapte de antrenare, de la capăt din #459, cu aceleași praguri** (aprobată de mine, e în granițe). Pornește după descărcarea de azi, cel mai devreme diseară.
 - **Rulează acum S46** (descărcarea codului, prima bucată, de la 00:30 până pe la 10:30, fără placă). Apoi S50 (măsurarea vitezei) și a doua bucată a descărcării.
 - **Aștept de la tine:** spune-mi dacă știi de ce s-a oprit calculatorul la 23:09 (l-ai repornit? a cerut Windows o actualizare?). Dacă e de la actualizările Windows, poți seta „ore active” sau amâna actualizările cu o săptămână (Setări → Windows Update), ca să nu repornească noaptea — eu n-am voie să schimb setări Windows.
-
-## 29 octombrie 2026, 23:15 — Antrenarea S45 merge bine (jumătate făcută); descărcarea S46 pornește după ea, pe la 02:00
-
-- **Rulează S45:** ora 3 din 6 încheiată la 22:12, cel mai bun punct de până acum păstrat (#471). Placa: 6,1 GB din 8 și 64 °C — în limite. Sfârșit ~01:25; verdictul îl verific la 02:15.
-- **S46 (descărcarea codului) n-a pornit încă** — nu e o defecțiune: executantul are regula fixă „o singură sarcină odată”, deci o ia **după** S45, pe la 02:00, și ține ~10 ore (fără placă). Nimic descărcat încă.
-- **S50** (măsurarea vitezei) vine după prima bucată a S46, mâine.
-- **Aștept de la tine:** nimic. Opțional: dacă vrei ca descărcările să poată merge în paralel cu antrenările pe placă, asta trebuie scris în instrucțiunea executantului (spune-mi și ți-o pregătesc); altfel le ia pe rând, ceea ce merge bine.
