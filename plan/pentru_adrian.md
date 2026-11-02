@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 2 noiembrie 2026, 23:20 — A doua antrenare pe cod (S63) a ieșit NECLAR; în noaptea asta un test scurt: „ajută dacă modelul încearcă de multe ori?”
+
+- **S63 gata, verificat de mine: NECLAR, corect.** Forma codului s-a mai îmbunătățit puțin: **0,5004 biți pe octet** (S58: 0,5141; CONTINUĂ cerea ≤ 0,494). Problemele rezolvate pe setul nou: **3 din 163** (1,8 %; CONTINUĂ cerea ≥ 5, PLATOU ≤ 2). Pe setul de probă: 0 din 20. Placa în limite (**6.013 MB, 63 °C**), **1177 teste trec**. Pe scurt: învață cum *arată* codul, dar rezolvă tot ~2 % din probleme; o a treia noapte la fel ar aduce puțin.
+- **Pus în coadă (aprobat de mine, e un examen): S64**, ~1,5 ore pe placă, de preferat chiar în noaptea asta: modelul scrie **200 de încercări** pe fiecare din cele 20 de probleme de probă (la două „temperaturi”) și numărăm câte probleme rezolvă măcar o dată, plus *de ce* pică restul. Pragurile scrise dinainte: AJUTĂ = cel puțin 4/20 rezolvate din 100 de încercări; NU AJUTĂ = cel mult 1/20. Fără antrenare, seturile ascunse nu se redeschid.
+- **De ce:** dacă încercările multe ajută, drumul e „încearcă mult + verifică singur” (auto-jocul cu verificator), nu mai multe ore. Dacă nu, rămân variantele care cer „da”-ul tău: date cu funcții și teste, sau un model mai mare. Ți le pun mâine cu cifrele S64.
+- **Aștept de la tine:** nimic urgent. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
+
 ## 2 noiembrie 2026, 14:40 — A doua antrenare pe cod (S63) rulează din 11:38, totul în regulă
 
 - **Rulează: S63** (10 ore pe cod, din modelul S58), pornită la **11:38**. Înainte de pornire executantul a făcut setul ascuns nou (**163 de probleme**, nicio repetare din S58; 3 teste noi, **1177 teste trec**) și a urcat pre-înregistrarea — verificată de mine: pragurile sunt exact cele stabilite (CONTINUĂ = biți/octet ≤ 0,494 și cel puțin **5/163**; PLATOU = > 0,504 și cel mult **2/163**).
@@ -146,11 +153,3 @@
 - **După S51:** bucata 2 a descărcării codului (S46), fără placă.
 - Nicio problemă: executantul a scris la 18:59, normal la pornirea antrenării. Nicio comandă nouă pentru Kronos în hub.
 - **Aștept de la tine:** nimic nou. Rămâne, fără grabă, întrebarea cu repornirea de aseară (comanda de citit jurnalul Windows e în raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
-## 30 octombrie 2026, 17:15 — Diagnosticul repornirii (S52) s-a oprit: executantul n-are voie să citească jurnalele Windows; placa sigur nu a fost de vină; diseară S51 la 19:00
-
-- **S52 oprit (corect, nu e o defecțiune):** comenzile care citesc jurnalele Windows sunt blocate pentru executant, iar el n-a încercat să ocolească blocarea.
-- **Ce s-a aflat totuși:** placa video a mers normal până în ultima secundă (23:09:36: **64 °C, 6.116 MB**, sub limite), fără niciun semn înainte. Deci **nu a fost supraîncălzire**; o oprire bruscă, totul în aceeași secundă, se potrivește cu **pana de curent** pe care o bănuiești. Sigur spune doar jurnalul Windows.
-- **Diseară, 19:00: S51** (antrenarea de noapte, repetarea S45), apoi bucata 2 a descărcării codului — neschimbat. **1119 teste trec.** Calculatorul raportează normal (ultimul commit 15:34).
-- **Aștept de la tine (fără grabă, alege una):** (1) deschizi PowerShell pe workstation și lipești comanda din raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md` (doar citește), apoi îmi trimiți ce iese; **sau** (2) îmi spui „da, executantul poate citi jurnalele Windows” și repun S52. Dacă a fost pana de curent, o sursă UPS ar proteja antrenările de noapte.
-

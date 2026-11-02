@@ -2243,8 +2243,9 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: gata (executant, 2 nov 22:40: lanțul 11:38:36–22:28:02, cod 0; orele 11–20 din starea liniei, examenul orar 0,4967 → 0,4834; (i) validarea întreagă **0,50041** (S58 0,5141); (ii) `ascuns2` **pass@10 = 3/163**, pass@1 0,25 %; (iii) proba 0/20 → după praguri **NECLAR**; placa max 6.013 MB / 63 °C; 1177 teste trec, 1 sărit)
+- stare: gata — verificat de supraveghetor 2 nov 23:20: NECLAR corect (executant, 2 nov 22:40: lanțul 11:38:36–22:28:02, cod 0; orele 11–20 din starea liniei, examenul orar 0,4967 → 0,4834; (i) validarea întreagă **0,50041** (S58 0,5141); (ii) `ascuns2` **pass@10 = 3/163**, pass@1 0,25 %; (iii) proba 0/20 → după praguri **NECLAR**; placa max 6.013 MB / 63 °C; 1177 teste trec, 1 sărit)
 - stare anterioară: in_lucru (executant, 2 nov 11:38: pasul 1 GATA 7a1197f (`--exclude-dosar`/`--max-pe-sablon`, 3 teste noi, 1177 trec, 1 sărit); pasul 2 GATA: `ascuns2` **N = 163** (referințele 163/163); pre-înregistrarea `2026-11-02_cod_c1_noaptea2.md` f876939 (CONTINUĂ ≤ 0,494 și ≥ 5/163; PLATOU > 0,504 și ≤ 2/163); lanțul `lucru/cascada/S63_proba/s63.py` pornit 11:38:36 (proces 19128): „orele 11–20” verificat în log, placa 5.974 MB / 62 °C; sfârșit estimat ~22:00 + examene ~30 min. Pornit ziua deși cele ~11 ore trec de 18:30: fereastra sarcinii e „oricând (zi sau noapte)”, C-56)
+- verdict verificat (supraveghetor, 2 nov 23:20): **NECLAR, corect.** Recalculat: 0,5141 − 0,50041 = 0,0137 (CONTINUĂ cere ≤ 0,494 ✗, PLATOU cere > 0,504 ✗); pass@10 3/163 = 1,84 % (CONTINUĂ ≥ 5 ✗, PLATOU ≤ 2 ✗); pass@1 4/1.630 = 0,245 % ✓; examenul orar 0,4946 → 0,4834, fiecare oră mai bună ✓; pre-înregistrarea f876939 urcată înainte de pornire ✓; examenele o singură dată, pe starea de după ora 20 ✓; placa max 6.013 MB / 63 °C ✓; 1177 teste trec ✓. Lecția: a doua noapte mai îmbunătățește forma codului (~0,001 biți/oră la sfârșit), dar rezolvarea problemelor rămâne ~2 %. Următorul pas: S64 (diagnostic, nu încă o noapte).
 - verificat (supraveghetor, 2 nov 14:36): pre-înregistrarea f876939 (11:38) urcată ÎNAINTE de pornire (11:38:36); N = 163 și pragurile = regula din coadă (⌈0,03×163⌉ = 5, ⌊0,015×163⌋ = 2), biții neschimbați (0,494 / 0,504); pornit din starea liniei; placa 5.974 MB / 62 °C. Nicio sarcină nouă pe placă până la sfârșitul S63 (~22:00 + examene).
 - stare anterioară: **aprobat** (supraveghetor, 2 nov 11:20: setul ascuns = **varianta (a)**, vezi „decizia setului” mai jos; restul sarcinii neschimbat, tot aprobarea lui Adrian C-56)
 - decizia setului (supraveghetor, 2 nov 11:20; granițele 2 și 5 — examen + unealtă cu test, notarea neschimbată):
@@ -2280,3 +2281,35 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477, linia română, setul ascuns S58. Raport `docs/rapoarte/<data>_<ora>_S63_cod_c1_noaptea2.md`.
 - aprobat de: **Adrian, 2 nov 2026 08:46** („pornește acum S63”, C-56)
 - raport: docs/rapoarte/2026-11-02_2240_S63_cod_c1_noaptea2.md (înainte: 2026-11-02_0932_S63_oprit_set_ascuns.md)
+
+### S64 — Kronos-Cod: diagnostic „mai multe încercări ajută?” — pass@k cu multe corpuri pe setul de PROBĂ + de ce pică corpurile (placa ~1,5 ore + procesor)
+- stare: **aprobat**
+- tip: placă (scurt, doar scriere de răspunsuri) + procesor
+- fereastră: oricând — **de preferat chiar în noaptea 2→3 nov** (placa e liberă după S63); dacă Adrian cere workstation-ul (fereastra OS/GPU), nu pornești
+- durată maximă: 2,5 ore în total (placa ~1,5 ore); examenele cu `--lot 2 --memorie-max 6500`; placa sub 7.000 MB și 83 °C
+- de ce: S58 și S63 au ieșit NECLAR; biții scad (0,5141 → 0,5004), dar rezolvarea a rămas ~2 % (3/200, 3/163). Înainte să cerem o
+  direcție nouă lui Adrian (a treia noapte cu altă rată / date cu funcții și teste / model mai mare), vrem două cifre ieftine:
+  (1) dacă modelul *poate* rezolva problemele când încearcă de multe ori (pass@k cu k mare) — dacă da, ajută căutarea/verificatorul (auto-joc, H3),
+  nu mai multe ore; (2) de ce pică corpurile (sintaxă, nume interzise, rezultat greșit, timp).
+- granițe: examene și notări (2) + unealtă în `unelte/` cu test, dacă e nevoie (5). Fără antrenare, fără `kronos/`, `module/examen_bpb.py`,
+  paznic, jurnal, #477, linia română. **Setul ascuns S58 și `ascuns2` NU se deschid din nou** (ambele sunt folosite). `lucru/cod_c1/gpt.pt` doar se citește.
+- ce faci:
+  1. **Pre-înregistrarea ÎNAINTE de placă:** `docs/preinregistrari/2026-11-03_cod_pass_k_mare.md` (sau cu data zilei), commit + push, cu pragurile de mai jos
+     copiate neschimbate și așteptările tale în cifre. Reper: S63 pe setul de probă, n = 10, T = 0,8 → pass@10 = 0/20.
+  2. Răspunsurile, starea liniei după ora 20 (`lucru/cod_c1/gpt.pt`, `config/cod_c1_init002.toml`), **setul de PROBĂ** (20 de probleme), într-un dosar nou
+     `lucru/kronos_cod/s64/`, câte o rulare, sămânța 0, aceleași `--max-simboluri` ca la S63:
+     (a) `examen_cod.py model --set proba --n 200 --temperatura 0.8 --lot 2 --memorie-max 6500 --iesire lucru/kronos_cod/s64/t08.json`, apoi `noteaza`;
+     (b) la fel cu `--temperatura 0.4` (`t04.json`), apoi `noteaza`.
+     Estimare: ~45 min pe rulare (S63: 200 de corpuri = 103 s + 39 s cutia). Dacă (a) depășește 70 de minute, (b) se face cu `--n 100` și o spui în raport.
+  3. pass@k pentru k = 1, 10, 50, 100, 200 din `pe_problema` (n, c) cu același estimator `pass_la_k` (nu schimbi `noteaza`; dacă vrei comanda în unealtă,
+     o adaugi ca opțiune nouă cu test). Pe problemă: c din 200 la fiecare temperatură.
+  4. De ce pică (procesor, pe corpurile de la (a)): numărul pe stări (ok/picat/interzis/timp/căzut/blocat/eroare) și, pentru „interzis” și „căzut”,
+     motivul cel mai des (ce nume/construcție, ce eroare), plus câte corpuri nu se compilează deloc. 3–5 exemple scurte din setul de probă (e public, se poate arăta).
+     Fără a deschide seturile ascunse.
+  5. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S64_pass_k_mare.md`; coada → `gata`; commit + push.
+- pragurile (pentru T = 0,8, n = 200; supraveghetorul le-a scris înainte, executantul le copiază neschimbate):
+  **ÎNCERCĂRILE AJUTĂ** = pass@100 ≥ **4/20** (cel puțin 4 probleme rezolvate măcar o dată din 100);
+  **NU AJUTĂ** = pass@100 ≤ **1/20**; altfel **NECLAR**. T = 0,4 și k = 200: doar informație. Setul de probă e mic (20) și a fost folosit la dezvoltare
+  (nu la antrenare), deci cifra e un diagnostic, nu un examen; o spunem așa.
+- aprobat de: supraveghetor, 2 nov 2026 23:20 (granițele 2 și 5)
+- raport: docs/rapoarte/<data>_<ora>_S64_pass_k_mare.md
