@@ -66,3 +66,36 @@ adică numărul așteptat de probleme rezolvate cu 100 de încercări; poate fi 
 - pass@100 ≥ 8/20: modelul „știe” mult mai mult decât arată pass@10; căutarea cu verificator ar fi direcția clară.
 - 0 corpuri „ok” din 4.000: pe setul de probă modelul nu rezolvă nimic nici cu 200 de încercări.
 - Peste 30 % corpuri care nu se compilează: problema e forma (tăierea, oprirea), nu logica.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-03 01:48, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+**Rezultatele S64 (setul de PROBĂ, 20 × 200, starea `lucru/cod_c1/gpt.pt` după ora 20, sămânța 0; complet, cod 0):**
+
+| T | corpuri „ok” | pass@1 | pass@10 | pass@50 | pass@100 | pass@200 | probleme rezolvate măcar o dată |
+|---|---|---|---|---|---|---|---|
+| 0,8 | 3 / 4.000 | 0,015/20 (0,075 %) | 0,15/20 | 0,69/20 | **1,25/20** | 2/20 | s01 (1/200), s12 (2/200) |
+| 0,4 | 25 / 4.000 | 0,125/20 (0,625 %) | 0,78/20 | 1,25/20 | 1,50/20 | 2/20 | s01 (24/200), s12 (1/200) |
+
+- (b) s-a făcut cu n = 200 ((a) a scris în 38,8 min, sub pragul de 70).
+- De ce pică (T = 0,8, 4.000 de corpuri): picat (rezultat greșit) 3.674 (91,9 %), interzis 267 (6,7 %; din ele **243 nu se compilează** = 6,1 %,
+  doar 24 sunt nume/importuri/atribute interzise), timp 31, blocat 11, memorie 10, căzut 4 (excepții la rulare), ok 3.
+
+## Verdictul
+
+*Scris la 2026-11-03 01:50, de executant, strict după pragurile de mai sus.*
+
+- ÎNCERCĂRILE AJUTĂ = pass@100 ≥ 4/20 → 1,25/20 ✗ → **nu**.
+- NU AJUTĂ = pass@100 ≤ 1/20 → 1,25/20 ✗ → **nu**.
+- **→ NECLAR** (aproape de „NU AJUTĂ”).
+
+Față de așteptări: pass@100 1,25/20 (așteptat ~2, sub); corpuri „ok” 3 (așteptat 10–20, mult sub); corpuri care nu se compilează
+6,1 % (așteptat 5–15 %, în interval); „picat” ~92 % (așteptat ~90 %). Chiar și cu 200 de încercări, doar 2 probleme din 20 (cele mai
+simple: „numără multiplii lui 8”, „suma rândului 0”) se rezolvă vreodată. La T = 0,4 problema s01 trece de 24 de ori din 200,
+dar tot aceleași 2 probleme: mai multe încercări nu aduc probleme noi. Setul de probă e mic și folosit la dezvoltare: diagnostic, nu examen.
+O sămânță; NECLAR e NECLAR.

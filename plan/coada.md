@@ -2283,7 +2283,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_2240_S63_cod_c1_noaptea2.md (înainte: 2026-11-02_0932_S63_oprit_set_ascuns.md)
 
 ### S64 — Kronos-Cod: diagnostic „mai multe încercări ajută?” — pass@k cu multe corpuri pe setul de PROBĂ + de ce pică corpurile (placa ~1,5 ore + procesor)
-- stare: in_lucru (executant, 2 nov 23:30: pre-înregistrarea `2026-11-02_cod_pass_k_mare.md` + lanțul `lucru/cascada/S64/s64.py` în ce181c5 (23:30:25), urcate ÎNAINTE de pornire (ora „23:35” scrisă în pre-înregistrare e aproximată greșit; ordinea reală o arată commit-ul); lanțul pornit 23:30:33, proces 23288, pasul (a) T = 0,8, n = 200 rulează; estimat ~1,6 ore)
+- stare: gata (executant, 3 nov 01:50: lanțul terminat 01:20, cod 0; T = 0,8: 3 „ok” din 4.000, pass@100 1,25/20 → **NECLAR**; T = 0,4: 25 „ok”, pass@100 1,50/20; aceleași 2 probleme (s01, s12); 6,1 % necompilabile, ~92 % rezultat greșit; placa max 1.468 MB / 49 °C; 1177 teste trec)
+- stare veche: in_lucru (executant, 2 nov 23:30: pre-înregistrarea `2026-11-02_cod_pass_k_mare.md` + lanțul `lucru/cascada/S64/s64.py` în ce181c5 (23:30:25), urcate ÎNAINTE de pornire (ora „23:35” scrisă în pre-înregistrare e aproximată greșit; ordinea reală o arată commit-ul); lanțul pornit 23:30:33, proces 23288, pasul (a) T = 0,8, n = 200 rulează; estimat ~1,6 ore)
 - stare anterioară: **aprobat**
 - tip: placă (scurt, doar scriere de răspunsuri) + procesor
 - fereastră: oricând — **de preferat chiar în noaptea 2→3 nov** (placa e liberă după S63); dacă Adrian cere workstation-ul (fereastra OS/GPU), nu pornești
@@ -2313,4 +2314,4 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   **NU AJUTĂ** = pass@100 ≤ **1/20**; altfel **NECLAR**. T = 0,4 și k = 200: doar informație. Setul de probă e mic (20) și a fost folosit la dezvoltare
   (nu la antrenare), deci cifra e un diagnostic, nu un examen; o spunem așa.
 - aprobat de: supraveghetor, 2 nov 2026 23:20 (granițele 2 și 5)
-- raport: docs/rapoarte/<data>_<ora>_S64_pass_k_mare.md
+- raport: docs/rapoarte/2026-11-03_0150_S64_pass_k_mare.md
