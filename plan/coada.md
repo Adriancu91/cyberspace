@@ -2243,7 +2243,9 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
+- stare: oprit (executant, 2 nov 09:32: nimic pornit; pasul 2 imposibil așa cum e scris — un set ascuns nou de 200 (20 × 10) fără variantele S58 nu încape: 13 din 20 de șabloane au ≤ 24 de variante, `s07_roteste` doar 14 → ~163 de probleme fără suprapunere; 1174 teste trec, 1 sărit)
+- motiv: cere alegerea lui Adrian/supraveghetorului: setul ascuns nou — (a) ~163 de probleme fără suprapunere, pragurile pe procente, sau (b) 200 cu sămânță nouă, ca la S58 (suprapunere parțială); antrenarea (orele 11–20 din `gpt.pt`, rata fixă 6·10⁻⁵) nu depinde de set
+- stare anterioară: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
 - stare anterioară: propus — necesită Adrian (răspunsul „da S63” în hub, `COMENZI.md`). Motivul: pornește din S58, iar Adrian n-a spus încă dacă cifrele S58 contează (abaterea de memorie); setul ascuns S58 e folosit, iar pass@k ar cere un set ascuns NOU (altă sămânță, aceleași 20 de șabloane).
 - tip: placă
 - fereastră: **oricând (zi sau noapte), imediat după S62 `gata`** cu memoria sub 6.500 MB la ambele măsurări (C-56; înainte: noapte 19:00–07:00). Dacă S62 iese `oprit` sau peste 6.500 MB, S63 NU pornește.
@@ -2257,3 +2259,4 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - pragurile (propuse de supraveghetor; executantul le copiază neschimbate): **CONTINUĂ** = biți/octet ≤ **0,494** (cu cel puțin 0,02 sub 0,5141) **și** pass@10 ≥ **6/200**; **PLATOU** = biți/octet > 0,504 (sub 0,01 câștig) **și** pass@10 ≤ 3/200; altfel **NECLAR**. O sămânță, o noapte; setul ascuns e altul decât la S58, deci 3 → 6 e o diferență mică și o spunem așa.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477, linia română, setul ascuns S58. Raport `docs/rapoarte/<data>_<ora>_S63_cod_c1_noaptea2.md`.
 - aprobat de: **Adrian, 2 nov 2026 08:46** („pornește acum S63”, C-56)
+- raport: docs/rapoarte/2026-11-02_0932_S63_oprit_set_ascuns.md
