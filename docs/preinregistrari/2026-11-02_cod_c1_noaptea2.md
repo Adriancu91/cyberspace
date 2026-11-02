@@ -83,3 +83,42 @@ corp trece, altfel 0) × 163, adică numărul de probleme rezolvate cu 10 încer
 - Biți > 0,5141 după a doua noapte: a doua trecere prin date strică (supraînvățare) — linia ar trebui oprită, nu continuată.
 - Biți ≤ 0,490 cu pass@10 ≤ 2: modelul învață tot mai bine forma codului, dar nu rezolvarea problemelor; mai multe ore nu ajută pass@k.
 - pass@10 ≥ 9/163: rata mică fixă ajută mai mult decât mă aștept (sau setul nou e mai ușor decât cel S58).
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-02 22:34, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 490 | cod_c1 | 02.11 11:38 | 0,4946 | pastrat | — | — | — |  |
+| 491 | cod_c1 | 02.11 12:40 | 0,4928 | pastrat | — | — | — |  |
+| 492 | cod_c1 | 02.11 13:42 | 0,4910 | pastrat | — | — | — |  |
+| 493 | cod_c1 | 02.11 14:43 | 0,4899 | pastrat | — | — | — |  |
+| 494 | cod_c1 | 02.11 15:45 | 0,4887 | pastrat | — | — | — |  |
+| 495 | cod_c1 | 02.11 16:46 | 0,4885 | pastrat | — | — | — |  |
+| 496 | cod_c1 | 02.11 17:48 | 0,4863 | pastrat | — | — | — |  |
+| 497 | cod_c1 | 02.11 18:50 | 0,4850 | pastrat | — | — | — |  |
+| 498 | cod_c1 | 02.11 19:51 | 0,4846 | pastrat | — | — | — |  |
+| 499 | cod_c1 | 02.11 20:53 | 0,4834 | pastrat | — | — | — |  |
+
+- **cod_c1:** 10 ore, 10 păstrate; val_bpb de la 0,4946 la 0,4834; cel mai bun păstrat: #499 (0,4834).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+**Examenele (o singură dată, pe starea de după ora 20, `lucru/cod_c1/gpt.pt`):**
+- (i) biți pe octet pe validarea întreagă (5.686 fișiere): **0,50041** (Python 0,54068, Rust 0,42698, C 0,60137); S58: 0,5141.
+- (ii) setul ascuns nou `ascuns2` (163 × 10): pass@1 **0,25 %** (4 corpuri „ok” din 1.630), pass@10 **3/163 = 1,84 %**; complet.
+- (iii) setul de probă (20 × 10, doar informație): pass@1 0, pass@10 **0/20**.
+
+## Verdictul
+
+*Scris la 2026-11-02 22:40, de executant, strict după pragurile de mai sus.*
+
+- CONTINUĂ = biți ≤ 0,494 **și** pass@10 ≥ 5/163 → 0,50041 ✗, 3/163 ✗ → **nu**.
+- PLATOU = biți > 0,504 **și** pass@10 ≤ 2/163 → 0,50041 ✗, 3/163 ✗ → **nu**.
+- **→ NECLAR.**
+
+Față de așteptări: examenul orar 0,4834 (așteptat ~0,483, exact), validarea întreagă 0,5004 (așteptat ~0,500, exact),
+pass@10 3/163 (așteptat ~4, în interval), setul de probă 0/20 (așteptat 1–2, mai slab). Câștigul celei de-a doua nopți
+pe validarea întreagă: 0,0137 biți/octet (sub cele 0,02 cerute de CONTINUĂ, peste cele 0,01 ale PLATOU-ului). pass@10
+1,84 % față de 1,5 % la S58, pe alt set — practic la fel. O sămânță, o noapte; NECLAR e NECLAR.
