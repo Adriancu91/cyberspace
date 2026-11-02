@@ -2224,7 +2224,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 23:15 (granițele 2 și 5: o comparație de 10 minute fără model salvat + o setare opțională într-un modul, cu testul că fără ea nimic nu se schimbă; fără `kronos/`, fără examen; S58 neatinsă; alegerea configurării pentru S58 = Adrian)
 
 ### S62 — Kronos-Cod: uneltele de examen de cod se țin singure sub limita plăcii + `examen_validare.py` citește `gpt.pt` (procesor + o măsurare scurtă pe placă, pe setul de PROBĂ)
-- stare: aprobat
+- stare: in_lucru (executant, 2 nov 08:30)
 - tip: procesor + ~30 min pe placă (doar măsurare, fără antrenare)
 - fereastră: zi (2 nov, 08:00–18:30); trebuie `gata` înainte de orice alt examen de cod pe placă (inclusiv S63)
 - durată maximă: 4 ore de cod + măsurarea; la măsurare oprire singură peste 6.500 MB (paznicul: 7.000 MB / 83 °C)
