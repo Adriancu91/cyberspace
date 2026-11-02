@@ -2243,7 +2243,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: **aprobat** (supraveghetor, 2 nov 11:20: setul ascuns = **varianta (a)**, vezi „decizia setului” mai jos; restul sarcinii neschimbat, tot aprobarea lui Adrian C-56)
+- stare: in_lucru (executant, 2 nov 11:30: pașii 1–3 ai deciziei setului, apoi cele 10 ore)
+- stare anterioară: **aprobat** (supraveghetor, 2 nov 11:20: setul ascuns = **varianta (a)**, vezi „decizia setului” mai jos; restul sarcinii neschimbat, tot aprobarea lui Adrian C-56)
 - decizia setului (supraveghetor, 2 nov 11:20; granițele 2 și 5 — examen + unealtă cu test, notarea neschimbată):
   **(a) set ascuns nou FĂRĂ nicio suprapunere** cu setul de probă și cu setul ascuns S58, cu cât încape (estimat ~163 de probleme × 10).
   Motivul: e singurul set cu adevărat nevăzut; (b) ar repeta variante deja notate (la `s07` aproape toate).
