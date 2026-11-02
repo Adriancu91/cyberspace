@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 2 noiembrie 2026, 08:15 — PROBLEMĂ: la examenul de cod placa a trecut de limita de 7.000 MB ~17 minute și nimic n-a putut-o opri; prima antrenare pe cod (S58) a ieșit NECLAR
+
+- **S58 s-a terminat (10 ore, fără erori) — verificat de mine: NECLAR, corect.** Modelul a învățat bine *cum arată* codul (0,514 biți pe octet; pragul era ≤ 1,10), dar rezolvă rar o problemă: **3 din 200** (pragul ÎNVAȚĂ cerea ≥ 10). La antrenare placa a fost în regulă (6.205 MB, 64 °C).
+- **Problema:** la examenul pe setul ascuns, placa a stat la **7.188–7.971 MB** (limita: 7.000) ~17 minute. Temperatura bună (52–55 °C), nimic n-a căzut. Dar paznicul nu supraveghează uneltele de examen de cod, iar executantul n-a putut opri procesul (oprirea e blocată de permisiuni). S58 stă pe `oprit` până răspunzi tu.
+- **Pus în coadă (aprobat de mine): S62, azi ziua** — uneltele de examen de cod lucrează în loturi mai mici și **se opresc singure** peste 6.500 MB; unealta de validare citește și modelul liniei. Se măsoară pe placă doar pe setul de probă. Fără `kronos/`, fără examenul oficial.
+- **Propus, așteaptă „da”-ul tău: S63** — a doua noapte pe codul S58 (10 ore, din modelul de azi-noapte), apoi examenele cu uneltele reparate și un set ascuns NOU (cel vechi e folosit). Pragurile sunt scrise în coadă.
+- **Aștept de la tine:** (1) **contează cifrele S58?** scrie „S58 contează: da” sau „nu” (executantul și eu recomandăm „da”: cifrele sunt corecte, depășirea a fost la examen, nu la antrenare); (2) **„da S63”** dacă vrei a doua noapte — dacă scrii până la 18:30 și S62 e gata, pornește diseară la 19:00; altfel placa stă liberă la noapte; (3) de știut: dacă vrei ca executantul să poată opri singur un proces scăpat de sub control, trebuie permisă comanda `taskkill` pe workstation (schimbare de setări — doar tu). Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477, excluderea de la S53, repornirea din 29 oct.
+
 ## 1 noiembrie 2026, 23:15 — S58 rulează; o mică nepotrivire de ore la bucla automată, de reglat la pregătirea din ~3 nov
 
 - **Rulează: S58** (10 ore pe cod, `cod_c1_init002`, pornit la 19:00). Nimic terminat de la 20:15, nicio problemă (executantul nu scrie în timpul antrenării — e normal). Rezultatul: mâine dimineață.
@@ -147,10 +155,3 @@
 - **Rulează S46** (descărcarea codului, fără placă): 10.921 de pachete păstrate, ~3,2 GB; se oprește singură pe la 10:30. Pe disc: 64 GB liberi. **1113 teste trec.** CONTINUUM a pornit din nou odată cu calculatorul (doar observă).
 - **Urmează:** S50 (măsurarea vitezei, doar procesor) după S46, apoi bucata 2 a S46 și S51 (repetarea S45). Nimic nou pus în coadă; placa stă liberă ziua (nu am altă încercare în granițele mele).
 - **Aștept de la tine:** (1) dacă știi de ce s-a repornit calculatorul; dacă e Windows Update: **Setări → Windows Update → Opțiuni avansate → Ore active, 18:00–08:00**, altfel S51 poate cădea la fel; (2) opțional „S51 întâi” dacă vrei antrenarea în seara asta înaintea bucății 2 a descărcării.
-
-## 30 octombrie 2026, 02:15 — PROBLEMĂ: antrenarea de noapte S45 s-a oprit brusc la 23:09 (ora 4 din 6); o repet de la capăt ca S51; descărcarea codului (S46) a pornit
-
-- **S45 a căzut la 23:09**, fără nicio eroare scrisă — așa arată de obicei o **repornire a calculatorului** (de exemplu o actualizare Windows) sau o oprire de mână. Placa era în limite (6,1 GB, 64 °C), deci nu e de la ea. Primele 3 ore sunt salvate, dar **nu există verdict**.
-- **Ce am hotărât:** S45 se închide fără verdict; **S51 = aceeași noapte de antrenare, de la capăt din #459, cu aceleași praguri** (aprobată de mine, e în granițe). Pornește după descărcarea de azi, cel mai devreme diseară.
-- **Rulează acum S46** (descărcarea codului, prima bucată, de la 00:30 până pe la 10:30, fără placă). Apoi S50 (măsurarea vitezei) și a doua bucată a descărcării.
-- **Aștept de la tine:** spune-mi dacă știi de ce s-a oprit calculatorul la 23:09 (l-ai repornit? a cerut Windows o actualizare?). Dacă e de la actualizările Windows, poți seta „ore active” sau amâna actualizările cu o săptămână (Setări → Windows Update), ca să nu repornească noaptea — eu n-am voie să schimb setări Windows.
