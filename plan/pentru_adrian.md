@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 2 noiembrie 2026, 11:20 — S62 a reparat examenul de cod (placa sub limită); S63 s-a oprit la o întrebare despre setul nou, am ales eu varianta curată și a fost repornită
+
+- **S62 gata, verificat de mine: corect.** Uneltele de examen de cod stau acum mult sub limită: vârf **1.924 MB** și **4.416 MB** (la S58: 7.971 MB) și se opresc singure peste 6.500 MB. Cifra validării iese exact ca la S58 (**0,5141**), deci calculul nu s-a schimbat. **1174 teste trec.** **REZOLVAT:** depășirea de memorie de la examenul de cod.
+- **S63 s-a oprit înainte să pornească** (nimic stricat, nimic rulat): un set ascuns nou de 200 de probleme care să nu repete nimic din S58 nu încape — unele tipuri de probleme au doar 14–16 variante. Încap ~**163**.
+- **Am ales eu (intră în granițele mele: examen + unealtă cu test): setul nou fără nicio repetare, ~163 de probleme**, cu pragurile trecute pe procente (CONTINUĂ = cel puțin 3 %, adică ~5/163; PLATOU = cel mult 1,5 %, ~2/163). E singurul set cu adevărat nevăzut. S63 e iar `aprobat`: executantul face întâi setul + testele (~30 min, pe procesor), scrie pre-înregistrarea, apoi pornește cele 10 ore. Placa ocupată până pe la ~22:00–23:00.
+- **Aștept de la tine:** nimic. Dacă preferi totuși 200 de probleme cu unele repetate din S58, scrie „S63 varianta b” înainte de examene (antrenarea nu depinde de set). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
+
 ## 2 noiembrie 2026, 08:50 — Am primit „pornește acum S63”: a doua antrenare pe cod pornește imediat după S62, chiar ziua
 
 - **Comanda ta C-56 preluată.** S63 (10 ore pe cod, din modelul S58, apoi examenele pe un set ascuns NOU) e `aprobat` în coadă și pornește **imediat ce S62 e gata** cu memoria sub 6.500 MB — fără să aștepte ora 19:00. Executantul scrie întâi pre-înregistrarea (pragurile sunt deja în coadă: CONTINUĂ = biți/octet ≤ 0,494 și pass@10 ≥ 6/200).
@@ -147,12 +154,3 @@
 - **Diseară, 19:00: S51** (noaptea de antrenare, repetarea S45), apoi bucata 2 a descărcării codului. Nimic nou pus în coadă; placa stă liberă până la 19:00 ca S51 să pornească la timp.
 - Nicio problemă: calculatorul raportează normal (ultimul commit 11:48).
 - **Aștept de la tine:** tot întrebarea cu repornirea de aseară (~23:10) — dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), ca S51 să nu cadă la fel. Opțional: dacă vrei ca interfața să folosească placa video (mai rapid, dar ține ~1,5 GB ocupați).
-
-## 30 octombrie 2026, 11:15 — Prima bucată din descărcarea codului e gata (bun); diseară antrenarea S51 trece înaintea descărcării, ca placa să nu stea liberă
-
-- **S46 bucata 1 verificată: bună.** A mers 00:29–10:29 și s-a oprit curat la limita de 10 ore: **3,73 GB de cod curat (~1,07 miliarde de simboluri)**, doar licențe bune. Mai trebuie cel puțin încă o bucată. Pe disc: 68,9 GB liberi. **1113 teste trec.**
-- **Acum (ziua): S50** (măsurarea vitezei „rece/cald”, doar procesor, ~1–2 ore) pornește la următoarea verificare a executantului.
-- **Am schimbat ordinea de diseară:** **S51** (noaptea de antrenare, repetarea S45 din #459, aceleași praguri) pornește **la 19:00**, iar bucata 2 a descărcării vine **după** ea (~02:00). Altfel descărcarea ar fi ocupat toată noaptea și placa ar fi stat degeaba. Descărcarea nu folosește placa și nu are termen.
-- Nicio problemă: calculatorul raportează normal (ultimul commit 11:04).
-- **Aștept de la tine:** doar întrebarea rămasă de dimineață — de ce s-a repornit calculatorul aseară la ~23:10; dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), altfel și S51 poate cădea la fel.
-

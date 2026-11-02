@@ -2243,7 +2243,24 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: oprit (executant, 2 nov 09:32: nimic pornit; pasul 2 imposibil așa cum e scris — un set ascuns nou de 200 (20 × 10) fără variantele S58 nu încape: 13 din 20 de șabloane au ≤ 24 de variante, `s07_roteste` doar 14 → ~163 de probleme fără suprapunere; 1174 teste trec, 1 sărit)
+- stare: **aprobat** (supraveghetor, 2 nov 11:20: setul ascuns = **varianta (a)**, vezi „decizia setului” mai jos; restul sarcinii neschimbat, tot aprobarea lui Adrian C-56)
+- decizia setului (supraveghetor, 2 nov 11:20; granițele 2 și 5 — examen + unealtă cu test, notarea neschimbată):
+  **(a) set ascuns nou FĂRĂ nicio suprapunere** cu setul de probă și cu setul ascuns S58, cu cât încape (estimat ~163 de probleme × 10).
+  Motivul: e singurul set cu adevărat nevăzut; (b) ar repeta variante deja notate (la `s07` aproape toate).
+  Pașii, în ordinea asta:
+  1. `examen_cod.py ascuns`: opțiunea `--exclude-dosar` (poate fi dată de mai multe ori) + `--max-pe-sablon 10`: fiecare șablon dă min(10, variantele rămase);
+     unealta scrie în `rezumat` numărul total N și câte pe șablon. Teste pe procesor (un set „vechi” FALS din teste, nu cel adevărat): nicio problemă din dosarele excluse nu
+     apare în setul nou; același rezultat la aceeași sămânță. `noteaza`, cutia, temperatura, `MAX_SIMBOLURI` NU se schimbă. `python -m pytest`: toate trec; commit + push.
+  2. Setul: `examen_cod.py ascuns --dosar lucru/kronos_cod/ascuns2/` (sămânța secretă o alege unealta, ca la S58), excluzând setul de probă și dosarul setului ascuns S58 (unealta citește doar identitatea variantelor, tu nu-l deschizi și nu-l arăți).
+     Notezi doar N și împărțirea pe șabloane (nu problemele).
+  3. **Pre-înregistrarea** (`docs/preinregistrari/2026-11-02_cod_c1_noaptea2.md`), commit + push ÎNAINTE de antrenare, cu N-ul real și pragurile în număr întreg:
+     **CONTINUĂ** = biți/octet ≤ **0,494** **și** pass@10 ≥ **⌈0,03 × N⌉** (la N = 163 → 5); **PLATOU** = biți/octet > **0,504** **și** pass@10 ≤ **⌊0,015 × N⌋** (la N = 163 → 2);
+     altfel **NECLAR**. Scrii și: orele 11–20 rulează cu rata fixă 6·10⁻⁵ (scăderea s-a terminat la ora 10), fără încălzire nouă — acceptat, nu se schimbă configurarea.
+     Reperul S58 (3/200 = 1,5 %) e pe alt set; comparația e aproximativă și o spunem așa.
+  4. Apoi pașii 3–4 de mai jos (10 ore din `gpt.pt` + examenele cu `--lot 2 --memorie-max 6500`; la (ii) `model --set ascuns --dosar lucru/kronos_cod/ascuns2` și `noteaza --dosar lucru/kronos_cod/ascuns2`, N × 10).
+  Dacă pasul 1 sau 2 pică de 2 ori la rând: `oprit`, eroarea în raport; placa NU pornește.
+  Adrian poate cere varianta (b) până la examene (comanda „S63 varianta b”); antrenarea nu depinde de set.
+- stare anterioară: oprit (executant, 2 nov 09:32: nimic pornit; pasul 2 imposibil așa cum e scris — un set ascuns nou de 200 (20 × 10) fără variantele S58 nu încape: 13 din 20 de șabloane au ≤ 24 de variante, `s07_roteste` doar 14 → ~163 de probleme fără suprapunere; 1174 teste trec, 1 sărit)
 - motiv: cere alegerea lui Adrian/supraveghetorului: setul ascuns nou — (a) ~163 de probleme fără suprapunere, pragurile pe procente, sau (b) 200 cu sămânță nouă, ca la S58 (suprapunere parțială); antrenarea (orele 11–20 din `gpt.pt`, rata fixă 6·10⁻⁵) nu depinde de set
 - stare anterioară: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
 - stare anterioară: propus — necesită Adrian (răspunsul „da S63” în hub, `COMENZI.md`). Motivul: pornește din S58, iar Adrian n-a spus încă dacă cifrele S58 contează (abaterea de memorie); setul ascuns S58 e folosit, iar pass@k ar cere un set ascuns NOU (altă sămânță, aceleași 20 de șabloane).
