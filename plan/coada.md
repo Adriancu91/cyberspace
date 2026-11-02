@@ -2243,7 +2243,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: in_lucru (executant, 2 nov 11:30: pașii 1–3 ai deciziei setului, apoi cele 10 ore)
+- stare: in_lucru (executant, 2 nov 11:38: pasul 1 GATA 7a1197f (`--exclude-dosar`/`--max-pe-sablon`, 3 teste noi, 1177 trec, 1 sărit); pasul 2 GATA: `ascuns2` **N = 163** (referințele 163/163); pre-înregistrarea `2026-11-02_cod_c1_noaptea2.md` f876939 (CONTINUĂ ≤ 0,494 și ≥ 5/163; PLATOU > 0,504 și ≤ 2/163); lanțul `lucru/cascada/S63_proba/s63.py` pornit 11:38:36 (proces 19128): „orele 11–20” verificat în log, placa 5.974 MB / 62 °C; sfârșit estimat ~22:00 + examene ~30 min. Pornit ziua deși cele ~11 ore trec de 18:30: fereastra sarcinii e „oricând (zi sau noapte)”, C-56)
 - stare anterioară: **aprobat** (supraveghetor, 2 nov 11:20: setul ascuns = **varianta (a)**, vezi „decizia setului” mai jos; restul sarcinii neschimbat, tot aprobarea lui Adrian C-56)
 - decizia setului (supraveghetor, 2 nov 11:20; granițele 2 și 5 — examen + unealtă cu test, notarea neschimbată):
   **(a) set ascuns nou FĂRĂ nicio suprapunere** cu setul de probă și cu setul ascuns S58, cu cât încape (estimat ~163 de probleme × 10).
