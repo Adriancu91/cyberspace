@@ -2283,7 +2283,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_2240_S63_cod_c1_noaptea2.md (înainte: 2026-11-02_0932_S63_oprit_set_ascuns.md)
 
 ### S64 — Kronos-Cod: diagnostic „mai multe încercări ajută?” — pass@k cu multe corpuri pe setul de PROBĂ + de ce pică corpurile (placa ~1,5 ore + procesor)
-- stare: in_lucru (executant, 2 nov 23:30: luată din coadă; pre-înregistrarea urmează înainte de placă)
+- stare: in_lucru (executant, 2 nov 23:30: pre-înregistrarea `2026-11-02_cod_pass_k_mare.md` + lanțul `lucru/cascada/S64/s64.py` în ce181c5 (23:30:25), urcate ÎNAINTE de pornire (ora „23:35” scrisă în pre-înregistrare e aproximată greșit; ordinea reală o arată commit-ul); lanțul pornit 23:30:33, proces 23288, pasul (a) T = 0,8, n = 200 rulează; estimat ~1,6 ore)
 - stare anterioară: **aprobat**
 - tip: placă (scurt, doar scriere de răspunsuri) + procesor
 - fereastră: oricând — **de preferat chiar în noaptea 2→3 nov** (placa e liberă după S63); dacă Adrian cere workstation-ul (fereastra OS/GPU), nu pornești
