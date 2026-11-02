@@ -2243,7 +2243,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_<ora>_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
-- stare: **propus — necesită Adrian** (răspunsul „da S63” în hub, `COMENZI.md`). Motivul: pornește din S58, iar Adrian n-a spus încă dacă cifrele S58 contează (abaterea de memorie); setul ascuns S58 e folosit, iar pass@k ar cere un set ascuns NOU (altă sămânță, aceleași 20 de șabloane).
+- stare: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
+- stare anterioară: propus — necesită Adrian (răspunsul „da S63” în hub, `COMENZI.md`). Motivul: pornește din S58, iar Adrian n-a spus încă dacă cifrele S58 contează (abaterea de memorie); setul ascuns S58 e folosit, iar pass@k ar cere un set ascuns NOU (altă sămânță, aceleași 20 de șabloane).
 - tip: placă
 - fereastră: noapte (19:00–07:00), prima după „da”-ul lui Adrian **și** după S62 `gata` cu memoria sub 6.500 MB la ambele măsurări
 - durată maximă: 10 ore + examenele (~1 oră); placa sub 7.000 MB și 83 °C; examenele cu `--memorie-max 6500`
@@ -2255,4 +2256,4 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   4. Examenele, o singură dată, cu uneltele reparate la S62 (`--lot 2 --memorie-max 6500`): (i) biți pe octet pe validarea întreagă (tot + Python/Rust/C); (ii) pass@1 și pass@10 pe setul ascuns NOU (200 × 10, temperatura 0,8, sămânța 0); (iii) aceleași setări pe setul de probă (20 de probleme), doar ca informație.
 - pragurile (propuse de supraveghetor; executantul le copiază neschimbate): **CONTINUĂ** = biți/octet ≤ **0,494** (cu cel puțin 0,02 sub 0,5141) **și** pass@10 ≥ **6/200**; **PLATOU** = biți/octet > 0,504 (sub 0,01 câștig) **și** pass@10 ≤ 3/200; altfel **NECLAR**. O sămânță, o noapte; setul ascuns e altul decât la S58, deci 3 → 6 e o diferență mică și o spunem așa.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, #477, linia română, setul ascuns S58. Raport `docs/rapoarte/<data>_<ora>_S63_cod_c1_noaptea2.md`.
-- aprobat de: — (așteaptă „da S63” de la Adrian)
+- aprobat de: **Adrian, 2 nov 2026 08:46** („pornește acum S63”, C-56)
