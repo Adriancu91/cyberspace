@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 2 noiembrie 2026, 08:50 — Am primit „pornește acum S63”: a doua antrenare pe cod pornește imediat după S62, chiar ziua
+
+- **Comanda ta C-56 preluată.** S63 (10 ore pe cod, din modelul S58, apoi examenele pe un set ascuns NOU) e `aprobat` în coadă și pornește **imediat ce S62 e gata** cu memoria sub 6.500 MB — fără să aștepte ora 19:00. Executantul scrie întâi pre-înregistrarea (pragurile sunt deja în coadă: CONTINUĂ = biți/octet ≤ 0,494 și pass@10 ≥ 6/200).
+- **Rulează acum: S62** (din 08:30): codul e scris, **1174 teste trec**; urmează măsurarea scurtă pe placă, pe setul de probă. Dacă S62 iese `oprit` sau peste 6.500 MB, S63 NU pornește.
+- **Nimic nou terminat** de la 08:15; nicio problemă nouă. Limitele plăcii rămân 7.000 MB și 83 °C.
+- **Aștept de la tine:** nimic urgent. Dacă vrei, „S58 contează: da/nu” (pornind S63 din modelul S58 am înțeles că îl folosești oricum). Opțional: permisiunea `taskkill` pe workstation. Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
+
 ## 2 noiembrie 2026, 08:15 — PROBLEMĂ: la examenul de cod placa a trecut de limita de 7.000 MB ~17 minute și nimic n-a putut-o opri; prima antrenare pe cod (S58) a ieșit NECLAR
 
 - **S58 s-a terminat (10 ore, fără erori) — verificat de mine: NECLAR, corect.** Modelul a învățat bine *cum arată* codul (0,514 biți pe octet; pragul era ≤ 1,10), dar rezolvă rar o problemă: **3 din 200** (pragul ÎNVAȚĂ cerea ≥ 10). La antrenare placa a fost în regulă (6.205 MB, 64 °C).
@@ -149,9 +156,3 @@
 - Nicio problemă: calculatorul raportează normal (ultimul commit 11:04).
 - **Aștept de la tine:** doar întrebarea rămasă de dimineață — de ce s-a repornit calculatorul aseară la ~23:10; dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), altfel și S51 poate cădea la fel.
 
-## 30 octombrie 2026, 08:15 — Confirmat: S45 a căzut pentru că s-a repornit calculatorul (~23:10); descărcarea codului (S46) merge bine
-
-- **Raportul de dimineață e la locul lui (06:46).** Din jurnale: Windows a pornit din nou la 23:12, deci antrenarea S45 s-a oprit din cauza unei **reporniri a calculatorului**, nu a plăcii (6,1 GB, 64 °C). Cine/ce a cerut repornirea nu se vede. Pre-înregistrarea S45 e închisă „fără verdict”.
-- **Rulează S46** (descărcarea codului, fără placă): 10.921 de pachete păstrate, ~3,2 GB; se oprește singură pe la 10:30. Pe disc: 64 GB liberi. **1113 teste trec.** CONTINUUM a pornit din nou odată cu calculatorul (doar observă).
-- **Urmează:** S50 (măsurarea vitezei, doar procesor) după S46, apoi bucata 2 a S46 și S51 (repetarea S45). Nimic nou pus în coadă; placa stă liberă ziua (nu am altă încercare în granițele mele).
-- **Aștept de la tine:** (1) dacă știi de ce s-a repornit calculatorul; dacă e Windows Update: **Setări → Windows Update → Opțiuni avansate → Ore active, 18:00–08:00**, altfel S51 poate cădea la fel; (2) opțional „S51 întâi” dacă vrei antrenarea în seara asta înaintea bucății 2 a descărcării.

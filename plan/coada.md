@@ -2246,7 +2246,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - stare: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
 - stare anterioară: propus — necesită Adrian (răspunsul „da S63” în hub, `COMENZI.md`). Motivul: pornește din S58, iar Adrian n-a spus încă dacă cifrele S58 contează (abaterea de memorie); setul ascuns S58 e folosit, iar pass@k ar cere un set ascuns NOU (altă sămânță, aceleași 20 de șabloane).
 - tip: placă
-- fereastră: noapte (19:00–07:00), prima după „da”-ul lui Adrian **și** după S62 `gata` cu memoria sub 6.500 MB la ambele măsurări
+- fereastră: **oricând (zi sau noapte), imediat după S62 `gata`** cu memoria sub 6.500 MB la ambele măsurări (C-56; înainte: noapte 19:00–07:00). Dacă S62 iese `oprit` sau peste 6.500 MB, S63 NU pornește.
 - durată maximă: 10 ore + examenele (~1 oră); placa sub 7.000 MB și 83 °C; examenele cu `--memorie-max 6500`
 - de ce: pre-înregistrarea S58 spune dinainte: NECLAR → „a doua noapte, pe linia acum existentă”. Biții au scăzut la fiecare oră (0,5007 → 0,4967 în ultima, tot mai încet), deci mai e de câștigat; pass@10 3/200 e întrebarea deschisă.
 - ce faci (după „da”):
