@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 2 noiembrie 2026, 14:40 — A doua antrenare pe cod (S63) rulează din 11:38, totul în regulă
+
+- **Rulează: S63** (10 ore pe cod, din modelul S58), pornită la **11:38**. Înainte de pornire executantul a făcut setul ascuns nou (**163 de probleme**, nicio repetare din S58; 3 teste noi, **1177 teste trec**) și a urcat pre-înregistrarea — verificată de mine: pragurile sunt exact cele stabilite (CONTINUĂ = biți/octet ≤ 0,494 și cel puțin **5/163**; PLATOU = > 0,504 și cel mult **2/163**).
+- **Placa:** 5.974 MB, 62 °C (limitele: 7.000 MB, 83 °C). Antrenarea a pornit din modelul S58, cum trebuia.
+- **Se termină** pe la ~22:00, apoi examenele (~30 min). Verdictul îl verific la trecerea de 23:15 sau 02:15. Nu pun nimic altceva pe placă până atunci.
+- **Aștept de la tine:** nimic. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
+
 ## 2 noiembrie 2026, 11:20 — S62 a reparat examenul de cod (placa sub limită); S63 s-a oprit la o întrebare despre setul nou, am ales eu varianta curată și a fost repornită
 
 - **S62 gata, verificat de mine: corect.** Uneltele de examen de cod stau acum mult sub limită: vârf **1.924 MB** și **4.416 MB** (la S58: 7.971 MB) și se opresc singure peste 6.500 MB. Cifra validării iese exact ca la S58 (**0,5141**), deci calculul nu s-a schimbat. **1174 teste trec.** **REZOLVAT:** depășirea de memorie de la examenul de cod.
@@ -147,10 +154,3 @@
 - **Diseară, 19:00: S51** (antrenarea de noapte, repetarea S45), apoi bucata 2 a descărcării codului — neschimbat. **1119 teste trec.** Calculatorul raportează normal (ultimul commit 15:34).
 - **Aștept de la tine (fără grabă, alege una):** (1) deschizi PowerShell pe workstation și lipești comanda din raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md` (doar citește), apoi îmi trimiți ce iese; **sau** (2) îmi spui „da, executantul poate citi jurnalele Windows” și repun S52. Dacă a fost pana de curent, o sursă UPS ar proteja antrenările de noapte.
 
-## 30 octombrie 2026, 14:15 — Măsurarea vitezei (S50) e gata și verificată: bună; diseară la 19:00 pornește antrenarea S51
-
-- **S50 verificat: bun.** Kronos alege acum viteza după răspunsurile „de după primul”, cum se folosește de fapt: pe procesor **1 fir e de 1,36× mai rapid** decât toate firele (2,30 s față de 3,14 s la un răspuns), iar placa video e de **1,84× mai rapidă** decât procesorul. Cuvintele ies identice cu originalul. **1119 teste trec.**
-- Ciudățenia de ieri („toate firele rapide doar la primul răspuns”) nu s-a mai văzut azi; nu schimbă nimic.
-- **Diseară, 19:00: S51** (noaptea de antrenare, repetarea S45), apoi bucata 2 a descărcării codului. Nimic nou pus în coadă; placa stă liberă până la 19:00 ca S51 să pornească la timp.
-- Nicio problemă: calculatorul raportează normal (ultimul commit 11:48).
-- **Aștept de la tine:** tot întrebarea cu repornirea de aseară (~23:10) — dacă e Windows Update, setează **Ore active 18:00–08:00** (Setări → Windows Update → Opțiuni avansate), ca S51 să nu cadă la fel. Opțional: dacă vrei ca interfața să folosească placa video (mai rapid, dar ține ~1,5 GB ocupați).
