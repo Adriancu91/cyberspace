@@ -66,3 +66,46 @@ def test_setul_ascuns_se_face_o_singura_data_si_ocoleste_setul_de_proba(tmp_path
     assert (tmp_path / "samanta.txt").exists()
     with pytest.raises(SystemExit):
         ex.cmd_ascuns(tmp_path)
+
+
+def test_setul_nou_exclude_dosarele_vechi_si_ia_cat_incape(tmp_path):
+    # set „vechi” FALS, făcut aici (nu cel adevărat): 10 pe șablon, ca la S58
+    vechi = tmp_path / "vechi"
+    ex.cmd_ascuns(vechi, samanta=11)
+    nou = tmp_path / "nou"
+    info = ex.cmd_ascuns(nou, exclude_dosare=[vechi], max_pe_sablon=10, samanta=22)
+    probleme = ex.citeste_jsonl(nou / "probleme.jsonl")
+    assert not ex.chei(probleme) & ex.chei_din_dosar(vechi)
+    assert not ex.chei(probleme) & ex.chei(ex.set_proba())
+    assert len(ex.chei(probleme)) == len(probleme) == info["probleme"]
+    assert sum(info["pe_sablon"].values()) == info["probleme"]
+    assert all(n <= 10 for n in info["pe_sablon"].values())
+    assert info["probleme"] < 200  # unele șabloane nu mai au 10 variante rămase
+    rezumat = json.loads((nou / "rezumat.json").read_text())
+    assert rezumat == {"N": info["probleme"], "pe_sablon": info["pe_sablon"]}
+    # fiecare șablon dă min(10, rămase): dacă dă sub 10, alt set nou nu mai găsește nimic în plus
+    al_doilea = tmp_path / "al_doilea"
+    info2 = ex.cmd_ascuns(al_doilea, exclude_dosare=[vechi, nou], max_pe_sablon=10, samanta=33)
+    for sablon, n in info["pe_sablon"].items():
+        if n < 10:
+            assert info2["pe_sablon"][sablon] == 0, sablon
+
+
+def test_setul_nou_e_acelasi_la_aceeasi_samanta(tmp_path):
+    vechi = tmp_path / "vechi"
+    ex.cmd_ascuns(vechi, samanta=11)
+    a = ex.cmd_ascuns(tmp_path / "a", exclude_dosare=[vechi], max_pe_sablon=10, samanta=5)
+    b = ex.cmd_ascuns(tmp_path / "b", exclude_dosare=[vechi], max_pe_sablon=10, samanta=5)
+    assert a["sha256"] == b["sha256"] and a["pe_sablon"] == b["pe_sablon"]
+    with pytest.raises(SystemExit):
+        ex.cmd_ascuns(vechi, exclude_dosare=[vechi], max_pe_sablon=10)
+
+
+def test_comanda_ascuns_cu_exclude_dosar_cap_coada(tmp_path, capsys):
+    vechi = tmp_path / "vechi"
+    ex.cmd_ascuns(vechi, samanta=11)
+    nou = tmp_path / "nou"
+    assert ex.main(["ascuns", "--dosar", str(nou), "--exclude-dosar", str(vechi), "--max-pe-sablon", "10"]) == 0
+    iesire = json.loads(capsys.readouterr().out)
+    assert set(iesire) == {"probleme", "pe_sablon"}
+    assert not ex.chei(ex.citeste_jsonl(nou / "probleme.jsonl")) & ex.chei_din_dosar(vechi)

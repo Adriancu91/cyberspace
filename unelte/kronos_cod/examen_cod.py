@@ -459,8 +459,37 @@ def genereaza(samanta: int, variante: int, exclude: set | None = None) -> list[P
     return probleme
 
 
+INCERCARI_FARA_NOU = 5000
+
+
+def genereaza_cat_incape(samanta: int, max_pe_sablon: int, exclude: set | None = None) -> list[Problema]:
+    """Cel mult `max_pe_sablon` pe șablon: min(max, variantele rămase după `exclude`). Un șablon s-a terminat
+    când `INCERCARI_FARA_NOU` trageri la rând nu mai dau nicio variantă nouă (șabloanele au 14–24 de variante)."""
+    rng = random.Random(samanta)
+    exclude = set(exclude or ())
+    probleme = []
+    for sablon in SABLOANE:
+        folosite = set()
+        fara_nou = 0
+        while len(folosite) < max_pe_sablon and fara_nou < INCERCARI_FARA_NOU:
+            d = sablon(rng)
+            cheie = (sablon.__name__, repr(d["cheie"]))
+            if cheie in folosite or cheie in exclude:
+                fara_nou += 1
+                continue
+            fara_nou = 0
+            folosite.add(cheie)
+            probleme.append(_fa_problema(sablon, d, rng, len(folosite)))
+    return probleme
+
+
 def chei(probleme: list[Problema]) -> set:
     return {(p.sablon, p.varianta) for p in probleme}
+
+
+def chei_din_dosar(dosar: Path) -> set:
+    """Doar identitatea variantelor (șablon, cheie) dintr-un set scris de `ascuns`; nimic altceva nu se întoarce."""
+    return chei(citeste_jsonl(Path(dosar) / "probleme.jsonl"))
 
 
 def set_proba() -> list[Problema]:
@@ -523,18 +552,38 @@ def verifica(probleme: list[Problema]) -> dict:
 
 # ---------------------------------------------------------------------------------------------------- comenzile
 
-def cmd_ascuns(dosar: Path) -> dict:
+def cmd_ascuns(dosar: Path, exclude_dosare: list | None = None, max_pe_sablon: int = 0,
+               samanta: int | None = None) -> dict:
+    """`max_pe_sablon` = 0: exact VARIANTE_ASCUNSE pe șablon (ca la S41). Altfel min(max, variantele rămase).
+    `exclude_dosare`: seturi scrise înainte, ale căror variante nu au voie să apară (doar identitatea lor se citește)."""
+    exclude_dosare = [Path(x) for x in (exclude_dosare or [])]
+    exclude = chei(set_proba())
+    for d in exclude_dosare:
+        if Path(d).resolve() == Path(dosar).resolve():
+            raise SystemExit(f"{d}: dosarul exclus e chiar dosarul setului nou.")
+        exclude |= chei_din_dosar(d)
     dosar.mkdir(parents=True, exist_ok=True)
     cale = dosar / "probleme.jsonl"
     if cale.exists():
         raise SystemExit(f"{cale} există deja: setul ascuns se face o singură dată.")
-    samanta = secrets.randbits(63)
+    if samanta is None:
+        samanta = secrets.randbits(63)
+    if max_pe_sablon:
+        probleme = genereaza_cat_incape(samanta, max_pe_sablon, exclude=exclude)
+    else:
+        probleme = genereaza(samanta, VARIANTE_ASCUNSE, exclude=exclude)
     (dosar / "samanta.txt").write_text(str(samanta), encoding="utf-8")
-    probleme = genereaza(samanta, VARIANTE_ASCUNSE, exclude=chei(set_proba()))
     sha = scrie_jsonl(probleme, cale)
-    info = {"probleme": len(probleme), "sabloane": len(SABLOANE), "variante_pe_sablon": VARIANTE_ASCUNSE,
-            "sha256": sha, "fara_variantele_setului_de_proba": True}
+    pe_sablon = {s.__name__: 0 for s in SABLOANE}
+    for p in probleme:
+        pe_sablon[p.sablon] += 1
+    info = {"probleme": len(probleme), "sabloane": len(SABLOANE),
+            "variante_pe_sablon": max_pe_sablon or VARIANTE_ASCUNSE, "pe_sablon": pe_sablon,
+            "sha256": sha, "fara_variantele_setului_de_proba": True,
+            "exclude_dosare": [str(d) for d in exclude_dosare], "variante_excluse": len(exclude)}
     (dosar / "info.json").write_text(json.dumps(info, indent=1), encoding="utf-8")
+    rezumat = {"N": len(probleme), "pe_sablon": pe_sablon}
+    (dosar / "rezumat.json").write_text(json.dumps(rezumat, indent=1), encoding="utf-8")
     return info
 
 
@@ -695,8 +744,13 @@ def main(argv=None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("proba")
     ascuns = RADACINA / "lucru/kronos_cod/examen_ascuns"
-    for nume in ("ascuns", "verifica"):
-        sub.add_parser(nume).add_argument("--dosar", type=Path, default=ascuns)
+    s = sub.add_parser("ascuns")
+    s.add_argument("--dosar", type=Path, default=ascuns)
+    s.add_argument("--exclude-dosar", type=Path, action="append", default=[],
+                   help="set ascuns scris înainte; variantele lui nu apar în setul nou (se poate da de mai multe ori)")
+    s.add_argument("--max-pe-sablon", type=int, default=0,
+                   help="0 = exact %d pe șablon; altfel min(max, variantele rămase)" % VARIANTE_ASCUNSE)
+    sub.add_parser("verifica").add_argument("--dosar", type=Path, default=ascuns)
     m = sub.add_parser("model", help="modelul scrie n corpuri pe problemă")
     m.add_argument("--config", type=Path, required=True)
     m.add_argument("--stare", type=Path, required=True)
@@ -729,7 +783,8 @@ def main(argv=None) -> int:
         print(p.enunt + p.referinta)
         print("\n".join(p.teste))
     elif a.cmd == "ascuns":
-        print(json.dumps(cmd_ascuns(a.dosar), indent=1))
+        info = cmd_ascuns(a.dosar, a.exclude_dosar, a.max_pe_sablon)
+        print(json.dumps({"probleme": info["probleme"], "pe_sablon": info["pe_sablon"]}, indent=1))
     else:
         cale = a.dosar / "probleme.jsonl"
         probleme = citeste_jsonl(cale)
