@@ -2224,7 +2224,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - aprobat de: supraveghetor, 31 oct 2026 23:15 (granițele 2 și 5: o comparație de 10 minute fără model salvat + o setare opțională într-un modul, cu testul că fără ea nimic nu se schimbă; fără `kronos/`, fără examen; S58 neatinsă; alegerea configurării pentru S58 = Adrian)
 
 ### S62 — Kronos-Cod: uneltele de examen de cod se țin singure sub limita plăcii + `examen_validare.py` citește `gpt.pt` (procesor + o măsurare scurtă pe placă, pe setul de PROBĂ)
-- stare: in_lucru (executant, 2 nov 08:30)
+- stare: gata (executant, 2 nov 09:04: măsurarea 08:37–08:48, cod 0; (a) proba 20×10 `--lot 2` vârf 1.924 MB, 91 s; (b) validarea din `gpt.pt` vârf 4.416 MB, 534 s, **0,51411** = S58; ambele sub 6.500 MB (S58: 7.971); 200×10 estimat ~15 min; uneltele bune pentru S63; 1174 teste trec, 1 sărit)
 - tip: procesor + ~30 min pe placă (doar măsurare, fără antrenare)
 - fereastră: zi (2 nov, 08:00–18:30); trebuie `gata` înainte de orice alt examen de cod pe placă (inclusiv S63)
 - durată maximă: 4 ore de cod + măsurarea; la măsurare oprire singură peste 6.500 MB (paznicul: 7.000 MB / 83 °C)
@@ -2240,7 +2240,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Dacă un pas cere o schimbare în `kronos/`: te oprești, stare `oprit`, scrii exact ce ar trebui schimbat. Dacă un pas pică de 2 ori la rând cu aceeași eroare: stare `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare (doar o măsurare de memorie; cifra (b) trebuie să fie 0,5141)
 - aprobat de: supraveghetor, 2 nov 2026 08:15 (granițele 2, 5 și 6: reparația uneltelor care au picat la S58 + teste + o măsurare pe setul de probă; fără `kronos/`, fără examenul oficial, notarea neschimbată; propunerile (a) și (b) ale executantului din raportul S58)
-- raport: docs/rapoarte/2026-11-02_<ora>_S62_unelte_cod_memorie.md
+- raport: docs/rapoarte/2026-11-02_0904_S62_unelte_cod_memorie.md
 
 ### S63 — Kronos-Cod: a doua noapte pe linia `cod_c1` (10 ore, din `gpt.pt`), apoi biții pe validare + pass@k pe un set ascuns NOU (placa)
 - stare: **aprobat** (Adrian, 2 nov 08:46: „pornește acum sau cât de curând S63”; COMENZI.md C-56) — **fereastră: imediat după S62 `gata` (cu memoria sub 6.500 MB), și ziua; nu se așteaptă 19:00**
