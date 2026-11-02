@@ -37,6 +37,7 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from module.date_cod import DateCod  # noqa: E402
+from unelte.kronos_cod import memorie_placa  # noqa: E402
 from unelte.kronos_cod import tokenizer_cod as tc  # noqa: E402
 
 LIMBAJE = tc.LIMBAJE
@@ -80,10 +81,13 @@ def bucati_fisier(simboluri: np.ndarray, context: int, sfarsit: int) -> list[tup
     return [(s[i : i + context], s[i + 1 : i + context + 1]) for i in range(0, len(simboluri), context)]
 
 
-def pierderi(logits: Callable, fisiere: list[np.ndarray], context: int, sfarsit: int, lot: int = 16) -> list[float]:
+def pierderi(logits: Callable, fisiere: list[np.ndarray], context: int, sfarsit: int, lot: int = 16,
+             paza=None) -> list[float]:
     """Suma pierderilor (nats) pe fiecare fișier. `logits(x)` primește un tensor (lot, lungime) și dă
     (lot, lungime, vocabular); bucățile mai scurte se completează la dreapta (umplutura nu se notează). Pierderea se
-    socotește unde sunt răspunsurile (pe placă, dacă modelul e pe placă): pe procesor urcă doar sumele."""
+    socotește unde sunt răspunsurile (pe placă, dacă modelul e pe placă): pe procesor urcă doar sumele.
+    `paza` (memorie_placa.Paza, S62): după fiecare lot citește memoria plăcii și oprește peste limită; excepția
+    MemoriePeste primește `bucati_facute` și `bucati_total`."""
     import torch
     import torch.nn.functional as F
 
@@ -104,6 +108,13 @@ def pierderi(logits: Callable, fisiere: list[np.ndarray], context: int, sfarsit:
             p = p.view(len(grup), t).sum(dim=1).cpu()
             for r, (k, _, _) in enumerate(grup):
                 suma[k] += float(p[r])
+            if paza is not None:
+                del iesire, p
+                try:
+                    paza.verifica()
+                except memorie_placa.MemoriePeste as e:
+                    e.bucati_facute, e.bucati_total = i + len(grup), len(toate)
+                    raise
     return suma
 
 
@@ -126,23 +137,22 @@ def biti_pe_octet(pierderi_nats: list[float], simboluri: list[int], index: list[
     return rez
 
 
-def examineaza(logits: Callable, date: DateCod, index: list[tuple[str, int]], lot: int = 16) -> dict:
+def examineaza(logits: Callable, date: DateCod, index: list[tuple[str, int]], lot: int = 16, paza=None) -> dict:
     fisiere = date.fisiere_validare()
-    p = pierderi(logits, fisiere, date.context, date.sfarsit_de_fisier, lot)
+    p = pierderi(logits, fisiere, date.context, date.sfarsit_de_fisier, lot, paza)
     return biti_pe_octet(p, [len(f) for f in fisiere], index)
 
 
 # --- linia de comandă ------------------------------------------------------------------------------------------------
 
-def _model(config: str, stare: str) -> tuple[Callable, dict]:
+def _model(config: str, stare: str) -> tuple[Callable, dict, object]:
+    """Modelul din configurare cu greutățile din `stare`: modelul salvat în jurnal SAU starea liniei
+    (`lucru/cod_c1/gpt.pt`, S62), prin aceeași încărcare ca `examen_cod.py`."""
     from kronos.config import citeste_config
-    from kronos.registru import Registru
+    from unelte.kronos_cod.examen_cod import incarca_model
 
-    cfg = citeste_config(config)
-    model = Registru().creeaza("model", cfg.porturi["model"]["modul"], cfg.setari_port("model")).instanta
-    model.incarca(stare)
-    model.retea.eval()
-    return (lambda x: model.retea(x.to(model.dispozitiv))), cfg.setari_port("date")
+    model = incarca_model(config, stare)
+    return (lambda x: model.retea(x.to(model.dispozitiv))), citeste_config(config).setari_port("date"), model.dispozitiv
 
 
 def main(argv=None) -> int:
@@ -155,25 +165,37 @@ def main(argv=None) -> int:
     m.add_argument("--lot", type=int, default=16)
     m.add_argument("--procese", type=int, default=12)
     m.add_argument("--iesire", default=None, help="fișierul .json cu rezultatul (implicit doar afișat)")
+    m.add_argument("--memorie-max", type=float, default=memorie_placa.MEMORIE_MAX_MB,
+                   help="MB; peste ea examenul se oprește singur (cod 3), rezultatul marcat incomplet")
     a = ap.parse_args(argv)
     t0 = time.time()
     index = index_validare(procese=a.procese)
+    cod, extra = 0, {}
     if a.comanda == "index":
         date = DateCod()
         simb = [len(f) for f in date.fisiere_validare()]
         rez = biti_pe_octet([0.0] * len(simb), simb, index)
         rez = {k: {c: v[c] for c in ("fisiere", "octeti", "simboluri", "octeti_pe_simbol")} for k, v in rez.items()}
     else:
-        logits, setari_date = _model(a.config, a.stare)
+        logits, setari_date, dispozitiv = _model(a.config, a.stare)
         date = DateCod(**{k: v for k, v in setari_date.items() if k != "previzualizare"})
-        rez = examineaza(logits, date, index, a.lot)
-    rez = {"secunde": round(time.time() - t0, 1), "pe": rez}
+        paza = memorie_placa.Paza(dispozitiv, a.memorie_max)
+        try:
+            paza.verifica()
+            rez = examineaza(logits, date, index, a.lot, paza)
+        except memorie_placa.MemoriePeste as e:
+            rez, cod = None, 3
+            extra = {"incomplet": True, "oprit": str(e), "bucati_facute": getattr(e, "bucati_facute", 0),
+                     "bucati_total": getattr(e, "bucati_total", None)}
+        extra = {"stare": str(a.stare), "lot": a.lot, "memorie_max_mb": a.memorie_max,
+                 "memorie_varf_mb": None if paza.varf is None else round(paza.varf), **extra}
+    rez = {"secunde": round(time.time() - t0, 1), **extra, "pe": rez}
     text = json.dumps(rez, ensure_ascii=False, indent=1)
     print(text)
     if getattr(a, "iesire", None):
         Path(a.iesire).parent.mkdir(parents=True, exist_ok=True)
         Path(a.iesire).write_text(text, encoding="utf-8")
-    return 0
+    return cod
 
 
 if __name__ == "__main__":

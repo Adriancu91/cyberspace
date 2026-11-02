@@ -20,6 +20,8 @@ Comenzile:
 Răspunsurile modelului (S60, pentru S58): `model` scrie, din modelul salvat, n corpuri pe problemă (temperatura fixă,
 sămânța fixă, oprire la primul rând care nu mai e în corpul funcției sau la --max-simboluri); `noteaza` le dă cutiei
 prin `noteaza` (neschimbată) și scrie pass@1 și pass@10. Ambele refuză să scrie peste un fișier care există.
+S62: `model` scrie câte `--lot` corpuri odată (implicit 2), fiecare corp cu sămânța lui (aceleași răspunsuri oricare ar
+fi lotul), și se oprește singur (cod 3, fișier marcat „incomplet”) dacă placa trece de `--memorie-max` (implicit 6500 MB).
     python unelte/kronos_cod/examen_cod.py model --config config/cod_c1.toml --stare lucru/cod_c1/gpt.pt \
         --set ascuns --iesire lucru/kronos_cod/raspunsuri_cod_c1.json
     python unelte/kronos_cod/examen_cod.py noteaza --raspunsuri lucru/kronos_cod/raspunsuri_cod_c1.json \
@@ -45,6 +47,7 @@ RADACINA = Path(__file__).resolve().parents[2]
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
+from unelte.kronos_cod import memorie_placa  # noqa: E402
 from unelte.kronos_cod.cutie import ruleaza  # noqa: E402
 
 VARIANTE_ASCUNSE = 10
@@ -589,24 +592,36 @@ def incarca_model(config: str | Path, stare: str | Path, dispozitiv: str = ""):
     return model
 
 
-def scrie_corpuri(model, p: Problema, n: int, temperatura: float, generator, max_simboluri: int) -> list[str]:
-    """n corpuri pentru enunțul lui p, deodată (un lot din același început). Începutul = sfârșitul de fișier + enunțul,
-    ca la antrenare (fiecare fișier vine după un <|endoftext|>)."""
+def samanta_corp(samanta: int, problema: int, corp: int) -> int:
+    """Sămânța fiecărui corp (S62): din sămânța de bază, numărul problemei și al corpului, deci aceleași răspunsuri
+    oricât de mare e lotul."""
+    return (samanta * 1_000_003 + problema) * 1_009 + corp
+
+
+def scrie_corpuri(model, p: Problema, generatoare: list, temperatura: float, max_simboluri: int,
+                  paza=None) -> list[str]:
+    """Câte un corp pentru fiecare generator (un lot din același început; fiecare rând își trage simbolurile cu
+    generatorul lui). Începutul = sfârșitul de fișier + enunțul, ca la antrenare (fiecare fișier vine după un
+    <|endoftext|>). `paza` (memorie_placa.Paza) se uită la memorie la fiecare 32 de pași."""
     import torch
     import torch.nn.functional as F
 
+    n = len(generatoare)
     tok, ctx = model.tok, model.setari["context"]
     sfarsit = tok.speciale["<|endoftext|>"]
     x = torch.tensor([[sfarsit] + tok.codifica_fara_speciale(p.enunt)] * n, dtype=torch.long, device=model.dispozitiv)
     noi: list[list[int]] = [[] for _ in range(n)]
     gata = [False] * n
     with torch.no_grad():
-        for _ in range(max_simboluri):
+        for pas in range(max_simboluri):
             with model._autocast():
                 logits = model.retea(x[:, -ctx:], None)[:, -1, :]
             prob = F.softmax(logits.float() / temperatura, dim=-1).cpu()
-            urm = torch.multinomial(prob, 1, generator=generator)
+            urm = torch.cat([torch.multinomial(prob[i : i + 1], 1, generator=g) for i, g in enumerate(generatoare)])
+            del logits, prob
             x = torch.cat([x, urm.to(model.dispozitiv)], dim=1)
+            if paza is not None and pas % 32 == 31:
+                paza.verifica()
             for i in range(n):
                 if gata[i]:
                     continue
@@ -627,16 +642,32 @@ def cmd_model(a) -> dict:
 
     if a.iesire.exists():
         raise SystemExit(f"{a.iesire} există deja: răspunsurile se scriu o singură dată.")
+    if a.lot < 1:
+        raise SystemExit("--lot trebuie să fie cel puțin 1")
     probleme = probleme_setului(a.set, a.dosar)[: a.probleme or None]
     model = incarca_model(a.config, a.stare, a.dispozitiv)
+    paza = memorie_placa.Paza(model.dispozitiv, a.memorie_max)
     t0 = time.perf_counter()
-    raspunsuri = {}
-    for k, p in enumerate(probleme):
-        generator = torch.Generator(device="cpu").manual_seed(a.samanta * 1_000_003 + k)
-        raspunsuri[p.id] = scrie_corpuri(model, p, a.n, a.temperatura, generator, a.max_simboluri)
-    meta = {"set": a.set, "probleme": len(probleme), "n": a.n, "temperatura": a.temperatura, "samanta": a.samanta,
-            "max_simboluri": a.max_simboluri, "config": str(a.config), "stare": str(a.stare),
+    raspunsuri, oprit = {}, None
+    try:
+        paza.verifica()
+        for k, p in enumerate(probleme):
+            corpuri: list[str] = []
+            for j0 in range(0, a.n, a.lot):
+                generatoare = [torch.Generator(device="cpu").manual_seed(samanta_corp(a.samanta, k, j))
+                               for j in range(j0, min(j0 + a.lot, a.n))]
+                corpuri += scrie_corpuri(model, p, generatoare, a.temperatura, a.max_simboluri, paza)
+                paza.verifica()
+            raspunsuri[p.id] = corpuri  # doar problemele cu toate cele n corpuri
+    except memorie_placa.MemoriePeste as e:
+        oprit = str(e)
+    meta = {"set": a.set, "probleme": len(raspunsuri), "n": a.n, "temperatura": a.temperatura, "samanta": a.samanta,
+            "max_simboluri": a.max_simboluri, "lot": a.lot, "memorie_max_mb": a.memorie_max,
+            "memorie_varf_mb": None if paza.varf is None else round(paza.varf),
+            "config": str(a.config), "stare": str(a.stare),
             "dispozitiv": str(model.dispozitiv), "secunde": round(time.perf_counter() - t0, 1)}
+    if oprit:
+        meta.update({"incomplet": True, "oprit": oprit, "probleme_cerute": len(probleme)})
     a.iesire.parent.mkdir(parents=True, exist_ok=True)
     a.iesire.write_text(json.dumps({"meta": meta, "raspunsuri": raspunsuri}, ensure_ascii=False, indent=1),
                         encoding="utf-8")
@@ -678,13 +709,19 @@ def main(argv=None) -> int:
     m.add_argument("--max-simboluri", type=int, default=MAX_SIMBOLURI)
     m.add_argument("--probleme", type=int, default=0, help="doar primele N (pentru teste); 0 = toate")
     m.add_argument("--dispozitiv", default="")
+    m.add_argument("--lot", type=int, default=2, help="câte corpuri se scriu odată (răspunsurile nu depind de el)")
+    m.add_argument("--memorie-max", type=float, default=memorie_placa.MEMORIE_MAX_MB,
+                   help="MB; peste ea unealta se oprește singură (cod 3) și scrie ce a apucat, marcat incomplet")
     n = sub.add_parser("noteaza", help="cutia notează răspunsurile scrise de `model`")
     n.add_argument("--raspunsuri", type=Path, required=True)
     n.add_argument("--nota", type=Path, required=True)
     n.add_argument("--dosar", type=Path, default=ascuns)
     a = ap.parse_args(argv)
     if a.cmd == "model":
-        print(json.dumps(cmd_model(a), indent=1, ensure_ascii=False))
+        meta = cmd_model(a)
+        print(json.dumps(meta, indent=1, ensure_ascii=False))
+        if meta.get("incomplet"):
+            return 3
     elif a.cmd == "noteaza":
         print(json.dumps(cmd_noteaza(a), indent=1, ensure_ascii=False))
     elif a.cmd == "proba":
