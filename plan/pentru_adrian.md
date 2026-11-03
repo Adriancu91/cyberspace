@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 20:20 — Noaptea pe exerciții (S70) a pornit la 19:09, totul în regulă
+
+- **Rulează: S70** — 8 ore de antrenare pe exerciții, din modelul S63, pe o copie (`cod_c1_ex`; originalul rămâne rezervă), pornită la **19:09**. Verificarea dinainte: modelul copiat e cel bun (590.110 pași), **1195 teste trec**.
+- **Pre-înregistrarea e urcată și verificată de mine:** pragurile sunt exact cele stabilite (AJUTĂ = cel puțin **8/163** și validarea ≤ 0,510; NU AJUTĂ ≤ 4/163; STRICĂ > 0,510). Reperul S63: 3/163.
+- **Placa:** 5.918 MB, 58 °C (limitele: 7.000 MB, 83 °C). Antrenarea se termină pe la ~03:30, apoi examenele (~45 min); niciun pas nou după 05:45, deci **workstation-ul e liber pentru tine la 07:00** (C-63).
+- **Nimic nou pus în coadă:** S71 (memoria de cod) e deja aprobată pentru mâine, după fereastra ta. Verdictul S70 îl verific la trecerea de 05:15 sau 08:15.
+- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 3 noiembrie 2026, 17:20 — Exercițiile (S69) sunt gata; la noapte antrenarea pe ele (S70), terminată până la 06:45 pentru fereastra ta de mâine
 
 - **S69 gata, verificat de mine: corect.** **313.910 exerciții** „antet + explicație → corp”, amestecate cu cod obișnuit: **25,0 %** exerciții din ~971 mil. simboluri (cât pentru 8 ore). 5.516 exerciții ținute deoparte pentru măsurare. Scurgerile spre seturile ascunse au fost scoase (1 + 3 + 0 funcții). **1195 teste trec.** Copia modelului e identică cu originalul, care rămâne rezervă.
@@ -143,13 +151,3 @@
 - **Am pus în coadă S57** (aprobată de mine, doar procesor, ~câteva ore): pregătirea codului pentru prima antrenare pe cod — fără să antreneze nimic.
 - **S58 = prima antrenare Kronos-Cod** (o noapte de 10 ore pe placă, model nou de ~110 milioane, de la zero). E un **model nou**, deci **doar cu „da”-ul tău**. Pragurile sunt scrise dinainte în coadă. Placa stă liberă diseară dacă nu spui „da” până la ~18:30.
 - **Aștept de la tine:** (1) **„da S58”** dacă vrei prima antrenare pe cod (cel mai devreme în noaptea asta, după S57); (2) **Release-ul #477** (comanda de la 14:20, mai jos — e singurul lucru care lipsește ca OS-ul să-l pună pe stick); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-
-## 31 octombrie 2026, 14:20 — #477 e acum modelul în uz (S54 gata și verificat); OS-ul îl poate lua; Release-ul îl faci tu
-
-- **S54 (comanda ta C-44) gata și verificat: corect.** #477 exportat (110.859.040 octeți, aceeași mărime ca #459, suma `bcbe8187…3963`), modulele Kronos folosesc acum #477, **#459 rămâne neatins, ca rezervă**. Interfața nu s-a schimbat (filele ei folosesc alte modele, #312 și #407). **1126 teste trec.**
-- **Am copiat `MODEL.md` cu #477 în hub** → C-44 e gata, iar Cyber Universe OS poate începe C-46 (#477 pe stick).
-- **Urmează:** S55 (tokenizerul pe cod, doar procesor, până la ~10 ore). **Am pus după el S56** (aprobată de mine, în granițe): o măsurare de câteva minute pe placă, ca modulul să aibă și pentru #477 varianta rapidă pe placă, cum avea la #459.
-- **Aștept de la tine:** (1) **Release-ul #477** — pe workstation, în PowerShell, din `C:\Kronos\cyberspace`:
-  `gh release create kronos-kgr1-477 lucru/export/kronos_477_q8_0.kgr lucru/export/kronos_477_q8_0.kgr.sha256 --repo Adriancu91/cyberspace --title "Kronos #477 KGR1 Q8_0" --notes "SHA-256 bcbe8187087dbb3e531a8a7b10991cd24ea14a6e067d07c0fcbb8d3edd753963, 110859040 octeți"`
-  (comanda e și în `docs/integrare_kronos/MODEL.md`); (2) opțional, excluderea mai îngustă de la S53; (3) fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
