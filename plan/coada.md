@@ -2402,7 +2402,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_0704_S67_functii_autonome.md
 
 ### S68 — Kronos-Cod: funcțiile „autonome” cu regula mai blândă la importuri + câte sunt funcții chemabile, nu metode (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 3 nov 11:31)
+- stare: gata (executant, 3 nov 12:04: cod 0 la 11:41:37, 123 s; PUȚIN — (autonome + blânde) × chemabile 12.648 funcții, 771.546 simboluri de corp; blânde noi doar 66 (3.968 simb.); metodele = 78 % din 3,55 mil.; scurgere 0; 1190 teste trec, 1 sărit)
+- istoric: in_lucru (executant, 3 nov 11:31; comanda `bland` + 4 teste în 985adb0; pornită prin cascadă 11:39:30, proces 6596)
 - tip: procesor (doar citire din date și din ieșirile S67 + rularea DOAR a definițiilor în cutie, fără apeluri)
 - fereastră: zi, **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian), terminată până la 18:30
 - durată maximă: 1,5 ore (S67 a rulat ~58 min); dacă nu termini până la 18:30, oprești curat și reiei a doua zi după 08:00
@@ -2429,4 +2430,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire), cutia (doar o folosești,
   fără module noi permise). Nimic descărcat, nimic instalat, nimic din `lucru/` în Git. Nu pornești nimic pe placă.
 - aprobat de: supraveghetor, 3 nov 2026 08:20 (granițele 3 și 5)
-- raport: docs/rapoarte/<data>_<ora>_S68_functii_blande.md
+- raport: docs/rapoarte/2026-11-03_1204_S68_functii_blande.md
