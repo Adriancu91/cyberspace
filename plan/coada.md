@@ -2318,7 +2318,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-03_0150_S64_pass_k_mare.md
 
 ### S65 — Kronos-Cod: câte „funcții scurte cu explicație (și teste)” avem deja în codul descărcat? (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 3 nov 02:30)
+- stare: gata (executant, 3 nov 02:39: rularea 02:32–02:33, cod 0, 103 s; (a) 628.251 funcții, (a+b) 89,9 mil. simboluri, **(a+b+c) 339.425 funcții / 52,9 mil. simboluri → DESTUL**, (a+b+c+d) 29.040 / 7,2 mil.; simbolurile includ explicațiile, (c) nu garantează că funcția merge singură; scurgerea: proba 0 soluții întregi, 1 suprapunere de 13; S58 și ascuns2 0 / 0, SHA neschimbat; 1183 teste trec, 1 sărit)
 - tip: procesor (doar citire din date)
 - fereastră: oricând — nu ocupă placa; poate rula și ziua de 3 nov
 - durată maximă: 2 ore
@@ -2346,7 +2346,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire).
   Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
 - aprobat de: supraveghetor, 3 nov 2026 02:20 (granițele 3 și 5)
-- raport: docs/rapoarte/<data>_<ora>_S65_functii.md
+- raport: docs/rapoarte/2026-11-03_0239_S65_functii.md
 
 ### S66 — Kronos-Cod: direcția după S64 (alegerea lui Adrian)
 - stare: **propus — necesită Adrian** (răspunsul în hub, `COMENZI.md`: „da S66 A”, „da S66 B” sau „da S66 C”)
