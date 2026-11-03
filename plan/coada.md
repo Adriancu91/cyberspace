@@ -273,6 +273,10 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 curat (reluabil) și scrii în raport unde s-a oprit. După 11:30 coada continuă normal. Direcția Kronos-Cod (S66) o alege Adrian după testele lui.
 Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi până la „da”-ul lui Adrian la S66.
 
+**Actualizare 3 nov 08:20 (supraveghetor) — S67 verificat: ÎNTRE (corect, 3,55 mil. simboluri de corp la „autonome”).** Fereastra lui Adrian 09:00–11:30 rămâne neatinsă.
+După **11:30**, pe procesor: **S68** (regula mai blândă la importuri + câte autonome sunt funcții chemabile, nu metode; ~1 oră). Placa rămâne liberă azi și la noapte
+până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele mele care să nu anticipeze alegerea lui).
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -2367,7 +2371,7 @@ Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi p�
 - aprobat de: —
 
 ### S67 — Kronos-Cod: funcțiile S65 „cu adevărat ca la examen” — simbolurile corpului, proba definiției în cutie, filtrul celor triviale (doar procesor, fără placă, fără antrenare)
-- stare: gata (executant, 3 nov 07:04: cod 0 la 06:35:24, 3.456 s; ÎNTRE — autonome 83.349 funcții, 3,55 mil. simboluri de corp; scurgere 0; 1186 teste trec, 1 sărit)
+- stare: gata — verificat de supraveghetor 3 nov 08:20: ÎNTRE corect (3.545.959 simboluri de corp: ≥ 3 mil. și < 10 mil.; sumele pe lungimi, pe simboluri și pe licențe dau toate 83.349) (executant, 3 nov 07:04: cod 0 la 06:35:24, 3.456 s; ÎNTRE — autonome 83.349 funcții, 3,55 mil. simboluri de corp; scurgere 0; 1186 teste trec, 1 sărit)
 - istoric: in_lucru (executant, 3 nov 05:37: comanda `curata` + 3 teste în dac45c7, 1186 teste trec, 1 sărit; pornită prin cascadă 05:37:45, proces 13496, `--pana-la 08:40` (oprire curată, reluare cu aceeași comandă după 11:30); 319.430 funcții (a+b+c) fără duplicate = S65; cutia ~85 rulări/s cu 16 fire → estimat ~1 oră)
 - tip: procesor (doar citire din date + rularea DOAR a definițiilor în cutie, fără apeluri)
 - fereastră: **acum, până la 08:45**; dacă nu se termină până la 08:45, o oprești curat și o reiei **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian)
@@ -2396,3 +2400,33 @@ Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi p�
   Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
 - aprobat de: supraveghetor, 3 nov 2026 05:20 (granițele 3 și 5)
 - raport: docs/rapoarte/2026-11-03_0704_S67_functii_autonome.md
+
+### S68 — Kronos-Cod: funcțiile „autonome” cu regula mai blândă la importuri + câte sunt funcții chemabile, nu metode (doar procesor, fără placă, fără antrenare)
+- stare: aprobat
+- tip: procesor (doar citire din date și din ieșirile S67 + rularea DOAR a definițiilor în cutie, fără apeluri)
+- fereastră: zi, **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian), terminată până la 18:30
+- durată maximă: 1,5 ore (S67 a rulat ~58 min); dacă nu termini până la 18:30, oprești curat și reiei a doua zi după 08:00
+- de ce: S67 a ieșit ÎNTRE (3,55 mil. simboluri de corp). Executantul a notat două lucruri care schimbă cifra pentru varianta A de la S66:
+  (1) multe funcții au căzut doar pentru că `os`, `sys`, `time`, `np` etc. sunt importate sus în fișier, nu în funcție;
+  (2) multe „autonome” sunt metode sprijinite pe `self`/`ctx`, care nu se pot chema cu date ca la examen. Vrem ambele cifre înainte ca Adrian să aleagă.
+- granițe: 3 (pregătirea datelor din surse deja descărcate) + 5 (unealtă în `unelte/` cu teste). Fără antrenare, fără placă.
+- pre-înregistrare: nu e nevoie (nu e antrenare, nici examen); pragurile orientative mai jos, scrise dinainte.
+- ce faci:
+  1. Extinzi `unelte/kronos_cod/functii.py` (de ex. `curata --bland` sau o comandă nouă `bland`) + teste fără rețea pe fișiere mici. Pornești de la
+     ieșirile S67 (`lucru/kronos_cod/functii/autonome.tsv`, `cutie.jsonl`) și de la funcțiile care au trecut pasul (iii) (definiția în cutie).
+  2. **Regula blândă:** un nume liber din corp e acceptat și dacă este un modul (sau un alias de modul, ex. `np`) **importat la nivelul de sus al aceluiași fișier**
+     și modulul e **permis de cutie** (`MODULE_DE_BAZA` din `_cutie_interior.py`, neschimbat). Funcția „blândă” = corpul + rândurile de import necesare, puse
+     deasupra; o rulezi din nou DOAR ca definiție în cutie (fără s-o chemi). Nume din restul fișierului (alte funcții, constante, clase) rămân interzise.
+  3. **Chemabile:** dintre „autonome” și „blânde”, numeri separat funcțiile de nivel de sus / `@staticmethod` (fără `self`/`cls`/`ctx` ca prim parametru și fără
+     atribute pe primul parametru folosit ca obiect) — acestea seamănă cu examenul. Metodele se raportează separat.
+  4. Cifrele (funcții, simboluri doar corp), cu și fără (d): autonome S67 / blânde / autonome+blânde × chemabile / metode; lungimea corpului la „chemabile”;
+     primele 10 pachete; 3–5 exemple scurte chemabile, cu pachetul și licența. Scurgerea pe mulțimea nouă: aceleași reguli ca la S65/S67 (proba: suprapuneri
+     de 13 + soluția întreagă; seturile ascunse S58 și `ascuns2`: **doar numărul**, SHA verificat înainte și după).
+  5. Lista în `lucru/kronos_cod/functii/` (NU în Git). Nu ștergi și nu muți nimic din date.
+  6. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S68_functii_blande.md`; coada → `gata`; commit + push.
+- pragurile orientative (scrise de supraveghetor acum, înainte), pe **(autonome + blânde) × chemabile**, simboluri de corp:
+  **DESTUL PENTRU A** ≥ **10 mil.**; **PUȚIN** < **3 mil.**; între → A doar cu repetări sau amestecată cu pasul (iii) din S67 (17,9 mil.). Informativ: cât din cifră vin din metode.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire), cutia (doar o folosești,
+  fără module noi permise). Nimic descărcat, nimic instalat, nimic din `lucru/` în Git. Nu pornești nimic pe placă.
+- aprobat de: supraveghetor, 3 nov 2026 08:20 (granițele 3 și 5)
+- raport: docs/rapoarte/<data>_<ora>_S68_functii_blande.md

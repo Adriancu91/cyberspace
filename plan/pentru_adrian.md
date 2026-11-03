@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 08:20 — Funcțiile „care merg singure” (S67): ÎNTRE; o numărătoare mai blândă după 11:30; fereastra ta 09:00–11:30 e liberă
+
+- **S67 gata, verificat de mine: ÎNTRE.** Funcțiile care merg cu adevărat singure (nu sunt goale, rulează în cutie, nu cer nimic din afara lor) sunt **83.349**, cu **3,55 milioane** de simboluri de cod (pragul de jos 3 mil., cel de sus 10 mil.). Cu exemplu/test lângă ele: doar 7.182. Nicio scurgere din seturile ascunse. **1186 teste trec.** S-a terminat la 06:35, deci **calculatorul e liber pentru tine la 09:00**. Raportul de dimineață e scris.
+- **Pus în coadă (aprobat de mine, doar procesor, ~1 oră, după 11:30): S68** — multe funcții au căzut doar pentru că `os`/`numpy` sunt importate sus în fișier, iar multe dintre cele rămase sunt „metode” care nu se pot chema singure ca la examen. Numărăm cu o regulă mai blândă și separăm funcțiile chemabile, ca la varianta A să ai cifra corectă.
+- **Placa** rămâne liberă azi și la noapte până alegi la S66.
+- **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C”, sau direcția în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
+
 ## 3 noiembrie 2026, 05:20 — Numărătoarea funcțiilor (S65): DESTULE; o verificare mai strictă până la 08:45; fereastra ta 09:00–11:30 e notată
 
 - **S65 gata, verificat de mine (am refăcut adunările): DESTUL.** În codul descărcat sunt **339.425 de funcții scurte cu explicație** care trec verificarea cutiei, **52,9 milioane de simboluri** (pragul era 20 mil.). Cu exemplu sau test lângă ele: **29.040** (7,2 mil.). Nicio scurgere din seturile ascunse. **1183 teste trec.** Atenție: cifra e umflată — explicațiile sunt adesea mai lungi decât codul, iar ~27 % au un singur rând.
@@ -147,10 +154,3 @@
 - **Am pus în coadă S53** (doar procesor, ~1–2 ore, azi): verific că problemele examenului de cod ascuns nu apar deja în datele descărcate — altfel orice scor viitor pe cod ar fi fals. Nu șterge nimic, doar face o listă de excludere. Placa rămâne liberă.
 - Nicio comandă nouă pentru Kronos în hub.
 - **Aștept de la tine (fără grabă):** (1) dacă 1,1 miliarde îți ajung și dai „da” pentru tokenizerul pe cod, sau vrei mai multe surse (descărcare nouă = tot „da”-ul tău); (2) „da #477”; (3) ce să facă placa; (4) comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
-## 31 octombrie 2026, 08:15 — Raportul de dimineață e la locul lui; totul în regulă, nimic nou de decis
-
-- **Raportul de dimineață (06:45) confirmă verdictul S51: CONFIRMAT** — #477 română 1,2097 (prag 1,2112). Placa liberă (440 MB, 30 °C). **1119 teste trec, 0 picate.** Noaptea n-a mai fost nicio repornire.
-- **Rulează S46 bucata 2** (descărcarea codului, fără placă): ~21.100 pachete noi în noaptea asta, fișierul de cod are 4,67 GB; 61 GB liberi pe disc. Se oprește singură pe la ~12:00; o verific la 14:15.
-- Nimic nou pus în coadă; nicio comandă nouă pentru Kronos în hub.
-- **Aștept de la tine (fără grabă, aceleași 3 de la 02:15):** „da #477”; ce să facă placa de acum; comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
