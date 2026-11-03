@@ -2318,7 +2318,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-03_0150_S64_pass_k_mare.md
 
 ### S65 — Kronos-Cod: câte „funcții scurte cu explicație (și teste)” avem deja în codul descărcat? (doar procesor, fără placă, fără antrenare)
-- stare: **aprobat**
+- stare: in_lucru (executant, 3 nov 02:30)
 - tip: procesor (doar citire din date)
 - fereastră: oricând — nu ocupă placa; poate rula și ziua de 3 nov
 - durată maximă: 2 ore
