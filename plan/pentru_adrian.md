@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 17:20 — Exercițiile (S69) sunt gata; la noapte antrenarea pe ele (S70), terminată până la 06:45 pentru fereastra ta de mâine
+
+- **S69 gata, verificat de mine: corect.** **313.910 exerciții** „antet + explicație → corp”, amestecate cu cod obișnuit: **25,0 %** exerciții din ~971 mil. simboluri (cât pentru 8 ore). 5.516 exerciții ținute deoparte pentru măsurare. Scurgerile spre seturile ascunse au fost scoase (1 + 3 + 0 funcții). **1195 teste trec.** Copia modelului e identică cu originalul, care rămâne rezervă.
+- **O problemă mică de pornire, rezolvată de mine:** cu numele vechi, S70 ar fi scris peste rezultatele S63. Am ales ca noaptea să ruleze pe numele ei (`cod_c1_ex`), deci originalul rămâne neatins.
+- **Comanda ta C-63 preluată:** S70 pornește la 19:00 (cel târziu 21:30) și se termină sau se oprește curat **până la 06:45**; 07:00–09:30 workstation-ul e al tău. **S71** (memoria de cod) pornește mâine abia după fereastra ta. Pragurile S70 rămân: AJUTĂ ≥ 8/163 (S63: 3/163).
+- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 3 noiembrie 2026, 14:20 — S68: funcțiile „ca la examen” sunt PUȚINE; am pornit calea ta A+B+D: azi exercițiile, la noapte o antrenare pe ele
 
 - **S68 gata, verificat de mine: PUȚIN.** Funcțiile care se pot chema singure, ca la examen, au doar **0,77 mil. simboluri** de cod (pragul de jos era 3 mil.). Regula mai blândă la importuri a adus doar 66 de funcții; **78 %** din cele „autonome” sunt metode, care nu se pot chema singure. Nicio scurgere, **1190 teste trec**.

@@ -2435,6 +2435,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1204_S68_functii_blande.md
 
 ### S69 — Kronos-Cod C-60 pasul A: setul de exerciții „antet + explicație → corp” + amestecul pentru noaptea S70 (doar procesor, fără placă, fără antrenare)
+- verdict supraveghetor (3 nov 17:20): **gata, corect.** Verificat: 25 % cerut → 24,999 % ieșit; repetarea max 5 / 9 (plafon 6 / 12); scurgerea scoasă (proba 1, `ascuns2` 3, S58 0), SHA neschimbat; validarea identică cu S58/S63. Doar 13 exerciții deoparte au test care rulează → S72 își face testele altfel. Întrebarea (a)/(b) → (b), vezi S70.
 - stare: gata (executant, 3 nov 14:43: cod 0, 14:41–14:42; 313.910 exerciții la antrenare (50,6 mil. simb.), k = 4,04 (restul max 5, autonomele max 9); amestecul 970,8 mil. simb. = **24,999 %** exerciții, 29 fișiere + validarea copiată identic; deoparte 80 pachete / 5.516 exerciții, (d) 603, doar **13** trec în cutie; scurgere: proba 1, ascuns2 3 (suprapunere 13, 0 întregi), S58 0, SHA neschimbat; `config/cod_c1_ex.toml` + copia `lucru/cod_c1_ex/gpt.pt` (identică) verificate pe procesor; 1195 teste trec, 1 sărit. **Înainte de S70:** cu `nume = "cod_c1"`, `--ore 8` nu antrenează nimic (jurnalul are 20 de ore → `--ore 28`) și lock/placa/rezultat.json se scriu în `lucru/cod_c1/` — variantele (a)/(b) în raport)
 - tip: procesor (doar citire din datele deja descărcate și din ieșirile S65/S67/S68; cutia doar pentru verificarea celor cu exemplu/test)
 - fereastră: zi, **acum, până la 18:30** (ca S70 să poată porni la 19:00). Dacă nu e gata la 18:30, continui (e doar procesor), iar S70 pornește când S69 e `gata`, dar cel târziu la 22:00; după 22:00 S70 trece pe noaptea următoare.
@@ -2464,16 +2465,26 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1443_S69_exercitii.md
 
 ### S70 — Kronos-Cod C-60 pasul B: o noapte pe exerciții (8 ore, continuare din `gpt.pt`, pe copia `lucru/cod_c1_ex/`), apoi examenele pe `ascuns2` (placa)
-- stare: **aprobat** — pornește DOAR după S69 `gata` și după ce pre-înregistrarea e urcată
+- stare: **aprobat** — pornește DOAR după S69 `gata` (gata, 14:43) și după ce pre-înregistrarea e urcată
 - tip: placă
-- fereastră: **noapte, 3→4 nov, de la 19:00** (cel târziu la 22:00; dacă S69 nu e gata până atunci, noaptea următoare). Lanțul trebuie să se termine înainte de 07:00.
+- fereastră: **noapte, 3→4 nov, de la 19:00**. **Comanda lui Adrian C-63 (3 nov 16:30): tot lanțul (antrenare + examene) se termină sau se oprește curat (reluabil) până la 06:45**;
+  între 07:00 și ~09:30 nimic pe placă și nimic lung pe procesor (fereastra lui Adrian). Deci: pornești cel târziu la **21:30**; dacă pornești după 19:30, scazi orele de antrenare
+  ca antrenarea să se termine până la ~05:30 (de ex. pornire 20:30 → `--ore 7`) și scrii orele reale în pre-înregistrare și în raport. Dacă la 05:45 examenele nu sunt gata,
+  le oprești curat, notezi ce lipsește și le termini după ~09:30, înainte de S71.
+- **HOTĂRÂREA supraveghetorului la întrebarea din raportul S69 (3 nov 17:20): varianta (b).** În `config/cod_c1_ex.toml` schimbi și `nume = "cod_c1"` → `nume = "cod_c1_ex"`
+  (singura schimbare în plus; graniță 1: rulare pe linia existentă, pe o copie) și rulezi cu **`--ore 8`** (sau mai puțin, după regula de mai sus). Zăvorul, `placa_*.csv`, `rezultat.json`
+  merg toate în `lucru/cod_c1_ex/`; `lucru/cod_c1/` rămâne neatins (doar citire), inclusiv `rezultat.json` de la S63. Înainte de pornire verifici pe procesor (fără placă) că, cu numele nou,
+  modelul încarcă tot starea copiată (590.110 pași, 1.200 de minute) și rata e cea fixă 6·10⁻⁵ (fără încălzire de la zero); în log TREBUIE să apară pașii ~590.110 la pornire —
+  dacă apare pasul 0 sau încălzire nouă → nu pornești, `oprit`. Faptul că jurnalul arată „orele 1–8” pe linia `cod_c1_ex` e în regulă; scrie în raport că e continuarea liniei `cod_c1` (20 h + 8 h).
+  Testele trebuie să treacă după schimbarea din config (commit separat, înainte de pre-înregistrare).
 - durată maximă: 8 ore antrenare + examenele (~1 oră); placa sub 7.000 MB și 83 °C; examenele cu `--lot 2 --memorie-max 6500`
 - de ce: C-60 B. Aceeași rețetă ca S63 (rata fixă 6·10⁻⁵, fără încălzire nouă — cum continuă starea liniei), schimbăm DOAR datele: 25 % exerciții. Așa se vede efectul datelor.
 - ce faci:
   1. **Pre-înregistrarea ÎNAINTE de pornire:** `docs/preinregistrari/2026-11-03_cod_c1_exercitii.md`, commit + push, cu pragurile de mai jos copiate neschimbate, procentul real de exerciții
      din S69 și așteptările tale în cifre. Reperul = S63 (10 ore pe cod obișnuit): validarea 0,5004; `ascuns2` pass@10 = 3/163.
-  2. 8 ore prin `unelte/cascada.py` cu `config/cod_c1_ex.toml` (`--ore 8`). În log TREBUIE să apară că pornește din starea liniei copiate (`lucru/cod_c1_ex/`); dacă pornește de la zero
+  2. 8 ore prin `unelte/cascada.py` cu `config/cod_c1_ex.toml` (`nume = "cod_c1_ex"`, `--ore 8`, vezi HOTĂRÂREA de mai sus). În log TREBUIE să apară că pornește din starea liniei copiate (`lucru/cod_c1_ex/`, ~590.110 pași); dacă pornește de la zero
      sau scrie în `lucru/cod_c1/` → oprești, `oprit`.
+     (iv) se notează cu atenția din raportul S69: fișierele din care vin exercițiile ținute deoparte sunt în codul obișnuit — cifra arată forma exercițiului, nu cod nevăzut.
   3. Examenele, o singură dată, ca la S63: (i) biți pe octet pe validarea întreagă; (ii) `ascuns2`: `examen_cod.py model --set ascuns --dosar lucru/kronos_cod/ascuns2` + `noteaza`,
      163 × 10, temperatura 0,8, sămânța 0 → pass@1, pass@10 (Adrian a cerut același set ca la S63, ca să fie comparabil; setul nu se schimbă și nu se arată); (iii) setul de probă 20 × 10, informativ;
      (iv) informativ: biți pe octet doar pe corpurile exercițiilor ținute deoparte (S69 pasul 3), pentru `lucru/cod_c1_ex/gpt.pt` și pentru `lucru/cod_c1/gpt.pt` (S63), ca să se vadă ce a învățat.
@@ -2487,7 +2498,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S71 — Kronos-Cod C-60 pasul D: memoria de cod („rege / regat”) — indexul funcțiilor + căutarea celor mai asemănătoare (procesor; placa doar o măsurare scurtă pe setul de PROBĂ)
 - stare: **aprobat** — după S70 `gata` (sau `oprit`)
 - tip: procesor (+ ≤ 30 min pe placă, doar setul de probă)
-- fereastră: zi, **4 nov, 08:00–18:30**
+- fereastră: zi, **4 nov, după fereastra lui Adrian (C-63: 07:00–~09:30; pornești doar după 09:30 sau după ce Adrian anunță în hub că a terminat), până la 18:30**.
+  Dacă S70 a lăsat examene neterminate (oprite la 05:45), întâi le termini pe acelea.
 - durată maximă: 3 ore
 - ce faci:
   1. Unealtă nouă `unelte/kronos_cod/memorie.py` + teste fără rețea: index pe procesor al exercițiilor S69 (fără cele ținute deoparte), căutare după antet + explicație
