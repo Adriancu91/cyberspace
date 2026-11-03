@@ -2367,7 +2367,8 @@ Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi p�
 - aprobat de: —
 
 ### S67 — Kronos-Cod: funcțiile S65 „cu adevărat ca la examen” — simbolurile corpului, proba definiției în cutie, filtrul celor triviale (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 3 nov 05:37: comanda `curata` + 3 teste în dac45c7, 1186 teste trec, 1 sărit; pornită prin cascadă 05:37:45, proces 13496, `--pana-la 08:40` (oprire curată, reluare cu aceeași comandă după 11:30); 319.430 funcții (a+b+c) fără duplicate = S65; cutia ~85 rulări/s cu 16 fire → estimat ~1 oră)
+- stare: gata (executant, 3 nov 07:04: cod 0 la 06:35:24, 3.456 s; ÎNTRE — autonome 83.349 funcții, 3,55 mil. simboluri de corp; scurgere 0; 1186 teste trec, 1 sărit)
+- istoric: in_lucru (executant, 3 nov 05:37: comanda `curata` + 3 teste în dac45c7, 1186 teste trec, 1 sărit; pornită prin cascadă 05:37:45, proces 13496, `--pana-la 08:40` (oprire curată, reluare cu aceeași comandă după 11:30); 319.430 funcții (a+b+c) fără duplicate = S65; cutia ~85 rulări/s cu 16 fire → estimat ~1 oră)
 - tip: procesor (doar citire din date + rularea DOAR a definițiilor în cutie, fără apeluri)
 - fereastră: **acum, până la 08:45**; dacă nu se termină până la 08:45, o oprești curat și o reiei **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian)
 - durată maximă: 1,5 ore (S65 a rulat 103 s)
@@ -2394,4 +2395,4 @@ Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi p�
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire), cutia (doar o folosești).
   Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
 - aprobat de: supraveghetor, 3 nov 2026 05:20 (granițele 3 și 5)
-- raport: docs/rapoarte/<data>_<ora>_S67_functii_autonome.md
+- raport: docs/rapoarte/2026-11-03_0704_S67_functii_autonome.md
