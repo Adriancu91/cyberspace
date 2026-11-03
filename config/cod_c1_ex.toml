@@ -3,9 +3,11 @@
 #   [porturi.date] director = "lucru/kronos_cod/exercitii" (amestecul S69: ~25 % exerciții „antet + explicație → corp”,
 #     restul cod obișnuit; validare_*.bin = exact cele de la S58/S63), cale_stare = "lucru/cod_c1_ex/gpt.pt" (copia
 #     stării liniei după S63; originalul lucru/cod_c1/gpt.pt rămâne neatins, e rezerva) și eticheta.
-# Linia rămâne „cod_c1” (numele nu s-a schimbat): jurnalul are deja orele 1–20, deci antrenare_lunga.py numără de la 21
-# (8 ore noi = --ore 28). Rata: cea fixă de după scădere (6·10⁻⁵), ca la S63.
-#   python unelte/antrenare_lunga.py --config config/cod_c1_ex.toml --ore 28
+# S70 (hotărârea supraveghetorului, 3 nov 2026 17:20, varianta (b)): `nume = "cod_c1_ex"` (singura schimbare în plus).
+# Linia nouă e CONTINUAREA liniei cod_c1 (20 h + 8 h) pe copia stării: jurnalul o arată ca „orele 1–8”, dar modelul
+# pornește din lucru/cod_c1_ex/gpt.pt (~590.110 pași, 1.200 de minute). Zăvorul, placa_*.csv și rezultat.json merg în
+# lucru/cod_c1_ex/; lucru/cod_c1/ rămâne neatins. Rata: cea fixă de după scădere (6·10⁻⁵), ca la S63.
+#   python unelte/antrenare_lunga.py --config config/cod_c1_ex.toml --ore 8
 #
 # --- de aici în jos, comentariile din config/cod_c1_init002.toml ---
 # S61 (aprobat de supraveghetor, 31 oct 2026 23:15): copie a lui config/cod_c1.toml + `abatere_incorporari = 0.02`
@@ -22,7 +24,7 @@
 # altfel antrenare_lunga.py pune singur hrana implicită (poveștile cu fapte, în engleză), pe care modelul de cod o refuză.
 
 [platforma]
-nume = "cod_c1"
+nume = "cod_c1_ex"
 director_lucru = "lucru"
 buget_antrenare_secunde = 3600
 experimente = 10
