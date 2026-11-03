@@ -2465,7 +2465,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1443_S69_exercitii.md
 
 ### S70 — Kronos-Cod C-60 pasul B: o noapte pe exerciții (8 ore, continuare din `gpt.pt`, pe copia `lucru/cod_c1_ex/`), apoi examenele pe `ascuns2` (placa)
-- stare: **aprobat** — pornește DOAR după S69 `gata` (gata, 14:43) și după ce pre-înregistrarea e urcată
+- stare: in_lucru (executant, 3 nov 19:00: config `nume = "cod_c1_ex"`, verificarea pe procesor, pre-înregistrarea, apoi pornirea)
+- stare anterioară: **aprobat** — pornește DOAR după S69 `gata` (gata, 14:43) și după ce pre-înregistrarea e urcată
 - tip: placă
 - fereastră: **noapte, 3→4 nov, de la 19:00**. **Comanda lui Adrian C-63 (3 nov 16:30): tot lanțul (antrenare + examene) se termină sau se oprește curat (reluabil) până la 06:45**;
   între 07:00 și ~09:30 nimic pe placă și nimic lung pe procesor (fereastra lui Adrian). Deci: pornești cel târziu la **21:30**; dacă pornești după 19:30, scazi orele de antrenare
