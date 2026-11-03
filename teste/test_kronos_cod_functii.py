@@ -285,3 +285,142 @@ def test_curata_cap_coada_cu_reluare(tmp_path, date, monkeypatch):
     assert len((iesire / "cutie.jsonl").read_text(encoding="utf-8").splitlines()) == 8
     with pytest.raises(SystemExit):
         fu.curata(cod, iesire, cale_tok, **arg)
+
+
+# ---------------------------------------------------------------- S68: comanda `bland` (importuri de sus + chemabile)
+
+BLANDE = '''import math
+import re as expresii
+import numpy as np
+from collections import deque
+
+try:
+    import json
+except ImportError:
+    json = None
+
+
+def curata_spatii(s):
+    """Alias de modul permis, importat sus: blândă."""
+    return expresii.sub(r"\\s+", " ", s).strip()
+
+
+def radical(x):
+    """math importat sus: autonomă la S67, primește importul."""
+    y = abs(x)
+    return math.sqrt(y)
+
+
+def cu_statistics(xs):
+    """statistics nu e importat nicăieri: autonomă fără import."""
+    m = len(xs)
+    return statistics.mean(xs) + m
+
+
+def cu_numpy(xs):
+    """numpy nu e permis de cutie: respinsă."""
+    a = np.array(xs)
+    return a.sum()
+
+
+def cu_deque(xs):
+    """from collections import deque nu leagă un modul: respinsă (doar informativ)."""
+    d = deque(xs)
+    return d.pop()
+
+
+def cu_json(o):
+    """json din blocul try de sus: blândă."""
+    t = json.dumps(o)
+    return len(t)
+
+
+def din_obiect(nod):
+    """Primul parametru folosit ca obiect: nu e chemabilă."""
+    v = nod.valoare
+    return v + 1
+
+
+class K:
+    def metoda(self, x):
+        """Metodă cu self."""
+        y = x * 2
+        return y + 1
+
+    @staticmethod
+    def statica(s):
+        """Statică, cu apel de metodă pe parametru: chemabilă (nu strict)."""
+        t = s.strip()
+        return expresii.escape(t)
+'''
+
+
+def test_importurile_de_sus_si_chemabilele():
+    arbore = ast.parse(BLANDE)
+    module, din = fu.importuri_sus(arbore)
+    assert module["expresii"] == ("re", "import re as expresii") and module["np"][0] == "numpy"
+    assert module["json"] == ("json", "import json") and "deque" in din and "deque" not in module
+    loc = fu.locul_functiilor(arbore)
+    pe_nume = {v["nod"].name: v for v in loc.values()}
+    assert fu.nume_libere_stricte(pe_nume["radical"]["nod"]) == {"math"}
+    assert fu.nume_libere(pe_nume["radical"]["nod"]) == set()
+    ch = {k: fu.chemabila(v["nod"], v["in_clasa"], v["static"]) for k, v in pe_nume.items()}
+    assert ch["curata_spatii"] == (True, True) and ch["metoda"] == (False, False)
+    assert ch["din_obiect"] == (False, False) and ch["statica"] == (True, False)
+
+
+def test_textul_bland_trece_in_cutia_adevarata():
+    text = 'import re as expresii\n\n\ndef f(s):\n    """x"""\n    return expresii.sub("a", "b", s)\n'
+    assert fu.proba_in_cutie(text)["stare"] == "ok"
+    assert fu.proba_in_cutie("import numpy as np\n\n\ndef f(x):\n    return np.x\n")["stare"] == "interzis"
+
+
+def test_bland_cap_coada_cu_reluare(tmp_path, date, monkeypatch):
+    cod, exclus, cale_tok = date
+    randuri = (cod / "cod.jsonl").read_text(encoding="utf-8")
+    nou = {"sursa": "pypi", "pachet": "bl", "limbaj": "python", "licenta": "MIT", "cale": "bl/f.py",
+           "text": _antrenare(BLANDE)}
+    (cod / "cod.jsonl").write_text(randuri + json.dumps(nou) + "\n", encoding="utf-8")
+    iesire = tmp_path / "iesire"
+    fu.ruleaza(cod, exclus, iesire, cale_tok, ascunse={}, probleme_proba=PROBA, procese=1, jurnal=lambda m: None)
+    arg = dict(ascunse={}, probleme_proba=PROBA, procese=1, fire=2, cutia=_cutia_falsa, jurnal=lambda m: None)
+    fu.curata(cod, iesire, cale_tok, **arg)
+
+    monkeypatch.setattr(fu, "_ora_trecuta", lambda p: True)
+    assert fu.bland(cod, iesire, cale_tok, pana_la="00:00", **arg) is None
+    assert not (iesire / "bland.json").exists()
+    monkeypatch.setattr(fu, "_ora_trecuta", lambda p: False)
+    rez = fu.bland(cod, iesire, cale_tok, **arg)
+    c = rez["categorii"]
+    # S67 autonome (modulele permise scăzute): aria, radical, cu_json (modul permis importat sus), cu_statistics
+    # (neimportat), metoda (C), invers, din_obiect, K.metoda = 8
+    assert c["autonoma_cu_import"] == 3 and c["autonoma_fara_import"] == 1
+    assert c["autonoma_curata"] == 4
+    assert c["blanda"] == 2  # curata_spatii, statica (aliasul `expresii`)
+    assert c["respinsa"] == 2  # cu_numpy, cu_deque
+    m = rez["multimi"]
+    assert m["autonome S67"]["toate"]["toate"]["functii"] == rez["autonome_s67_din_tsv"] == 8
+    assert m["autonome + blânde"]["toate"]["toate"]["functii"] == 10
+    # chemabile: aria, invers, radical, cu_statistics, cu_json, curata_spatii, statica = 7
+    assert m["autonome + blânde"]["chemabile"]["toate"]["functii"] == 7
+    assert m["autonome + blânde"]["metode"]["toate"]["functii"] == 3
+    assert m["autonome + blânde, fără autonomele cu modul neimportat (strict, informativ)"]["toate"]["toate"][
+        "functii"] == 9
+    inf = rez["informativ_respinse"]
+    assert inf["ar_trece_si_cu_from_M_import_x (M permis)"]["functii"] == 1
+    assert [tuple(x) for x in inf["modulele_nepermise_top20"]] == [("numpy", 1)]
+    assert rez["cutie_bland_stari"] == {"ok": 5}
+    assert rez["scurgere_proba"]["probleme_cu_solutia_exacta"] == 1
+    assert (iesire / "blande.tsv").read_text(encoding="utf-8").count("\n") == 11
+    assert len((iesire / "cutie_bland.jsonl").read_text(encoding="utf-8").splitlines()) == 5
+    with pytest.raises(SystemExit):
+        fu.bland(cod, iesire, cale_tok, **arg)
+
+
+def test_comanda_bland_din_linia_de_comanda(monkeypatch):
+    primite = {}
+    monkeypatch.setattr(fu, "bland", lambda **k: primite.update(k) or {"ok": 1})
+    assert fu.main(["bland", "--procese", "3", "--fire", "4", "--pana-la", "18:20"]) == 0
+    assert primite["procese"] == 3 and primite["fire"] == 4 and primite["pana_la"] == "18:20"
+    monkeypatch.setattr(fu, "bland", lambda **k: None)
+    assert fu.main(["bland"]) == 3

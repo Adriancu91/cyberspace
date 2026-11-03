@@ -666,6 +666,369 @@ def curata(cod: Path = COD, iesire: Path = IESIRE, cale_tok: Path = TOKENIZER, a
     return rez
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# S68 (3 noiembrie 2026): comanda `bland` — regula mai blândă la importuri + „chemabile”.
+#   pornește de la ieșirile S67: functii.tsv (aceleași funcții cerute), cutie.jsonl (definiția a trecut în cutie);
+#   regula blândă: un nume liber din corp e acceptat și dacă e un modul (sau alias de modul) legat la nivelul de sus al
+#     fișierului cu `import M` / `import M as A` (și în blocurile `if`/`try` de sus) și rădăcina lui M e în
+#     MODULE_DE_BAZA (neschimbat). `from M import x` NU leagă un modul → nu intră (numărat doar informativ).
+#     Funcția blândă = rândurile de import necesare + textul funcției; rulată din nou DOAR ca definiție în cutie.
+#   S67 scădea modulele permise din numele libere chiar neimportate: „autonome” care folosesc de ex. `math` primesc
+#     aici importul de sus dacă există (tot rulate în cutie), iar cele fără niciun import sunt numărate separat.
+#   chemabile = funcții de nivel de sus sau `@staticmethod`, primul parametru nu e self/cls/ctx și nu e folosit ca
+#     obiect (atribut citit fără apel sau atribut scris); varianta „strictă” = niciun atribut pe primul parametru.
+# Comanda:  python -X utf8 -m unelte.kronos_cod.functii bland [--procese 12] [--fire 16] [--pana-la 18:20]
+# ---------------------------------------------------------------------------------------------------------------
+
+PRIMI_METODA = {"self", "cls", "ctx"}
+
+
+def nume_libere_stricte(nod) -> set[str]:
+    """Ca `nume_libere`, dar fără să scadă modulele permise (un `math` neimportat rămâne liber)."""
+    doc = ast.get_docstring(nod, clean=False)
+    corp = nod.body[1:] if doc is not None and doc.strip() else nod.body
+    locale, citite, declarate = set(), set(), set()
+    toate_arg = nod.args.posonlyargs + nod.args.args + nod.args.kwonlyargs + [
+        x for x in (nod.args.vararg, nod.args.kwarg) if x]
+    locale.update(a.arg for a in toate_arg)
+    for s in corp:
+        for n in ast.walk(s):
+            if isinstance(n, ast.Name):
+                (citite if isinstance(n.ctx, ast.Load) else locale).add(n.id)
+            elif isinstance(n, ast.arg):
+                locale.add(n.arg)
+            elif isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                locale.add(n.name)
+            elif isinstance(n, ast.ExceptHandler) and n.name:
+                locale.add(n.name)
+            elif isinstance(n, (ast.Import, ast.ImportFrom)):
+                for al in n.names:
+                    locale.add(al.asname or al.name.split(".")[0])
+            elif isinstance(n, (ast.Global, ast.Nonlocal)):
+                declarate.update(n.names)
+            elif isinstance(n, (ast.MatchAs, ast.MatchStar)) and n.name:
+                locale.add(n.name)
+            elif isinstance(n, ast.MatchMapping) and n.rest:
+                locale.add(n.rest)
+    return (citite - (locale - declarate) - _BUILTINS) | declarate
+
+
+def importuri_sus(arbore: ast.Module) -> tuple[dict, dict]:
+    """Numele legate la nivelul de sus: (module, din). module: nume -> (modulul, rândul `import ...`) pentru
+    `import M [as A]`; din: nume -> (modulul, rândul `from ...`) pentru `from M import x [as y]`. Prima legare câștigă."""
+    module, din = {}, {}
+
+    def parcurge(corp):
+        for s in corp:
+            if isinstance(s, ast.Import):
+                for al in s.names:
+                    if al.asname:
+                        module.setdefault(al.asname, (al.name, f"import {al.name} as {al.asname}"))
+                    else:
+                        module.setdefault(al.name.split(".")[0], (al.name, f"import {al.name}"))
+            elif isinstance(s, ast.ImportFrom) and not s.level and s.module:
+                for al in s.names:
+                    if al.name != "*":
+                        rand = f"from {s.module} import {al.name}" + (f" as {al.asname}" if al.asname else "")
+                        din.setdefault(al.asname or al.name, (s.module, rand))
+            elif isinstance(s, ast.If):
+                parcurge(s.body)
+                parcurge(s.orelse)
+            elif isinstance(s, (ast.Try, getattr(ast, "TryStar", ast.Try))):
+                parcurge(s.body)
+                for h in s.handlers:
+                    parcurge(h.body)
+                parcurge(s.orelse)
+                parcurge(s.finalbody)
+
+    parcurge(arbore.body)
+    return module, din
+
+
+def _radacina_permisa(modul: str) -> bool:
+    return modul.split(".")[0] in _PERMISE
+
+
+def locul_functiilor(arbore: ast.Module) -> dict[int, dict]:
+    """linia -> {in_clasa, static, clasa_metoda} pentru funcțiile date de `functiile`."""
+    def decor(nod, nume):
+        return any((isinstance(d, ast.Name) and d.id == nume) or (isinstance(d, ast.Attribute) and d.attr == nume)
+                   for d in nod.decorator_list)
+    loc = {}
+    for nod in arbore.body:
+        if isinstance(nod, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            loc[nod.lineno] = {"in_clasa": False, "static": decor(nod, "staticmethod"), "nod": nod}
+        elif isinstance(nod, ast.ClassDef):
+            for m in nod.body:
+                if isinstance(m, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    loc[m.lineno] = {"in_clasa": True, "static": decor(m, "staticmethod"), "nod": m}
+    return loc
+
+
+def chemabila(nod, in_clasa: bool, static: bool) -> tuple[bool, bool]:
+    """(chemabilă, chemabilă strict). Nivel de sus sau @staticmethod; primul parametru nu e self/cls/ctx și nu e
+    folosit ca obiect (atribut citit fără apel / atribut scris). Strict: niciun atribut pe primul parametru."""
+    if in_clasa and not static:
+        return False, False
+    if any((isinstance(d, ast.Name) and d.id == "classmethod") or (isinstance(d, ast.Attribute)
+           and d.attr == "classmethod") for d in nod.decorator_list):
+        return False, False
+    params = nod.args.posonlyargs + nod.args.args
+    if not params:
+        return True, True
+    p = params[0].arg
+    if p in PRIMI_METODA:
+        return False, False
+    apelate, orice, obiect = set(), False, False
+    for n in ast.walk(nod):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute):
+            apelate.add(id(n.func))
+    for n in ast.walk(nod):
+        if isinstance(n, ast.Attribute) and isinstance(n.value, ast.Name) and n.value.id == p:
+            orice = True
+            if not isinstance(n.ctx, ast.Load) or id(n) not in apelate:
+                obiect = True
+    return not obiect, not orice
+
+
+def analizeaza_bland(i: int, r: dict, cerute: list[dict], defin: set, tok, idx_proba: dict,
+                     idx_ascunse: dict) -> list[dict]:
+    """Doar pentru funcțiile a căror definiție a trecut în cutie la S67 (`defin` = sume): categoria blândă, textul
+    blând (importuri + funcție), chemabilă, scurgerea pe textul blând."""
+    cerute = [f for f in cerute if f["sha"] in defin]
+    if not cerute:
+        return []
+    out = []
+    try:
+        arbore = ast.parse(r["text"])
+    except (SyntaxError, ValueError, RecursionError, MemoryError):
+        return [dict(f, i=i, gasita=False) for f in cerute]
+    module, din = importuri_sus(arbore)
+    loc = locul_functiilor(arbore)
+    for f in analizeaza_curata(r, cerute, tok, idx_proba, idx_ascunse):
+        f["i"] = i
+        if not f["gasita"]:
+            out.append(f)
+            continue
+        l_ = loc[f["linia"]]
+        try:
+            stricte = nume_libere_stricte(l_["nod"])
+            f["chemabila"], f["chemabila_strict"] = chemabila(l_["nod"], l_["in_clasa"], l_["static"])
+        except RecursionError:
+            f["gasita"] = False
+            out.append(f)
+            continue
+        f["in_clasa"], f["static"] = l_["in_clasa"], l_["static"]
+        rezolvate = {n for n in stricte if n in module and _radacina_permisa(module[n][0])}
+        rest = stricte - rezolvate
+        f["importuri"] = sorted({module[n][1] for n in rezolvate})
+        autonoma = not f["libere"]
+        if autonoma:
+            f["categorie"] = ("autonoma_fara_import" if rest else
+                              "autonoma_cu_import" if f["importuri"] else "autonoma_curata")
+        elif not rest:
+            f["categorie"] = "bland_candidat"
+        else:
+            f["categorie"] = "respinsa"
+            # informativ: ce ar mai trece cu `from M import x` (M permis) sau dacă cutia ar permite orice modul
+            rest_din = {n for n in rest if not (n in din and _radacina_permisa(din[n][0]))}
+            f["ar_trece_cu_from"] = not rest_din
+            f["module_nepermise"] = sorted({module[n][0].split(".")[0] for n in rest if n in module})
+            f["ar_trece_cu_orice_modul"] = all(n in module for n in rest)
+            f["rest"] = sorted(rest)
+        if f["importuri"] and f["categorie"] in ("autonoma_cu_import", "bland_candidat"):
+            f["text_bland"] = "\n".join(f["importuri"]) + "\n\n\n" + f["text"]
+            if f["categorie"] == "bland_candidat":
+                f["proba_atinse"], f["proba_exacte"], f["ascunse_exacte"] = {}, [], {}
+                g = scurgere.scaneaza_text(f["text_bland"], idx_proba)
+                if g:
+                    f["proba_atinse"], f["proba_exacte"] = g["atinse"], sorted(g["exacte"])
+                for nume, idx in idx_ascunse.items():
+                    g = scurgere.scaneaza_text(f["text_bland"], idx)
+                    if g and g["exacte"]:
+                        f["ascunse_exacte"][nume] = sorted(g["exacte"])
+        if f["categorie"] == "respinsa":
+            f.pop("text", None)  # nu le mai trebuie textul (memoria)
+        out.append(f)
+    return out
+
+
+def _lot_bland(lot) -> list[dict]:
+    start, randuri = lot
+    out = []
+    for j, rand in enumerate(randuri):
+        cerute = _STARE["cerute"].get(start + j)
+        if cerute:
+            out.extend(analizeaza_bland(start + j, json.loads(rand), cerute, _STARE["defin"], _STARE["tok"],
+                                        _STARE["idx_proba"], _STARE["idx_ascunse"]))
+    return out
+
+
+def _lungime(n: int) -> str:
+    return "1" if n <= 1 else "2–3" if n <= 3 else "4–8" if n <= 8 else "9–15" if n <= 15 else "16–30"
+
+
+def _sume_bland(fs: list[dict]) -> dict:
+    return {"functii": len(fs), "simboluri_corp": sum(f["simboluri_corp"] for f in fs),
+            "simboluri_intregi": sum(f["simboluri"] for f in fs)}
+
+
+def _chem(fs: list[dict]) -> dict:
+    """toate / chemabile / metode, fiecare cu și fără (d)."""
+    def cu_d(xs):
+        return {"toate": _sume_bland(xs), "cu_d": _sume_bland([f for f in xs if f["d"]])}
+    return {"toate": cu_d(fs), "chemabile": cu_d([f for f in fs if f["chemabila"]]),
+            "metode": cu_d([f for f in fs if not f["chemabila"]]),
+            "chemabile_strict (informativ)": cu_d([f for f in fs if f["chemabila_strict"]])}
+
+
+def bland(cod: Path = COD, iesire: Path = IESIRE, cale_tok: Path = TOKENIZER, ascunse: dict | None = None,
+          probleme_proba: list[dict] | None = None, procese: int = 12, fire: int = 16, pana_la: str | None = None,
+          cutia=proba_in_cutie, jurnal=print) -> dict | None:
+    """S68. Întoarce rezultatul (și scrie bland.json), sau None dacă s-a oprit la `pana_la` (se reia)."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    cod, iesire = Path(cod), Path(iesire)
+    f_rez = iesire / "bland.json"
+    if f_rez.exists():
+        raise SystemExit(f"{f_rez} există deja: numărătoarea blândă se face o singură dată")
+    ascunse = ASCUNSE if ascunse is None else ascunse
+    proba = probleme_proba if probleme_proba is not None else _probleme_proba()
+    idx_proba = scurgere.indexeaza(proba)
+    idx_ascunse, sha_inainte, n_ascunse = {}, {}, {}
+    for nume, dosar in ascunse.items():
+        probleme, sha_inainte[nume] = _probleme_ascunse(Path(dosar))
+        idx_ascunse[nume] = scurgere.indexeaza(probleme)
+        n_ascunse[nume] = len(probleme)
+        del probleme
+    cerute = citeste_tsv_abc(iesire / "functii.tsv")
+    cutie_s67 = {}
+    for rand in (iesire / "cutie.jsonl").read_text(encoding="utf-8").splitlines():
+        if rand.strip():
+            x = json.loads(rand)
+            cutie_s67[x["sha"]] = x["stare"]
+    defin = {s for s, st in cutie_s67.items() if st == "ok"}
+    n_auto_s67 = sum(1 for _ in open(iesire / "autonome.tsv", encoding="utf-8")) - 1
+    jurnal(f"S67: {len(defin)} definiții trecute în cutie, {n_auto_s67} autonome; ascunse {n_ascunse}")
+    t0 = time.time()
+    fs: list[dict] = []
+    stare = {"cerute": cerute, "defin": defin, "cale_tok": str(cale_tok), "idx_proba": idx_proba,
+             "idx_ascunse": idx_ascunse}
+    with Pool(procese, initializer=_init, initargs=(stare,)) as pool:
+        for k, r in enumerate(pool.imap(_lot_bland, loturi(cod / "cod.jsonl"), chunksize=1), 1):
+            fs.extend(r)
+            if k % 20 == 0:
+                jurnal(f"{k} loturi citite, {len(fs)} funcții, {time.time() - t0:.0f} s")
+    jurnal(f"partea fără cutie gata: {len(fs)} funcții, {time.time() - t0:.0f} s")
+
+    f_cutie = iesire / "cutie_bland.jsonl"
+    facute = {}
+    if f_cutie.exists():
+        for rand in f_cutie.read_text(encoding="utf-8").splitlines():
+            if rand.strip():
+                x = json.loads(rand)
+                facute[x["sha"]] = x
+    de_facut = [f for f in fs if f.get("text_bland") and f["sha"] not in facute]
+    jurnal(f"cutia: {len(facute)} deja făcute, {len(de_facut)} de făcut, {fire} fire")
+    t1, oprita = time.time(), False
+    with open(f_cutie, "a", encoding="utf-8", newline="\n") as fo, ThreadPoolExecutor(fire) as ex:
+        for k0 in range(0, len(de_facut), 2000):
+            if _ora_trecuta(pana_la):
+                oprita = True
+                break
+            bucata = de_facut[k0:k0 + 2000]
+            for f, rc in zip(bucata, ex.map(lambda f: cutia(f["text_bland"]), bucata)):
+                x = {"sha": f["sha"], **rc}
+                facute[f["sha"]] = x
+                fo.write(json.dumps(x, ensure_ascii=False) + "\n")
+            fo.flush()
+            jurnal(f"cutia: {k0 + len(bucata)}/{len(de_facut)}, {time.time() - t1:.0f} s")
+    if oprita:
+        jurnal(f"oprită curat la {time.strftime('%H:%M')} (--pana-la {pana_la}); se reia cu aceeași comandă")
+        return None
+    sha_dupa = {nume: scurgere.sha256_fisier(Path(d) / "probleme.jsonl") for nume, d in ascunse.items()}
+
+    gasite = [f for f in fs if f["gasita"]]
+    for f in gasite:
+        f["cutie_bland"] = facute[f["sha"]]["stare"] if f.get("text_bland") else None
+    auto = [f for f in gasite if f["categorie"].startswith("autonoma")]
+    cand = [f for f in gasite if f["categorie"] == "bland_candidat"]
+    blande = [f for f in cand if f["cutie_bland"] == "ok"]
+    for f in blande:
+        f["categorie"] = "blanda"
+    cat = Counter(f["categorie"] for f in gasite)
+    noua = auto + blande
+    stricta = [f for f in noua if f["categorie"] != "autonoma_fara_import"]
+    resp = [f for f in gasite if f["categorie"] == "respinsa"]
+    chem = [f for f in noua if f["chemabila"]]
+
+    lung = Counter(_lungime(f["linii_corp"]) for f in chem)
+    simb = Counter("≤16" if f["simboluri_corp"] <= 16 else "17–64" if f["simboluri_corp"] <= 64
+                   else "65–256" if f["simboluri_corp"] <= 256 else ">256" for f in chem)
+    pe_pachet, simb_pachet = Counter(f["pachet"] for f in chem), Counter()
+    for f in chem:
+        simb_pachet[f["pachet"]] += f["simboluri_corp"]
+    mod_nep = Counter(m for f in resp if f["ar_trece_cu_orice_modul"] for m in f["module_nepermise"])
+
+    pe_prob = []
+    for k, p in enumerate(proba):
+        sup = [f["proba_atinse"][k] for f in noua if k in f["proba_atinse"]]
+        pe_prob.append({"id": p["id"], "functii_suprapunere": len(sup), "cea_mai_lunga": max(sup, default=0),
+                        "functii_solutie_exacta": sum(1 for f in noua if k in f["proba_exacte"])})
+    scurgere_proba = {"probleme": len(proba),
+                      "probleme_cu_suprapunere": sum(1 for x in pe_prob if x["functii_suprapunere"]),
+                      "probleme_cu_solutia_exacta": sum(1 for x in pe_prob if x["functii_solutie_exacta"]),
+                      "functii_atinse": sum(1 for f in noua if f["proba_atinse"] or f["proba_exacte"]),
+                      "functii_atinse_chemabile": sum(1 for f in chem if f["proba_atinse"] or f["proba_exacte"]),
+                      "pe_problema": [x for x in pe_prob if x["functii_suprapunere"] or x["functii_solutie_exacta"]]}
+    scurgere_asc = {}
+    for nume in ascunse:
+        cu = [f for f in noua if nume in f["ascunse_exacte"]]
+        scurgere_asc[nume] = {"probleme": n_ascunse[nume], "functii_cu_solutia_intreaga": len(cu),
+                              "probleme_atinse": len({p for f in cu for p in f["ascunse_exacte"][nume]}),
+                              "sha_neschimbat": sha_inainte[nume] == sha_dupa[nume]}
+    scurte = [f for f in chem if 3 <= f["linii_corp"] <= 8]
+    scurte.sort(key=lambda f: hashlib.sha256(f"{f['cale']}:{f['linia']}".encode()).hexdigest())
+    alese = ([f for f in scurte if f["importuri"]][:2] + [f for f in scurte if not f["importuri"]])[:EXEMPLE_CURATA]
+    exemple = [{"pachet": f["pachet"], "licenta": f["licenta"], "cale": f["cale"], "linia": f["linia"],
+                "nume": f["nume"], "categorie": f["categorie"], "d": f["d"], "simboluri_corp": f["simboluri_corp"],
+                "text": f.get("text_bland") or f["text"]} for f in alese]
+    v = verdict_curata(_chem(noua)["chemabile"]["toate"]["simboluri_corp"])
+    rez = {"sarcina": "S68", "secunde": round(time.time() - t0, 1), "definitii_s67": len(defin),
+           "autonome_s67_din_tsv": n_auto_s67, "gasite": len(gasite), "negasite": len(fs) - len(gasite),
+           "categorii": dict(cat.most_common()),
+           "cutie_bland_stari": dict(Counter(f["cutie_bland"] for f in gasite if f["cutie_bland"]).most_common()),
+           "cutie_bland_stari_candidati": dict(Counter(f["cutie_bland"] for f in cand).most_common()),
+           "multimi": {"autonome S67": _chem(auto), "blânde (noi)": _chem(blande),
+                       "autonome + blânde": _chem(noua),
+                       "autonome + blânde, fără autonomele cu modul neimportat (strict, informativ)": _chem(stricta)},
+           "chemabile_linii_corp": dict(lung), "chemabile_simboluri_corp": dict(simb),
+           "primele_10_pachete_chemabile": [{"pachet": p, "functii": n, "simboluri_corp": simb_pachet[p]}
+                                            for p, n in pe_pachet.most_common(10)],
+           "licente_chemabile": dict(Counter(f["licenta"] for f in chem).most_common()),
+           "informativ_respinse": {
+               "respinse": _sume_bland(resp),
+               "ar_trece_si_cu_from_M_import_x (M permis)": _sume_bland([f for f in resp if f["ar_trece_cu_from"]]),
+               "ar_trece_daca_cutia_ar_permite_modulul (cutia NU se schimbă)": _sume_bland(
+                   [f for f in resp if f["ar_trece_cu_orice_modul"]]),
+               "modulele_nepermise_top20": mod_nep.most_common(20),
+               "nume_ramase_top20": Counter(n for f in resp for n in f["rest"]).most_common(20)},
+           "scurgere_proba": scurgere_proba, "scurgere_ascunse": scurgere_asc,
+           "praguri": {"DESTUL PENTRU A": PRAG_A_DESTUL, "PUTIN": PRAG_A_PUTIN},
+           "verdict (autonome + blânde) × chemabile": v, "exemple": exemple}
+    with open(iesire / "blande.tsv", "w", encoding="utf-8", newline="\n") as fo:
+        fo.write("i\tlinia\tsha256_normalizat\tcategorie\tchemabila\tchemabila_strict\td\tlinii_corp\tsimboluri_corp\t"
+                 "importuri\tpachet\tcale\n")
+        for f in noua:
+            fo.write(f"{f['i']}\t{f['linia']}\t{f['sha']}\t{f['categorie']}\t{int(f['chemabila'])}\t"
+                     f"{int(f['chemabila_strict'])}\t{int(f['d'])}\t{f['linii_corp']}\t{f['simboluri_corp']}\t"
+                     f"{' | '.join(f['importuri'])}\t{f['pachet']}\t{f['cale']}\n")
+    f_rez.write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    jurnal(json.dumps({"multimi": rez["multimi"]["autonome + blânde"], "verdict": v,
+                       "scurgere_ascunse": scurgere_asc}, ensure_ascii=False))
+    return rez
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="comanda", required=True)
@@ -675,8 +1038,14 @@ def main(argv=None) -> int:
     c.add_argument("--procese", type=int, default=12)
     c.add_argument("--fire", type=int, default=16)
     c.add_argument("--pana-la", default=None, help="HH:MM — oprire curată (se reia cu aceeași comandă)")
+    b = sub.add_parser("bland", help="S68: regula blândă la importuri + chemabile (cu reluare)")
+    b.add_argument("--procese", type=int, default=12)
+    b.add_argument("--fire", type=int, default=16)
+    b.add_argument("--pana-la", default=None, help="HH:MM — oprire curată (se reia cu aceeași comandă)")
     a = ap.parse_args(argv)
     j = lambda m: print(time.strftime("%H:%M:%S"), m, flush=True)  # noqa: E731
+    if a.comanda == "bland":
+        return 0 if bland(procese=a.procese, fire=a.fire, pana_la=a.pana_la, jurnal=j) is not None else 3
     if a.comanda == "curata":
         return 0 if curata(procese=a.procese, fire=a.fire, pana_la=a.pana_la, jurnal=j) is not None else 3
     ruleaza(procese=a.procese, jurnal=j)
