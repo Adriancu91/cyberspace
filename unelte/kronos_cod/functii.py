@@ -339,13 +339,346 @@ def ruleaza(cod: Path = COD, exclus: Path = EXCLUS, iesire: Path = IESIRE, cale_
     return rez
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# S67 (3 noiembrie 2026): comanda `curata` — funcțiile (a+b+c) „cu adevărat ca la examen”.
+#   pornește de la functii.tsv (S65): doar (a+b+c), fără duplicatele exacte (prima apariție a fiecărei sume);
+#   (i)   simbolurile DOAR ale corpului (fără semnătură, fără docstring), cu tokenizerul S55;
+#   (ii)  filtrul celor triviale (corpul = o singură instrucțiune `pass`, `...`, `raise …`, `return`, `return <nume
+#         sau constantă>` sau doar un apel `super().…`);
+#   (iii) proba definiției: textul funcției (cu decoratori) rulat în cutie (neschimbată) ca modul separat, fără apel
+#         (doar pentru cele care trec (ii)); apoi cu `ast`: toate numele libere din corp sunt parametri, nume locale,
+#         funcții de bază ale lui Python sau module permise de cutie.
+#   „autonome” = trec (ii) și (iii). Rezultatele cutiei se scriu pe rând în cutie.jsonl, deci o rulare oprită se
+#   reia de unde a rămas (`--pana-la HH:MM` oprește curat la ora dată).
+# Comanda:  python -X utf8 -m unelte.kronos_cod.functii curata [--procese 12] [--fire 16] [--pana-la 08:40]
+# ---------------------------------------------------------------------------------------------------------------
+
+PRAG_A_DESTUL = 10_000_000
+PRAG_A_PUTIN = 3_000_000
+EXEMPLE_CURATA = 5
+_BUILTINS = set(dir(__import__("builtins")))
+
+
+def text_corp(nod, linii: list[str]) -> str:
+    """Textul corpului (fără semnătură și fără docstring), dedentat; "" dacă nu are corp după docstring."""
+    doc = ast.get_docstring(nod, clean=False)
+    corp = nod.body[1:] if doc is not None and doc.strip() else nod.body
+    if not corp:
+        return ""
+    bucata = linii[corp[0].lineno - 1:nod.end_lineno]
+    prim = bucata[0]
+    if prim[:corp[0].col_offset].strip():  # corpul începe pe același rând cu altceva (de ex. `def f(): return 1`)
+        bucata[0] = " " * corp[0].col_offset + prim[corp[0].col_offset:]
+    return textwrap.dedent("\n".join(bucata)) + "\n"
+
+
+def e_triviala(nod) -> bool:
+    doc = ast.get_docstring(nod, clean=False)
+    corp = nod.body[1:] if doc is not None and doc.strip() else nod.body
+    if len(corp) != 1:
+        return not corp
+    s = corp[0]
+    if isinstance(s, (ast.Pass, ast.Raise)):
+        return True
+    if isinstance(s, ast.Expr) and isinstance(s.value, ast.Constant) and s.value.value is Ellipsis:
+        return True
+    if isinstance(s, ast.Return) and (s.value is None or isinstance(s.value, (ast.Name, ast.Constant))):
+        return True
+    val = s.value if isinstance(s, (ast.Expr, ast.Return)) else None
+    if isinstance(val, ast.Call) and isinstance(val.func, ast.Attribute):
+        tinta = val.func.value
+        if (isinstance(tinta, ast.Call) and isinstance(tinta.func, ast.Name) and tinta.func.id == "super"):
+            return True
+    return False
+
+
+def nume_libere(nod) -> set[str]:
+    """Numele citite în corp care nu sunt parametri, nume locale (atribuite, bucle, `with`, `except`, importuri,
+    funcții/clase interioare și parametrii lor), funcții de bază sau module permise. `global`/`nonlocal` = libere."""
+    doc = ast.get_docstring(nod, clean=False)
+    corp = nod.body[1:] if doc is not None and doc.strip() else nod.body
+    locale, citite, declarate = set(), set(), set()
+    toate_arg = nod.args.posonlyargs + nod.args.args + nod.args.kwonlyargs + [
+        x for x in (nod.args.vararg, nod.args.kwarg) if x]
+    locale.update(a.arg for a in toate_arg)
+    for s in corp:
+        for n in ast.walk(s):
+            if isinstance(n, ast.Name):
+                (citite if isinstance(n.ctx, ast.Load) else locale).add(n.id)
+            elif isinstance(n, ast.arg):
+                locale.add(n.arg)
+            elif isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                locale.add(n.name)
+            elif isinstance(n, ast.ExceptHandler) and n.name:
+                locale.add(n.name)
+            elif isinstance(n, (ast.Import, ast.ImportFrom)):
+                for al in n.names:
+                    locale.add(al.asname or al.name.split(".")[0])
+            elif isinstance(n, (ast.Global, ast.Nonlocal)):
+                declarate.update(n.names)
+            elif isinstance(n, (ast.MatchAs, ast.MatchStar)) and n.name:
+                locale.add(n.name)
+            elif isinstance(n, ast.MatchMapping) and n.rest:
+                locale.add(n.rest)
+    return (citite - (locale - declarate) - _BUILTINS - _PERMISE) | declarate
+
+
+def module_neimportate(nod) -> bool:
+    """Informativ: corpul folosește un modul permis (de ex. `math`) fără să-l importe el însuși."""
+    doc = ast.get_docstring(nod, clean=False)
+    corp = nod.body[1:] if doc is not None and doc.strip() else nod.body
+    importate, citite = set(), set()
+    for s in corp:
+        for n in ast.walk(s):
+            if isinstance(n, (ast.Import, ast.ImportFrom)):
+                importate.update(al.asname or al.name.split(".")[0] for al in n.names)
+            elif isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load):
+                citite.add(n.id)
+    return bool((citite & _PERMISE) - importate)
+
+
+def citeste_tsv_abc(f_tsv: Path) -> dict[int, list[dict]]:
+    """Din functii.tsv: doar (a+b+c), prima apariție a fiecărei sume normalizate; grupate pe indicele fișierului."""
+    vazute, pe_fisier = set(), {}
+    with open(f_tsv, encoding="utf-8") as f:
+        cap = f.readline().rstrip("\n").split("\t")
+        for rand in f:
+            r = dict(zip(cap, rand.rstrip("\n").split("\t")))
+            if r["c"] != "1" or r["sha256_normalizat"] in vazute:
+                continue
+            vazute.add(r["sha256_normalizat"])
+            pe_fisier.setdefault(int(r["i"]), []).append(
+                {"linia": int(r["linia"]), "sha": r["sha256_normalizat"], "d": r["d"] == "1",
+                 "doctest": r["doctest"] == "1", "simboluri": int(r["simboluri"]), "pachet": r["pachet"],
+                 "cale": r["cale"]})
+    return pe_fisier
+
+
+def analizeaza_curata(r: dict, cerute: list[dict], tok, idx_proba: dict, idx_ascunse: dict) -> list[dict]:
+    """Pentru funcțiile cerute dintr-un fișier: corpul, simbolurile lui, trivială?, numele libere, scurgerea."""
+    try:
+        arbore = ast.parse(r["text"])
+    except (SyntaxError, ValueError, RecursionError, MemoryError):
+        return [dict(f, gasita=False) for f in cerute]
+    linii = r["text"].splitlines()
+    pe_linie = {n.lineno: n for n in functiile(arbore)}
+    out = []
+    for f in cerute:
+        f = dict(f, licenta=r.get("licenta", ""), gasita=False)
+        nod = pe_linie.get(f["linia"])
+        if nod is None:
+            out.append(f)
+            continue
+        try:
+            d = descrie(nod, linii)
+            if d["sha"] != f["sha"]:
+                out.append(f)
+                continue
+            corp = text_corp(nod, linii)
+            f.update(gasita=True, nume=nod.name, text=d["text"], linii_corp=d["linii_corp"],
+                     simboluri_corp=len(tok.codifica_fara_speciale(corp)) if corp else 0,
+                     triviala=e_triviala(nod), libere=sorted(nume_libere(nod)),
+                     modul_neimportat=module_neimportate(nod))
+        except RecursionError:
+            out.append(f)
+            continue
+        f["proba_atinse"], f["proba_exacte"], f["ascunse_exacte"] = {}, [], {}
+        if not f["triviala"]:
+            g = scurgere.scaneaza_text(d["text"], idx_proba)
+            if g:
+                f["proba_atinse"], f["proba_exacte"] = g["atinse"], sorted(g["exacte"])
+            for nume, idx in idx_ascunse.items():
+                g = scurgere.scaneaza_text(d["text"], idx)
+                if g and g["exacte"]:
+                    f["ascunse_exacte"][nume] = sorted(g["exacte"])
+        out.append(f)
+    return out
+
+
+def _lot_curata(lot) -> list[dict]:
+    start, randuri = lot
+    out = []
+    for j, rand in enumerate(randuri):
+        cerute = _STARE["cerute"].get(start + j)
+        if cerute:
+            out.extend(analizeaza_curata(json.loads(rand), cerute, _STARE["tok"], _STARE["idx_proba"],
+                                         _STARE["idx_ascunse"]))
+    return out
+
+
+def proba_in_cutie(text: str) -> dict:
+    from unelte.kronos_cod import cutie
+    r = cutie.ruleaza(text, [], limita_secunde=5.0, limita_mb=256)
+    return {"stare": r.stare, "mesaj": r.mesaj[:200]}
+
+
+def verdict_curata(simboluri_corp: int) -> str:
+    if simboluri_corp >= PRAG_A_DESTUL:
+        return "DESTUL PENTRU A"
+    if simboluri_corp < PRAG_A_PUTIN:
+        return "PUȚIN"
+    return "ÎNTRE"
+
+
+def _sume_curata(fs: list[dict]) -> dict:
+    return {"functii": len(fs), "simboluri_intregi": sum(f["simboluri"] for f in fs),
+            "simboluri_corp": sum(f.get("simboluri_corp", 0) for f in fs)}
+
+
+def _cu_si_fara_d(fs: list[dict]) -> dict:
+    return {"toate": _sume_curata(fs), "cu_d": _sume_curata([f for f in fs if f["d"]])}
+
+
+def _ora_trecuta(pana_la: str | None) -> bool:
+    return bool(pana_la) and time.strftime("%H:%M") >= pana_la
+
+
+def curata(cod: Path = COD, iesire: Path = IESIRE, cale_tok: Path = TOKENIZER, ascunse: dict | None = None,
+           probleme_proba: list[dict] | None = None, procese: int = 12, fire: int = 16, pana_la: str | None = None,
+           cutia=proba_in_cutie, jurnal=print) -> dict | None:
+    """S67. Întoarce rezultatul (și scrie curata.json), sau None dacă s-a oprit la `pana_la` (se reia)."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    cod, iesire = Path(cod), Path(iesire)
+    f_rez = iesire / "curata.json"
+    if f_rez.exists():
+        raise SystemExit(f"{f_rez} există deja: curățarea se face o singură dată")
+    ascunse = ASCUNSE if ascunse is None else ascunse
+    proba = probleme_proba if probleme_proba is not None else _probleme_proba()
+    idx_proba = scurgere.indexeaza(proba)
+    idx_ascunse, sha_inainte, n_ascunse = {}, {}, {}
+    for nume, dosar in ascunse.items():
+        probleme, sha_inainte[nume] = _probleme_ascunse(Path(dosar))
+        idx_ascunse[nume] = scurgere.indexeaza(probleme)
+        n_ascunse[nume] = len(probleme)
+        del probleme
+    cerute = citeste_tsv_abc(iesire / "functii.tsv")
+    n_cerute = sum(len(v) for v in cerute.values())
+    jurnal(f"(a+b+c) fără duplicate: {n_cerute} funcții în {len(cerute)} fișiere; ascunse {n_ascunse}")
+    t0 = time.time()
+    functii_g: list[dict] = []
+    stare = {"cerute": cerute, "cale_tok": str(cale_tok), "idx_proba": idx_proba, "idx_ascunse": idx_ascunse}
+    with Pool(procese, initializer=_init, initargs=(stare,)) as pool:
+        for k, r in enumerate(pool.imap(_lot_curata, loturi(cod / "cod.jsonl"), chunksize=1), 1):
+            functii_g.extend(r)
+            if k % 20 == 0:
+                jurnal(f"{k} loturi citite, {len(functii_g)} funcții, {time.time() - t0:.0f} s")
+    jurnal(f"partea fără cutie gata: {len(functii_g)} funcții, {time.time() - t0:.0f} s")
+
+    # proba definiției în cutie, cu reluare din cutie.jsonl
+    f_cutie = iesire / "cutie.jsonl"
+    facute = {}
+    if f_cutie.exists():
+        for rand in f_cutie.read_text(encoding="utf-8").splitlines():
+            if rand.strip():
+                x = json.loads(rand)
+                facute[x["sha"]] = x
+    de_facut = [f for f in functii_g if f["gasita"] and not f["triviala"] and f["sha"] not in facute]
+    jurnal(f"cutia: {len(facute)} deja făcute, {len(de_facut)} de făcut, {fire} fire")
+    t1, oprita = time.time(), False
+    with open(f_cutie, "a", encoding="utf-8", newline="\n") as fo, ThreadPoolExecutor(fire) as ex:
+        for k0 in range(0, len(de_facut), 2000):
+            if _ora_trecuta(pana_la):
+                oprita = True
+                break
+            bucata = de_facut[k0:k0 + 2000]
+            for f, rc in zip(bucata, ex.map(lambda f: cutia(f["text"]), bucata)):
+                x = {"sha": f["sha"], **rc}
+                facute[f["sha"]] = x
+                fo.write(json.dumps(x, ensure_ascii=False) + "\n")
+            fo.flush()
+            jurnal(f"cutia: {k0 + len(bucata)}/{len(de_facut)}, {time.time() - t1:.0f} s")
+    if oprita:
+        jurnal(f"oprită curat la {time.strftime('%H:%M')} (--pana-la {pana_la}); se reia cu aceeași comandă")
+        return None
+    sha_dupa = {nume: scurgere.sha256_fisier(Path(d) / "probleme.jsonl") for nume, d in ascunse.items()}
+
+    gasite = [f for f in functii_g if f["gasita"]]
+    netriv = [f for f in gasite if not f["triviala"]]
+    for f in netriv:
+        f["cutie"] = facute[f["sha"]]["stare"]
+    defin = [f for f in netriv if f["cutie"] == "ok"]
+    auto = [f for f in defin if not f["libere"]]
+    pasi = {"a+b+c fără duplicate": _cu_si_fara_d(gasite), "(ii) netriviale": _cu_si_fara_d(netriv),
+            "(iii) definiția trece în cutie": _cu_si_fara_d(defin), "(iii) + fără nume libere = autonome": _cu_si_fara_d(auto)}
+    nume_lipsa = Counter()
+    for f in netriv:
+        if f["cutie"] != "ok":
+            m = re.match(r"NameError: name '([^']+)'", facute[f["sha"]].get("mesaj", ""))
+            if m:
+                nume_lipsa[m.group(1)] += 1
+    libere_top = Counter(n for f in defin for n in f["libere"])
+    lungimi = Counter()
+    for f in auto:
+        n = f["linii_corp"]
+        lungimi["1" if n <= 1 else "2–3" if n <= 3 else "4–8" if n <= 8 else "9–15" if n <= 15 else "16–30"] += 1
+    simb_corp = Counter()
+    for f in auto:
+        s = f["simboluri_corp"]
+        simb_corp["≤16" if s <= 16 else "17–64" if s <= 64 else "65–256" if s <= 256 else ">256"] += 1
+    pe_pachet, simb_pachet = Counter(f["pachet"] for f in auto), Counter()
+    for f in auto:
+        simb_pachet[f["pachet"]] += f["simboluri_corp"]
+
+    pe_prob = []
+    for k, p in enumerate(proba):
+        sup = [f["proba_atinse"][k] for f in auto if k in f["proba_atinse"]]
+        pe_prob.append({"id": p["id"], "functii_suprapunere": len(sup), "cea_mai_lunga": max(sup, default=0),
+                        "functii_solutie_exacta": sum(1 for f in auto if k in f["proba_exacte"])})
+    scurgere_proba = {"probleme": len(proba),
+                      "probleme_cu_suprapunere": sum(1 for x in pe_prob if x["functii_suprapunere"]),
+                      "probleme_cu_solutia_exacta": sum(1 for x in pe_prob if x["functii_solutie_exacta"]),
+                      "functii_atinse": sum(1 for f in auto if f["proba_atinse"] or f["proba_exacte"]),
+                      "pe_problema": [x for x in pe_prob if x["functii_suprapunere"] or x["functii_solutie_exacta"]]}
+    scurgere_asc = {}
+    for nume in ascunse:
+        cu = [f for f in auto if nume in f["ascunse_exacte"]]
+        scurgere_asc[nume] = {"probleme": n_ascunse[nume], "functii_cu_solutia_intreaga": len(cu),
+                              "probleme_atinse": len({p for f in cu for p in f["ascunse_exacte"][nume]}),
+                              "sha_neschimbat": sha_inainte[nume] == sha_dupa[nume]}
+    scurte = [f for f in auto if 3 <= f["linii_corp"] <= 8]
+    scurte.sort(key=lambda f: hashlib.sha256(f"{f['cale']}:{f['linia']}".encode()).hexdigest())
+    exemple = [{k: f[k] for k in ("pachet", "licenta", "cale", "linia", "nume", "d", "simboluri_corp", "text")}
+               for f in scurte[:EXEMPLE_CURATA]]
+    v = verdict_curata(pasi["(iii) + fără nume libere = autonome"]["toate"]["simboluri_corp"])
+    rez = {"sarcina": "S67", "secunde": round(time.time() - t0, 1), "cerute": n_cerute,
+           "negasite": len(functii_g) - len(gasite), "pasi": pasi,
+           "cutie_stari": dict(Counter(f["cutie"] for f in netriv).most_common()),
+           "cutie_nume_lipsa_top20": nume_lipsa.most_common(20),
+           "nume_libere_top20 (definiția trece, dar corpul cere nume din afară)": libere_top.most_common(20),
+           "autonome_cu_modul_permis_neimportat (informativ)": sum(1 for f in auto if f["modul_neimportat"]),
+           "autonome_linii_corp": dict(lungimi), "autonome_simboluri_corp": dict(simb_corp),
+           "primele_20_pachete": [{"pachet": p, "functii": n, "simboluri_corp": simb_pachet[p]}
+                                  for p, n in pe_pachet.most_common(20)],
+           "licente_autonome": dict(Counter(f["licenta"] for f in auto).most_common()),
+           "scurgere_proba": scurgere_proba, "scurgere_ascunse": scurgere_asc,
+           "praguri": {"DESTUL PENTRU A": PRAG_A_DESTUL, "PUTIN": PRAG_A_PUTIN}, "verdict": v, "exemple": exemple}
+    with open(iesire / "autonome.tsv", "w", encoding="utf-8", newline="\n") as fo:
+        fo.write("i\tlinia\tsha256_normalizat\td\tdoctest\tlinii_corp\tsimboluri\tsimboluri_corp\tmodul_neimportat\t"
+                 "pachet\tcale\n")
+        idx_fisier = {(f["cale"], f["linia"], f["sha"]): i for i, v_ in cerute.items() for f in v_}
+        for f in auto:
+            fo.write(f"{idx_fisier[(f['cale'], f['linia'], f['sha'])]}\t{f['linia']}\t{f['sha']}\t{int(f['d'])}\t"
+                     f"{int(f['doctest'])}\t{f['linii_corp']}\t{f['simboluri']}\t{f['simboluri_corp']}\t"
+                     f"{int(f['modul_neimportat'])}\t{f['pachet']}\t{f['cale']}\n")
+    f_rez.write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    jurnal(json.dumps({"pasi": pasi, "verdict": v, "scurgere_ascunse": scurgere_asc}, ensure_ascii=False))
+    return rez
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="comanda", required=True)
     r = sub.add_parser("ruleaza", help="numărătoarea, o singură dată")
     r.add_argument("--procese", type=int, default=12)
+    c = sub.add_parser("curata", help="S67: funcțiile autonome (cu reluare)")
+    c.add_argument("--procese", type=int, default=12)
+    c.add_argument("--fire", type=int, default=16)
+    c.add_argument("--pana-la", default=None, help="HH:MM — oprire curată (se reia cu aceeași comandă)")
     a = ap.parse_args(argv)
     j = lambda m: print(time.strftime("%H:%M:%S"), m, flush=True)  # noqa: E731
+    if a.comanda == "curata":
+        return 0 if curata(procese=a.procese, fire=a.fire, pana_la=a.pana_la, jurnal=j) is not None else 3
     ruleaza(procese=a.procese, jurnal=j)
     return 0
 
