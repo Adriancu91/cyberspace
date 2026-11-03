@@ -39,6 +39,8 @@ from collections import Counter
 from multiprocessing import Pool
 from pathlib import Path
 
+import numpy as np
+
 RADACINA = Path(__file__).resolve().parents[2]
 if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
@@ -1029,6 +1031,386 @@ def bland(cod: Path = COD, iesire: Path = IESIRE, cale_tok: Path = TOKENIZER, as
     return rez
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# S69 (3 noiembrie 2026): comanda `exercitii` — setul „antet + explicație → corp” și amestecul pentru S70.
+#   exercițiul = textul funcției (decoratori + semnătură + docstring + corp, ca la S65), cu tokenizerul S55, urmat de
+#     simbolul de sfârșit de fișier; la autonomele/blândele din S68 care au importuri de sus, rândurile de import
+#     înainte (exact textul blând din S68).
+#   mulțimea: (a+b+c) din S65 fără duplicate (prima apariție a fiecărei sume); cele din blande.tsv (S68) cu greutatea 2.
+#   scurgerea: scoate orice funcție cu suprapunere de 13 sau soluția întreagă din setul de probă, și orice potrivire
+#     (suprapunere de 13 sau soluția întreagă) cu seturile ascunse — din acestea doar numărul; SHA verificat.
+#   ținute deoparte: 2 % din pachete (sămânța 0, pachete întregi) → deoparte.jsonl, NU intră în amestec; dintre ele,
+#     cele cu (d): exemplul `>>>` sau `assert`-urile din testele pachetului, rulate în cutie (neschimbată) cu corpul
+#     original → deoparte_d.jsonl.
+#   amestecul: `procent` din simboluri exerciții (fiecare repetat de k ori, autonomele de 2k ori, k ≤ max_rep), restul
+#     bucăți de cod obișnuit din simboluri/antrenare_*.bin, totul pe bucăți de `bloc` simboluri amestecate cu sămânța 0;
+#     validare_*.bin copiate neschimbate. Nu șterge și nu mută nimic din simboluri/ sau complet/.
+# Comanda:  python -X utf8 -m unelte.kronos_cod.functii exercitii --simboluri-total N [--procese 12] [--fire 16]
+# ---------------------------------------------------------------------------------------------------------------
+
+SIMBOLURI = RADACINA / "lucru" / "kronos_cod" / "simboluri"
+EXERCITII = RADACINA / "lucru" / "kronos_cod" / "exercitii"
+SFARSIT = 32_764
+ASSERTURI_MAX = 10
+
+
+def exemple_doctest(doc: str) -> tuple[list[str], int]:
+    """Exemplele `>>>` ca instrucțiuni de rulat: cele cu rezultat devin `assert repr(v) == ... or str(v) == ...`,
+    cele fără rezultat rămân instrucțiuni. Întoarce (rândurile, câte exemple n-au putut fi transformate)."""
+    import doctest
+
+    try:
+        exemple = doctest.DocTestParser().get_examples(doc)
+    except ValueError:
+        return [], 1
+    randuri, sarite = [], 0
+    for ex in exemple:
+        src, want = ex.source.strip(), ex.want.strip()
+        if ex.exc_msg is not None:
+            sarite += 1
+            continue
+        if not want:
+            randuri.append(src)
+            continue
+        try:
+            ast.parse(src, mode="eval")
+        except SyntaxError:
+            sarite += 1
+            continue
+        randuri.append(f"_v = ({src})\nassert repr(_v) == {want!r} or str(_v) == {want!r}")
+    return randuri, sarite
+
+
+def asserturi_fisier(arbore: ast.AST) -> list[tuple[frozenset, str]]:
+    """(numele citite, textul) pentru fiecare `assert` din fișier."""
+    out = []
+    for n in ast.walk(arbore):
+        if isinstance(n, ast.Assert):
+            try:
+                text = ast.unparse(n)
+            except Exception:  # noqa: BLE001
+                continue
+            out.append((frozenset(x.id for x in ast.walk(n) if isinstance(x, ast.Name)), text))
+    return out
+
+
+def asserturi_pentru(nume: str, asserturi: list[tuple[frozenset, str]]) -> list[str]:
+    """Asserturile care cheamă `nume` și nu cer altceva decât funcții de bază și module permise (cu importul lor)."""
+    alese = []
+    for nume_citite, text in asserturi:
+        if nume in nume_citite and not (nume_citite - {nume} - _BUILTINS - _PERMISE) and text not in alese:
+            module = sorted(nume_citite & _PERMISE)
+            alese.append("".join(f"import {m}\n" for m in module) + text)
+        if len(alese) >= ASSERTURI_MAX:
+            break
+    return alese
+
+
+def analizeaza_exercitii(i: int, r: dict, cerute: list[dict], importuri: dict, deoparte: set, tok, idx_proba: dict,
+                         idx_ascunse: dict) -> list[dict]:
+    """Pentru funcțiile cerute dintr-un fișier: textul exercițiului, simbolurile lui, scurgerea; la cele din pachetele
+    ținute deoparte și textul, corpul și exemplele `>>>`."""
+    try:
+        arbore = ast.parse(r["text"])
+    except (SyntaxError, ValueError, RecursionError, MemoryError):
+        return [dict(f, i=i, gasita=False) for f in cerute]
+    linii = r["text"].splitlines()
+    pe_linie = {n.lineno: n for n in functiile(arbore)}
+    out = []
+    for f in cerute:
+        f = dict(f, i=i, gasita=False)
+        nod = pe_linie.get(f["linia"])
+        if nod is None:
+            out.append(f)
+            continue
+        try:
+            d = descrie(nod, linii)
+            if d["sha"] != f["sha"]:
+                out.append(f)
+                continue
+            imp = importuri.get(f["sha"])
+            text = ("\n".join(imp) + "\n\n\n" + d["text"]) if imp else d["text"]
+            f.update(gasita=True, nume=nod.name, cu_importuri=bool(imp))
+            g = scurgere.scaneaza_text(text, idx_proba)
+            f["scurgere_proba"] = bool(g and (g["atinse"] or g["exacte"]))
+            f["scurgere_ascunse"] = {}
+            for nume, idx in idx_ascunse.items():
+                g = scurgere.scaneaza_text(text, idx)
+                if g and (g["atinse"] or g["exacte"]):
+                    f["scurgere_ascunse"][nume] = {"atinse": bool(g["atinse"]), "exacte": bool(g["exacte"])}
+            if f["scurgere_proba"] or f["scurgere_ascunse"]:
+                out.append(f)
+                continue
+            simb = tok.codifica_fara_speciale(text) + [SFARSIT]
+            f["n"] = len(simb)
+            f["simb"] = np.asarray(simb, dtype=np.uint16).tobytes()
+            if f["pachet"] in deoparte:
+                doc = ast.get_docstring(nod) or ""
+                f["text"], f["corp"] = text, text_corp(nod, linii)
+                f["exemple"], f["exemple_sarite"] = exemple_doctest(doc) if f["doctest"] else ([], 0)
+        except RecursionError:
+            f["gasita"] = False
+        out.append(f)
+    return out
+
+
+def _lot_exercitii(lot) -> dict:
+    start, randuri = lot
+    out = {"functii": [], "asserturi": {}}
+    for j, rand in enumerate(randuri):
+        i = start + j
+        cerute = _STARE["cerute"].get(i)
+        if not cerute and not _STARE["deoparte"]:
+            continue
+        r = json.loads(rand)
+        if cerute:
+            out["functii"].extend(analizeaza_exercitii(i, r, cerute, _STARE["importuri"], _STARE["deoparte"],
+                                                       _STARE["tok"], _STARE["idx_proba"], _STARE["idx_ascunse"]))
+        cheie = f"{r.get('sursa', '?')}:{r.get('pachet', '?')}"
+        if (cheie in _STARE["deoparte"] and r.get("limbaj") == "python" and e_fisier_de_test(r.get("cale", ""))
+                and parte(i, r["text"], _STARE["aproape"], _STARE["scurgere"]) in ("antrenare", "esantion")):
+            try:
+                a = asserturi_fisier(ast.parse(r["text"]))
+            except (SyntaxError, ValueError, RecursionError, MemoryError):
+                a = []
+            if a:
+                out["asserturi"].setdefault(cheie, []).extend(a)
+    return out
+
+
+def citeste_blande(f_tsv: Path) -> dict[str, list[str]]:
+    """Din blande.tsv (S68): suma -> rândurile de import (listă goală dacă n-are)."""
+    out = {}
+    with open(f_tsv, encoding="utf-8") as f:
+        cap = f.readline().rstrip("\n").split("\t")
+        for rand in f:
+            r = dict(zip(cap, rand.rstrip("\n").split("\t")))
+            out[r["sha256_normalizat"]] = [x for x in r["importuri"].split(" | ") if x]
+    return out
+
+
+def alege_deoparte(pachete: set[str], procent: float, samanta: int = 0) -> set[str]:
+    import random
+
+    toate = sorted(pachete)
+    random.Random(samanta).shuffle(toate)
+    n = max(1, round(procent * len(toate))) if toate else 0
+    return set(toate[:n])
+
+
+def repetari(n: np.ndarray, greutate: np.ndarray, tinta: int, max_rep: int, samanta: int = 0) -> tuple[np.ndarray, float]:
+    """De câte ori intră fiecare exercițiu: k·greutate în medie (partea fracționară la întâmplare), k ≤ max_rep."""
+    s = float((n * greutate).sum())
+    k = min(tinta / s, float(max_rep)) if s else 0.0
+    x = k * greutate
+    rng = np.random.default_rng(samanta)
+    r = np.floor(x).astype(np.int64) + (rng.random(len(x)) < (x - np.floor(x)))
+    return r, k
+
+
+def amesteca(ex: np.ndarray, obisnuit: np.ndarray, simboluri_total: int, bloc: int, iesire: Path,
+             simboluri_pe_fisier: int, samanta: int = 0) -> dict:
+    """Bucățile de `bloc`: toate din fluxul exercițiilor + cât trebuie din codul obișnuit (alese fără repetare),
+    amestecate; scrise în antrenare_NNNNN.bin. Coada exercițiilor (< bloc) se pune la sfârșit."""
+    rng = np.random.default_rng(samanta + 1)
+    n_ex = len(ex) // bloc
+    ex2 = ex[:n_ex * bloc].reshape(n_ex, bloc)
+    coada = ex[n_ex * bloc:]
+    n_ob_disp = len(obisnuit) // bloc
+    n_ob = max(0, min(n_ob_disp, -(-(simboluri_total - len(ex)) // bloc)))
+    ob2 = obisnuit[:n_ob_disp * bloc].reshape(n_ob_disp, bloc)
+    alese_ob = rng.choice(n_ob_disp, size=n_ob, replace=False) if n_ob else np.zeros(0, dtype=np.int64)
+    eticheta = np.concatenate([np.ones(n_ex, dtype=bool), np.zeros(n_ob, dtype=bool)])
+    sursa = np.concatenate([np.arange(n_ex), alese_ob])
+    ordine = rng.permutation(len(eticheta))
+    eticheta, sursa = eticheta[ordine], sursa[ordine]
+    pe_fisier = max(1, simboluri_pe_fisier // bloc)
+    fisiere = []
+    for k, a in enumerate(range(0, max(len(eticheta), 1), pe_fisier)):
+        et, sr = eticheta[a:a + pe_fisier], sursa[a:a + pe_fisier]
+        out = np.empty((len(et), bloc), dtype=np.uint16)
+        out[et] = ex2[sr[et]]
+        out[~et] = ob2[sr[~et]]
+        date = out.reshape(-1)
+        if a + pe_fisier >= len(eticheta) and len(coada):
+            date = np.concatenate([date, coada])
+        f = iesire / f"antrenare_{k:05d}.bin"
+        date.tofile(f)
+        fisiere.append(f.name)
+    total = n_ex * bloc + len(coada) + n_ob * bloc
+    return {"bucati_exercitii": n_ex, "coada_exercitii": int(len(coada)), "bucati_obisnuite": int(n_ob),
+            "bucati_obisnuite_disponibile": int(n_ob_disp), "simboluri_scrise": int(total),
+            "procent_exercitii_real": (n_ex * bloc + len(coada)) / total if total else 0.0, "fisiere": fisiere}
+
+
+def program_d(f: dict, asserturi: list[tuple[frozenset, str]]) -> tuple[str, str | None, int]:
+    """(tipul, programul de rulat în cutie sau None, câte exemple/asserturi) pentru un exercițiu ținut deoparte cu (d)."""
+    if f.get("exemple"):
+        return "doctest", f["text"] + "\n\n" + "\n".join(f["exemple"]) + "\n", len(f["exemple"])
+    alese = asserturi_pentru(f["nume"], asserturi)
+    if alese:
+        return "assert", f["text"] + "\n\n" + "\n".join(alese) + "\n", len(alese)
+    return ("doctest" if f["doctest"] else "assert"), None, 0
+
+
+def exercitii(simboluri_total: int, cod: Path = COD, functii_dir: Path = IESIRE, simboluri_dir: Path = SIMBOLURI,
+              iesire: Path = EXERCITII, cale_tok: Path = TOKENIZER, exclus: Path = EXCLUS, ascunse: dict | None = None,
+              probleme_proba: list[dict] | None = None, procent: float = 0.25, max_rep: int = 6,
+              procent_deoparte: float = 0.02, bloc: int = 512, simboluri_pe_fisier: int = 1 << 25, procese: int = 12,
+              fire: int = 16, cutia=proba_in_cutie, jurnal=print) -> dict:
+    """S69. Scrie amestecul și listele în `iesire`; refuză dacă exercitii.json există."""
+    import shutil
+    from concurrent.futures import ThreadPoolExecutor
+
+    cod, functii_dir, simboluri_dir, iesire = Path(cod), Path(functii_dir), Path(simboluri_dir), Path(iesire)
+    f_rez = iesire / "exercitii.json"
+    if f_rez.exists():
+        raise SystemExit(f"{f_rez} există deja: amestecul se face o singură dată")
+    if iesire.exists() and any(iesire.glob("*.bin")):
+        raise SystemExit(f"în {iesire} sunt deja fișiere .bin: nu scriu peste ele")
+    ascunse = ASCUNSE if ascunse is None else ascunse
+    proba = probleme_proba if probleme_proba is not None else _probleme_proba()
+    idx_proba = scurgere.indexeaza(proba)
+    idx_ascunse, sha_inainte, n_ascunse = {}, {}, {}
+    for nume, dosar in ascunse.items():
+        probleme, sha_inainte[nume] = _probleme_ascunse(Path(dosar))
+        idx_ascunse[nume] = scurgere.indexeaza(probleme)
+        n_ascunse[nume] = len(probleme)
+        del probleme
+    cerute = citeste_tsv_abc(functii_dir / "functii.tsv")
+    n_cerute = sum(len(v) for v in cerute.values())
+    blande = citeste_blande(functii_dir / "blande.tsv")
+    importuri = {s: v for s, v in blande.items() if v}
+    pachete = {f["pachet"] for v in cerute.values() for f in v}
+    deoparte = alege_deoparte(pachete, procent_deoparte)
+    aproape, scurg = citeste_excluse(cod, Path(exclus))
+    jurnal(f"(a+b+c) fără duplicate: {n_cerute} funcții; din S68 (greutatea 2): {len(blande)}; pachete {len(pachete)}, "
+           f"ținute deoparte {len(deoparte)}; ascunse {n_ascunse}")
+    t0 = time.time()
+    fs: list[dict] = []
+    asserturi: dict[str, list] = {}
+    stare = {"cerute": cerute, "importuri": importuri, "deoparte": deoparte, "cale_tok": str(cale_tok),
+             "idx_proba": idx_proba, "idx_ascunse": idx_ascunse, "aproape": aproape, "scurgere": scurg}
+    with Pool(procese, initializer=_init, initargs=(stare,)) as pool:
+        for k, r in enumerate(pool.imap(_lot_exercitii, loturi(cod / "cod.jsonl"), chunksize=1), 1):
+            fs.extend(r["functii"])
+            for c, v in r["asserturi"].items():
+                asserturi.setdefault(c, []).extend(v)
+            if k % 20 == 0:
+                jurnal(f"{k} loturi citite, {len(fs)} funcții, {time.time() - t0:.0f} s")
+    sha_dupa = {nume: scurgere.sha256_fisier(Path(d) / "probleme.jsonl") for nume, d in ascunse.items()}
+    jurnal(f"citirea gata: {len(fs)} funcții, {time.time() - t0:.0f} s")
+
+    gasite = [f for f in fs if f["gasita"]]
+    for f in gasite:
+        f["autonoma"] = f["sha"] in blande
+    sc_proba = [f for f in gasite if f["scurgere_proba"]]
+    sc_asc = {nume: {"functii_atinse_13": sum(1 for f in gasite if f["scurgere_ascunse"].get(nume, {}).get("atinse")),
+                     "functii_solutia_intreaga": sum(1 for f in gasite
+                                                     if f["scurgere_ascunse"].get(nume, {}).get("exacte")),
+                     "probleme": n_ascunse[nume], "sha_neschimbat": sha_inainte[nume] == sha_dupa[nume]}
+              for nume in ascunse}
+    bune = [f for f in gasite if "simb" in f]
+    antr = [f for f in bune if f["pachet"] not in deoparte]
+    dep = [f for f in bune if f["pachet"] in deoparte]
+
+    # repetarea și fluxul exercițiilor
+    n = np.array([f["n"] for f in antr], dtype=np.int64)
+    w = np.array([2 if f["autonoma"] else 1 for f in antr], dtype=np.float64)
+    tinta = int(round(procent * simboluri_total))
+    rep, k = repetari(n, w, tinta, max_rep)
+    ordine = np.repeat(np.arange(len(antr)), rep)
+    np.random.default_rng(0).shuffle(ordine)
+    bucati = [np.frombuffer(f["simb"], dtype=np.uint16) for f in antr]
+    flux = np.concatenate([bucati[j] for j in ordine]) if len(ordine) else np.zeros(0, dtype=np.uint16)
+    del bucati
+    jurnal(f"exerciții: {len(antr)} la antrenare, k = {k:.3f}, {len(flux):,} simboluri în flux")
+
+    # amestecul
+    iesire.mkdir(parents=True, exist_ok=True)
+    f_antr = sorted(simboluri_dir.glob("antrenare_*.bin"))
+    obisnuit = np.concatenate([np.fromfile(f, dtype=np.uint16) for f in f_antr])
+    am = amesteca(flux, obisnuit, simboluri_total, bloc, iesire, simboluri_pe_fisier)
+    del obisnuit, flux
+    copiate = []
+    for f in sorted(simboluri_dir.glob("validare_*.bin")):
+        shutil.copy2(f, iesire / f.name)
+        if scurgere.sha256_fisier(f) != scurgere.sha256_fisier(iesire / f.name):
+            raise SystemExit(f"copia lui {f.name} nu e identică")
+        copiate.append(f.name)
+    jurnal(f"amestecul scris: {len(am['fisiere'])} fișiere, {am['simboluri_scrise']:,} simboluri, "
+           f"{am['procent_exercitii_real']:.2%} exerciții; validare {len(copiate)} fișiere copiate")
+
+    # cele ținute deoparte, și (d) în cutie
+    cu_d = [f for f in dep if f["d"]]
+    programe = []
+    for f in cu_d:
+        tip, prog, nr = program_d(f, asserturi.get(f["pachet"], []))
+        programe.append((f, tip, prog, nr))
+    de_rulat = [x for x in programe if x[2]]
+    with ThreadPoolExecutor(fire) as ex:
+        rezultate = list(ex.map(lambda x: cutia(x[2]), de_rulat))
+    stari_d = {id(x[0]): rc for x, rc in zip(de_rulat, rezultate)}
+    with open(iesire / "deoparte.jsonl", "w", encoding="utf-8", newline="\n") as fo:
+        for f in dep:
+            fo.write(json.dumps({k_: f[k_] for k_ in ("pachet", "cale", "linia", "nume", "sha", "autonoma", "d",
+                                                      "doctest", "n", "text", "corp")}, ensure_ascii=False) + "\n")
+    with open(iesire / "deoparte_d.jsonl", "w", encoding="utf-8", newline="\n") as fo:
+        for f, tip, prog, nr in programe:
+            rc = stari_d.get(id(f), {"stare": "fara_exemplu", "mesaj": ""})
+            fo.write(json.dumps({"sha": f["sha"], "pachet": f["pachet"], "nume": f["nume"], "autonoma": f["autonoma"],
+                                 "tip": tip, "exemple": nr, "exemple_sarite": f.get("exemple_sarite", 0),
+                                 "program": prog, **rc}, ensure_ascii=False) + "\n")
+    with open(iesire / "exercitii.tsv", "w", encoding="utf-8", newline="\n") as fo:
+        fo.write("i\tlinia\tsha256_normalizat\tautonoma\td\tsimboluri\trepetari\tdeoparte\tpachet\tcale\n")
+        for f, r_ in zip(antr, rep):
+            fo.write(f"{f['i']}\t{f['linia']}\t{f['sha']}\t{int(f['autonoma'])}\t{int(f['d'])}\t{f['n']}\t{int(r_)}\t0\t"
+                     f"{f['pachet']}\t{f['cale']}\n")
+        for f in dep:
+            fo.write(f"{f['i']}\t{f['linia']}\t{f['sha']}\t{int(f['autonoma'])}\t{int(f['d'])}\t{f['n']}\t0\t1\t"
+                     f"{f['pachet']}\t{f['cale']}\n")
+
+    def sume(xs, reps=None):
+        return {"functii": len(xs), "simboluri": int(sum(f["n"] for f in xs)),
+                **({"simboluri_cu_repetari": int(sum(f["n"] * int(r_) for f, r_ in zip(xs, reps)))} if reps is not None
+                   else {})}
+    auto_m = np.array([f["autonoma"] for f in antr], dtype=bool)
+    rep_auto, rep_rest = rep[auto_m], rep[~auto_m]
+    stari = Counter(rc["stare"] for rc in rezultate)
+    pe_tip = {}
+    for f, tip, prog, nr in programe:
+        x = pe_tip.setdefault(tip, {"functii": 0, "cu_program": 0, "ok": 0})
+        x["functii"] += 1
+        x["cu_program"] += bool(prog)
+        x["ok"] += stari_d.get(id(f), {}).get("stare") == "ok"
+    rez = {
+        "sarcina": "S69", "secunde": round(time.time() - t0, 1), "tokenizer": str(cale_tok),
+        "sha256_tokenizer": scurgere.sha256_fisier(Path(cale_tok)), "cerute": n_cerute,
+        "negasite": len(fs) - len(gasite), "din_S68_greutatea_2": len(blande),
+        "scurgere": {"proba_functii_scoase": len(sc_proba), "ascunse": sc_asc},
+        "exercitii_bune": sume(bune), "pachete": len(pachete), "pachete_deoparte": len(deoparte),
+        "procent_deoparte": procent_deoparte,
+        "antrenare": {"toate": sume(antr, rep), "autonome": sume([f for f in antr if f["autonoma"]], rep_auto),
+                      "restul": sume([f for f in antr if not f["autonoma"]], rep_rest),
+                      "cu_d": sume([f for f in antr if f["d"]], [r_ for f, r_ in zip(antr, rep) if f["d"]])},
+        "repetari": {"k": k, "max_rep_cerut": max_rep, "medie_ponderata_simboluri":
+                     float((n * rep).sum() / n.sum()) if n.sum() else 0.0,
+                     "medie_autonome": float(rep_auto.mean()) if len(rep_auto) else 0.0,
+                     "medie_restul": float(rep_rest.mean()) if len(rep_rest) else 0.0,
+                     "maxim_autonome": int(rep_auto.max()) if len(rep_auto) else 0,
+                     "maxim_restul": int(rep_rest.max()) if len(rep_rest) else 0,
+                     "histograma": {str(a): int(b) for a, b in sorted(Counter(rep.tolist()).items())}},
+        "procent_cerut": procent, "simboluri_total_cerute": simboluri_total, "simboluri_exercitii_tinta": tinta,
+        "amestec": am, "validare_copiate": len(copiate),
+        "deoparte": {"toate": sume(dep), "autonome": sume([f for f in dep if f["autonoma"]]),
+                     "cu_d": sume(cu_d), "d_pe_tip": pe_tip, "cutie_stari": dict(stari.most_common())},
+        "blocul": bloc, "sfarsit_de_fisier": SFARSIT,
+    }
+    f_rez.write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    jurnal(json.dumps({k_: rez[k_] for k_ in ("antrenare", "repetari", "scurgere")}, ensure_ascii=False))
+    return rez
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="comanda", required=True)
@@ -1042,8 +1424,17 @@ def main(argv=None) -> int:
     b.add_argument("--procese", type=int, default=12)
     b.add_argument("--fire", type=int, default=16)
     b.add_argument("--pana-la", default=None, help="HH:MM — oprire curată (se reia cu aceeași comandă)")
+    e = sub.add_parser("exercitii", help="S69: exercițiile și amestecul pentru S70 (o singură dată)")
+    e.add_argument("--simboluri-total", type=int, required=True, help="câte simboluri are amestecul (8 ore la viteza S63)")
+    e.add_argument("--procent", type=float, default=0.25)
+    e.add_argument("--max-rep", type=int, default=6)
+    e.add_argument("--procese", type=int, default=12)
+    e.add_argument("--fire", type=int, default=16)
     a = ap.parse_args(argv)
     j = lambda m: print(time.strftime("%H:%M:%S"), m, flush=True)  # noqa: E731
+    if a.comanda == "exercitii":
+        exercitii(a.simboluri_total, procent=a.procent, max_rep=a.max_rep, procese=a.procese, fire=a.fire, jurnal=j)
+        return 0
     if a.comanda == "bland":
         return 0 if bland(procese=a.procese, fire=a.fire, pana_la=a.pana_la, jurnal=j) is not None else 3
     if a.comanda == "curata":

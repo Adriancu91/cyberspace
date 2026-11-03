@@ -424,3 +424,92 @@ def test_comanda_bland_din_linia_de_comanda(monkeypatch):
     assert primite["procese"] == 3 and primite["fire"] == 4 and primite["pana_la"] == "18:20"
     monkeypatch.setattr(fu, "bland", lambda **k: None)
     assert fu.main(["bland"]) == 3
+
+
+# ---------------------------------------------------------------- S69: comanda `exercitii` (setul + amestecul)
+
+def test_exemplele_doctest_si_asserturile():
+    doc = "Aria.\n\n>>> round(aria(1), 2)\n3.14\n>>> x = 2\n>>> aria(x) > 0\nTrue\n>>> aria('a')\nTraceback (most recent call last):\nTypeError: x\n"
+    randuri, sarite = fu.exemple_doctest(doc)
+    assert sarite == 1 and len(randuri) == 3 and randuri[1] == "x = 2"
+    assert randuri[0].startswith("_v = (round(aria(1), 2))\nassert repr(_v) == '3.14'")
+    a = fu.asserturi_fisier(ast.parse("def test():\n    assert f(2) == 4\n    assert f(np.x)\n    assert math.floor(f(1)) == 1\n"))
+    assert fu.asserturi_pentru("f", a) == ["assert f(2) == 4", "import math\nassert math.floor(f(1)) == 1"]
+    assert fu.asserturi_pentru("g", a) == []
+
+
+def test_programul_doctest_trece_in_cutia_adevarata():
+    n, linii = _arbore(CU_DOC)
+    text = "import math\n\n\n" + fu.descrie(n["aria"], linii)["text"]
+    ex, _ = fu.exemple_doctest(ast.get_docstring(n["aria"]))
+    tip, prog, nr = fu.program_d({"exemple": ex, "text": text, "nume": "aria", "doctest": True}, [])
+    assert tip == "doctest" and nr == 1 and fu.proba_in_cutie(prog)["stare"] == "ok"
+    rau = prog.replace("3.14", "3.15")
+    assert fu.proba_in_cutie(rau)["stare"] != "ok"
+    tip, prog, nr = fu.program_d({"exemple": [], "text": text, "nume": "aria", "doctest": False}, [])
+    assert tip == "assert" and prog is None and nr == 0
+
+
+def test_repetarile_si_plafonul():
+    import numpy as np
+    r, k = fu.repetari(np.array([10, 10]), np.array([1.0, 2.0]), 1000, 6)
+    assert k == 6 and r.tolist() == [6, 12]
+    r, k = fu.repetari(np.array([10, 10, 10, 10]), np.array([1.0, 1.0, 1.0, 1.0]), 100, 6)
+    assert k == 2.5 and set(r.tolist()) <= {2, 3}
+    assert fu.alege_deoparte({"a", "b", "c"}, 0.02) == fu.alege_deoparte({"c", "b", "a"}, 0.02)
+    assert len(fu.alege_deoparte({f"p{i}" for i in range(500)}, 0.02)) == 10
+
+
+def test_exercitii_cap_coada(tmp_path, date, monkeypatch):
+    import numpy as np
+    cod, exclus, cale_tok = date
+    randuri = (cod / "cod.jsonl").read_text(encoding="utf-8")
+    nou = {"sursa": "pypi", "pachet": "auto", "limbaj": "python", "licenta": "BSD", "cale": "auto/f.py",
+           "text": _antrenare(AUTONOME)}
+    (cod / "cod.jsonl").write_text(randuri + json.dumps(nou) + "\n", encoding="utf-8")
+    functii_dir = tmp_path / "functii"
+    fu.ruleaza(cod, exclus, functii_dir, cale_tok, ascunse={}, probleme_proba=PROBA, procese=1, jurnal=lambda m: None)
+    arg = dict(ascunse={}, probleme_proba=PROBA, procese=1, fire=2, cutia=_cutia_falsa, jurnal=lambda m: None)
+    fu.curata(cod, functii_dir, cale_tok, **arg)
+    fu.bland(cod, functii_dir, cale_tok, **arg)
+    simb = tmp_path / "simboluri"
+    simb.mkdir()
+    (np.arange(20_000) % 290).astype(np.uint16).tofile(simb / "antrenare_00000.bin")
+    (np.arange(100) % 7).astype(np.uint16).tofile(simb / "validare_00000.bin")
+    monkeypatch.setattr(fu, "alege_deoparte", lambda pachete, p: {"pypi:pachet"})
+    rulate = []
+    arg["cutia"] = lambda t: rulate.append(t) or {"stare": "ok", "mesaj": ""}
+    iesire = tmp_path / "ex"
+    rez = fu.exercitii(4000, cod, functii_dir, simb, iesire, cale_tok, exclus, bloc=16, simboluri_pe_fisier=512, **arg)
+    # (a+b+c): aria, metoda (pachet, deoparte), invers (scurgere în proba), cele 8 din AUTONOME
+    assert rez["cerute"] == 11 and rez["negasite"] == 0 and rez["scurgere"]["proba_functii_scoase"] == 1
+    a = rez["antrenare"]
+    assert a["toate"]["functii"] == 8 and a["autonome"]["functii"] == 2  # suma_patrate, cu_math
+    assert rez["deoparte"]["toate"]["functii"] == 2 and rez["deoparte"]["cu_d"]["functii"] == 2
+    assert rez["deoparte"]["d_pe_tip"] == {"doctest": {"functii": 1, "cu_program": 1, "ok": 1},
+                                           "assert": {"functii": 1, "cu_program": 0, "ok": 0}}
+    assert len(rulate) == 1 and rulate[0].startswith("import math\n") and "assert repr(_v) == '3.14'" in rulate[0]
+    assert rez["repetari"]["maxim_restul"] <= 6 and rez["repetari"]["maxim_autonome"] <= 12
+    am = rez["amestec"]
+    tot = np.concatenate([np.fromfile(iesire / f, dtype=np.uint16) for f in am["fisiere"]])
+    assert len(tot) == am["simboluri_scrise"] and len(am["fisiere"]) > 1
+    assert int((tot == fu.SFARSIT).sum()) == sum(int(r.split("\t")[6]) for r in
+                                                (iesire / "exercitii.tsv").read_text(encoding="utf-8").splitlines()[1:])
+    assert 0.2 < am["procent_exercitii_real"] < 0.3
+    assert (iesire / "validare_00000.bin").read_bytes() == (simb / "validare_00000.bin").read_bytes()
+    dep = [json.loads(r) for r in (iesire / "deoparte.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert {d["nume"] for d in dep} == {"aria", "metoda"} and all(d["corp"] and d["text"] for d in dep)
+    assert (simb / "antrenare_00000.bin").stat().st_size == 40_000  # sursa neatinsă
+    from module.date_cod import DateCod
+    d = DateCod(str(iesire), context=16)
+    assert len(d.simboluri_antrenare()) == am["simboluri_scrise"]
+    with pytest.raises(SystemExit):
+        fu.exercitii(4000, cod, functii_dir, simb, iesire, cale_tok, exclus, bloc=16, **arg)
+
+
+def test_comanda_exercitii_din_linia_de_comanda(monkeypatch):
+    primite = {}
+    monkeypatch.setattr(fu, "exercitii", lambda total, **k: primite.update(k, total=total) or {})
+    assert fu.main(["exercitii", "--simboluri-total", "970000000", "--procese", "3"]) == 0
+    assert primite["total"] == 970_000_000 and primite["procese"] == 3 and primite["procent"] == 0.25
+    assert primite["max_rep"] == 6

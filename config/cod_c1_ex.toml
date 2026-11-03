@@ -1,0 +1,77 @@
+# S69 (instrucțiunile: supraveghetor, 3 nov 2026 14:20; aprobat de Adrian, COMENZI.md C-60): configurarea nopții S70
+# (C-60 pasul B, o noapte pe exerciții). E config/cod_c1_init002.toml (cea de la S63), schimbată DOAR la:
+#   [porturi.date] director = "lucru/kronos_cod/exercitii" (amestecul S69: ~25 % exerciții „antet + explicație → corp”,
+#     restul cod obișnuit; validare_*.bin = exact cele de la S58/S63), cale_stare = "lucru/cod_c1_ex/gpt.pt" (copia
+#     stării liniei după S63; originalul lucru/cod_c1/gpt.pt rămâne neatins, e rezerva) și eticheta.
+# Linia rămâne „cod_c1” (numele nu s-a schimbat): jurnalul are deja orele 1–20, deci antrenare_lunga.py numără de la 21
+# (8 ore noi = --ore 28). Rata: cea fixă de după scădere (6·10⁻⁵), ca la S63.
+#   python unelte/antrenare_lunga.py --config config/cod_c1_ex.toml --ore 28
+#
+# --- de aici în jos, comentariile din config/cod_c1_init002.toml ---
+# S61 (aprobat de supraveghetor, 31 oct 2026 23:15): copie a lui config/cod_c1.toml + `abatere_incorporari = 0.02`
+# la model (încorporările și capul legat pornesc din normala cu abaterea 0,02, ca la GPT-2), nimic altceva diferit.
+#
+# S57 (aprobat de supraveghetor, 31 oct 2026 17:15): configurarea primei antrenări Kronos-Cod, linia nouă `cod_c1`.
+# De la zero (nu din #477), 12 straturi × 12 capete × 768, context 512, vocabularul de cod 32.768 (~110 mil. parametri);
+# AdamW, rata max 6·10⁻⁴, încălzire 1.000 pași, scădere la 10 % în cele 10 ore; lot 8 × 12 adunate = 96 (ca linia w2:
+# 12 × 8); sămânța 0.
+# S59 (aprobat de supraveghetor, 31 oct 2026 20:15): modelul e module.model_gpt_cod (ia direct simbolurile din date_cod,
+# fără tokenizare), iar examenul de la fiecare oră e module.examen_cod_validare (biți pe octet pe 1.000 de fișiere de
+# validare, alese cu sămânța 0). `previzualizare = true` la date: testul rapid al lui Kronos (kronos/orchestrator.py,
+# pasul 4) cere date.text_validare(); modelul nu folosește textul de antrenare (ia simbolurile). `hrana = ""` la model:
+# altfel antrenare_lunga.py pune singur hrana implicită (poveștile cu fapte, în engleză), pe care modelul de cod o refuză.
+
+[platforma]
+nume = "cod_c1"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 10
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt_cod:ModelGPTCod"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 8, adunare_loturi = 12, rata_invatare = 0.0006, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 0.1, durata_scaderii_secunde = 36000, tokenizer = "bpe", cale_tokenizer = "lucru/kronos_cod/tokenizer/bpe_cod_32768.json", cale_stare = "lucru/cod_c1_ex/gpt.pt", director_cache = "lucru/cache", samanta = 0, optimizator = "adamw", hrana = "", abatere_incorporari = 0.02 }
+
+[antrenare_lunga]
+eticheta = "S70: cod_c1 pe exerciții (C-60 B), 8 ore din starea copiată lucru/cod_c1_ex/"
+
+[porturi.date]
+modul = "module.date_cod:DateCod"
+setari = { director = "lucru/kronos_cod/exercitii", context = 512, sfarsit_de_fisier = 32764, cale_tokenizer = "lucru/kronos_cod/tokenizer/bpe_cod_32768.json", previzualizare = true }
+
+[porturi.examen]
+modul = "module.examen_cod_validare:ExamenCodValidare"
+setari = { fisiere = 1000, samanta = 0, lot = 8 }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [8] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
