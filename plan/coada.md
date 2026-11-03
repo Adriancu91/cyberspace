@@ -2435,7 +2435,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1204_S68_functii_blande.md
 
 ### S69 — Kronos-Cod C-60 pasul A: setul de exerciții „antet + explicație → corp” + amestecul pentru noaptea S70 (doar procesor, fără placă, fără antrenare)
-- stare: **aprobat**
+- stare: in_lucru (executant, 3 nov 14:30)
 - tip: procesor (doar citire din datele deja descărcate și din ieșirile S65/S67/S68; cutia doar pentru verificarea celor cu exemplu/test)
 - fereastră: zi, **acum, până la 18:30** (ca S70 să poată porni la 19:00). Dacă nu e gata la 18:30, continui (e doar procesor), iar S70 pornește când S69 e `gata`, dar cel târziu la 22:00; după 22:00 S70 trece pe noaptea următoare.
 - durată maximă: 3 ore
