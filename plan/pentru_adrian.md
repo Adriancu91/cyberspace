@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 05:20 — Numărătoarea funcțiilor (S65): DESTULE; o verificare mai strictă până la 08:45; fereastra ta 09:00–11:30 e notată
+
+- **S65 gata, verificat de mine (am refăcut adunările): DESTUL.** În codul descărcat sunt **339.425 de funcții scurte cu explicație** care trec verificarea cutiei, **52,9 milioane de simboluri** (pragul era 20 mil.). Cu exemplu sau test lângă ele: **29.040** (7,2 mil.). Nicio scurgere din seturile ascunse. **1183 teste trec.** Atenție: cifra e umflată — explicațiile sunt adesea mai lungi decât codul, iar ~27 % au un singur rând.
+- **Pus în coadă (aprobat de mine, doar procesor, ~1 oră): S67** — numărăm doar funcțiile „ca la examen”: codul fără explicație, fără cele banale, și care merg singure. Așa varianta A de la S66 are cifra reală. Se termină înainte de 08:45; dacă nu, se oprește curat și continuă după 11:30.
+- **Comanda ta C-57 preluată:** azi **09:00–11:30** placa și calculatorul sunt ale tale; executantul nu pornește nimic. Placa rămâne liberă azi până alegi la S66.
+- **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C” — sau direcția „exerciții / memorie de cod / școala de cod” pe care ai pomenit-o, spusă în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
+
 ## 3 noiembrie 2026, 02:20 — Testul „ajută dacă încearcă de multe ori?” (S64): practic NU; propun 3 direcții pentru Kronos-Cod
 
 - **S64 gata, verificat de mine (am refăcut calculul): NECLAR, la un pas de „nu ajută”.** Cu 200 de încercări pe fiecare din cele 20 de probleme de probă, modelul rezolvă doar **2 probleme** (cele mai simple); cu 100 de încercări, în medie **1,25 din 20** (AJUTĂ cerea ≥ 4, NU AJUTĂ ≤ 1). Doar ~6 % din răspunsuri au greșeli de scriere; **~92 % rulează, dar dau rezultat greșit** — știe cum arată codul, nu și cum să rezolve. Placa a stat mult sub limite (1.468 MB, 49 °C), **1177 teste trec**.
@@ -147,10 +154,3 @@
 - **Rulează S46 bucata 2** (descărcarea codului, fără placă): ~21.100 pachete noi în noaptea asta, fișierul de cod are 4,67 GB; 61 GB liberi pe disc. Se oprește singură pe la ~12:00; o verific la 14:15.
 - Nimic nou pus în coadă; nicio comandă nouă pentru Kronos în hub.
 - **Aștept de la tine (fără grabă, aceleași 3 de la 02:15):** „da #477”; ce să facă placa de acum; comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
-## 31 octombrie 2026, 02:15 — Antrenarea de noapte S51 a mers până la capăt: CONFIRMAT (#477 e acum cel mai bun model); descărcarea codului continuă
-
-- **S51 verificat: CONFIRMAT, la limită.** Noaptea a mers fără cădere (19:00–01:23). Modelul nou **#477**: română **1,2097** (față de 1,2162 la #459; prag 1,2112), cod 0,7270, povești 0,4060 — toate mai bune, toate 7 validările puțin mai bune. Placa: max 6.002 MB, 64 °C. **1119 teste trec.**
-- **Câștigul scade:** a doua noapte a adus −0,0065, prima adusese −0,017. O a treia noapte la fel probabil n-ar mai merita, deci **n-o pun**.
-- **Rulează S46 bucata 2** (descărcarea codului, fără placă, de la 02:00, până pe la ~12:00). **Placa stă liberă** până îmi spui ce vrei pe ea.
-- **Aștept de la tine (fără grabă):** (1) „da #477” dacă vrei ca #477 să-l înlocuiască pe #459 (în interfață și în Cyber Universe OS); (2) ce să facă placa de acum (de ex. tokenizerul pe cod după descărcare, sau altă idee); (3) rămâne întrebarea cu repornirea din 29 oct (comanda în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).

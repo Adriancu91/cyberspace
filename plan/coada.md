@@ -268,6 +268,11 @@ Lecția: a doua noapte a adus −0,0065, față de −0,017 la prima (S38) — l
 S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o singură rulare (112 s) ✓; 3,8662 GB scanați = rezumatul S46 ✓. Față de praguri: soluția întreagă **0/200** (prag 0 ✓), suprapuneri de 13 **87/200 > 10** ✗, compromis (> 50 cu soluția întreagă) nu → **DE CURĂȚAT**, corect. De exclus 3.821 fișiere curate (118 MB = 3,06 %; 118,3/3866 = 3,06 % ✓); cea mai lungă suprapunere 26 de simboluri; 1126 teste trec, 1 sărit. Excluderea se aplică la S55. Propunerea executantului (să se excludă doar suprapunerile din enunț/soluție, nu cele din listele de numere ale testelor) **nu se aplică** fără „da”-ul lui Adrian: S55 exclude toată lista.
 **Ordinea:** **S54** acum (procesor, ~1–2 ore; deblochează C-46 la OS), apoi **S55** (procesor, poate continua în noapte). **Placa stă liberă diseară**: nicio sarcină de placă în granițele mele care să merite (a treia noapte w2 nu e susținută de cifre); prima antrenare Kronos-Cod vine după S55, cu planul și pragurile din raportul ei.
 
+**Actualizare 3 nov 05:20 (supraveghetor) — C-57 (Adrian): FEREASTRA LUI ADRIAN AZI 09:00–11:30 pe workstation.**
+Între **09:00 și 11:30** nu porni nimic pe placă și nimic lung pe procesor (Adrian lucrează în Cyber Universe). Dacă la **08:45** rulează ceva, îl oprești
+curat (reluabil) și scrii în raport unde s-a oprit. După 11:30 coada continuă normal. Direcția Kronos-Cod (S66) o alege Adrian după testele lui.
+Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi până la „da”-ul lui Adrian la S66.
+
 ### S28 — Oprirea în siguranță a workstation-ului (cerută de Adrian)
 - stare: anulat — nu mai e nevoie (Adrian, prin centrul de comandă, 27 oct 23:50; scris de supraveghetor 28 oct 02:15)
 - stare veche: oprit
@@ -2318,7 +2323,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-03_0150_S64_pass_k_mare.md
 
 ### S65 — Kronos-Cod: câte „funcții scurte cu explicație (și teste)” avem deja în codul descărcat? (doar procesor, fără placă, fără antrenare)
-- stare: gata (executant, 3 nov 02:39: rularea 02:32–02:33, cod 0, 103 s; (a) 628.251 funcții, (a+b) 89,9 mil. simboluri, **(a+b+c) 339.425 funcții / 52,9 mil. simboluri → DESTUL**, (a+b+c+d) 29.040 / 7,2 mil.; simbolurile includ explicațiile, (c) nu garantează că funcția merge singură; scurgerea: proba 0 soluții întregi, 1 suprapunere de 13; S58 și ascuns2 0 / 0, SHA neschimbat; 1183 teste trec, 1 sărit)
+- stare: gata — verificat de supraveghetor 3 nov 05:20: DESTUL corect (executant, 3 nov 02:39: rularea 02:32–02:33, cod 0, 103 s; (a) 628.251 funcții, (a+b) 89,9 mil. simboluri, **(a+b+c) 339.425 funcții / 52,9 mil. simboluri → DESTUL**, (a+b+c+d) 29.040 / 7,2 mil.; simbolurile includ explicațiile, (c) nu garantează că funcția merge singură; scurgerea: proba 0 soluții întregi, 1 suprapunere de 13; S58 și ascuns2 0 / 0, SHA neschimbat; 1183 teste trec, 1 sărit)
 - tip: procesor (doar citire din date)
 - fereastră: oricând — nu ocupă placa; poate rula și ziua de 3 nov
 - durată maximă: 2 ore
@@ -2347,6 +2352,7 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
 - aprobat de: supraveghetor, 3 nov 2026 02:20 (granițele 3 și 5)
 - raport: docs/rapoarte/2026-11-03_0239_S65_functii.md
+- verdict verificat (supraveghetor, 3 nov 05:20): **DESTUL, corect.** (a+b+c) = 52.873.873 simboluri ≥ 20 mil. (și fără duplicate 51.090.271 ≥ 20 mil.); lanțul se strânge corect 628.251 ≥ 561.784 ≥ 339.425 ≥ 29.040; (d) pe bucăți 10.247 + 16.351 + 2.442 = 29.040 ✓; duplicatele 339.425 − 19.995 = 319.430 ✓. Scurgerea 0 pe ambele seturi ascunse, SHA neschimbat ✓. Rezervele executantului contează: simbolurile includ explicațiile (corpurile sunt mult mai mici), (c) e doar un plafon de sus, 27 % au un singur rând → S67 le măsoară înainte de orice antrenare.
 
 ### S66 — Kronos-Cod: direcția după S64 (alegerea lui Adrian)
 - stare: **propus — necesită Adrian** (răspunsul în hub, `COMENZI.md`: „da S66 A”, „da S66 B” sau „da S66 C”)
@@ -2359,3 +2365,33 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   - **C „model mai mare”**: o linie nouă (~2–3× mai mare, cât încape sub 7.000 MB), mai multe nopți. Cel mai scump; cere „da” separat oricum.
 - tip: placă (A și C), placă + procesor (B)
 - aprobat de: —
+
+### S67 — Kronos-Cod: funcțiile S65 „cu adevărat ca la examen” — simbolurile corpului, proba definiției în cutie, filtrul celor triviale (doar procesor, fără placă, fără antrenare)
+- stare: **aprobat**
+- tip: procesor (doar citire din date + rularea DOAR a definițiilor în cutie, fără apeluri)
+- fereastră: **acum, până la 08:45**; dacă nu se termină până la 08:45, o oprești curat și o reiei **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian)
+- durată maximă: 1,5 ore (S65 a rulat 103 s)
+- de ce: S65 a ieșit DESTUL (52,9 mil. simboluri la (a+b+c)), dar cu rezervele executantului: explicațiile sunt adesea mai lungi decât corpul,
+  (c) nu arată că funcția merge singură, ~27 % au un singur rând de corp. Înainte ca Adrian să aleagă la S66 (varianta A „funcții”), vrem cifra reală:
+  câte funcții seamănă cu adevărat cu examenul. Exact pasul propus de executant în raportul S65.
+- granițe: 3 (pregătirea datelor din surse deja descărcate) + 5 (unealtă în `unelte/` cu teste). Fără antrenare, fără placă.
+- pre-înregistrare: nu e nevoie (nu e antrenare, nici examen); pragurile orientative mai jos, scrise dinainte.
+- ce faci:
+  1. Extinzi `unelte/kronos_cod/functii.py` cu o comandă nouă (de ex. `curata`) + teste fără rețea pe fișiere mici; pornești de la `lucru/kronos_cod/functii/functii.tsv`
+     (doar (a+b+c), fără duplicatele exacte).
+  2. (i) **simbolurile doar ale corpului** (fără semnătură și fără docstring), cu tokenizerul de cod S55; (ii) **filtrul celor triviale**: scoți corpurile care sunt doar
+     `pass`, `...`, `raise …`, `return` fără valoare, `return <nume sau constantă>` sau doar un apel `super().…`; (iii) **proba definiției**: în cutie (neschimbată), rulezi
+     DOAR textul funcției (cu decoratori) ca modul separat, fără să o chemi, și apoi verificezi cu `ast` că toate numele libere din corp sunt parametri, nume locale,
+     funcții de bază ale lui Python sau module permise de cutie (fără nume din restul fișierului). Funcțiile care trec (ii) și (iii) = **„autonome”**.
+  3. Cifrele, cu și fără (d): funcții și simboluri (întregi și doar corpul) la fiecare pas; distribuția lungimii corpului; primele 20 de pachete; 3–5 exemple scurte autonome,
+     cu pachetul și licența. Scurgerea pe „autonome”: aceleași reguli ca la S65 (proba: suprapuneri de 13 + soluția întreagă; seturile ascunse S58 și `ascuns2`: **doar numărul**,
+     SHA verificat înainte și după).
+  4. Lista (fișier, linie, sha, marcaje) în `lucru/kronos_cod/functii/` (NU în Git). Nu ștergi și nu muți nimic din date.
+  5. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S67_functii_autonome.md`; coada → `gata`; commit + push.
+- pragurile orientative (scrise de supraveghetor acum, înainte): **DESTUL PENTRU A** = „autonome” cu **≥ 10 mil. simboluri de corp** → o noapte de 6–10 ore pe ele are sens
+  fără date noi (cu 1–3 repetări); **PUȚIN** = sub **3 mil.** → varianta A ar cere date noi sau trecerea la B (decizia lui Adrian); între → A se poate, cu mai multe repetări,
+  sau amestecată cu (d). Informativ: câte „autonome” au și (d).
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire), cutia (doar o folosești).
+  Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
+- aprobat de: supraveghetor, 3 nov 2026 05:20 (granițele 3 și 5)
+- raport: docs/rapoarte/<data>_<ora>_S67_functii_autonome.md
