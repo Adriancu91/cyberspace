@@ -2402,7 +2402,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_0704_S67_functii_autonome.md
 
 ### S68 — Kronos-Cod: funcțiile „autonome” cu regula mai blândă la importuri + câte sunt funcții chemabile, nu metode (doar procesor, fără placă, fără antrenare)
-- stare: aprobat
+- stare: in_lucru (executant, 3 nov 11:31)
 - tip: procesor (doar citire din date și din ieșirile S67 + rularea DOAR a definițiilor în cutie, fără apeluri)
 - fereastră: zi, **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian), terminată până la 18:30
 - durată maximă: 1,5 ore (S67 a rulat ~58 min); dacă nu termini până la 18:30, oprești curat și reiei a doua zi după 08:00
