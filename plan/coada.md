@@ -2435,7 +2435,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1204_S68_functii_blande.md
 
 ### S69 — Kronos-Cod C-60 pasul A: setul de exerciții „antet + explicație → corp” + amestecul pentru noaptea S70 (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 3 nov 14:30)
+- stare: gata (executant, 3 nov 14:43: cod 0, 14:41–14:42; 313.910 exerciții la antrenare (50,6 mil. simb.), k = 4,04 (restul max 5, autonomele max 9); amestecul 970,8 mil. simb. = **24,999 %** exerciții, 29 fișiere + validarea copiată identic; deoparte 80 pachete / 5.516 exerciții, (d) 603, doar **13** trec în cutie; scurgere: proba 1, ascuns2 3 (suprapunere 13, 0 întregi), S58 0, SHA neschimbat; `config/cod_c1_ex.toml` + copia `lucru/cod_c1_ex/gpt.pt` (identică) verificate pe procesor; 1195 teste trec, 1 sărit. **Înainte de S70:** cu `nume = "cod_c1"`, `--ore 8` nu antrenează nimic (jurnalul are 20 de ore → `--ore 28`) și lock/placa/rezultat.json se scriu în `lucru/cod_c1/` — variantele (a)/(b) în raport)
 - tip: procesor (doar citire din datele deja descărcate și din ieșirile S65/S67/S68; cutia doar pentru verificarea celor cu exemplu/test)
 - fereastră: zi, **acum, până la 18:30** (ca S70 să poată porni la 19:00). Dacă nu e gata la 18:30, continui (e doar procesor), iar S70 pornește când S69 e `gata`, dar cel târziu la 22:00; după 22:00 S70 trece pe noaptea următoare.
 - durată maximă: 3 ore
@@ -2461,7 +2461,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `module/date_cod.py`, cutia, modelele (`lucru/cod_c1/gpt.pt` doar se citește/copiază), #477, linia română.
   Nimic descărcat, nimic instalat, nimic din `lucru/` în Git. Nu pornești nimic pe placă.
 - aprobat de: **Adrian (COMENZI.md C-60, 3 nov 2026 11:45)**; instrucțiunile: supraveghetor, 3 nov 2026 14:20
-- raport: docs/rapoarte/<data>_<ora>_S69_exercitii.md
+- raport: docs/rapoarte/2026-11-03_1443_S69_exercitii.md
 
 ### S70 — Kronos-Cod C-60 pasul B: o noapte pe exerciții (8 ore, continuare din `gpt.pt`, pe copia `lucru/cod_c1_ex/`), apoi examenele pe `ascuns2` (placa)
 - stare: **aprobat** — pornește DOAR după S69 `gata` și după ce pre-înregistrarea e urcată
