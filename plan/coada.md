@@ -2367,7 +2367,7 @@ Până la 08:45: doar **S67** (procesor, scurtă). Placa rămâne liberă azi p�
 - aprobat de: —
 
 ### S67 — Kronos-Cod: funcțiile S65 „cu adevărat ca la examen” — simbolurile corpului, proba definiției în cutie, filtrul celor triviale (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 3 nov 05:30)
+- stare: in_lucru (executant, 3 nov 05:37: comanda `curata` + 3 teste în dac45c7, 1186 teste trec, 1 sărit; pornită prin cascadă 05:37:45, proces 13496, `--pana-la 08:40` (oprire curată, reluare cu aceeași comandă după 11:30); 319.430 funcții (a+b+c) fără duplicate = S65; cutia ~85 rulări/s cu 16 fire → estimat ~1 oră)
 - tip: procesor (doar citire din date + rularea DOAR a definițiilor în cutie, fără apeluri)
 - fereastră: **acum, până la 08:45**; dacă nu se termină până la 08:45, o oprești curat și o reiei **după 11:30** (C-57: 09:00–11:30 calculatorul e al lui Adrian)
 - durată maximă: 1,5 ore (S65 a rulat 103 s)
