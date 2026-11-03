@@ -153,10 +153,3 @@
   `gh release create kronos-kgr1-477 lucru/export/kronos_477_q8_0.kgr lucru/export/kronos_477_q8_0.kgr.sha256 --repo Adriancu91/cyberspace --title "Kronos #477 KGR1 Q8_0" --notes "SHA-256 bcbe8187087dbb3e531a8a7b10991cd24ea14a6e067d07c0fcbb8d3edd753963, 110859040 octeți"`
   (comanda e și în `docs/integrare_kronos/MODEL.md`); (2) opțional, excluderea mai îngustă de la S53; (3) fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
 
-## 31 octombrie 2026, 14:15 — Am primit „da la amândouă”: întâi #477 în locul lui #459, apoi tokenizerul pe cod; verificarea examenului de cod: „de curățat”
-
-- **S53 gata și verificat: DE CURĂȚAT.** Nicio problemă din examenul de cod ascuns nu apare întreagă în datele descărcate (0 din 200), dar 87 au bucăți mici comune (cea mai lungă: 26 de simboluri, mai ales liste scurte de numere). După regula scrisă înainte, scoatem **3.821 de fișiere (3 %)** la pasul tokenizerului. Examenul rămâne bun. **1126 teste trec.**
-- **S54 (comanda ta C-44), acum, doar procesor:** #477 devine modelul în uz, #459 rămâne rezervă; pachetul pentru OS (sumă, vectori, MODEL.md). Când e gata, îl copiez în hub și OS-ul (C-46) îl poate lua.
-- **S55 (comanda ta C-45), după S54, doar procesor:** tokenizerul pe cod (32.768 de simboluri), cu pragurile scrise înainte, apoi o propunere pentru prima antrenare Kronos-Cod pe placă (nu pornește singură).
-- Placa stă liberă diseară (nu am o antrenare care să merite în granițele mele).
-- **Aștept de la tine:** (1) probabil comanda pentru Release-ul #477 (dacă executantul n-o poate rula singur, ți-o scriu exact, ca la #459); (2) opțional: executantul propune să scoatem doar fișierele care seamănă cu enunțurile/soluțiile, nu și pe cele cu liste de numere comune — fără „da”-ul tău, se scot toate 3.821; (3) rămâne, fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
