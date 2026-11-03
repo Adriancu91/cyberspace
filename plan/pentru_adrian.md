@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 14:20 — S68: funcțiile „ca la examen” sunt PUȚINE; am pornit calea ta A+B+D: azi exercițiile, la noapte o antrenare pe ele
+
+- **S68 gata, verificat de mine: PUȚIN.** Funcțiile care se pot chema singure, ca la examen, au doar **0,77 mil. simboluri** de cod (pragul de jos era 3 mil.). Regula mai blândă la importuri a adus doar 66 de funcții; **78 %** din cele „autonome” sunt metode, care nu se pot chema singure. Nicio scurgere, **1190 teste trec**.
+- **Comenzile tale C-60 și C-62 preluate** (alegerea la S66 e făcută). Pus în coadă: **S69** (acum, doar procesor, ~2–3 ore): exercițiile „explicație + antet → corp” din toate funcțiile bune (319.430, cele autonome de 2 ori), amestecate 25 % cu 75 % cod obișnuit; **S70** (la noapte, de la 19:00, 8 ore pe placă): antrenare din modelul S63, pe o copie (originalul rămâne rezervă), apoi examenul pe același set de 163 ca la S63. Pragurile scrise dinainte: AJUTĂ = cel puțin **8/163** (S63: 3/163) fără să strice codul obișnuit; NU AJUTĂ = cel mult 4/163.
+- **Mâine ziua: S71**, memoria de cod („rege / regat”): caută 2–4 funcții asemănătoare și i le pune în față lui Kronos; măsurat întâi pe setul de probă. **Școala de cod (S72)** și **alegerea datelor de către Kronos (S73, C-62)** le detaliez după rezultatul de la noapte.
+- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 3 noiembrie 2026, 08:20 — Funcțiile „care merg singure” (S67): ÎNTRE; o numărătoare mai blândă după 11:30; fereastra ta 09:00–11:30 e liberă
 
 - **S67 gata, verificat de mine: ÎNTRE.** Funcțiile care merg cu adevărat singure (nu sunt goale, rulează în cutie, nu cer nimic din afara lor) sunt **83.349**, cu **3,55 milioane** de simboluri de cod (pragul de jos 3 mil., cel de sus 10 mil.). Cu exemplu/test lângă ele: doar 7.182. Nicio scurgere din seturile ascunse. **1186 teste trec.** S-a terminat la 06:35, deci **calculatorul e liber pentru tine la 09:00**. Raportul de dimineață e scris.
@@ -146,11 +153,3 @@
 - **S55 (comanda ta C-45), după S54, doar procesor:** tokenizerul pe cod (32.768 de simboluri), cu pragurile scrise înainte, apoi o propunere pentru prima antrenare Kronos-Cod pe placă (nu pornește singură).
 - Placa stă liberă diseară (nu am o antrenare care să merite în granițele mele).
 - **Aștept de la tine:** (1) probabil comanda pentru Release-ul #477 (dacă executantul n-o poate rula singur, ți-o scriu exact, ca la #459); (2) opțional: executantul propune să scoatem doar fișierele care seamănă cu enunțurile/soluțiile, nu și pe cele cu liste de numere comune — fără „da”-ul tău, se scot toate 3.821; (3) rămâne, fără grabă, comanda pentru repornirea din 29 oct (`docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
-## 31 octombrie 2026, 11:15 — Descărcarea codului (S46) s-a terminat: 1,1 miliarde de simboluri de cod curat, mai puțin decât estimarea
-
-- **S46 gata și verificat:** descărcarea s-a încheiat în 2 nopți (nu 3), fără erori: **3,87 GB de cod curat (~1,10 miliarde de simboluri)**, doar licențe bune, 61 GB liberi pe disc. **1119 teste trec.**
-- **Cinstit: e cam o treime din cât estimam (3–6 miliarde).** Multe pachete Rust au fost respinse pentru că n-au fișier de licență, iar lista Python de la sursă are 15.000 de pachete, nu 30.000.
-- **Am pus în coadă S53** (doar procesor, ~1–2 ore, azi): verific că problemele examenului de cod ascuns nu apar deja în datele descărcate — altfel orice scor viitor pe cod ar fi fals. Nu șterge nimic, doar face o listă de excludere. Placa rămâne liberă.
-- Nicio comandă nouă pentru Kronos în hub.
-- **Aștept de la tine (fără grabă):** (1) dacă 1,1 miliarde îți ajung și dai „da” pentru tokenizerul pe cod, sau vrei mai multe surse (descărcare nouă = tot „da”-ul tău); (2) „da #477”; (3) ce să facă placa; (4) comanda pentru repornirea din 29 oct (în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
