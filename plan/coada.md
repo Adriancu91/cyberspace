@@ -2283,7 +2283,8 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
 - raport: docs/rapoarte/2026-11-02_2240_S63_cod_c1_noaptea2.md (înainte: 2026-11-02_0932_S63_oprit_set_ascuns.md)
 
 ### S64 — Kronos-Cod: diagnostic „mai multe încercări ajută?” — pass@k cu multe corpuri pe setul de PROBĂ + de ce pică corpurile (placa ~1,5 ore + procesor)
-- stare: gata (executant, 3 nov 01:50: lanțul terminat 01:20, cod 0; T = 0,8: 3 „ok” din 4.000, pass@100 1,25/20 → **NECLAR**; T = 0,4: 25 „ok”, pass@100 1,50/20; aceleași 2 probleme (s01, s12); 6,1 % necompilabile, ~92 % rezultat greșit; placa max 1.468 MB / 49 °C; 1177 teste trec)
+- stare: gata — verificat de supraveghetor 3 nov 02:20: NECLAR corect (executant, 3 nov 01:50: lanțul terminat 01:20, cod 0; T = 0,8: 3 „ok” din 4.000, pass@100 1,25/20 → **NECLAR**; T = 0,4: 25 „ok”, pass@100 1,50/20; aceleași 2 probleme (s01, s12); 6,1 % necompilabile, ~92 % rezultat greșit; placa max 1.468 MB / 49 °C; 1177 teste trec)
+- verdict verificat (supraveghetor, 3 nov 02:20): **NECLAR, corect.** Recalculat cu estimatorul nedeplasat din (n = 200, c): T = 0,8 → s01 c = 1 → 1 − C(199,100)/C(200,100) = 0,500; s12 c = 2 → 1 − (100·99)/(200·199) = 0,751; suma **1,251/20** (AJUTĂ ≥ 4 ✗, NU AJUTĂ ≤ 1 ✗). T = 0,4: s01 c = 24 → ~1,000, s12 c = 1 → 0,500 → 1,50/20 ✓. Pre-înregistrarea ce181c5 (23:30:25) urcată înainte de pornire (23:30:33) ✓; seturile ascunse nedeschise; placa max 1.468 MB / 49 °C ✓. Citirea mea: 1,25 e practic „nu ajută” — modelul nu „ascunde” soluții pe care le-ar găsi cu multe încercări; 92 % din corpuri rulează dar dau rezultat greșit (logica, nu forma).
 - stare veche: in_lucru (executant, 2 nov 23:30: pre-înregistrarea `2026-11-02_cod_pass_k_mare.md` + lanțul `lucru/cascada/S64/s64.py` în ce181c5 (23:30:25), urcate ÎNAINTE de pornire (ora „23:35” scrisă în pre-înregistrare e aproximată greșit; ordinea reală o arată commit-ul); lanțul pornit 23:30:33, proces 23288, pasul (a) T = 0,8, n = 200 rulează; estimat ~1,6 ore)
 - stare anterioară: **aprobat**
 - tip: placă (scurt, doar scriere de răspunsuri) + procesor
@@ -2315,3 +2316,46 @@ S53: suma setului ascuns `90fc64cd…3749` la început și la sfârșit ✓; o s
   (nu la antrenare), deci cifra e un diagnostic, nu un examen; o spunem așa.
 - aprobat de: supraveghetor, 2 nov 2026 23:20 (granițele 2 și 5)
 - raport: docs/rapoarte/2026-11-03_0150_S64_pass_k_mare.md
+
+### S65 — Kronos-Cod: câte „funcții scurte cu explicație (și teste)” avem deja în codul descărcat? (doar procesor, fără placă, fără antrenare)
+- stare: **aprobat**
+- tip: procesor (doar citire din date)
+- fereastră: oricând — nu ocupă placa; poate rula și ziua de 3 nov
+- durată maximă: 2 ore
+- de ce: S58, S63 și S64 arată același lucru: modelul `cod_c1` a învățat *forma* codului (doar ~6 % din corpuri nu se compilează), dar nu *logica*
+  (~92 % rulează și dau rezultat greșit; chiar cu 200 de încercări rezolvă doar 2 probleme simple din 20). Varianta „date cu funcții și teste”
+  (antrenare pe funcții scurte cu explicație, apropiate de forma examenului) are nevoie de cifre înainte să i-o propun lui Adrian: câte astfel de
+  funcții avem deja, fără nicio descărcare nouă.
+- granițe: 3 (pregătirea datelor din surse deja descărcate) + 5 (unealtă nouă în `unelte/` cu teste). Fără antrenare, fără placă.
+- pre-înregistrare: nu e nevoie (nu e antrenare și nici examen); pragurile orientative de mai jos sunt scrise dinainte.
+- ce faci:
+  1. Unealtă nouă `unelte/kronos_cod/functii.py` (+ teste fără rețea, pe fișiere mici făcute în test). Citește doar `lucru/kronos_cod/complet/cod.jsonl`,
+     **doar fișierele folosite la antrenare** (curate, minus `lucru/kronos_cod/scurgere/fisiere_de_exclus.txt` din S53, minus validarea de 1 % după regula din S55).
+     Pentru fișierele Python, cu `ast` (codul NU se rulează), găsește funcțiile (de modul sau metode) care au:
+     (a) explicație (docstring); (b) corp de 1–30 de linii; (c) doar construcții permise de cutie (refolosești verificarea statică a cutiei, fără să o schimbi);
+     (d) marcaj separat: un exemplu `>>>` în explicație, sau numele funcției apare într-un `assert` dintr-un fișier de test din același pachet.
+  2. Cifrele: câte funcții la (a), (a+b), (a+b+c), (a+b+c+d); câte simboluri au în total (tokenizerul de cod din S55); câte sunt duplicate exacte
+     (după normalizare); primele 20 de pachete după număr; 3–5 exemple scurte (cu pachetul și licența din S46).
+  3. Scurgerea: pe **setul de PROBĂ** (public), aceleași reguli ca S53 (suprapuneri de 13 simboluri, soluția întreagă) pe funcțiile găsite. Pe seturile
+     ascunse S58 și `ascuns2`: **doar numărul** de potriviri ale soluției de referință întregi, cu unealta S53, fără să arăți vreun text (ambele sunt deja
+     folosite; cifra contează pentru un set ascuns viitor).
+  4. Lista funcțiilor (fișier, linie, sha) în `lucru/kronos_cod/functii/` (NU în Git). Nu ștergi și nu muți nimic din date.
+  5. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S65_functii.md`; coada → `gata`; commit + push.
+- pragurile orientative (scrise de supraveghetor acum, înainte): **DESTUL** = (a+b+c) ≥ **20 mil. simboluri** → o antrenare pe ele are sens fără date noi;
+  **PUȚIN** = sub **5 mil.** → varianta ar cere o descărcare nouă (asta e decizia lui Adrian); între → se poate, cu 2–4 repetări ale datelor.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, modelele (`gpt.pt`, #477), linia română, datele din `complet/` (doar citire).
+  Nimic descărcat, nimic instalat, nimic din `lucru/` în Git.
+- aprobat de: supraveghetor, 3 nov 2026 02:20 (granițele 3 și 5)
+- raport: docs/rapoarte/<data>_<ora>_S65_functii.md
+
+### S66 — Kronos-Cod: direcția după S64 (alegerea lui Adrian)
+- stare: **propus — necesită Adrian** (răspunsul în hub, `COMENZI.md`: „da S66 A”, „da S66 B” sau „da S66 C”)
+- de ce: două nopți pe cod (S58, S63) + diagnosticul S64: rezolvarea rămâne ~2 % și nu crește nici cu 200 de încercări. Încă o noapte cu aceeași
+  rețetă ar aduce puțin. Variantele (detaliile exacte și pragurile le scriu după „da” și, la A, după cifrele S65):
+  - **A „funcții”** (recomandarea mea): continuare pe linia `cod_c1` din `gpt.pt`, ~6–10 ore, pe un amestec cu funcțiile scurte din S65 (de ex. jumătate
+    funcții, jumătate cod obișnuit), apoi examen pe un set ascuns NOU. Fără descărcări dacă S65 iese DESTUL. Ieftin, folosește ce avem.
+  - **B „școala cu verificator”** (auto-jocul H3 din strategie): probleme generate foarte ușoare, modelul încearcă de multe ori, încercările corecte
+    (verificate de cutie) intră în antrenare, runde scurte. S64 arată că acum găsește rar o soluție, deci ar porni de la nivelurile cele mai simple.
+  - **C „model mai mare”**: o linie nouă (~2–3× mai mare, cât încape sub 7.000 MB), mai multe nopți. Cel mai scump; cere „da” separat oricum.
+- tip: placă (A și C), placă + procesor (B)
+- aprobat de: —

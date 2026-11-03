@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 3 noiembrie 2026, 02:20 — Testul „ajută dacă încearcă de multe ori?” (S64): practic NU; propun 3 direcții pentru Kronos-Cod
+
+- **S64 gata, verificat de mine (am refăcut calculul): NECLAR, la un pas de „nu ajută”.** Cu 200 de încercări pe fiecare din cele 20 de probleme de probă, modelul rezolvă doar **2 probleme** (cele mai simple); cu 100 de încercări, în medie **1,25 din 20** (AJUTĂ cerea ≥ 4, NU AJUTĂ ≤ 1). Doar ~6 % din răspunsuri au greșeli de scriere; **~92 % rulează, dar dau rezultat greșit** — știe cum arată codul, nu și cum să rezolve. Placa a stat mult sub limite (1.468 MB, 49 °C), **1177 teste trec**.
+- **Pus în coadă (aprobat de mine, doar procesor, fără placă): S65** — numărăm câte „funcții scurte cu explicație (și teste)” există deja în codul descărcat, ca varianta A de mai jos să aibă cifre. Nimic descărcat, nimic antrenat.
+- **Propus, așteaptă alegerea ta: S66.** **A „funcții”** (recomandarea mea): încă 6–10 ore pe același model, dar pe funcții scurte cu explicație, apoi examen pe un set nou. **B „școala cu verificator”**: probleme foarte ușoare, modelul încearcă mult și învață din ce îi iese corect. **C „model mai mare”**: cel mai scump, mai multe nopți.
+- **Placa:** liberă azi ziua până alegi (nu pun pe ea încă o noapte cu aceeași rețetă — ar aduce puțin).
+- **Aștept de la tine:** „da S66 A”, „da S66 B” sau „da S66 C” (în hub, prin centrul de comandă). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
+
 ## 2 noiembrie 2026, 23:20 — A doua antrenare pe cod (S63) a ieșit NECLAR; în noaptea asta un test scurt: „ajută dacă modelul încearcă de multe ori?”
 
 - **S63 gata, verificat de mine: NECLAR, corect.** Forma codului s-a mai îmbunătățit puțin: **0,5004 biți pe octet** (S58: 0,5141; CONTINUĂ cerea ≤ 0,494). Problemele rezolvate pe setul nou: **3 din 163** (1,8 %; CONTINUĂ cerea ≥ 5, PLATOU ≤ 2). Pe setul de probă: 0 din 20. Placa în limite (**6.013 MB, 63 °C**), **1177 teste trec**. Pe scurt: învață cum *arată* codul, dar rezolvă tot ~2 % din probleme; o a treia noapte la fel ar aduce puțin.
@@ -146,10 +154,3 @@
 - **Câștigul scade:** a doua noapte a adus −0,0065, prima adusese −0,017. O a treia noapte la fel probabil n-ar mai merita, deci **n-o pun**.
 - **Rulează S46 bucata 2** (descărcarea codului, fără placă, de la 02:00, până pe la ~12:00). **Placa stă liberă** până îmi spui ce vrei pe ea.
 - **Aștept de la tine (fără grabă):** (1) „da #477” dacă vrei ca #477 să-l înlocuiască pe #459 (în interfață și în Cyber Universe OS); (2) ce să facă placa de acum (de ex. tokenizerul pe cod după descărcare, sau altă idee); (3) rămâne întrebarea cu repornirea din 29 oct (comanda în `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
-
-## 30 octombrie 2026, 20:15 — Antrenarea de noapte S51 a pornit la 19:00, cu pragurile scrise înainte; nimic altceva nou
-
-- **Rulează S51** (repetarea S45: 6 ore de antrenare din #459). Am verificat: pre-înregistrarea a fost urcată la 19:00, înainte de pornire, și e identică cu a S45 (aceleași praguri); configurarea diferă doar prin nume și dosar. Sfârșit estimat ~02:00; verdictul îl verific la 02:15.
-- **După S51:** bucata 2 a descărcării codului (S46), fără placă.
-- Nicio problemă: executantul a scris la 18:59, normal la pornirea antrenării. Nicio comandă nouă pentru Kronos în hub.
-- **Aștept de la tine:** nimic nou. Rămâne, fără grabă, întrebarea cu repornirea de aseară (comanda de citit jurnalul Windows e în raportul `docs/rapoarte/2026-10-30_1533_S52_repornire.md`).
