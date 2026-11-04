@@ -2615,7 +2615,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1211_S74_reper_scoala.md
 
 ### S75 — Școala de cod, runda 1, pașii 1–2 din S72b mutați ZIUA: S63 scrie 8 soluții la fiecare exercițiu din P_scoala, cutia le verifică (placa ~70 min + procesor ~20 min)
-- stare: **aprobat** (supraveghetor, 4 nov 2026 14:20)
+- stare: in_lucru (executant, 4 nov 14:30)
+- (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 14:20)
 - tip: placă (doar generare, fără antrenare) + procesor (cutia)
 - fereastră: zi, **4 nov, cât de curând, terminat până la 18:30** (generarea se oprește curat la 18:15 dacă nu e gata: notezi câte exerciții s-au scris; restul rămâne pentru S72b la noapte)
 - de ce acum: reperul S74 a ieșit mic (B = 14/200, 7 %). La 689 de exerciții × 8 încercări, mă aștept la doar ~40–80 de exerciții rezolvate — adică riscul real ca pragul de **100 de corpuri corecte diferite** să nu fie atins.
