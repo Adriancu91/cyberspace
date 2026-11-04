@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 08:20 — ⚠ IMPORTANT: reînnoiește autentificarea Claude pe workstation până pe 6 noiembrie
+
+- **PROBLEMĂ nouă, de rezolvat de tine până pe 6 nov:** raportul de dimineață spune că, la fiecare pornire, Claude Code de pe workstation anunță că **autentificarea lui expiră între 6 și 9 noiembrie**. După aceea executantul și raportul de dimineață se opresc (cascada stă).
+  **Ce faci (2 minute, pe workstation, într-o fereastră PowerShell):** `claude setup-token` (cheia pentru sarcinile care merg fără om — varianta potrivită aici) sau, dacă nu merge, `claude auth login`. Urmezi pașii din browser. Nu oprește nimic din ce rulează.
+- **Noaptea:** S70 s-a terminat normal la 04:00 (verdictul NU AJUTĂ, verificat de mine la 05:20). Raportul de dimineață e scris (06:45), **1195 teste trec**, placa liberă (391 MB / 23 °C).
+- **Acum:** fereastra ta pe workstation (07:00–~09:30, C-63) — nimic nu rulează pe placă. **După 09:30:** S71 (memoria de cod), apoi S72a (doar procesor); **la noapte de la 19:00:** S72b, prima rundă a școlii de cod (dacă S72a dă ≥ 500 exerciții cu test). Toate deja aprobate, n-am adăugat nimic în coadă.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov.** Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 05:20 — Noaptea pe exerciții (S70): NU AJUTĂ; azi pregătim școala de cod, la noapte prima ei rundă
 
 - **S70 gata, verificat de mine: NU AJUTĂ.** După 8 ore cu 25 % exerciții, modelul rezolvă **2 din 163** probleme noi (S63: 3/163 — diferența e zgomot; AJUTĂ cerea ≥ 8). Codul obișnuit s-a stricat puțin: **0,5074** biți pe octet (S63: 0,5004; limita STRICĂ era 0,510). Placa max 5.922 MB / 62 °C, **1195 teste trec**. S-a terminat la **04:00**, deci workstation-ul e liber pentru tine la 07:00 (C-63).
@@ -143,11 +151,3 @@
 - **Am pus în coadă S60** (aprobată de mine, doar procesor, ~1–3 ore, acum): exact aceste două unelte, cu teste doar pe setul de probă (examenul ascuns rămâne închis).
 - **Programarea S58:** în noaptea asta, după S60, doar pre-înregistrarea și proba de 10 minute (măsoară memoria plăcii). **Cele 10 ore: mâine-seară (1 nov), de la 19:00.** Dacă ești la workstation pentru fereastra OS/GPU, antrenarea pornește abia după ce termini.
 - **Aștept de la tine:** (1) **Release-ul #477** (comanda de la 14:20, mai jos); (2) mâine: spune-mi dacă vii la workstation și când, ca să nu se suprapună cu antrenarea; (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-
-## 31 octombrie 2026, 20:15 — Pregătirea pentru antrenarea pe cod (S57) e gata; mai lipsește o bucată mică de cod (S59) înainte ca S58 să poată porni
-
-- **S57 gata și verificat: corect.** Kronos are acum modulul de date pentru cod, examenul pe validare (biți pe octet) și configurarea `cod_c1` (scrisă, nepornită). Pe datele reale, examenul dă exact cifrele de la S55 (5.686 fișiere, 3,4617 octeți/simbol). Memoria estimată pe placă: ~5,3–5,8 GB (sub limită; proba de 10 minute o va măsura). **1145 teste trec.**
-- **Executantul a găsit o problemă din timp:** modelele de acum citesc doar text, iar examenul de pe ore cere text — S58 s-ar opri din prima secundă.
-- **Am pus în coadă S59** (aprobată de mine, doar procesor, ~câteva ore): un model nou care citește direct simbolurile de cod și un examen nou pe ore, fără să atingă modelul #477, examenul oficial sau nucleul. Dacă ar trebui atins nucleul, se oprește și te întreabă.
-- **Placa stă liberă în noaptea asta** (S58 nu poate porni oricum înainte de S59).
-- **Aștept de la tine:** (1) **„da S58”** când vrei — ar putea porni cel mai devreme mâine-seară, după S59; (2) **Release-ul #477** (comanda de la 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
