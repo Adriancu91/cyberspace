@@ -2654,6 +2654,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1618_S75_scoala_r1_solutii.md
 
 ### S76 — C-64 R1: răspunsuri în română (exerciții „întrebare/instrucțiune → răspuns” din datele românești deja avute + set ascuns + notă automată; o noapte din #477 pe o copie)
+- **notă supraveghetor (4 nov 23:20):** S76a = GATA; **S76b aprobat și mutat în noaptea 4→5 nov** (placa liberă), mai jos.
 - **notă supraveghetor (4 nov 20:20): condiția e îndeplinită (S72b = STRICĂ, nu AJUTĂ).** S76 se face în doi pași: **S76a** (mai jos, aprobat, pornește la noapte) = exercițiile, setul ascuns, nota automată și reperul #477; **S76b** = noaptea de antrenare din #477 pe o copie, scrisă de mine după verdictul S76a (ținta: noaptea 5→6 nov).
 - (istoric) stare: **aprobat de Adrian, cu condiție** — pornește DOAR după verdictul S72b, dacă **nu** e AJUTĂ (NU AJUTĂ, STRICĂ sau NECLAR = „nu avansăm pe cod”); dacă S72b e AJUTĂ, continuăm școala și S76 așteaptă.
   Instrucțiunile exacte, pragurile și pre-înregistrarea le scriu eu după verdictul S72b (întâi partea de procesor: exercițiile, setul ascuns, nota automată; apoi noaptea pe placă).
@@ -2665,6 +2666,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S76a — C-64 R1 pasul 1: exercițiile „întrebare/instrucțiune → răspuns” în română + setul ascuns + nota automată (fără alt AI) + reperul #477 (procesor; placa doar un examen scurt)
 - stare: gata (executant, 4 nov 20:50): **GATA** — antrenare **23.251** perechi (50,0 % instrucțiuni, 8 feluri noi), ascuns **500** (290 instrucțiuni), scurgeri 0 (toate 6), proba notei trecută (referințe 100 %, gol 0 %, altă referință 3,8 %, la fel de două ori); reperul #477 **R1 = 63,73** (instrucțiuni 37,47; felurile vechi 100), #459 62,87; placa max 1.344 MB / 61 °C; #477 SHA neschimbat; „limbă curată” cu minim 1 cuvânt când referința are 1 cuvânt (strict: `limba_curata_min2`) — de ales de Adrian; 1221 teste trec, 1 sărit.
 - raport: docs/rapoarte/2026-11-04_2050_S76a_romana_raspunsuri.md
+- verificat de supraveghetor (4 nov 23:20): toate condițiile GATA verificate pe cifre — 23.251 ≥ 10.000; instrucțiuni 50,0 % ≥ 40 %; 8 feluri noi ≥ 4; ascuns 500 ≥ 400 (290 instrucțiuni ≥ 160); scurgeri 0 la toate 6; proba notei 100 % ≥ 95 %, gol 0 %, altă referință 3,8 % ≤ 5 %, la fel de două ori ✓ → **GATA** ✓. Abaterile (minim 1 cuvânt la referințele de un cuvânt; refuzuri 15 % / da-nu 10 % în ascuns) sunt rezonabile și spuse deschis; R1 se păstrează cu varianta executantului, cea strictă alături, până alege Adrian. → **S76b aprobat pentru noaptea asta** (placa liberă de la 20:48).
 - (istoric) stare: in_lucru (executant, 4 nov 20:30)
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 20:20)
 - tip: procesor (date + unealtă + teste) + placă (doar un examen scurt, fără antrenare)
@@ -2701,6 +2703,41 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   (le poți importa, nu le schimbi), examenele vechi și seturile ascunse de cod, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
 - urmează: **S76b** (noaptea 5→6 nov, din #477 pe o copie, cu pre-înregistrare): o scriu eu după verdict, cu pragurile față de reperul de la pasul 5 și cu limita pe română curat (#477 = 1,2097).
 - aprobat de: supraveghetor, 4 nov 2026 20:20 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
+
+### S76b — C-64 R1 pasul 2: o noapte din #477 pe o copie (linia nouă `w2_romana_r1`), pe perechile S76a; apoi nota R1 pe setul ascuns + examenele de română/cod (placa, noaptea 4→5 nov)
+- stare: **aprobat** (supraveghetor, 4 nov 2026 23:20)
+- tip: placă (antrenare 4–5 ore + examene ~35 min)
+- fereastră: **ACUM, noaptea 4→5 nov** (placa e liberă de la 20:48; altfel ar sta degeaba până mâine seară). Orele se aleg după ora la care începe antrenarea (pasul 4):
+  **`--ore 5` dacă pornește cel târziu la 01:00; `--ore 4` dacă pornește între 01:00 și 02:00; după 02:00 NU pornește la noapte** — rămâne `aprobat` pentru noaptea 5→6 nov cu `--ore 6`, pornire la 19:00
+  (atunci refaci configurarea și pre-înregistrarea cu 6 ore). Totul (antrenare + examene) se termină până la **06:45**. Dacă în `COMENZI.md` apare o fereastră a lui Adrian pe workstation în noaptea asta, n-o atingi.
+- durată maximă: 5 ore de antrenare + ~35 min examene; placa sub 7.000 MB și 83 °C (S51, aceeași rețetă: max 6.002 MB / 64 °C)
+- de ce: C-64 R1. S76a (GATA): #477 știe perfect felurile vechi (R1 100 pe cele 210), dar la instrucțiunile noi doar **R1 37,47** (corect 22,07 %): răspunde „Da.”/„Nu.” la „Rezumă…”, „Spune într-o propoziție…”, „Scrie doar numărul…”.
+  Întrebarea: o noapte pe perechile S76a (50 % instrucțiuni, articole pe care setul ascuns nu le are) îl învață să urmeze instrucțiunile, fără să strice româna și codul?
+- ce faci:
+  1. Verifici că `lucru/romana_raspunsuri/antrenare.jsonl` are SHA-256 `3d8ac5a3…00b0` și `ascuns.jsonl` `3a333657…c9e` (ca în `info.json`). Altfel `oprit`.
+  2. `config/conv_w2_romana_r1.toml` = **copie a `config/conv_w2_reteta_A_cont3.toml` (S51, cea care a dat #477)** cu DOAR: `nume = "w2_romana_r1"`, `cale_stare = "lucru/w2_romana_r1/gpt.pt"`,
+     `conversatie = "lucru/romana_raspunsuri/antrenare.jsonl"`, `durata_scaderii_secunde` = orele × 3600 (18000 la 5 ore, 14400 la 4), eticheta și antetul (diff-ul în raport). Restul identic
+     (45 % perechi / 5 % hrană / 50 % text vechi, rata 0,00005, lot 12, `adunare_loturi = 8`, `racire_finala = 0.25`, adamw). `lucru/w2_romana_r1/` trebuie să NU existe înainte de pornire (capcana S42; scrii verificarea în pre-înregistrare).
+     Un test mic nou dacă e nevoie ca modelul să citească perechile S76a (au `intrebare`, `raspuns`, `text` — aceleași câmpuri ca `text_v3`, deci ar trebui să meargă fără nicio schimbare de cod; dacă nu merge, `oprit`, nu schimbi `module/`).
+  3. **Pre-înregistrarea** `python unelte/preinregistrare.py --nume w2_romana_r1 --titlu "S76b: o noapte din #477 pe răspunsurile în română (S76a)"` → `docs/preinregistrari/2026-11-04_w2_romana_r1.md` (sau data zilei în care pornește), cu pragurile de mai jos **copiate exact** și cu orele alese. Commit + push **ÎNAINTE** de pornire.
+     Reperele #477 (S76a): R1 total 63,73; **R1 pe instrucțiuni (290) 37,47**; R1 pe felurile vechi (210) 100,0; corect pe instrucțiuni 22,07 %; limbă strictă (min 2) 54,6 %. Română curat 1,2097, cod curat 0,7270, R2 0,4060 (S51) — **re-măsurate în aceeași rulare** pe #477, iar pragurile de regresie se socotesc față de cifrele re-măsurate.
+     - **AJUTĂ:** R1 pe instrucțiuni ≥ **47,47** (+10 față de 37,47) și nicio regresie (mai jos).
+     - **NU AJUTĂ:** R1 pe instrucțiuni < **40,47** (sub +3) și nicio regresie.
+     - **NECLAR:** între ele, fără regresie.
+     - **STRICĂ** (are întâietate): R1 pe felurile vechi < **98,0**, sau română curat > #477 + **0,005**, sau cod curat > #477 + **0,005**, sau R2 > #477 + **0,005**.
+     - Informativ (fără prag): R1 total, corect pe instrucțiuni, R1 pe fiecare fel, `limba_curata_min2`, română curat față de #477 (scade = bine, e și ținta C-64).
+     - Scrie deschis în pre-înregistrare: instrucțiunile din setul ascuns au **aceleași șabloane** ca în antrenare (articole noi, formulări la fel), deci AJUTĂ înseamnă „a învățat aceste 8 feluri de instrucțiuni pe texte noi”, nu „înțelege orice instrucțiune”.
+  4. Pornești prin cascadă (`unelte/cascada.py`), lanțul ca la S51 (`lucru/cascada/S76b_proba/s76b.py`), în același proces:
+     `python unelte/antrenare_lunga.py --config config/conv_w2_romana_r1.toml --ore <5 sau 4> --porneste-din 477`, apoi `python unelte/examen_validari_ws.py --linie w2_romana_r1` și `python unelte/examen_validari_ws.py --experiment 477`,
+     apoi `python unelte/romana_raspunsuri.py reper --experiment <ultimul experiment al liniei w2_romana_r1> --iesire lucru/romana_raspunsuri/reper_s76b --citit lucru/stocare/modele/experiment_477.pt lucru/w2_reteta_A_cont3/gpt.pt`
+     (aceleași setări ca la reperul #477: fără întâmplare, cel mult 64 de simboluri). #477 doar citit: SHA-256 înainte = după.
+  5. La sfârșit: închizi pre-înregistrarea (`--inchide w2_romana_r1`) cu cifrele și verdictul; `python -m pytest` verde; raport `docs/rapoarte/<data>_<ora>_S76b_romana_r1.md` (tabelul pe ore, R1 pe fel #477 vs. copia, cele trei examene, verdictul față de praguri, 3–5 răspunsuri ale copiei la instrucțiuni din antrenare — nu din setul ascuns —, placa max MB/°C, cât a durat); coada → `gata` cu verdictul într-o propoziție; commit + push.
+- Dacă procesul cade fără eroare: `oprit`, raport cu ora exactă a căderii, **nu** reporni singur.
+- Nota: R1 folosește „limbă curată” cu minim 1 cuvânt când referința are un cuvânt (varianta executantului din S76a); `limba_curata_min2` se scrie alături. Dacă Adrian alege altfel, re-notarea se face pe procesor din `raspunsuri.json`, fără placă.
+- Copia **nu** înlocuiește #477 în interfață, în pachetul KGR1 sau în OS fără „da”-ul lui Adrian. Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `module/`, setul ascuns (doar citit de `reper`), #477/#459 (doar citire), linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
+- pre-înregistrare: docs/preinregistrari/2026-11-04_w2_romana_r1.md (de scris și urcat înainte de pornire)
+- aprobat de: supraveghetor, 4 nov 2026 23:20 (granița 1: încă o rulare pe linia w2 existentă, alt amestec de date din surse deja avute; granița 2 pentru examene) — partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30
+- raport: docs/rapoarte/…
 
 ### S77 — C-64 R2: Kronos mai mare, crescut din #477 (straturi noi pornite „neutre”, aceeași ieșire la început, verificat pe vectorii KGR1) — întâi un test scurt de memorie și viteză
 - **notă supraveghetor (4 nov 20:20): condiția e îndeplinită (S72b = STRICĂ).** Primul pas (S77a: modelul crescut din #477 dă aceeași ieșire pe vectorii KGR1 + test scurt de memorie și viteză pe placă, fără antrenare) îl scriu la trecerea de 05:15 / 08:15, pentru ziua de 5 nov, după S76a.

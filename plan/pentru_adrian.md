@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 23:20 — Exercițiile de română (S76a) sunt gata; Kronos învață din ele chiar de la noapte (S76b)
+
+- **S76a gata, verificat de mine: GATA.** **23.251** de exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le aveam (jumătate instrucțiuni de 8 feluri noi: „Rezumă…”, „Scrie doar anul…”, „Spune în ce județ…”), plus **500** ascunse, fără nicio scurgere. Nota automată (fără alt AI) a trecut toate probele. **1221 teste trec.**
+- **Cum stă #477 acum:** perfect la felurile vechi (100 din 100), dar slab la instrucțiuni: **37,5 din 100** — la „Rezumă textul” sau „Scrie doar numărul” răspunde de multe ori doar „Da.” sau „Nu.”.
+- **Pus în coadă (aprobat de mine, pornește la noapte, nu mai așteptăm până mâine): S76b** — 5 ore de învățare pe aceste exerciții, pe o copie a lui #477 (#477 rămâne în uz), terminat până la 06:45. AJUTĂ = cel puțin **47,5** la instrucțiuni, fără să strice româna sau codul. Verdictul la 05:15 / 08:15.
+- O alegere mică, fără grabă: la „limbă curată”, un răspuns de un singur cuvânt („1968.”, „Da.”) e socotit bun când și răspunsul corect are un cuvânt. Mi se pare corect așa; dacă vrei regula strictă (minim 2 cuvinte), spune și se re-notează fără placă.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 20:20 — Școala de cod (S72b): STRICĂ; trecem pe română (C-64), de la noapte pregătim răspunsurile în română (S76a)
 
 - **S72b gata, verificat de mine: STRICĂ.** După o trecere scurtă (48 s) prin cele 109 soluții corecte, Kronos rezolvă **18 din 200** exerciții (înainte 14 — +4, la limita zgomotului), dar codul obișnuit s-a stricat: **0,513** biți pe octet (S63: 0,500; limita era 0,510). Pe examenul ascuns: 4/163 (înainte 3). Placa max 5.885 MB / 61 °C, **1212 teste trec**. Concluzia: școala, așa cum e, nu avansează codul.
@@ -140,12 +148,3 @@
 - **Ce urmează pe placă mâine ziuă:** decid la trecerea de 05:15/08:15, după cifrele S58 (continuare dacă învață, reparare dacă nu).
 - **Văzut în hub:** ai aprobat „bucla automată” (teste doar de citire, doar ziua, nu în nopțile de antrenare); pregătirea ei se face cu tine pe ~3 nov. Nu atinge antrenarea de la Kronos.
 - **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.
-
-## 1 noiembrie 2026, 17:15 — Totul gata pentru antrenarea pe cod de la 19:00; #477 merge deja în Cyber Universe
-
-- **Nimic nou terminat la Kronos** de la 11:55 (placa liberă ziua, cum era planificat). Nicio problemă: 1168 teste trec, raportul de dimineață e la locul lui.
-- **Diseară la 19:00 pornește S58** (10 ore, prima antrenare pe cod, cu varianta `cod_c1_init002` aleasă de tine). Executantul actualizează întâi pre-înregistrarea; pragurile rămân cele scrise dinainte. Rezultatul: mâine dimineață.
-- **Văzut în hub:** testul tău de azi de la workstation (11:35–11:50) arată că **#477 merge în Cyber Universe** (controlul TRECE, simbolurile identice cu ale lui Kronos). Deci Release-ul #477 nu mai blochează OS-ul (fișierul e deja pe stick) — rămâne doar ca copie de siguranță pe GitHub, fără grabă.
-- **Atenție:** OS-ul îți cere o probă scurtă cu `os-211` (~6 min pe workstation). Dacă o faci, **fă-o înainte de 19:00 sau mâine după ~07:00** — altfel repornirea oprește antrenarea.
-- **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.
-
