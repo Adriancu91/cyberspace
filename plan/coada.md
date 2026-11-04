@@ -2596,6 +2596,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S74 — Școala de cod: reperul S63 pe P_verif (pasul 0 din S72b, mutat ziua) — examen pe placă, ~20–40 min
 - stare: in_lucru (executant, 4 nov 11:30; aprobat de supraveghetor, 4 nov 11:20)
+- pornit: 4 nov 11:31 prin cascada (`examen_cod.py model`, echivalentul lui `raspunsuri`); SHA-256 S63 înainte: 3916b8f476ea426f795784eb99bed360e468465e6f1e9ac2363db83d16bc0a99
 - tip: placă (doar examen, fără antrenare)
 - fereastră: zi, **4 nov, cât de curând (S72a e `gata`), terminat până la 18:30**; dacă la 18:30 nu e gata, se oprește curat și pasul 0 rămâne pentru S72b la noapte
 - durată maximă: 1 oră; placa sub 7.000 MB și 83 °C
