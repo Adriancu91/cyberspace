@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 14:20 — Reperul școlii (S74): 14 din 200, deci școala poate porni; azi după-amiază facem deja prima ei parte (S75)
+
+- **S74 gata, verificat de mine: 14 din 200.** Modelul S63, cu 10 încercări pe exercițiu, rezolvă măcar o dată **14** din cele 200 de exerciții de măsurare (13 fără un răspuns care doar „ghicea” rezultatul). Pragul minim era 10, deci **S72b (școala de cod) poate porni la noapte**. Pentru ea, „AJUTĂ” înseamnă acum cel puțin **24 din 200** după învățare. S63 neatins, placa max 2.032 MB, **1207 teste trec**.
+- **Pus în coadă (aprobat de mine, ~1,5 ore, acum ziua): S75** — S63 scrie câte 8 soluții la cele 689 de exerciții ale școlii și cutia le verifică. Reperul fiind mic, s-ar putea să iasă sub cele 100 de soluții corecte de care e nevoie; dacă aflăm de ziuă, noaptea nu se pierde (fie școala începe direct cu învățarea, fie pun altceva pe noapte la 17:15 / 20:15).
+- **Comanda ta C-64 preluată:** dacă școala de cod nu ajută, urmează **S76** (răspunsuri în română, o noapte din #477 pe o copie) și **S77** (Kronos mai mare, crescut din #477). Le scriu în detaliu după verdictul S72b (mâine dimineață). Am socotit „nu ajută” orice verdict în afară de AJUTĂ — spune-mi dacă vrei altfel la NECLAR.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 11:20 — Memoria de cod (S71): NU AJUTĂ; exercițiile cu test (S72a): DESTULE — școala de cod pornește la noapte
 
 - **S71 gata, verificat de mine: NU AJUTĂ.** Cu 2–4 funcții asemănătoare puse în față, modelul rezolvă **0 din 20** probleme de probă (fără ele: S63 0/20, S70 1/20). Funcțiile găsite seamănă la nume, nu la soluție, iar modelul începe să copieze nume din ele. Lăsăm memoria deoparte; o reîncercăm poate doar cu exerciții verificate.
@@ -144,10 +151,3 @@
 - **Recomandarea executantului și a mea, după cifre:** varianta S61 (`cod_c1_init002`).
 - **Aștept de la tine:** (1) **până azi la 19:00**: scrie **„S58 cu init002”** dacă vrei varianta S61 (dacă nu scrii nimic, cele 10 ore pornesc cu varianta aprobată, cea veche); (2) dacă vii azi la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
 
-## 31 octombrie 2026, 23:15 — Uneltele (S60) și proba de 10 minute (S58) au trecut; o comparație mică în noaptea asta, ca să alegi pe cifre cum pornește antrenarea pe cod
-
-- **S60 gata și verificat: corect.** Kronos are proba „de la zero” și comanda care pune modelul să scrie răspunsurile la problemele de cod. Examenul ascuns a rămas închis. **1165 teste trec.**
-- **S58, pașii 1–2 gata și verificați: corecți.** Pragurile au fost scrise înainte de probă. Proba de 10 minute: placa **6.078 MB** (sub 6.500), **63 °C**, fără erori. Cele 10 ore pornesc **mâine (1 nov) de la 19:00**, cum am stabilit.
-- **Executantul a observat ceva:** modelul pornește „prea sigur pe el” (greșeala de început 474, normal ar fi ~10) din cauza felului în care sunt alese numerele de pornire. Învață oricum (6,8 după 10 minute), dar pierde primii pași reparând asta.
-- **Am pus în coadă S61** (aprobată de mine, ~2 ore de cod + 10 minute pe placă, în noaptea asta): aceeași probă cu numere de pornire mai mici (ca la GPT-2), pe o configurare SEPARATĂ, cu praguri scrise înainte. S58 nu se schimbă.
-- **Aștept de la tine:** (1) mâine, după raportul S61, alegi: cele 10 ore pornesc **cum sunt aprobate** (dacă nu spui nimic, așa rămâne) sau **cu varianta S61** — scrie „S58 cu init002” înainte de 19:00; (2) dacă vii mâine la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.

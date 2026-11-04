@@ -2588,6 +2588,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   (un singur rând; în arbore un `Return` cu o constantă sau o listă/tuplă/dicționar doar de constante) NU intră în învățare, ca școala să nu răsplătească ghicitul rezultatului. Numeri câte au fost scoase
   și scrii cifra în raport și în pre-înregistrare (așteptarea ta). Pragul de 100 de corpuri corecte diferite se socotește DUPĂ această regulă.
   (c) Concentrarea pe `fluids`/`chemicals` (35 % din P_scoala) rămâne cum e la runda 1 (o raportezi: câte corecte vin din ele); la runda 2 decid o limită pe pachet după rezultat.
+- **notă supraveghetor (4 nov 14:20, după S74 = B 14/200, verificat de mine: 14 ≥ 10, deci S72b poate porni; praguri cu B = 14: AJUTĂ R ≥ 24 și validarea ≤ 0,505, NU AJUTĂ R ≤ 17, STRICĂ validarea > 0,510 sau R ≤ 9):**
+  (d) Pre-înregistrarea se scrie acum, înainte de **S75**, care face ziua pașii 1 și 2. La noapte urmezi regula din S75 („la noapte”): DESTULE → începi de la pasul 3 cu `runda1/corecte.jsonl`; PREA PUȚINE → nu pornești; S75 neterminat → continui pasul 1.
 
 ### S73 — Kronos-Cod C-62 pasul E: Kronos își alege datele (nota fiecărei bucăți după cât îl mai învață) — o noapte pe datele alese vs. o noapte pe date la întâmplare
 - stare: propus — aprobat de Adrian în principiu (C-62); vine după S70 (și S72, după ordinea din C-60/C-62); instrucțiunile și pragurile după verdictul S70
@@ -2611,3 +2613,42 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, modelele, P_verif / P_scoala (doar citire), seturile ascunse. Nimic descărcat, nimic instalat.
 - aprobat de: supraveghetor, 4 nov 2026 11:20 (granița 2: examen; parte din S72b, aprobată de Adrian prin COMENZI.md C-60 C)
 - raport: docs/rapoarte/2026-11-04_1211_S74_reper_scoala.md
+
+### S75 — Școala de cod, runda 1, pașii 1–2 din S72b mutați ZIUA: S63 scrie 8 soluții la fiecare exercițiu din P_scoala, cutia le verifică (placa ~70 min + procesor ~20 min)
+- stare: **aprobat** (supraveghetor, 4 nov 2026 14:20)
+- tip: placă (doar generare, fără antrenare) + procesor (cutia)
+- fereastră: zi, **4 nov, cât de curând, terminat până la 18:30** (generarea se oprește curat la 18:15 dacă nu e gata: notezi câte exerciții s-au scris; restul rămâne pentru S72b la noapte)
+- de ce acum: reperul S74 a ieșit mic (B = 14/200, 7 %). La 689 de exerciții × 8 încercări, mă aștept la doar ~40–80 de exerciții rezolvate — adică riscul real ca pragul de **100 de corpuri corecte diferite** să nu fie atins.
+  Dacă aflăm ziua, noaptea nu se pierde: fie S72b începe direct cu învățarea (pasul 3), fie planific altceva pentru noapte la trecerea de 17:15 / 20:15.
+- **ÎNAINTE de pornire:** pre-înregistrarea S72b `docs/preinregistrari/2026-11-04_cod_c1_scoala_r1.md` (exact cum cere S72b, cu **B = 14** din `lucru/kronos_cod/scoala/reper_s63/nota.json`, mărimile P_verif 200 / P_scoala 689,
+  pragurile S72b neschimbate: AJUTĂ = R ≥ 24 și validarea ≤ 0,505; NU AJUTĂ = R ≤ 17; STRICĂ = validarea > 0,510 sau R ≤ 9; altfel NECLAR; `ascuns2` ≥ 6/163 pentru „ajută și pe examen”), plus așteptările tale în cifre
+  pentru pasul 2 (câte corecte, la câte exerciții, câte `return <valoare fixă>`, câte copiate din memorie). Commit + push, apoi pornești.
+- ce faci:
+  1. Pe placă, prin `unelte/cascada.py`, modelul **S63 doar citit** (`lucru/cod_c1/gpt.pt`, SHA-256 înainte și după; nu e nevoie de copie pentru generare):
+     `examen_cod.py model --config config/cod_c1_init002.toml --stare lucru/cod_c1/gpt.pt --set ascuns --dosar lucru/kronos_cod/scoala/P_scoala --n 8 --temperatura 0.8 --samanta 1 --lot 2 --memorie-max 6500 --iesire lucru/kronos_cod/scoala/runda1/raspunsuri.jsonl`
+     (toate cele 689, sub limita de 1.500; ~5.500 de încercări, ~65–70 min după viteza din S74).
+  2. Pe procesor, o unealtă nouă **în `unelte/kronos_cod/scoala.py`** (comanda `corecte`, granița 5; cu teste noi, fără să schimbi `cutie.py`): rulează fiecare încercare în cutie cu testul exercițiului ei (exact ca `examen_cod.py noteaza`)
+     și scrie `lucru/kronos_cod/scoala/runda1/corecte.jsonl` (un rând pe corp corect păstrat: id exercițiu, pachet, enunț, corp) + `runda1/numaratoare.json` cu:
+     încercări scrise; corecte (toate); scoase ca `return <valoare fixă>` (regula (b) din nota S72b); **corpuri corecte diferite după spații**, la câte exerciții; câte sunt identice cu corpul original (după spații);
+     câte corecte vin din `fluids` / `chemicals`; refuză să scrie peste un `numaratoare.json` existent. Rulezi și `examen_cod.py noteaza` pe aceleași răspunsuri, ca control (aceleași cifre de „ok”).
+  3. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S75_scoala_r1_solutii.md` (cifrele, placa max, cât a durat); coada → `gata` cu verdictul într-o propoziție:
+     **DESTULE** (≥ 100 corpuri corecte diferite după regula (b)) sau **PREA PUȚINE** (< 100); commit + push.
+- **la noapte (S72b):** dacă S75 e `gata` cu DESTULE, S72b **sare pașii 0, 1 și 2** și pornește de la pasul 3 cu `runda1/corecte.jsonl` (B = 14 din `nota.json`). Dacă e PREA PUȚINE: S72b **nu pornește**; scrii în coadă
+  „S72b nu pornește: PREA PUȚINE (N)” și placa rămâne liberă până la trecerea mea de 17:15 / 20:15, când pun sarcina de noapte. Dacă S75 n-a terminat generarea până la 18:15: S72b face la noapte restul pasului 1, apoi pașii 2–4 ca până acum.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `cutie.py`, #477, linia română, `lucru/cod_c1/` și `lucru/cod_c1_ex/` (doar citire), P_verif / P_scoala (doar citire), seturile ascunse. Nimic descărcat, nimic instalat.
+- aprobat de: supraveghetor, 4 nov 2026 14:20 (granițele 2, 4 și 5; pașii 1–2 ai S72b, aprobată de Adrian prin COMENZI.md C-60 C)
+- raport: docs/rapoarte/<data>_<ora>_S75_scoala_r1_solutii.md
+
+### S76 — C-64 R1: răspunsuri în română (exerciții „întrebare/instrucțiune → răspuns” din datele românești deja avute + set ascuns + notă automată; o noapte din #477 pe o copie)
+- stare: **aprobat de Adrian, cu condiție** — pornește DOAR după verdictul S72b, dacă **nu** e AJUTĂ (NU AJUTĂ, STRICĂ sau NECLAR = „nu avansăm pe cod”); dacă S72b e AJUTĂ, continuăm școala și S76 așteaptă.
+  Instrucțiunile exacte, pragurile și pre-înregistrarea le scriu eu după verdictul S72b (întâi partea de procesor: exercițiile, setul ascuns, nota automată; apoi noaptea pe placă).
+- tip: procesor (date + notă) + placă (o noapte, din #477 pe o copie; #477 rămâne în uz până când copia îl bate la examen)
+- Nimic descărcat, fără alt AI; `kronos/`, paznicul și examenul neatinse; placa ≤ 7.000 MB / 83 °C.
+- aprobat de: **Adrian (COMENZI.md C-64, 4 nov 2026 11:30)**; preluat de supraveghetor 4 nov 14:20
+
+### S77 — C-64 R2: Kronos mai mare, crescut din #477 (straturi noi pornite „neutre”, aceeași ieșire la început, verificat pe vectorii KGR1) — întâi un test scurt de memorie și viteză
+- stare: **aprobat de Adrian, cu condiție** — aceeași condiție ca S76; vine după partea de procesor din S76. Instrucțiunile (mărimea țintă care încape în ≤ 7.000 MB la antrenare, estimarea lui Adrian ~200–350M,
+  bf16, recalcul activări), testul de memorie/viteză și pragurile le scriu eu după verdictul S72b. Măsurat cu examenul de română (#477 = 1,2097) și cu nota din S76.
+- tip: procesor + placă (test scurt, apoi nopți, fiecare cu pre-înregistrare)
+- Linie de model nouă (altă mărime) — acoperită de „da”-ul din C-64; `kronos/`, paznicul și examenul neatinse; nimic descărcat.
+- aprobat de: **Adrian (COMENZI.md C-64, 4 nov 2026 11:30)**; preluat de supraveghetor 4 nov 14:20
