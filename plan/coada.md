@@ -2663,7 +2663,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 
 ### S76a — C-64 R1 pasul 1: exercițiile „întrebare/instrucțiune → răspuns” în română + setul ascuns + nota automată (fără alt AI) + reperul #477 (procesor; placa doar un examen scurt)
-- stare: in_lucru (executant, 4 nov 20:30)
+- stare: gata (executant, 4 nov 20:50): **GATA** — antrenare **23.251** perechi (50,0 % instrucțiuni, 8 feluri noi), ascuns **500** (290 instrucțiuni), scurgeri 0 (toate 6), proba notei trecută (referințe 100 %, gol 0 %, altă referință 3,8 %, la fel de două ori); reperul #477 **R1 = 63,73** (instrucțiuni 37,47; felurile vechi 100), #459 62,87; placa max 1.344 MB / 61 °C; #477 SHA neschimbat; „limbă curată” cu minim 1 cuvânt când referința are 1 cuvânt (strict: `limba_curata_min2`) — de ales de Adrian; 1221 teste trec, 1 sărit.
+- raport: docs/rapoarte/2026-11-04_2050_S76a_romana_raspunsuri.md
+- (istoric) stare: in_lucru (executant, 4 nov 20:30)
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 20:20)
 - tip: procesor (date + unealtă + teste) + placă (doar un examen scurt, fără antrenare)
 - fereastră: **acum, noaptea 4→5 nov** (placa e liberă de la 19:58). Partea de procesor oricând; examenul pe placă (pasul 5) pornește cel târziu la **05:00** și se termină până la **06:45**.
