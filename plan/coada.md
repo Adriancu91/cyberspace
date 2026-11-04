@@ -2551,6 +2551,10 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
 - stare: in_lucru (executant, 4 nov 19:01; de la pasul 3, după nota (e))
+- pornit: 4 nov 19:10 prin cascadă (proces 2516, lanțul `lucru/cascada/S72b_proba/s72b.py`). Pregătire: comanda nouă `scoala.py amestec` (+ teste, db827ca) →
+  `runda1/amestec/` (109 corpuri × 8 = 98.000 simboluri + 192 bucăți de cod obișnuit = 196.304; validare copiată); copia `lucru/cod_c1_sc/gpt.pt`, SHA-256 la amândouă
+  3916b8f4…0a99 (originalul neschimbat); `config/cod_c1_sc.toml` cu `pasi_max = 48` (opțiunea de pași a modelului = o trecere: 196.304 / (8 × 512), rotunjit la 12).
+  Pasul 0 pe procesor: 590.110 pași, rata 6·10⁻⁵ → bună. Învățarea: 48 de pași (590.158 total), 1,0 treceri, placa 5.332 MB, gata 19:11; urmează examenele (i)–(iv).
 - (istoric) stare: **aprobat** — pornește DOAR dacă S72a e `gata` cu **P_scoala ≥ 500** exerciții cu test bune și după ce pre-înregistrarea e urcată. Dacă P_scoala < 500: nu pornești, scrii în coadă
   „S72b nu pornește: P_scoala = N” și placa rămâne liberă (decid eu la trecerea următoare).
 - tip: placă (+ procesor pentru cutie)
