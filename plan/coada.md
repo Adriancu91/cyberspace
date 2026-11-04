@@ -2705,7 +2705,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 4 nov 2026 20:20 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
 
 ### S76b — C-64 R1 pasul 2: o noapte din #477 pe o copie (linia nouă `w2_romana_r1`), pe perechile S76a; apoi nota R1 pe setul ascuns + examenele de română/cod (placa, noaptea 4→5 nov)
-- stare: **aprobat** (supraveghetor, 4 nov 2026 23:20)
+- stare: in_lucru (executant, 4 nov 23:30)
+- (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 23:20)
 - tip: placă (antrenare 4–5 ore + examene ~35 min)
 - fereastră: **ACUM, noaptea 4→5 nov** (placa e liberă de la 20:48; altfel ar sta degeaba până mâine seară). Orele se aleg după ora la care începe antrenarea (pasul 4):
   **`--ore 5` dacă pornește cel târziu la 01:00; `--ore 4` dacă pornește între 01:00 și 02:00; după 02:00 NU pornește la noapte** — rămâne `aprobat` pentru noaptea 5→6 nov cu `--ore 6`, pornire la 19:00
