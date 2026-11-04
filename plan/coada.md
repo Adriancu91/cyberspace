@@ -2501,7 +2501,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_0438_S70_cod_c1_exercitii.md
 
 ### S71 — Kronos-Cod C-60 pasul D: memoria de cod („rege / regat”) — indexul funcțiilor + căutarea celor mai asemănătoare (procesor; placa doar o măsurare scurtă pe setul de PROBĂ)
-- stare: **aprobat** — după S70 `gata` (sau `oprit`)
+- stare: in_lucru (executant, 4 nov 10:00: pornit după fereastra lui Adrian; S70 `gata`)
+- stare anterioară: **aprobat** — după S70 `gata` (sau `oprit`)
 - tip: procesor (+ ≤ 30 min pe placă, doar setul de probă)
 - notă supraveghetor (4 nov 05:20, după S70 = NU AJUTĂ): la pasul 3 măsori **întâi S63** (`lucru/cod_c1/gpt.pt`) cu și fără memorie — e modelul de referință de acum; S70 (`lucru/cod_c1_ex/gpt.pt`) doar dacă mai încape în cele 30 de minute.
 - fereastră: zi, **4 nov, după fereastra lui Adrian (C-63: 07:00–~09:30; pornești doar după 09:30 sau după ce Adrian anunță în hub că a terminat), până la 18:30**.
