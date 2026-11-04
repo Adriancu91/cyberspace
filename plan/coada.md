@@ -2663,7 +2663,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 
 ### S76a — C-64 R1 pasul 1: exercițiile „întrebare/instrucțiune → răspuns” în română + setul ascuns + nota automată (fără alt AI) + reperul #477 (procesor; placa doar un examen scurt)
-- stare: **aprobat** (supraveghetor, 4 nov 2026 20:20)
+- stare: in_lucru (executant, 4 nov 20:30)
+- (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 20:20)
 - tip: procesor (date + unealtă + teste) + placă (doar un examen scurt, fără antrenare)
 - fereastră: **acum, noaptea 4→5 nov** (placa e liberă de la 19:58). Partea de procesor oricând; examenul pe placă (pasul 5) pornește cel târziu la **05:00** și se termină până la **06:45**.
   Dacă nu apucă, pasul 5 rămâne pentru ziua de 5 nov (după 08:00) și scrii asta în coadă.
