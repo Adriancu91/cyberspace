@@ -82,3 +82,33 @@ Cum le citesc (scris acum): R = numărul de exerciții din P_verif cu măcar un 
 - Peste 60 % din corecte identice cu originalul: „școala” ar învăța mai ales ce știa deja pe de rost.
 - R ≥ 24 cu validarea ≤ 0,505 (AJUTĂ) după o singură trecere scurtă: învățarea din propriile soluții corecte are efect mare chiar la doză mică.
 - R ≤ 9 (STRICĂ): repetarea de 8 ori a câtorva zeci de corpuri strică generarea.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-04 19:59, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 508 | cod_c1_sc | 04.11 19:10 | 0,4954 | pastrat | — | — | — |  |
+
+- **cod_c1_sc:** 1 ore, 1 păstrate; val_bpb de la 0,4954 la 0,4954; cel mai bun păstrat: #508 (0,4954).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Examenele, o singură dată, pe starea de după învățare (`lucru/cod_c1_sc/gpt.pt`, 590.158 pași):
+
+| examen | S63 (înainte) | S72b (după) |
+|---|---|---|
+| (i) validarea întreagă, biți pe octet (5.686 fișiere) | 0,50041 | **0,51303** (python 0,55524, rust 0,43679, c 0,61659) |
+| (ii) P_verif 200 × 10 → R (pass@10 × 200) | B = 14 (pass@1 0,013; 26 ok) | **R = 18** (pass@10 0,090, pass@1 0,023; 46 ok) |
+| (iii) `ascuns2` 163 × 10 | 3/163 | **4/163** (pass@1 0,0031) |
+| (iv) proba 20 × 10 (informativ) | — | 0/20 |
+
+Notă: 0,4954 din tabelul de mai sus e validarea internă a liniei (cea din dosarul amestecului, copiată), nu validarea întreagă de cod; pragul folosește (i).
+
+## Verdictul
+
+**STRICĂ** — strict după praguri: validarea întreagă 0,51303 > 0,510 (STRICĂ are întâietate). Partea de P_verif singură ar fi fost NECLAR
+(R = 18: peste NU AJUTĂ ≤ 17, sub AJUTĂ ≥ 24; +4 față de B = 14, la marginea zgomotului de ±3). `ascuns2` 4/163 < 6/163 → nu „ajută și pe examen”.
+Așteptările: validarea ~0,501 (între 0,499 și 0,505) — **infirmată** (0,513, mult peste interval); R ~17 — în interval; STRICĂ era la ~5 %.
+O singură trecere de 48 de pași (109 corpuri × 8 + tot atâta cod obișnuit) a stricat codul obișnuit cu +0,0126 biți pe octet (python +0,0146, rust +0,0098, c +0,0152).

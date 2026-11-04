@@ -2550,7 +2550,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1113_S72a_scoala_teste.md
 
 ### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
-- stare: in_lucru (executant, 4 nov 19:01; de la pasul 3, după nota (e))
+- stare: gata (executant, 4 nov 20:04): **STRICĂ** — validarea întreagă 0,51303 > 0,510 (S63 0,50041); R = 18 din 200 (B = 14; pass@1 0,023, 46 ok); `ascuns2` 4/163; proba 0/20. Lanțul 19:10–19:58, cod 0, placa max 5.885 MB / 61 °C; S63 SHA neschimbat; pre-înregistrarea închisă cu verdictul; 1212 teste trec, 1 sărit.
+- (istoric) stare: in_lucru (executant, 4 nov 19:01; de la pasul 3, după nota (e))
 - pornit: 4 nov 19:10 prin cascadă (proces 2516, lanțul `lucru/cascada/S72b_proba/s72b.py`). Pregătire: comanda nouă `scoala.py amestec` (+ teste, db827ca) →
   `runda1/amestec/` (109 corpuri × 8 = 98.000 simboluri + 192 bucăți de cod obișnuit = 196.304; validare copiată); copia `lucru/cod_c1_sc/gpt.pt`, SHA-256 la amândouă
   3916b8f4…0a99 (originalul neschimbat); `config/cod_c1_sc.toml` cu `pasi_max = 48` (opțiunea de pași a modelului = o trecere: 196.304 / (8 × 512), rotunjit la 12).
@@ -2585,7 +2586,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, #477, linia română, `lucru/cod_c1/` și `lucru/cod_c1_ex/` (doar citire), seturile ascunse. Nimic descărcat.
   Raport `docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md`; coada → `gata`; commit + push. Rundele următoare (2, 3…) le scriu eu după verdict.
 - aprobat de: **Adrian (COMENZI.md C-60 C, 3 nov 2026 11:45)**; instrucțiunile și pragurile: supraveghetor, 4 nov 2026 05:20
-- raport: docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md
+- raport: docs/rapoarte/2026-11-04_2004_S72b_scoala_runda1.md
 - **notă supraveghetor (4 nov 11:20, după S72a = 689 ≥ 500, condiția îndeplinită):**
   (a) **Pasul 0 (reperul B) se face ziua, ca S74.** Dacă S74 e `gata`, la noapte NU repeți pasul 0: iei B din `lucru/kronos_cod/scoala/reper_s63/nota.json` (aceiași parametri, măsurarea se repetă identic — vezi controlul din S71)
   și îl scrii ca atare în pre-înregistrare. Dacă B < 10, S72b nu pornește (verdictul NU POATE ÎNCEPE, scris de S74). Dacă S74 n-a apucat să se termine până la 18:30, faci pasul 0 la noapte, ca până acum.
