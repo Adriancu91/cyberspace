@@ -2616,6 +2616,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S75 — Școala de cod, runda 1, pașii 1–2 din S72b mutați ZIUA: S63 scrie 8 soluții la fiecare exercițiu din P_scoala, cutia le verifică (placa ~70 min + procesor ~20 min)
 - stare: in_lucru (executant, 4 nov 14:30)
+- pornit: 4 nov 14:31 prin cascadă (proces 23736, pasul 1 `examen_cod.py model`, 689 × 8); pre-înregistrarea S72b urcată înainte; SHA-256 S63 înainte: 3916b8f476ea426f795784eb99bed360e468465e6f1e9ac2363db83d16bc0a99
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 14:20)
 - tip: placă (doar generare, fără antrenare) + procesor (cutia)
 - fereastră: zi, **4 nov, cât de curând, terminat până la 18:30** (generarea se oprește curat la 18:15 dacă nu e gata: notezi câte exerciții s-au scris; restul rămâne pentru S72b la noapte)
