@@ -2501,7 +2501,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_0438_S70_cod_c1_exercitii.md
 
 ### S71 — Kronos-Cod C-60 pasul D: memoria de cod („rege / regat”) — indexul funcțiilor + căutarea celor mai asemănătoare (procesor; placa doar o măsurare scurtă pe setul de PROBĂ)
-- stare: in_lucru (executant, 4 nov 10:11: pașii 1–2 GATA b1bfe8d — `unelte/kronos_cod/memorie.py` + 3 teste, 1198 trec, 1 sărit; indexul 313.910/313.910 exerciții, 58 s; scurgerea: proba 0 scoase (53 funcții alese, 2,65 pe problemă), ascuns2 0 scoase, SHA neschimbat; pasul 3: lanțul `lucru/cascada/S71_proba/s71.py` pornit 10:10:43 prin cascadă (proces 19716): S63 fără/cu, apoi S70 fără/cu, doar proba, ≤ 30 min)
+- stare: gata (executant, 4 nov 10:34: NU AJUTĂ pe probă — cu memorie S63 0/20, S70 0/20; fără S63 0/20, S70 1/20; scurgere 0; 1198 teste trec, 1 sărit)
+- stare anterioară 2: in_lucru (executant, 4 nov 10:11: pașii 1–2 GATA b1bfe8d — `unelte/kronos_cod/memorie.py` + 3 teste, 1198 trec, 1 sărit; indexul 313.910/313.910 exerciții, 58 s; scurgerea: proba 0 scoase (53 funcții alese, 2,65 pe problemă), ascuns2 0 scoase, SHA neschimbat; pasul 3: lanțul `lucru/cascada/S71_proba/s71.py` pornit 10:10:43 prin cascadă (proces 19716): S63 fără/cu, apoi S70 fără/cu, doar proba, ≤ 30 min)
 - stare anterioară: **aprobat** — după S70 `gata` (sau `oprit`)
 - tip: procesor (+ ≤ 30 min pe placă, doar setul de probă)
 - notă supraveghetor (4 nov 05:20, după S70 = NU AJUTĂ): la pasul 3 măsori **întâi S63** (`lucru/cod_c1/gpt.pt`) cu și fără memorie — e modelul de referință de acum; S70 (`lucru/cod_c1_ex/gpt.pt`) doar dacă mai încape în cele 30 de minute.
@@ -2519,7 +2520,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   4. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S71_memorie_cod.md`; coada → `gata`; commit + push.
 - Nu atingi `kronos/`, examenul, paznicul, jurnalul, cutia, modelele (doar citire). Nimic descărcat, nimic instalat.
 - aprobat de: **Adrian (COMENZI.md C-60, 3 nov 2026 11:45)**; instrucțiunile: supraveghetor, 3 nov 2026 14:20
-- raport: docs/rapoarte/<data>_<ora>_S71_memorie_cod.md
+- raport: docs/rapoarte/2026-11-04_1034_S71_memorie_cod.md
 
 ### S72 — Kronos-Cod C-60 pasul C: școala de cod (Kronos își scrie soluții, cutia le verifică, învață doar din cele corecte)
 - stare: **împărțit în S72a + S72b** (supraveghetor, 4 nov 05:20, după verdictul S70 = NU AJUTĂ). De ce așa: S69 a arătat că doar 13 din 441 de exerciții ținute deoparte au
