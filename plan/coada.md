@@ -2550,7 +2550,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1113_S72a_scoala_teste.md
 
 ### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
-- stare: **aprobat** — pornește DOAR dacă S72a e `gata` cu **P_scoala ≥ 500** exerciții cu test bune și după ce pre-înregistrarea e urcată. Dacă P_scoala < 500: nu pornești, scrii în coadă
+- stare: in_lucru (executant, 4 nov 19:01; de la pasul 3, după nota (e))
+- (istoric) stare: **aprobat** — pornește DOAR dacă S72a e `gata` cu **P_scoala ≥ 500** exerciții cu test bune și după ce pre-înregistrarea e urcată. Dacă P_scoala < 500: nu pornești, scrii în coadă
   „S72b nu pornește: P_scoala = N” și placa rămâne liberă (decid eu la trecerea următoare).
 - tip: placă (+ procesor pentru cutie)
 - fereastră: noapte, **4→5 nov, de la 19:00** (cel târziu 21:00); totul se termină până la 07:00
