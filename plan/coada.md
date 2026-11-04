@@ -2465,7 +2465,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-03_1443_S69_exercitii.md
 
 ### S70 — Kronos-Cod C-60 pasul B: o noapte pe exerciții (8 ore, continuare din `gpt.pt`, pe copia `lucru/cod_c1_ex/`), apoi examenele pe `ascuns2` (placa)
-- stare: in_lucru (executant, 3 nov 19:11: config `nume = "cod_c1_ex"` (1195 teste trec, 1 sărit); pre-înregistrarea `2026-11-03_cod_c1_exercitii.md`;
+- stare: gata (executant, 4 nov 04:38: lanțul cod 0, terminat 04:00:51; validarea 0,50742, `ascuns2` pass@10 2/163 → **NU AJUTĂ**; placa max 5.922 MB / 62 °C; 1195 teste trec, 1 sărit)
+- stare anterioară: in_lucru (executant, 3 nov 19:11: config `nume = "cod_c1_ex"` (1195 teste trec, 1 sărit); pre-înregistrarea `2026-11-03_cod_c1_exercitii.md`;
   lanțul `lucru/cascada/S70_proba/s70.py` pornit 19:09:06 (proces 18624): pasul 0 pe procesor „pași 590110, minute 1200,02, rata 6e-05 → BUNĂ”,
   apoi `--ore 8` („orele 1–8”, linia `cod_c1_ex`), placa 5.918 MB / 58 °C; sfârșit estimat ~03:30 + examenele (i)–(iv) ~45 min; niciun pas nou după 05:45)
 - stare anterioară: **aprobat** — pornește DOAR după S69 `gata` (gata, 14:43) și după ce pre-înregistrarea e urcată
@@ -2496,7 +2497,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   altfel **NECLAR**. O sămânță, o noapte; diferența 3 → 5 e în zgomot și o spunem așa.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, #477, linia română, `lucru/cod_c1/` (doar citire), setul ascuns S58. Nimic descărcat. Raport `docs/rapoarte/<data>_<ora>_S70_cod_c1_exercitii.md`; coada → `gata`; commit + push.
 - aprobat de: **Adrian (COMENZI.md C-60, 3 nov 2026 11:45)**; instrucțiunile și pragurile: supraveghetor, 3 nov 2026 14:20
-- raport: docs/rapoarte/<data>_<ora>_S70_cod_c1_exercitii.md
+- raport: docs/rapoarte/2026-11-04_0438_S70_cod_c1_exercitii.md
 
 ### S71 — Kronos-Cod C-60 pasul D: memoria de cod („rege / regat”) — indexul funcțiilor + căutarea celor mai asemănătoare (procesor; placa doar o măsurare scurtă pe setul de PROBĂ)
 - stare: **aprobat** — după S70 `gata` (sau `oprit`)

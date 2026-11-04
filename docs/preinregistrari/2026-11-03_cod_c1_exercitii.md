@@ -90,3 +90,39 @@ Reperul: S63 (10 ore pe cod obișnuit) — validarea **0,50041**; `ascuns2` pass
 - pass@10 ≥ 10/163: forma „antet + explicație → corp” se potrivește cu examenul mult mai bine decât cred.
 - (iv) fără câștig (diferență < 0,01) dar pass@10 urcă: câștigul vine din altceva (orele în plus / zgomot), nu din forma exercițiului.
 - (iv) câștig mare (> 0,08) cu pass@10 ≤ 4: modelul învață forma exercițiilor, dar nu să rezolve probleme noi.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-04 04:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 500 | cod_c1_ex | 03.11 19:09 | 0,4900 | pastrat | — | — | — |  |
+| 501 | cod_c1_ex | 03.11 20:10 | 0,4903 | pastrat | — | — | — |  |
+| 502 | cod_c1_ex | 03.11 21:12 | 0,4908 | pastrat | — | — | — |  |
+| 503 | cod_c1_ex | 03.11 22:14 | 0,4917 | pastrat | — | — | — |  |
+| 504 | cod_c1_ex | 03.11 23:15 | 0,4909 | pastrat | — | — | — |  |
+| 505 | cod_c1_ex | 04.11 00:17 | 0,4899 | pastrat | — | — | — |  |
+| 506 | cod_c1_ex | 04.11 01:18 | 0,4910 | pastrat | — | — | — |  |
+| 507 | cod_c1_ex | 04.11 02:20 | 0,4911 | pastrat | — | — | — |  |
+
+- **cod_c1_ex:** 8 ore, 8 păstrate; val_bpb de la 0,4900 la 0,4911; cel mai bun păstrat: #505 (0,4899).
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+**Examenele (o singură dată, pe starea de după ora 8):** (i) validarea întreagă **0,50742** (S63: 0,50041);
+(ii) `ascuns2` pass@10 = 0,01227 × 163 = **2/163**, pass@1 0,18 % (3 corpuri „ok” din 1.630), complet;
+(iii) proba 1/20; (iv) corpurile ținute deoparte: `cod_c1_ex` 0,56463, S63 0,57434 (−0,0097).
+
+## Verdictul
+
+*Scris la 2026-11-04 04:38 de executant, strict după pragurile de sus.*
+
+- STRICĂ (validarea > 0,510)? 0,50742 → **nu**.
+- AJUTĂ (pass@10 ≥ 8/163 și validarea ≤ 0,510)? 2/163 → **nu**.
+- NU AJUTĂ (pass@10 ≤ 4/163)? 2/163 → **da**.
+
+**Verdict: NU AJUTĂ.** 25 % exerciții, 8 ore, nu au urcat pass@10 pe `ascuns2` (2/163 față de 3/163 la S63; diferența e în zgomot),
+iar validarea a urcat cu 0,007 (mai prost, dar sub pragul 0,510). O sămânță, o noapte.
+Față de așteptări: validarea 0,507 (așteptam ~0,497, în intervalul 0,490–0,505: peste interval); examenul orar plat ~0,490–0,492
+(așteptam coborâre la ~0,481); (iv) câștig mic, 0,0097 (așteptam 0,02–0,06), iar cifrele absolute ~0,57, nu ~0,45 cum arătase proba pe 20.
