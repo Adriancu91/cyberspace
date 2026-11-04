@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 17:20 — Prima parte a școlii de cod (S75): DESTULE soluții corecte; la noapte Kronos învață din ele (S72b)
+
+- **S75 gata, verificat de mine: DESTULE.** Modelul S63 a scris 8 soluții la fiecare din cele 689 de exerciții ale școlii (5.512 în total, 81 min pe placă, max **2.032 MB**). Cutia a găsit **137 corecte**; după ce am scos dublurile și 3 răspunsuri care doar „ghiceau” rezultatul, rămân **109 soluții corecte diferite** la 70 de exerciții (pragul era 100 — trecut, dar la limită). Doar 12,8 % sunt copiate întocmai din original, deci nu e „memorie pe de rost”. S63 neatins, **1209 teste trec**.
+- **La noapte (de la 19:00): S72b** pornește direct de la învățare (o trecere scurtă din cele 109 soluții, pe o copie a S63), apoi examenul pe cele 200 de exerciții nevăzute. AJUTĂ = cel puțin **24 din 200** (acum 14) fără să strice codul obișnuit. Deja aprobată, n-am adăugat nimic în coadă. Verdictul mâine la 05:15 / 08:15.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 14:20 — Reperul școlii (S74): 14 din 200, deci școala poate porni; azi după-amiază facem deja prima ei parte (S75)
 
 - **S74 gata, verificat de mine: 14 din 200.** Modelul S63, cu 10 încercări pe exercițiu, rezolvă măcar o dată **14** din cele 200 de exerciții de măsurare (13 fără un răspuns care doar „ghicea” rezultatul). Pragul minim era 10, deci **S72b (școala de cod) poate porni la noapte**. Pentru ea, „AJUTĂ” înseamnă acum cel puțin **24 din 200** după învățare. S63 neatins, placa max 2.032 MB, **1207 teste trec**.
@@ -142,12 +148,3 @@
 - **Executantul scrie întâi** în pre-înregistrare ce configurare folosește, apoi pornește. Proba de memorie nu se mai repetă (S61 a măsurat deja 6.078 MB, sub limită).
 - **Rulează:** nimic; placa e liberă până la 19:00. Raportul de dimineață e la locul lui, **1168 teste trec**, nicio problemă.
 - **Aștept de la tine:** (1) dacă vii azi la workstation, spune-mi când (antrenarea pornește după ce termini); (2) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-
-## 1 noiembrie 2026, 02:15 — Comparația de noapte (S61) a ieșit AJUTĂ, cu diferență mare; azi alegi cum pornesc cele 10 ore de la 19:00
-
-- **S61 gata și verificat de mine: AJUTĂ, corect.** Cu numerele de pornire mici, modelul de cod pornește de la greșeala **10,7** (în loc de 474) și după aceleași 10 minute ajunge la **3,77** (în loc de 6,82) — de ~10 ori mai bine decât pragul cerut. Memoria plăcii (6.078 MB), temperatura (63 °C) și viteza: identice. Pragurile au fost scrise înainte. **1168 teste trec.** O singură probă pe fiecare parte, deci „zgomotul” nu e măsurat, dar diferența e foarte mare.
-- **Ce NU spune proba:** unde ajunge modelul după 10 ore (acolo diferența poate fi mai mică).
-- **Rulează:** nimic; placa e liberă. Nu pun nimic pe placă azi-ziuă, ca să fie liberă dacă vii la workstation și ca să nu întârzie antrenarea de la 19:00.
-- **Recomandarea executantului și a mea, după cifre:** varianta S61 (`cod_c1_init002`).
-- **Aștept de la tine:** (1) **până azi la 19:00**: scrie **„S58 cu init002”** dacă vrei varianta S61 (dacă nu scrii nimic, cele 10 ore pornesc cu varianta aprobată, cea veche); (2) dacă vii azi la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-

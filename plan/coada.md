@@ -2590,6 +2590,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   (c) Concentrarea pe `fluids`/`chemicals` (35 % din P_scoala) rămâne cum e la runda 1 (o raportezi: câte corecte vin din ele); la runda 2 decid o limită pe pachet după rezultat.
 - **notă supraveghetor (4 nov 14:20, după S74 = B 14/200, verificat de mine: 14 ≥ 10, deci S72b poate porni; praguri cu B = 14: AJUTĂ R ≥ 24 și validarea ≤ 0,505, NU AJUTĂ R ≤ 17, STRICĂ validarea > 0,510 sau R ≤ 9):**
   (d) Pre-înregistrarea se scrie acum, înainte de **S75**, care face ziua pașii 1 și 2. La noapte urmezi regula din S75 („la noapte”): DESTULE → începi de la pasul 3 cu `runda1/corecte.jsonl`; PREA PUȚINE → nu pornești; S75 neterminat → continui pasul 1.
+- **notă supraveghetor (4 nov 17:20, după S75, verificat de mine: 109 corpuri corecte diferite ≥ 100 → DESTULE):**
+  (e) La noapte pornești S72b de la **pasul 3** cu `lucru/kronos_cod/scoala/runda1/corecte.jsonl` (109 corpuri), B = 14 din `reper_s63/nota.json`; pragurile din pre-înregistrare rămân neschimbate.
+  Scrii în raport și temperatura maximă a plăcii (la S75 n-a fost notată în timpul rulării).
 
 ### S73 — Kronos-Cod C-62 pasul E: Kronos își alege datele (nota fiecărei bucăți după cât îl mai învață) — o noapte pe datele alese vs. o noapte pe date la întâmplare
 - stare: propus — aprobat de Adrian în principiu (C-62); vine după S70 (și S72, după ordinea din C-60/C-62); instrucțiunile și pragurile după verdictul S70
