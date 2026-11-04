@@ -2528,7 +2528,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian în principiu (COMENZI.md C-60 C, 3 nov 2026 11:45)
 
 ### S72a — Școala de cod, pregătirea: exercițiile CU TEST care rulează în cutie + împărțirea școală / verificare (doar procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 4 nov 11:00; aprobat — după S71 `gata` (sau `oprit`))
+- stare: gata (executant, 4 nov 11:13: cod 0, 11:10–11:12, 123 s; **889 exerciții cu test bune** (811 autonome, 246 pachete); **P_verif 200** (122 pachete), **P_scoala 689** (124 pachete; fluids 138, chemicals 104) → S72b poate porni; scurgere: proba 0, S58 0, ascuns2 1 scos (13 simb.), SHA neschimbat; `noteaza` pe 5: original 5/5 ok, `return None` 5/5 picat; 14 scoase pentru că trec și cu `return None`; 1207 teste trec, 1 sărit)
 - tip: procesor
 - fereastră: zi, 4 nov, după S71, **până la 18:30** (trebuie `gata` înainte de 19:00, altfel S72b nu pornește în noaptea asta)
 - durată maximă: 3 ore
@@ -2547,7 +2547,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
      căderile pe motive, scurgerile; coada → `gata`; commit + push.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, modelele, seturile ascunse (doar numărul la scurgere). Nimic descărcat, nimic instalat.
 - aprobat de: **Adrian (COMENZI.md C-60 C, 3 nov 2026 11:45)**; instrucțiunile: supraveghetor, 4 nov 2026 05:20 (granițele 3 și 5: pregătirea datelor deja descărcate, unealtă nouă)
-- raport: docs/rapoarte/<data>_<ora>_S72a_scoala_teste.md
+- raport: docs/rapoarte/2026-11-04_1113_S72a_scoala_teste.md
 
 ### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
 - stare: **aprobat** — pornește DOAR dacă S72a e `gata` cu **P_scoala ≥ 500** exerciții cu test bune și după ce pre-înregistrarea e urcată. Dacă P_scoala < 500: nu pornești, scrii în coadă
