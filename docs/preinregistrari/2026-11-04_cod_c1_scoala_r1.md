@@ -71,6 +71,10 @@ Cum le citesc (scris acum): R = numărul de exerciții din P_verif cu măcar un 
   **R ~17** (între 12 și 24); `ascuns2` ~3/163. Verdictul, condiționat de DESTULE: AJUTĂ ~15 %, NU AJUTĂ ~50 %, STRICĂ ~5 %, NECLAR ~30 %.
 - **Per total (înainte de S75):** PREA PUȚINE ~85 %, AJUTĂ ~2 %, NU AJUTĂ ~8 %, NECLAR ~4 %, STRICĂ ~1 %.
 
+- **Notă (executant, 4 nov 16:18, după S75; așteptările de mai sus rămân neschimbate):** S75 = **DESTULE** — 5.512 încercări, 137 corecte
+  la 71 de exerciții, 3 `return <valoare fixă>` scoase, 25 duplicate scoase → **109 corpuri corecte diferite** la 70 de exerciții; 14 identice
+  cu originalul (12,8 %); fluids/chemicals 13. Raport `docs/rapoarte/2026-11-04_1618_S75_scoala_r1_solutii.md`.
+
 ## Ce ar infirma așteptările
 
 - ≥ 150 de corpuri corecte diferite: S63 rezolvă exercițiile din școală mult mai des decât pe P_verif (probabil din memorie) — de verificat

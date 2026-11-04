@@ -220,3 +220,62 @@ def test_comanda_din_linia_de_comanda(monkeypatch):
     assert primite["procese"] == 3 and primite["fire"] == 16
     monkeypatch.setattr(sc, "verifica", lambda **k: {"bun": False, **k})
     assert sc.main(["verifica", "--cate", "5"]) == 1
+
+
+# ---------------------------------------------------------------- S75: comanda `corecte`
+
+def test_return_fix_si_dupa_spatii():
+    assert sc.e_return_fix("    return 3\n")
+    assert sc.e_return_fix("    return 'x=(1, 2, 3)'\n")
+    assert sc.e_return_fix("    # doar\n    return [1, -2, (3, 'a'), {'k': None}]\n")
+    assert not sc.e_return_fix("    return x\n")
+    assert not sc.e_return_fix("    return [x, 1]\n")
+    assert not sc.e_return_fix("    y = 1\n    return 1\n")
+    assert not sc.e_return_fix("    return\n")
+    assert not sc.e_return_fix("    print(1)\n")
+    assert sc.dupa_spatii("    return  a+b\n\n") == sc.dupa_spatii("  return a+b")
+    assert sc.dupa_spatii("return a + b") != sc.dupa_spatii("return a+b")
+
+
+def test_corecte_cap_coada(tmp_path):
+    from unelte.kronos_cod.examen_cod import Problema, scrie_jsonl
+
+    dosar = tmp_path / "P_scoala"
+    dosar.mkdir()
+    probleme = [
+        Problema(id="s00000", sablon="pypi:fluids", varianta="a", functie="dublu",
+                 enunt='def dublu(x):\n    """Twice x. dublu(2) -> 4"""\n', referinta="    return 2 * x\n",
+                 teste=["assert dublu(2) == 4", "assert dublu(3) == 6"]),
+        Problema(id="s00001", sablon="pypi:altul", varianta="b", functie="patru",
+                 enunt='def patru(x):\n    """Always 4."""\n', referinta="    return 4\n", teste=["assert patru(1) == 4"]),
+        Problema(id="s00002", sablon="pypi:altul", varianta="c", functie="minus",
+                 enunt='def minus(x):\n    """Negative."""\n', referinta="    return -x\n", teste=["assert minus(2) == -2"]),
+    ]
+    sha = scrie_jsonl(probleme, dosar / "probleme.jsonl")
+    (dosar / "info.json").write_text(json.dumps({"sha256": sha}), encoding="utf-8")
+    raspunsuri = tmp_path / "raspunsuri.jsonl"
+    raspunsuri.write_text(json.dumps({"meta": {"set": "ascuns", "n": 4}, "raspunsuri": {
+        "s00000": ["    return 2 * x\n", "    return  2 * x\n\n", "    return x + x\n", "    return 4\n"],
+        "s00001": ["    return 4\n", "    return 4\n", "    return 5\n", "    return x + 3\n"],
+        "s00002": ["    return x\n", "    return nume_lipsa\n", "    return 0 - x\n", "    return -x\n"],
+    }}), encoding="utf-8")
+    iesire = tmp_path / "runda1"
+    num = sc.corecte(raspunsuri, dosar, iesire, fire=4, jurnal=lambda m: None)
+    assert num["incercari"] == 12 and num["corecte_toate"] == 8
+    assert num["exercitii_cu_corecte_toate"] == 3
+    assert num["scoase_return_fix"] == 2 and num["exercitii_doar_cu_return_fix"] == 0
+    assert num["duplicate_dupa_spatii_scoase"] == 1
+    assert num["corpuri_corecte_diferite"] == 5 and num["exercitii_cu_corpuri_pastrate"] == 3
+    assert num["identice_cu_originalul"] == 2  # `return 2 * x` (s00000) și `return -x` (s00002)
+    assert num["din_pachetele_mari"]["pypi:fluids"] == {"corpuri": 2, "exercitii": 1}
+    assert num["verdict"] == "PREA PUȚINE"
+    assert num["control_noteaza"]["la_fel"] and num["control_noteaza"]["ok"] == 8
+    assert num["caderi_pe_motiv"] == {"rezultat_gresit": 3, "NameError": 1}
+    randuri = [json.loads(r) for r in (iesire / "corecte.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [(r["id"], r["corp"]) for r in randuri] == [
+        ("s00000", "    return 2 * x\n"), ("s00000", "    return x + x\n"),
+        ("s00001", "    return x + 3\n"), ("s00002", "    return 0 - x\n"), ("s00002", "    return -x\n")]
+    assert [r["copiat"] for r in randuri] == [True, False, False, False, True]
+    assert all(r["enunt"] and r["pachet"] for r in randuri)
+    with pytest.raises(SystemExit):
+        sc.corecte(raspunsuri, dosar, iesire, fire=4, jurnal=lambda m: None)

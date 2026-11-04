@@ -26,6 +26,10 @@ multe pachete), P_scoala = restul. În `lucru/kronos_cod/scoala/` (nimic în Git
 
 Comanda:  python -X utf8 -m unelte.kronos_cod.scoala teste [--procese 12] [--fire 16]
           python -X utf8 -m unelte.kronos_cod.scoala verifica [--cate 5]
+
+S75 (comanda `corecte`): încercările scrise de `examen_cod.py model` pe P_scoala trec prin cutie cu testul exercițiului;
+se păstrează corpurile corecte, fără `return <valoare fixă>` (regula (b) S72b) și fără duplicate după spații.
+          python -X utf8 -m unelte.kronos_cod.scoala corecte [--raspunsuri …] [--dosar …] [--iesire …]
 """
 
 from __future__ import annotations
@@ -497,6 +501,119 @@ def verifica(iesire: Path = IESIRE, cate: int = 5) -> dict:
     return rez
 
 
+# ---------------------------------------------------------------------------------------------------- comanda `corecte` (S75)
+
+PACHETE_MARI = ("pypi:fluids", "pypi:chemicals")
+
+
+def dupa_spatii(corp: str) -> str:
+    """Forma „după spații” (S75): toate spațiile, tab-urile și rândurile goale strânse într-un singur spațiu."""
+    return " ".join(corp.split())
+
+
+def _doar_constante(nod) -> bool:
+    if isinstance(nod, ast.Constant):
+        return True
+    if isinstance(nod, ast.UnaryOp) and isinstance(nod.op, (ast.USub, ast.UAdd)):
+        return _doar_constante(nod.operand)
+    if isinstance(nod, (ast.List, ast.Tuple, ast.Set)):
+        return all(_doar_constante(x) for x in nod.elts)
+    if isinstance(nod, ast.Dict):
+        return all(k is not None and _doar_constante(k) for k in nod.keys) and all(_doar_constante(v) for v in nod.values)
+    return False
+
+
+def e_return_fix(corp: str) -> bool:
+    """Regula (b) din nota S72b: corpul e doar `return <valoare fixă>` — un singur rând de cod, în arbore un `Return`
+    cu o constantă sau o listă/tuplă/mulțime/dicționar doar de constante (și `-constantă`)."""
+    randuri = [r for r in corp.splitlines() if r.strip() and not r.strip().startswith("#")]
+    if len(randuri) != 1:
+        return False
+    try:
+        arbore = ast.parse(textwrap.dedent(randuri[0]))
+    except (SyntaxError, ValueError):
+        return False
+    if len(arbore.body) != 1 or not isinstance(arbore.body[0], ast.Return):
+        return False
+    v = arbore.body[0].value
+    return v is not None and _doar_constante(v)
+
+
+def corecte(raspunsuri: Path, dosar: Path, iesire: Path, fire: int = 16, cutia=ruleaza_in_cutie,
+            control: bool = True, jurnal=print) -> dict:
+    """Fiecare încercare din `raspunsuri` (scrise de `examen_cod.py model`) rulează în cutie cu testul exercițiului ei,
+    exact ca `examen_cod.py noteaza`. Scrie `iesire/corecte.jsonl` (corpurile corecte păstrate: fără `return <valoare
+    fixă>`, fără duplicate după spații în același exercițiu) și `iesire/numaratoare.json` (refuză dacă există).
+    `control`: rulează și `examen_cod.py noteaza` pe aceleași răspunsuri (`iesire/nota_control.json`)."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from unelte.kronos_cod import examen_cod
+
+    iesire = Path(iesire)
+    f_num, f_cor = iesire / "numaratoare.json", iesire / "corecte.jsonl"
+    if f_num.exists():
+        raise SystemExit(f"{f_num} există deja: numărătoarea se face o singură dată")
+    t0 = time.time()
+    date = json.loads(Path(raspunsuri).read_text(encoding="utf-8"))
+    probleme = {p.id: p for p in examen_cod.probleme_setului("ascuns", Path(dosar))}
+    lipsa = [i for i in date["raspunsuri"] if i not in probleme]
+    if lipsa:
+        raise SystemExit(f"{len(lipsa)} exerciții din răspunsuri nu sunt în {dosar} (de ex. {lipsa[0]})")
+    sarcini = [(probleme[i], j, corp) for i, corpuri in date["raspunsuri"].items() for j, corp in enumerate(corpuri)]
+    jurnal(f"încercări: {len(sarcini)} la {len(date['raspunsuri'])} exerciții")
+    with ThreadPoolExecutor(fire) as ex:
+        rez = list(ex.map(lambda s: cutia(s[0].enunt, s[2], s[0].teste), sarcini))
+    jurnal(f"cutia gata: {time.time() - t0:.0f} s")
+    ok = [(p, j, corp) for (p, j, corp), r in zip(sarcini, rez) if r["trecut"]]
+    fixe = [(p, j, corp) for p, j, corp in ok if e_return_fix(corp)]
+    pastrate, vazute, dubluri = [], set(), 0
+    for p, j, corp in ok:
+        if e_return_fix(corp):
+            continue
+        cheie = (p.id, dupa_spatii(corp))
+        if cheie in vazute:
+            dubluri += 1
+            continue
+        vazute.add(cheie)
+        pastrate.append({"id": p.id, "pachet": p.sablon, "functie": p.functie, "incercarea": j, "enunt": p.enunt,
+                         "corp": corp, "copiat": dupa_spatii(corp) == dupa_spatii(p.referinta)})
+    iesire.mkdir(parents=True, exist_ok=True)
+    with open(f_cor, "w", encoding="utf-8", newline="\n") as fo:
+        for x in pastrate:
+            fo.write(json.dumps(x, ensure_ascii=False) + "\n")
+    pe_pachet = Counter(x["pachet"] for x in pastrate)
+    num = {
+        "sarcina": "S75", "raspunsuri": str(raspunsuri), "dosar": str(dosar), "meta_raspunsuri": date["meta"],
+        "exercitii": len(date["raspunsuri"]), "incercari": len(sarcini),
+        "stari": dict(Counter(r["stare"] for r in rez).most_common()),
+        "caderi_pe_motiv": dict(Counter(motiv_cadere(r["stare"], r["mesaj"]) for r in rez if not r["trecut"]).most_common()),
+        "corecte_toate": len(ok), "exercitii_cu_corecte_toate": len({p.id for p, _, _ in ok}),
+        "scoase_return_fix": len(fixe), "exercitii_doar_cu_return_fix":
+            len({p.id for p, _, _ in fixe} - {x["id"] for x in pastrate}),
+        "duplicate_dupa_spatii_scoase": dubluri,
+        "corpuri_corecte_diferite": len(pastrate), "exercitii_cu_corpuri_pastrate": len({x["id"] for x in pastrate}),
+        "identice_cu_originalul": sum(x["copiat"] for x in pastrate),
+        "exercitii_cu_copiat": len({x["id"] for x in pastrate if x["copiat"]}),
+        "din_pachetele_mari": {n: {"corpuri": pe_pachet.get(n, 0),
+                                   "exercitii": len({x["id"] for x in pastrate if x["pachet"] == n})}
+                               for n in PACHETE_MARI},
+        "pachete_cu_corpuri": len(pe_pachet), "pe_pachet_primele": dict(pe_pachet.most_common(10)),
+        "prag_destule": 100,
+    }
+    num["verdict"] = "DESTULE" if num["corpuri_corecte_diferite"] >= 100 else "PREA PUȚINE"
+    if control:
+        f_nota = iesire / "nota_control.json"
+        examen_cod.main(["noteaza", "--raspunsuri", str(raspunsuri), "--nota", str(f_nota), "--dosar", str(dosar)])
+        nota = json.loads(f_nota.read_text(encoding="utf-8"))
+        ok_control = sum(x["c"] for x in nota["pe_problema"])
+        num["control_noteaza"] = {"ok": ok_control, "stari": nota["stari"], "pass@1": nota["pass@1"],
+                                  "la_fel": ok_control == len(ok),
+                                  "exercitii_cu_ok": sum(1 for x in nota["pe_problema"] if x["c"])}
+    num["secunde"] = round(time.time() - t0, 1)
+    f_num.write_text(json.dumps(num, ensure_ascii=False, indent=1), encoding="utf-8")
+    return num
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="comanda", required=True)
@@ -505,10 +622,19 @@ def main(argv=None) -> int:
     t.add_argument("--fire", type=int, default=16)
     v = sub.add_parser("verifica", help="S72a: examen_cod noteaza pe câteva exerciții din P_verif")
     v.add_argument("--cate", type=int, default=5)
+    c = sub.add_parser("corecte", help="S75: cutia verifică încercările modelului; păstrează corpurile corecte")
+    c.add_argument("--raspunsuri", type=Path, default=IESIRE / "runda1" / "raspunsuri.jsonl")
+    c.add_argument("--dosar", type=Path, default=IESIRE / "P_scoala")
+    c.add_argument("--iesire", type=Path, default=IESIRE / "runda1")
+    c.add_argument("--fire", type=int, default=16)
     a = ap.parse_args(argv)
     j = lambda m: print(time.strftime("%H:%M:%S"), m, flush=True)  # noqa: E731
     if a.comanda == "teste":
         teste(procese=a.procese, fire=a.fire, jurnal=j)
+        return 0
+    if a.comanda == "corecte":
+        r = corecte(a.raspunsuri, a.dosar, a.iesire, fire=a.fire, jurnal=j)
+        print(json.dumps(r, ensure_ascii=False, indent=1))
         return 0
     r = verifica(cate=a.cate)
     print(json.dumps(r, ensure_ascii=False, indent=1))

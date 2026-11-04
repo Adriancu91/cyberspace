@@ -2615,7 +2615,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1211_S74_reper_scoala.md
 
 ### S75 — Școala de cod, runda 1, pașii 1–2 din S72b mutați ZIUA: S63 scrie 8 soluții la fiecare exercițiu din P_scoala, cutia le verifică (placa ~70 min + procesor ~20 min)
-- stare: in_lucru (executant, 4 nov 14:30)
+- stare: gata (executant, 4 nov 16:18): **DESTULE** — 109 corpuri corecte diferite (≥ 100, după regula (b)) la 70 de exerciții; 137 „ok” din 5.512 încercări (71 exerciții; controlul `noteaza` identic), 3 `return <valoare fixă>` scoase, 25 duplicate; 14 identice cu originalul (12,8 %); fluids/chemicals 12 + 1. Pasul 1 cod 0, 81 min, placa max 2.032 MB; S63 SHA-256 neschimbat; 1209 teste trec, 1 sărit. La noapte S72b pornește de la pasul 3 cu `runda1/corecte.jsonl`.
+- (istoric) stare: in_lucru (executant, 4 nov 14:30)
 - pornit: 4 nov 14:31 prin cascadă (proces 23736, pasul 1 `examen_cod.py model`, 689 × 8); pre-înregistrarea S72b urcată înainte; SHA-256 S63 înainte: 3916b8f476ea426f795784eb99bed360e468465e6f1e9ac2363db83d16bc0a99
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 14:20)
 - tip: placă (doar generare, fără antrenare) + procesor (cutia)
@@ -2639,7 +2640,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   „S72b nu pornește: PREA PUȚINE (N)” și placa rămâne liberă până la trecerea mea de 17:15 / 20:15, când pun sarcina de noapte. Dacă S75 n-a terminat generarea până la 18:15: S72b face la noapte restul pasului 1, apoi pașii 2–4 ca până acum.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, `cutie.py`, #477, linia română, `lucru/cod_c1/` și `lucru/cod_c1_ex/` (doar citire), P_verif / P_scoala (doar citire), seturile ascunse. Nimic descărcat, nimic instalat.
 - aprobat de: supraveghetor, 4 nov 2026 14:20 (granițele 2, 4 și 5; pașii 1–2 ai S72b, aprobată de Adrian prin COMENZI.md C-60 C)
-- raport: docs/rapoarte/<data>_<ora>_S75_scoala_r1_solutii.md
+- raport: docs/rapoarte/2026-11-04_1618_S75_scoala_r1_solutii.md
 
 ### S76 — C-64 R1: răspunsuri în română (exerciții „întrebare/instrucțiune → răspuns” din datele românești deja avute + set ascuns + notă automată; o noapte din #477 pe o copie)
 - stare: **aprobat de Adrian, cu condiție** — pornește DOAR după verdictul S72b, dacă **nu** e AJUTĂ (NU AJUTĂ, STRICĂ sau NECLAR = „nu avansăm pe cod”); dacă S72b e AJUTĂ, continuăm școala și S76 așteaptă.
