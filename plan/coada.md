@@ -2528,7 +2528,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian în principiu (COMENZI.md C-60 C, 3 nov 2026 11:45)
 
 ### S72a — Școala de cod, pregătirea: exercițiile CU TEST care rulează în cutie + împărțirea școală / verificare (doar procesor, fără placă, fără antrenare)
-- stare: **aprobat** — după S71 `gata` (sau `oprit`)
+- stare: in_lucru (executant, 4 nov 11:00; aprobat — după S71 `gata` (sau `oprit`))
 - tip: procesor
 - fereastră: zi, 4 nov, după S71, **până la 18:30** (trebuie `gata` înainte de 19:00, altfel S72b nu pornește în noaptea asta)
 - durată maximă: 3 ore
