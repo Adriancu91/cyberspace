@@ -30,6 +30,10 @@ Comanda:  python -X utf8 -m unelte.kronos_cod.scoala teste [--procese 12] [--fir
 S75 (comanda `corecte`): încercările scrise de `examen_cod.py model` pe P_scoala trec prin cutie cu testul exercițiului;
 se păstrează corpurile corecte, fără `return <valoare fixă>` (regula (b) S72b) și fără duplicate după spații.
           python -X utf8 -m unelte.kronos_cod.scoala corecte [--raspunsuri …] [--dosar …] [--iesire …]
+
+S72b pasul 3 (comanda `amestec`): fiecare corp corect cu enunțul în față, repetat de 8 ori, + tot atâtea simboluri de cod
+obișnuit (sămânța 0) → `runda1/amestec/` (antrenare_*.bin, validare_*.bin copiate, amestec.json cu `pasi_o_trecere`).
+          python -X utf8 -m unelte.kronos_cod.scoala amestec [--corecte …] [--iesire …] [--repetari 8]
 """
 
 from __future__ import annotations
@@ -614,6 +618,74 @@ def corecte(raspunsuri: Path, dosar: Path, iesire: Path, fire: int = 16, cutia=r
     return num
 
 
+# ---------------------------------------------------------------------------------------------------- S72b pasul 3
+
+def text_de_invatat(enunt: str, corp: str) -> str:
+    """Exercițiul rezolvat, ca textul unei funcții (S69): enunțul (importuri + antet + explicație) urmat de corpul corect,
+    fără rândurile goale de la coadă."""
+    return enunt + corp.rstrip() + "\n"
+
+
+def pasi_o_trecere(simboluri: int, lot: int = 8, context: int = 512, adunare: int = 12) -> int:
+    """Câte loturi (pașii numărați de model) fac o trecere prin `simboluri`, rotunjit în sus la un multiplu de
+    `adunare`, ca ultimul pas al optimizatorului să fie întreg."""
+    loturi_ = -(-simboluri // (lot * context))
+    return -(-loturi_ // adunare) * adunare
+
+
+def amestec(corecte_f: Path, iesire: Path, simboluri_dir: Path = fu.SIMBOLURI, cale_tok: Path = fu.TOKENIZER,
+            repetari: int = 8, bloc: int = 512, samanta: int = 0, simboluri_pe_fisier: int = 1 << 25,
+            jurnal=print) -> dict:
+    """S72b pasul 3: fiecare corp corect, cu enunțul în față, repetat de `repetari` ori (ordinea amestecată cu sămânța),
+    + tot atâtea simboluri de cod obișnuit din `simboluri_dir/antrenare_*.bin` (alese cu sămânța), pe bucăți de `bloc`
+    amestecate (`functii.amesteca`, ca la S69); validare_*.bin copiate neschimbate. Refuză dacă `amestec.json` există."""
+    import hashlib
+    import shutil
+
+    import numpy as np
+
+    from module.tokenizer_bpe import TokenizerBPE
+
+    iesire = Path(iesire)
+    f_rez = iesire / "amestec.json"
+    if f_rez.exists():
+        raise SystemExit(f"{f_rez} există deja: amestecul se face o singură dată")
+    if iesire.exists() and any(iesire.glob("*.bin")):
+        raise SystemExit(f"în {iesire} sunt deja fișiere .bin: nu scriu peste ele")
+    t0 = time.time()
+    randuri = [json.loads(r) for r in Path(corecte_f).read_text(encoding="utf-8").splitlines() if r.strip()]
+    tok = TokenizerBPE.incarca(str(cale_tok))
+    bucati = [np.asarray(tok.codifica_fara_speciale(text_de_invatat(r["enunt"], r["corp"])) + [fu.SFARSIT],
+                         dtype=np.uint16) for r in randuri]
+    ordine = np.repeat(np.arange(len(bucati)), repetari)
+    np.random.default_rng(samanta).shuffle(ordine)
+    flux = np.concatenate([bucati[j] for j in ordine]) if len(ordine) else np.zeros(0, dtype=np.uint16)
+    jurnal(f"{len(bucati)} corpuri × {repetari} = {len(flux):,} simboluri de exerciții")
+    iesire.mkdir(parents=True, exist_ok=True)
+    f_antr = sorted(Path(simboluri_dir).glob("antrenare_*.bin"))
+    obisnuit = np.concatenate([np.fromfile(f, dtype=np.uint16) for f in f_antr])
+    am = fu.amesteca(flux, obisnuit, 2 * len(flux), bloc, iesire, simboluri_pe_fisier, samanta)
+    del obisnuit
+    copiate = []
+    for f in sorted(Path(simboluri_dir).glob("validare_*.bin")):
+        shutil.copy2(f, iesire / f.name)
+        if scurgere.sha256_fisier(f) != scurgere.sha256_fisier(iesire / f.name):
+            raise SystemExit(f"copia lui {f.name} nu e identică")
+        copiate.append(f.name)
+    lungimi = [len(b) for b in bucati]
+    rez = {
+        "sarcina": "S72b", "corecte": str(corecte_f),
+        "sha256_corecte": hashlib.sha256(Path(corecte_f).read_bytes()).hexdigest(),
+        "tokenizer": str(cale_tok), "sha256_tokenizer": scurgere.sha256_fisier(Path(cale_tok)),
+        "corpuri": len(bucati), "repetari": repetari, "samanta": samanta, "blocul": bloc,
+        "simboluri_pe_corp": {"total": int(sum(lungimi)), "min": min(lungimi, default=0), "max": max(lungimi, default=0)},
+        "simboluri_exercitii": int(len(flux)), "amestec": am, "validare_copiate": len(copiate),
+        "pasi_o_trecere": pasi_o_trecere(am["simboluri_scrise"]), "secunde": round(time.time() - t0, 1),
+    }
+    f_rez.write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+    return rez
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="comanda", required=True)
@@ -627,8 +699,16 @@ def main(argv=None) -> int:
     c.add_argument("--dosar", type=Path, default=IESIRE / "P_scoala")
     c.add_argument("--iesire", type=Path, default=IESIRE / "runda1")
     c.add_argument("--fire", type=int, default=16)
+    m = sub.add_parser("amestec", help="S72b pasul 3: amestecul de învățat din corpurile corecte (o singură dată)")
+    m.add_argument("--corecte", type=Path, default=IESIRE / "runda1" / "corecte.jsonl")
+    m.add_argument("--iesire", type=Path, default=IESIRE / "runda1" / "amestec")
+    m.add_argument("--repetari", type=int, default=8)
     a = ap.parse_args(argv)
     j = lambda m: print(time.strftime("%H:%M:%S"), m, flush=True)  # noqa: E731
+    if a.comanda == "amestec":
+        r = amestec(a.corecte, a.iesire, repetari=a.repetari, jurnal=j)
+        print(json.dumps(r, ensure_ascii=False, indent=1))
+        return 0
     if a.comanda == "teste":
         teste(procese=a.procese, fire=a.fire, jurnal=j)
         return 0

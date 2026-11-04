@@ -279,3 +279,55 @@ def test_corecte_cap_coada(tmp_path):
     assert all(r["enunt"] and r["pachet"] for r in randuri)
     with pytest.raises(SystemExit):
         sc.corecte(raspunsuri, dosar, iesire, fire=4, jurnal=lambda m: None)
+
+
+# ---------------------------------------------------------------- S72b pasul 3: comanda `amestec`
+
+def test_pasi_o_trecere():
+    assert sc.pasi_o_trecere(8 * 512) == 12
+    assert sc.pasi_o_trecere(8 * 512 * 12) == 12
+    assert sc.pasi_o_trecere(8 * 512 * 12 + 1) == 24
+    assert sc.text_de_invatat("def f(x):\n    '''doc'''\n", "    return x\n\n\n") == "def f(x):\n    '''doc'''\n    return x\n"
+
+
+def test_amestec_cap_coada(tmp_path):
+    import numpy as np
+
+    from module.date_cod import DateCod
+    from module.tokenizer_bpe import TokenizerBPE, antreneaza_din_frecvente, frecvente_bucati
+    from unelte.kronos_cod.tokenizer_cod import SPECIALE
+
+    corecte = [{"id": "s1", "enunt": "def f(x):\n    '''f'''\n", "corp": "    return x + 1\n"},
+               {"id": "s2", "enunt": "def g(y):\n    '''g'''\n", "corp": "    y = y * 2\n    return y\n\n"}]
+    f_cor = tmp_path / "corecte.jsonl"
+    f_cor.write_text("".join(json.dumps(r) + "\n" for r in corecte), encoding="utf-8")
+    texte = "".join(sc.text_de_invatat(r["enunt"], r["corp"]) for r in corecte)
+    tok = antreneaza_din_frecvente(dict(frecvente_bucati(texte, (), "cod")), 300, SPECIALE, "cod")
+    cale_tok = tmp_path / "tok.json"
+    tok.salveaza(cale_tok, {})
+    simb = tmp_path / "simboluri"
+    simb.mkdir()
+    (np.arange(20_000) % 250).astype(np.uint16).tofile(simb / "antrenare_00000.bin")
+    (np.arange(3_000) % 7).astype(np.uint16).tofile(simb / "validare_00000.bin")
+    iesire = tmp_path / "amestec"
+    rez = sc.amestec(f_cor, iesire, simb, cale_tok, repetari=8, bloc=16, simboluri_pe_fisier=512,
+                     jurnal=lambda m: None)
+    t = TokenizerBPE.incarca(str(cale_tok))
+    lung = [len(t.codifica_fara_speciale(sc.text_de_invatat(r["enunt"], r["corp"]))) + 1 for r in corecte]
+    assert rez["corpuri"] == 2 and rez["simboluri_exercitii"] == 8 * sum(lung)
+    am = rez["amestec"]
+    # tot atâtea simboluri obișnuite cât exerciții (rotunjit în sus la bloc)
+    assert rez["simboluri_exercitii"] - 16 <= am["bucati_obisnuite"] * 16 < rez["simboluri_exercitii"] + 16
+    assert rez["validare_copiate"] == 1 and rez["pasi_o_trecere"] == sc.pasi_o_trecere(am["simboluri_scrise"])
+    s = DateCod(str(iesire), context=16).simboluri_antrenare()
+    assert len(s) == am["simboluri_scrise"]
+    assert int((s == fu.SFARSIT).sum()) == 16  # fiecare din cele 2 corpuri, de 8 ori, cu sfârșitul lui
+    with pytest.raises(SystemExit):
+        sc.amestec(f_cor, iesire, simb, cale_tok, jurnal=lambda m: None)
+
+
+def test_comanda_amestec_din_linia_de_comanda(monkeypatch):
+    primite = {}
+    monkeypatch.setattr(sc, "amestec", lambda c, i, **k: primite.update(c=c, i=i, **k) or {})
+    assert sc.main(["amestec"]) == 0
+    assert primite["repetari"] == 8 and primite["c"].name == "corecte.jsonl" and primite["i"].name == "amestec"
