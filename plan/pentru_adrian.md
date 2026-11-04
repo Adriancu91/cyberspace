@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 05:20 — Noaptea pe exerciții (S70): NU AJUTĂ; azi pregătim școala de cod, la noapte prima ei rundă
+
+- **S70 gata, verificat de mine: NU AJUTĂ.** După 8 ore cu 25 % exerciții, modelul rezolvă **2 din 163** probleme noi (S63: 3/163 — diferența e zgomot; AJUTĂ cerea ≥ 8). Codul obișnuit s-a stricat puțin: **0,5074** biți pe octet (S63: 0,5004; limita STRICĂ era 0,510). Placa max 5.922 MB / 62 °C, **1195 teste trec**. S-a terminat la **04:00**, deci workstation-ul e liber pentru tine la 07:00 (C-63).
+- **Concluzia:** a învăța doar „forma” exercițiilor nu-l face să rezolve probleme. Mergem mai departe din modelul S63 (mai bun), nu din S70.
+- **Azi:** după fereastra ta (~09:30) **S71**, memoria de cod (cum era aprobat). Apoi **S72a** (doar procesor): facem exercițiile care au un test ce rulează — la S69 erau doar 13, prea puține pentru școală.
+- **La noapte (de la 19:00): S72b, prima rundă a școlii de cod** (C-60 C): S63 scrie câte 8 soluții, cutia le verifică, învață doar din cele corecte, apoi îl măsurăm pe 200 de exerciții pe care nu le-a văzut în școală. Pragurile scrise dinainte: AJUTĂ = cel puțin **+10 din 200** față de S63, fără să strice codul obișnuit. Pornește doar dacă S72a dă cel puțin 500 de exerciții cu test.
+- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 3 noiembrie 2026, 20:20 — Noaptea pe exerciții (S70) a pornit la 19:09, totul în regulă
 
 - **Rulează: S70** — 8 ore de antrenare pe exerciții, din modelul S63, pe o copie (`cod_c1_ex`; originalul rămâne rezervă), pornită la **19:09**. Verificarea dinainte: modelul copiat e cel bun (590.110 pași), **1195 teste trec**.
@@ -143,11 +151,3 @@
 - **Am pus în coadă S59** (aprobată de mine, doar procesor, ~câteva ore): un model nou care citește direct simbolurile de cod și un examen nou pe ore, fără să atingă modelul #477, examenul oficial sau nucleul. Dacă ar trebui atins nucleul, se oprește și te întreabă.
 - **Placa stă liberă în noaptea asta** (S58 nu poate porni oricum înainte de S59).
 - **Aștept de la tine:** (1) **„da S58”** când vrei — ar putea porni cel mai devreme mâine-seară, după S59; (2) **Release-ul #477** (comanda de la 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-
-## 31 octombrie 2026, 17:15 — Tokenizerul pe cod (S55) a ieșit BUN; varianta rapidă pe placă pentru #477 (S56) e gata; prima antrenare pe cod așteaptă „da”-ul tău
-
-- **S55 (comanda ta C-45) gata și verificat: BUN.** Tokenizerul nou pune **3,46 octeți într-un simbol** (prag 3,0), cu **22 % mai mult** decât tokenizerul vechi pe același cod (prag 15 %), și refacere 100 % identică (5.686 din 5.686 fișiere). Tot codul e transformat: **1,08 miliarde de simboluri**, în doar 18 minute. Examenul ascuns a rămas neatins.
-- **S56 gata și verificat: corect.** Kronos are acum și pentru #477 varianta pe placă: **1,75× mai rapidă** decât procesorul (la #459 era 1,84×), cuvinte identice. Placa a folosit doar 1,5 GB. **1132 teste trec.**
-- **Am pus în coadă S57** (aprobată de mine, doar procesor, ~câteva ore): pregătirea codului pentru prima antrenare pe cod — fără să antreneze nimic.
-- **S58 = prima antrenare Kronos-Cod** (o noapte de 10 ore pe placă, model nou de ~110 milioane, de la zero). E un **model nou**, deci **doar cu „da”-ul tău**. Pragurile sunt scrise dinainte în coadă. Placa stă liberă diseară dacă nu spui „da” până la ~18:30.
-- **Aștept de la tine:** (1) **„da S58”** dacă vrei prima antrenare pe cod (cel mai devreme în noaptea asta, după S57); (2) **Release-ul #477** (comanda de la 14:20, mai jos — e singurul lucru care lipsește ca OS-ul să-l pună pe stick); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.

@@ -2466,6 +2466,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S70 — Kronos-Cod C-60 pasul B: o noapte pe exerciții (8 ore, continuare din `gpt.pt`, pe copia `lucru/cod_c1_ex/`), apoi examenele pe `ascuns2` (placa)
 - stare: gata (executant, 4 nov 04:38: lanțul cod 0, terminat 04:00:51; validarea 0,50742, `ascuns2` pass@10 2/163 → **NU AJUTĂ**; placa max 5.922 MB / 62 °C; 1195 teste trec, 1 sărit)
+- verificat de supraveghetor (4 nov 05:20): **corect, NU AJUTĂ** — 2/163 ≤ 4/163; validarea 0,50742 ≤ 0,510 (deci nu STRICĂ), dar mai proastă decât S63 (0,50041). Linia `cod_c1_ex` nu se continuă; S72 pornește din S63.
 - stare anterioară: in_lucru (executant, 3 nov 19:11: config `nume = "cod_c1_ex"` (1195 teste trec, 1 sărit); pre-înregistrarea `2026-11-03_cod_c1_exercitii.md`;
   lanțul `lucru/cascada/S70_proba/s70.py` pornit 19:09:06 (proces 18624): pasul 0 pe procesor „pași 590110, minute 1200,02, rata 6e-05 → BUNĂ”,
   apoi `--ore 8` („orele 1–8”, linia `cod_c1_ex`), placa 5.918 MB / 58 °C; sfârșit estimat ~03:30 + examenele (i)–(iv) ~45 min; niciun pas nou după 05:45)
@@ -2502,6 +2503,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S71 — Kronos-Cod C-60 pasul D: memoria de cod („rege / regat”) — indexul funcțiilor + căutarea celor mai asemănătoare (procesor; placa doar o măsurare scurtă pe setul de PROBĂ)
 - stare: **aprobat** — după S70 `gata` (sau `oprit`)
 - tip: procesor (+ ≤ 30 min pe placă, doar setul de probă)
+- notă supraveghetor (4 nov 05:20, după S70 = NU AJUTĂ): la pasul 3 măsori **întâi S63** (`lucru/cod_c1/gpt.pt`) cu și fără memorie — e modelul de referință de acum; S70 (`lucru/cod_c1_ex/gpt.pt`) doar dacă mai încape în cele 30 de minute.
 - fereastră: zi, **4 nov, după fereastra lui Adrian (C-63: 07:00–~09:30; pornești doar după 09:30 sau după ce Adrian anunță în hub că a terminat), până la 18:30**.
   Dacă S70 a lăsat examene neterminate (oprite la 05:45), întâi le termini pe acelea.
 - durată maximă: 3 ore
@@ -2519,9 +2521,66 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S71_memorie_cod.md
 
 ### S72 — Kronos-Cod C-60 pasul C: școala de cod (Kronos își scrie soluții, cutia le verifică, învață doar din cele corecte)
-- stare: propus — aprobat de Adrian în principiu (C-60); instrucțiunile exacte și pragurile le scrie supraveghetorul după verdictul S70 (de la ce model pornim, ce exerciții cu test)
-- tip: placă + procesor
+- stare: **împărțit în S72a + S72b** (supraveghetor, 4 nov 05:20, după verdictul S70 = NU AJUTĂ). De ce așa: S69 a arătat că doar 13 din 441 de exerciții ținute deoparte au
+  un test care rulează în cutie — școala n-are încă destule exerciții cu test. Întâi le facem (S72a, procesor), apoi o rundă a școlii la noapte (S72b, placa).
+- aprobat de: Adrian în principiu (COMENZI.md C-60 C, 3 nov 2026 11:45)
+
+### S72a — Școala de cod, pregătirea: exercițiile CU TEST care rulează în cutie + împărțirea școală / verificare (doar procesor, fără placă, fără antrenare)
+- stare: **aprobat** — după S71 `gata` (sau `oprit`)
+- tip: procesor
+- fereastră: zi, 4 nov, după S71, **până la 18:30** (trebuie `gata` înainte de 19:00, altfel S72b nu pornește în noaptea asta)
+- durată maximă: 3 ore
+- ce faci:
+  1. Unealtă: comanda nouă `teste` în `unelte/kronos_cod/functii.py` (sau `unelte/kronos_cod/scoala.py`) + teste fără rețea pe fișiere mici. Pornește de la ce ai făcut la S69 pentru cele 603 cu (d),
+     dar pe **toate cele 27.581 de exerciții de antrenare cu (d)** (exemplu `>>>` sau assert), din `lucru/kronos_cod/exercitii/`. **Repară scăparea din S69** (exemplele `>>>` pe mai multe rânduri,
+     cu `...`), apoi pentru fiecare exercițiu: programul = importurile de sus (ca la S68 „blând”) + funcția + testul; testul trebuie să cheme funcția cu argumente și să aibă cel puțin un `assert` cu rezultat.
+  2. Rulezi fiecare program în cutie (`unelte/kronos_cod/cutie.py`, neschimbată) **cu corpul original**. Păstrezi doar exercițiile la care corpul original trece testul = „exerciții cu test bune”.
+     Scrii câte au căzut și de ce (NameError, import nepermis, timp, sintaxă), ca la S69.
+  3. Scurgerea, după regulile S53/S69: scoți orice exercițiu care se suprapune (13 simboluri) cu setul de probă, `ascuns2` sau `examen_ascuns` S58; pentru seturile ascunse doar numărul.
+     Cele 5.516 ținute deoparte la S69 NU intră (rămân pentru măsurare).
+  4. **Împărțirea pe pachete** (ca la S69, sămânța 0, un pachet întreg merge doar într-o parte): **P_verif** = cel puțin 200 de exerciții (dacă se poate exact 200, din cât mai multe pachete diferite),
+     **P_scoala** = restul. Scrii în `lucru/kronos_cod/scoala/` câte un dosar pentru fiecare, **în formatul pe care îl citește `examen_cod.py`** (ca să-l poți folosi cu `--dosar`, cu testul exercițiului
+     ca judecător), plus `scoala.json` cu cifrele. Verifici pe procesor, pe 5 exerciții, că `examen_cod.py noteaza` dă „ok” pentru corpul original și „picat” pentru un corp greșit.
+  5. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S72a_scoala_teste.md`: câte exerciții cu test bune (total, autonome, din câte pachete), mărimile P_verif / P_scoala,
+     căderile pe motive, scurgerile; coada → `gata`; commit + push.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, modelele, seturile ascunse (doar numărul la scurgere). Nimic descărcat, nimic instalat.
+- aprobat de: **Adrian (COMENZI.md C-60 C, 3 nov 2026 11:45)**; instrucțiunile: supraveghetor, 4 nov 2026 05:20 (granițele 3 și 5: pregătirea datelor deja descărcate, unealtă nouă)
+- raport: docs/rapoarte/<data>_<ora>_S72a_scoala_teste.md
+
+### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
+- stare: **aprobat** — pornește DOAR dacă S72a e `gata` cu **P_scoala ≥ 500** exerciții cu test bune și după ce pre-înregistrarea e urcată. Dacă P_scoala < 500: nu pornești, scrii în coadă
+  „S72b nu pornește: P_scoala = N” și placa rămâne liberă (decid eu la trecerea următoare).
+- tip: placă (+ procesor pentru cutie)
+- fereastră: noapte, **4→5 nov, de la 19:00** (cel târziu 21:00); totul se termină până la 07:00
+- durată maximă: ~6 ore în total; placa sub 7.000 MB și 83 °C; generarea și examenele cu `--lot 2 --memorie-max 6500`
+- de la ce model: **S63** (`lucru/cod_c1/gpt.pt`, validarea 0,50041) — e mai bun pe codul obișnuit decât S70 (0,50742), iar exercițiile S70 n-au ajutat. Copiezi `lucru/cod_c1/gpt.pt`
+  în `lucru/cod_c1_sc/gpt.pt` (verifici suma SHA-256 a ambelor; originalul rămâne neatins, doar citit). Config nouă `config/cod_c1_sc.toml` = `cod_c1_init002.toml` cu `nume = "cod_c1_sc"`,
+  `cale_stare = "lucru/cod_c1_sc/gpt.pt"`, `director` = amestecul de la pasul 3, eticheta (commit separat, testele trec, înainte de pre-înregistrare). Graniță 1: rulare pe linia existentă, pe o copie.
+- ce faci, un singur lanț prin `unelte/cascada.py`:
+  0. **Reperul:** S63 (`lucru/cod_c1/gpt.pt`) pe P_verif, 10 încercări pe exercițiu, temperatura 0,8, sămânța 0 → pass@1, pass@10 = **B** (câte exerciții din P_verif rezolvă măcar o dată).
+     Dacă B < 10 (sub 5 % din 200): te oprești curat după acest pas — „școala n-are din ce învăța” e un rezultat; raport, coada → `gata` cu verdictul NU POATE ÎNCEPE.
+  1. **Școala:** S63 scrie **8 încercări** pe fiecare exercițiu din P_scoala (cel mult 1.500 de exerciții, alese cu sămânța 0 dacă sunt mai multe; temperatura 0,8, sămânța 1), cel mult **3 ore** pe placă —
+     dacă timpul nu ajunge, te oprești la ce s-a scris și notezi câte.
+  2. **Cutia** (procesor): fiecare încercare cu testul exercițiului ei. Păstrezi doar corpurile **corecte**, fără duplicate (după spații). Scrii: câte corecte, la câte exerciții, și câte sunt
+     **identice cu corpul original** (după spații) — partea „copiată din memorie”.
+     Dacă sunt mai puțin de **100** de corpuri corecte diferite: nu antrenezi; sari la pasul 4 doar cu (i) și scrii verdictul PREA PUȚINE.
+  3. **Învățarea:** amestecul = fiecare corp corect, cu antetul și explicația lui în față (exact ca exercițiul), repetat de **8 ori**, + tot atâtea simboluri de cod obișnuit din
+     `simboluri/antrenare_*.bin` (alese cu sămânța 0); amestecat. O singură trecere prin el (cât durează — probabil minute), cu rata fixă a liniei 6·10⁻⁵, din `lucru/cod_c1_sc/gpt.pt`.
+     Dacă unealta cere ore întregi, folosește opțiunea de pași sau de minute dacă există; dacă nu există, cel mult `--ore 1` și scrii în raport câte treceri au fost. Pornește din starea copiată
+     (verifici înainte pe procesor, ca la S70 pasul 0: starea copiată are **590.110 pași**, rata 6·10⁻⁵, fără încălzire de la zero; altfel nu antrenezi, `oprit`).
+  4. **Examenele, o singură dată, pe starea de după învățare:** (i) biți pe octet pe validarea întreagă (5.686 fișiere, ca la S63/S70); (ii) P_verif 200 × 10, la fel ca la pasul 0 → pass@1, pass@10 = **R**;
+     (iii) `ascuns2` 163 × 10, temperatura 0,8, sămânța 0 (ca la S63/S70; setul nu se schimbă și nu se arată); (iv) setul de probă 20 × 10, informativ.
+- **pragurile** (scrise de supraveghetor acum, înainte; executantul le copiază neschimbate în pre-înregistrare), N = 200 (P_verif), B = reperul de la pasul 0:
+  **AJUTĂ** = R ≥ B + 10 **și** validarea ≤ **0,505**; **NU AJUTĂ** = R ≤ B + 3; **STRICĂ** = validarea > 0,510 sau R ≤ B − 5; altfel **NECLAR**.
+  `ascuns2` se raportează alături (S63: 3/163, S70: 2/163); „ajută și pe examen” doar dacă `ascuns2` ≥ **6/163**. O sămânță, o rundă; o diferență de ±3 din 200 e zgomot și o spunem așa.
+- **Pre-înregistrarea ÎNAINTE de pornire:** `docs/preinregistrari/2026-11-04_cod_c1_scoala_r1.md`, commit + push: pragurile de mai sus, mărimile reale P_verif / P_scoala din S72a,
+  așteptările tale în cifre (B, câte corecte, R, cât din corecte sunt copiate din memorie) și ce ar infirma ideea.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, #477, linia română, `lucru/cod_c1/` și `lucru/cod_c1_ex/` (doar citire), seturile ascunse. Nimic descărcat.
+  Raport `docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md`; coada → `gata`; commit + push. Rundele următoare (2, 3…) le scriu eu după verdict.
+- aprobat de: **Adrian (COMENZI.md C-60 C, 3 nov 2026 11:45)**; instrucțiunile și pragurile: supraveghetor, 4 nov 2026 05:20
+- raport: docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md
 
 ### S73 — Kronos-Cod C-62 pasul E: Kronos își alege datele (nota fiecărei bucăți după cât îl mai învață) — o noapte pe datele alese vs. o noapte pe date la întâmplare
 - stare: propus — aprobat de Adrian în principiu (C-62); vine după S70 (și S72, după ordinea din C-60/C-62); instrucțiunile și pragurile după verdictul S70
+- notă supraveghetor (4 nov 05:20): rămâne `propus` până la verdictul S72b; atunci scriu instrucțiunile (pornind tot din S63, nu din S70).
 - tip: placă (două nopți) + procesor
