@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 11:20 — Memoria de cod (S71): NU AJUTĂ; exercițiile cu test (S72a): DESTULE — școala de cod pornește la noapte
+
+- **S71 gata, verificat de mine: NU AJUTĂ.** Cu 2–4 funcții asemănătoare puse în față, modelul rezolvă **0 din 20** probleme de probă (fără ele: S63 0/20, S70 1/20). Funcțiile găsite seamănă la nume, nu la soluție, iar modelul începe să copieze nume din ele. Lăsăm memoria deoparte; o reîncercăm poate doar cu exerciții verificate.
+- **S72a gata, verificat de mine: 889 de exerciții cu test** care trec în cutie (și nu trec cu un răspuns gol) — **200** pentru măsurare, **689** pentru școală (pragul era 500). Nicio scurgere rămasă, **1207 teste trec**.
+- **Pus în coadă (aprobat de mine, ~30 min pe placă, acum ziua): S74** — măsurăm de pe acum cât rezolvă S63 din cele 200 (reperul școlii), ca la noapte să nu pierdem timp și să știm dinainte dacă are din ce învăța. Am adăugat și o regulă: școala nu învață din răspunsuri care doar „ghicesc” rezultatul (`return 4`).
+- **La noapte (de la 19:00): S72b**, prima rundă a școlii de cod, cum era aprobată. Placa e liberă acum (S71 a mers la max 1.506 MB / 55 °C).
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil de la 08:20). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 08:20 — ⚠ IMPORTANT: reînnoiește autentificarea Claude pe workstation până pe 6 noiembrie
 
 - **PROBLEMĂ nouă, de rezolvat de tine până pe 6 nov:** raportul de dimineață spune că, la fiecare pornire, Claude Code de pe workstation anunță că **autentificarea lui expiră între 6 și 9 noiembrie**. După aceea executantul și raportul de dimineață se opresc (cascada stă).
@@ -143,11 +151,3 @@
 - **Executantul a observat ceva:** modelul pornește „prea sigur pe el” (greșeala de început 474, normal ar fi ~10) din cauza felului în care sunt alese numerele de pornire. Învață oricum (6,8 după 10 minute), dar pierde primii pași reparând asta.
 - **Am pus în coadă S61** (aprobată de mine, ~2 ore de cod + 10 minute pe placă, în noaptea asta): aceeași probă cu numere de pornire mai mici (ca la GPT-2), pe o configurare SEPARATĂ, cu praguri scrise înainte. S58 nu se schimbă.
 - **Aștept de la tine:** (1) mâine, după raportul S61, alegi: cele 10 ore pornesc **cum sunt aprobate** (dacă nu spui nimic, așa rămâne) sau **cu varianta S61** — scrie „S58 cu init002” înainte de 19:00; (2) dacă vii mâine la workstation, spune-mi când; (3) **Release-ul #477** (comanda de la 14:20, mai jos); (4) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.
-
-## 31 octombrie 2026, 20:56 — Am primit „da S58”; prima antrenare pe cod pornește mâine-seară, după o ultimă bucată mică de cod (S60)
-
-- **S59 gata și verificat: corect.** Kronos are acum modelul care citește direct simbolurile de cod și examenul pe ore (biți pe octet, pe 1.000 de fișiere fixe). Drumul întreg al antrenării a fost probat cap-coadă pe un set mic. Nucleul, examenul oficial și #477 neatinse. **1159 teste trec.**
-- **„da S58” primit (C-47).** Executantul a găsit însă că mai lipsesc două unelte: proba de 10 minute „de la zero” și comanda care pune modelul să scrie răspunsurile la problemele de cod (pentru nota pass@10).
-- **Am pus în coadă S60** (aprobată de mine, doar procesor, ~1–3 ore, acum): exact aceste două unelte, cu teste doar pe setul de probă (examenul ascuns rămâne închis).
-- **Programarea S58:** în noaptea asta, după S60, doar pre-înregistrarea și proba de 10 minute (măsoară memoria plăcii). **Cele 10 ore: mâine-seară (1 nov), de la 19:00.** Dacă ești la workstation pentru fereastra OS/GPU, antrenarea pornește abia după ce termini.
-- **Aștept de la tine:** (1) **Release-ul #477** (comanda de la 14:20, mai jos); (2) mâine: spune-mi dacă vii la workstation și când, ca să nu se suprapună cu antrenarea; (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.

@@ -2581,8 +2581,32 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   Raport `docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md`; coada → `gata`; commit + push. Rundele următoare (2, 3…) le scriu eu după verdict.
 - aprobat de: **Adrian (COMENZI.md C-60 C, 3 nov 2026 11:45)**; instrucțiunile și pragurile: supraveghetor, 4 nov 2026 05:20
 - raport: docs/rapoarte/<data>_<ora>_S72b_scoala_runda1.md
+- **notă supraveghetor (4 nov 11:20, după S72a = 689 ≥ 500, condiția îndeplinită):**
+  (a) **Pasul 0 (reperul B) se face ziua, ca S74.** Dacă S74 e `gata`, la noapte NU repeți pasul 0: iei B din `lucru/kronos_cod/scoala/reper_s63/nota.json` (aceiași parametri, măsurarea se repetă identic — vezi controlul din S71)
+  și îl scrii ca atare în pre-înregistrare. Dacă B < 10, S72b nu pornește (verdictul NU POATE ÎNCEPE, scris de S74). Dacă S74 n-a apucat să se termine până la 18:30, faci pasul 0 la noapte, ca până acum.
+  (b) **Pasul 2, o regulă în plus (pentru că explicația conține adesea chiar rezultatul exemplului — punctul 2 din raportul S72a):** un corp „corect” care e doar `return <valoare fixă>`
+  (un singur rând; în arbore un `Return` cu o constantă sau o listă/tuplă/dicționar doar de constante) NU intră în învățare, ca școala să nu răsplătească ghicitul rezultatului. Numeri câte au fost scoase
+  și scrii cifra în raport și în pre-înregistrare (așteptarea ta). Pragul de 100 de corpuri corecte diferite se socotește DUPĂ această regulă.
+  (c) Concentrarea pe `fluids`/`chemicals` (35 % din P_scoala) rămâne cum e la runda 1 (o raportezi: câte corecte vin din ele); la runda 2 decid o limită pe pachet după rezultat.
 
 ### S73 — Kronos-Cod C-62 pasul E: Kronos își alege datele (nota fiecărei bucăți după cât îl mai învață) — o noapte pe datele alese vs. o noapte pe date la întâmplare
 - stare: propus — aprobat de Adrian în principiu (C-62); vine după S70 (și S72, după ordinea din C-60/C-62); instrucțiunile și pragurile după verdictul S70
 - notă supraveghetor (4 nov 05:20): rămâne `propus` până la verdictul S72b; atunci scriu instrucțiunile (pornind tot din S63, nu din S70).
 - tip: placă (două nopți) + procesor
+
+### S74 — Școala de cod: reperul S63 pe P_verif (pasul 0 din S72b, mutat ziua) — examen pe placă, ~20–40 min
+- stare: **aprobat** (supraveghetor, 4 nov 11:20)
+- tip: placă (doar examen, fără antrenare)
+- fereastră: zi, **4 nov, cât de curând (S72a e `gata`), terminat până la 18:30**; dacă la 18:30 nu e gata, se oprește curat și pasul 0 rămâne pentru S72b la noapte
+- durată maximă: 1 oră; placa sub 7.000 MB și 83 °C
+- de ce: aflăm înainte de noapte dacă școala are din ce învăța (B ≥ 10) și punem B adevărat în pre-înregistrarea S72b; noaptea câștigă ~20–40 de minute.
+- ce faci, prin `unelte/cascada.py`:
+  1. `examen_cod.py raspunsuri --config config/cod_c1_init002.toml --stare lucru/cod_c1/gpt.pt --set ascuns --dosar lucru/kronos_cod/scoala/P_verif --n 10 --temperatura 0.8 --samanta 0 --lot 2 --memorie-max 6500 --iesire lucru/kronos_cod/scoala/reper_s63/raspunsuri.jsonl`
+     (dacă numele exacte ale opțiunilor diferă, folosești echivalentele; parametrii rămân: S63, P_verif 200 × 10, temperatura 0,8, sămânța 0). Modelul S63 doar citit (verifici SHA-256 înainte și după).
+  2. `examen_cod.py noteaza --dosar lucru/kronos_cod/scoala/P_verif --raspunsuri … --nota lucru/kronos_cod/scoala/reper_s63/nota.json` → pass@1, pass@10 = **B** (din 200), plus ok / picat / interzis / timp.
+     Notezi și câte din răspunsurile „ok” sunt doar `return <valoare fixă>` (regula (b) din nota S72b) — B se raportează în ambele feluri (cu și fără ele); pragurile S72b folosesc B obișnuit.
+  3. Dacă **B < 10**: scrii în coadă la S72b „nu pornește: B = N (< 10), NU POATE ÎNCEPE” și S72b nu mai rulează la noapte; placa rămâne liberă (decid eu la trecerea următoare).
+  4. `python -m pytest` — toate trec; raport scurt `docs/rapoarte/<data>_<ora>_S74_reper_scoala.md` (cifrele, placa max, cât a durat); coada → `gata`; commit + push.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, modelele, P_verif / P_scoala (doar citire), seturile ascunse. Nimic descărcat, nimic instalat.
+- aprobat de: supraveghetor, 4 nov 2026 11:20 (granița 2: examen; parte din S72b, aprobată de Adrian prin COMENZI.md C-60 C)
+- raport: docs/rapoarte/<data>_<ora>_S74_reper_scoala.md
