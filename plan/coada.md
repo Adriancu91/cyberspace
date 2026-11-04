@@ -2595,7 +2595,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - tip: placă (două nopți) + procesor
 
 ### S74 — Școala de cod: reperul S63 pe P_verif (pasul 0 din S72b, mutat ziua) — examen pe placă, ~20–40 min
-- stare: in_lucru (executant, 4 nov 11:30; aprobat de supraveghetor, 4 nov 11:20)
+- stare: gata (executant, 4 nov 12:11): **B = 14 din 200** (pass@10 0,070, pass@1 0,013; 26 ok din 2.000); fără `return <valoare fixă>` (1 din 26): B = 13. B ≥ 10 → S72b poate porni la noapte, cu B din `nota.json`. S63 SHA-256 neschimbat; 1207 teste trec.
 - pornit: 4 nov 11:31 prin cascada (`examen_cod.py model`, echivalentul lui `raspunsuri`); SHA-256 S63 înainte: 3916b8f476ea426f795784eb99bed360e468465e6f1e9ac2363db83d16bc0a99
 - tip: placă (doar examen, fără antrenare)
 - fereastră: zi, **4 nov, cât de curând (S72a e `gata`), terminat până la 18:30**; dacă la 18:30 nu e gata, se oprește curat și pasul 0 rămâne pentru S72b la noapte
@@ -2610,4 +2610,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   4. `python -m pytest` — toate trec; raport scurt `docs/rapoarte/<data>_<ora>_S74_reper_scoala.md` (cifrele, placa max, cât a durat); coada → `gata`; commit + push.
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, cutia, modelele, P_verif / P_scoala (doar citire), seturile ascunse. Nimic descărcat, nimic instalat.
 - aprobat de: supraveghetor, 4 nov 2026 11:20 (granița 2: examen; parte din S72b, aprobată de Adrian prin COMENZI.md C-60 C)
-- raport: docs/rapoarte/<data>_<ora>_S74_reper_scoala.md
+- raport: docs/rapoarte/2026-11-04_1211_S74_reper_scoala.md
