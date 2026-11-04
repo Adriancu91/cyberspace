@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 4 noiembrie 2026, 20:20 — Școala de cod (S72b): STRICĂ; trecem pe română (C-64), de la noapte pregătim răspunsurile în română (S76a)
+
+- **S72b gata, verificat de mine: STRICĂ.** După o trecere scurtă (48 s) prin cele 109 soluții corecte, Kronos rezolvă **18 din 200** exerciții (înainte 14 — +4, la limita zgomotului), dar codul obișnuit s-a stricat: **0,513** biți pe octet (S63: 0,500; limita era 0,510). Pe examenul ascuns: 4/163 (înainte 3). Placa max 5.885 MB / 61 °C, **1212 teste trec**. Concluzia: școala, așa cum e, nu avansează codul.
+- **Deci, cum ai cerut în C-64, trecem pe română.** Pus în coadă (aprobat de mine, pornește la noapte): **S76a** — exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le avem (cel puțin 10.000 pentru învățare, 400 ascunse, cel puțin 40 % instrucțiuni de felul „Spune…”, „Scrie…”, „Rezumă…”), o notă automată fără alt AI (corect / în temă / limbă curată) și reperul: cât de bine răspunde #477 acum. Nicio antrenare la noapte.
+- **Urmează:** mâine noapte **S76b**, antrenarea din #477 pe o copie (#477 rămâne în uz până îl bate copia); ziua, primul test pentru **S77** (Kronos mai mare: aceeași ieșire + memorie și viteză). Le scriu mâine dimineață, după cifrele S76a.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 17:20 — Prima parte a școlii de cod (S75): DESTULE soluții corecte; la noapte Kronos învață din ele (S72b)
 
 - **S75 gata, verificat de mine: DESTULE.** Modelul S63 a scris 8 soluții la fiecare din cele 689 de exerciții ale școlii (5.512 în total, 81 min pe placă, max **2.032 MB**). Cutia a găsit **137 corecte**; după ce am scos dublurile și 3 răspunsuri care doar „ghiceau” rezultatul, rămân **109 soluții corecte diferite** la 70 de exerciții (pragul era 100 — trecut, dar la limită). Doar 12,8 % sunt copiate întocmai din original, deci nu e „memorie pe de rost”. S63 neatins, **1209 teste trec**.
@@ -142,9 +149,3 @@
 - **Atenție:** OS-ul îți cere o probă scurtă cu `os-211` (~6 min pe workstation). Dacă o faci, **fă-o înainte de 19:00 sau mâine după ~07:00** — altfel repornirea oprește antrenarea.
 - **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.
 
-## 1 noiembrie 2026, 11:55 — Am primit „da init002”: antrenarea pe cod de diseară pornește cu varianta S61
-
-- **Comanda ta C-50 preluată.** Cele 10 ore de la 19:00 (S58) folosesc acum configurarea `cod_c1_init002` (numerele de pornire mici, care la S61 au dat greșeala 3,77 în loc de 6,82). Pragurile rămân exact cele scrise înainte.
-- **Executantul scrie întâi** în pre-înregistrare ce configurare folosește, apoi pornește. Proba de memorie nu se mai repetă (S61 a măsurat deja 6.078 MB, sub limită).
-- **Rulează:** nimic; placa e liberă până la 19:00. Raportul de dimineață e la locul lui, **1168 teste trec**, nicio problemă.
-- **Aștept de la tine:** (1) dacă vii azi la workstation, spune-mi când (antrenarea pornește după ce termini); (2) **Release-ul #477** (comanda de la 31 oct 14:20, mai jos); (3) fără grabă: excluderea mai îngustă de la S53 și repornirea din 29 oct.

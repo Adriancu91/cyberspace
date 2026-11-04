@@ -2550,6 +2550,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1113_S72a_scoala_teste.md
 
 ### S72b — Școala de cod, runda 1: Kronos (S63) scrie soluții la P_scoala, cutia le verifică, învață doar din cele corecte; măsurat pe P_verif (placa, noaptea 4→5 nov)
+- verificat de supraveghetor (4 nov 20:20): pre-înregistrarea urcată înainte de pornire (S75, 14:30) ✓; validarea întreagă 0,51303 > 0,510 → **STRICĂ** ✓ (R = 18: +4 față de B = 14, zgomot; `ascuns2` 4/163 < 6). Școala, cum e, nu avansează codul → se aplică C-64 (S76, S77). Rundele 2+ nu le pun acum; `lucru/cod_c1_sc/` rămâne, nu se șterge.
 - stare: gata (executant, 4 nov 20:04): **STRICĂ** — validarea întreagă 0,51303 > 0,510 (S63 0,50041); R = 18 din 200 (B = 14; pass@1 0,023, 46 ok); `ascuns2` 4/163; proba 0/20. Lanțul 19:10–19:58, cod 0, placa max 5.885 MB / 61 °C; S63 SHA neschimbat; pre-înregistrarea închisă cu verdictul; 1212 teste trec, 1 sărit.
 - (istoric) stare: in_lucru (executant, 4 nov 19:01; de la pasul 3, după nota (e))
 - pornit: 4 nov 19:10 prin cascadă (proces 2516, lanțul `lucru/cascada/S72b_proba/s72b.py`). Pregătire: comanda nouă `scoala.py amestec` (+ teste, db827ca) →
@@ -2603,6 +2604,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S73 — Kronos-Cod C-62 pasul E: Kronos își alege datele (nota fiecărei bucăți după cât îl mai învață) — o noapte pe datele alese vs. o noapte pe date la întâmplare
 - stare: propus — aprobat de Adrian în principiu (C-62); vine după S70 (și S72, după ordinea din C-60/C-62); instrucțiunile și pragurile după verdictul S70
 - notă supraveghetor (4 nov 05:20): rămâne `propus` până la verdictul S72b; atunci scriu instrucțiunile (pornind tot din S63, nu din S70).
+- notă supraveghetor (4 nov 20:20): S72b = STRICĂ → după C-64 placa trece pe română (S76, S77). S73 rămâne `propus`, în așteptare; nu pornește fără o nouă decizie (a lui Adrian sau după S76/S77).
 - tip: placă (două nopți) + procesor
 
 ### S74 — Școala de cod: reperul S63 pe P_verif (pasul 0 din S72b, mutat ziua) — examen pe placă, ~20–40 min
@@ -2652,13 +2654,53 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-04_1618_S75_scoala_r1_solutii.md
 
 ### S76 — C-64 R1: răspunsuri în română (exerciții „întrebare/instrucțiune → răspuns” din datele românești deja avute + set ascuns + notă automată; o noapte din #477 pe o copie)
-- stare: **aprobat de Adrian, cu condiție** — pornește DOAR după verdictul S72b, dacă **nu** e AJUTĂ (NU AJUTĂ, STRICĂ sau NECLAR = „nu avansăm pe cod”); dacă S72b e AJUTĂ, continuăm școala și S76 așteaptă.
+- **notă supraveghetor (4 nov 20:20): condiția e îndeplinită (S72b = STRICĂ, nu AJUTĂ).** S76 se face în doi pași: **S76a** (mai jos, aprobat, pornește la noapte) = exercițiile, setul ascuns, nota automată și reperul #477; **S76b** = noaptea de antrenare din #477 pe o copie, scrisă de mine după verdictul S76a (ținta: noaptea 5→6 nov).
+- (istoric) stare: **aprobat de Adrian, cu condiție** — pornește DOAR după verdictul S72b, dacă **nu** e AJUTĂ (NU AJUTĂ, STRICĂ sau NECLAR = „nu avansăm pe cod”); dacă S72b e AJUTĂ, continuăm școala și S76 așteaptă.
   Instrucțiunile exacte, pragurile și pre-înregistrarea le scriu eu după verdictul S72b (întâi partea de procesor: exercițiile, setul ascuns, nota automată; apoi noaptea pe placă).
 - tip: procesor (date + notă) + placă (o noapte, din #477 pe o copie; #477 rămâne în uz până când copia îl bate la examen)
 - Nimic descărcat, fără alt AI; `kronos/`, paznicul și examenul neatinse; placa ≤ 7.000 MB / 83 °C.
 - aprobat de: **Adrian (COMENZI.md C-64, 4 nov 2026 11:30)**; preluat de supraveghetor 4 nov 14:20
 
+
+### S76a — C-64 R1 pasul 1: exercițiile „întrebare/instrucțiune → răspuns” în română + setul ascuns + nota automată (fără alt AI) + reperul #477 (procesor; placa doar un examen scurt)
+- stare: **aprobat** (supraveghetor, 4 nov 2026 20:20)
+- tip: procesor (date + unealtă + teste) + placă (doar un examen scurt, fără antrenare)
+- fereastră: **acum, noaptea 4→5 nov** (placa e liberă de la 19:58). Partea de procesor oricând; examenul pe placă (pasul 5) pornește cel târziu la **05:00** și se termină până la **06:45**.
+  Dacă nu apucă, pasul 5 rămâne pentru ziua de 5 nov (după 08:00) și scrii asta în coadă.
+- durată maximă: procesor ~4–5 ore; placa ≤ 1 oră, sub 7.000 MB și 83 °C (`--lot` mic, ca la examenele de până acum)
+- de ce: C-64 R1. #477 a fost antrenat pe întrebări cu răspunsul în text (`text_v3`); acum vrem și **instrucțiuni** („Spune…”, „Scrie…”, „Rezumă…”) și o notă care
+  nu cere alt AI (profesorul Qwen NU se folosește aici), ca să putem măsura dacă o noapte de antrenare îl face să răspundă mai bine în română.
+- ce faci:
+  1. **Unealta nouă `unelte/romana_raspunsuri.py`** (granița 5; cu teste noi în `teste/`), comanda `construieste`: perechi „Întrebare: …⏎Răspuns: …” (același format ca la antrenarea liniei w2;
+     pentru cele cu text: „Text: …⏎Întrebare: …⏎Răspuns: …”), făcute **doar prin reguli**, doar din datele românești deja pe disc (paragrafele Wikipedia RO folosite de `conversatie_text.py`,
+     `docs/conversatie/conversatie_simpla.json`, `date/fapte/`). Nimic descărcat, niciun model folosit la scris.
+     - păstrezi felurile din `text_v3` (cu răspunsul în text, „Nu scrie în text.”, da/nu, conversația simplă), dar **cel puțin 40 % sunt instrucțiuni** la imperativ, din **cel puțin 4 feluri noi**
+       care nu există în `text_v3` și nici în examenele vechi, de exemplu: „Spune într-o propoziție ce este X.” (răspunsul = prima propoziție, scurtată curat), „Scrie doar anul în care …”,
+       „Rezumă textul într-o propoziție.”, „Spune în ce județ se află X și din ce țară face parte.” (două informații din text), „Răspunde cu da sau nu: …”, „Scrie numele …”.
+     - fiecare pereche are câmpurile: `fel`, `prompt`, `raspuns` (referința), `cheie` (1–3 bucăți care TREBUIE să apară într-un răspuns corect: numele, anul, numărul, județul; pentru „Nu scrie în text.” cheia e chiar asta),
+       `subiect` (X) și `articol` (sursa).
+  2. **Setul ascuns** `lucru/romana_raspunsuri/ascuns.jsonl`: cel puțin **400** de perechi (cel puțin 160 instrucțiuni, toate felurile reprezentate), din articole care **nu intră deloc** în antrenare
+     și nu apar în `text_v3`, `date/conversatie/examen.json` sau în examenele din `docs/conversatie/`. Antrenarea: `lucru/romana_raspunsuri/antrenare.jsonl`, cel puțin **10.000** de perechi.
+     Verifici scurgerile ca la `conversatie_text.py` (nicio bucată de 8 cuvinte comună între antrenare și ascuns / examenele vechi / validările română) și scrii cifra (trebuie **0**).
+     Plus `info.json` (câte pe fel, sămânța, sumele SHA-256 ale celor două fișiere). Setul ascuns nu se arată în raport (doar 5 exemple din antrenare).
+  3. **Nota automată**, comanda `noteaza` (fără alt AI, deterministă): pentru fiecare răspuns (tăiat la primul rând nou, ca la `examen_conversatie.py`) trei note 0/1:
+     **corect** = toate bucățile din `cheie` apar în răspuns (fără diacritice și fără majuscule; numerele ca cifre); la da/nu, primul cuvânt e cel bun;
+     **în temă** = apare subiectul (sau cuvântul lui principal) ori o bucată din `cheie`; la „Nu scrie în text.” = răspunsul spune că nu scrie / nu știe;
+     **limbă curată** = 2–60 de cuvinte, cel puțin 90 % din cuvinte cunoscute (lista de cuvinte a motorului `module/limba_romana` sau, dacă nu se poate, vocabularul datelor românești de antrenare),
+     niciun cuvânt repetat de 3 ori la rând, fără bucăți `<|…|>`. Ies: procentele pe toate și pe fel (corect / în temă / limbă curată) + **scorul R1 = media celor trei**.
+  4. **Proba notei** (procesor, înainte de placă), scrisă în raport: referințele însele → corect ≥ **95 %**; răspuns gol → 0 %; referința altei întrebări (amestecate cu sămânța 0) → corect ≤ **5 %**;
+     de două ori pe aceleași răspunsuri → aceleași cifre. Dacă una pică, repari nota (cel mult 3 încercări), altfel `oprit` cu motivul.
+  5. **Reperul pe placă:** #477 (`lucru/w2_reteta_A_cont3/` — doar citit, SHA-256 înainte și după) scrie răspunsurile la tot setul ascuns, fără întâmplare (cea mai probabilă bucată, ca la `examen_conversatie.py`),
+     cel mult 64 de simboluri; apoi `noteaza` → `lucru/romana_raspunsuri/reper_477/nota.json`. Același lucru pe procesor nu e nevoie. Informativ, dacă încape în timp: și #459.
+  6. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S76a_romana_raspunsuri.md` (cifrele de la 2–5, câte pe fel, placa max MB/°C, cât a durat); coada → `gata` cu verdictul:
+     **GATA** (≥ 10.000 antrenare, ≥ 400 ascuns, scurgeri 0, proba notei trecută) sau **PUȚINE** / **NOTA PICĂ** (cu cifra); commit + push. Nu pornești nicio antrenare.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, #477 / #459 (doar citire), `module/model_gpt.py`, `module/model_muon.py`, `unelte/examen_conversatie.py`, `unelte/conversatie_text.py`
+  (le poți importa, nu le schimbi), examenele vechi și seturile ascunse de cod, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
+- urmează: **S76b** (noaptea 5→6 nov, din #477 pe o copie, cu pre-înregistrare): o scriu eu după verdict, cu pragurile față de reperul de la pasul 5 și cu limita pe română curat (#477 = 1,2097).
+- aprobat de: supraveghetor, 4 nov 2026 20:20 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
+
 ### S77 — C-64 R2: Kronos mai mare, crescut din #477 (straturi noi pornite „neutre”, aceeași ieșire la început, verificat pe vectorii KGR1) — întâi un test scurt de memorie și viteză
+- **notă supraveghetor (4 nov 20:20): condiția e îndeplinită (S72b = STRICĂ).** Primul pas (S77a: modelul crescut din #477 dă aceeași ieșire pe vectorii KGR1 + test scurt de memorie și viteză pe placă, fără antrenare) îl scriu la trecerea de 05:15 / 08:15, pentru ziua de 5 nov, după S76a.
 - stare: **aprobat de Adrian, cu condiție** — aceeași condiție ca S76; vine după partea de procesor din S76. Instrucțiunile (mărimea țintă care încape în ≤ 7.000 MB la antrenare, estimarea lui Adrian ~200–350M,
   bf16, recalcul activări), testul de memorie/viteză și pragurile le scriu eu după verdictul S72b. Măsurat cu examenul de română (#477 = 1,2097) și cu nota din S76.
 - tip: procesor + placă (test scurt, apoi nopți, fiecare cu pre-înregistrare)
