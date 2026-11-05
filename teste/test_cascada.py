@@ -1,8 +1,11 @@
 """Ajutorul executantului din cascadă (19 octombrie 2026): ferestrele plăcii, procesele grele, pornirea desprinsă."""
 
 import json
+import os
+import subprocess
 import sys
 import time
+import types
 from datetime import datetime
 
 from unelte import cascada
@@ -74,6 +77,69 @@ def test_din_nou_muta_pornirea_terminata_si_porneste(tmp_path):
     assert (tmp_path / "S0_1929.json").read_text(encoding="utf-8") == "{}"
     s = _asteapta_sfarsitul("S0", tmp_path)
     assert s["cod"] == 0 and any("a doua" in r for r in s["ultimele_randuri"])
+
+
+class _WindowsFals:
+    """S80: `tasklist` și `Get-CimInstance` înlocuite — un singur proces cu PID-ul, imaginea și ora date."""
+
+    def __init__(self, monkeypatch, imagine, ora=None, pid=19792):
+        self.pid, self.imagine, self.ora, self.chemari = pid, imagine, ora, []
+        monkeypatch.setattr(cascada, "os", types.SimpleNamespace(name="nt", kill=os.kill))
+        monkeypatch.setattr(cascada.subprocess, "run", self.run)
+
+    def run(self, argumente, **_):
+        self.chemari.append(argumente[0])
+        if argumente[0] == "tasklist":
+            iesire = (f'"{self.imagine}","{self.pid}","Console","1","12.345 K"\n' if self.imagine
+                      else "INFO: No tasks are running which match the specified criteria.\n")
+        else:
+            iesire = f"{self.ora}\n" if self.ora else ""
+        return subprocess.CompletedProcess(argumente, 0, stdout=iesire, stderr="")
+
+
+def test_pid_refolosit_de_alt_program_nu_merge(monkeypatch):
+    _WindowsFals(monkeypatch, "dllhost.exe", "2026-11-05T09:12:00")
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is False
+    _WindowsFals(monkeypatch, None)
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is False
+    _WindowsFals(monkeypatch, "python.exe", pid=197920)  # doar cifra în text nu ajunge
+    assert cascada.traieste(19792) is False
+
+
+def test_python_pornit_inainte_merge_iar_cel_pornit_dupa_nu(monkeypatch):
+    _WindowsFals(monkeypatch, "python.exe", "2026-10-28T08:33:21")
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is True
+    _WindowsFals(monkeypatch, "python.exe", "2026-10-28T08:33:20")
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is True
+    _WindowsFals(monkeypatch, "python.exe", "2026-10-28T10:33:21")  # 2 ore după
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is False
+    w = _WindowsFals(monkeypatch, "python.exe", None)  # ora nu se citește: hotărăște numele
+    assert cascada.traieste(19792, "2026-10-28T08:33:21") is True
+    assert w.chemari == ["tasklist", "powershell"]
+
+
+def test_inregistrare_mutata_fara_cod_nu_blocheaza_liber(tmp_path, monkeypatch):
+    s42 = {"sarcina": "S42", "comanda": ["x"], "pornita": "2026-10-28T08:33:21", "pid": 19792}
+    (tmp_path / "S42_0833.json").write_text(json.dumps(s42), encoding="utf-8")
+    w = _WindowsFals(monkeypatch, "python.exe", "2026-10-28T08:33:21")  # chiar dacă ar părea viu
+    monkeypatch.setattr(cascada, "placa", lambda: None)
+    monkeypatch.setattr(cascada, "procese_python", lambda: [])
+    s = cascada.sarcina("S42_0833", tmp_path)
+    assert s["merge"] is False and s["cod"] is None
+    assert w.chemari == []  # nu mai întreabă Windows
+    st = cascada.stare(datetime(2026, 11, 5, 17, 30), tmp_path)
+    assert st["liber"] is True and st["sarcini_pornite"][0]["merge"] is False
+    assert json.loads((tmp_path / "S42_0833.json").read_text(encoding="utf-8")) == s42  # neatinsă
+
+
+def test_muta_vechea_fara_cod_scrie_cod_null(tmp_path, monkeypatch):
+    s4 = {"sarcina": "S4", "comanda": ["x"], "pornita": "2026-10-20T10:55:56", "pid": 9392}
+    (tmp_path / "S4.json").write_text(json.dumps(s4), encoding="utf-8")
+    _WindowsFals(monkeypatch, None)
+    assert cascada.muta_vechea("S4", tmp_path) is True
+    mutata = json.loads((tmp_path / "S4_1055.json").read_text(encoding="utf-8"))
+    assert mutata["cod"] is None and mutata["nota"] == "mutată fără cod" and mutata["terminata"]
+    assert {k: mutata[k] for k in s4} == s4 and not (tmp_path / "S4.json").exists()
 
 
 def test_din_nou_refuza_sarcina_care_merge(tmp_path):

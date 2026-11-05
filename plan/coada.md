@@ -2747,7 +2747,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S80 — Reparație: `unelte/cascada.py` nu mai crede că o sarcină veche „merge” când Windows i-a dat PID-ul altui proces (doar procesor, ~30–45 min)
-- stare: in_lucru (executant, 5 nov 2026 17:30; aprobat de supraveghetor 17:15)
+- stare: gata (executant, 5 nov 2026 17:36; 1225 teste trec, 1 sărit; `stare` → `liber: true`, S42_0833 `merge: false`)
 - tip: procesor (cod în `unelte/` + teste). Fără placă, fără antrenare.
 - fereastră: **oricând — ACUM, înaintea lui S77a.** E singura sarcină care poate porni cât `liber` e `false` din cauza unei înregistrări vechi: n-o pornești prin `cascada.py porneste`, o faci direct în sesiunea ta.
 - durată maximă: ~45 de minute.
@@ -2760,7 +2760,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. Raport `docs/rapoarte/<data>_<ora>_S80_cascada_pid_refolosit.md` (ce s-a schimbat, testele noi, ieșirea `stare` înainte/după); coada → `gata`; commit + push; **apoi pornești imediat S77a**.
 - Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`, nimic din `lucru/` (nicio înregistrare editată sau ștearsă). Nu oprești procesul 19792 (e al Windows). Nimic instalat.
 - aprobat de: supraveghetor, 5 nov 2026 17:15 (granițele 5 și 6)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-05_1736_S80_cascada_pid_refolosit.md
 
 ### S77 — C-64 R2: Kronos mai mare, crescut din #477 (straturi noi pornite „neutre”, aceeași ieșire la început, verificat pe vectorii KGR1) — întâi un test scurt de memorie și viteză
 - **notă supraveghetor (4 nov 20:20): condiția e îndeplinită (S72b = STRICĂ).** Primul pas (S77a: modelul crescut din #477 dă aceeași ieșire pe vectorii KGR1 + test scurt de memorie și viteză pe placă, fără antrenare) îl scriu la trecerea de 05:15 / 08:15, pentru ziua de 5 nov, după S76a.

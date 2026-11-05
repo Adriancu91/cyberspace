@@ -15,8 +15,10 @@ lucru/cascada/S<n>.log (tot ce a scris). Unealta doar pornește și citește; nu
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, time, timedelta
@@ -98,10 +100,52 @@ def grele(procese: list[dict]) -> list[dict]:
     return rezultat
 
 
-def traieste(pid: int) -> bool:
+# S80 (5 nov 2026): Windows refolosește PID-urile. O sarcină veche fără „cod” al cărei PID a ajuns la alt program
+# (S42 19792 → dllhost.exe; S45 14764 pe 4 nov) bloca „liber”. Pe Windows procesul e „al nostru” doar dacă e
+# python.exe (porneste lansează mereu sys.executable) și n-a pornit mult după ora înregistrării.
+IMAGINEA_NOASTRA = "python.exe"
+TOLERANTA_PORNIRE = timedelta(minutes=5)
+
+
+def _imaginea(pid: int) -> str | None:
+    """Numele programului cu PID-ul dat (din `tasklist ... /FO CSV /NH`), sau None dacă nu există."""
+    try:
+        r = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"], capture_output=True,
+                           text=True, timeout=30, errors="replace")
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    for rand in csv.reader(r.stdout.splitlines()):
+        if len(rand) >= 2 and rand[1].strip() == str(pid):
+            return rand[0].strip()
+    return None
+
+
+def _ora_pornirii(pid: int) -> datetime | None:
+    """Când a pornit procesul (Win32_Process.CreationDate, ora locală), sau None dacă nu se poate citi."""
+    comanda = (f"$p = Get-CimInstance Win32_Process -Filter \"ProcessId={int(pid)}\"; "
+               "if ($p) { $p.CreationDate.ToString('s') }")
+    try:
+        r = subprocess.run(["powershell", "-NoProfile", "-Command", comanda], capture_output=True, text=True,
+                           timeout=60, errors="replace")
+        return datetime.fromisoformat(r.stdout.strip())
+    except (OSError, subprocess.TimeoutExpired, ValueError):
+        return None
+
+
+def traieste(pid: int, pornita: str | None = None) -> bool:
     if os.name == "nt":
-        r = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"], capture_output=True, text=True)
-        return str(pid) in r.stdout
+        imagine = _imaginea(pid)
+        if imagine is None or imagine.lower() != IMAGINEA_NOASTRA:
+            return False
+        if pornita:
+            try:
+                inregistrata = datetime.fromisoformat(pornita)
+            except (TypeError, ValueError):
+                return True  # ora din înregistrare nu se citește: hotărăște doar numele
+            ora = _ora_pornirii(pid)
+            if ora is not None and ora > inregistrata + TOLERANTA_PORNIRE:
+                return False  # alt python.exe, pornit după ce al nostru s-a terminat
+        return True
     try:
         os.kill(pid, 0)
     except OSError:
@@ -109,15 +153,23 @@ def traieste(pid: int) -> bool:
     return True
 
 
+def mutata(nume: str, s: dict) -> bool:
+    """Înregistrarea a fost mutată deoparte de `muta_vechea` (fișierul <sarcina>_<HHMM>[_n].json)."""
+    if "sarcina" in s:
+        return s["sarcina"] != nume
+    return re.search(r"_(\d{4}|vechi)(_\d+)?$", nume) is not None
+
+
 def sarcina(nume: str, dosar: Path = DOSAR) -> dict | None:
     cale = dosar / f"{nume}.json"
     if not cale.exists():
         return None
     s = json.loads(cale.read_text(encoding="utf-8"))
-    if "cod" in s:
-        s["merge"] = False
+    if "cod" in s or mutata(nume, s):
+        s["merge"] = False  # o înregistrare mutată deoparte de muta_vechea e prin definiție terminată
+        s.setdefault("cod", None)
     else:
-        s["merge"] = traieste(s["pid"])
+        s["merge"] = traieste(s["pid"], s.get("pornita"))
         if not s["merge"]:
             s["cod"] = None  # s-a oprit fără să-și scrie codul (calculatorul repornit, proces omorât)
     jurnal = dosar / f"{nume}.log"
@@ -147,6 +199,12 @@ def muta_vechea(nume: str, dosar: Path = DOSAR) -> bool:
     while any((dosar / f"{baza if n == 1 else f'{baza}_{n}'}{ext}").exists() for ext in (".json", ".log")):
         n += 1
     nou = baza if n == 1 else f"{baza}_{n}"
+    cale = dosar / f"{nume}.json"
+    inregistrarea = json.loads(cale.read_text(encoding="utf-8"))
+    if "cod" not in inregistrarea:  # S80: fără cod, PID-ul ei ar putea fi luat de alt program mai târziu
+        inregistrarea.update(cod=None, terminata=datetime.now().isoformat(timespec="seconds"),
+                             nota="mutată fără cod")
+        cale.write_text(json.dumps(inregistrarea, ensure_ascii=False, indent=1), encoding="utf-8")
     for ext in (".json", ".log"):
         vechi = dosar / f"{nume}{ext}"
         if vechi.exists():
