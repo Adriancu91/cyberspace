@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 07:40 — Răspunsurile în română (S76b): AJUTĂ; azi, după fereastra ta, primul test pentru Kronos mai mare (S77a)
+
+- **S76b gata, verificat de mine: AJUTĂ.** Copia **#513** urmează acum instrucțiunile din examenul ascuns: **98,97** din 100 (#477: 37,47; pragul era 47,47). Nu s-a stricat nimic: româna 1,2060 (#477: 1,2097 — puțin mai bine), codul și poveștile tot puțin mai bine. Placa max 5.936 MB / 63 °C, **1221 teste trec**. Atenție: examenul folosea aceleași 8 tipuri de instrucțiuni ca exercițiile, deci încă nu știm dacă urmează instrucțiuni *formulate altfel*.
+- **Fereastra ta C-73 (~08:30–09:45):** nimic nu rulează pe placă și nu pornește nimic până la 09:45.
+- **Pus în coadă (aprobat de mine), după 09:45:** **S77a** — Kronos crescut din #477 de la 12 la 24–42 de straturi (~180–310M parametri), straturile noi pornite „neutre” ca să dea exact aceeași ieșire; verificăm asta (și pe vectorii KGR1) și măsurăm memoria și viteza pe placă, fără antrenare. Regula de alegere e scrisă dinainte: cea mai mare mărime sub 6.500 MB și cu cel puțin 2 pași/s. Apoi **S76c** (doar procesor): un examen cu instrucțiuni formulate altfel, ca să vedem cinstit dacă #513 a învățat să urmeze instrucțiuni sau doar a copiat tiparele (repar și greșeala „1,091 → 091”).
+- **La noapte:** prima noapte a modelului mai mare (S77b) — o scriu la 14:15 / 17:15, după cifrele S77a, cu pre-înregistrare.
+- **Aștept de la tine:** **`claude setup-token` pe workstation — AZI, cât ești acolo** (autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul se opresc). Când vrei: dacă #513 îl înlocuiește pe #477 (îți recomand să aștepți S76c, azi după-amiază). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 02:20 — Noaptea pe răspunsurile în română (S76b) a pornit; nimic de făcut pentru tine acum
 
 - **Rulează: S76b** — 5 ore de învățare pe exercițiile în română, pe o copie a lui #477 (#477 rămâne în uz), pornită pe la **23:30–23:40**. Sfârșitul estimat: antrenarea ~05:10, examenele până pe la ~05:45, deci mult înainte de 06:45.
@@ -141,10 +149,3 @@
 - **Pus în coadă (aprobat de mine): S62, azi ziua** — uneltele de examen de cod lucrează în loturi mai mici și **se opresc singure** peste 6.500 MB; unealta de validare citește și modelul liniei. Se măsoară pe placă doar pe setul de probă. Fără `kronos/`, fără examenul oficial.
 - **Propus, așteaptă „da”-ul tău: S63** — a doua noapte pe codul S58 (10 ore, din modelul de azi-noapte), apoi examenele cu uneltele reparate și un set ascuns NOU (cel vechi e folosit). Pragurile sunt scrise în coadă.
 - **Aștept de la tine:** (1) **contează cifrele S58?** scrie „S58 contează: da” sau „nu” (executantul și eu recomandăm „da”: cifrele sunt corecte, depășirea a fost la examen, nu la antrenare); (2) **„da S63”** dacă vrei a doua noapte — dacă scrii până la 18:30 și S62 e gata, pornește diseară la 19:00; altfel placa stă liberă la noapte; (3) de știut: dacă vrei ca executantul să poată opri singur un proces scăpat de sub control, trebuie permisă comanda `taskkill` pe workstation (schimbare de setări — doar tu). Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477, excluderea de la S53, repornirea din 29 oct.
-
-## 1 noiembrie 2026, 23:15 — S58 rulează; o mică nepotrivire de ore la bucla automată, de reglat la pregătirea din ~3 nov
-
-- **Rulează: S58** (10 ore pe cod, `cod_c1_init002`, pornit la 19:00). Nimic terminat de la 20:15, nicio problemă (executantul nu scrie în timpul antrenării — e normal). Rezultatul: mâine dimineață.
-- **Văzut în hub:** Cyber Universe a terminat partea OS a buclei automate (C-53, `os-213`). Scriptul lor pentru Windows pornește doar între **08:00 și 22:00** — dar în nopțile de antrenare Kronos folosește placa de la **19:00**. Ai hotărât „doar ziua, nu în nopțile de antrenare”, deci am cerut în hub ca ora limită să fie ~18:30 (sau să verifice că nu rulează antrenarea). Nu e urgent: scriptul nu rulează până nu îl pregătești tu (~3 nov).
-- **Pus în coadă:** nimic nou; pasul următor pe placă îl decid mâine la 05:15/08:15, după cifrele S58.
-- **Aștept de la tine:** nimic urgent. La pregătirea buclei (~3 nov): ora limită 18:30 în nopțile de antrenare. Fără grabă: Release-ul #477, excluderea mai îngustă de la S53, repornirea din 29 oct.
