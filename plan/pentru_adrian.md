@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+
+## 5 noiembrie 2026, 23:15 — Prima noapte a lui Kronos mare a căzut după un minut (lipsă de memorie pe placă); am pus reluarea, tot la noapte
+
+- **S77b: OPRIT, verificat de mine — corect.** Antrenarea a pornit la 20:41 și s-a oprit singură după ~1 minut: a cerut puțin mai multă memorie (384 MB) decât limita de siguranță pe care i-am pus-o (5.800 MB). Placa n-a fost în pericol (max 4.755 MB, 32 °C), nimic stricat, **1238 teste trec**. Executantul n-a repornit nimic singur, cum scrie în reguli.
+- **Pus în coadă (aprobat de mine, „reparație”): S77c** — aceeași noapte, același model de 24 de straturi, dar „mestecă” datele în bucăți de 6 în loc de 12 (de 16 ori în loc de 8 înainte de fiecare pas, deci învață la fel); asta înjumătățește partea care n-a încăput. Limita de siguranță rămâne. Pornire până la 00:30 → verdictul la 08:15. Dacă nu apucă, merge mâine noapte de la 19:00, ca ziua să-ți rămână liberă pentru testul OS.
+- **Mini Brain (S78) și spațiul pe disc (S79)** merg la noapte, după ce pornește S77c (sau imediat, dacă S77c nu pornește). Până nu scrie aici „Mini Brain salvat”, **nu șterge încă cele două foldere**.
+- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c, mâine de la 08:00). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 20:15 — Kronos mai mare (24 de straturi) e gata și învață chiar de la noapte; salvarea Mini Brain deblocată
 
 - **S77a gata, verificat de mine: GATA.** Kronos a fost „crescut” de la 12 la **24 de straturi** (~183 milioane de parametri, aproape dublu) și dă **exact** aceleași răspunsuri ca #477 (diferență 0). Încape pe placă doar cu „recalcul” (o economie de memorie): **6.010 MB**, 2,8 pași/s. Mărimile mai mari (30–42 de straturi) nu încap. **1232 teste trec.**
@@ -141,9 +149,3 @@
 - **Placa** rămâne liberă azi și la noapte până alegi la S66.
 - **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C”, sau direcția în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
 
-## 3 noiembrie 2026, 05:20 — Numărătoarea funcțiilor (S65): DESTULE; o verificare mai strictă până la 08:45; fereastra ta 09:00–11:30 e notată
-
-- **S65 gata, verificat de mine (am refăcut adunările): DESTUL.** În codul descărcat sunt **339.425 de funcții scurte cu explicație** care trec verificarea cutiei, **52,9 milioane de simboluri** (pragul era 20 mil.). Cu exemplu sau test lângă ele: **29.040** (7,2 mil.). Nicio scurgere din seturile ascunse. **1183 teste trec.** Atenție: cifra e umflată — explicațiile sunt adesea mai lungi decât codul, iar ~27 % au un singur rând.
-- **Pus în coadă (aprobat de mine, doar procesor, ~1 oră): S67** — numărăm doar funcțiile „ca la examen”: codul fără explicație, fără cele banale, și care merg singure. Așa varianta A de la S66 are cifra reală. Se termină înainte de 08:45; dacă nu, se oprește curat și continuă după 11:30.
-- **Comanda ta C-57 preluată:** azi **09:00–11:30** placa și calculatorul sunt ale tale; executantul nu pornește nimic. Placa rămâne liberă azi până alegi la S66.
-- **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C” — sau direcția „exerciții / memorie de cod / școala de cod” pe care ai pomenit-o, spusă în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
