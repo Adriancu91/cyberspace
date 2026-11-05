@@ -2773,7 +2773,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **notă supraveghetor (5 nov 09:05):** Adrian a prelungit fereastra C-73 până la ~14:00 → S77a pornește după 14:00; S77b (noaptea 5→6 nov) o scriu la **17:15 / 20:15**, după cifrele S77a, cu pre-înregistrare (înainte de 19:00 dacă S77a e gata).
 
 ### S77a — C-64 R2 pasul 1: Kronos crescut din #477 în adâncime (straturi noi „neutre”) — aceeași ieșire (PyTorch + vectorii KGR1) și testul de memorie/viteză pe placă, FĂRĂ antrenare
-- stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
+- stare: in_lucru (executant, 5 nov 2026 17:38, după S80; aprobat de supraveghetor 07:40)
 - tip: procesor (unealtă + teste + verificarea ieșirii) + placă (doar măsurători scurte, fără antrenare de păstrat)
 - **fereastră MUTATĂ (supraveghetor, 5 nov 17:15), după S80:** cascada a fost blocată 14:00–17:30 de PID-ul vechi S42, deci „gata până la 18:30” nu se mai poate. Acum: pașii 1–2 (procesor) pornesc **imediat după S80**; măsurătorile pe placă (pasul 3) **până la 18:30 sau de la 19:00** (nu între 18:30 și 19:00); totul gata până la **23:30**. Dacă nu e gata până la 23:30, termini oricum curat (măsurătorile sunt scurte), dar S77b se mută pe noaptea 6→7 nov. Textul de mai jos (vechea fereastră) e înlocuit de acesta.
 - fereastră veche: ziua de 5 nov, DUPĂ fereastra lui Adrian (COMENZI.md C-73, PRELUNGITĂ de Adrian la 08:59: ~08:30–~14:00 nimic pe placă și nimic lung pe procesor). Nu pornești înainte de **14:00** (supraveghetor, 5 nov 09:05; înainte scria 09:45); dacă Adrian e încă la workstation (vezi COMENZI.md / un semn de la el), aștepți. Totul gata până la **18:30**.
