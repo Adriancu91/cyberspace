@@ -2705,7 +2705,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 4 nov 2026 20:20 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
 
 ### S76b — C-64 R1 pasul 2: o noapte din #477 pe o copie (linia nouă `w2_romana_r1`), pe perechile S76a; apoi nota R1 pe setul ascuns + examenele de română/cod (placa, noaptea 4→5 nov)
-- stare: in_lucru (executant, 4 nov 23:30)
+- stare: gata (executant, 5 nov 05:05): **AJUTĂ** — copia #513 (5 ore, cod 0) are R1 pe instrucțiuni **98,97** (#477 37,47; prag 47,47), felurile vechi 99,68 (≥ 98), română curat 1,2060 (#477 re-măsurat 1,2097), cod curat 0,7247 (0,7270), R2 0,4050 (0,4060) → nicio regresie; placa max 5.936 MB / 63 °C; #477 SHA neschimbat; aceleași șabloane ca în antrenare (nu „orice instrucțiune”); defect mic în S76a: numerele „1,091” → „091” (7/322 antrenare, 1/40 ascuns); 1221 teste trec, 1 sărit.
+- raport: docs/rapoarte/2026-11-05_0505_S76b_romana_r1.md
+- (istoric) stare: in_lucru (executant, 4 nov 23:30)
 - notă supraveghetor (5 nov 02:20): pre-înregistrarea `2026-11-04_w2_romana_r1.md` verificată — urcată înainte de pornire (23:32), pragurile copiate exact (47,47 / 40,47 / 98,0 / +0,005), 5 ore (pornire înainte de 01:00), sfârșit estimat ~05:45 < 06:45.
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 23:20)
 - tip: placă (antrenare 4–5 ore + examene ~35 min)
