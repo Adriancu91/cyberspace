@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 14:20 — Token făcut (C-78), mulțumesc; după fereastra ta urmează S77a → S78 → S79
+
+- **C-78 văzut:** ai reînnoit autentificarea pe workstation (`claude auth login` → „Login successful”). Am scos cererea din lista de așteptări. Dacă executantul mai vede totuși avertismentul de expirare, îl scrie aici și îl rezolvăm mâine dimineață, când ești la workstation (atunci ar fi `claude setup-token`, care ține un an).
+- **Nimic nou de la 13:45:** executantul n-a pornit încă (citește coada la 30 de minute; fereastra ta s-a terminat la 14:00). Următoarea: **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă, gata până la 18:30), apoi **S78** (Mini Brain, copie, nimic șters) și **S79** (raport de spațiu, nimic șters). Nimic nou pus în coadă.
+- **La noapte:** S77b (prima noapte a modelului mai mare) o scriu la 17:15 / 20:15, după cifrele S77a, cu pre-înregistrare.
+- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 13:45 — Am preluat comenzile tale C-77 (Mini Brain) și C-76 (spațiul pe disc); după 14:00: S77a → S78 → S79
 
 - **C-77 → S78 (aprobat):** executantul copiază (nu mută) partea utilă din cele două foldere „test ai brain” în `C:\Kronos\arhiva\mini-brain\`, cu listă + SHA-256 și verificare copie = sursă, plus un document cu lecțiile pentru Kronos. **Nu șterge nimic.** Am adăugat o pază: dacă după copiere ar rămâne sub 20 GB liberi pe disc, baza geografică rămâne necopiată până faci loc — atunci nu șterge încă folderul v13. Când e gata, scrie aici: „Mini Brain salvat (X GB) — poți șterge ambele foldere”.
@@ -141,11 +148,3 @@
 - **Pus în coadă (aprobat de mine, e un examen): S64**, ~1,5 ore pe placă, de preferat chiar în noaptea asta: modelul scrie **200 de încercări** pe fiecare din cele 20 de probleme de probă (la două „temperaturi”) și numărăm câte probleme rezolvă măcar o dată, plus *de ce* pică restul. Pragurile scrise dinainte: AJUTĂ = cel puțin 4/20 rezolvate din 100 de încercări; NU AJUTĂ = cel mult 1/20. Fără antrenare, seturile ascunse nu se redeschid.
 - **De ce:** dacă încercările multe ajută, drumul e „încearcă mult + verifică singur” (auto-jocul cu verificator), nu mai multe ore. Dacă nu, rămân variantele care cer „da”-ul tău: date cu funcții și teste, sau un model mai mare. Ți le pun mâine cu cifrele S64.
 - **Aștept de la tine:** nimic urgent. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
-
-## 2 noiembrie 2026, 14:40 — A doua antrenare pe cod (S63) rulează din 11:38, totul în regulă
-
-- **Rulează: S63** (10 ore pe cod, din modelul S58), pornită la **11:38**. Înainte de pornire executantul a făcut setul ascuns nou (**163 de probleme**, nicio repetare din S58; 3 teste noi, **1177 teste trec**) și a urcat pre-înregistrarea — verificată de mine: pragurile sunt exact cele stabilite (CONTINUĂ = biți/octet ≤ 0,494 și cel puțin **5/163**; PLATOU = > 0,504 și cel mult **2/163**).
-- **Placa:** 5.974 MB, 62 °C (limitele: 7.000 MB, 83 °C). Antrenarea a pornit din modelul S58, cum trebuia.
-- **Se termină** pe la ~22:00, apoi examenele (~30 min). Verdictul îl verific la trecerea de 23:15 sau 02:15. Nu pun nimic altceva pe placă până atunci.
-- **Aștept de la tine:** nimic. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
-
