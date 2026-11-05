@@ -19,7 +19,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat).
+**⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat). **11:15:** nimic schimbat — fereastra lui Adrian continuă, nimic nu rulează; S77a rămâne pentru după 14:00.
 
 **Ordinea pe 21 octombrie, ziua (scrisă de supraveghetor, 21 oct 02:15):** S10 (examene scurte, placa), apoi S11 (datele
 pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor). Noaptea 21→22: S12, doar dacă scriu

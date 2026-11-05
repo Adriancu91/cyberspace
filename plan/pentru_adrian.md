@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 11:15 — Fereastra ta continuă până la ~14:00; Kronos merge mai repede în OS (256 simboluri/s)
+
+- **Nimic nou de la 09:05:** nu rulează nimic pe placă sau pe procesor (cum ai cerut în C-73), executantul așteaptă cuminte; **1221 teste trec** (ultima verificare, azi-noapte). Nicio comandă nouă pentru Kronos în hub.
+- **Vestea bună din testul tău de azi (os-242, stick normal):** Kronos #477 în OS — CONTROL **TRECE**, viteza **256 simboluri/s** (ieri 206, alaltăieri 125). Am trecut-o în starea Kronos din hub.
+- **După 14:00:** pornește **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă), gata până la 18:30; **S76c** după ea sau mâine de la 08:00. S77b (noaptea) o scriu la 17:15 / 20:15, după cifrele S77a.
+- **Aștept de la tine:** **`claude setup-token` pe workstation ÎNAINTE să pleci (până la 14:00)** — autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul de dimineață se opresc. Scrie-mi în hub (COMENZI.md) „token făcut” ca să știu. Când vrei: dacă #513 îl înlocuiește pe #477 (recomand după S76c). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 09:05 — Fereastra ta prelungită până la ~14:00: totul așteaptă după tine
 
 - **Am văzut prelungirea (C-73, 08:59):** până pe la **14:00** nimic nu rulează pe placă și nimic lung pe procesor. Acum nu rulează nimic (placa liberă, noaptea S76b s-a terminat curat, **1221 teste trec**, raportul de dimineață e la locul lui).
@@ -141,10 +148,3 @@
 - **S63 s-a oprit înainte să pornească** (nimic stricat, nimic rulat): un set ascuns nou de 200 de probleme care să nu repete nimic din S58 nu încape — unele tipuri de probleme au doar 14–16 variante. Încap ~**163**.
 - **Am ales eu (intră în granițele mele: examen + unealtă cu test): setul nou fără nicio repetare, ~163 de probleme**, cu pragurile trecute pe procente (CONTINUĂ = cel puțin 3 %, adică ~5/163; PLATOU = cel mult 1,5 %, ~2/163). E singurul set cu adevărat nevăzut. S63 e iar `aprobat`: executantul face întâi setul + testele (~30 min, pe procesor), scrie pre-înregistrarea, apoi pornește cele 10 ore. Placa ocupată până pe la ~22:00–23:00.
 - **Aștept de la tine:** nimic. Dacă preferi totuși 200 de probleme cu unele repetate din S58, scrie „S63 varianta b” înainte de examene (antrenarea nu depinde de set). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
-
-## 2 noiembrie 2026, 08:50 — Am primit „pornește acum S63”: a doua antrenare pe cod pornește imediat după S62, chiar ziua
-
-- **Comanda ta C-56 preluată.** S63 (10 ore pe cod, din modelul S58, apoi examenele pe un set ascuns NOU) e `aprobat` în coadă și pornește **imediat ce S62 e gata** cu memoria sub 6.500 MB — fără să aștepte ora 19:00. Executantul scrie întâi pre-înregistrarea (pragurile sunt deja în coadă: CONTINUĂ = biți/octet ≤ 0,494 și pass@10 ≥ 6/200).
-- **Rulează acum: S62** (din 08:30): codul e scris, **1174 teste trec**; urmează măsurarea scurtă pe placă, pe setul de probă. Dacă S62 iese `oprit` sau peste 6.500 MB, S63 NU pornește.
-- **Nimic nou terminat** de la 08:15; nicio problemă nouă. Limitele plăcii rămân 7.000 MB și 83 °C.
-- **Aștept de la tine:** nimic urgent. Dacă vrei, „S58 contează: da/nu” (pornind S63 din modelul S58 am înțeles că îl folosești oricum). Opțional: permisiunea `taskkill` pe workstation. Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
