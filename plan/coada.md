@@ -2747,7 +2747,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S80 — Reparație: `unelte/cascada.py` nu mai crede că o sarcină veche „merge” când Windows i-a dat PID-ul altui proces (doar procesor, ~30–45 min)
-- stare: **aprobat** (supraveghetor, 5 nov 2026 17:15)
+- stare: in_lucru (executant, 5 nov 2026 17:30; aprobat de supraveghetor 17:15)
 - tip: procesor (cod în `unelte/` + teste). Fără placă, fără antrenare.
 - fereastră: **oricând — ACUM, înaintea lui S77a.** E singura sarcină care poate porni cât `liber` e `false` din cauza unei înregistrări vechi: n-o pornești prin `cascada.py porneste`, o faci direct în sesiunea ta.
 - durată maximă: ~45 de minute.
