@@ -2773,7 +2773,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **notă supraveghetor (5 nov 09:05):** Adrian a prelungit fereastra C-73 până la ~14:00 → S77a pornește după 14:00; S77b (noaptea 5→6 nov) o scriu la **17:15 / 20:15**, după cifrele S77a, cu pre-înregistrare (înainte de 19:00 dacă S77a e gata).
 
 ### S77a — C-64 R2 pasul 1: Kronos crescut din #477 în adâncime (straturi noi „neutre”) — aceeași ieșire (PyTorch + vectorii KGR1) și testul de memorie/viteză pe placă, FĂRĂ antrenare
-- stare: in_lucru (executant, 5 nov 2026 17:38, după S80; aprobat de supraveghetor 07:40)
+- stare: gata — **GATA** (executant, 5 nov 2026 17:58): ieșirea identică (dif. 0) la pașii 2 și 5; ales **N = 24 cu recalcul** (6.010 MB, 2,80 pași/s); `lucru/w2_mare/gpt_24.pt` (sha d35e3dbe…92cc); 1232 teste trec
 - tip: procesor (unealtă + teste + verificarea ieșirii) + placă (doar măsurători scurte, fără antrenare de păstrat)
 - **fereastră MUTATĂ (supraveghetor, 5 nov 17:15), după S80:** cascada a fost blocată 14:00–17:30 de PID-ul vechi S42, deci „gata până la 18:30” nu se mai poate. Acum: pașii 1–2 (procesor) pornesc **imediat după S80**; măsurătorile pe placă (pasul 3) **până la 18:30 sau de la 19:00** (nu între 18:30 și 19:00); totul gata până la **23:30**. Dacă nu e gata până la 23:30, termini oricum curat (măsurătorile sunt scurte), dar S77b se mută pe noaptea 6→7 nov. Textul de mai jos (vechea fereastră) e înlocuit de acesta.
 - fereastră veche: ziua de 5 nov, DUPĂ fereastra lui Adrian (COMENZI.md C-73, PRELUNGITĂ de Adrian la 08:59: ~08:30–~14:00 nimic pe placă și nimic lung pe procesor). Nu pornești înainte de **14:00** (supraveghetor, 5 nov 09:05; înainte scria 09:45); dacă Adrian e încă la workstation (vezi COMENZI.md / un semn de la el), aștepți. Totul gata până la **18:30**.
@@ -2795,7 +2795,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/` (nicio schimbare în S77a — dacă noaptea va cere recalculul în clasa modelului, asta o scriu eu la S77b, ca setare opțională cu implicitul neschimbat), `module/examen_bpb.py`, paznicul, jurnalul, #477/#459/#513 (doar citire, SHA-256 înainte = după), linia `cod_c1*`, setul ascuns, ramura `limba-romana`. Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git. Interfața, KGR1-ul OS-ului și `integrare/kronos/MODEL.md` rămân pe #477.
 - urmează: **S77b** (prima noapte a modelului crescut, din `lucru/w2_mare/gpt_N.pt`, linie nouă `w2_mare_N`, cu pre-înregistrare; măsurat cu română curat față de #477 = 1,2097 și cu R1) — o scriu eu după verdictul S77a.
 - aprobat de: supraveghetor, 5 nov 2026 07:40 (granițele 2 și 5; linia nouă de altă mărime e acoperită de **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-05_1752_S77a_kronos_crescut.md
 
 ### S76c — C-64 R1 pasul 3: #513 urmează și instrucțiuni FORMULATE ALTFEL decât în antrenare? (examen nou pe procesor, fără placă, fără antrenare)
 - stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
