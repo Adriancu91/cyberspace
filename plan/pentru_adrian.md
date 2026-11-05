@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 17:15 — Executantul s-a împiedicat de o „sarcină-fantomă”; am aprobat reparația, S77a pornește acum (fără nimic de la tine)
+
+- **Ce s-a întâmplat (raportul executantului de la 14:29):** scriptul care verifică dacă placa e liberă a crezut că o sarcină veche din 28 oct (S42) încă rulează, pentru că Windows a dat numărul ei de proces unui program al lui (`dllhost.exe`). Executantul a procedat corect: n-a pornit nimic și n-a ocolit regula. Placa e rece și liberă (750 MB, 28 °C); s-au pierdut ~3 ore de după-amiază.
+- **Ce am pus în coadă (aprobat de mine, „reparație de script”):** **S80** — scriptul verifică și că procesul e chiar Python-ul nostru, pornit la ora sarcinii; teste noi; nimic editat de mână, nimic șters. Durează ~45 min.
+- **Apoi S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă), mutată: gata până la **23:30** în loc de 18:30. **S77b** (prima noapte a modelului mai mare) o scriu la 20:15 / 23:15, după cifre; dacă S77a întârzie, trece pe noaptea de mâine. S78 (Mini Brain) și S79 (spațiul pe disc) după S77a; S76c mâine de la 08:00.
+- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 14:20 — Token făcut (C-78), mulțumesc; după fereastra ta urmează S77a → S78 → S79
 
 - **C-78 văzut:** ai reînnoit autentificarea pe workstation (`claude auth login` → „Login successful”). Am scos cererea din lista de așteptări. Dacă executantul mai vede totuși avertismentul de expirare, îl scrie aici și îl rezolvăm mâine dimineață, când ești la workstation (atunci ar fi `claude setup-token`, care ține un an).
@@ -141,10 +148,3 @@
 - **Propus, așteaptă alegerea ta: S66.** **A „funcții”** (recomandarea mea): încă 6–10 ore pe același model, dar pe funcții scurte cu explicație, apoi examen pe un set nou. **B „școala cu verificator”**: probleme foarte ușoare, modelul încearcă mult și învață din ce îi iese corect. **C „model mai mare”**: cel mai scump, mai multe nopți.
 - **Placa:** liberă azi ziua până alegi (nu pun pe ea încă o noapte cu aceeași rețetă — ar aduce puțin).
 - **Aștept de la tine:** „da S66 A”, „da S66 B” sau „da S66 C” (în hub, prin centrul de comandă). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
-
-## 2 noiembrie 2026, 23:20 — A doua antrenare pe cod (S63) a ieșit NECLAR; în noaptea asta un test scurt: „ajută dacă modelul încearcă de multe ori?”
-
-- **S63 gata, verificat de mine: NECLAR, corect.** Forma codului s-a mai îmbunătățit puțin: **0,5004 biți pe octet** (S58: 0,5141; CONTINUĂ cerea ≤ 0,494). Problemele rezolvate pe setul nou: **3 din 163** (1,8 %; CONTINUĂ cerea ≥ 5, PLATOU ≤ 2). Pe setul de probă: 0 din 20. Placa în limite (**6.013 MB, 63 °C**), **1177 teste trec**. Pe scurt: învață cum *arată* codul, dar rezolvă tot ~2 % din probleme; o a treia noapte la fel ar aduce puțin.
-- **Pus în coadă (aprobat de mine, e un examen): S64**, ~1,5 ore pe placă, de preferat chiar în noaptea asta: modelul scrie **200 de încercări** pe fiecare din cele 20 de probleme de probă (la două „temperaturi”) și numărăm câte probleme rezolvă măcar o dată, plus *de ce* pică restul. Pragurile scrise dinainte: AJUTĂ = cel puțin 4/20 rezolvate din 100 de încercări; NU AJUTĂ = cel mult 1/20. Fără antrenare, seturile ascunse nu se redeschid.
-- **De ce:** dacă încercările multe ajută, drumul e „încearcă mult + verifică singur” (auto-jocul cu verificator), nu mai multe ore. Dacă nu, rămân variantele care cer „da”-ul tău: date cu funcții și teste, sau un model mai mare. Ți le pun mâine cu cifrele S64.
-- **Aștept de la tine:** nimic urgent. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
