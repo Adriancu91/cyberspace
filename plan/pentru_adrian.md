@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 09:05 — Fereastra ta prelungită până la ~14:00: totul așteaptă după tine
+
+- **Am văzut prelungirea (C-73, 08:59):** până pe la **14:00** nimic nu rulează pe placă și nimic lung pe procesor. Acum nu rulează nimic (placa liberă, noaptea S76b s-a terminat curat, **1221 teste trec**, raportul de dimineață e la locul lui).
+- **Mutat în coadă:** **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă) pornește **după 14:00** și trebuie gata până la 18:30. **S76c** (instrucțiuni formulate altfel, pe procesor) vine după ea doar dacă S77a e gata până pe la 15:30; altfel **mâine dimineață, de la 08:00** — ca să nu încarce procesorul peste noaptea modelului mare.
+- **La noapte:** S77b (prima noapte a modelului mai mare) o scriu la 17:15 / 20:15, după cifrele S77a, cu pre-înregistrare.
+- **Aștept de la tine:** **`claude setup-token` pe workstation — acum, cât ești acolo** (autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul se opresc). Când vrei: dacă #513 îl înlocuiește pe #477 (recomand după S76c). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 07:40 — Răspunsurile în română (S76b): AJUTĂ; azi, după fereastra ta, primul test pentru Kronos mai mare (S77a)
 
 - **S76b gata, verificat de mine: AJUTĂ.** Copia **#513** urmează acum instrucțiunile din examenul ascuns: **98,97** din 100 (#477: 37,47; pragul era 47,47). Nu s-a stricat nimic: româna 1,2060 (#477: 1,2097 — puțin mai bine), codul și poveștile tot puțin mai bine. Placa max 5.936 MB / 63 °C, **1221 teste trec**. Atenție: examenul folosea aceleași 8 tipuri de instrucțiuni ca exercițiile, deci încă nu știm dacă urmează instrucțiuni *formulate altfel*.
@@ -141,11 +148,3 @@
 - **Rulează acum: S62** (din 08:30): codul e scris, **1174 teste trec**; urmează măsurarea scurtă pe placă, pe setul de probă. Dacă S62 iese `oprit` sau peste 6.500 MB, S63 NU pornește.
 - **Nimic nou terminat** de la 08:15; nicio problemă nouă. Limitele plăcii rămân 7.000 MB și 83 °C.
 - **Aștept de la tine:** nimic urgent. Dacă vrei, „S58 contează: da/nu” (pornind S63 din modelul S58 am înțeles că îl folosești oricum). Opțional: permisiunea `taskkill` pe workstation. Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
-
-## 2 noiembrie 2026, 08:15 — PROBLEMĂ: la examenul de cod placa a trecut de limita de 7.000 MB ~17 minute și nimic n-a putut-o opri; prima antrenare pe cod (S58) a ieșit NECLAR
-
-- **S58 s-a terminat (10 ore, fără erori) — verificat de mine: NECLAR, corect.** Modelul a învățat bine *cum arată* codul (0,514 biți pe octet; pragul era ≤ 1,10), dar rezolvă rar o problemă: **3 din 200** (pragul ÎNVAȚĂ cerea ≥ 10). La antrenare placa a fost în regulă (6.205 MB, 64 °C).
-- **Problema:** la examenul pe setul ascuns, placa a stat la **7.188–7.971 MB** (limita: 7.000) ~17 minute. Temperatura bună (52–55 °C), nimic n-a căzut. Dar paznicul nu supraveghează uneltele de examen de cod, iar executantul n-a putut opri procesul (oprirea e blocată de permisiuni). S58 stă pe `oprit` până răspunzi tu.
-- **Pus în coadă (aprobat de mine): S62, azi ziua** — uneltele de examen de cod lucrează în loturi mai mici și **se opresc singure** peste 6.500 MB; unealta de validare citește și modelul liniei. Se măsoară pe placă doar pe setul de probă. Fără `kronos/`, fără examenul oficial.
-- **Propus, așteaptă „da”-ul tău: S63** — a doua noapte pe codul S58 (10 ore, din modelul de azi-noapte), apoi examenele cu uneltele reparate și un set ascuns NOU (cel vechi e folosit). Pragurile sunt scrise în coadă.
-- **Aștept de la tine:** (1) **contează cifrele S58?** scrie „S58 contează: da” sau „nu” (executantul și eu recomandăm „da”: cifrele sunt corecte, depășirea a fost la examen, nu la antrenare); (2) **„da S63”** dacă vrei a doua noapte — dacă scrii până la 18:30 și S62 e gata, pornește diseară la 19:00; altfel placa stă liberă la noapte; (3) de știut: dacă vrei ca executantul să poată opri singur un proces scăpat de sub control, trebuie permisă comanda `taskkill` pe workstation (schimbare de setări — doar tu). Fără grabă: ora limită 18:30 la bucla automată (~3 nov), Release-ul #477, excluderea de la S53, repornirea din 29 oct.

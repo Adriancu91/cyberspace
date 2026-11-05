@@ -19,7 +19,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**⚠ ACUM — 5 nov 2026 (supraveghetor, 07:45; COMENZI.md C-73, Adrian):** fereastra lui Adrian pe workstation **~08:30–09:45**: **nimic pe placă și nimic lung pe procesor**; dacă rulează ceva, se oprește curat. **S77a** și apoi **S76c** (jos, `aprobat`) pornesc **doar după 09:45**. S76b = AJUTĂ (verificat).
+**⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat).
 
 **Ordinea pe 21 octombrie, ziua (scrisă de supraveghetor, 21 oct 02:15):** S10 (examene scurte, placa), apoi S11 (datele
 pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor). Noaptea 21→22: S12, doar dacă scriu
@@ -2754,11 +2754,12 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Linie de model nouă (altă mărime) — acoperită de „da”-ul din C-64; `kronos/`, paznicul și examenul neatinse; nimic descărcat.
 - aprobat de: **Adrian (COMENZI.md C-64, 4 nov 2026 11:30)**; preluat de supraveghetor 4 nov 14:20
 - **notă supraveghetor (5 nov 07:40):** S76b = AJUTĂ → primul pas **S77a** scris mai jos (aprobat, ziua de 5 nov, DUPĂ fereastra lui Adrian C-73). Prima noapte (S77b) o scriu la 14:15 / 17:15, după cifrele S77a, cu pre-înregistrare.
+- **notă supraveghetor (5 nov 09:05):** Adrian a prelungit fereastra C-73 până la ~14:00 → S77a pornește după 14:00; S77b (noaptea 5→6 nov) o scriu la **17:15 / 20:15**, după cifrele S77a, cu pre-înregistrare (înainte de 19:00 dacă S77a e gata).
 
 ### S77a — C-64 R2 pasul 1: Kronos crescut din #477 în adâncime (straturi noi „neutre”) — aceeași ieșire (PyTorch + vectorii KGR1) și testul de memorie/viteză pe placă, FĂRĂ antrenare
 - stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
 - tip: procesor (unealtă + teste + verificarea ieșirii) + placă (doar măsurători scurte, fără antrenare de păstrat)
-- fereastră: **ziua de 5 nov, DUPĂ fereastra lui Adrian (COMENZI.md C-73: ~08:30–~09:45 nimic pe placă și nimic lung pe procesor)**. Nu pornești înainte de **09:45**; dacă Adrian e încă la workstation (vezi COMENZI.md / un semn de la el), aștepți. Totul gata până la **18:30**.
+- fereastră: **ziua de 5 nov, DUPĂ fereastra lui Adrian (COMENZI.md C-73, PRELUNGITĂ de Adrian la 08:59: ~08:30–~14:00 nimic pe placă și nimic lung pe procesor)**. Nu pornești înainte de **14:00** (supraveghetor, 5 nov 09:05; înainte scria 09:45); dacă Adrian e încă la workstation (vezi COMENZI.md / un semn de la el), aștepți. Totul gata până la **18:30**.
 - durată maximă: procesor ~3 ore; placa ≤ **1,5 ore** în total, sub 7.000 MB și 83 °C.
 - de ce: C-64 R2 („mărim parametrii păstrând ce știe”). #477 = 12 straturi × 768 (~98M parametri). Creștem **în adâncime**: un strat nou cu proiecția atenției (`atentie.out_proj`) și ultimul strat liniar al MLP (`mlp[2]`) puse pe **zero** (greutăți și bias) adună exact 0 la fluxul rezidual, deci modelul crescut dă **aceeași ieșire** ca #477 la început (arhitectura e pre-LN, cu `ln` final). Creșterea în lățime ar schimba LayerNorm-ul, deci nu păstrează ieșirea — n-o facem acum.
 - ce faci:
@@ -2782,7 +2783,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S76c — C-64 R1 pasul 3: #513 urmează și instrucțiuni FORMULATE ALTFEL decât în antrenare? (examen nou pe procesor, fără placă, fără antrenare)
 - stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
 - tip: procesor (date + unealtă + teste + examen pe procesor, `CUDA_VISIBLE_DEVICES=-1`)
-- fereastră: ziua de 5 nov, **DUPĂ S77a** (nu în același timp cu măsurătorile de viteză de pe placă și nu în fereastra lui Adrian C-73). Gata până la **18:30**; dacă nu apucă, se termină doar când pe placă nu rulează o antrenare (nu încarcă procesorul peste o noapte de antrenare).
+- fereastră: ziua de 5 nov, **DUPĂ S77a** (nu în același timp cu măsurătorile de viteză de pe placă și nu în fereastra lui Adrian C-73, acum până la ~14:00). Gata până la **18:30**; dacă nu apucă, se termină doar când pe placă nu rulează o antrenare (nu încarcă procesorul peste o noapte de antrenare).
+  **Notă supraveghetor (5 nov 09:05):** cu fereastra prelungită până la 14:00, S77a (~3 h procesor + ≤ 1,5 h placă) ocupă probabil toată după-amiaza. Pornești S76c azi **doar dacă S77a e `gata` până la ~15:30**; altfel S76c rămâne `aprobat` pentru **ziua de 6 nov, de la 08:00** (înaintea oricărei alte sarcini de zi).
 - durată maximă: ~3 ore pe procesor.
 - de ce: S76b = AJUTĂ (98,97), dar setul ascuns are **aceleași 8 șabloane** ca antrenarea. Înainte ca Adrian să decidă dacă #513 îl înlocuiește pe #477, măsurăm cinstit dacă #513 urmează instrucțiuni sau doar a copiat șabloanele. Repari și defectul „1,091 → 091” (doar în setul nou).
 - ce faci:
