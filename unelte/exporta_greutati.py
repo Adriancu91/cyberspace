@@ -231,10 +231,19 @@ def exporta_model(model: Any, cale: str | Path, fel: str, sursa: str = "") -> in
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    p.add_argument("--experiment", type=int, required=True)
+    care = p.add_mutually_exclusive_group(required=True)
+    care.add_argument("--experiment", type=int)
+    care.add_argument("--gpt", help="S77a: un fișier cale_stare (gpt.pt) dat, ex. lucru/w2_mare/gpt_24.pt (linia w2)")
     p.add_argument("--fel", choices=sorted(FEL_DIN_NUME), required=True)
     p.add_argument("--iesire", required=True)
     a = p.parse_args(argv)
+    if a.gpt:
+        from unelte.creste_model import model_din_gpt
+
+        model = model_din_gpt(a.gpt, "cpu")
+        marime = exporta_model(model, a.iesire, a.fel, sursa=f"{Path(a.gpt).as_posix()} (S77a)")
+        print(json.dumps({"gpt": a.gpt, "fel": a.fel, "iesire": a.iesire, "octeti": marime}, ensure_ascii=False))
+        return 0
     from kronos.jurnal import Jurnal
     from unelte.modele_salvate import fisa_modelului, incarca_modelul
 
