@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 20:15 — Kronos mai mare (24 de straturi) e gata și învață chiar de la noapte; salvarea Mini Brain deblocată
+
+- **S77a gata, verificat de mine: GATA.** Kronos a fost „crescut” de la 12 la **24 de straturi** (~183 milioane de parametri, aproape dublu) și dă **exact** aceleași răspunsuri ca #477 (diferență 0). Încape pe placă doar cu „recalcul” (o economie de memorie): **6.010 MB**, 2,8 pași/s. Mărimile mai mari (30–42 de straturi) nu încap. **1232 teste trec.**
+- **Pus în coadă (aprobat de mine, pornește acum): S77b** — prima noapte a modelului mare, 5 ore pe aceleași date ca #513, ca să vedem cinstit dacă la timp egal pe placă cel mare iese mai bun la română (prag: cu cel puțin 0,005 mai bun decât #513), fără să strice instrucțiunile, codul sau poveștile. Gata până la ~06:45; verdictul la 08:15.
+- **Mini Brain (S78) a stat pe loc:** executantul nu poate citi hub-ul de pe workstation, deci nu avea lista ta din C-77. **Am copiat textul întreg al C-77 și C-76 în repo**, așa că S78 (copierea, nimic șters) și apoi S79 (raportul de spațiu) merg la noapte, pe procesor, după ce pornește S77b. Până nu scrie aici „Mini Brain salvat”, **nu șterge încă cele două foldere**.
+- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c, mâine de la 08:00). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 17:15 — Executantul s-a împiedicat de o „sarcină-fantomă”; am aprobat reparația, S77a pornește acum (fără nimic de la tine)
 
 - **Ce s-a întâmplat (raportul executantului de la 14:29):** scriptul care verifică dacă placa e liberă a crezut că o sarcină veche din 28 oct (S42) încă rulează, pentru că Windows a dat numărul ei de proces unui program al lui (`dllhost.exe`). Executantul a procedat corect: n-a pornit nimic și n-a ocolit regula. Placa e rece și liberă (750 MB, 28 °C); s-au pierdut ~3 ore de după-amiază.
@@ -140,11 +147,3 @@
 - **Pus în coadă (aprobat de mine, doar procesor, ~1 oră): S67** — numărăm doar funcțiile „ca la examen”: codul fără explicație, fără cele banale, și care merg singure. Așa varianta A de la S66 are cifra reală. Se termină înainte de 08:45; dacă nu, se oprește curat și continuă după 11:30.
 - **Comanda ta C-57 preluată:** azi **09:00–11:30** placa și calculatorul sunt ale tale; executantul nu pornește nimic. Placa rămâne liberă azi până alegi la S66.
 - **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C” — sau direcția „exerciții / memorie de cod / școala de cod” pe care ai pomenit-o, spusă în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
-
-## 3 noiembrie 2026, 02:20 — Testul „ajută dacă încearcă de multe ori?” (S64): practic NU; propun 3 direcții pentru Kronos-Cod
-
-- **S64 gata, verificat de mine (am refăcut calculul): NECLAR, la un pas de „nu ajută”.** Cu 200 de încercări pe fiecare din cele 20 de probleme de probă, modelul rezolvă doar **2 probleme** (cele mai simple); cu 100 de încercări, în medie **1,25 din 20** (AJUTĂ cerea ≥ 4, NU AJUTĂ ≤ 1). Doar ~6 % din răspunsuri au greșeli de scriere; **~92 % rulează, dar dau rezultat greșit** — știe cum arată codul, nu și cum să rezolve. Placa a stat mult sub limite (1.468 MB, 49 °C), **1177 teste trec**.
-- **Pus în coadă (aprobat de mine, doar procesor, fără placă): S65** — numărăm câte „funcții scurte cu explicație (și teste)” există deja în codul descărcat, ca varianta A de mai jos să aibă cifre. Nimic descărcat, nimic antrenat.
-- **Propus, așteaptă alegerea ta: S66.** **A „funcții”** (recomandarea mea): încă 6–10 ore pe același model, dar pe funcții scurte cu explicație, apoi examen pe un set nou. **B „școala cu verificator”**: probleme foarte ușoare, modelul încearcă mult și învață din ce îi iese corect. **C „model mai mare”**: cel mai scump, mai multe nopți.
-- **Placa:** liberă azi ziua până alegi (nu pun pe ea încă o noapte cu aceeași rețetă — ar aduce puțin).
-- **Aștept de la tine:** „da S66 A”, „da S66 B” sau „da S66 C” (în hub, prin centrul de comandă). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
