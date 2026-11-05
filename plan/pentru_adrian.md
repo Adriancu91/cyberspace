@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 13:45 — Am preluat comenzile tale C-77 (Mini Brain) și C-76 (spațiul pe disc); după 14:00: S77a → S78 → S79
+
+- **C-77 → S78 (aprobat):** executantul copiază (nu mută) partea utilă din cele două foldere „test ai brain” în `C:\Kronos\arhiva\mini-brain\`, cu listă + SHA-256 și verificare copie = sursă, plus un document cu lecțiile pentru Kronos. **Nu șterge nimic.** Am adăugat o pază: dacă după copiere ar rămâne sub 20 GB liberi pe disc, baza geografică rămâne necopiată până faci loc — atunci nu șterge încă folderul v13. Când e gata, scrie aici: „Mini Brain salvat (X GB) — poți șterge ambele foldere”.
+- **C-76 → S79 (aprobat), după S78:** cât ocupă fiecare dosar din `C:\Kronos\`, ce e doar în arhiva de mutare de 25,6 GB și o propunere de curățenie pe grupuri, cu GB eliberați. **Nimic șters** — tu alegi grupurile.
+- **Ordinea după 14:00:** S77a (Kronos mai mare, test pe placă, gata până la 18:30) → S78 → S79; acestea două merg doar pe procesor și disc și pot continua noaptea fără să încetinească S77b. S76c probabil mâine de la 08:00. Nimic nu rulează acum (fereastra ta până la ~14:00).
+- **Aștept de la tine:** **`claude setup-token` pe workstation ÎNAINTE să pleci** — autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul de dimineață se opresc. Scrie-mi „token făcut” în COMENZI.md. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 11:15 — Fereastra ta continuă până la ~14:00; Kronos merge mai repede în OS (256 simboluri/s)
 
 - **Nimic nou de la 09:05:** nu rulează nimic pe placă sau pe procesor (cum ai cerut în C-73), executantul așteaptă cuminte; **1221 teste trec** (ultima verificare, azi-noapte). Nicio comandă nouă pentru Kronos în hub.
@@ -142,9 +149,3 @@
 - **Se termină** pe la ~22:00, apoi examenele (~30 min). Verdictul îl verific la trecerea de 23:15 sau 02:15. Nu pun nimic altceva pe placă până atunci.
 - **Aștept de la tine:** nimic. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.
 
-## 2 noiembrie 2026, 11:20 — S62 a reparat examenul de cod (placa sub limită); S63 s-a oprit la o întrebare despre setul nou, am ales eu varianta curată și a fost repornită
-
-- **S62 gata, verificat de mine: corect.** Uneltele de examen de cod stau acum mult sub limită: vârf **1.924 MB** și **4.416 MB** (la S58: 7.971 MB) și se opresc singure peste 6.500 MB. Cifra validării iese exact ca la S58 (**0,5141**), deci calculul nu s-a schimbat. **1174 teste trec.** **REZOLVAT:** depășirea de memorie de la examenul de cod.
-- **S63 s-a oprit înainte să pornească** (nimic stricat, nimic rulat): un set ascuns nou de 200 de probleme care să nu repete nimic din S58 nu încape — unele tipuri de probleme au doar 14–16 variante. Încap ~**163**.
-- **Am ales eu (intră în granițele mele: examen + unealtă cu test): setul nou fără nicio repetare, ~163 de probleme**, cu pragurile trecute pe procente (CONTINUĂ = cel puțin 3 %, adică ~5/163; PLATOU = cel mult 1,5 %, ~2/163). E singurul set cu adevărat nevăzut. S63 e iar `aprobat`: executantul face întâi setul + testele (~30 min, pe procesor), scrie pre-înregistrarea, apoi pornește cele 10 ore. Placa ocupată până pe la ~22:00–23:00.
-- **Aștept de la tine:** nimic. Dacă preferi totuși 200 de probleme cu unele repetate din S58, scrie „S63 varianta b” înainte de examene (antrenarea nu depinde de set). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (~3 nov), Release-ul #477.

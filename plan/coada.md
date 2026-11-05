@@ -19,7 +19,7 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat). **11:15:** nimic schimbat — fereastra lui Adrian continuă, nimic nu rulează; S77a rămâne pentru după 14:00.
+**⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat). **11:15:** nimic schimbat — fereastra lui Adrian continuă, nimic nu rulează; S77a rămâne pentru după 14:00. **13:45 — comenzi noi de la Adrian:** **S78** (C-77, salvarea „Mini Brain”) și **S79** (C-76, raportul de spațiu) — doar procesor și disc, **nimic șters**; ordinea după 14:00: **S77a → S78 → S79**; S76c pe 6 nov de la 08:00 dacă nu apucă azi. S78/S79 pot continua noaptea, fără să încetinească S77b.
 
 **Ordinea pe 21 octombrie, ziua (scrisă de supraveghetor, 21 oct 02:15):** S10 (examene scurte, placa), apoi S11 (datele
 pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor). Noaptea 21→22: S12, doar dacă scriu
@@ -2801,4 +2801,34 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. `python -m pytest` — toate trec; închizi pre-înregistrarea; raport `docs/rapoarte/<data>_<ora>_S76c_reformulat.md` (cifrele, 5 exemple de formulări noi — din articole de antrenare, nu din setul ascuns —, cât a durat); coada → `gata` cu verdictul; commit + push.
 - Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, #477/#459/#513 (doar citire), seturile S76a existente, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, niciun alt AI, nimic instalat. Nimic din `lucru/` în Git. #513 nu înlocuiește #477 nicăieri fără „da”-ul lui Adrian.
 - aprobat de: supraveghetor, 5 nov 2026 07:40 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
+- raport: docs/rapoarte/…
+
+### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
+- stare: **aprobat** (Adrian, prin C-77; preluat de supraveghetor 5 nov 2026 13:45)
+- tip: procesor + disc (copiere, SHA-256, un document de lecții). Fără placă, fără antrenare, nimic instalat.
+- fereastră: **ziua de 5 nov, după 14:00** (după fereastra lui Adrian C-73). **S77a are prioritate** (cifrele ei trebuie gata până la 18:30 pentru noaptea S77b): faci S78 **imediat după S77a** (înaintea lui S76c și a lui S79). Dacă S77a e blocată sau așteaptă după Adrian, poți începe S78 de la 14:00. Copierea și sumele SHA-256 pot continua și în timpul nopții S77b (nu opresc și nu încetinesc antrenarea; dacă vezi că pașii/s ai nopții scad cu peste 10 %, pui copierea pe pauză până dimineață).
+- durată maximă: ~3 ore.
+- ce faci: **exact ce scrie în `COMENZI.md` C-77 din hub** (citește-o întreagă, apoi `C:\Users\Computer\Desktop\raport-test-ai-brain.md`). Pe scurt:
+  1. Sursele (doar CITIRE): `C:\Users\Computer\Desktop\test ai brain v13 clean` și `C:\Users\Computer\Desktop\test ai brain`. Destinația: `C:\Kronos\arhiva\mini-brain\` (**în afara** repo-ului git).
+  2. **Paza discului (adăugată de supraveghetor — workstation-ul are doar ~40 GB liberi):** înainte de copiere măsori mărimea fiecărui grup din C-77 (1–5) și spațiul liber de pe C:. Dacă după copiere ar rămâne **sub 20 GB liberi** (noaptea S77b are nevoie de loc pentru salvări), copiezi grupurile 1, 2, 3 și 5 și **NU** grupul 4 (baza geografică + `raw\`): scrii mărimea lui în raport și îl lași pentru după ce Adrian eliberează loc (C-76 / S79).
+  3. Copiezi (NU muți) după lista din C-77; NU copiezi `*.pt`, `.venv*`, `.standard05-cache`, `__pycache__`, pachetul `.git` mare, cele 4 build-uri geografice vechi. Istoria git: `git bundle create <nume>.bundle --all` pentru fiecare folder, apoi `git bundle verify`.
+  4. `MANIFEST.txt` (fiecare fișier + SHA-256) și verificarea sursă = copie pe toate fișierele copiate (scrii câte, câți GB, câte diferențe — trebuie 0). `CITESTE-MA.md` în arhivă (ce e unde, ce s-a lăsat și de ce).
+  5. În repo: **un singur** document `docs/studiu/2026-11-05_lectii-mini-brain.md` cu lecțiile cerute în C-77 (testul mic de format înaintea rulărilor lungi — greșeala „NONE”/null; doar câștigătorul + `*.pt` în `.gitignore`; maxim 2–3 încercări pe întrebare; modulul „fapte verificate” doar ca PROPUNERE, fără cod). Fără date mari în git.
+  6. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S78_mini_brain.md` (ce s-a copiat, GB, manifest, verificarea, spațiul liber înainte/după); coada → `gata`; în rezumatul tău scrii rândul: „Mini Brain salvat (X GB în arhivă) — Adrian poate șterge ambele foldere” (sau, dacă grupul 4 a rămas necopiat din lipsă de loc: „… DAR baza geografică nu e încă salvată — NU șterge încă `test ai brain v13 clean`”). Commit + push.
+- **Nimic șters de tine** (nici sursele, nici altceva). Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, `config/`, #477/#459/#513, linia `cod_c1*`, ramura `limba-romana`. Nimic din arhivă în Git.
+- aprobat de: **Adrian (COMENZI.md C-77, 5 nov 2026 13:40)**; preluat de supraveghetor 5 nov 2026 13:45
+- raport: docs/rapoarte/…
+
+### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
+- stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
+- tip: procesor + disc (măsurători, SHA-256, un raport). Fără placă, fără antrenare, nimic instalat.
+- fereastră: **după S78** (C-77 are prioritate, cum cere Adrian). Poate rula și în timpul nopții S77b (doar citire de pe disc; aceeași regulă: dacă pașii/s ai nopții scad cu peste 10 %, pui pe pauză până dimineață). S76c rămâne pentru 6 nov de la 08:00 dacă nu apucă azi.
+- durată maximă: ~3 ore.
+- ce faci: **exact ce scrie în `COMENZI.md` C-76 din hub** (citește-o întreagă):
+  1. Cât ocupă fiecare dosar mare din `C:\Kronos\` (`lucru/`, date de antrenare, puncte de salvare `.pt`, exporturi `.kgr`, cache-uri pip/HF) + cele mai mari 30 de fișiere. Plus `C:\Kronos\arhiva\` după S78.
+  2. Compari `Desktop\de sters\proiect\cyberspace_mutare_2026-10-10.zip` (25,6 GB) cu `C:\Kronos\cyberspace`: lista de fișiere din arhivă (fără s-o dezarhivezi pe disc; dacă trebuie, citești fișierele direct din zip) + SHA-256 pe cele mari → ce e **doar** în arhivă (cu mărimi).
+  3. Propunerea de curățenie **pe grupuri**, fiecare cu GB eliberați și de ce e sigur (puncte de salvare vechi depășite, date intermediare care se pot regenera). **Obligatoriu păstrate:** #459, #477, #513, `cod_c1/gpt.pt`, `lucru/w2_mare/` (S77a/S77b), examenele și seturile ascunse, jurnalul, datele brute, amprentele paznicului.
+  4. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S79_spatiu_workstation.md`; coada → `gata`; commit + push.
+- **NIMIC șters, mutat sau dezarhivat pe disc** — Adrian aprobă pe grupuri (ștergerea de modele sau date e doar cu „da”-ul lui). Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`.
+- aprobat de: **Adrian (COMENZI.md C-76, 5 nov 2026 13:15)**; preluat de supraveghetor 5 nov 2026 13:45
 - raport: docs/rapoarte/…
