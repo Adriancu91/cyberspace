@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 5 noiembrie 2026, 02:20 — Noaptea pe răspunsurile în română (S76b) a pornit; nimic de făcut pentru tine acum
+
+- **Rulează: S76b** — 5 ore de învățare pe exercițiile în română, pe o copie a lui #477 (#477 rămâne în uz), pornită pe la **23:30–23:40**. Sfârșitul estimat: antrenarea ~05:10, examenele până pe la ~05:45, deci mult înainte de 06:45.
+- **Pre-înregistrarea e urcată ÎNAINTE de pornire și verificată de mine:** pragurile sunt exact cele stabilite (AJUTĂ = cel puțin **47,47** la instrucțiuni, acum 37,47; NU AJUTĂ sub 40,47; STRICĂ dacă felurile vechi scad sub 98 sau româna/codul se strică cu peste 0,005). Configurarea e copia rețetei S51, cu 5 ore.
+- Executantul n-a mai scris nimic de la 23:32 (normal cât rulează antrenarea, sub cele 3 ore de alarmă). Verdictul îl verific la 05:15 / 08:15; tot atunci scriu primul pas din **S77** (Kronos mai mare) pentru ziua de azi.
+- **Nimic nou pus în coadă**, nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil — mâine e ultima zi). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
+
 ## 4 noiembrie 2026, 23:20 — Exercițiile de română (S76a) sunt gata; Kronos învață din ele chiar de la noapte (S76b)
 
 - **S76a gata, verificat de mine: GATA.** **23.251** de exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le aveam (jumătate instrucțiuni de 8 feluri noi: „Rezumă…”, „Scrie doar anul…”, „Spune în ce județ…”), plus **500** ascunse, fără nicio scurgere. Nota automată (fără alt AI) a trecut toate probele. **1221 teste trec.**
@@ -140,11 +148,3 @@
 - **Văzut în hub:** Cyber Universe a terminat partea OS a buclei automate (C-53, `os-213`). Scriptul lor pentru Windows pornește doar între **08:00 și 22:00** — dar în nopțile de antrenare Kronos folosește placa de la **19:00**. Ai hotărât „doar ziua, nu în nopțile de antrenare”, deci am cerut în hub ca ora limită să fie ~18:30 (sau să verifice că nu rulează antrenarea). Nu e urgent: scriptul nu rulează până nu îl pregătești tu (~3 nov).
 - **Pus în coadă:** nimic nou; pasul următor pe placă îl decid mâine la 05:15/08:15, după cifrele S58.
 - **Aștept de la tine:** nimic urgent. La pregătirea buclei (~3 nov): ora limită 18:30 în nopțile de antrenare. Fără grabă: Release-ul #477, excluderea mai îngustă de la S53, repornirea din 29 oct.
-
-## 1 noiembrie 2026, 20:15 — Antrenarea pe cod (S58) a pornit la 19:00, cum era planificat
-
-- **Rulează: S58**, cele 10 ore de antrenare pe cod cu varianta `cod_c1_init002` aleasă de tine (C-50). Executantul a scris la 18:59, **înainte de pornire**, actualizarea pre-înregistrării: pragurile sunt copiate neschimbate (ÎNVAȚĂ = biți/octet ≤ 1,10 și pass@10 ≥ 10/200), iar așteptarea lui e cel mai probabil NECLAR (~57 %).
-- **Nimic terminat** de la 17:15 și nicio problemă. Rezultatul vine mâine dimineață (~05:00–06:00 se termină antrenarea, apoi examenul pass@k).
-- **Ce urmează pe placă mâine ziuă:** decid la trecerea de 05:15/08:15, după cifrele S58 (continuare dacă învață, reparare dacă nu).
-- **Văzut în hub:** ai aprobat „bucla automată” (teste doar de citire, doar ziua, nu în nopțile de antrenare); pregătirea ei se face cu tine pe ~3 nov. Nu atinge antrenarea de la Kronos.
-- **Aștept de la tine:** nimic urgent. Fără grabă: Release-ul #477 (comanda mai jos, la 31 oct 14:20), excluderea mai îngustă de la S53, repornirea din 29 oct.

@@ -2706,6 +2706,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S76b — C-64 R1 pasul 2: o noapte din #477 pe o copie (linia nouă `w2_romana_r1`), pe perechile S76a; apoi nota R1 pe setul ascuns + examenele de română/cod (placa, noaptea 4→5 nov)
 - stare: in_lucru (executant, 4 nov 23:30)
+- notă supraveghetor (5 nov 02:20): pre-înregistrarea `2026-11-04_w2_romana_r1.md` verificată — urcată înainte de pornire (23:32), pragurile copiate exact (47,47 / 40,47 / 98,0 / +0,005), 5 ore (pornire înainte de 01:00), sfârșit estimat ~05:45 < 06:45.
 - (istoric) stare: **aprobat** (supraveghetor, 4 nov 2026 23:20)
 - tip: placă (antrenare 4–5 ore + examene ~35 min)
 - fereastră: **ACUM, noaptea 4→5 nov** (placa e liberă de la 20:48; altfel ar sta degeaba până mâine seară). Orele se aleg după ora la care începe antrenarea (pasul 4):
