@@ -1,0 +1,60 @@
+# S77c (aprobat de supraveghetor, 5 nov 2026 23:15, granițele 1, 5 și 6; COMENZI.md C-64, aprobată de Adrian 4 nov 11:30):
+# reluarea S77b (#516 a căzut cu CUDA out of memory la lot 12) cu lot 6 × adunare_loturi 16 (același lot efectiv 96).
+# Copie exactă a config/conv_w2_mare_24.toml (S77b), cu DOAR: `nume`, `cale_stare`, `lot = 6`, `adunare_loturi = 16`,
+# `spatiu = { model = { lot = [6] } }` la cercetător, eticheta și acest antet schimbate.
+#   python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24b.toml --ore 5
+
+[platforma]
+# Linie nouă; starea de pornire e copia lui lucru/w2_mare/gpt_24.pt în cale_stare (lucru/w2_mare_24b/ nu există înainte).
+nume = "w2_mare_24b"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 6, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24b/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 18000, adunare_loturi = 16, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S77c: prima noapte (5 ore) a lui Kronos de 24 de straturi, reluarea S77b cu lot 6 × 16"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [6] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
