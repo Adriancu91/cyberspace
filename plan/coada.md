@@ -2799,7 +2799,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - verificat de supraveghetor (5 nov 20:15): ieșirea identică — dif. max. logit **0,0** (prag 1e-4) și argmax **100 %** pe KGR1 și pe 2.950 de poziții, la toate N ✓; română curat N = 24 **1,2096** față de 1,2097 (±0,0005) ✓; KGR1 greedy 5 identic pe 3/3 texte, dif. 0,0 (prag 1e-3) ✓; regula: 42/36 nu încap, 30 cu recalcul 6.874 MB > 6.500 ✗, **24 cu recalcul 6.010 MB ≤ 6.500 și 2,80 ≥ 2,0 pași/s** ✓ → **GATA, N = 24** ✓. De știut: la măsurătorile care NU au încăput, `nvidia-smi` a urcat sub o secundă la 7.090–7.440 MB înainte de oprire (de aceea S77b are o verificare la 15 minute și pragul de oprire 6.700 MB).
 
 ### S77b — C-64 R2 pasul 2: prima noapte a lui Kronos crescut la 24 de straturi (`lucru/w2_mare/gpt_24.pt`), 5 ore pe rețeta S76b — e mai bun decât #513 (12 straturi, aceleași date, aceleași 5 ore)?
-- stare: in_lucru (executant, 5 nov 2026 20:30)
+- stare: oprit (executant, 5 nov 2026 21:15)
+- motiv: antrenarea #516 a căzut la 20:42:41 (~1 minut) cu CUDA out of memory: plafonul PyTorch 5.800 MB din `antrenare_recalcul.py` e prea mic pentru antrenarea adevărată (5,39 GiB folosiți + 384 MiB cerute); nicio oră, niciun examen; variante în raport (lot 6 / `adunare_loturi = 16`); `lucru/w2_mare_24/` există acum (neșters)
+- (istoric) stare: in_lucru (executant, 5 nov 2026 20:30)
 - (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 20:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **ACUM, noaptea 5→6 nov.** Antrenarea pornește **cel târziu la 00:15** (ca totul să fie gata până la **06:45**); dacă nu apucă, NU pornește la noapte și rămâne `aprobat` pentru noaptea 6→7 nov, pornire la 19:00 (tot 5 ore, refaci pre-înregistrarea cu data nouă). Dacă în hub/coadă apare o fereastră a lui Adrian pe workstation, n-o atingi.
@@ -2825,7 +2827,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Modelul nou **nu** înlocuiește #477 în interfață, în KGR1 sau în OS fără „da”-ul lui Adrian. Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, setul ascuns (doar citit de `reper`), #477/#459/#513, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, nimic instalat. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/2026-11-05_w2_mare_24.md (de scris și urcat înainte de pornire)
 - aprobat de: supraveghetor, 5 nov 2026 20:15 (granițele 1, 2 și 5; linia nouă de altă mărime și recalculul activărilor sunt acoperite de **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-05_2115_S77b_kronos_mare_noaptea1.md
 
 ### S76c — C-64 R1 pasul 3: #513 urmează și instrucțiuni FORMULATE ALTFEL decât în antrenare? (examen nou pe procesor, fără placă, fără antrenare)
 - stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
