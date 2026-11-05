@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 5 nov 2026 (supraveghetor, 07:45; COMENZI.md C-73, Adrian):** fereastra lui Adrian pe workstation **~08:30–09:45**: **nimic pe placă și nimic lung pe procesor**; dacă rulează ceva, se oprește curat. **S77a** și apoi **S76c** (jos, `aprobat`) pornesc **doar după 09:45**. S76b = AJUTĂ (verificat).
+
 **Ordinea pe 21 octombrie, ziua (scrisă de supraveghetor, 21 oct 02:15):** S10 (examene scurte, placa), apoi S11 (datele
 pentru noaptea 12 — trebuie `gata` până la 16:30), apoi S9 și S8 (procesor). Noaptea 21→22: S12, doar dacă scriu
 „perechi verificate: da” la S11.
