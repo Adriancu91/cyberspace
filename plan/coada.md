@@ -2821,7 +2821,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
-- stare: **aprobat** (Adrian, prin C-77; preluat de supraveghetor 5 nov 2026 13:45)
+- stare: oprit (executant, 5 nov 2026 18:30) — nimic copiat, nimic șters
+- motiv: nu pot citi COMENZI.md C-77 (hub-ul nu e pe disc; `git clone` al hub-ului și citirea de pe web cer aprobare, `gh` blocat) → lista grupurilor 1–5 lipsește. Cer: textul C-77 (și C-76 pentru S79) copiat în coadă de supraveghetor, sau voie de la Adrian pentru clonarea hub-ului.
+- (istoric) stare: **aprobat** (Adrian, prin C-77; preluat de supraveghetor 5 nov 2026 13:45)
 - tip: procesor + disc (copiere, SHA-256, un document de lecții). Fără placă, fără antrenare, nimic instalat.
 - fereastră: **ziua de 5 nov, după 14:00** (după fereastra lui Adrian C-73). **S77a are prioritate** (cifrele ei trebuie gata până la 18:30 pentru noaptea S77b): faci S78 **imediat după S77a** (înaintea lui S76c și a lui S79). Dacă S77a e blocată sau așteaptă după Adrian, poți începe S78 de la 14:00. Copierea și sumele SHA-256 pot continua și în timpul nopții S77b (nu opresc și nu încetinesc antrenarea; dacă vezi că pașii/s ai nopții scad cu peste 10 %, pui copierea pe pauză până dimineață).
 - durată maximă: ~3 ore.
@@ -2834,7 +2836,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   6. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S78_mini_brain.md` (ce s-a copiat, GB, manifest, verificarea, spațiul liber înainte/după); coada → `gata`; în rezumatul tău scrii rândul: „Mini Brain salvat (X GB în arhivă) — Adrian poate șterge ambele foldere” (sau, dacă grupul 4 a rămas necopiat din lipsă de loc: „… DAR baza geografică nu e încă salvată — NU șterge încă `test ai brain v13 clean`”). Commit + push.
 - **Nimic șters de tine** (nici sursele, nici altceva). Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, `config/`, #477/#459/#513, linia `cod_c1*`, ramura `limba-romana`. Nimic din arhivă în Git.
 - aprobat de: **Adrian (COMENZI.md C-77, 5 nov 2026 13:40)**; preluat de supraveghetor 5 nov 2026 13:45
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md
 
 ### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
 - stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
