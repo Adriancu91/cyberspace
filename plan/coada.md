@@ -2799,7 +2799,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - verificat de supraveghetor (5 nov 20:15): ieșirea identică — dif. max. logit **0,0** (prag 1e-4) și argmax **100 %** pe KGR1 și pe 2.950 de poziții, la toate N ✓; română curat N = 24 **1,2096** față de 1,2097 (±0,0005) ✓; KGR1 greedy 5 identic pe 3/3 texte, dif. 0,0 (prag 1e-3) ✓; regula: 42/36 nu încap, 30 cu recalcul 6.874 MB > 6.500 ✗, **24 cu recalcul 6.010 MB ≤ 6.500 și 2,80 ≥ 2,0 pași/s** ✓ → **GATA, N = 24** ✓. De știut: la măsurătorile care NU au încăput, `nvidia-smi` a urcat sub o secundă la 7.090–7.440 MB înainte de oprire (de aceea S77b are o verificare la 15 minute și pragul de oprire 6.700 MB).
 
 ### S77b — C-64 R2 pasul 2: prima noapte a lui Kronos crescut la 24 de straturi (`lucru/w2_mare/gpt_24.pt`), 5 ore pe rețeta S76b — e mai bun decât #513 (12 straturi, aceleași date, aceleași 5 ore)?
-- stare: **aprobat** (supraveghetor, 5 nov 2026 20:15)
+- stare: in_lucru (executant, 5 nov 2026 20:30)
+- (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 20:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **ACUM, noaptea 5→6 nov.** Antrenarea pornește **cel târziu la 00:15** (ca totul să fie gata până la **06:45**); dacă nu apucă, NU pornește la noapte și rămâne `aprobat` pentru noaptea 6→7 nov, pornire la 19:00 (tot 5 ore, refaci pre-înregistrarea cu data nouă). Dacă în hub/coadă apare o fereastră a lui Adrian pe workstation, n-o atingi.
 - durată maximă: 5 ore de antrenare + examene; placa sub **6.700 MB** (oprire proprie) / 7.000 MB (paznicul) și sub 83 °C.
