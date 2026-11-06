@@ -2918,7 +2918,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md
 
 ### S81 — Reparație: `unelte/antrenare_lunga.py` / `antrenare_recalcul.py` ies cu cod ≠ 0 când o oră e anulată (ca lanțurile să nu meargă mai departe pe un model neașteptat) (doar procesor, ~30–45 min)
-- stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
+- stare: in_lucru (executant, 6 nov 2026 03:30)
+- (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
 - tip: procesor (cod în `unelte/` + teste). Fără placă.
 - fereastră: ziua de 6 nov, **înainte de S77d** (după S78/S79 dacă acestea rulează încă; poate și noaptea, dacă S78/S79 sunt gata).
 - durată maximă: ~45 min.
