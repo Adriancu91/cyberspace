@@ -3042,7 +3042,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_2210_S83_oprit_marime_export.md
 
 ### S84 — C-85 pasul 1: lista punctelor de salvare `.pt` (ce s-ar păstra / ce s-ar putea șterge) — unealtă nouă, DOAR LISTĂ, nimic șters (procesor + disc)
-- stare: in_lucru (executantul, 6 nov 2026 22:35; aprobat de Adrian, COMENZI.md C-85 pasul 1, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 20:15)
+- stare: gata (executantul, 6 nov 2026 23:04; lista 592 .pt / 107,6 GB: PĂSTREAZĂ 50 / 22,3 GB, SE POATE ȘTERGE 113 / 71,5 GB, NECUNOSCUT 429 / 13,8 GB; nimic șters; 1254 teste trec; aprobat de Adrian, COMENZI.md C-85 pasul 1, 6 nov 2026 17:56)
 - tip: procesor + disc (doar citire), fără placă
 - fereastră: **după ce S83 e `gata` sau `oprit`** (nu în timp ce S77e rulează: citirea a ~100 GB ar încetini antrenarea)
 - durată maximă: 1,5 ore
@@ -3056,4 +3056,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu ștergi, nu muți, nu redenumești nimic; nu scrii în jurnal; nimic din `lucru/` în Git.
 - pre-înregistrare: nu e nevoie (fără antrenare, fără placă)
 - aprobat de: Adrian (COMENZI.md C-85, 6 nov 2026 17:56, pasul 1)
-- raport: —
+- raport: docs/rapoarte/2026-11-06_2304_S84_puncte_salvare.md

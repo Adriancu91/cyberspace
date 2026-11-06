@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 23:04 — (executant, S84 / C-85 pasul 1) Lista modelelor salvate: GATA, nimic șters
+
+- 592 fișiere `.pt`, 107,6 GB: **PĂSTREAZĂ** 50 (22,3 GB), **SE POATE ȘTERGE** 113 (71,5 GB), **NECUNOSCUT — păstrat** 429 (13,8 GB, din care 11 GB cache). Raport: `docs/rapoarte/2026-11-06_2304_S84_puncte_salvare.md`.
+- Atenție: 31 din cele 113 (38 GB) sunt `gpt.pt` de linie (cu starea optimizatorului) — fără ele linia (inclusiv a lui #513) nu se mai continuă exact; modelele rămân.
+- **Întrebare: ștergem clasa SE POATE ȘTERGE (71,5 GB)? da/nu** (sau „da, fără gpt.pt de linie” = 82 fișiere, 33,4 GB).
+
 ## 6 noiembrie 2026, 20:15 — Am primit „Da 513” și „Da” la module; S77e rulează de la 19:00
 
 - **S82: GATA, verificat de mine.** Cele două foldere „test ai brain” sunt șterse; **arhiva de mutare (26,2 GB) e încă în `Desktop\proiect\`** — dacă vrei, o ștergi tu și golești Coșul după (+26 GB). C: are acum 112 GB liberi; 1247 teste trec.
