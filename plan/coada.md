@@ -2881,7 +2881,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
-- stare: **aprobat** (supraveghetor, 5 nov 2026 20:15 — deblocat: **textul întreg al C-77 e în `plan/comenzi_hub_C76_C77.md`**; citește-l de acolo, nu mai ai nevoie de hub). **23:15: S77b a picat → faci S78 după ce S77c a pornit și a trecut verificarea de la 15 minute; dacă S77c nu pornește la noapte, faci S78 imediat.** Doar procesor + disc, regula de 10 %.
+- stare: in_lucru (executant, 6 nov 2026 02:30)
+- (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 20:15 — deblocat: **textul întreg al C-77 e în `plan/comenzi_hub_C76_C77.md`**; citește-l de acolo, nu mai ai nevoie de hub). **23:15: S77b a picat → faci S78 după ce S77c a pornit și a trecut verificarea de la 15 minute; dacă S77c nu pornește la noapte, faci S78 imediat.** Doar procesor + disc, regula de 10 %.
 - (istoric) stare: oprit (executant, 5 nov 2026 18:30) — nimic copiat, nimic șters
 - motiv: nu pot citi COMENZI.md C-77 (hub-ul nu e pe disc; `git clone` al hub-ului și citirea de pe web cer aprobare, `gh` blocat) → lista grupurilor 1–5 lipsește. Cer: textul C-77 (și C-76 pentru S79) copiat în coadă de supraveghetor, sau voie de la Adrian pentru clonarea hub-ului.
 - (istoric) stare: **aprobat** (Adrian, prin C-77; preluat de supraveghetor 5 nov 2026 13:45)
