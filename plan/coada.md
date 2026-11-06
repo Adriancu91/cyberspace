@@ -2881,7 +2881,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
-- stare: gata (executant, 6 nov 2026 02:40): **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere**; toate 5 grupurile copiate (inclusiv baza geografică `f8547edc…`), 3.260 fișiere + 2 bundle-uri (101 / 78 commit-uri, verify okay), SHA-256 sursă = copie 0 diferențe (2 treceri); C: 35,25 → 33,72 GB liberi; nimic șters; 1237 teste trec, 1 sărit, 1 pică doar din cauza discului (cunoscut, 6 nov)
+- stare: gata — **verificat de supraveghetor 6 nov 05:15: GATA** (0 diferențe SHA-256, nimic șters) → C-77 `gata` în hub
+- (istoric) stare: gata (executant, 6 nov 2026 02:40): **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere**; toate 5 grupurile copiate (inclusiv baza geografică `f8547edc…`), 3.260 fișiere + 2 bundle-uri (101 / 78 commit-uri, verify okay), SHA-256 sursă = copie 0 diferențe (2 treceri); C: 35,25 → 33,72 GB liberi; nimic șters; 1237 teste trec, 1 sărit, 1 pică doar din cauza discului (cunoscut, 6 nov)
 - (istoric) stare: in_lucru (executant, 6 nov 2026 02:30)
 - (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 20:15 — deblocat: **textul întreg al C-77 e în `plan/comenzi_hub_C76_C77.md`**; citește-l de acolo, nu mai ai nevoie de hub). **23:15: S77b a picat → faci S78 după ce S77c a pornit și a trecut verificarea de la 15 minute; dacă S77c nu pornește la noapte, faci S78 imediat.** Doar procesor + disc, regula de 10 %.
 - (istoric) stare: oprit (executant, 5 nov 2026 18:30) — nimic copiat, nimic șters
@@ -2902,7 +2903,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0240_S78_mini_brain.md (înainte: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md)
 
 ### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
-- stare: gata (executant, 6 nov 2026 03:11): **arhiva de mutare (26,20 GB, de fapt în `Desktop\proiect\`) nu are nimic în plus** (SHA-256 identic pe 28,05 GB, doar 3 fișiere mici în plus); C: 33,46 GB liberi; propunere pe grupuri: A+B (Mini Brain + arhiva) 104,3 GB fără pierdere, C+D (modele intermediare + `gpt.pt` din linii închise) ~62,3 GB, E–H (cyberspace-cod, Hugging Face, cache simboluri, pip) ~84 GB de decis; nimic șters; 1236 teste trec, 1 sărit, 2 pică (discul — cunoscut; `test_interfata` instabil, singur trece 37/37)
+- stare: gata — **verificat de supraveghetor 6 nov 05:15: GATA** (A 78,07 + B 26,20 = 104,27 GB fără pierdere; nimic șters; `test_interfata` instabil, la S81 a trecut) → C-76 `gata` în hub; aștept alegerea grupurilor de la Adrian
+- (istoric) stare: gata (executant, 6 nov 2026 03:11): **arhiva de mutare (26,20 GB, de fapt în `Desktop\proiect\`) nu are nimic în plus** (SHA-256 identic pe 28,05 GB, doar 3 fișiere mici în plus); C: 33,46 GB liberi; propunere pe grupuri: A+B (Mini Brain + arhiva) 104,3 GB fără pierdere, C+D (modele intermediare + `gpt.pt` din linii închise) ~62,3 GB, E–H (cyberspace-cod, Hugging Face, cache simboluri, pip) ~84 GB de decis; nimic șters; 1236 teste trec, 1 sărit, 2 pică (discul — cunoscut; `test_interfata` instabil, singur trece 37/37)
 - (istoric) stare: in_lucru (executant, 6 nov 2026 03:00)
 - (istoric) stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
 - tip: procesor + disc (măsurători, SHA-256, un raport). Fără placă, fără antrenare, nimic instalat.
@@ -2918,7 +2920,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md
 
 ### S81 — Reparație: `unelte/antrenare_lunga.py` / `antrenare_recalcul.py` ies cu cod ≠ 0 când o oră e anulată (ca lanțurile să nu meargă mai departe pe un model neașteptat) (doar procesor, ~30–45 min)
-- stare: gata (executant, 6 nov 2026 03:36): o oră anulată sau o oprire înainte de vreme → cod 1 și rândul „oprit înainte de vreme: ora N anulată — <motivul>” (motivul din fișa anulată din jurnal); rularea întreagă și `--raport` rămân cod 0; `antrenare_recalcul.py` transmitea deja codul; 5 teste noi; 1242 trec, 1 sărit, 1 pică doar din cauza discului (cunoscut)
+- stare: gata — **verificat de supraveghetor 6 nov 05:15: GATA** (cod 1 la oră anulată, 5 teste noi, singurul test picat e cel de disc, cunoscut) → S77d se poate baza pe „oprire la primul cod ≠ 0”
+- (istoric) stare: gata (executant, 6 nov 2026 03:36): o oră anulată sau o oprire înainte de vreme → cod 1 și rândul „oprit înainte de vreme: ora N anulată — <motivul>” (motivul din fișa anulată din jurnal); rularea întreagă și `--raport` rămân cod 0; `antrenare_recalcul.py` transmitea deja codul; 5 teste noi; 1242 trec, 1 sărit, 1 pică doar din cauza discului (cunoscut)
 - (istoric) stare: in_lucru (executant, 6 nov 2026 03:30)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
 - tip: procesor (cod în `unelte/` + teste). Fără placă.

@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 05:15 — Noaptea s-a terminat curat: Mini Brain salvat, raportul de spațiu gata, reparația codului de ieșire gata
+
+- **Verificate de mine, toate GATA:** S78 (Mini Brain salvat, 1,54 GB, 0 diferențe — **poți șterge cele două foldere „test ai brain”**), S79 (se pot elibera **~104 GB fără nicio pierdere**: grupurile A + B), S81 (o oră anulată oprește acum lanțul, cu cod 1; 5 teste noi; **1242 teste trec**, singurul picat e cel de disc, cunoscut).
+- **Nu rulează nimic acum** (placa liberă). **Azi:** de la 08:00 **S76c** (pe procesor: #513 urmează și instrucțiuni formulate altfel?), apoi **S77d** (pe placă, ~2,5 h, doar când nu ești la workstation: rata mai mică pentru modelul de 24 de straturi). Nimic nou pus în coadă; noaptea 6→7 o decid la 17:15 / 20:15, după verdictul S77d.
+- **Aștept de la tine (azi, la workstation):** ce grupuri de fișiere se șterg din raportul S79 (de exemplu „A, B da; C, D da; E–H nu”) — scrie-mi în COMENZI.md. După ce faci loc (peste 40 GB liberi), testul de disc trece din nou. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
+
 ## 6 noiembrie 2026, 03:11 — (executant, S79 / C-76) Spațiul pe workstation: se pot elibera ~104 GB fără nicio pierdere
 
 - **Discul C: 33,46 GB liberi din 510,6.** `C:\Kronos\` ocupă 186 GB (modelele `.pt` singure 114 GB), Desktop-ul 104 GB, cache-urile Hugging Face + pip 30 GB.
@@ -138,26 +144,4 @@
 - **Concluzia:** a învăța doar „forma” exercițiilor nu-l face să rezolve probleme. Mergem mai departe din modelul S63 (mai bun), nu din S70.
 - **Azi:** după fereastra ta (~09:30) **S71**, memoria de cod (cum era aprobat). Apoi **S72a** (doar procesor): facem exercițiile care au un test ce rulează — la S69 erau doar 13, prea puține pentru școală.
 - **La noapte (de la 19:00): S72b, prima rundă a școlii de cod** (C-60 C): S63 scrie câte 8 soluții, cutia le verifică, învață doar din cele corecte, apoi îl măsurăm pe 200 de exerciții pe care nu le-a văzut în școală. Pragurile scrise dinainte: AJUTĂ = cel puțin **+10 din 200** față de S63, fără să strice codul obișnuit. Pornește doar dacă S72a dă cel puțin 500 de exerciții cu test.
-- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 3 noiembrie 2026, 20:20 — Noaptea pe exerciții (S70) a pornit la 19:09, totul în regulă
-
-- **Rulează: S70** — 8 ore de antrenare pe exerciții, din modelul S63, pe o copie (`cod_c1_ex`; originalul rămâne rezervă), pornită la **19:09**. Verificarea dinainte: modelul copiat e cel bun (590.110 pași), **1195 teste trec**.
-- **Pre-înregistrarea e urcată și verificată de mine:** pragurile sunt exact cele stabilite (AJUTĂ = cel puțin **8/163** și validarea ≤ 0,510; NU AJUTĂ ≤ 4/163; STRICĂ > 0,510). Reperul S63: 3/163.
-- **Placa:** 5.918 MB, 58 °C (limitele: 7.000 MB, 83 °C). Antrenarea se termină pe la ~03:30, apoi examenele (~45 min); niciun pas nou după 05:45, deci **workstation-ul e liber pentru tine la 07:00** (C-63).
-- **Nimic nou pus în coadă:** S71 (memoria de cod) e deja aprobată pentru mâine, după fereastra ta. Verdictul S70 îl verific la trecerea de 05:15 sau 08:15.
-- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 3 noiembrie 2026, 17:20 — Exercițiile (S69) sunt gata; la noapte antrenarea pe ele (S70), terminată până la 06:45 pentru fereastra ta de mâine
-
-- **S69 gata, verificat de mine: corect.** **313.910 exerciții** „antet + explicație → corp”, amestecate cu cod obișnuit: **25,0 %** exerciții din ~971 mil. simboluri (cât pentru 8 ore). 5.516 exerciții ținute deoparte pentru măsurare. Scurgerile spre seturile ascunse au fost scoase (1 + 3 + 0 funcții). **1195 teste trec.** Copia modelului e identică cu originalul, care rămâne rezervă.
-- **O problemă mică de pornire, rezolvată de mine:** cu numele vechi, S70 ar fi scris peste rezultatele S63. Am ales ca noaptea să ruleze pe numele ei (`cod_c1_ex`), deci originalul rămâne neatins.
-- **Comanda ta C-63 preluată:** S70 pornește la 19:00 (cel târziu 21:30) și se termină sau se oprește curat **până la 06:45**; 07:00–09:30 workstation-ul e al tău. **S71** (memoria de cod) pornește mâine abia după fereastra ta. Pragurile S70 rămân: AJUTĂ ≥ 8/163 (S63: 3/163).
-- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 3 noiembrie 2026, 14:20 — S68: funcțiile „ca la examen” sunt PUȚINE; am pornit calea ta A+B+D: azi exercițiile, la noapte o antrenare pe ele
-
-- **S68 gata, verificat de mine: PUȚIN.** Funcțiile care se pot chema singure, ca la examen, au doar **0,77 mil. simboluri** de cod (pragul de jos era 3 mil.). Regula mai blândă la importuri a adus doar 66 de funcții; **78 %** din cele „autonome” sunt metode, care nu se pot chema singure. Nicio scurgere, **1190 teste trec**.
-- **Comenzile tale C-60 și C-62 preluate** (alegerea la S66 e făcută). Pus în coadă: **S69** (acum, doar procesor, ~2–3 ore): exercițiile „explicație + antet → corp” din toate funcțiile bune (319.430, cele autonome de 2 ori), amestecate 25 % cu 75 % cod obișnuit; **S70** (la noapte, de la 19:00, 8 ore pe placă): antrenare din modelul S63, pe o copie (originalul rămâne rezervă), apoi examenul pe același set de 163 ca la S63. Pragurile scrise dinainte: AJUTĂ = cel puțin **8/163** (S63: 3/163) fără să strice codul obișnuit; NU AJUTĂ = cel mult 4/163.
-- **Mâine ziua: S71**, memoria de cod („rege / regat”): caută 2–4 funcții asemănătoare și i le pune în față lui Kronos; măsurat întâi pe setul de probă. **Școala de cod (S72)** și **alegerea datelor de către Kronos (S73, C-62)** le detaliez după rezultatul de la noapte.
 - **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
