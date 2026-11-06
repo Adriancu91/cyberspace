@@ -3064,7 +3064,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - verificat de supraveghetor (6 nov 23:15): **gata, corect** — doar listă (fără comandă de ștergere), 592 `.pt` / 107,6 GB pe clase, 7 teste noi, 1254 trec. Întrebarea „ștergem SE POATE ȘTERGE?” e la Adrian; până la răspunsul lui nu se șterge nimic. Atenție la `gpt.pt` de linie (31 fișiere, 38 GB) — fără ele liniile nu se mai continuă exact.
 
 ### S85 — Prima noapte de 5 ore a lui Kronos de 24 de straturi pe rețeta e1 (rata 1e-5, încălzire 1000, lot 4 × 24), linie nouă `w2_mare_24f` — e mai bun decât #513 la timp egal?
-- stare: **aprobat** (supraveghetor, 6 nov 2026 23:15)
+- stare: in_lucru (executant, 6 nov 2026 23:30; fereastra de noapte, placa liberă 456 MB / 26 °C)
+- (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 23:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **ACUM, noaptea 6→7 nov.** Antrenarea pornește **cel târziu la 00:30**; examenele trebuie gata până la **07:45**. Dacă nu apuci să pornești până la 00:30: NU pornești la noapte; rămâne `aprobat` pentru **noaptea 7→8 nov, pornire la 19:00** (refaci pre-înregistrarea cu data nouă). Dacă în coadă/hub apare o fereastră a lui Adrian pe workstation, oprești curat.
 - durată maximă: 5 ore de antrenare + examene; placa sub **6.700 MB** la verificarea de 15 minute (oprire proprie) / 7.000 MB (paznicul, tot timpul) și sub 83 °C.
