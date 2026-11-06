@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 20:15 — Am primit „Da 513” și „Da” la module; S77e rulează de la 19:00
+
+- **S82: GATA, verificat de mine.** Cele două foldere „test ai brain” sunt șterse; **arhiva de mutare (26,2 GB) e încă în `Desktop\proiect\`** — dacă vrei, o ștergi tu și golești Coșul după (+26 GB). C: are acum 112 GB liberi; 1247 teste trec.
+- **Rulează: S77e** (modelul de 24 de straturi cu rată mai mică, ~2,5 h, de la 19:00) — totul normal, nu-l întrerupem. Verdictul îl verific la 23:15 sau 02:15.
+- **Pus în coadă (aprobate de tine):** **S83** — #513 devine modelul în uz (pachetul pentru OS, interfața, Release `kronos-kgr1-513`; #477 și #459 rămân rezerve), doar pe procesor; **S84** — primul pas din C-85: lista modelelor salvate (ce păstrăm / ce s-ar putea șterge), **doar listă, nimic șters**. Ordinea: S77e → S83 → S84 (în noaptea asta sau mâine dimineață). Pașii 2–8 din C-85 îi pun câte unul, după S84.
+- **Aștept de la tine:** nimic acum. După S84 o să te întreb dacă ștergem modelele marcate „se poate șterge”.
+
 ## 6 noiembrie 2026, 17:35 — (executant, S82 / C-81) Ce ai șters: grupul A da, arhiva B nu
 
 - **Grupul A (cele două foldere „test ai brain”): nu mai există** — șterse. **Grupul B (arhiva `Desktop\proiect\cyberspace_mutare_2026-10-10.zip`, 26,2 GB): EXISTĂ încă** (e singurul lucru din `Desktop\proiect\`).
@@ -134,17 +141,4 @@
 - **S72b gata, verificat de mine: STRICĂ.** După o trecere scurtă (48 s) prin cele 109 soluții corecte, Kronos rezolvă **18 din 200** exerciții (înainte 14 — +4, la limita zgomotului), dar codul obișnuit s-a stricat: **0,513** biți pe octet (S63: 0,500; limita era 0,510). Pe examenul ascuns: 4/163 (înainte 3). Placa max 5.885 MB / 61 °C, **1212 teste trec**. Concluzia: școala, așa cum e, nu avansează codul.
 - **Deci, cum ai cerut în C-64, trecem pe română.** Pus în coadă (aprobat de mine, pornește la noapte): **S76a** — exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le avem (cel puțin 10.000 pentru învățare, 400 ascunse, cel puțin 40 % instrucțiuni de felul „Spune…”, „Scrie…”, „Rezumă…”), o notă automată fără alt AI (corect / în temă / limbă curată) și reperul: cât de bine răspunde #477 acum. Nicio antrenare la noapte.
 - **Urmează:** mâine noapte **S76b**, antrenarea din #477 pe o copie (#477 rămâne în uz până îl bate copia); ziua, primul test pentru **S77** (Kronos mai mare: aceeași ieșire + memorie și viteză). Le scriu mâine dimineață, după cifrele S76a.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 4 noiembrie 2026, 17:20 — Prima parte a școlii de cod (S75): DESTULE soluții corecte; la noapte Kronos învață din ele (S72b)
-
-- **S75 gata, verificat de mine: DESTULE.** Modelul S63 a scris 8 soluții la fiecare din cele 689 de exerciții ale școlii (5.512 în total, 81 min pe placă, max **2.032 MB**). Cutia a găsit **137 corecte**; după ce am scos dublurile și 3 răspunsuri care doar „ghiceau” rezultatul, rămân **109 soluții corecte diferite** la 70 de exerciții (pragul era 100 — trecut, dar la limită). Doar 12,8 % sunt copiate întocmai din original, deci nu e „memorie pe de rost”. S63 neatins, **1209 teste trec**.
-- **La noapte (de la 19:00): S72b** pornește direct de la învățare (o trecere scurtă din cele 109 soluții, pe o copie a S63), apoi examenul pe cele 200 de exerciții nevăzute. AJUTĂ = cel puțin **24 din 200** (acum 14) fără să strice codul obișnuit. Deja aprobată, n-am adăugat nimic în coadă. Verdictul mâine la 05:15 / 08:15.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 4 noiembrie 2026, 14:20 — Reperul școlii (S74): 14 din 200, deci școala poate porni; azi după-amiază facem deja prima ei parte (S75)
-
-- **S74 gata, verificat de mine: 14 din 200.** Modelul S63, cu 10 încercări pe exercițiu, rezolvă măcar o dată **14** din cele 200 de exerciții de măsurare (13 fără un răspuns care doar „ghicea” rezultatul). Pragul minim era 10, deci **S72b (școala de cod) poate porni la noapte**. Pentru ea, „AJUTĂ” înseamnă acum cel puțin **24 din 200** după învățare. S63 neatins, placa max 2.032 MB, **1207 teste trec**.
-- **Pus în coadă (aprobat de mine, ~1,5 ore, acum ziua): S75** — S63 scrie câte 8 soluții la cele 689 de exerciții ale școlii și cutia le verifică. Reperul fiind mic, s-ar putea să iasă sub cele 100 de soluții corecte de care e nevoie; dacă aflăm de ziuă, noaptea nu se pierde (fie școala începe direct cu învățarea, fie pun altceva pe noapte la 17:15 / 20:15).
-- **Comanda ta C-64 preluată:** dacă școala de cod nu ajută, urmează **S76** (răspunsuri în română, o noapte din #477 pe o copie) și **S77** (Kronos mai mare, crescut din #477). Le scriu în detaliu după verdictul S72b (mâine dimineață). Am socotit „nu ajută” orice verdict în afară de AJUTĂ — spune-mi dacă vrei altfel la NECLAR.
 - **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.

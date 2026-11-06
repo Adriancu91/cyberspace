@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 6 nov 2026 (supraveghetor, 20:15; COMENZI.md C-82 și C-85, Adrian):** S77e rulează (de la 19:00) — **nu-l întrerupi.** S82 = **GATA, verificat**. Adrian a spus **„Da 513”** (C-82) și **„Da” la C-85** (modulele cresc odată cu modelul). Am pus jos **S83** (C-82: #513 devine modelul în uz, doar procesor) și **S84** (C-85 pasul 1: lista punctelor de salvare `.pt`, doar citire, nimic șters). **Ordinea: S77e → S83 → S84**, fiecare pornește doar după ce cea dinainte e `gata`/`oprit` (în noaptea asta, după S77e, sau mâine de la 08:00). Pașii 2–8 din C-85 îi pun eu, câte unul, după ce S84 e gata.
+
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 17:15; COMENZI.md C-80 și C-81, Adrian):** Adrian **a plecat de la workstation la ~15:20 fără testul OS** — calculatorul n-a fost repornit, a rămas în Windows, **placa e liberă**. Înainte să plece **a șters** (spune el) cele două foldere „test ai brain” și probabil arhiva `cyberspace_mutare`. **Fă ACUM S82** (jos, `aprobat`, doar citire, ~15 min): ce a mai rămas din grupurile A/B, spațiul pe C:, Coșul de reciclare → 3 rânduri sus în `plan/pentru_adrian.md`; nu ștergi nimic, nici Coșul. **S77e rămâne la noapte, pornire de la 19:00 (cel târziu 21:00)** — ziua nu mai ajunge până la 18:30 pentru ~2,5 h. Testul OS al lui Adrian se mută la următoarea lui fereastră (îți scriu eu dacă e una).
 
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 11:15; COMENZI.md C-79, Adrian):** Adrian e la workstation de la ~08:30 pentru testul OS (repornire în Cyber Universe, `os-250`/`os-251`) — **nimic pe placă cât e el acolo.** S76c = **GATA, verificat** (URMEAZĂ, la limită). **S77d** a pornit la 10:00 (tu nu vedeai C-79 — nu e vina ta) și a fost închis la 10:22, cel mai probabil de repornirea lui Adrian → OPRIT/NEMĂSURAT corect, nimic stricat. **Reluarea = S77e** (jos, sub S77d, `aprobat`): linii noi `w2_mare_24e1`/`_24e2`, deci **nu atingi și nu ștergi** `lucru/w2_mare_24d1/`. **Fereastra S77e: noaptea 6→7, pornire de la 19:00** (cel târziu 21:00). Ziua o mut eu mai devreme doar dacă la 14:15 / 17:15 scrie aici că Adrian a terminat. Discul C: are acum ~106 GB liberi → testul de disc trece din nou; regula „1 test pică din cauza discului” nu se mai aplică (orice test picat = regula obișnuită).
@@ -3012,3 +3014,42 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: nu e nevoie (fără placă, fără experiment)
 - aprobat de: Adrian (COMENZI.md C-81, 6 nov 2026)
 - raport: docs/rapoarte/2026-11-06_1735_S82_verificare_spatiu.md
+- verificat de supraveghetor (6 nov 20:15): **gata, corect** — doar citire, nimic șters; grupul A nu mai există, arhiva B (26,2 GB) e încă în `Desktop\proiect\`; C: 112,4 GB liberi (> 40 → testul de disc rulat: 1247 trec, 1 sărit); Coșul gol. C-81 → gata în hub.
+
+### S83 — C-82: #513 îl înlocuiește pe #477 (modelul în uz + pachetul KGR1 pentru OS + Release), #477 și #459 păstrați ca rezerve (doar procesor)
+- stare: **aprobat** (Adrian, COMENZI.md C-82, 6 nov 2026 17:39; pașii scriși de supraveghetor 6 nov 20:15)
+- tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
+- fereastră: **după ce S77e e `gata` sau `oprit`** (în noaptea 6→7 sau mâine de la 08:00). NU în timp ce S77e rulează (ca să nu-i iei procesorul și discul).
+- durată maximă: 2 ore; RAM cel mult ~6 GB
+- de ce: Adrian: „Da 513” (C-82, DECIZII 6 nov 17:39) după S76b (AJUTĂ: R1 98,97 vs 37,47) și S76c (URMEAZĂ: 83,22 vs 61,38). OS-ul (sarcina lui P6-60) așteaptă Release-ul `kronos-kgr1-513` și `MODEL.md` cu #513.
+- ce faci: **exact pașii 1–7 din S54**, cu 513 în loc de 477 și 477 în loc de 459:
+  0. Verificări: SHA-256 pentru checkpoint-ul #513, `kronos_477_q8_0.kgr` (`bcbe8187…3963`) și `kronos_459_q8_0.kgr` (`e80618b4…382e`) notate înainte; la final trebuie să fie identice.
+  1. **Export:** `python unelte/exporta_greutati.py --experiment 513 --fel q8_0 --iesire lucru/export/kronos_513_q8_0.kgr` (în `lucru/`, NU în Git); SHA-256 + mărimea în `lucru/export/kronos_513_q8_0.kgr.sha256` (același format ca la #477). Mărimea trebuie să fie **110.859.040 octeți** (aceeași arhitectură ca #477); altfel oprești și scrii de ce. **Nu ștergi și nu suprascrii** fișierele #477 și #459.
+  2. **Vectorii de control:** `python unelte/vectori_kgr1.py model --kgr lucru/export/kronos_513_q8_0.kgr` — cele 3 texte fixe, simbolurile, primele 5 simboluri greedy și marja minimă. Verifică cu `unelte/inferenta_bruta.py` că dă aceleași simboluri și aceleași logit-uri ca PyTorch pe greutățile Q8_0 desfăcute (cum s-a făcut la #477; diferența maximă de rotunjire o scrii în raport). Dacă o marjă minimă e sub 0,005, o scrii clar în raport (OS-ul ar putea alege alt simbol din cauza rotunjirii).
+  3. **`docs/integrare_kronos/MODEL.md`** rescris pentru #513, în aceeași formă: modelul (#513, linia `w2_romana_r1`, S76b AJUTĂ, S76c URMEAZĂ la limită, slab la „județ și țară”), arhitectura, fișierul, mărimea, SHA-256, Release-ul, tabelul cu cele 3 texte, marjele. La final: **„Rezerva: #477”** (suma, mărimea, Release-ul lui dacă există) și **„Rezerva: #459”** (ce era deja), ca OS-ul să le poată porni în continuare.
+  4. **Release** privat în `Adriancu91/cyberspace` (NU în hub, NU public): `gh release create kronos-kgr1-513 lucru/export/kronos_513_q8_0.kgr lucru/export/kronos_513_q8_0.kgr.sha256 --repo Adriancu91/cyberspace --title "Kronos #513 KGR1 Q8_0" --notes "<suma și mărimea>"` (fără date personale). Dacă `gh` cere aprobare, nu există sau nu e autentificat: **nu instalezi nimic, nu te autentifici**; comanda exactă în raport și în MODEL.md (o face Adrian).
+  5. **Modelul în uz:** toate locurile unde #477 / `kronos_477_q8_0.kgr` e implicit (aceleași ca la S54: `module/inferenta_kgr1.py`, `module/inferenta_ccm.py`, `module/calcul/banc.py`, `module/calcul/reglaj.py`, configurarea și `unelte/interfata_ws.ps1`) → `kronos_513_q8_0.kgr` / 513. Doar căile implicite, **MANIFEST neschimbat**. Reglajul CCM: `python -X utf8 -m module.calcul.reglaj verifica --kgr lucru/export/kronos_513_q8_0.kgr` (și reglajul nou pe procesor, dacă cere). Filele interfeței care folosesc alte modele nu le schimbi; în raport: ce model folosește fiecare filă înainte și după. Interfața o repornești doar cum se face de obicei; dacă cere aprobare, scrii ce trebuie făcut.
+  6. Testele care verifică „modelul în uz” → 513; cele cu vectorii fixați ai lui #477/#459 rămân. `python -m pytest`: toate trec. Commit + push.
+  7. Raport `docs/rapoarte/<data>_<ora>_S83_model_513.md`: suma și mărimea, tabelul cu cele 3 texte (#513 lângă #477), marjele, Release făcut sau comanda pentru Adrian, fișierele schimbate (înainte → după), testele. Un rând sus în `plan/pentru_adrian.md`. Coada → `gata`.
+- Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, checkpoint-urile (doar citire), S77e și liniile `w2_mare_24*`. Nu scrii în hub (supraveghetorul copiază MODEL.md în `integrare/kronos/MODEL.md`). Nimic descărcat, instalat sau șters.
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare; nu e nevoie (pragul: mărime = 110.859.040, aceleași simboluri ca PyTorch, sumele rezervelor neschimbate)
+- aprobat de: Adrian (COMENZI.md C-82, 6 nov 2026 17:39, „Da 513”)
+- raport: —
+
+### S84 — C-85 pasul 1: lista punctelor de salvare `.pt` (ce s-ar păstra / ce s-ar putea șterge) — unealtă nouă, DOAR LISTĂ, nimic șters (procesor + disc)
+- stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 1, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 20:15)
+- tip: procesor + disc (doar citire), fără placă
+- fereastră: **după ce S83 e `gata` sau `oprit`** (nu în timp ce S77e rulează: citirea a ~100 GB ar încetini antrenarea)
+- durată maximă: 1,5 ore
+- de ce: C-85 pasul 1 — discul se umple cu modele intermediare (S79: `.pt` ~114 GB). Regula: după verdict se păstrează doar câștigătorul + rezervele numite; restul se șterge DOAR după ce numele, SHA-256 și scorul sunt în jurnal. **Prima rulare e doar listă**, ca Adrian să vadă totalul.
+- ce faci:
+  1. Unealtă nouă `unelte/puncte_salvare.py` (nu atinge `kronos/`, `module/`, examenul): comanda `lista` caută toate fișierele `.pt` din `lucru/` și scrie pentru fiecare: calea, mărimea, SHA-256, linia și experimentul din jurnal (doar citit), scorul (română curat / cod curat / R1, ce există în jurnal sau în rapoarte) și clasa **PĂSTREAZĂ** sau **SE POATE ȘTERGE**, cu motivul.
+  2. **PĂSTREAZĂ** mereu: #459, #477, #513, `lucru/cod_c1/gpt.pt`, modelul în uz (după S83: #513), `lucru/w2_mare/gpt_24.pt`, tot ce e numit în pre-înregistrările încă deschise și în sarcinile `aprobat`/`in_lucru` din coadă, cel mai bun punct al fiecărei linii (câștigătorul) și orice fișier pe care unealta nu-l poate lega de jurnal (clasa „NECUNOSCUT — păstrat”). Lista rezervelor numite stă într-un fișier de configurare mic (de ex. `config/puncte_salvare.toml`), nu în cod.
+  3. Unealta **nu are comandă de ștergere** în pasul ăsta. Ieșirea: `lucru/puncte_salvare/lista_<data>.json` + tabelul în raport.
+  4. Teste noi în `teste/` (fișiere `.pt` false într-un dosar temporar): rezervele numite ies mereu PĂSTREAZĂ; un fișier fără jurnal iese NECUNOSCUT; unealta nu șterge și nu modifică nimic (sumele înainte = după). `python -m pytest`: toate trec.
+  5. Raport `docs/rapoarte/<data>_<ora>_S84_puncte_salvare.md`: totalul pe clase (număr de fișiere și GB), primele 20 cele mai mari din „SE POATE ȘTERGE”, lista NECUNOSCUT. 3 rânduri sus în `plan/pentru_adrian.md`, cu întrebarea pentru Adrian: „ștergem clasa SE POATE ȘTERGE (X GB)? da/nu”. Coada → `gata`; commit + push.
+- Nu ștergi, nu muți, nu redenumești nimic; nu scrii în jurnal; nimic din `lucru/` în Git.
+- pre-înregistrare: nu e nevoie (fără antrenare, fără placă)
+- aprobat de: Adrian (COMENZI.md C-85, 6 nov 2026 17:56, pasul 1)
+- raport: —
