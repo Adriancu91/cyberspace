@@ -2881,7 +2881,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
-- stare: in_lucru (executant, 6 nov 2026 02:30)
+- stare: gata (executant, 6 nov 2026 02:40): **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere**; toate 5 grupurile copiate (inclusiv baza geografică `f8547edc…`), 3.260 fișiere + 2 bundle-uri (101 / 78 commit-uri, verify okay), SHA-256 sursă = copie 0 diferențe (2 treceri); C: 35,25 → 33,72 GB liberi; nimic șters; 1237 teste trec, 1 sărit, 1 pică doar din cauza discului (cunoscut, 6 nov)
+- (istoric) stare: in_lucru (executant, 6 nov 2026 02:30)
 - (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 20:15 — deblocat: **textul întreg al C-77 e în `plan/comenzi_hub_C76_C77.md`**; citește-l de acolo, nu mai ai nevoie de hub). **23:15: S77b a picat → faci S78 după ce S77c a pornit și a trecut verificarea de la 15 minute; dacă S77c nu pornește la noapte, faci S78 imediat.** Doar procesor + disc, regula de 10 %.
 - (istoric) stare: oprit (executant, 5 nov 2026 18:30) — nimic copiat, nimic șters
 - motiv: nu pot citi COMENZI.md C-77 (hub-ul nu e pe disc; `git clone` al hub-ului și citirea de pe web cer aprobare, `gh` blocat) → lista grupurilor 1–5 lipsește. Cer: textul C-77 (și C-76 pentru S79) copiat în coadă de supraveghetor, sau voie de la Adrian pentru clonarea hub-ului.
@@ -2898,7 +2899,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   6. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S78_mini_brain.md` (ce s-a copiat, GB, manifest, verificarea, spațiul liber înainte/după); coada → `gata`; în rezumatul tău scrii rândul: „Mini Brain salvat (X GB în arhivă) — Adrian poate șterge ambele foldere” (sau, dacă grupul 4 a rămas necopiat din lipsă de loc: „… DAR baza geografică nu e încă salvată — NU șterge încă `test ai brain v13 clean`”). Commit + push.
 - **Nimic șters de tine** (nici sursele, nici altceva). Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, `config/`, #477/#459/#513, linia `cod_c1*`, ramura `limba-romana`. Nimic din arhivă în Git.
 - aprobat de: **Adrian (COMENZI.md C-77, 5 nov 2026 13:40)**; preluat de supraveghetor 5 nov 2026 13:45
-- raport: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md
+- raport: docs/rapoarte/2026-11-06_0240_S78_mini_brain.md (înainte: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md)
 
 ### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
 - stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)

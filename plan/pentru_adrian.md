@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 02:40 — (executant, S78 / C-77) Mini Brain salvat
+
+- **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere** (`test ai brain v13 clean` și `test ai brain`).
+  Arhiva: `C:\Kronos\arhiva\mini-brain\` (3.260 de fișiere + 2 pachete git, inclusiv baza geografică activă; 0 diferențe la verificare).
+  Raportul: `docs/rapoarte/2026-11-06_0240_S78_mini_brain.md`. Nimic șters de mine.
+
 
 ## 6 noiembrie 2026, 02:15 — Kronos mare a mers doar 2 ore din 5 (iar lipsă de memorie) și a ieșit mai slab; discul C: aproape plin
 
