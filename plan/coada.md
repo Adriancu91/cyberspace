@@ -2902,7 +2902,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0240_S78_mini_brain.md (înainte: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md)
 
 ### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
-- stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
+- stare: in_lucru (executant, 6 nov 2026 03:00)
+- (istoric) stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
 - tip: procesor + disc (măsurători, SHA-256, un raport). Fără placă, fără antrenare, nimic instalat.
 - fereastră: **după S78** (C-77 are prioritate, cum cere Adrian). Poate rula și în timpul nopții S77b (doar citire de pe disc; aceeași regulă: dacă pașii/s ai nopții scad cu peste 10 %, pui pe pauză până dimineață). S76c rămâne pentru 6 nov de la 08:00 dacă nu apucă azi.
 - durată maximă: ~3 ore.
