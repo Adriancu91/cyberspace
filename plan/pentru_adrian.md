@@ -3,6 +3,13 @@
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
 
+## 6 noiembrie 2026, 02:15 — Kronos mare a mers doar 2 ore din 5 (iar lipsă de memorie) și a ieșit mai slab; discul C: aproape plin
+
+- **S77c: OPRIT, verificat de mine — corect.** Modelul de 24 de straturi a învățat 2 ore, apoi la ora 3 n-a mai încăput în limita de memorie (placa n-a fost în pericol: max 6.433 MB, 64 °C). Fără ora 5 nu există verdict (NEMĂSURAT). Dar cifrele de la ora 2 spun cinstit: **a dat înapoi** față de #477 (română 1,2268 față de 1,2096; codul și poveștile tot mai rău), încă din prima oră. #477 rămâne în uz, nimic stricat.
+- **Pus în coadă (aprobat de mine):** **S81** — reparația care face ca o oră anulată să oprească lanțul (acum mergea mai departe ca și cum totul ar fi bine); **S77d** (azi pe zi, după ce termini tu la workstation, ~2,5 h pe placă) — două ore scurte cu rată de învățare mai mică, ca să vedem ieftin dacă asta e cauza, înainte de încă o noapte întreagă. **S78 (Mini Brain) și S79 (raportul de spațiu) merg acum, la noapte**; S76c azi pe procesor.
+- **Discul C: are doar 34 GB liberi** (sub pragul de 40 GB al uneltelor) → un test pică din cauza asta, nu din cauza codului. Până faci loc, am spus executantului să-l treacă în raport ca „cunoscut” și să nu se blocheze în el; orice alt test picat oprește lucrul ca de obicei. Am ridicat paza la Mini Brain: se lasă baza geografică necopiată dacă ar rămâne sub 25 GB.
+- **Aștept de la tine (azi, la workstation):** după raportul S79, alege ce grupuri de fișiere se pot șterge (candidatul cel mai mare: arhiva `cyberspace_mutare` de 25,6 GB, dacă S79 arată că nu are nimic în plus). Până nu scrie aici „Mini Brain salvat”, nu șterge cele două foldere „test ai brain”. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
+
 ## 5 noiembrie 2026, 23:15 — Prima noapte a lui Kronos mare a căzut după un minut (lipsă de memorie pe placă); am pus reluarea, tot la noapte
 
 - **S77b: OPRIT, verificat de mine — corect.** Antrenarea a pornit la 20:41 și s-a oprit singură după ~1 minut: a cerut puțin mai multă memorie (384 MB) decât limita de siguranță pe care i-am pus-o (5.800 MB). Placa n-a fost în pericol (max 4.755 MB, 32 °C), nimic stricat, **1238 teste trec**. Executantul n-a repornit nimic singur, cum scrie în reguli.
@@ -141,11 +148,3 @@
 - **Comenzile tale C-60 și C-62 preluate** (alegerea la S66 e făcută). Pus în coadă: **S69** (acum, doar procesor, ~2–3 ore): exercițiile „explicație + antet → corp” din toate funcțiile bune (319.430, cele autonome de 2 ori), amestecate 25 % cu 75 % cod obișnuit; **S70** (la noapte, de la 19:00, 8 ore pe placă): antrenare din modelul S63, pe o copie (originalul rămâne rezervă), apoi examenul pe același set de 163 ca la S63. Pragurile scrise dinainte: AJUTĂ = cel puțin **8/163** (S63: 3/163) fără să strice codul obișnuit; NU AJUTĂ = cel mult 4/163.
 - **Mâine ziua: S71**, memoria de cod („rege / regat”): caută 2–4 funcții asemănătoare și i le pune în față lui Kronos; măsurat întâi pe setul de probă. **Școala de cod (S72)** și **alegerea datelor de către Kronos (S73, C-62)** le detaliez după rezultatul de la noapte.
 - **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 3 noiembrie 2026, 08:20 — Funcțiile „care merg singure” (S67): ÎNTRE; o numărătoare mai blândă după 11:30; fereastra ta 09:00–11:30 e liberă
-
-- **S67 gata, verificat de mine: ÎNTRE.** Funcțiile care merg cu adevărat singure (nu sunt goale, rulează în cutie, nu cer nimic din afara lor) sunt **83.349**, cu **3,55 milioane** de simboluri de cod (pragul de jos 3 mil., cel de sus 10 mil.). Cu exemplu/test lângă ele: doar 7.182. Nicio scurgere din seturile ascunse. **1186 teste trec.** S-a terminat la 06:35, deci **calculatorul e liber pentru tine la 09:00**. Raportul de dimineață e scris.
-- **Pus în coadă (aprobat de mine, doar procesor, ~1 oră, după 11:30): S68** — multe funcții au căzut doar pentru că `os`/`numpy` sunt importate sus în fișier, iar multe dintre cele rămase sunt „metode” care nu se pot chema singure ca la examen. Numărăm cu o regulă mai blândă și separăm funcțiile chemabile, ca la varianta A să ai cifra corectă.
-- **Placa** rămâne liberă azi și la noapte până alegi la S66.
-- **Aștept de la tine:** după testele tale, alegerea la **S66** („da S66 A / B / C”, sau direcția în cuvintele tale). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată (azi, la pregătirea ei), Release-ul #477.
-

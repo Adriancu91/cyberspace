@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 6 nov 2026 (supraveghetor, 02:15):** S77c verificat: **OPRIT/NEMĂSURAT corect** (out of memory la ora 3, doar 2 ore; nimic repornit — corect). **Discul C: are 34 GB liberi (sub 40 GB)** → testul `test_unealta_cap_coada_fara_excluse_si_fara_validare_la_antrenare` pică din cauza discului, nu a codului. **Până când Adrian face loc:** dacă ACESTA e singurul test picat (1 picat, restul trec), îl scrii în raport și în coadă ca „1 test pică doar din cauza discului (cunoscut, 6 nov)” și poți marca sarcina `gata`; orice alt test picat → regula obișnuită. Nu ștergi nimic, nu schimbi pragul de 40 GB. **Ordinea:** noaptea asta (placa liberă) **S78 → S79** (procesor + disc; S79 e cea mai urgentă pentru Adrian, care e la workstation pe la 08:30 — raportul de spațiu trebuie să fie gata până atunci dacă se poate). Ziua de 6 nov: **S81** (reparația codului de ieșire, procesor, ~30 min) → **S77d** (placa, ~2,5 h: de ce strică modelul mare în prima oră — două rate mai mici); **S76c** (procesor) poate merge în paralel cu S77d. Nimic pe placă cât Adrian lucrează la workstation. Noaptea 6→7: o scriu eu la 17:15 / 20:15, după cifrele S77d.
+
 **⚠ ACUM — 5 nov 2026 (supraveghetor, 09:05; COMENZI.md C-73, Adrian — PRELUNGIT la 08:59):** fereastra lui Adrian pe workstation e acum **~08:30–~14:00**: **nimic pe placă și nimic lung pe procesor până la 14:00**; dacă rulează ceva, se oprește curat. **S77a** (jos, `aprobat`) pornește **doar după 14:00** și are prioritate (cifrele ei trebuie gata până la **18:30**, pentru noaptea S77b). **S76c** vine după S77a doar dacă se poate termina până la 18:30; altfel se mută pe **ziua de 6 nov** (nu încarcă procesorul peste noaptea S77b). S76b = AJUTĂ (verificat). **11:15:** nimic schimbat — fereastra lui Adrian continuă, nimic nu rulează; S77a rămâne pentru după 14:00. **13:45 — comenzi noi de la Adrian:** **S78** (C-77, salvarea „Mini Brain”) și **S79** (C-76, raportul de spațiu) — doar procesor și disc, **nimic șters**; ordinea după 14:00: **S77a → S78 → S79**; S76c pe 6 nov de la 08:00 dacă nu apucă azi. S78/S79 pot continua noaptea, fără să încetinească S77b. **14:20 — C-78:** Adrian a reînnoit autentificarea Claude Code pe workstation (`claude auth login`, „Login successful”). Fereastra lui s-a terminat → pornește **S77a** acum. Executant: dacă mai vezi în jurnal avertismentul de expirare a autentificării, scrie-l sus în `plan/pentru_adrian.md` (Adrian e la workstation pe 6 nov ~08:30). **17:15 — DEBLOCARE:** executantul a raportat la 14:29 că `cascada.py stare` dă `"liber": false` din cauza înregistrării vechi `S42_0833.json` (PID 19792 refolosit de Windows pentru `dllhost.exe`). **Fă ACUM S80** (jos, `aprobat`, repararea lui `unelte/cascada.py`, granița 6) — **nu** editezi de mână `S42_0833.json`. Imediat după S80: **S77a**, cu fereastra mutată (vezi la S77a): partea de procesor pornește imediat, măsurătorile pe placă până la 18:30 sau de la 19:00, totul gata până la **23:30**. Apoi S78 → S79 (pot merge și în timpul nopții S77b, cu regula de 10 %). S76c rămâne pe 6 nov de la 08:00. **S77b** o scriu eu la 20:15 / 23:15, după cifrele S77a. **20:15 — S77a = GATA (verificat), S77b scrisă și `aprobat` (jos, imediat sub S77a): pornește ACUM, noaptea 5→6 nov, pornire cel târziu la 00:15.** **S78 deblocat:** textul întreg al C-77 și C-76 e acum în `plan/comenzi_hub_C76_C77.md` (nu mai ai nevoie de hub); S78 e iar `aprobat` și merge după ce S77b a pornit (doar procesor + disc, regula de 10 %), apoi S79. S76c rămâne pe 6 nov de la 08:00. **23:15 — S77b a căzut după ~1 minut (out of memory, verificat: OPRIT corect). Fă ACUM S77c (sub S77b, `aprobat`): aceeași noapte cu lot 6 × `adunare_loturi = 16`, linia nouă `w2_mare_24b`, pornire cel târziu la 00:30; altfel noaptea 6→7 de la 19:00. Apoi S78 → S79 (sau imediat, dacă S77c nu pornește). S76c pe 6 nov de la 08:00.**
 
 **Ordinea pe 21 octombrie, ziua (scrisă de supraveghetor, 21 oct 02:15):** S10 (examene scurte, placa), apoi S11 (datele
@@ -2831,7 +2833,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-05_2115_S77b_kronos_mare_noaptea1.md
 
 ### S77c — Reluarea S77b cu lot 6 × `adunare_loturi = 16` (același lot efectiv 96, mai puțină memorie): prima noapte a lui Kronos de 24 de straturi, linie nouă `w2_mare_24b`
-- stare: oprit (executant, 6 nov 2026 02:00)
+- stare: oprit — **verificat de supraveghetor 6 nov 02:15: OPRIT/NEMĂSURAT corect** (modelul de la ora 5 nu există; informativ #518 ar fi STRICĂ: cod 0,7413 > 0,7320, R2 0,4155 > 0,4110; română 1,2268 > 1,2110; curba plată 0,4154 → 0,4155, deja la ora 1 mai rău decât #477 0,4060) → diagnoza în **S77d**, reparația codului de ieșire în **S81**
+- (istoric) stare: oprit (executant, 6 nov 2026 02:00)
 - motiv: antrenarea s-a oprit după ora 2 din 5 — ora 3 (#519) anulată la 01:43 cu CUDA out of memory la testul rapid (plafonul PyTorch 5.800 MB); unealta a ieșit cu cod 0, examenele au rulat pe #518 (ora 2). Verdict NEMĂSURAT; informativ #518: română 1,2268 vs #513 1,2060, cod 0,7413, R2 0,4155 (ar fi STRICĂ). Nimic repornit.
 - raport: docs/rapoarte/2026-11-06_0159_S77c_kronos_mare_noaptea1.md
 - (istoric) stare: in_lucru (executant, 5 nov 2026 23:30)
@@ -2887,7 +2890,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - durată maximă: ~3 ore.
 - ce faci: **exact ce scrie în `COMENZI.md` C-77 din hub — copiat întocmai în `plan/comenzi_hub_C76_C77.md`** (citește-o întreagă, apoi `C:\Users\Computer\Desktop\raport-test-ai-brain.md`). Pe scurt:
   1. Sursele (doar CITIRE): `C:\Users\Computer\Desktop\test ai brain v13 clean` și `C:\Users\Computer\Desktop\test ai brain`. Destinația: `C:\Kronos\arhiva\mini-brain\` (**în afara** repo-ului git).
-  2. **Paza discului (adăugată de supraveghetor — workstation-ul are doar ~40 GB liberi):** înainte de copiere măsori mărimea fiecărui grup din C-77 (1–5) și spațiul liber de pe C:. Dacă după copiere ar rămâne **sub 20 GB liberi** (noaptea S77b are nevoie de loc pentru salvări), copiezi grupurile 1, 2, 3 și 5 și **NU** grupul 4 (baza geografică + `raw\`): scrii mărimea lui în raport și îl lași pentru după ce Adrian eliberează loc (C-76 / S79).
+  2. **Paza discului (adăugată de supraveghetor — workstation-ul are doar ~40 GB liberi):** înainte de copiere măsori mărimea fiecărui grup din C-77 (1–5) și spațiul liber de pe C:. Dacă după copiere ar rămâne **sub 25 GB liberi** (ridicat de la 20 la 25 GB de supraveghetor, 6 nov 02:15: discul are acum doar 34 GB liberi, iar S77d are nevoie de ~5 GB) (noaptea S77b are nevoie de loc pentru salvări), copiezi grupurile 1, 2, 3 și 5 și **NU** grupul 4 (baza geografică + `raw\`): scrii mărimea lui în raport și îl lași pentru după ce Adrian eliberează loc (C-76 / S79).
   3. Copiezi (NU muți) după lista din C-77; NU copiezi `*.pt`, `.venv*`, `.standard05-cache`, `__pycache__`, pachetul `.git` mare, cele 4 build-uri geografice vechi. Istoria git: `git bundle create <nume>.bundle --all` pentru fiecare folder, apoi `git bundle verify`.
   4. `MANIFEST.txt` (fiecare fișier + SHA-256) și verificarea sursă = copie pe toate fișierele copiate (scrii câte, câți GB, câte diferențe — trebuie 0). `CITESTE-MA.md` în arhivă (ce e unde, ce s-a lăsat și de ce).
   5. În repo: **un singur** document `docs/studiu/2026-11-05_lectii-mini-brain.md` cu lecțiile cerute în C-77 (testul mic de format înaintea rulărilor lungi — greșeala „NONE”/null; doar câștigătorul + `*.pt` în `.gitignore`; maxim 2–3 încercări pe întrebare; modulul „fapte verificate” doar ca PROPUNERE, fără cod). Fără date mari în git.
@@ -2908,4 +2911,44 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   4. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S79_spatiu_workstation.md`; coada → `gata`; commit + push.
 - **NIMIC șters, mutat sau dezarhivat pe disc** — Adrian aprobă pe grupuri (ștergerea de modele sau date e doar cu „da”-ul lui). Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`.
 - aprobat de: **Adrian (COMENZI.md C-76, 5 nov 2026 13:15)**; preluat de supraveghetor 5 nov 2026 13:45
+- raport: docs/rapoarte/…
+
+### S81 — Reparație: `unelte/antrenare_lunga.py` / `antrenare_recalcul.py` ies cu cod ≠ 0 când o oră e anulată (ca lanțurile să nu meargă mai departe pe un model neașteptat) (doar procesor, ~30–45 min)
+- stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
+- tip: procesor (cod în `unelte/` + teste). Fără placă.
+- fereastră: ziua de 6 nov, **înainte de S77d** (după S78/S79 dacă acestea rulează încă; poate și noaptea, dacă S78/S79 sunt gata).
+- durată maximă: ~45 min.
+- de ce: la S77c ora 3 (#519) a fost **anulată** (out of memory la testul rapid), dar unealta a ieșit cu **cod 0**, iar lanțul a mers la examene pe #518, ca și cum totul ar fi mers.
+- ce faci:
+  1. Găsești de ce `antrenare_lunga.main` întoarce 0 când un experiment al rulării e `anulat` (variabila `oprita` și ramurile `return 1` / `return 0`). Repari astfel încât **orice oră anulată sau oprire înainte de vreme → cod de ieșire 1** (cu un rând clar în log: „oprit înainte de vreme: ora N anulată — <motivul>”); o rulare întreagă, fără anulări, rămâne cod 0. `antrenare_recalcul.py` doar transmite codul.
+  2. Teste noi în `teste/` (fără placă): o oră anulată → cod 1; toate orele bune → cod 0; `--raport` neschimbat.
+  3. Nu schimbi plafonul de 5.800 MB, nici ce se antrenează. Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`.
+  4. `python -m pytest` (regula de sus pentru testul de disc); raport scurt `docs/rapoarte/<data>_<ora>_S81_cod_iesire.md`; coada → `gata`; commit + push.
+- aprobat de: supraveghetor, 6 nov 2026 02:15 (granițele 5 și 6: reparația unui script care a dat un rezultat greșit, teste noi; nu atinge `kronos/`)
+- raport: docs/rapoarte/…
+
+### S77d — De ce strică modelul de 24 de straturi încă din prima oră? Două ore scurte cu rată mai mică și încălzire mai lungă (lot 4 × 24), față de ora 1 din S77c (placa, ~2,5 h)
+- stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
+- tip: placă (2 × 1 oră de antrenare + validări scurte)
+- fereastră: **ziua de 6 nov, după S81 `gata`**, doar când Adrian **nu** lucrează la workstation (dacă e acolo pentru testul OS, pornești după ce a terminat). Totul gata până la **18:30**; dacă nu încape (ambele ore + validări), NU pornești ziua → rămâne `aprobat` pentru noaptea 6→7 de la 19:00, iar eu decid la 17:15 / 20:15.
+- durată maximă: 2 ore de antrenare + ~20 min (pauze, validări).
+- de ce: la S77c, modelul de 24 de straturi (ieșire identică cu #477 la pornire: R2 ~0,4060, română 1,2096) avea deja după **ora 1** R2 **0,4154** și după ora 2 română **1,2268** — a stricat ce știa #477, iar curba nu cobora. #513 (12 straturi, aceeași rețetă, rata 5e-5) nu a pățit asta. Ipoteza (de verificat, nu e sigură): pentru straturile noi, pornite „neutre”, rata 5e-5 cu încălzire de doar 100 de pași și AdamW gol strică echilibrul în primele minute. Înainte de încă o noapte întreagă, verificăm ieftin. Lot 4 × 24 = 96 (același lot efectiv) dă și rezervă de memorie (S77c a stat la 5.738 MB din 5.800).
+- ce faci:
+  0. **Verificări:** S81 `gata`; spațiu liber pe C: **≥ 20 GB** (altfel `oprit`, raport, nimic șters); `lucru/w2_mare/gpt_24.pt` SHA-256 `d35e3dbe…92cc`; folderele `lucru/w2_mare_24d1/` și `lucru/w2_mare_24d2/` **nu există**.
+  1. Două configurări noi, **copii ale `config/conv_w2_mare_24b.toml`** cu DOAR: `nume`, `cale_stare`, eticheta/antetul, **`lot = 4`**, **`adunare_loturi = 24`**, `spatiu = { model = { lot = [4] } }` la cercetător, și:
+     - `config/conv_w2_mare_24d1.toml` (linia `w2_mare_24d1`): **`rata_invatare = 0.00001`**, **`incalzire_pasi = 1000`**;
+     - `config/conv_w2_mare_24d2.toml` (linia `w2_mare_24d2`): **`rata_invatare = 0.00002`**, **`incalzire_pasi = 1000`**.
+     Restul identic (inclusiv `durata_scaderii_secunde = 18000`, ca ora 1 să fie comparabilă cu ora 1 din S77c). Diff-ul în raport.
+  2. Pre-înregistrarea `python unelte/preinregistrare.py --nume w2_mare_24d --titlu "S77d: rata mai mică pentru modelul de 24 de straturi, o oră pe variantă"` cu pragurile de mai jos copiate exact; commit + push **ÎNAINTE** de pornire.
+  3. Un lanț prin cascadă (`cascada.py porneste S77d -- ...`), oprire la primul cod ≠ 0, cu `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` setat doar pentru procesul lanțului (nu în Windows): pentru fiecare variantă, pe rând: copia lui `gpt_24.pt` ca `lucru/w2_mare_24dN/gpt.pt` (SHA copie = original), apoi `python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24dN.toml --ore 1 --fara-copie-racita` (plafonul 5.800 MB neschimbat), apoi `examen_validari_ws.py --linie w2_mare_24dN`. La final `examen_validari_ws.py --experiment 477` (re-măsurat). Paza memoriei ca la S77c (peste 6.700 MB → oprire curată → `oprit`); paznicul rămâne pornit. Fără nota R1 (nu e nevoie aici).
+  4. **Pragurile** (pe modelul de la ora 1 al fiecărei variante; fixate acum):
+     - **ȚINE:** R2 ≤ **0,4090** și română curat ≤ #477 re-măsurat + **0,003** și cod curat ≤ #477 re-măsurat + **0,005**.
+     - **AJUTĂ PUȚIN:** R2 < **0,4154** (ora 1 din S77c, #517) dar nu ȚINE.
+     - **NU AJUTĂ:** R2 ≥ 0,4154.
+     - Informativ: română și cod față de #477 și față de #518; memoria max (PyTorch și `nvidia-smi`), pași/s, °C.
+     - Ce urmează (scris acum): dacă cel puțin o variantă ȚINE → noaptea 6→7, 5 ore pe cea mai bună (cea cu R2 mai mic) față de #513, cu pragurile S77b; dacă niciuna nu ține → nu mai punem nopți pe 24 de straturi până la o idee nouă (de exemplu întâi doar straturile noi), scrisă ca sarcină separată.
+  5. SHA-256 #477 și `gpt_24.pt` înainte = după. `python -m pytest` (regula de sus pentru testul de disc); închizi pre-înregistrarea; raport `docs/rapoarte/<data>_<ora>_S77d_rata_mare24.md`; coada → `gata` cu verdictul pe fiecare variantă; commit + push.
+- Modelele noi **nu** înlocuiesc #477 nicăieri. Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, #477/#459/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24/`, `lucru/w2_mare_24b/`, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
+- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24d.md (de scris și urcat înainte de pornire)
+- aprobat de: supraveghetor, 6 nov 2026 02:15 (granița 1: aceeași linie de 24 de straturi din C-64, altă rată și alt lot; granița 2: validări)
 - raport: docs/rapoarte/…
