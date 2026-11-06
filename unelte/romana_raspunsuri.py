@@ -21,7 +21,14 @@ ascuns și o notă automată, fără alt AI (profesorul Qwen NU se folosește ai
 - **reper**: un model salvat de Kronos (#477) scrie răspunsurile la setul ascuns pe placă (cea mai probabilă bucată,
   cel mult 64 de simboluri), apoi `noteaza`. Greutățile doar citite (SHA-256 înainte și după).
 
+- **reformulat** (S76c, 6 nov 2026): instrucțiunile setului ascuns (aceleași articole, referințe și chei), cu
+  întrebarea spusă altfel (`REFORMULARI`, cel puțin 2 șabloane pe fel, niciunul găsit în `antrenare.jsonl`) →
+  `ascuns_reformulat.jsonl` + `info_reformulat.json`. La „locuitori”, numărul se citește întreg (`numar`: „1,091” =
+  „1.091” = 1091) și cheia tăiată din S76a („000” din „122,000”) se repară. `reper --set …` îl examinează;
+  `renoteaza-reparat` re-notează răspunsurile vechi pe S76a doar cu perechea reparată.
+
     python unelte/romana_raspunsuri.py construieste
+    python unelte/romana_raspunsuri.py reformulat
     python unelte/romana_raspunsuri.py proba
     python unelte/romana_raspunsuri.py reper --experiment 477 --iesire lucru/romana_raspunsuri/reper_477
     python unelte/romana_raspunsuri.py noteaza --raspunsuri <raspunsuri.json> --iesire <nota.json>
@@ -562,12 +569,16 @@ def nota_corect(p: dict[str, Any], raspuns: str) -> bool:
         return bool(cuvinte) and cuvinte[0] == norm(p["cheie"][0])
     if p["fel"] in REFUZ:
         return contine(raspuns, NU_SCRIE)
+    if "numar" in p:  # S76c: numărul de locuitori citit întreg („1,091” = „1.091” = „1091”)
+        return p["numar"] in numere(raspuns) and not spune_nu_scrie(raspuns)
     return all(contine(raspuns, c) for c in p["cheie"]) and not spune_nu_scrie(raspuns)
 
 
 def nota_in_tema(p: dict[str, Any], raspuns: str) -> bool:
     if p["fel"] in REFUZ:
         return spune_nu_scrie(raspuns)
+    if "numar" in p and p["numar"] in numere(raspuns):
+        return True
     bucati = [p["subiect"], cuvant_principal(p["subiect"])] if p["subiect"] else []
     return any(contine(raspuns, b) for b in bucati + list(p["cheie"]))
 
@@ -665,6 +676,234 @@ def proba(perechi: list[dict[str, Any]]) -> dict[str, Any]:
     return rez
 
 
+# --- S76c: numerele întregi și instrucțiunile formulate altfel ------------------------------------------------------
+
+_NUMAR_TOT = re.compile(r"\d+(?:[.,]\d+)*")
+_LOCUITORI = re.compile(r"(\d+(?:[.,]\d+)*)\s+(?:de\s+)?locuitori")
+
+
+def numar_intreg(s: str) -> int | None:
+    """Un număr scris cu sau fără despărțitor de mii, citit întreg: „1,091” = „1.091” = „1091” → 1091;
+    „3.671.032” → 3671032. Un număr zecimal („2,5”, „492,04”) → None."""
+    s = s.strip().rstrip(".,")
+    if not re.fullmatch(r"\d+(?:[.,]\d+)*", s):
+        return None
+    grupuri = re.split(r"[.,]", s)
+    if len(grupuri) == 1:
+        return int(s)
+    if 1 <= len(grupuri[0]) <= 3 and all(len(g) == 3 for g in grupuri[1:]):
+        return int("".join(grupuri))
+    return None
+
+
+def numere(text: str) -> list[int]:
+    """Toate numerele întregi dintr-un răspuns, citite întregi (fără cele zecimale)."""
+    return [n for m in _NUMAR_TOT.finditer(text) if (n := numar_intreg(m.group(0))) is not None]
+
+
+def cu_puncte(n: int) -> str:
+    return f"{n:,}".replace(",", ".")
+
+
+def numar_locuitori(p: dict[str, Any]) -> int | None:
+    """Numărul întreg de locuitori din textul perechii („… 122,000 locuitori”), cel care se termină cu cifrele cheii
+    (în S76a cheia putea fi doar ultima grupă: „122,000” → „000”)."""
+    cifre = re.sub(r"\D", "", p["cheie"][0])
+    for m in _LOCUITORI.finditer(p.get("text", "")):
+        n = numar_intreg(m.group(1))
+        if n is not None and cifre and str(n).endswith(cifre):
+            return n
+    return numar_intreg(p["cheie"][0])
+
+
+def repara_numar(p: dict[str, Any]) -> dict[str, Any]:
+    """Copie a perechii. La „locuitori” (nu la refuzuri): câmpul `numar` (întreg, cu care se notează); dacă cheia
+    S76a era tăiată („091” din „1,091”), cheia și referința primesc numărul întreg, iar `reparat` ține cheia veche."""
+    q = dict(p)
+    if p.get("tip") != "locuitori" or p["fel"] in REFUZ or not p.get("cheie"):
+        return q
+    n = numar_locuitori(p)
+    if n is None:
+        return q
+    q["numar"] = n
+    vechi = p["cheie"][0]
+    if numar_intreg(vechi) != n:
+        nou = cu_puncte(n)
+        q["cheie"] = [nou] + list(p["cheie"][1:])
+        q["raspuns"] = p["raspuns"].replace(vechi, nou, 1)
+        q["reparat"] = vechi
+    return q
+
+
+def _mare(s: str) -> str:
+    return s[:1].upper() + s[1:]
+
+
+# Formulările noi (cel puțin 2 pe fel). Câmpurile: {x} subiectul, {rest} restul întrebării vechi, {q} întrebarea da/nu.
+REFORMULARI: dict[str, list[str]] = {
+    "propozitie": ["{Cine} {verb} {x}? Explică într-o singură propoziție.",
+                   "Într-o singură frază, te rog: {cine} {verb} {x}?",
+                   "Descrie pe scurt {x}, cu o singură propoziție."],
+    "rezuma": ["Care e ideea textului, pe scurt? O propoziție.",
+               "Despre ce e vorba în text? Răspunde într-o singură frază.",
+               "Fă un rezumat al textului dintr-o singură propoziție."],
+    "an": ["În ce an {rest}? Doar anul, te rog.",
+           "Când {rest}? Răspunde numai cu anul.",
+           "Anul în care {rest} — doar cifrele, fără alte cuvinte."],
+    "nume": ["Cine {rest}? Dă doar numele.",
+             "Numele persoanei care {rest}, fără altceva.",
+             "Spune-mi doar numele: cine {rest}?"],
+    "capitala": ["Care este capitala pentru {x}? Dă doar numele.",
+                 "Capitala pentru {x}? Numai numele, te rog."],
+    "locuitori": ["Câți locuitori are {x}? Răspunde numai cu numărul.",
+                  "Populația din {x}, în cifre? Doar numărul, te rog.",
+                  "Cât de populat e {x}? Scrie numai câți locuitori are."],
+    "suprafata": ["Ce suprafață are {x}? Doar cifra și unitatea.",
+                  "Cât de mare e {x}, ca suprafață? Răspunde numai cu suprafața."],
+    "judet_tara": ["{x} — {unitatea} și țara?",
+                   "În ce {unitate} și în ce țară se află {x}? Spune-le pe amândouă.",
+                   "Unde e {x}: ce {unitate}, ce țară?"],
+    "da_nu": ["Da sau nu: {q}",
+              "{q} Spune doar da sau nu.",
+              "Te rog, numai „da” sau „nu”: {q}"],
+}
+
+_VECHI = [
+    ("propozitie", re.compile(r"^Spune într-o propoziție (?P<cine>cine|ce) (?P<verb>este|a fost) (?P<x>.+)\.$")),
+    ("rezuma", re.compile(r"^Rezumă textul într-o propoziție\.$")),
+    ("an", re.compile(r"^Scrie doar anul în care (?P<rest>.+)\.$")),
+    ("capitala", re.compile(r"^Scrie numele capitalei pentru (?P<x>.+)\.$")),
+    ("nume", re.compile(r"^Scrie numele celui care (?P<rest>.+)\.$")),
+    ("locuitori", re.compile(r"^Scrie doar numărul de locuitori din (?P<x>.+)\.$")),
+    ("suprafata", re.compile(r"^Scrie doar suprafața pe care o are (?P<x>.+)\.$")),
+    ("judet_tara", re.compile(r"^Spune în ce (?P<unitate>județ|raion) se află (?P<x>.+) și din ce țară face parte\.$")),
+    ("da_nu", re.compile(r"^Răspunde cu da sau nu: (?P<q>.+)$")),
+]
+
+
+def reformuleaza(intrebare: str, k: int) -> tuple[str, str]:
+    """Instrucțiunea S76a spusă altfel: (întrebarea nouă, șablonul folosit). `k` alege șablonul (k mod câte sunt)."""
+    for fel, model in _VECHI:
+        m = model.match(intrebare.strip())
+        if m is None:
+            continue
+        c = m.groupdict()
+        if "cine" in c:
+            c["Cine"] = _mare(c["cine"])
+        if "unitate" in c:
+            c["unitatea"] = c["unitate"] + "ul"
+        sabloane = REFORMULARI[fel]
+        sablon = sabloane[k % len(sabloane)]
+        return sablon.format(**c), sablon
+    raise ValueError(f"nu știu să reformulez: {intrebare!r}")
+
+
+def regula_sablonului(sablon: str) -> re.Pattern[str]:
+    """Expresia care recunoaște orice întrebare făcută cu șablonul (câmpurile = orice text)."""
+    import string
+
+    parti = []
+    for literal, camp, _, _ in string.Formatter().parse(sablon):
+        parti.append(re.escape(literal))
+        if camp is not None:
+            parti.append(".+?")
+    return re.compile("".join(parti), re.IGNORECASE)
+
+
+def reformulat(args: argparse.Namespace) -> dict[str, Any]:
+    """Setul S76c: instrucțiunile setului ascuns S76a (aceleași articole, referințe și chei), cu întrebarea formulată
+    altfel; numărul de locuitori citit întreg (cheia tăiată „091” reparată)."""
+    from module.model_conversatie import intrebarea
+    from unelte.genereaza_conversatie import normalizat
+
+    t0 = time.time()
+    dosar = RADACINA / args.dosar
+    iesire = dosar / "ascuns_reformulat.jsonl"
+    if iesire.exists() and not args.suprascrie:
+        raise SystemExit(f"{iesire} există deja: setul reformulat nu se face a doua oară.")
+    fisiere = {n: dosar / n for n in ("antrenare.jsonl", "ascuns.jsonl")}
+    sha_inainte = {n: sha256(f) for n, f in fisiere.items()}
+    ascuns, antrenare = citeste(fisiere["ascuns.jsonl"]), citeste(fisiere["antrenare.jsonl"])
+    rng = random.Random(args.samanta)
+    noi: list[dict[str, Any]] = []
+    for fel in INSTRUCTIUNI:
+        lista = [p for p in ascuns if p["fel"] == fel]
+        rng.shuffle(lista)
+        for k, p in enumerate(lista):
+            intrebare, sablon = reformuleaza(p["intrebare"], k)
+            q = repara_numar(p)
+            q.update(id_s76a=p["id"], intrebare=intrebare, prompt=intrebarea(intrebare, p.get("text", "")),
+                     sablon=sablon, intrebare_s76a=p["intrebare"])
+            noi.append(q)
+    rng.shuffle(noi)
+    for k, q in enumerate(noi):
+        q["id"] = f"r{k:04d}"
+
+    # verificările
+    sabloane = sorted({q["sablon"] for q in noi})
+    reguli = {s: regula_sablonului(s) for s in sabloane}
+    intrebari_antr = [p["intrebare"].strip() for p in antrenare]
+    in_antrenare = {s: sum(bool(r.fullmatch(i)) for i in intrebari_antr) for s, r in reguli.items()}
+    antr_norm = {normalizat(i) for i in intrebari_antr}
+    asc_norm = {normalizat(p["intrebare"]) for p in ascuns}
+    pe_fel = {f: sum(q["fel"] == f for q in noi) for f in INSTRUCTIUNI}
+    sabloane_pe_fel = {f: len({q["sablon"] for q in noi if q["fel"] == f}) for f in INSTRUCTIUNI}
+    minim = {f: 15 if f in ("instr_da_nu", "instr_nu_scrie") else 20 for f in INSTRUCTIUNI}
+    verificari = {
+        "formulari_noi_gasite_in_antrenare": sum(in_antrenare.values()),
+        "intrebari_noi_identice_cu_antrenare": sum(normalizat(q["intrebare"]) in antr_norm for q in noi),
+        "intrebari_noi_identice_cu_ascuns_s76a": sum(normalizat(q["intrebare"]) in asc_norm for q in noi),
+        "total_min_200": len(noi) >= 200,
+        "pe_fel_minim": all(pe_fel[f] >= minim[f] for f in INSTRUCTIUNI),
+        "min_2_formulari_pe_fel": all(v >= 2 for v in sabloane_pe_fel.values()),
+    }
+    verificari["toate_trecute"] = (verificari["formulari_noi_gasite_in_antrenare"] == 0
+                                   and verificari["intrebari_noi_identice_cu_antrenare"] == 0
+                                   and verificari["total_min_200"] and verificari["pe_fel_minim"]
+                                   and verificari["min_2_formulari_pe_fel"])
+    # exemple din articolele de ANTRENARE (pentru raport; setul ascuns nu se arată)
+    exemple, vazute = [], set()
+    for p in antrenare:
+        if p["fel"] in INSTRUCTIUNI and p["fel"] not in vazute and len(exemple) < args.exemple:
+            nou, _ = reformuleaza(p["intrebare"], len(exemple))
+            exemple.append({"fel": p["fel"], "s76a": p["intrebare"], "reformulat": nou, "raspuns": p["raspuns"]})
+            vazute.add(p["fel"])
+    with iesire.open("w", encoding="utf-8", newline="\n") as f:
+        for q in noi:
+            f.write(json.dumps(q, ensure_ascii=False) + "\n")
+    sha_dupa = {n: sha256(f) for n, f in fisiere.items()}
+    info = {
+        "facut": "unelte/romana_raspunsuri.py reformulat",
+        "argumente": {k: v for k, v in vars(args).items() if k != "functie"},
+        "sursa": "instrucțiunile setului ascuns S76a (aceleași articole, referințe, chei); nimic descărcat, niciun model",
+        "intrebari": len(noi), "pe_fel": pe_fel, "sabloane_pe_fel": sabloane_pe_fel,
+        "pe_sablon": dict(sorted(Counter(q["sablon"] for q in noi).items())),
+        "sabloane_gasite_in_antrenare": in_antrenare, "verificari": verificari,
+        "reparate": [{"id": q["id"], "id_s76a": q["id_s76a"], "cheie_veche": q["reparat"], "cheie": q["cheie"]}
+                     for q in noi if "reparat" in q],
+        "cu_numar_intreg": sum("numar" in q for q in noi),
+        "exemple_din_antrenare": exemple,
+        "sha256": {"ascuns_reformulat.jsonl": sha256(iesire)},
+        "sha256_s76a_inainte": sha_inainte, "sha256_s76a_dupa": sha_dupa,
+        "s76a_neschimbat": sha_inainte == sha_dupa, "secunde": round(time.time() - t0, 1),
+    }
+    (dosar / "info_reformulat.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
+    return info
+
+
+def renoteaza_reparat(perechi: list[dict[str, Any]], raspunsuri: dict[str, str]) -> dict[str, Any]:
+    """Nota setului S76a cu numărul reparat DOAR la perechile cu cheia tăiată (restul neatinse), pe răspunsuri vechi."""
+    reparate, noi = [], []
+    for p in perechi:
+        q = repara_numar(p)
+        if "reparat" in q:
+            reparate.append({"id": p["id"], "cheie_veche": p["cheie"], "cheie": q["cheie"], "numar": q["numar"]})
+            noi.append(q)
+        else:
+            noi.append(p)
+    return {"reparate": reparate, **noteaza(noi, raspunsuri)}
+
+
 # --- reperul pe placă -----------------------------------------------------------------------------------------------
 
 class PazaPlacii(threading.Thread):
@@ -696,7 +935,8 @@ def reper(args: argparse.Namespace) -> dict[str, Any]:
     iesire = RADACINA / args.iesire
     if (iesire / "nota.json").exists():
         raise SystemExit(f"{iesire / 'nota.json'} există deja: reperul nu se reface.")
-    perechi = citeste(RADACINA / args.dosar / "ascuns.jsonl")
+    fisier_set = RADACINA / args.set if args.set else RADACINA / args.dosar / "ascuns.jsonl"
+    perechi = citeste(fisier_set)
     perechi = perechi[: args.cate] if args.cate else perechi
     fisa = fisa_modelului(Jurnal(RADACINA / "lucru"), args.experiment)
     fisiere = [Path(gaseste_model(fisa["model_salvat"]))] + [RADACINA / c for c in args.citit]
@@ -730,7 +970,9 @@ def reper(args: argparse.Namespace) -> dict[str, Any]:
     meta = {"experiment": fisa["id"], "linie": fisa["linie"], "intrebari": len(perechi), "simboluri": args.simboluri,
             "secunde": secunde, "placa_max_mb": paza.max_mb, "placa_max_c": paza.max_c,
             "torch_max_rezervat_mb": memorie_torch, "sha256_inainte": sha_inainte, "sha256_dupa": sha_dupa,
-            "greutati_neschimbate": sha_inainte == sha_dupa, "set": sha256(RADACINA / args.dosar / "ascuns.jsonl")}
+            "greutati_neschimbate": sha_inainte == sha_dupa, "set": sha256(fisier_set),
+            "set_fisier": fisier_set.relative_to(RADACINA).as_posix() if fisier_set.is_relative_to(RADACINA)
+            else str(fisier_set), "dispozitiv": args.dispozitiv or "implicit"}
     (iesire / "nota.json").write_text(json.dumps({"meta": meta, **nota}, ensure_ascii=False, indent=1), encoding="utf-8")
     return {"meta": meta, **{k: v for k, v in nota.items() if k != "note"}}
 
@@ -768,10 +1010,27 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--dispozitiv", default="")
     r.add_argument("--memorie-max", type=int, default=6800)
     r.add_argument("--citit", nargs="*", default=[], help="alte fișiere doar citite, cu SHA-256 înainte și după")
+    r.add_argument("--set", default="", help="alt set decât <dosar>/ascuns.jsonl (ex. ascuns_reformulat.jsonl)")
+    f = sub.add_parser("reformulat", help="S76c: instrucțiunile setului ascuns, formulate altfel")
+    f.add_argument("--dosar", default=DOSAR)
+    f.add_argument("--samanta", type=int, default=7603)
+    f.add_argument("--exemple", type=int, default=5, help="exemple din articolele de antrenare, pentru raport")
+    f.add_argument("--suprascrie", action="store_true", help="doar pentru teste: setul nu se reface")
+    rn = sub.add_parser("renoteaza-reparat", help="S76c: nota S76a cu numărul reparat, pe răspunsuri vechi")
+    rn.add_argument("--raspunsuri", required=True)
+    rn.add_argument("--set", default=f"{DOSAR}/ascuns.jsonl")
+    rn.add_argument("--iesire", required=True)
     args = parser.parse_args(argv)
 
     if args.comanda == "construieste":
         rez = construieste(args)
+    elif args.comanda == "reformulat":
+        rez = reformulat(args)
+    elif args.comanda == "renoteaza-reparat":
+        rez = renoteaza_reparat(citeste(RADACINA / args.set), citeste_raspunsuri(RADACINA / args.raspunsuri))
+        Path(RADACINA / args.iesire).parent.mkdir(parents=True, exist_ok=True)
+        (RADACINA / args.iesire).write_text(json.dumps(rez, ensure_ascii=False, indent=1), encoding="utf-8")
+        rez = {k: v for k, v in rez.items() if k != "note"}
     elif args.comanda == "noteaza":
         perechi = citeste(RADACINA / args.set)
         rez = noteaza(perechi, citeste_raspunsuri(RADACINA / args.raspunsuri))
