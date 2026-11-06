@@ -2858,7 +2858,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S76c — C-64 R1 pasul 3: #513 urmează și instrucțiuni FORMULATE ALTFEL decât în antrenare? (examen nou pe procesor, fără placă, fără antrenare)
-- stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
+- stare: in_lucru (executant, 6 nov 2026 08:30)
+- (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
 - tip: procesor (date + unealtă + teste + examen pe procesor, `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: ziua de 5 nov, **DUPĂ S77a** (nu în același timp cu măsurătorile de viteză de pe placă și nu în fereastra lui Adrian C-73, acum până la ~14:00). Gata până la **18:30**; dacă nu apucă, se termină doar când pe placă nu rulează o antrenare (nu încarcă procesorul peste o noapte de antrenare).
   **Notă supraveghetor (5 nov 09:05):** cu fereastra prelungită până la 14:00, S77a (~3 h procesor + ≤ 1,5 h placă) ocupă probabil toată după-amiaza. Pornești S76c azi **doar dacă S77a e `gata` până la ~15:30**; altfel S76c rămâne `aprobat` pentru **ziua de 6 nov, de la 08:00** (înaintea oricărei alte sarcini de zi).
