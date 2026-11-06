@@ -1,0 +1,14 @@
+# Rezervele numite pentru `unelte/puncte_salvare.py` (S84, C-85 pasul 1, aprobat de Adrian 6 nov 2026).
+# Ce e scris aici iese MEREU „PĂSTREAZĂ”. Lista se schimbă doar cu aprobarea lui Adrian.
+
+# Experimentele din jurnal păstrate mereu (fișierul lor din lucru/stocare/modele/ și orice alt fișier legat de ele).
+experimente = [459, 477, 513]
+
+# Modelul în uz (după S83: #513).
+model_in_uz = 513
+
+# Fișiere păstrate mereu, cu calea de la rădăcina proiectului.
+fisiere = [
+    "lucru/cod_c1/gpt.pt",
+    "lucru/w2_mare/gpt_24.pt",
+]
