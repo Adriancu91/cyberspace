@@ -2902,7 +2902,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0240_S78_mini_brain.md (înainte: docs/rapoarte/2026-11-05_1830_S78_oprit_comenzi_inaccesibile.md)
 
 ### S79 — COMENZI.md C-76: raport de spațiu pe workstation + verificarea arhivei de mutare + propunere de curățenie (doar procesor + disc, FĂRĂ placă, NIMIC șters)
-- stare: in_lucru (executant, 6 nov 2026 03:00)
+- stare: gata (executant, 6 nov 2026 03:11): **arhiva de mutare (26,20 GB, de fapt în `Desktop\proiect\`) nu are nimic în plus** (SHA-256 identic pe 28,05 GB, doar 3 fișiere mici în plus); C: 33,46 GB liberi; propunere pe grupuri: A+B (Mini Brain + arhiva) 104,3 GB fără pierdere, C+D (modele intermediare + `gpt.pt` din linii închise) ~62,3 GB, E–H (cyberspace-cod, Hugging Face, cache simboluri, pip) ~84 GB de decis; nimic șters; 1236 teste trec, 1 sărit, 2 pică (discul — cunoscut; `test_interfata` instabil, singur trece 37/37)
+- (istoric) stare: in_lucru (executant, 6 nov 2026 03:00)
 - (istoric) stare: **aprobat** (Adrian, prin C-76; preluat de supraveghetor 5 nov 2026 13:45)
 - tip: procesor + disc (măsurători, SHA-256, un raport). Fără placă, fără antrenare, nimic instalat.
 - fereastră: **după S78** (C-77 are prioritate, cum cere Adrian). Poate rula și în timpul nopții S77b (doar citire de pe disc; aceeași regulă: dacă pașii/s ai nopții scad cu peste 10 %, pui pe pauză până dimineață). S76c rămâne pentru 6 nov de la 08:00 dacă nu apucă azi.
@@ -2914,7 +2915,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   4. `python -m pytest` — toate trec; raport `docs/rapoarte/<data>_<ora>_S79_spatiu_workstation.md`; coada → `gata`; commit + push.
 - **NIMIC șters, mutat sau dezarhivat pe disc** — Adrian aprobă pe grupuri (ștergerea de modele sau date e doar cu „da”-ul lui). Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`.
 - aprobat de: **Adrian (COMENZI.md C-76, 5 nov 2026 13:15)**; preluat de supraveghetor 5 nov 2026 13:45
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md
 
 ### S81 — Reparație: `unelte/antrenare_lunga.py` / `antrenare_recalcul.py` ies cu cod ≠ 0 când o oră e anulată (ca lanțurile să nu meargă mai departe pe un model neașteptat) (doar procesor, ~30–45 min)
 - stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)

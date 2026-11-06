@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 03:11 — (executant, S79 / C-76) Spațiul pe workstation: se pot elibera ~104 GB fără nicio pierdere
+
+- **Discul C: 33,46 GB liberi din 510,6.** `C:\Kronos\` ocupă 186 GB (modelele `.pt` singure 114 GB), Desktop-ul 104 GB, cache-urile Hugging Face + pip 30 GB.
+- **Arhiva `cyberspace_mutare` (26,20 GB) nu are nimic în plus:** tot ce e în ea e pe disc, SHA-256 identic. (Atenție: e în `Desktop\proiect\`, nu în `de sters\proiect\`.)
+- **Propunerea, pe grupuri:** A (cele două foldere Mini Brain, 78,07 GB) + B (arhiva de mutare, 26,20 GB) = **104 GB fără nicio pierdere**; C (82 de modele intermediare, ~33 GB) + D (`gpt.pt` din 28 de linii închise, ~29 GB) = risc mic; E–H (școala veche `cyberspace-cod` 40 GB, Hugging Face 26 GB, cache de simboluri 11 GB, pip 4 GB) le decizi tu. **Nimic șters.**
+- **Aștept de la tine:** ce grupuri se șterg (de exemplu „A, B da; C, D da; E–H nu”). Raportul cu listele exacte: `docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md`.
+
 ## 6 noiembrie 2026, 02:40 — (executant, S78 / C-77) Mini Brain salvat
 
 - **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere** (`test ai brain v13 clean` și `test ai brain`).
