@@ -2977,7 +2977,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_1035_S77d_rata_mare24.md
 
 ### S77e — Reluarea lui S77d (rata mai mică pentru modelul de 24 de straturi), pe linii noi `w2_mare_24e1` / `w2_mare_24e2` (placa, ~2,5 h)
-- stare: in_lucru (executant, 6 nov 2026 19:00; fereastra de noapte, placa liberă 705 MB / 26 °C; C: 105 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc; `lucru/w2_mare_24e1/`, `_24e2/` nu există)
+- stare: gata (executant, 6 nov 2026 21:35) — **e1 (1e-5) ȚINE** (#523: R2 0,4072, română 1,2120, cod 0,7286; la limită pe română), **e2 (2e-5) AJUTĂ PUȚIN** (#525: R2 0,4095, română 1,2160, cod 0,7315); #477 re-măsurat 1,2097 / 0,7270; niciuna mai bună ca #477; nvidia-smi max 6.688 MB, 61 °C; SHA-uri neschimbate; 1247 teste trec, 1 sărit
+- (istoric) stare: in_lucru (executant, 6 nov 2026 19:00; fereastra de noapte, placa liberă 705 MB / 26 °C; C: 105 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc; `lucru/w2_mare_24e1/`, `_24e2/` nu există)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 11:15)
 - tip: placă (2 × 1 oră de antrenare + validări scurte)
 - fereastră: **noaptea 6→7 nov, pornire de la 19:00, cel târziu 21:00** (gata până la ~00:00). NU pornești ziua decât dacă în nota ⚠ ACUM de sus scrie că Adrian a terminat la workstation (o scriu eu la 14:15 / 17:15); atunci totul trebuie gata până la 18:30. Dacă la pornire vezi că workstation-ul a fost repornit sau Adrian lucrează la el, aștepți.
@@ -2992,9 +2993,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. SHA-256 #477 și `gpt_24.pt` înainte = după; `python -m pytest` (toate trec); închizi pre-înregistrarea; raport `docs/rapoarte/<data>_<ora>_S77e_rata_mare24.md`; coada → `gata` cu verdictul pe fiecare variantă; commit + push.
 - Ce urmează (scris acum, ca la S77d): dacă o variantă ȚINE → o noapte de 5 ore pe cea mai bună, față de #513, cu pragurile S77b (o scriu eu); dacă niciuna → nu mai punem nopți pe 24 de straturi până la o idee nouă.
 - Modelele noi **nu** înlocuiesc #477 nicăieri. Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, #477/#459/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
-- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24e.md (de scris înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-11-06_w2_mare_24e.md (închisă: e1 ȚINE, e2 AJUTĂ PUȚIN)
 - aprobat de: supraveghetor, 6 nov 2026 11:15 (granița 1: aceeași linie de 24 de straturi, aceleași rate ca S77d deja aprobate; granița 2: validări)
-- raport: —
+- raport: docs/rapoarte/2026-11-06_2135_S77e_rata_mare24.md
 
 ### S82 — Verificare (doar citire): ce a mai rămas din grupurile A și B din S79 după ștergerea lui Adrian, spațiul pe C: și Coșul de reciclare (procesor + disc, ~15 min)
 - stare: gata (executant, 6 nov 2026 17:35) — grupul A nu mai există, arhiva B (26,2 GB) există încă; C: 112,4 GB liberi; Coșul gol; 1247 teste trec, 1 sărit
