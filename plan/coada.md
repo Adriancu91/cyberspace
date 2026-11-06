@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 6 nov 2026 (supraveghetor, 23:15):** S77e = **GATA, verificat** (e1 ȚINE, e2 AJUTĂ PUȚIN — cifrele se potrivesc cu pragurile). S84 = **GATA, verificat** (nimic șters). S83 = **oprit, motiv bun** (−32 octeți doar din antet) → reluarea e **S83b** (accept mărimea reală). **Ordinea în noaptea asta:** **S85** pe placă ACUM (5 ore pe rețeta e1, pornire **cel târziu 00:30**); **S83b** pe procesor **după ce S85 a trecut verificarea de la 15 minute** (regula de 10 % la pașii/s), sau imediat dacă S85 nu pornește. Mâine ziua (7 nov, 08:00–18:30): **S86** (C-85 pasul 2, memoria plăcii la modelul mare, măsurare scurtă), după ce S85 e `gata`/`oprit`. **Nimic nu se șterge** până răspunde Adrian la S84.
+
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 20:15; COMENZI.md C-82 și C-85, Adrian):** S77e rulează (de la 19:00) — **nu-l întrerupi.** S82 = **GATA, verificat**. Adrian a spus **„Da 513”** (C-82) și **„Da” la C-85** (modulele cresc odată cu modelul). Am pus jos **S83** (C-82: #513 devine modelul în uz, doar procesor) și **S84** (C-85 pasul 1: lista punctelor de salvare `.pt`, doar citire, nimic șters). **Ordinea: S77e → S83 → S84**, fiecare pornește doar după ce cea dinainte e `gata`/`oprit` (în noaptea asta, după S77e, sau mâine de la 08:00). Pașii 2–8 din C-85 îi pun eu, câte unul, după ce S84 e gata.
 
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 17:15; COMENZI.md C-80 și C-81, Adrian):** Adrian **a plecat de la workstation la ~15:20 fără testul OS** — calculatorul n-a fost repornit, a rămas în Windows, **placa e liberă**. Înainte să plece **a șters** (spune el) cele două foldere „test ai brain” și probabil arhiva `cyberspace_mutare`. **Fă ACUM S82** (jos, `aprobat`, doar citire, ~15 min): ce a mai rămas din grupurile A/B, spațiul pe C:, Coșul de reciclare → 3 rânduri sus în `plan/pentru_adrian.md`; nu ștergi nimic, nici Coșul. **S77e rămâne la noapte, pornire de la 19:00 (cel târziu 21:00)** — ziua nu mai ajunge până la 18:30 pentru ~2,5 h. Testul OS al lui Adrian se mută la următoarea lui fereastră (îți scriu eu dacă e una).
@@ -2994,6 +2996,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Ce urmează (scris acum, ca la S77d): dacă o variantă ȚINE → o noapte de 5 ore pe cea mai bună, față de #513, cu pragurile S77b (o scriu eu); dacă niciuna → nu mai punem nopți pe 24 de straturi până la o idee nouă.
 - Modelele noi **nu** înlocuiesc #477 nicăieri. Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, #477/#459/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/2026-11-06_w2_mare_24e.md (închisă: e1 ȚINE, e2 AJUTĂ PUȚIN)
+- verificat de supraveghetor (6 nov 23:15): **corect** — e1: R2 0,4072 ≤ 0,4090, română 1,2120 ≤ 1,2127, cod 0,7286 ≤ 0,7320 → ȚINE (la 0,0007 de prag); e2: R2 0,4095 > 0,4090 dar < 0,4154 → AJUTĂ PUȚIN. Placa max 6.688 MB / 61 °C, SHA-uri neschimbate, 1247 teste trec. După regula scrisă dinainte → **S85** (5 ore pe e1, față de #513).
 - aprobat de: supraveghetor, 6 nov 2026 11:15 (granița 1: aceeași linie de 24 de straturi, aceleași rate ca S77d deja aprobate; granița 2: validări)
 - raport: docs/rapoarte/2026-11-06_2135_S77e_rata_mare24.md
 
@@ -3040,6 +3043,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: nu e antrenare; nu e nevoie (pragul: mărime = 110.859.040, aceleași simboluri ca PyTorch, sumele rezervelor neschimbate)
 - aprobat de: Adrian (COMENZI.md C-82, 6 nov 2026 17:39, „Da 513”)
 - raport: docs/rapoarte/2026-11-06_2210_S83_oprit_marime_export.md
+- verificat de supraveghetor (6 nov 23:15): **oprit corect** — pragul de mărime era al meu și presupunea același antet; aceiași tensori și aceleași forme, diferența (−32 octeți) vine doar din textul `sursa` + alinierea la 32. Accept mărimea reală → reluarea **S83b** (jos), de la pasul 2, cu fișierul deja exportat.
 
 ### S84 — C-85 pasul 1: lista punctelor de salvare `.pt` (ce s-ar păstra / ce s-ar putea șterge) — unealtă nouă, DOAR LISTĂ, nimic șters (procesor + disc)
 - stare: gata (executantul, 6 nov 2026 23:04; lista 592 .pt / 107,6 GB: PĂSTREAZĂ 50 / 22,3 GB, SE POATE ȘTERGE 113 / 71,5 GB, NECUNOSCUT 429 / 13,8 GB; nimic șters; 1254 teste trec; aprobat de Adrian, COMENZI.md C-85 pasul 1, 6 nov 2026 17:56)
@@ -3057,3 +3061,57 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: nu e nevoie (fără antrenare, fără placă)
 - aprobat de: Adrian (COMENZI.md C-85, 6 nov 2026 17:56, pasul 1)
 - raport: docs/rapoarte/2026-11-06_2304_S84_puncte_salvare.md
+- verificat de supraveghetor (6 nov 23:15): **gata, corect** — doar listă (fără comandă de ștergere), 592 `.pt` / 107,6 GB pe clase, 7 teste noi, 1254 trec. Întrebarea „ștergem SE POATE ȘTERGE?” e la Adrian; până la răspunsul lui nu se șterge nimic. Atenție la `gpt.pt` de linie (31 fișiere, 38 GB) — fără ele liniile nu se mai continuă exact.
+
+### S85 — Prima noapte de 5 ore a lui Kronos de 24 de straturi pe rețeta e1 (rata 1e-5, încălzire 1000, lot 4 × 24), linie nouă `w2_mare_24f` — e mai bun decât #513 la timp egal?
+- stare: **aprobat** (supraveghetor, 6 nov 2026 23:15)
+- tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
+- fereastră: **ACUM, noaptea 6→7 nov.** Antrenarea pornește **cel târziu la 00:30**; examenele trebuie gata până la **07:45**. Dacă nu apuci să pornești până la 00:30: NU pornești la noapte; rămâne `aprobat` pentru **noaptea 7→8 nov, pornire la 19:00** (refaci pre-înregistrarea cu data nouă). Dacă în coadă/hub apare o fereastră a lui Adrian pe workstation, oprești curat.
+- durată maximă: 5 ore de antrenare + examene; placa sub **6.700 MB** la verificarea de 15 minute (oprire proprie) / 7.000 MB (paznicul, tot timpul) și sub 83 °C.
+- de ce: regula scrisă dinainte la S77e: o variantă ȚINE → o noapte de 5 ore pe cea mai bună, față de #513, cu pragurile S77b. e1 (#523) a ȚINUT (R2 0,4072, română 1,2120, cod 0,7286). Întrebarea S77b rămâne: la timp egal pe placă (5 ore), modelul de 24 de straturi ajunge mai bun decât #513 (12 straturi, aceleași date)?
+- ce faci — **exact ca la S77b (pașii 1–7 de acolo), cu DOAR aceste diferențe:**
+  0. Verificări: C: ≥ 20 GB liber; `lucru/w2_mare/gpt_24.pt` SHA-256 `d35e3dbe…92cc`; `lucru/w2_mare_24f/` **nu există**; `cascada.py stare` dă placa liberă. Folderele `lucru/w2_mare_24*` existente rămân neatinse.
+  1. `config/conv_w2_mare_24f.toml` = **copia lui `config/conv_w2_mare_24e1.toml`** cu DOAR `nume = "w2_mare_24f"`, `cale_stare = "lucru/w2_mare_24f/gpt.pt"`, eticheta și antetul (diff-ul în raport). Restul identic (rata 1e-5, încălzire 1000, lot 4 × 24, `durata_scaderii_secunde = 18000`, `racire_finala = 0.25`, adamw). Copiezi `gpt_24.pt` ca `lucru/w2_mare_24f/gpt.pt` (originalul rămâne); verificarea obligatorie din S77b pasul 3 (rețeta `24×768`, „24 straturi împachetate”, scorul de pornire = #477 ± 0,001).
+  2. Pre-înregistrarea `python unelte/preinregistrare.py --nume w2_mare_24f --titlu "S85: prima noapte de 5 ore a lui Kronos de 24 de straturi pe rețeta e1"` cu **pragurile S77b copiate exact** (MAI MARE = MAI BUN: română curat ≤ #513 − 0,005 și nicio STRICĂ; LA FEL: ±0,005; MAI SLAB: > #513 + 0,005; STRICĂ, cu întâietate: R1 felurile vechi < 98,0, R1 pe instrucțiuni < 90,0, cod curat > #477 + 0,005, R2 > #477 + 0,005; #477 și #513 re-măsurați în aceeași rulare; R1 #513 = `reper_s76b`) + propozițiile: „comparația e la timp egal, nu la simboluri egale (~48 M simboluri/oră față de mai multe la #513)”, „rețeta e1 din S77e (ȚINE după o oră)”, „încălzirea de 1.000 de pași ocupă ~prima oră”. Commit + push **ÎNAINTE** de pornire.
+  3. Lanțul prin cascadă: `python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24f.toml --ore 5`, apoi `examen_validari_ws.py --linie w2_mare_24f`, `--experiment 477`, `--experiment 513`, apoi `romana_raspunsuri.py reper --experiment <ultimul experiment al liniei w2_mare_24f> --iesire lucru/romana_raspunsuri/reper_s85 …` (aceleași setări ca la S76b). Plafonul PyTorch 5.800 MB rămâne (nu-l ridici).
+  4. **Dacă o oră e anulată** (de ex. out of memory la testul rapid, ca la S77c ora 3): lanțul se oprește singur (S81, cod 1). Atunci rulezi DOAR validările (`examen_validari_ws.py`) pe ultimul model salvat al liniei, ca informativ; verdictul e **NEMĂSURAT**; `oprit`, raport cu ora, vârful PyTorch și `nvidia-smi` la căderea; nimic repornit. Dacă lanțul e închis din afară: la fel ca la S77d (`oprit`, nimic repornit).
+  5. La sfârșit (ca la S77b pasul 7): SHA-256 #477, #513 și `gpt_24.pt` înainte = după; închizi pre-înregistrarea cu verdictul; `python -m pytest` (toate trec); raport `docs/rapoarte/<data>_<ora>_S85_kronos_mare_5ore.md` (tabelul pe ore — urcă încă la ora 5?, cele trei examene pentru S85/#513/#477, R1 pe fel, pași/s, simboluri văzute față de #513, vârful PyTorch și `nvidia-smi` pe fiecare oră, °C max); coada → `gata` cu verdictul într-o propoziție; commit + push.
+- S83b (procesor) poate merge **după ce antrenarea a trecut verificarea de la 15 minute**; dacă pașii/s scad cu peste 10 % (sub ~5,9), pui S83b pe pauză până după S85.
+- Ce urmează (scris acum): MAI MARE = MAI BUN → propun lui Adrian o a doua noapte (continuare) și întrebarea dacă modelul mare devine linia principală; LA FEL / MAI SLAB fără STRICĂ → mă uit la curbă (dacă urcă încă la ora 5 → a doua noapte de continuare; dacă e plată → oprim liniile de 24 până la C-85 pasul 2); STRICĂ → oprim liniile de 24.
+- Modelul nou **nu** înlocuiește #513/#477 nicăieri fără „da”-ul lui Adrian. Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul (doar prin platformă), setul ascuns (doar citit de `reper`), #459/#477/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
+- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24f.md (de scris și urcat înainte de pornire)
+- aprobat de: supraveghetor, 6 nov 2026 23:15 (granițele 1 și 2: aceeași linie de 24 de straturi, rețeta e1 deja rulată, mai multe ore; linia de 24 și recalculul acoperite de COMENZI.md C-64, Adrian 4 nov)
+- raport: docs/rapoarte/…
+
+### S83b — Reluarea S83 de la pasul 2: #513 modelul în uz, cu mărimea reală a exportului (110.859.008 octeți) (doar procesor)
+- stare: **aprobat** (supraveghetor, 6 nov 2026 23:15; în cadrul COMENZI.md C-82, „Da 513”, Adrian 6 nov 17:39)
+- tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
+- fereastră: **după ce S85 a trecut verificarea de la 15 minute** (regula de 10 % la pașii/s de la S85), sau imediat dacă S85 nu pornește la noapte; altfel mâine de la 08:00.
+- durată maximă: 2 ore; RAM cel mult ~6 GB
+- de ce: S83 s-a oprit corect la pasul 1: exportul #513 are 110.859.008 octeți în loc de 110.859.040 — aceiași tensori și forme, diferă doar textul `sursa` din antet (+ alinierea la 32). Pragul de mărime era al supraveghetorului; îl înlocuiesc cu verificarea care contează: aceiași tensori/forme + aceleași simboluri ca PyTorch.
+- ce faci: **pașii 2–7 din S83, exact**, cu fișierul deja exportat `lucru/export/kronos_513_q8_0.kgr`:
+  0. Verifici că SHA-256 al fișierului e `66f734b3…5859` și mărimea 110.859.008; dacă `lucru/export/kronos_513_q8_0.kgr.sha256` nu există, îl scrii (același format ca la #477). SHA-256 pentru checkpoint-ul #513, `kronos_477_q8_0.kgr` (`bcbe8187…3963`) și `kronos_459_q8_0.kgr` (`e80618b4…382e`) notate înainte = după. **Nu reexporți, nu suprascrii nimic.**
+  1. Pașii 2–7 din S83 (vectorii de control verificați cu `inferenta_bruta.py`, `docs/integrare_kronos/MODEL.md` cu #513 + rezervele #477 și #459, Release privat `kronos-kgr1-513` sau comanda pentru Adrian, căile implicite → 513 cu MANIFEST neschimbat, testele „modelul în uz” → 513, `python -m pytest` verde). În `MODEL.md` scrii mărimea reală **110.859.008** și o propoziție: „față de #477 (110.859.040) diferă doar antetul (textul `sursa`), arhitectura e aceeași”.
+  2. Raport `docs/rapoarte/<data>_<ora>_S83b_model_513.md` (ce cere S83 pasul 7, plus mărimea și motivul diferenței); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- Aceleași interdicții ca la S83 (nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, checkpoint-urile, S85 și liniile `w2_mare_24*`; nu scrii în hub; nimic descărcat, instalat sau șters). Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
+- pre-înregistrare: nu e antrenare (pragul: aceiași tensori/forme ca #477, aceleași simboluri ca PyTorch, sumele rezervelor neschimbate)
+- aprobat de: Adrian (COMENZI.md C-82, 6 nov 2026 17:39); pragul de mărime schimbat de supraveghetor, 6 nov 2026 23:15
+- raport: docs/rapoarte/…
+
+### S86 — C-85 pasul 2: memoria plăcii la modelul mare — Muon (o singură stare) față de AdamW + paza de memorie la fiecare oră (măsurare scurtă pe placă, fără antrenare lungă)
+- stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 2, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 23:15)
+- tip: placă (măsurare ~45–60 min) + procesor (unealtă, teste)
+- fereastră: **ziua de 7 nov, 08:00–18:30, după ce S85 e `gata` sau `oprit`** (și după S83b). Totul gata până la 18:30; dacă nu încape, rămâne `aprobat` pentru ziua următoare (nu noaptea, ca să nu încurce o eventuală continuare S85). Nimic pe placă dacă Adrian e la workstation.
+- durată maximă: 1 oră pe placă + ~1 oră procesor
+- de ce: la modelul de 24 de straturi memoria plăcii e la limită (S77b: out of memory la lot 12; S77c: out of memory la testul rapid de la ora 3; S77e: `nvidia-smi` 6.688 MB, la 12 MB de paza de 6.700). AdamW ține 2 stări pentru fiecare parametru (~1,5 GB la 183M); Muon (există deja în `module/model_muon.py`, `optimizator = "muon"`) ține una pe matricile straturilor.
+- ce faci:
+  1. **Unealtă nouă `unelte/masoara_memorie_mare.py`** (nu atinge `kronos/`, `module/`, examenul): construiește modelul de 24 de straturi exact ca `antrenare_recalcul.py` (recalcul pe straturi, plafonul PyTorch 5.800 MB), din o **copie** a `gpt_24.pt` într-un dosar temporar `lucru/memorie_mare/` (nou), și face pentru fiecare variantă ~200 de pași de optimizator pe loturi reale + **un test rapid / o validare** ca cea de la sfârșitul unei ore. Nu salvează modele, nu scrie în jurnal. Scrie pentru fiecare variantă: vârful PyTorch (`max_memory_allocated` și `max_memory_reserved`), vârful `nvidia-smi`, separat la antrenare și la testul rapid, pași/s.
+  2. **Variantele**, în ordinea asta (te oprești la prima care trece de 6.700 MB `nvidia-smi` sau cade cu out of memory — o notezi și treci la următoarea): (a) adamw, lot 4 × 24 (reperul = e1); (b) muon, lot 4 × 24; (c) muon, lot 6 × 16; (d) muon, lot 12 × 8. Setările Muon: cele implicite din `model_muon.py` (le scrii în raport).
+  3. **Paza de memorie la fiecare oră** în `unelte/antrenare_recalcul.py` (doar `unelte/`): înainte de testul rapid al fiecărei ore, `torch.cuda.empty_cache()` și citirea `nvidia-smi`; dacă e peste 6.700 MB, oprire curată cu cod ≠ 0 și mesaj clar în log (ora, MB). Teste noi în `teste/` (fără placă: citirea `nvidia-smi` simulată) — sub prag continuă, peste prag oprește cu cod ≠ 0.
+  4. **Stări pe 8 biți:** NU instalezi nimic (ar cere `bitsandbytes` → „da”-ul lui Adrian). Doar scrii în raport cât ar câștiga, socotit pe hârtie.
+  5. Pre-înregistrare scurtă `python unelte/preinregistrare.py --nume memorie_mare --titlu "S86: memoria plăcii la modelul mare, Muon față de AdamW"` cu așteptarea: „(b) muon lot 4 scade vârful PyTorch la antrenare cu cel puțin 400 MB față de (a)” — DA/NU, fără alt prag; commit + push înainte de partea pe placă.
+  6. `python -m pytest` (toate trec); raport `docs/rapoarte/<data>_<ora>_S86_memorie_mare.md` (tabelul variantelor, care lot încape cu Muon, recomandarea pentru o noapte viitoare — fără s-o pornești); închizi pre-înregistrarea; coada → `gata`; commit + push. Dosarul `lucru/memorie_mare/` rămâne (ștergerea cere „da”-ul lui Adrian).
+- Nu atingi `kronos/`, `module/` (doar citit), `module/examen_bpb.py`, paznicul, jurnalul, #459/#477/#513, `gpt_24.pt` (doar citit, SHA înainte = după), liniile `w2_mare_24*`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
+- pre-înregistrare: docs/preinregistrari/<data>_memorie_mare.md (de scris înainte de partea pe placă)
+- aprobat de: Adrian (COMENZI.md C-85, 6 nov 2026 17:56, pasul 2)
+- raport: docs/rapoarte/…

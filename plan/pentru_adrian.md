@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 23:15 — Kronos mare a trecut proba de o oră; de la noapte încearcă 5 ore; #513 se reia după o mică corectură
+
+- **S77e: GATA, verificat de mine.** Cu rata mică (e1), modelul de 24 de straturi **nu mai strică** ce știa (ȚINE, la limită: R2 0,4072, română 1,2120, cod 0,7286); cu rata dublă (e2) strică puțin. Încă nu e mai bun decât #477 — doar nu mai dă înapoi.
+- **S83 (#513 în uz): oprit corect** — fișierul exportat are cu 32 de octeți mai puțin decât am cerut eu, doar din cauza unui text din antet; modelul e același. Am acceptat mărimea reală → **S83b** continuă de unde a rămas (procesor, la noapte).
+- **S84: GATA, verificat** — lista modelelor salvate (întrebarea ta e mai sus). Nimic șters.
+- **Pus în coadă (aprobate de mine):** **S85** — 5 ore pe modelul de 24 de straturi cu rețeta e1, față de #513 (la noapte, de la ~23:45; verdictul la 08:15); **S83b** în paralel pe procesor. Mâine ziua: **S86** (C-85 pasul 2, aprobat de tine) — cât economisește memoria plăcii alt optimizator (Muon), măsurare scurtă.
+- **Aștept de la tine:** doar răspunsul la S84: „ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”. Fără grabă.
+
 ## 6 noiembrie 2026, 23:04 — (executant, S84 / C-85 pasul 1) Lista modelelor salvate: GATA, nimic șters
 
 - 592 fișiere `.pt`, 107,6 GB: **PĂSTREAZĂ** 50 (22,3 GB), **SE POATE ȘTERGE** 113 (71,5 GB), **NECUNOSCUT — păstrat** 429 (13,8 GB, din care 11 GB cache). Raport: `docs/rapoarte/2026-11-06_2304_S84_puncte_salvare.md`.
@@ -134,17 +142,3 @@
 - **Nimic nou pus în coadă**, nicio comandă nouă pentru Kronos în hub.
 - **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil — mâine e ultima zi). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
 
-## 4 noiembrie 2026, 23:20 — Exercițiile de română (S76a) sunt gata; Kronos învață din ele chiar de la noapte (S76b)
-
-- **S76a gata, verificat de mine: GATA.** **23.251** de exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le aveam (jumătate instrucțiuni de 8 feluri noi: „Rezumă…”, „Scrie doar anul…”, „Spune în ce județ…”), plus **500** ascunse, fără nicio scurgere. Nota automată (fără alt AI) a trecut toate probele. **1221 teste trec.**
-- **Cum stă #477 acum:** perfect la felurile vechi (100 din 100), dar slab la instrucțiuni: **37,5 din 100** — la „Rezumă textul” sau „Scrie doar numărul” răspunde de multe ori doar „Da.” sau „Nu.”.
-- **Pus în coadă (aprobat de mine, pornește la noapte, nu mai așteptăm până mâine): S76b** — 5 ore de învățare pe aceste exerciții, pe o copie a lui #477 (#477 rămâne în uz), terminat până la 06:45. AJUTĂ = cel puțin **47,5** la instrucțiuni, fără să strice româna sau codul. Verdictul la 05:15 / 08:15.
-- O alegere mică, fără grabă: la „limbă curată”, un răspuns de un singur cuvânt („1968.”, „Da.”) e socotit bun când și răspunsul corect are un cuvânt. Mi se pare corect așa; dacă vrei regula strictă (minim 2 cuvinte), spune și se re-notează fără placă.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 4 noiembrie 2026, 20:20 — Școala de cod (S72b): STRICĂ; trecem pe română (C-64), de la noapte pregătim răspunsurile în română (S76a)
-
-- **S72b gata, verificat de mine: STRICĂ.** După o trecere scurtă (48 s) prin cele 109 soluții corecte, Kronos rezolvă **18 din 200** exerciții (înainte 14 — +4, la limita zgomotului), dar codul obișnuit s-a stricat: **0,513** biți pe octet (S63: 0,500; limita era 0,510). Pe examenul ascuns: 4/163 (înainte 3). Placa max 5.885 MB / 61 °C, **1212 teste trec**. Concluzia: școala, așa cum e, nu avansează codul.
-- **Deci, cum ai cerut în C-64, trecem pe română.** Pus în coadă (aprobat de mine, pornește la noapte): **S76a** — exerciții „întrebare/instrucțiune → răspuns” făcute doar prin reguli din datele românești pe care le avem (cel puțin 10.000 pentru învățare, 400 ascunse, cel puțin 40 % instrucțiuni de felul „Spune…”, „Scrie…”, „Rezumă…”), o notă automată fără alt AI (corect / în temă / limbă curată) și reperul: cât de bine răspunde #477 acum. Nicio antrenare la noapte.
-- **Urmează:** mâine noapte **S76b**, antrenarea din #477 pe o copie (#477 rămâne în uz până îl bate copia); ziua, primul test pentru **S77** (Kronos mai mare: aceeași ieșire + memorie și viteză). Le scriu mâine dimineață, după cifrele S76a.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
