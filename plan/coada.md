@@ -2975,7 +2975,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_1035_S77d_rata_mare24.md
 
 ### S77e — Reluarea lui S77d (rata mai mică pentru modelul de 24 de straturi), pe linii noi `w2_mare_24e1` / `w2_mare_24e2` (placa, ~2,5 h)
-- stare: **aprobat** (supraveghetor, 6 nov 2026 11:15)
+- stare: in_lucru (executant, 6 nov 2026 19:00; fereastra de noapte, placa liberă 705 MB / 26 °C; C: 105 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc; `lucru/w2_mare_24e1/`, `_24e2/` nu există)
+- (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 11:15)
 - tip: placă (2 × 1 oră de antrenare + validări scurte)
 - fereastră: **noaptea 6→7 nov, pornire de la 19:00, cel târziu 21:00** (gata până la ~00:00). NU pornești ziua decât dacă în nota ⚠ ACUM de sus scrie că Adrian a terminat la workstation (o scriu eu la 14:15 / 17:15); atunci totul trebuie gata până la 18:30. Dacă la pornire vezi că workstation-ul a fost repornit sau Adrian lucrează la el, aștepți.
 - durată maximă: 2 ore de antrenare + ~20 min.
