@@ -2940,7 +2940,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0336_S81_cod_iesire.md
 
 ### S77d — De ce strică modelul de 24 de straturi încă din prima oră? Două ore scurte cu rată mai mică și încălzire mai lungă (lot 4 × 24), față de ora 1 din S77c (placa, ~2,5 h)
-- stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
+- stare: in_lucru (executant, 6 nov 2026 10:00; Adrian nu e la workstation: inactiv 39 min, ecran blocat; C: 103 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc)
+- (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
 - tip: placă (2 × 1 oră de antrenare + validări scurte)
 - fereastră: **ziua de 6 nov, după S81 `gata`**, doar când Adrian **nu** lucrează la workstation (dacă e acolo pentru testul OS, pornești după ce a terminat). Totul gata până la **18:30**; dacă nu încape (ambele ore + validări), NU pornești ziua → rămâne `aprobat` pentru noaptea 6→7 de la 19:00, iar eu decid la 17:15 / 20:15.
 - durată maximă: 2 ore de antrenare + ~20 min (pauze, validări).
