@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 08:15 — Raportul de dimineață e la locul lui; singura grijă: discul C: scade (31 GB liberi)
+
+- **Raportul de dimineață (06:46) există și se potrivește cu ce am verificat eu:** S77c NEMĂSURAT (oprit după ora 2), S78, S79, S81 GATA; **1242 teste trec**, 1 pică doar din cauza discului. Placa e liberă și rece (446 MB, 28 °C).
+- **Discul C: a scăzut de la 34 → 33,5 → 31 GB liberi** în 6 ore. S77d are o pază (nu pornește sub 20 GB), deci nimic nu se strică, dar e bine să faci loc azi.
+- **Azi, cum era planificat:** de la 08:00 **S76c** (procesor), apoi **S77d** (placa, ~2,5 h) doar când nu ești la workstation (inclusiv dacă faci testul OS cu `os-251`). Nimic nou pus în coadă.
+- **Aștept de la tine (azi, la workstation):** ce grupuri se șterg din raportul S79 — de exemplu „A, B da” (104 GB, fără nicio pierdere) — scris în COMENZI.md. Restul, fără grabă, ca în rezumatul de mai jos.
+
 ## 6 noiembrie 2026, 05:15 — Noaptea s-a terminat curat: Mini Brain salvat, raportul de spațiu gata, reparația codului de ieșire gata
 
 - **Verificate de mine, toate GATA:** S78 (Mini Brain salvat, 1,54 GB, 0 diferențe — **poți șterge cele două foldere „test ai brain”**), S79 (se pot elibera **~104 GB fără nicio pierdere**: grupurile A + B), S81 (o oră anulată oprește acum lanțul, cu cod 1; 5 teste noi; **1242 teste trec**, singurul picat e cel de disc, cunoscut).
@@ -137,11 +144,3 @@
 - **Noaptea:** S70 s-a terminat normal la 04:00 (verdictul NU AJUTĂ, verificat de mine la 05:20). Raportul de dimineață e scris (06:45), **1195 teste trec**, placa liberă (391 MB / 23 °C).
 - **Acum:** fereastra ta pe workstation (07:00–~09:30, C-63) — nimic nu rulează pe placă. **După 09:30:** S71 (memoria de cod), apoi S72a (doar procesor); **la noapte de la 19:00:** S72b, prima rundă a școlii de cod (dacă S72a dă ≥ 500 exerciții cu test). Toate deja aprobate, n-am adăugat nimic în coadă.
 - **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov.** Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 4 noiembrie 2026, 05:20 — Noaptea pe exerciții (S70): NU AJUTĂ; azi pregătim școala de cod, la noapte prima ei rundă
-
-- **S70 gata, verificat de mine: NU AJUTĂ.** După 8 ore cu 25 % exerciții, modelul rezolvă **2 din 163** probleme noi (S63: 3/163 — diferența e zgomot; AJUTĂ cerea ≥ 8). Codul obișnuit s-a stricat puțin: **0,5074** biți pe octet (S63: 0,5004; limita STRICĂ era 0,510). Placa max 5.922 MB / 62 °C, **1195 teste trec**. S-a terminat la **04:00**, deci workstation-ul e liber pentru tine la 07:00 (C-63).
-- **Concluzia:** a învăța doar „forma” exercițiilor nu-l face să rezolve probleme. Mergem mai departe din modelul S63 (mai bun), nu din S70.
-- **Azi:** după fereastra ta (~09:30) **S71**, memoria de cod (cum era aprobat). Apoi **S72a** (doar procesor): facem exercițiile care au un test ce rulează — la S69 erau doar 13, prea puține pentru școală.
-- **La noapte (de la 19:00): S72b, prima rundă a școlii de cod** (C-60 C): S63 scrie câte 8 soluții, cutia le verifică, învață doar din cele corecte, apoi îl măsurăm pe 200 de exerciții pe care nu le-a văzut în școală. Pragurile scrise dinainte: AJUTĂ = cel puțin **+10 din 200** față de S63, fără să strice codul obișnuit. Pornește doar dacă S72a dă cel puțin 500 de exerciții cu test.
-- **Aștept de la tine:** nimic acum. Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
