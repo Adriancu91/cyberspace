@@ -418,7 +418,7 @@ def main(argv: list[str] | None = None) -> int:
     pornit_la = datetime.now()
     limite = [limita_urmatoare(o, pornit_la) for o in (reguli["pana_la"], args.pana_la) if o]
     limita = min(limite) if limite else None
-    oprita = False  # rularea s-a oprit înainte de vreme (butonul de oprire, paznicul, un experiment anulat)
+    oprita = None  # rularea s-a oprit înainte de vreme (butonul de oprire, paznicul, un experiment anulat): de ce
     examen = Registru().creeaza("examen", config.porturi["examen"]["modul"], config.setari_port("examen")).instanta
     jurnal = Jurnal(config.director_lucru)
     facute = len(ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal))
@@ -490,12 +490,13 @@ def main(argv: list[str] | None = None) -> int:
                     config_orei.buget_antrenare_secunde = buget
                     descriere += f", scurtată la {buget / 60:.0f} minute (limita {limita:%H:%M})"
                     print(f"   Ora {ora} e scurtată la {buget / 60:.0f} minute (limita {limita:%H:%M}).", flush=True)
+                primul_id = jurnal.urmatorul_id()
                 rulare = ruleaza(
                     config_orei, config.nume, descriere, {"samanta": reteta.get("samanta", 0)},
                     pauza=pauza, racire=args.racire, cu_fisa=True,
                 )
                 if rulare is None:
-                    oprita = True
+                    oprita = motivul_opririi(jurnal, config.nume, ora, primul_id)
                     break
                 criterii = criterii_din(rulare.pop("fisa"))
                 ref = (alaturi or {}).get(ora)
@@ -532,6 +533,8 @@ def main(argv: list[str] | None = None) -> int:
     ore = ore_din_jurnal(jurnal.istoric(config.nume), examen.scor_principal)
     if not ore:
         print("Nicio oră făcută încă.", flush=True)
+        if oprita:
+            print(f"oprit înainte de vreme: {oprita}", flush=True)
         return 1
     print("\n=== Antrenarea lungă: scorul pe ore (val_bpb, mai mic = mai bine) ===")
     if alaturi is not None:
@@ -587,7 +590,19 @@ def main(argv: list[str] | None = None) -> int:
         "poveste_comparatie": {"experiment": args.compara_cu, "text": comparatie} if comparatie else None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\nSalvat în {iesire}", flush=True)
+    if oprita:
+        # 6 nov 2026 (S81): un lanț care vede cod 0 merge mai departe la examene, pe alt model decât cel așteptat
+        print(f"oprit înainte de vreme: {oprita}", flush=True)
+        return 1
     return 0
+
+
+def motivul_opririi(jurnal: Jurnal, linie: str, ora: int, primul_id: int) -> str:
+    """De ce n-a ieșit ora: experimentul ei anulat din jurnal (cu motivul lui), altfel butonul de oprire sau paznicul."""
+    anulate = [f for f in jurnal.istoric(linie) if f.get("id", -1) >= primul_id and f.get("decizie") == "anulat"]
+    if anulate:
+        return f"ora {ora} anulată — {anulate[-1].get('motiv') or 'fără motiv scris'}"
+    return f"ora {ora} nu s-a făcut — butonul de oprire sau paznicul (motivul e scris mai sus)"
 
 
 if __name__ == "__main__":

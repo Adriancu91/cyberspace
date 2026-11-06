@@ -2918,7 +2918,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md
 
 ### S81 — Reparație: `unelte/antrenare_lunga.py` / `antrenare_recalcul.py` ies cu cod ≠ 0 când o oră e anulată (ca lanțurile să nu meargă mai departe pe un model neașteptat) (doar procesor, ~30–45 min)
-- stare: in_lucru (executant, 6 nov 2026 03:30)
+- stare: gata (executant, 6 nov 2026 03:36): o oră anulată sau o oprire înainte de vreme → cod 1 și rândul „oprit înainte de vreme: ora N anulată — <motivul>” (motivul din fișa anulată din jurnal); rularea întreagă și `--raport` rămân cod 0; `antrenare_recalcul.py` transmitea deja codul; 5 teste noi; 1242 trec, 1 sărit, 1 pică doar din cauza discului (cunoscut)
+- (istoric) stare: in_lucru (executant, 6 nov 2026 03:30)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
 - tip: procesor (cod în `unelte/` + teste). Fără placă.
 - fereastră: ziua de 6 nov, **înainte de S77d** (după S78/S79 dacă acestea rulează încă; poate și noaptea, dacă S78/S79 sunt gata).
@@ -2930,7 +2931,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   3. Nu schimbi plafonul de 5.800 MB, nici ce se antrenează. Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`.
   4. `python -m pytest` (regula de sus pentru testul de disc); raport scurt `docs/rapoarte/<data>_<ora>_S81_cod_iesire.md`; coada → `gata`; commit + push.
 - aprobat de: supraveghetor, 6 nov 2026 02:15 (granițele 5 și 6: reparația unui script care a dat un rezultat greșit, teste noi; nu atinge `kronos/`)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-06_0336_S81_cod_iesire.md
 
 ### S77d — De ce strică modelul de 24 de straturi încă din prima oră? Două ore scurte cu rată mai mică și încălzire mai lungă (lot 4 × 24), față de ora 1 din S77c (placa, ~2,5 h)
 - stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
