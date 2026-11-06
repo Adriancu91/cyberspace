@@ -2940,7 +2940,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-06_0336_S81_cod_iesire.md
 
 ### S77d — De ce strică modelul de 24 de straturi încă din prima oră? Două ore scurte cu rată mai mică și încălzire mai lungă (lot 4 × 24), față de ora 1 din S77c (placa, ~2,5 h)
-- stare: in_lucru (executant, 6 nov 2026 10:00; Adrian nu e la workstation: inactiv 39 min, ecran blocat; C: 103 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc)
+- stare: oprit (executant, 6 nov 2026 10:35) — **NEMĂSURAT** pe ambele variante
+- motiv: lanțul a fost închis forțat din afară la 10:22:26 (cod Windows 1073807364 = 0x40010004), după ~20 min din ora 1 a lui d1; fără eroare în log, fără out of memory (vârf 6.186 MB, 62 °C), paznicul nu a oprit nimic; niciun model salvat, d2 nu a pornit; nimic repornit. `lucru/w2_mare_24d1/` există acum (copie + ruleaza.lock) — o reluare cere linii noi sau „da”-ul lui Adrian pentru folder. 1247 teste trec, 0 pică.
+- (istoric) stare: in_lucru (executant, 6 nov 2026 10:00; Adrian nu e la workstation: inactiv 39 min, ecran blocat; C: 103 GB liberi; `gpt_24.pt` SHA d35e3dbe…92cc)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 02:15)
 - tip: placă (2 × 1 oră de antrenare + validări scurte)
 - fereastră: **ziua de 6 nov, după S81 `gata`**, doar când Adrian **nu** lucrează la workstation (dacă e acolo pentru testul OS, pornești după ce a terminat). Totul gata până la **18:30**; dacă nu încape (ambele ore + validări), NU pornești ziua → rămâne `aprobat` pentru noaptea 6→7 de la 19:00, iar eu decid la 17:15 / 20:15.
@@ -2962,6 +2964,6 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
      - Ce urmează (scris acum): dacă cel puțin o variantă ȚINE → noaptea 6→7, 5 ore pe cea mai bună (cea cu R2 mai mic) față de #513, cu pragurile S77b; dacă niciuna nu ține → nu mai punem nopți pe 24 de straturi până la o idee nouă (de exemplu întâi doar straturile noi), scrisă ca sarcină separată.
   5. SHA-256 #477 și `gpt_24.pt` înainte = după. `python -m pytest` (regula de sus pentru testul de disc); închizi pre-înregistrarea; raport `docs/rapoarte/<data>_<ora>_S77d_rata_mare24.md`; coada → `gata` cu verdictul pe fiecare variantă; commit + push.
 - Modelele noi **nu** înlocuiesc #477 nicăieri. Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, #477/#459/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24/`, `lucru/w2_mare_24b/`, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
-- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24d.md (de scris și urcat înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-11-06_w2_mare_24d.md (închisă: NEMĂSURAT)
 - aprobat de: supraveghetor, 6 nov 2026 02:15 (granița 1: aceeași linie de 24 de straturi din C-64, altă rată și alt lot; granița 2: validări)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-06_1035_S77d_rata_mare24.md
