@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 6 nov 2026 (supraveghetor, 17:15; COMENZI.md C-80 și C-81, Adrian):** Adrian **a plecat de la workstation la ~15:20 fără testul OS** — calculatorul n-a fost repornit, a rămas în Windows, **placa e liberă**. Înainte să plece **a șters** (spune el) cele două foldere „test ai brain” și probabil arhiva `cyberspace_mutare`. **Fă ACUM S82** (jos, `aprobat`, doar citire, ~15 min): ce a mai rămas din grupurile A/B, spațiul pe C:, Coșul de reciclare → 3 rânduri sus în `plan/pentru_adrian.md`; nu ștergi nimic, nici Coșul. **S77e rămâne la noapte, pornire de la 19:00 (cel târziu 21:00)** — ziua nu mai ajunge până la 18:30 pentru ~2,5 h. Testul OS al lui Adrian se mută la următoarea lui fereastră (îți scriu eu dacă e una).
+
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 11:15; COMENZI.md C-79, Adrian):** Adrian e la workstation de la ~08:30 pentru testul OS (repornire în Cyber Universe, `os-250`/`os-251`) — **nimic pe placă cât e el acolo.** S76c = **GATA, verificat** (URMEAZĂ, la limită). **S77d** a pornit la 10:00 (tu nu vedeai C-79 — nu e vina ta) și a fost închis la 10:22, cel mai probabil de repornirea lui Adrian → OPRIT/NEMĂSURAT corect, nimic stricat. **Reluarea = S77e** (jos, sub S77d, `aprobat`): linii noi `w2_mare_24e1`/`_24e2`, deci **nu atingi și nu ștergi** `lucru/w2_mare_24d1/`. **Fereastra S77e: noaptea 6→7, pornire de la 19:00** (cel târziu 21:00). Ziua o mut eu mai devreme doar dacă la 14:15 / 17:15 scrie aici că Adrian a terminat. Discul C: are acum ~106 GB liberi → testul de disc trece din nou; regula „1 test pică din cauza discului” nu se mai aplică (orice test picat = regula obișnuită).
 
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 02:15):** S77c verificat: **OPRIT/NEMĂSURAT corect** (out of memory la ora 3, doar 2 ore; nimic repornit — corect). **Discul C: are 34 GB liberi (sub 40 GB)** → testul `test_unealta_cap_coada_fara_excluse_si_fara_validare_la_antrenare` pică din cauza discului, nu a codului. **Până când Adrian face loc:** dacă ACESTA e singurul test picat (1 picat, restul trec), îl scrii în raport și în coadă ca „1 test pică doar din cauza discului (cunoscut, 6 nov)” și poți marca sarcina `gata`; orice alt test picat → regula obișnuită. Nu ștergi nimic, nu schimbi pragul de 40 GB. **Ordinea:** noaptea asta (placa liberă) **S78 → S79** (procesor + disc; S79 e cea mai urgentă pentru Adrian, care e la workstation pe la 08:30 — raportul de spațiu trebuie să fie gata până atunci dacă se poate). Ziua de 6 nov: **S81** (reparația codului de ieșire, procesor, ~30 min) → **S77d** (placa, ~2,5 h: de ce strică modelul mare în prima oră — două rate mai mici); **S76c** (procesor) poate merge în paralel cu S77d. Nimic pe placă cât Adrian lucrează la workstation. Noaptea 6→7: o scriu eu la 17:15 / 20:15, după cifrele S77d.
@@ -2989,4 +2991,21 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Modelele noi **nu** înlocuiesc #477 nicăieri. Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul, #477/#459/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24e.md (de scris înainte de pornire)
 - aprobat de: supraveghetor, 6 nov 2026 11:15 (granița 1: aceeași linie de 24 de straturi, aceleași rate ca S77d deja aprobate; granița 2: validări)
+- raport: —
+
+### S82 — Verificare (doar citire): ce a mai rămas din grupurile A și B din S79 după ștergerea lui Adrian, spațiul pe C: și Coșul de reciclare (procesor + disc, ~15 min)
+- stare: **aprobat** (Adrian, prin COMENZI.md C-81, 6 nov 2026 15:51; preluat de supraveghetor 6 nov 2026 17:15)
+- tip: procesor (doar citire pe disc)
+- fereastră: **oricând — fă-o ACUM, înainte de S77e** (se termină cu mult înainte de 19:00; nu folosește placa)
+- durată maximă: 30 de minute
+- de ce: Adrian spune că a șters înainte să plece cele două foldere „test ai brain” (grupul A) și, probabil, arhiva `cyberspace_mutare` (grupul B, în `Desktop\proiect\`). Vrea să știe ce s-a eliberat cu adevărat.
+- ce faci:
+  1. **Doar prin citire** (`Test-Path`, `Get-ChildItem`, `Get-PSDrive C`): pentru fiecare cale din grupurile A și B din raportul `docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md` scrii „există / nu mai există” (și mărimea, dacă există).
+  2. Spațiul liber pe C: în GB, acum.
+  3. Coșul de reciclare de pe C: câte fișiere și câți GB ține (doar citit, de exemplu cu `Shell.Application` → `Namespace(10)` sau mărimea lui `C:\$Recycle.Bin`; dacă nu se poate citi, scrii asta). **NU golești Coșul și nu ștergi nimic.**
+  4. Dacă spațiul liber e **> 40 GB**: `python -m pytest` (cu testul de disc inclus) și scrii rezultatul.
+  5. Scrii **SUS în `plan/pentru_adrian.md`** un rezumat de **3 rânduri** (titlu `## 6 noiembrie 2026, <ora> — (executant, S82 / C-81) …`): ce mai există din A și B, spațiul liber pe C:, cât ține Coșul (și dacă golirea lui ar elibera spațiu — o face Adrian, dacă vrea). Raportul întreg: `docs/rapoarte/<data>_<ora>_S82_verificare_spatiu.md`. Coada → `gata` cu rezultatul într-o propoziție; commit + push.
+- Nu atingi nimic altceva; nimic șters, mutat, descărcat sau instalat. Nimic din `lucru/` în Git.
+- pre-înregistrare: nu e nevoie (fără placă, fără experiment)
+- aprobat de: Adrian (COMENZI.md C-81, 6 nov 2026)
 - raport: —

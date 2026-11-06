@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 17:15 — Ai plecat fără testul OS: placa e liberă; executantul verifică ce ai șters; S77e la noapte
+
+- **Am primit C-80 și C-81:** ai plecat la ~15:20 fără testul OS (calculatorul a rămas în Windows) și ai șters înainte cele două foldere „test ai brain” și probabil arhiva de mutare.
+- **Pus în coadă: S82** (aprobat de tine prin C-81, se face acum, ~15 min, doar citire): ce a mai rămas din grupurile A și B, cât e liber pe C: și cât ține Coșul de reciclare. Executantul scrie 3 rânduri chiar aici, sus. **Nu șterge nimic, nici Coșul** — dacă vrei să golești Coșul, o faci tu.
+- **Nu rulează nimic acum.** De la executant nimic nou din 10:36 — normal, n-avea treabă cât erai la workstation. **S77e** (reluarea S77d, modelul de 24 de straturi cu rată mai mică, ~2,5 h pe placă) pornește **la noapte de la 19:00**; până la 18:30 nu mai ajungea. Verdictul îl verific la 23:15 sau 02:15.
+- **Aștept de la tine:** nimic urgent. Când ai timp: **#513 îl înlocuiește pe #477?** („da/nu” în COMENZI.md) și când e următoarea ta fereastră pentru testul OS.
+
 ## 6 noiembrie 2026, 11:15 — #513 urmează și instrucțiuni spuse altfel (la limită); S77d a fost oprit de repornire, îl reiau la noapte
 
 - **S76c: GATA, verificat de mine — URMEAZĂ INSTRUCȚIUNI, la limită.** Pe 290 de cereri spuse cu alte cuvinte decât la antrenare, #513 are **83,22** față de #477 **61,38** (pragul cerea cel puțin +20 → a ieșit +21,84). Merge bine la nume, an, număr, rezumat; **cade la „în ce județ și țară”** spus altfel (doar 7,5 % corect).
@@ -135,12 +142,3 @@
 - **Pus în coadă (aprobat de mine, ~1,5 ore, acum ziua): S75** — S63 scrie câte 8 soluții la cele 689 de exerciții ale școlii și cutia le verifică. Reperul fiind mic, s-ar putea să iasă sub cele 100 de soluții corecte de care e nevoie; dacă aflăm de ziuă, noaptea nu se pierde (fie școala începe direct cu învățarea, fie pun altceva pe noapte la 17:15 / 20:15).
 - **Comanda ta C-64 preluată:** dacă școala de cod nu ajută, urmează **S76** (răspunsuri în română, o noapte din #477 pe o copie) și **S77** (Kronos mai mare, crescut din #477). Le scriu în detaliu după verdictul S72b (mâine dimineață). Am socotit „nu ajută” orice verdict în afară de AJUTĂ — spune-mi dacă vrei altfel la NECLAR.
 - **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 4 noiembrie 2026, 11:20 — Memoria de cod (S71): NU AJUTĂ; exercițiile cu test (S72a): DESTULE — școala de cod pornește la noapte
-
-- **S71 gata, verificat de mine: NU AJUTĂ.** Cu 2–4 funcții asemănătoare puse în față, modelul rezolvă **0 din 20** probleme de probă (fără ele: S63 0/20, S70 1/20). Funcțiile găsite seamănă la nume, nu la soluție, iar modelul începe să copieze nume din ele. Lăsăm memoria deoparte; o reîncercăm poate doar cu exerciții verificate.
-- **S72a gata, verificat de mine: 889 de exerciții cu test** care trec în cutie (și nu trec cu un răspuns gol) — **200** pentru măsurare, **689** pentru școală (pragul era 500). Nicio scurgere rămasă, **1207 teste trec**.
-- **Pus în coadă (aprobat de mine, ~30 min pe placă, acum ziua): S74** — măsurăm de pe acum cât rezolvă S63 din cele 200 (reperul școlii), ca la noapte să nu pierdem timp și să știm dinainte dacă are din ce învăța. Am adăugat și o regulă: școala nu învață din răspunsuri care doar „ghicesc” rezultatul (`return 4`).
-- **La noapte (de la 19:00): S72b**, prima rundă a școlii de cod, cum era aprobată. Placa e liberă acum (S71 a mers la max 1.506 MB / 55 °C).
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil de la 08:20). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
