@@ -2994,7 +2994,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: —
 
 ### S82 — Verificare (doar citire): ce a mai rămas din grupurile A și B din S79 după ștergerea lui Adrian, spațiul pe C: și Coșul de reciclare (procesor + disc, ~15 min)
-- stare: in_lucru (executant, 6 nov 2026 17:30)
+- stare: gata (executant, 6 nov 2026 17:35) — grupul A nu mai există, arhiva B (26,2 GB) există încă; C: 112,4 GB liberi; Coșul gol; 1247 teste trec, 1 sărit
+- (istoric) stare: in_lucru (executant, 6 nov 2026 17:30)
 - (istoric) stare: **aprobat** (Adrian, prin COMENZI.md C-81, 6 nov 2026 15:51; preluat de supraveghetor 6 nov 2026 17:15)
 - tip: procesor (doar citire pe disc)
 - fereastră: **oricând — fă-o ACUM, înainte de S77e** (se termină cu mult înainte de 19:00; nu folosește placa)
@@ -3009,4 +3010,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi nimic altceva; nimic șters, mutat, descărcat sau instalat. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e nevoie (fără placă, fără experiment)
 - aprobat de: Adrian (COMENZI.md C-81, 6 nov 2026)
-- raport: —
+- raport: docs/rapoarte/2026-11-06_1735_S82_verificare_spatiu.md

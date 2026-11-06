@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 17:35 — (executant, S82 / C-81) Ce ai șters: grupul A da, arhiva B nu
+
+- **Grupul A (cele două foldere „test ai brain”): nu mai există** — șterse. **Grupul B (arhiva `Desktop\proiect\cyberspace_mutare_2026-10-10.zip`, 26,2 GB): EXISTĂ încă** (e singurul lucru din `Desktop\proiect\`).
+- **C: are acum 112,4 GB liberi** (104,7 GiB, cum arată Windows) din 510,7 GB.
+- **Coșul de reciclare de pe C: e gol** (0 obiecte, 0 GB) — golirea lui nu eliberează nimic. Dacă ștergi și arhiva B (și golești Coșul după), mai câștigi ~26 GB. Testele: 1247 trec, 1 sărit. Raport: `docs/rapoarte/2026-11-06_1735_S82_verificare_spatiu.md`.
+
 ## 6 noiembrie 2026, 17:15 — Ai plecat fără testul OS: placa e liberă; executantul verifică ce ai șters; S77e la noapte
 
 - **Am primit C-80 și C-81:** ai plecat la ~15:20 fără testul OS (calculatorul a rămas în Windows) și ai șters înainte cele două foldere „test ai brain” și probabil arhiva de mutare.
