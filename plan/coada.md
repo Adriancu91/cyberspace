@@ -2831,7 +2831,10 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-05_2115_S77b_kronos_mare_noaptea1.md
 
 ### S77c — Reluarea S77b cu lot 6 × `adunare_loturi = 16` (același lot efectiv 96, mai puțină memorie): prima noapte a lui Kronos de 24 de straturi, linie nouă `w2_mare_24b`
-- stare: in_lucru (executant, 5 nov 2026 23:30)
+- stare: oprit (executant, 6 nov 2026 02:00)
+- motiv: antrenarea s-a oprit după ora 2 din 5 — ora 3 (#519) anulată la 01:43 cu CUDA out of memory la testul rapid (plafonul PyTorch 5.800 MB); unealta a ieșit cu cod 0, examenele au rulat pe #518 (ora 2). Verdict NEMĂSURAT; informativ #518: română 1,2268 vs #513 1,2060, cod 0,7413, R2 0,4155 (ar fi STRICĂ). Nimic repornit.
+- raport: docs/rapoarte/2026-11-06_0159_S77c_kronos_mare_noaptea1.md
+- (istoric) stare: in_lucru (executant, 5 nov 2026 23:30)
 - (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 23:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **ACUM, noaptea 5→6 nov.** Antrenarea pornește **cel târziu la 00:30**; examenele trebuie gata până la **08:00** (dacă apare între timp o fereastră a lui Adrian pe workstation în coadă/hub, oprești curat). Dacă nu apuci să pornești până la 00:30: NU pornești la noapte; rămâne `aprobat` pentru **noaptea 6→7 nov, pornire la 19:00** (refaci pre-înregistrarea cu data nouă). Ziua de 6 nov rămâne liberă pentru fereastra lui Adrian (testul OS) și S76c.
