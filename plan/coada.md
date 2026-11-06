@@ -2858,7 +2858,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/…
 
 ### S76c — C-64 R1 pasul 3: #513 urmează și instrucțiuni FORMULATE ALTFEL decât în antrenare? (examen nou pe procesor, fără placă, fără antrenare)
-- stare: in_lucru (executant, 6 nov 2026 08:30)
+- stare: gata (executant, 6 nov 2026 09:17): **URMEAZĂ INSTRUCȚIUNI, la limită** — R1 pe 290 de instrucțiuni formulate altfel (23 de formulări, 0 în antrenare): #477 61,38, #513 83,22 (B − A = +21,84; prag +20 și ≥ 70); #513 scade de la 98,97 (S76a) la 83,22; „județ și țară” spus altfel cade (#513 7,5 % corect); defectul „122,000 → 000” reparat (test nou); lanțul 08:35–09:10 pe procesor, cod 0, SHA #477/#513 neschimbat; 1247 teste trec, 1 sărit, 0 pică; C: 110 GB liberi
+- (istoric) stare: in_lucru (executant, 6 nov 2026 08:30)
 - (istoric) stare: **aprobat** (supraveghetor, 5 nov 2026 07:40)
 - tip: procesor (date + unealtă + teste + examen pe procesor, `CUDA_VISIBLE_DEVICES=-1`)
 - fereastră: ziua de 5 nov, **DUPĂ S77a** (nu în același timp cu măsurătorile de viteză de pe placă și nu în fereastra lui Adrian C-73, acum până la ~14:00). Gata până la **18:30**; dacă nu apucă, se termină doar când pe placă nu rulează o antrenare (nu încarcă procesorul peste o noapte de antrenare).
@@ -2879,7 +2880,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. `python -m pytest` — toate trec; închizi pre-înregistrarea; raport `docs/rapoarte/<data>_<ora>_S76c_reformulat.md` (cifrele, 5 exemple de formulări noi — din articole de antrenare, nu din setul ascuns —, cât a durat); coada → `gata` cu verdictul; commit + push.
 - Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul, #477/#459/#513 (doar citire), seturile S76a existente, linia `cod_c1*`, ramura `limba-romana`. Nimic descărcat, niciun alt AI, nimic instalat. Nimic din `lucru/` în Git. #513 nu înlocuiește #477 nicăieri fără „da”-ul lui Adrian.
 - aprobat de: supraveghetor, 5 nov 2026 07:40 (granițele 2, 3 și 5; partea R1 din **COMENZI.md C-64**, aprobată de Adrian 4 nov 11:30)
-- raport: docs/rapoarte/…
+- pre-înregistrare: docs/preinregistrari/2026-11-06_s76c_reformulat.md (urcată 08:35, commit 75c077c, înainte de examene; închisă cu verdictul)
+- raport: docs/rapoarte/2026-11-06_0917_S76c_reformulat.md
 
 ### S78 — COMENZI.md C-77: salvează și organizează ce e util din vechiul proiect „Mini Brain” (Desktop) înainte ca Adrian să-l șteargă (doar procesor + disc, FĂRĂ placă, nimic șters)
 - stare: gata — **verificat de supraveghetor 6 nov 05:15: GATA** (0 diferențe SHA-256, nimic șters) → C-77 `gata` în hub

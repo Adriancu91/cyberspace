@@ -90,3 +90,42 @@ răspunsese „Nu.”) și **98,97** (#513, răspunsese „122.”) — ambele g
 - B < A + 10 (DOAR ȘABLOANELE): #513 a învățat cele 8 șabloane, nu cererea din spatele lor.
 - B ≥ 90 și A ≤ 40: generalizarea e mai bună decât credeam, iar #477 nu se folosește de felurile vechi.
 - A ≥ 65: formulările noi sunt prea aproape de felurile vechi, iar setul măsoară mai mult „întrebare veche” decât „instrucțiune nouă”.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-06 09:15, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Cifrele (examen, nu antrenare; lanțul `lucru/cascada/S76c_proba/s76c.py`, prin cascadă, 08:35–09:10, cod 0, pe procesor; set
+`ec6900f2…7646` verificat în ambele `nota.json`; SHA-256 #477 și #513 înainte = după ✓):
+
+| măsura | A (#477) | B (#513) |
+|---|---|---|
+| **R1 pe instrucțiunile reformulate (290)** | **61,38** | **83,22** |
+| corect | 47,24 % | 74,83 % |
+| în temă | 53,79 % | 79,66 % |
+| limbă curată | 83,10 % | 95,17 % |
+| `limba_curata_min2` | 67,59 % | 86,21 % |
+| durata | 1.011 s | 1.067 s |
+
+R1 pe fel (A / B; în paranteză B pe setul S76a): instr_an 78,33 / 80,00 (100); instr_da_nu 100 / 100 (100); instr_judet_tara 37,50 /
+**38,33** (99,17); instr_nu_scrie 96,00 / 100 (100); instr_numar 67,50 / 83,33 (95,83); instr_nume 77,50 / 98,33 (97,50);
+instr_propozitie 39,17 / 100 (100); instr_rezuma 22,50 / 78,33 (100).
+
+B pe setul nou față de S76a: 83,22 vs 98,97 (−15,75).
+
+## Verdictul
+
+**URMEAZĂ INSTRUCȚIUNI** (strict după pragurile de mai sus): B = 83,22 ≥ A + 20 = 81,38 și B = 83,22 ≥ 70. La limită: cu **1,84**
+puncte peste pragul relativ.
+
+Față de așteptări: A ~50 → 61,38 (mai sus, dar sub 65, deci nu se declanșează „setul prea aproape de felurile vechi”); B ~78 → 83,22;
+diferența ~28 → 21,84. Nu se infirmă nimic din ce am scris, dar diferența e mai mică decât credeam.
+
+Citirea (conform „Să nu uite”): #513 urmează cererile spuse altfel la nume, propoziție, rezumat (mai puțin la „Despre ce e vorba în text?”
+1/13) și număr, dar **„județul și țara” spus altfel cade complet** (B 7,5 % corect, ca #477: 0 %) — răspunde „Nu.”, „În județul X.” fără
+țară sau „Nu scrie în text.”. La formulări mai neobișnuite („Populația din X, în cifre?”, „Anul în care … — doar cifrele”) ambele
+modele spun des „Nu scrie în text.”. URMEAZĂ e aici „aceeași cerere, alte cuvinte”, nu „orice instrucțiune”.
