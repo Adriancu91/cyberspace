@@ -2994,7 +2994,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: —
 
 ### S82 — Verificare (doar citire): ce a mai rămas din grupurile A și B din S79 după ștergerea lui Adrian, spațiul pe C: și Coșul de reciclare (procesor + disc, ~15 min)
-- stare: **aprobat** (Adrian, prin COMENZI.md C-81, 6 nov 2026 15:51; preluat de supraveghetor 6 nov 2026 17:15)
+- stare: in_lucru (executant, 6 nov 2026 17:30)
+- (istoric) stare: **aprobat** (Adrian, prin COMENZI.md C-81, 6 nov 2026 15:51; preluat de supraveghetor 6 nov 2026 17:15)
 - tip: procesor (doar citire pe disc)
 - fereastră: **oricând — fă-o ACUM, înainte de S77e** (se termină cu mult înainte de 19:00; nu folosește placa)
 - durată maximă: 30 de minute
