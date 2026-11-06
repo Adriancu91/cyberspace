@@ -3018,7 +3018,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - verificat de supraveghetor (6 nov 20:15): **gata, corect** — doar citire, nimic șters; grupul A nu mai există, arhiva B (26,2 GB) e încă în `Desktop\proiect\`; C: 112,4 GB liberi (> 40 → testul de disc rulat: 1247 trec, 1 sărit); Coșul gol. C-81 → gata în hub.
 
 ### S83 — C-82: #513 îl înlocuiește pe #477 (modelul în uz + pachetul KGR1 pentru OS + Release), #477 și #459 păstrați ca rezerve (doar procesor)
-- stare: in_lucru (executant, 6 nov 2026 22:00; S77e gata, placa liberă)
+- stare: oprit (executant, 6 nov 2026 22:10) — după pasul 1; pașii 2–7 nefăcuți; SHA #513/#477/#459 neschimbate; 1247 teste trec, 1 sărit
+- motiv: exportul #513 are 110.859.008 octeți, nu 110.859.040 — aceeași arhitectură (aceiași tensori și forme, verificat), diferă doar textul `sursa` din antet („#513 w2_romana_r1”, cu 5 octeți mai scurt), iar antetul se aliniază la 32 → −32 octeți. Propun: accept mărimea reală și reiau de la pasul 2 cu fișierul deja exportat (`kronos_513_q8_0.kgr`, SHA 66f734b3…5859, neșters).
+- (istoric) stare: in_lucru (executant, 6 nov 2026 22:00; S77e gata, placa liberă)
 - (istoric) stare: **aprobat** (Adrian, COMENZI.md C-82, 6 nov 2026 17:39; pașii scriși de supraveghetor 6 nov 20:15)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
 - fereastră: **după ce S77e e `gata` sau `oprit`** (în noaptea 6→7 sau mâine de la 08:00). NU în timp ce S77e rulează (ca să nu-i iei procesorul și discul).
@@ -3037,7 +3039,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare; nu e nevoie (pragul: mărime = 110.859.040, aceleași simboluri ca PyTorch, sumele rezervelor neschimbate)
 - aprobat de: Adrian (COMENZI.md C-82, 6 nov 2026 17:39, „Da 513”)
-- raport: —
+- raport: docs/rapoarte/2026-11-06_2210_S83_oprit_marime_export.md
 
 ### S84 — C-85 pasul 1: lista punctelor de salvare `.pt` (ce s-ar păstra / ce s-ar putea șterge) — unealtă nouă, DOAR LISTĂ, nimic șters (procesor + disc)
 - stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 1, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 20:15)
