@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 6 noiembrie 2026, 11:15 — #513 urmează și instrucțiuni spuse altfel (la limită); S77d a fost oprit de repornire, îl reiau la noapte
+
+- **S76c: GATA, verificat de mine — URMEAZĂ INSTRUCȚIUNI, la limită.** Pe 290 de cereri spuse cu alte cuvinte decât la antrenare, #513 are **83,22** față de #477 **61,38** (pragul cerea cel puțin +20 → a ieșit +21,84). Merge bine la nume, an, număr, rezumat; **cade la „în ce județ și țară”** spus altfel (doar 7,5 % corect).
+- **S77d: oprit după 20 de minute, NEMĂSURAT** — închis din afară la 10:22, cel mai probabil de repornirea ta în Cyber Universe (executantul nu vedea C-79). Nimic stricat (placa max 6.186 MB, 62 °C; 1247 teste trec). **Am pus reluarea S77e (aprobată de mine) la noapte, de la 19:00**, pe foldere noi, ca să nu trebuiască șters nimic.
+- **REZOLVAT: discul C:** are acum ~106 GB liberi (dimineață 31) — testul de disc trece din nou.
+- **Aștept de la tine:** nimic urgent. Când ai timp: **#513 îl înlocuiește pe #477?** (acum ai ambele verdicte: S76b AJUTĂ, S76c URMEAZĂ, cu slăbiciunea la „județ și țară”) — scrie „da/nu” în COMENZI.md. Dacă termini testul OS mai devreme și vrei S77e pe zi, scrie-mi „am terminat la workstation”.
+
 ## 6 noiembrie 2026, 08:15 — Raportul de dimineață e la locul lui; singura grijă: discul C: scade (31 GB liberi)
 
 - **Raportul de dimineață (06:46) există și se potrivește cu ce am verificat eu:** S77c NEMĂSURAT (oprit după ora 2), S78, S79, S81 GATA; **1242 teste trec**, 1 pică doar din cauza discului. Placa e liberă și rece (446 MB, 28 °C).
@@ -137,10 +144,3 @@
 - **La noapte (de la 19:00): S72b**, prima rundă a școlii de cod, cum era aprobată. Placa e liberă acum (S71 a mers la max 1.506 MB / 55 °C).
 - **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil de la 08:20). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
 
-## 4 noiembrie 2026, 08:20 — ⚠ IMPORTANT: reînnoiește autentificarea Claude pe workstation până pe 6 noiembrie
-
-- **PROBLEMĂ nouă, de rezolvat de tine până pe 6 nov:** raportul de dimineață spune că, la fiecare pornire, Claude Code de pe workstation anunță că **autentificarea lui expiră între 6 și 9 noiembrie**. După aceea executantul și raportul de dimineață se opresc (cascada stă).
-  **Ce faci (2 minute, pe workstation, într-o fereastră PowerShell):** `claude setup-token` (cheia pentru sarcinile care merg fără om — varianta potrivită aici) sau, dacă nu merge, `claude auth login`. Urmezi pașii din browser. Nu oprește nimic din ce rulează.
-- **Noaptea:** S70 s-a terminat normal la 04:00 (verdictul NU AJUTĂ, verificat de mine la 05:20). Raportul de dimineață e scris (06:45), **1195 teste trec**, placa liberă (391 MB / 23 °C).
-- **Acum:** fereastra ta pe workstation (07:00–~09:30, C-63) — nimic nu rulează pe placă. **După 09:30:** S71 (memoria de cod), apoi S72a (doar procesor); **la noapte de la 19:00:** S72b, prima rundă a școlii de cod (dacă S72a dă ≥ 500 exerciții cu test). Toate deja aprobate, n-am adăugat nimic în coadă.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov.** Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
