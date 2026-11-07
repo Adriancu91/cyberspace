@@ -3107,7 +3107,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0239_S83b_model_513.md
 
 ### S86 — C-85 pasul 2: memoria plăcii la modelul mare — Muon (o singură stare) față de AdamW + paza de memorie la fiecare oră (măsurare scurtă pe placă, fără antrenare lungă)
-- stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 2, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 23:15)
+- stare: in_lucru (executant, 7 nov 2026 03:00; S83b gata, placa liberă 456 MB / 26 °C)
+- (istoric) stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 2, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 23:15)
 - tip: placă (măsurare ~45–60 min) + procesor (unealtă, teste)
 - fereastră: **MUTAT (supraveghetor, 7 nov 02:15): ACUM, în restul nopții 6→7** — S85 s-a oprit, placa e liberă, nu mai vine o continuare S85. Pornești după ce S83b a pornit (pot merge în paralel; S83b e pe procesor; regula de 10 % nu se aplică, S86 nu e antrenare lungă). Partea pe placă pornește **cel târziu la 05:30** și se termină până la **07:00**; dacă nu apuci, o faci **ziua de 7 nov de la 08:00** (totul gata până la 18:30). Nimic pe placă dacă Adrian e la workstation.
 - durată maximă: 1 oră pe placă + ~1 oră procesor
