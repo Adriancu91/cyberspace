@@ -3199,7 +3199,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S89_kronos_mare_5ore.md
 
 ### S90 — C-85 pasul 3: examenul de română ca modul `module/examen_romana.py` (port `examen`, MANIFEST, trece `teste_contracte/`), NEACTIVAT în nicio configurare (doar procesor)
-- stare: **aprobat** (supraveghetor, 7 nov 2026 11:15)
+- stare: in_lucru (executant, 7 nov 2026 11:30; placa liberă, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 11:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **oricând de azi, 7 nov**; ziua imediat (placa nu e folosită). Dacă S89 a pornit: doar după verificarea de la 15 minute a lui S89 și cu regula de 10 % la pași/s (dacă scad cu peste 10 %, pui S90 pe pauză până după S89).
 - durată maximă: ~3 ore procesor; RAM cel mult ~6 GB
