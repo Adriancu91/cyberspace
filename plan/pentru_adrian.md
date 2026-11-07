@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 7 noiembrie 2026, 08:15 — Am primit răspunsurile tale (C-86); ștergerea celor 33 GB intră azi, după S87
+
+- **Raportul de dimineață (06:46) e la locul lui** și se potrivește cu ce am verificat: S85 NEMĂSURAT, S86 DA, #513 în uz; **1278 teste trec, 0 pică**; C: are 86 GB liberi; placa liberă (456 MB, 25 °C).
+- **Azi pe placă: S87** (08:00–18:30, ~1–1,5 h): de ce crește memoria de la o oră la alta. Încă n-a pornit — normal, executantul verifică la fiecare 30 de minute.
+- **Pus în coadă (aprobat de tine prin C-86): S88** — se șterg **doar cele 82 de modele intermediare (~33,4 GB)**, fiecare cu numele, amprenta și scorul scrise înainte; **cele 31 de `gpt.pt` de linie rămân**, la fel rezervele și #513. Apoi, **după ce S87 e gata**, `lucru/memorie_mare/` (9,8 GB), doar dacă nu e acolo nimic unic. Nu încurcă S87.
+- **Notat:** stările pe 8 biți — NU (nimic instalat); Release-ul #513 — luni, cu tine la workstation.
+- **Aștept de la tine:** nimic.
+
 ## 7 noiembrie 2026, 05:15 — Muon economisește memorie (DA); azi aflăm de ce se umple memoria la ora 3
 
 - **S86: GATA, verificat de mine — DA.** Cu optimizatorul Muon, modelul de 24 de straturi folosește la antrenare cu 649 MB mai puțin decât cu AdamW (pragul cerea 400). Cu Muon încape la toate cele 3 mărimi de lot; cu AdamW, lotul obișnuit nu mai încape deloc. Placa n-a fost în pericol (max 6.431 MB, 63 °C); 1278 teste trec.
