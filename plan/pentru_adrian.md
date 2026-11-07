@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 7 nov 14:40 — S91 `gata`:** unealta care încearcă rețetele întâi pe un model mic și scrie o singură propunere pentru cel mare (`unelte/cercetator_avans.py`) merge, fără nicio schimbare în `kronos/`; 1318 teste trec. Lecția demonstrației: rata bună a unui model minuscul nu se poate copia pe cel mare (ar fi ×300) → pentru partea b propun schimbări relative și un test Spearman pe 5 rețete (detalii în `docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md`). Nimic de făcut acum.
+>
 > **Executant, 7 nov 12:26 — S90 `gata`:** examenul de română e acum un modul separat (`module/examen_romana.py`) și dă exact cifrele vechi (#513 1,2060, #477 1,2096; R1 #513 99,27 ca pe placă). **Nu e pus în nicio configurare** — dacă vrei să decidă orele după română, spune „da” (detalii în `docs/rapoarte/2026-11-07_1226_S90_examen_romana.md`). 1306 teste trec.
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**

@@ -1,0 +1,55 @@
+# S91 (C-85 pasul 4, partea a): modelul MIC „trimis în avans” pentru rularea demonstrativă a uneltei
+# unelte/cercetator_avans.py. Un GPT minuscul (2 straturi × 64), doar pe procesor, pe Shakespeare.
+# Cercetătorul încearcă doar setări care există și pe linia mare (rata_invatare, incalzire_pasi), nu mărimea.
+#   python -X utf8 unelte/cercetator_avans.py --config-mic config/avans_proba_mic.toml \
+#       --config-mare config/conv_w2_mare_24f.toml --incercari 5 --minute-pe-incercare 1 \
+#       --iesire lucru/avans/s91_demo --procesor --porneste
+# Unealta mută tot ce se scrie (jurnal, amprente, stocare) în dosarul --iesire.
+
+[platforma]
+nume = "avans_proba_mic"
+director_lucru = "lucru"
+buget_antrenare_secunde = 60
+experimente = 5
+prag_zgomot = 0.002
+
+[paznic]
+timp_max_secunde = 300
+timp_test_secunde = 60
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt:ModelGPT"
+setari = { n_straturi = 2, n_capete = 2, n_emb = 64, context = 64, lot = 16, rata_invatare = 0.001, incalzire_pasi = 100, dispozitiv = "cpu", samanta = 0 }
+
+[porturi.date]
+modul = "module.date_fisier:DateFisier"
+setari = { cale = "date/shakespeare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = true, spatiu = { model = { rata_invatare = [0.003, 0.0003], incalzire_pasi = [10, 400] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

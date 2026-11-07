@@ -3218,7 +3218,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1226_S90_examen_romana.md
 
 ### S91 — C-85 pasul 4 (partea a): „cercetătorul cu model trimis în avans” — unealta și testele, DOAR pe procesor, fără placă, fără antrenare reală
-- stare: in_lucru (executant, 7 nov 2026 14:30; placa liberă 450 MB / 25 °C, nimic altceva în lucru)
+- stare: gata (executant, 7 nov 2026 14:40) — `unelte/cercetator_avans.py` (proba implicit; refuză mărimea modelului și setările care nu există pe cel mare, ÎNAINTE de antrenare; tot ce scrie platforma merge în `--iesire`; `propunere_mare.toml` verificată = mare + doar câștigătorul); `kronos/` neschimbat; 12 teste noi; demonstrația pe procesor (GPT 2×64, 5 × 1 min, 320 s, cod 0): câștigător rata 0,003 / încălzire 400, val_bpb 2,6091 vs plecare 2,7320 — propunerea NU e de rulat (valoare absolută, ×300 față de linia mare) → planul b propune schimbări relative + Spearman ρ ≥ 0,7 pe 5 rețete; 1318 teste trec, 1 sărit
+- (istoric) stare: in_lucru (executant, 7 nov 2026 14:30; placa liberă 450 MB / 25 °C, nimic altceva în lucru)
 - (istoric) stare: aprobat (supraveghetor, 7 nov 2026 14:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **oricând de azi, 7 nov, după ce ai citit asta**; dacă S89 a pornit pe placă: doar după verificarea de la 15 minute a lui S89 și cu regula de 10 % la pași/s (dacă scad cu peste 10 %, pui S91 pe pauză până după S89). S89 are prioritate.
@@ -3234,4 +3235,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py`, paznicul, jurnalul (doar prin platformă), nicio configurare existentă din `config/` (configurările noi de test stau în fișiere temporare sau în `config/` cu nume nou `avans_*` dacă e nevoie), modelele #459/#477/#513/`gpt_24.pt`, `lucru/w2_mare_24*/`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e antrenare reală (doar modele minuscule de test); partea b, pe placă, va avea pre-înregistrare.
 - aprobat de: Adrian (COMENZI.md C-85 pasul 4, 6 nov 2026 17:56); pașii scriși de supraveghetor 7 nov 2026 14:15 (granițele 5: unealtă nouă în `unelte/` + teste, fără `kronos/` și fără examen)
-- raport: docs/rapoarte/<data>_<ora>_S91_cercetator_avans.md
+- raport: docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md
