@@ -3184,7 +3184,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1040_S88_stergere.md
 
 ### S89 — Reluarea S85: 5 ore pe Kronos de 24 de straturi, rețeta e1 neschimbată, linie nouă `w2_mare_24g`, cu paza nouă (gc.collect la fiecare oră) — e mai bun decât #513 la timp egal? (placa, ~6,5 h)
-- stare: in_lucru (executant, 7 nov 2026 19:30; fereastra de noapte, placa liberă 450 MB / 25 °C; C: 80 GB liberi; `gc.collect()` în paza din `unelte/antrenare_recalcul.py`; `lucru/w2_mare_24g/` nu există). Configurarea + pre-înregistrarea `2026-11-07_w2_mare_24g.md` în 8056bdd, urcate înainte de placă. Lanțul `lucru/cascada/S89_proba/s89.py` (copia lui s85.py + verificarea gc.collect + citirile nvidia-smi în `smi.jsonl`) pornit prin cascadă 19:31:30, proces 25092.
+- stare: gata (executant, 8 nov 2026 01:30) — **LA FEL**: română curat #536 1,2063 față de #513 1,2060 (praguri 1,2010 / 1,2110), fără STRICĂ (cod 0,7243, R2 0,4052, R1 instr. 99,20, vechi 100); toate 5 orele trecute (vârf 6.465 MB, 62 °C); așteptarea de memorie NU (după golire ~3.650 MB constant, nu ≤ 1.000 — modelul + AdamW); SHA neschimbate; 1318 teste trec, 1 sărit
+- (istoric) stare: in_lucru (executant, 7 nov 2026 19:30; fereastra de noapte, placa liberă 450 MB / 25 °C; C: 80 GB liberi; `gc.collect()` în paza din `unelte/antrenare_recalcul.py`; `lucru/w2_mare_24g/` nu există). Configurarea + pre-înregistrarea `2026-11-07_w2_mare_24g.md` în 8056bdd, urcate înainte de placă. Lanțul `lucru/cascada/S89_proba/s89.py` (copia lui s85.py + verificarea gc.collect + citirile nvidia-smi în `smi.jsonl`) pornit prin cascadă 19:31:30, proces 25092.
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 11:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **noaptea 7→8 nov, pornire de la 19:00, cel târziu la 00:30**; examenele gata până la 07:45. Dacă nu pornește până la 00:30, rămâne `aprobat` pentru noaptea 8→9 de la 19:00 (refaci pre-înregistrarea cu data nouă). Nimic pe placă dacă Adrian e la workstation (vezi notele de sus / hub).
@@ -3201,7 +3202,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Modelul nou **nu** înlocuiește #513/#477 nicăieri fără „da”-ul lui Adrian. Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul (doar prin platformă), setul ascuns (doar citit de `reper`), #459/#477/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24g.md (de scris înainte de pornire)
 - aprobat de: supraveghetor, 7 nov 2026 11:15 (granițele 1 și 2: aceeași linie de 24 de straturi, aceeași rețetă e1 deja rulată; linia de 24 și recalculul acoperite de COMENZI.md C-64, Adrian 4 nov; paza din S86/S87, C-85 pasul 2)
-- raport: docs/rapoarte/<data>_<ora>_S89_kronos_mare_5ore.md
+- raport: docs/rapoarte/2026-11-08_0130_S89_kronos_mare_5ore.md
 
 ### S90 — C-85 pasul 3: examenul de română ca modul `module/examen_romana.py` (port `examen`, MANIFEST, trece `teste_contracte/`), NEACTIVAT în nicio configurare (doar procesor)
 - stare: gata (executant, 7 nov 2026 12:26) — `romana_bpb` #513 1,20601 (reper 1,2060), #477 1,20962 (reper 1,2097), ambele în ± 0,001; `r1_ascuns` #513 pe procesor 99,27 = S76b (dif. 0,00), 2,73 s/întrebare (~23 min); amprentele verificate la fiecare notare; neactivat în nicio configurare; SHA #513/#477 neschimbate; 1306 teste trec, 1 sărit. Prima rulare a scriptului de verificare a căzut pe o cheie lipsă din nota S76b (scriptul meu, nu modulul) → reluată cap-coadă, cod 0
