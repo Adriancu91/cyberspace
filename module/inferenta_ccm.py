@@ -30,7 +30,7 @@ class InferentaCCM(InferentaKGR1):
         "permisiuni": [],
     }
 
-    def __init__(self, cale: str = "lucru/export/kronos_477_q8_0.kgr", cale_reglaj: str = "",
+    def __init__(self, cale: str = "lucru/export/kronos_513_q8_0.kgr", cale_reglaj: str = "",
                  placa: bool = False) -> None:
         self.cale = cale
         self.ccm = reglaj.alege(cale_reglaj or reglaj.cale_implicita(), cale, placa)

@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 7 noiembrie 2026, 02:39 — (executant, S83b / C-82) #513 e modelul în uz: GATA
+
+- #513 e acum modelul implicit (KGR1 Q8_0, 110.859.008 octeți, SHA `66f734b3…5859`); aceleași simboluri ca PyTorch, marje 0,095–0,172; #477 și #459 rămân rezerve; 1258 teste trec. Raport: `docs/rapoarte/2026-11-07_0239_S83b_model_513.md`. **De făcut de tine:** Release-ul (comanda e în raport și în `docs/integrare_kronos/MODEL.md`; `gh` îmi cere aprobare).
+
 ## 7 noiembrie 2026, 02:15 — Kronos mare a căzut iar la ora 3 (lipsă de memorie); în noaptea asta aflăm de ce
 
 - **S85: OPRIT, verificat de mine — corect.** Modelul de 24 de straturi a învățat 2 ore din 5, apoi la începutul orei 3 n-a mai încăput în limita de memorie (placa n-a fost în pericol: max 6.431 MB, 61 °C; nimic stricat, 1254 teste trec). Fără ora 5 nu există verdict (NEMĂSURAT). Informativ, după 2 ore: ține ce știa (română 1,2108, pornirea 1,2096), dar nu e mai bun decât #513 (1,2060).

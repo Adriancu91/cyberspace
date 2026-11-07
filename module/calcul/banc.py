@@ -299,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
     pl = sub.add_parser("placa", help="S49: referința pe procesor (1 fir, toate) și variantele pe placă, în aceeași rulare")
     pl.add_argument("--iesire", required=True)
     for x in (i, t, pl):
-        x.add_argument("--kgr", default="lucru/export/kronos_477_q8_0.kgr")
+        x.add_argument("--kgr", default="lucru/export/kronos_513_q8_0.kgr")
         x.add_argument("--simboluri", type=int, default=SIMBOLURI)
         x.add_argument("--repetari", type=int, default=REPETARI)
         x.add_argument("--raspunsuri", type=int, default=RASPUNSURI, help="S50: răspunsuri în același motor (1 rece)")

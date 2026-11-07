@@ -7,7 +7,7 @@ neacceptată, fire care nu se pot pune) răspunsul e „nu”, cu motivele, iar 
 
 Folosire:
     python -X utf8 -m module.calcul.reglaj scrie --banc lucru/ccm/s47.json        # → lucru/ccm/reglaj-<calculator>.json
-    python -X utf8 -m module.calcul.reglaj verifica --kgr lucru/export/kronos_477_q8_0.kgr
+    python -X utf8 -m module.calcul.reglaj verifica --kgr lucru/export/kronos_513_q8_0.kgr
 """
 
 from __future__ import annotations
@@ -207,7 +207,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--iesire", default=None)
     s.add_argument("--inlocuieste", action="store_true")
     v = sub.add_parser("verifica")
-    v.add_argument("--kgr", default="lucru/export/kronos_477_q8_0.kgr")
+    v.add_argument("--kgr", default="lucru/export/kronos_513_q8_0.kgr")
     v.add_argument("--reglaj", default=None)
     v.add_argument("--placa", action="store_true", help="S49: și varianta de placă, dacă e aleasă de măsurători")
     a = p.parse_args(argv)

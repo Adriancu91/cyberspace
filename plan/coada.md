@@ -3090,7 +3090,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0200_S85_kronos_mare_5ore.md
 
 ### S83b — Reluarea S83 de la pasul 2: #513 modelul în uz, cu mărimea reală a exportului (110.859.008 octeți) (doar procesor)
-- stare: in_lucru (executant, 7 nov 2026 02:30; S85 oprit, placa liberă)
+- stare: gata (executant, 7 nov 2026 02:39; #513 modelul în uz, 110.859.008 octeți, SHA 66f734b3…5859; aceleași simboluri ca PyTorch, dif. max 1,4e-4, marje greedy 0,166/0,172/0,095; reglaj CCM refăcut pe procesor; Release nefăcut — `gh` cere aprobare, comanda pentru Adrian în raport; sumele #513/#477/#459 neschimbate; 1258 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 7 nov 2026 02:30; S85 oprit, placa liberă)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 23:15; în cadrul COMENZI.md C-82, „Da 513”, Adrian 6 nov 17:39)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
 - fereastră: **după ce S85 a trecut verificarea de la 15 minute** (regula de 10 % la pașii/s de la S85), sau imediat dacă S85 nu pornește la noapte; altfel mâine de la 08:00.
@@ -3103,7 +3104,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Aceleași interdicții ca la S83 (nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, checkpoint-urile, S85 și liniile `w2_mare_24*`; nu scrii în hub; nimic descărcat, instalat sau șters). Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare (pragul: aceiași tensori/forme ca #477, aceleași simboluri ca PyTorch, sumele rezervelor neschimbate)
 - aprobat de: Adrian (COMENZI.md C-82, 6 nov 2026 17:39); pragul de mărime schimbat de supraveghetor, 6 nov 2026 23:15
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-07_0239_S83b_model_513.md
 
 ### S86 — C-85 pasul 2: memoria plăcii la modelul mare — Muon (o singură stare) față de AdamW + paza de memorie la fiecare oră (măsurare scurtă pe placă, fără antrenare lungă)
 - stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 2, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 23:15)
