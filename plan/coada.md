@@ -3090,7 +3090,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0200_S85_kronos_mare_5ore.md
 
 ### S83b — Reluarea S83 de la pasul 2: #513 modelul în uz, cu mărimea reală a exportului (110.859.008 octeți) (doar procesor)
-- stare: **aprobat** (supraveghetor, 6 nov 2026 23:15; în cadrul COMENZI.md C-82, „Da 513”, Adrian 6 nov 17:39)
+- stare: in_lucru (executant, 7 nov 2026 02:30; S85 oprit, placa liberă)
+- (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 23:15; în cadrul COMENZI.md C-82, „Da 513”, Adrian 6 nov 17:39)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
 - fereastră: **după ce S85 a trecut verificarea de la 15 minute** (regula de 10 % la pașii/s de la S85), sau imediat dacă S85 nu pornește la noapte; altfel mâine de la 08:00.
 - durată maximă: 2 ore; RAM cel mult ~6 GB
