@@ -3159,7 +3159,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1004_S87_memorie_ore.md
 
 ### S88 — C-86: ștergerea celor 82 de modele intermediare (~33,4 GB) din lista S84 și, după S87, a copiilor de lucru `lucru/memorie_mare/` (9,8 GB) (procesor + disc)
-- stare: **aprobat** (Adrian, COMENZI.md C-86, 7 nov 2026 08:14; pașii scriși de supraveghetor 7 nov 08:15)
+- stare: in_lucru (executant, 7 nov 2026 10:30)
+- (istoric) stare: **aprobat** (Adrian, COMENZI.md C-86, 7 nov 2026 08:14; pașii scriși de supraveghetor 7 nov 08:15)
 - tip: procesor + disc (fără placă)
 - fereastră: **oricând, 7 nov 2026**, dar NU în timp ce S87 e pe placă: o faci **după ce S87 e `gata`/`oprit`**, sau înainte ca S87 să pornească partea pe placă dacă termini sigur înainte (fără să o întârzii). Partea 2 (`lucru/memorie_mare/`) **doar după ce S87 e `gata`/`oprit`** (S87 interzice atingerea acelui dosar cât rulează).
 - durată maximă: ~1 oră
