@@ -3064,7 +3064,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - verificat de supraveghetor (6 nov 23:15): **gata, corect** — doar listă (fără comandă de ștergere), 592 `.pt` / 107,6 GB pe clase, 7 teste noi, 1254 trec. Întrebarea „ștergem SE POATE ȘTERGE?” e la Adrian; până la răspunsul lui nu se șterge nimic. Atenție la `gpt.pt` de linie (31 fișiere, 38 GB) — fără ele liniile nu se mai continuă exact.
 
 ### S85 — Prima noapte de 5 ore a lui Kronos de 24 de straturi pe rețeta e1 (rata 1e-5, încălzire 1000, lot 4 × 24), linie nouă `w2_mare_24f` — e mai bun decât #513 la timp egal?
-- stare: in_lucru (executant, 6 nov 2026 23:30; fereastra de noapte, placa liberă 456 MB / 26 °C)
+- stare: oprit (executant, 7 nov 2026 02:00)
+- motiv: ora 3 (#530) anulată la 01:44 cu CUDA out of memory la testul rapid (PyTorch 5,56 din 5,66 GiB, plafonul 5.800 MB), a doua noapte la rând după S77c; doar validările informative pe #529 (română curat 1,2108, cod curat 0,7280, R2 0,4069) → NEMĂSURAT; nimic repornit
+- (istoric) stare: in_lucru (executant, 6 nov 2026 23:30; fereastra de noapte, placa liberă 456 MB / 26 °C)
 - (istoric) stare: **aprobat** (supraveghetor, 6 nov 2026 23:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **ACUM, noaptea 6→7 nov.** Antrenarea pornește **cel târziu la 00:30**; examenele trebuie gata până la **07:45**. Dacă nu apuci să pornești până la 00:30: NU pornești la noapte; rămâne `aprobat` pentru **noaptea 7→8 nov, pornire la 19:00** (refaci pre-înregistrarea cu data nouă). Dacă în coadă/hub apare o fereastră a lui Adrian pe workstation, oprești curat.
@@ -3080,9 +3082,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - S83b (procesor) poate merge **după ce antrenarea a trecut verificarea de la 15 minute**; dacă pașii/s scad cu peste 10 % (sub ~5,9), pui S83b pe pauză până după S85.
 - Ce urmează (scris acum): MAI MARE = MAI BUN → propun lui Adrian o a doua noapte (continuare) și întrebarea dacă modelul mare devine linia principală; LA FEL / MAI SLAB fără STRICĂ → mă uit la curbă (dacă urcă încă la ora 5 → a doua noapte de continuare; dacă e plată → oprim liniile de 24 până la C-85 pasul 2); STRICĂ → oprim liniile de 24.
 - Modelul nou **nu** înlocuiește #513/#477 nicăieri fără „da”-ul lui Adrian. Nu atingi `kronos/`, `module/`, `module/examen_bpb.py`, paznicul, jurnalul (doar prin platformă), setul ascuns (doar citit de `reper`), #459/#477/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` existente. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
-- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24f.md (de scris și urcat înainte de pornire)
+- pre-înregistrare: docs/preinregistrari/2026-11-06_w2_mare_24f.md (închisă, Verdictul NEMĂSURAT)
 - aprobat de: supraveghetor, 6 nov 2026 23:15 (granițele 1 și 2: aceeași linie de 24 de straturi, rețeta e1 deja rulată, mai multe ore; linia de 24 și recalculul acoperite de COMENZI.md C-64, Adrian 4 nov)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-07_0200_S85_kronos_mare_5ore.md
 
 ### S83b — Reluarea S83 de la pasul 2: #513 modelul în uz, cu mărimea reală a exportului (110.859.008 octeți) (doar procesor)
 - stare: **aprobat** (supraveghetor, 6 nov 2026 23:15; în cadrul COMENZI.md C-82, „Da 513”, Adrian 6 nov 17:39)
