@@ -3133,7 +3133,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md
 
 ### S87 — C-85 pasul 2, continuare (3b): crește memoria plăcii de la o oră la alta? 3 „ore” scurte cu Muon lot 4 × 24, în ordinea orchestratorului, cu și fără golire (placă ~1–1,5 h)
-- stare: in_lucru (executant, 7 nov 2026 08:30; Adrian inactiv ~10,9 h, placa liberă 474 MB / 23 °C)
+- stare: in_lucru (executant, 7 nov 2026 08:30; Adrian inactiv ~10,9 h, placa liberă 474 MB / 23 °C). Unealta (`ore`) + 9 teste + pre-înregistrarea `2026-11-07_memorie_ore.md` în 5ffd7ac (1286 trec, 1 sărit), urcate înainte de placă. Proba cap-coadă 08:37–08:46 (b, `--golire del`, 2 ore × 1 pas, `lucru/cascada/S87_proba/proba/`, nu intră în verdict): cod 0, vârf 6.437 MB. Măsurarea pornită prin cascadă 08:46:45, proces 7708 → `lucru/memorie_ore/s87.json`, ~70 min.
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 05:15)
 - tip: placă (măsurare, fără antrenare lungă) + procesor (unealtă, teste)
 - fereastră: **zi, 7 nov 2026, 08:00–18:30** (totul gata până la 18:30; dacă nu apuci, noaptea 7→8 de la 19:00). Nimic pe placă dacă Adrian e la workstation.
