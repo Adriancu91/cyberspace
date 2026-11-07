@@ -2,6 +2,7 @@
 
 import copy
 
+import pytest
 import torch
 
 from unelte import antrenare_recalcul as ar
@@ -123,6 +124,7 @@ def test_main_trimite_restul_argumentelor_la_antrenare_lunga(monkeypatch):
     def fals(argv):
         primite["argv"] = argv
         primite["instalat"] = getattr(M._pregateste_reteaua, "_cu_recalcul", False)
+        primite["paza"] = getattr(M.antreneaza, "_cu_paza", False)
         return 0
 
     monkeypatch.setattr(antrenare_lunga, "main", fals)
@@ -130,4 +132,89 @@ def test_main_trimite_restul_argumentelor_la_antrenare_lunga(monkeypatch):
         assert ar.main(["--memorie-max-mb", "0", "--config", "x.toml", "--ore", "5"]) == 0
     finally:
         ar.dezinstaleaza(M)
-    assert primite == {"argv": ["--config", "x.toml", "--ore", "5"], "instalat": True}
+        ar.dezinstaleaza_paza(M)
+    assert primite == {"argv": ["--config", "x.toml", "--ore", "5"], "instalat": True, "paza": True}
+    assert not getattr(M.antreneaza, "_cu_paza", False)
+
+
+# ---- S86: paza de memorie înainte de testul rapid al fiecărei ore (nvidia-smi simulat, fără placă) ----------------
+
+class _ModelFals:
+    def __init__(self):
+        self.chemari = []
+
+    def antreneaza(self, date, buget_secunde):
+        self.chemari.append(buget_secunde)
+        return {"pasi": 1}
+
+
+def test_paza_sub_prag_continua():
+    class M(_ModelFals):
+        pass
+
+    citiri = iter([6000, 6700])
+    ar.instaleaza_paza(M, prag_mb=6700, citeste=lambda: next(citiri))
+    m = M()
+    assert m.antreneaza(None, 2.0) == {"pasi": 1}  # ora 1: 6.000 MB
+    assert m.antreneaza(None, 3600.0) == {"pasi": 1}  # antrenarea orei: fără citire
+    assert m.antreneaza(None, 2.0) == {"pasi": 1}  # ora 2: 6.700 MB = pragul, încă trece
+    assert m.chemari == [2.0, 3600.0, 2.0]
+    assert M.antreneaza._stare["ora"] == 2
+
+
+def test_paza_peste_prag_opreste_cu_ora_si_mb(capsys):
+    class M(_ModelFals):
+        pass
+
+    citiri = iter([5000, 5500, 6900])
+    ar.instaleaza_paza(M, prag_mb=6700, citeste=lambda: next(citiri))
+    m = M()
+    m.antreneaza(None, 2.0)
+    m.antreneaza(None, 2.0)
+    with pytest.raises(ar.PazaMemorie, match=r"ora 3 .*6,900 MB > 6,700 MB"):
+        m.antreneaza(None, 2.0)
+    assert m.chemari == [2.0, 2.0]  # testul rapid al orei 3 nu mai rulează
+    assert "paza de memorie: ora 3" in capsys.readouterr().out
+
+
+def test_paza_fara_citire_continua():
+    class M(_ModelFals):
+        pass
+
+    ar.instaleaza_paza(M, citeste=lambda: None)
+    assert M().antreneaza(None, 2.0) == {"pasi": 1}
+
+
+def test_paza_a_doua_instalare_si_dezinstalarea():
+    class M(_ModelFals):
+        pass
+
+    ar.instaleaza_paza(M, citeste=lambda: 0)
+    pusa = M.antreneaza
+    ar.instaleaza_paza(M, citeste=lambda: 99999)
+    assert M.antreneaza is pusa
+    ar.dezinstaleaza_paza(M)
+    assert M.antreneaza is _ModelFals.__dict__["antreneaza"] or "antreneaza" not in M.__dict__
+
+
+def test_paza_opreste_antrenarea_lunga_cu_cod_diferit_de_zero(monkeypatch):
+    """Cap-coadă: PazaMemorie în testul rapid → ora anulată → antrenare_lunga.main întoarce cod ≠ 0 (S81)."""
+    from module.model_muon import ModelGPTConversatieMuon as M
+    from unelte import antrenare_lunga
+
+    def fals(argv):
+        try:
+            M.antreneaza(object.__new__(M), None, 2.0)
+        except ar.PazaMemorie as e:
+            print(f"oprit înainte de vreme: ora 1 anulată — testul rapid a eșuat: {e}")
+            return 1
+        return 0
+
+    monkeypatch.setattr(antrenare_lunga, "main", fals)
+    monkeypatch.setattr(ar, "nvidia_smi_mb", lambda: 7100)
+    try:
+        assert ar.main(["--memorie-max-mb", "0", "--config", "x.toml"]) == 1
+    finally:
+        ar.dezinstaleaza(M)
+        ar.dezinstaleaza_paza(M)
+    assert not getattr(M.antreneaza, "_cu_paza", False)

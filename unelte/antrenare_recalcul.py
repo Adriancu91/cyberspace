@@ -103,6 +103,76 @@ def plafon_placa(memorie_max_mb: int) -> float | None:
     return fractie
 
 
+PRAG_PAZA_MB = 6700  # S86: peste atât nvidia-smi înainte de testul rapid al unei ore → oprire curată
+
+
+class PazaMemorie(RuntimeError):
+    """Memoria plăcii e prea sus înainte de testul rapid al unei ore."""
+
+
+def nvidia_smi_mb() -> int | None:
+    """Memoria folosită pe placă după nvidia-smi (MB); None dacă nu se poate citi."""
+    import subprocess
+
+    try:
+        r = subprocess.run(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
+                           capture_output=True, text=True, timeout=30)
+        return int(r.stdout.strip().splitlines()[0])
+    except (OSError, ValueError, IndexError, subprocess.TimeoutExpired):
+        return None
+
+
+def verifica_memoria(ora: int, prag_mb: int = PRAG_PAZA_MB, citeste: Any = None) -> int | None:
+    """Înainte de testul rapid al orei: golește memoria rezervată fără folos (empty_cache), citește nvidia-smi; peste
+    prag ridică PazaMemorie cu ora și MB (ora se anulează → antrenare_lunga iese cu cod 1 și motivul în log)."""
+    import torch
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    mb = (citeste or nvidia_smi_mb)()
+    if mb is not None and mb > prag_mb:
+        mesaj = (f"paza de memorie: ora {ora} din procesul acesta, nvidia-smi {mb:,} MB > {prag_mb:,} MB înainte de "
+                 f"testul rapid — oprire curată")
+        print(f"   {mesaj}", flush=True)
+        raise PazaMemorie(mesaj)
+    return mb
+
+
+def instaleaza_paza(clasa: Any = None, prag_mb: int = PRAG_PAZA_MB, citeste: Any = None) -> Any:
+    """antreneaza al clasei verifică memoria înainte de fiecare test rapid (buget ≤ 2 s, ca în orchestrator) și
+    numără orele. Doar în procesul acesta; a doua chemare nu mai face nimic."""
+    if clasa is None:
+        from module.model_muon import ModelGPTConversatieMuon as clasa
+    original = clasa.antreneaza
+    if getattr(original, "_cu_paza", False):
+        return clasa
+    stare = {"ora": 0}
+
+    def antreneaza(self: Any, date: Any, buget_secunde: float) -> Any:
+        if buget_secunde <= 2.0:
+            stare["ora"] += 1
+            verifica_memoria(stare["ora"], prag_mb, citeste)
+        return original(self, date, buget_secunde)
+
+    antreneaza._cu_paza = True  # type: ignore[attr-defined]
+    antreneaza._original = original  # type: ignore[attr-defined]
+    antreneaza._era_in_clasa = "antreneaza" in clasa.__dict__  # type: ignore[attr-defined]
+    antreneaza._stare = stare  # type: ignore[attr-defined]
+    clasa.antreneaza = antreneaza
+    return clasa
+
+
+def dezinstaleaza_paza(clasa: Any = None) -> None:
+    if clasa is None:
+        from module.model_muon import ModelGPTConversatieMuon as clasa
+    actual = clasa.__dict__.get("antreneaza")
+    if getattr(actual, "_cu_paza", False):
+        if actual._era_in_clasa:
+            clasa.antreneaza = actual._original
+        else:
+            delattr(clasa, "antreneaza")
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -110,11 +180,16 @@ def main(argv: list[str] | None = None) -> int:
         pass
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0], add_help=False)
     p.add_argument("--memorie-max-mb", type=int, default=MEMORIE_MAX_MB)
+    p.add_argument("--paza-mb", type=int, default=PRAG_PAZA_MB)
     a, rest = p.parse_known_args(argv)
     fractie = plafon_placa(a.memorie_max_mb)
     if fractie is not None:
         print(f"   Plafonul PyTorch pe placă: {a.memorie_max_mb:,} MB (fracția {fractie:.3f}).", flush=True)
     instaleaza()
+    if a.paza_mb > 0:
+        instaleaza_paza(prag_mb=a.paza_mb)
+        print(f"   Paza de memorie: înainte de fiecare test rapid, peste {a.paza_mb:,} MB nvidia-smi → oprire.",
+              flush=True)
     from unelte import antrenare_lunga
 
     return antrenare_lunga.main(rest)
