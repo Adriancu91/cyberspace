@@ -33,8 +33,7 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from kronos.jurnal import Jurnal  # noqa: E402
-
-SEPARATOR = "<|endoftext|>"
+from unelte.validari_text import SEPARATOR, inceput_de_text  # noqa: E402,F401  (S90: mutate aici, neschimbate)
 # numele din raport → validarea pusă deoparte. „povesti” e validarea examenului oficial, ca reper.
 VALIDARI = {
     "povesti": "date/tinystories_r2/validare.txt",
@@ -52,19 +51,6 @@ VALIDARI.update({f"{nume}_curat": Path(cale).with_name("validare_curata.txt").as
 GRUPE = {"romana": ["romana_wikipedia", "romana_web", "romana_carti"], "cod": ["cod_python", "cod_sarcini"],
          "romana_curat": ["romana_wikipedia_curat", "romana_web_curat", "romana_carti_curat"],
          "cod_curat": ["cod_python_curat", "cod_sarcini_curat"]}
-
-
-def inceput_de_text(cale: Path, caractere: int) -> str:
-    """Primele `caractere` litere din fișier, tăiate după ultimul text întreg (sau, dacă primul text e mai lung, la
-    ultimul sfârșit de rând)."""
-    with cale.open(encoding="utf-8") as f:
-        text = f.read(caractere + 1)
-    if len(text) <= caractere:
-        return text
-    capat = text.rfind(SEPARATOR, 0, caractere)
-    if capat > caractere // 2:
-        return text[:capat]
-    return text[: text.rfind("\n", 0, caractere) + 1] or text[:caractere]
 
 
 def masoara(model: Any, text: str) -> dict[str, Any]:

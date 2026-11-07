@@ -92,6 +92,7 @@ MODULE = [
     ("date", "module.date_cod:DateCod", {"director": "__simboluri_cod__", "context": 16, "previzualizare": True}),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("examen", "module.examen_cod_validare:ExamenCodValidare", {}),
+    ("examen", "module.examen_romana:ExamenRomana", {"validari": "__romana_mica__"}),
     ("cercetator", "module.cercetator_aleator:CercetatorAleator", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("cercetator", "module.cercetator_local:CercetatorLocal", {"spatiu": {"model": {"ordin": [1, 2, 3]}}}),
     ("profesor", "module.jucarii:ProfesorGol", {}),
@@ -194,6 +195,12 @@ def _setari_reale(setari, tmp_path):
                                "verificare_model": {"dif_logits_max": 0.0}}]}
         (tmp_path / "reglaj.json").write_text(json.dumps(reglaj.din_banc(banc, "test")), encoding="utf-8")
         setari["cale_reglaj"] = str(tmp_path / "reglaj.json")
+    if setari.get("validari") == "__romana_mica__":  # o validare mică, cu amprenta ei (nu cele din date/ws/)
+        from module.examen_romana import sha256
+
+        fisier = tmp_path / "romana_mica.txt"
+        fisier.write_text("Orașul are o cetate veche pe deal.\n<|endoftext|>\nSatele sunt mici.\n" * 40, encoding="utf-8")
+        setari.update(validari={"romana_mica": str(fisier)}, amprente={str(fisier): sha256(fisier)})
     if setari.get("cale_reglaj") == "__fara_reglaj__":  # rezerva: calea inferenta_kgr1
         setari["cale_reglaj"] = str(tmp_path / "nu_exista.json")
     return setari

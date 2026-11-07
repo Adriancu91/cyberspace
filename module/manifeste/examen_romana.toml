@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "examen_romana"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Examenul de română: biți pe octet pe validarea „română curat” (romana_bpb), cu amprentele setului verificate la fiecare notare; opțional R1 pe setul ascuns. Neactivat în nicio configurare."
+format = "modul-v0"
+
+[contract]
+port = "examen"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"examineaza" = "notează un model pe textul de validare și întoarce scorurile"
+"scor_principal" = "numele scorului după care se decide"
+"mai_mic_e_mai_bun" = "în ce direcție e mai bun scorul"
+
+[rulare]
+limbaj = "python"
+intrare = "module.examen_romana:ExamenRomana"
+teste = "python -m pytest teste/test_examen_romana.py && python -m pytest teste_contracte -k ExamenRomana"
