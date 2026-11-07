@@ -4,6 +4,13 @@
 
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 7 noiembrie 2026, 11:15 — Am găsit de ce cădea modelul mare la ora 3 și e reparat; ștergerea așteaptă mâna ta
+
+- **⚠ Ai de ales (S88, ștergerea celor 82 de modele, 33,4 GB):** executantul a pregătit totul (proba: exact 82 fișiere, amprentele identice, niciun `gpt.pt` de linie), dar **regula lui de pe workstation îi interzice orice ștergere, chiar cu „da”-ul tău** — regula aia n-o pot schimba eu (e în sarcina programată de pe workstation). Variante: **(1)** la workstation, în `C:\Kronos\cyberspace`, rulezi comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md` (~3–5 min), apoi ștergi de mână dosarul `lucru\memorie_mare` (10,5 GB, verificat: nimic unic); sau **(2)** adaugi tu în regula executantului o excepție pentru ștergeri aprobate de tine. Nu e urgent: C: are 86 GB liberi.
+- **S87: GATA, verificat de mine — P1 DA, P2 DA.** Memoria creștea: de la o oră la alta rămâneau ținuți ~1.340 MB din ora trecută, iar ora 3 cădea (exact ca în nopțile S77c și S85). Cu o „strângere de gunoi” la începutul fiecărei ore rămân doar 16 MB și trec toate orele (vârf 6.399 MB, sub limita 6.600). Leacul e pus în unealta de antrenare; `kronos/` nu trebuie schimbat. 1294 teste trec.
+- **Pus în coadă (aprobate de mine):** **S89** la noapte (19:00): reluarea nopții de 5 ore a modelului de 24 de straturi, aceeași rețetă, acum cu leacul — vedem dacă bate #513. **S90** azi pe procesor (C-85 pasul 3, aprobat de tine): examenul de română ca modul separat; **nu-l activez nicăieri** fără tine.
+- **Aștept de la tine:** doar alegerea (1) sau (2) la ștergere, când ai timp.
+
 ## 7 noiembrie 2026, 08:15 — Am primit răspunsurile tale (C-86); ștergerea celor 33 GB intră azi, după S87
 
 - **Raportul de dimineață (06:46) e la locul lui** și se potrivește cu ce am verificat: S85 NEMĂSURAT, S86 DA, #513 în uz; **1278 teste trec, 0 pică**; C: are 86 GB liberi; placa liberă (456 MB, 25 °C).
@@ -128,11 +135,4 @@
 - **Ce s-a întâmplat (raportul executantului de la 14:29):** scriptul care verifică dacă placa e liberă a crezut că o sarcină veche din 28 oct (S42) încă rulează, pentru că Windows a dat numărul ei de proces unui program al lui (`dllhost.exe`). Executantul a procedat corect: n-a pornit nimic și n-a ocolit regula. Placa e rece și liberă (750 MB, 28 °C); s-au pierdut ~3 ore de după-amiază.
 - **Ce am pus în coadă (aprobat de mine, „reparație de script”):** **S80** — scriptul verifică și că procesul e chiar Python-ul nostru, pornit la ora sarcinii; teste noi; nimic editat de mână, nimic șters. Durează ~45 min.
 - **Apoi S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă), mutată: gata până la **23:30** în loc de 18:30. **S77b** (prima noapte a modelului mai mare) o scriu la 20:15 / 23:15, după cifre; dacă S77a întârzie, trece pe noaptea de mâine. S78 (Mini Brain) și S79 (spațiul pe disc) după S77a; S76c mâine de la 08:00.
-- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 14:20 — Token făcut (C-78), mulțumesc; după fereastra ta urmează S77a → S78 → S79
-
-- **C-78 văzut:** ai reînnoit autentificarea pe workstation (`claude auth login` → „Login successful”). Am scos cererea din lista de așteptări. Dacă executantul mai vede totuși avertismentul de expirare, îl scrie aici și îl rezolvăm mâine dimineață, când ești la workstation (atunci ar fi `claude setup-token`, care ține un an).
-- **Nimic nou de la 13:45:** executantul n-a pornit încă (citește coada la 30 de minute; fereastra ta s-a terminat la 14:00). Următoarea: **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă, gata până la 18:30), apoi **S78** (Mini Brain, copie, nimic șters) și **S79** (raport de spațiu, nimic șters). Nimic nou pus în coadă.
-- **La noapte:** S77b (prima noapte a modelului mai mare) o scriu la 17:15 / 20:15, după cifrele S77a, cu pre-înregistrare.
 - **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
