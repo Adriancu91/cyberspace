@@ -112,7 +112,7 @@ def test_nu_sterge_si_nu_modifica_nimic(proiect):
     assert {k: v for k, v in dupa.items() if k != nou} == inainte
     with pytest.raises(FileExistsError):              # nu scrie peste o listă veche
         ps.lista(proiect, proiect / "config" / "puncte_salvare.toml", acum=datetime(2026, 11, 6, 22, 40))
-    assert not hasattr(ps, "sterge")
+    # (S88, C-86: `sterge` există acum, aprobat de Adrian; `lista` tot nu șterge nimic — verificat mai sus.)
 
 
 def test_cap_coada_main_si_tabel(proiect, monkeypatch, capsys):
@@ -129,3 +129,124 @@ def test_configurarea_reala_are_rezervele_cerute():
     c = ps.citeste_config(Path(__file__).resolve().parents[1] / "config" / "puncte_salvare.toml")
     assert {459, 477, 513} <= set(c["experimente"]) and c["model_in_uz"] == 513
     assert {"lucru/cod_c1/gpt.pt", "lucru/w2_mare/gpt_24.pt"} <= set(c["fisiere"])
+
+
+# --- S88 (7 nov 2026, C-86): comanda `sterge` --------------------------------------------------------------------
+
+def _lista_fisier(r: Path) -> Path:
+    return ps.lista(r, r / "config" / "puncte_salvare.toml", acum=datetime(2026, 11, 6, 22, 40))
+
+
+def _sterge(r: Path, lista: Path, **k):
+    return ps.sterge(r, lista, r / "config" / "puncte_salvare.toml", acum=datetime(2026, 11, 7, 11, 0), **k)
+
+
+def test_sterge_proba_nu_sterge_nimic(proiect):
+    lista = _lista_fisier(proiect)
+    inainte = _sume(proiect)
+    rez = _sterge(proiect, lista)
+    assert _sume(proiect) == inainte                       # nimic șters, nimic scris
+    rezultate = {i["cale"]: i["rezultat"] for i in rez["fisiere"]}
+    for n in (1, 3, 8, 10):
+        assert rezultate[f"lucru/stocare/modele/experiment_{n}.pt"] == "s-ar șterge (proba)", n
+    assert rezultate["lucru/linia_a/gpt.pt"].startswith("refuzat")
+    assert rez["total"]["sterse_sau_de_sters"] == 4 and rez["proba"] is True
+
+
+def test_sterge_refuza_rezervele_gpt_pt_export_si_numitele(proiect):
+    lista = _lista_fisier(proiect)
+    date = json.loads(lista.read_text(encoding="utf-8"))
+    _scrie(proiect / "lucru" / "export" / "experiment_1.pt", b"export")
+    _scrie(proiect / "lucru" / "altundeva" / "experiment_3.pt", b"altundeva")
+    extra = [{"cale": c, "octeti": 1, "sha256": "x", "clasa": ps.SE_POATE_STERGE}
+             for c in ("lucru/export/experiment_1.pt", "lucru/altundeva/experiment_3.pt")]
+    for r in date["fisiere"]:
+        r["clasa"] = ps.SE_POATE_STERGE                    # o listă „stricată”: totul pare de șters
+    date["fisiere"] += extra
+    lista.write_text(json.dumps(date), encoding="utf-8")
+    rez = _sterge(proiect, lista, da_sterge=True)
+    rezultate = {i["cale"]: i["rezultat"] for i in rez["fisiere"]}
+    pastrate = {
+        "lucru/stocare/modele/experiment_4.pt": "rezervă",           # din config
+        "lucru/stocare/modele/experiment_7.pt": "în uz",
+        "lucru/stocare/modele/experiment_2.pt": "câștigătorul",
+        "lucru/stocare/modele/experiment_5.pt": "câștigătorul",
+        "lucru/stocare/modele/experiment_6.pt": "pre-înregistrarea deschisă",
+        "lucru/stocare/modele/experiment_9.pt": "aprobat",
+        "lucru/stocare/modele/experiment_99.pt": "jurnal",
+        "lucru/linia_a/gpt.pt": "afara",
+        "lucru/rezerva/gpt.pt": "afara",
+        "lucru/export/experiment_1.pt": "afara",
+        "lucru/altundeva/experiment_3.pt": "afara",
+    }
+    for cale, semn in pastrate.items():
+        assert (proiect / cale).exists(), cale
+        assert rezultate[cale].startswith("refuzat"), cale
+        if semn != "afara":
+            assert semn in rezultate[cale], (cale, rezultate[cale])
+    for n in (1, 3, 8, 10):
+        assert not (proiect / f"lucru/stocare/modele/experiment_{n}.pt").exists(), n
+        assert rezultate[f"lucru/stocare/modele/experiment_{n}.pt"] == "șters"
+
+
+def test_sterge_refuza_rezervele_fixe_chiar_fara_config(proiect):
+    leg = ps.legaturi_jurnal([_fisa(12, "x", 0.5, decizie="respins")] +
+                             [_fisa(n, "x", 0.6, decizie="respins") for n in (459, 477, 513)])
+    config = {"experimente": [], "model_in_uz": None, "fisiere": []}
+    num = {"cai": {}, "experimente": {}, "dosare": {}}
+    for n in (459, 477, 513):
+        assert "rezervă" in ps.motiv_refuz(f"lucru/stocare/modele/experiment_{n}.pt", proiect, leg, config, num)
+        assert "rezervă" in ps.motiv_refuz(f"lucru/stocare/modele/experiment_{n}.pt", proiect,
+                                           ps.legaturi_jurnal([]), config, num)  # și fără fișă
+    assert ps.motiv_refuz("lucru/stocare/modele/experiment_12.pt", proiect, leg, config, num) is None
+    assert "jurnal" in ps.motiv_refuz("lucru/stocare/modele/experiment_12.pt", proiect,
+                                      ps.legaturi_jurnal([]), config, num)
+    for cale in ("lucru/cod_c1/gpt.pt", "lucru/w2_mare/gpt_24.pt", "lucru/stocare/modele/gpt.pt",
+                 "lucru/stocare/modele/../../export/experiment_12.pt"):
+        assert ps.motiv_refuz(cale, proiect, leg, config, num) is not None, cale
+
+
+def test_sterge_sha_diferit_nu_sterge(proiect):
+    lista = _lista_fisier(proiect)
+    schimbat = proiect / "lucru" / "stocare" / "modele" / "experiment_1.pt"
+    schimbat.write_bytes(b"alt continut")
+    rez = _sterge(proiect, lista, da_sterge=True)
+    rezultate = {i["cale"]: i["rezultat"] for i in rez["fisiere"]}
+    assert schimbat.exists()
+    assert rezultate["lucru/stocare/modele/experiment_1.pt"].startswith("nu șters: SHA-256 diferit")
+    assert not (proiect / "lucru" / "stocare" / "modele" / "experiment_3.pt").exists()
+
+
+def test_sterge_jurnalul_se_scrie_inainte_de_stergere(proiect, monkeypatch):
+    lista = _lista_fisier(proiect)
+    jurnal = proiect / "lucru" / "puncte_salvare" / "sterse_2026-11-07.json"
+    vazute = []
+    original = Path.unlink
+
+    def unlink_verificat(self, *a, **k):
+        if self.suffix != ".pt":
+            return original(self, *a, **k)
+        assert jurnal.exists(), "jurnalul ștergerii lipsește înainte de ștergere"
+        date = json.loads(jurnal.read_text(encoding="utf-8"))
+        intrare = next(i for i in date["fisiere"] if (proiect / i["cale"]).resolve() == self.resolve())
+        assert intrare["rezultat"] == "urmează să fie șters"
+        assert intrare["sha256"] and intrare["octeti"] > 0 and "val_bpb" in intrare
+        vazute.append(self.name)
+        return original(self, *a, **k)
+
+    monkeypatch.setattr(Path, "unlink", unlink_verificat)
+    rez = _sterge(proiect, lista, da_sterge=True)
+    assert sorted(vazute) == sorted(f"experiment_{n}.pt" for n in (1, 3, 8, 10))
+    final = json.loads(jurnal.read_text(encoding="utf-8"))
+    assert final["total"]["sterse_sau_de_sters"] == 4 and rez["jurnal"] == str(jurnal)
+    with pytest.raises(FileExistsError):                  # nu scrie peste un jurnal vechi
+        _sterge(proiect, lista, da_sterge=True)
+
+
+def test_sterge_cap_coada_main_e_proba_implicit(proiect, monkeypatch, capsys):
+    monkeypatch.chdir(proiect)
+    lista = _lista_fisier(proiect)
+    inainte = _sume(proiect)
+    assert ps.main(["sterge", "--lista", str(lista), "--doar", "intermediare"]) == 0
+    assert _sume(proiect) == inainte
+    assert '"sterse_sau_de_sters": 4' in capsys.readouterr().out

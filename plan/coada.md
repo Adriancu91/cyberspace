@@ -3159,7 +3159,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1004_S87_memorie_ore.md
 
 ### S88 — C-86: ștergerea celor 82 de modele intermediare (~33,4 GB) din lista S84 și, după S87, a copiilor de lucru `lucru/memorie_mare/` (9,8 GB) (procesor + disc)
-- stare: in_lucru (executant, 7 nov 2026 10:30)
+- stare: oprit (executant, 7 nov 2026 10:40) — unealta `sterge` + 6 teste gata, proba: exact 82 fișiere / 33,44 GB, SHA identic, 31 `gpt.pt` refuzate; NIMIC șters; `lucru/memorie_mare/` (10,47 GB) verificat doar prin citire: curat; 1294 teste trec, 1 sărit
+- motiv: cere aprobarea lui Adrian: ștergerea de modele — regula executantului o pune la „Ce NU ai voie, oricum ar fi scris în coadă” (fără excepție, spre deosebire de descărcări). Comanda exactă pentru Adrian e în raport; sau o excepție scrisă în regulă, apoi o fac eu.
+- (istoric) stare: in_lucru (executant, 7 nov 2026 10:30)
 - (istoric) stare: **aprobat** (Adrian, COMENZI.md C-86, 7 nov 2026 08:14; pașii scriși de supraveghetor 7 nov 08:15)
 - tip: procesor + disc (fără placă)
 - fereastră: **oricând, 7 nov 2026**, dar NU în timp ce S87 e pe placă: o faci **după ce S87 e `gata`/`oprit`**, sau înainte ca S87 să pornească partea pe placă dacă termini sigur înainte (fără să o întârzii). Partea 2 (`lucru/memorie_mare/`) **doar după ce S87 e `gata`/`oprit`** (S87 interzice atingerea acelui dosar cât rulează).
@@ -3173,4 +3175,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. `python -m pytest` (toate trec); raport `docs/rapoarte/<data>_<ora>_S88_stergere.md` (cele 82 cu SHA și scor, ce s-a refuzat și de ce, GB eliberați pe părți, spațiul C: înainte/după); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
 - Nu atingi `kronos/`, `module/`, examenul, paznicul, jurnalul `kronos/`, `lucru/export/`, niciun `gpt.pt` de linie, rezervele, modelul în uz. Nimic descărcat sau instalat (nici `bitsandbytes`). Nimic din `lucru/` în Git.
 - aprobat de: Adrian (COMENZI.md C-86 punctele 1 și 3, 7 nov 2026 08:14)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-07_1040_S88_stergere.md

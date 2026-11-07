@@ -1,7 +1,12 @@
 """Punctele de salvare `.pt`: ce s-ar păstra și ce s-ar putea șterge (S84, C-85 pasul 1, aprobat de Adrian 6 nov 2026).
 
-DOAR LISTĂ. Unealta nu are comandă de ștergere: nu șterge, nu mută, nu redenumește și nu scrie în jurnal. Singurul
-fișier pe care îl scrie e lista: `lucru/puncte_salvare/lista_<AAAA-LL-ZZ_HHMM>.json` (refuză să scrie peste una veche).
+`lista` și `tabel` doar citesc: nu șterg, nu mută, nu redenumesc și nu scriu în jurnal. `lista` scrie doar
+`lucru/puncte_salvare/lista_<AAAA-LL-ZZ_HHMM>.json` (refuză să scrie peste una veche).
+
+`sterge` (S88, C-86, aprobat de Adrian 7 nov 2026): implicit doar proba; ștergerea reală numai cu `--da-sterge`. Șterge
+doar fișiere „SE POATE ȘTERGE” din `lucru/stocare/modele/`; refuză rezervele, modelul în uz, câștigătorii liniilor, orice
+`gpt.pt`, `lucru/export/`, tot ce e numit în pre-înregistrările deschise / sarcinile vii. Recitește SHA-256 chiar înainte
+de fiecare ștergere. Jurnalul ștergerii (`lucru/puncte_salvare/sterse_<AAAA-LL-ZZ>.json`) se scrie ÎNAINTE de ștergere.
 
 Pentru fiecare `.pt` din `lucru/`: calea, mărimea, SHA-256, experimentul și linia din jurnal (doar citit), scorurile
 din jurnal (val_bpb; română curat / cod curat din examenele pe validări) și clasa:
@@ -13,6 +18,7 @@ din jurnal (val_bpb; română curat / cod curat din examenele pe validări) și 
 Comenzi:
   python -X utf8 unelte/puncte_salvare.py lista [--radacina .] [--config config/puncte_salvare.toml]
   python -X utf8 unelte/puncte_salvare.py tabel lucru/puncte_salvare/lista_....json   (tabelele pentru raport)
+  python -X utf8 unelte/puncte_salvare.py sterge --lista lucru/puncte_salvare/lista_....json --doar intermediare [--da-sterge]
 """
 
 from __future__ import annotations
@@ -318,6 +324,125 @@ def tabel(cale: Path, primele: int = 20) -> str:
     return "\n".join(o) + "\n"
 
 
+# --- ștergerea (S88, C-86, aprobat de Adrian 7 nov 2026) ----------------------------------------------------------
+
+INTERMEDIARE = "intermediare"
+INTERZISE_EXPERIMENTE = (459, 477, 513)
+INTERZISE_CAI = ("lucru/cod_c1/gpt.pt", "lucru/w2_mare/gpt_24.pt")
+DOSAR_PERMIS = ("lucru", "stocare", "modele")
+
+
+def motiv_refuz(rel: str, radacina: Path, leg: dict[str, Any], config: dict[str, Any],
+                num: dict[str, Any]) -> str | None:
+    """De ce NU se poate șterge fișierul (None = se poate). Verificările se fac pe starea de ACUM a discului,
+    a jurnalului, a configurării și a pre-înregistrărilor, nu pe lista veche."""
+    cheie = _cheie(rel)
+    nume = cheie.rsplit("/", 1)[-1]
+    permis = radacina.joinpath(*DOSAR_PERMIS).resolve()
+    try:
+        (radacina / rel).resolve().relative_to(permis)
+    except ValueError:
+        return "în afara lucru/stocare/modele/"
+    if cheie.startswith("lucru/export/"):
+        return "în lucru/export/"
+    if nume == "gpt.pt":
+        return "gpt.pt de linie"
+    if cheie in INTERZISE_CAI or cheie in config["fisiere"]:
+        return "rezervă numită (cale)"
+    fisa = leg["modele_cale"].get(cheie) or leg["modele"].get(nume)
+    exp = fisa.get("id") if fisa else None
+    m = re.fullmatch(r"experiment_(\d+)\.pt", nume)
+    din_nume = int(m.group(1)) if m else None
+    for n in (exp, din_nume):  # rezervele fixe după număr, chiar dacă fișa lipsește
+        if n is not None and (n in INTERZISE_EXPERIMENTE or n in config["experimente"]):
+            return f"rezervă numită (#{n})"
+    if exp is None or exp != din_nume:
+        return "nu se poate lega de un experiment din jurnal"
+    if exp in INTERZISE_EXPERIMENTE or exp in config["experimente"]:
+        return f"rezervă numită (#{exp})"
+    if exp == config.get("model_in_uz"):
+        return f"modelul în uz (#{exp})"
+    if any(f.get("id") == exp for f in leg["castigatori"].values()):
+        return f"câștigătorul unei linii (#{exp})"
+    if cheie in num["cai"]:
+        return "numit în " + "; ".join(num["cai"][cheie])
+    if exp in num["experimente"]:
+        return f"#{exp} numit în " + "; ".join(num["experimente"][exp])
+    return None
+
+
+def _scrie_jurnal_stergere(tinta: Path, date: dict[str, Any]) -> None:
+    temp = tinta.with_suffix(".tmp")
+    temp.write_text(json.dumps(date, ensure_ascii=False, indent=1), encoding="utf-8")
+    temp.replace(tinta)
+
+
+def sterge(radacina: Path, lista_cale: Path, config_cale: Path, doar: str = INTERMEDIARE,
+           da_sterge: bool = False, acum: datetime | None = None, iesire: Path | None = None,
+           cu_progres: bool = False) -> dict[str, Any]:
+    """Proba (implicit): ce s-ar șterge, cu SHA-256 recitit de pe disc. Cu `da_sterge`: scrie ÎNTÂI jurnalul ștergerii
+    (`sterse_<AAAA-LL-ZZ>.json`, refuză să scrie peste unul vechi), apoi, pentru fiecare fișier, recitește SHA-256 chiar
+    înainte de ștergere și îl șterge doar dacă e același cu cel din listă."""
+    if doar != INTERMEDIARE:
+        raise ValueError(f"clasă necunoscută: {doar!r} (doar „{INTERMEDIARE}”)")
+    acum = acum or datetime.now()
+    radacina = Path(radacina)
+    date_lista = json.loads(Path(lista_cale).read_text(encoding="utf-8"))
+    config = citeste_config(config_cale)
+    leg = legaturi_jurnal(citeste_jurnal(radacina))
+    num = numite(radacina, leg["linii"])
+    alese = [r for r in date_lista["fisiere"] if r["clasa"] == SE_POATE_STERGE]
+    intrari = []
+    for r in alese:
+        intrare = {"cale": r["cale"], "experiment": r.get("experiment"), "linie": r.get("linie"),
+                   "octeti": r["octeti"], "sha256": r["sha256"],
+                   "val_bpb": (r.get("scoruri") or {}).get("val_bpb")}
+        motiv = motiv_refuz(r["cale"], radacina, leg, config, num)
+        if motiv is not None:
+            intrare["rezultat"] = f"refuzat: {motiv}"
+        intrari.append(intrare)
+    de_sters = [i for i in intrari if "rezultat" not in i]
+    rezumat: dict[str, Any] = {"facut_la": acum.isoformat(timespec="seconds"), "lista": str(lista_cale),
+                               "doar": doar, "proba": not da_sterge, "fisiere": intrari}
+    tinta = None
+    if da_sterge:
+        iesire = iesire or radacina / "lucru" / "puncte_salvare"
+        tinta = iesire / f"sterse_{acum:%Y-%m-%d}.json"
+        if tinta.exists():
+            raise FileExistsError(f"{tinta} există deja; nu scriu peste el")
+        for i in de_sters:
+            i["rezultat"] = "urmează să fie șters"
+        iesire.mkdir(parents=True, exist_ok=True)
+        _scrie_jurnal_stergere(tinta, rezumat)  # ÎNAINTE de orice ștergere
+    for n, i in enumerate(de_sters, 1):
+        cale = radacina / i["cale"]
+        if not cale.exists():
+            i["rezultat"] = "lipsește de pe disc"
+        elif (sha := sha256(cale)) != i["sha256"]:
+            i["rezultat"] = f"nu șters: SHA-256 diferit ({sha})"
+        elif da_sterge:
+            cale.unlink()
+            i["rezultat"] = "șters"
+        else:
+            i["rezultat"] = "s-ar șterge (proba)"
+        if tinta is not None:
+            _scrie_jurnal_stergere(tinta, rezumat)
+        if cu_progres:
+            print(f"[{n}/{len(de_sters)}] {i['rezultat']}: {i['cale']} ({i['octeti'] / GB:.2f} GB)", flush=True)
+    bune = {"s-ar șterge (proba)", "șters"}
+    rezumat["total"] = {
+        "alese_din_lista": len(intrari),
+        "refuzate": sum(1 for i in intrari if i["rezultat"].startswith("refuzat")),
+        "sterse_sau_de_sters": sum(1 for i in intrari if i["rezultat"] in bune),
+        "gb_sterse_sau_de_sters": round(sum(i["octeti"] for i in intrari if i["rezultat"] in bune) / GB, 3),
+        "alte": sum(1 for i in intrari if i["rezultat"] not in bune and not i["rezultat"].startswith("refuzat")),
+    }
+    if tinta is not None:
+        _scrie_jurnal_stergere(tinta, rezumat)
+        rezumat["jurnal"] = str(tinta)
+    return rezumat
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -331,7 +456,28 @@ def main(argv: list[str] | None = None) -> int:
     pt = sub.add_parser("tabel", help="tabelele pentru raport, dintr-o listă scrisă")
     pt.add_argument("fisier", type=Path)
     pt.add_argument("--primele", type=int, default=20)
+    ps_ = sub.add_parser("sterge", help="șterge modelele intermediare dintr-o listă (implicit doar proba)")
+    ps_.add_argument("--lista", type=Path, required=True)
+    ps_.add_argument("--doar", choices=[INTERMEDIARE], required=True)
+    ps_.add_argument("--radacina", type=Path, default=Path("."))
+    ps_.add_argument("--config", type=Path, default=Path("config/puncte_salvare.toml"))
+    grup = ps_.add_mutually_exclusive_group()
+    grup.add_argument("--proba", action="store_true", help="doar afișează (implicit)")
+    grup.add_argument("--da-sterge", action="store_true", help="ștergerea reală")
     a = p.parse_args(argv)
+    if a.comanda == "sterge":
+        try:
+            r = sterge(a.radacina, a.lista, a.config, a.doar, da_sterge=a.da_sterge, cu_progres=True)
+        except FileExistsError as e:
+            print(f"Refuz: {e}")
+            return 1
+        for i in r["fisiere"]:
+            if i["rezultat"].startswith("refuzat"):
+                print(f"{i['rezultat']}: {i['cale']}")
+        print(json.dumps(r["total"], ensure_ascii=False))
+        if "jurnal" in r:
+            print(f"Jurnalul ștergerii: {r['jurnal']}")
+        return 0
     if a.comanda == "lista":
         try:
             tinta = lista(a.radacina, a.config, cu_progres=True)

@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
+
 ## 7 noiembrie 2026, 08:15 — Am primit răspunsurile tale (C-86); ștergerea celor 33 GB intră azi, după S87
 
 - **Raportul de dimineață (06:46) e la locul lui** și se potrivește cu ce am verificat: S85 NEMĂSURAT, S86 DA, #513 în uz; **1278 teste trec, 0 pică**; C: are 86 GB liberi; placa liberă (456 MB, 25 °C).
