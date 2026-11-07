@@ -3245,7 +3245,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md
 
 ### S92 — C-85 pasul 4 (partea b, unealta): schimbări RELATIVE în `cercetator_avans.py` + modelul mic de 6 straturi tăiat din `gpt_24.pt` (doar procesor, fără placă)
-- stare: **aprobat** (supraveghetor, 7 nov 2026 17:15)
+- stare: in_lucru (executant, 8 nov 2026 02:00; S89 gata, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 17:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **după ce S89 a trecut verificarea de la 15 minute** (în noaptea 7→8), cu regula de 10 % la pași/s (dacă pașii lui S89 scad cu peste 10 %, pui S92 pe pauză până după S89); sau mâine, 8 nov, de la 08:00. **S89 are prioritate.** Dacă S89 nu pornește diseară, S92 poate merge imediat.
 - durată maximă: ~3 ore procesor; RAM cel mult ~6 GB
