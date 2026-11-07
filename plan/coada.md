@@ -3199,7 +3199,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S89_kronos_mare_5ore.md
 
 ### S90 — C-85 pasul 3: examenul de română ca modul `module/examen_romana.py` (port `examen`, MANIFEST, trece `teste_contracte/`), NEACTIVAT în nicio configurare (doar procesor)
-- stare: in_lucru (executant, 7 nov 2026 11:30; placa liberă, nimic altceva în lucru)
+- stare: gata (executant, 7 nov 2026 12:26) — `romana_bpb` #513 1,20601 (reper 1,2060), #477 1,20962 (reper 1,2097), ambele în ± 0,001; `r1_ascuns` #513 pe procesor 99,27 = S76b (dif. 0,00), 2,73 s/întrebare (~23 min); amprentele verificate la fiecare notare; neactivat în nicio configurare; SHA #513/#477 neschimbate; 1306 teste trec, 1 sărit. Prima rulare a scriptului de verificare a căzut pe o cheie lipsă din nota S76b (scriptul meu, nu modulul) → reluată cap-coadă, cod 0
+- (istoric) stare: in_lucru (executant, 7 nov 2026 11:30; placa liberă, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 11:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **oricând de azi, 7 nov**; ziua imediat (placa nu e folosită). Dacă S89 a pornit: doar după verificarea de la 15 minute a lui S89 și cu regula de 10 % la pași/s (dacă scad cu peste 10 %, pui S90 pe pauză până după S89).
@@ -3214,4 +3215,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, paznicul, jurnalul, nicio configurare din `config/` (modulul NU se pune în nicio configurare), setul ascuns (doar citit), modelele (doar citite). Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e antrenare (pragul: ± 0,001 față de `examen_validari_ws.py` la #513 și #477)
 - aprobat de: Adrian (COMENZI.md C-85 pasul 3, 6 nov 2026 17:56); pașii scriși de supraveghetor 7 nov 2026 11:15 (granițele 2 și 5)
-- raport: docs/rapoarte/<data>_<ora>_S90_examen_romana.md
+- raport: docs/rapoarte/2026-11-07_1226_S90_examen_romana.md

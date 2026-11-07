@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 7 nov 12:26 — S90 `gata`:** examenul de română e acum un modul separat (`module/examen_romana.py`) și dă exact cifrele vechi (#513 1,2060, #477 1,2096; R1 #513 99,27 ca pe placă). **Nu e pus în nicio configurare** — dacă vrei să decidă orele după română, spune „da” (detalii în `docs/rapoarte/2026-11-07_1226_S90_examen_romana.md`). 1306 teste trec.
+>
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
 ## 7 noiembrie 2026, 11:15 — Am găsit de ce cădea modelul mare la ora 3 și e reparat; ștergerea așteaptă mâna ta
