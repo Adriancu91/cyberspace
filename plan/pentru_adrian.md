@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 7 noiembrie 2026, 04:06 — (executant, S86 / C-85 pasul 2) memoria plăcii la modelul mare: GATA
+
+- Verdict **DA**: Muon scade vârful la antrenare cu 649 MB față de AdamW. AdamW lot 4 × 24 cade cu out of memory la validare; Muon încape la loturile 4 × 24, 6 × 16 și 12 × 8 (vârf 6.273–6.373 MB, la validare). Paza de memorie la fiecare oră e pusă. Întrebarea „crește memoria de la o oră la alta” a rămas fără răspuns sigur. 1278 teste trec. Raport: `docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md`.
+
 ## 7 noiembrie 2026, 02:39 — (executant, S83b / C-82) #513 e modelul în uz: GATA
 
 - #513 e acum modelul implicit (KGR1 Q8_0, 110.859.008 octeți, SHA `66f734b3…5859`); aceleași simboluri ca PyTorch, marje 0,095–0,172; #477 și #459 rămân rezerve; 1258 teste trec. Raport: `docs/rapoarte/2026-11-07_0239_S83b_model_513.md`. **De făcut de tine:** Release-ul (comanda e în raport și în `docs/integrare_kronos/MODEL.md`; `gh` îmi cere aprobare).

@@ -47,3 +47,26 @@ de la o „oră” la alta, ca la căderile S77c/S85 de la testul rapid al orei 
 - NU: vârful PyTorch la antrenare (b) e mai mic decât (a) cu mai puțin de 400 MB (sau (b) cade / trece de 6.700 MB).
 - Pentru 3b (informativ): alocatul după testul rapid la (a) rămâne în ±100 MB de la ora 1 la ora 3 → memoria nu crește,
   căderea de la ora 3 are altă cauză.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-07 04:05, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+(Corect: S86 nu scrie în jurnal; cifrele sunt în `lucru/memorie_mare/s86.json`, rularea 03:12–03:47.)
+
+## Verdictul
+
+**DA.** Vârful PyTorch la antrenare (max_memory_allocated, ora 1): (a) adamw lot 4 × 24 = **3.706 MB**,
+(b) muon lot 4 × 24 = **3.057 MB** → (b) e mai mic cu **649 MB** ≥ 400 MB. (Pe hârtie: 650–700 MB; s-a potrivit.)
+(b) nu a căzut și nu a trecut de 6.700 MB (vârf nvidia-smi 6.373 MB, la validare).
+
+Informativ (fără prag):
+- (c) muon 6 × 16: vârf nvidia-smi 6.273 MB; (d) muon 12 × 8: 6.303 MB → amândouă încap sub 6.700 MB, ca în așteptare.
+- 3b (memoria crește de la o oră la alta la (a)?): **fără răspuns** — (a) a căzut cu out of memory chiar la validarea
+  orei 1 (plafonul 5.800 MB: 5,42 GiB alocați + 42 MiB ceruți), deci n-a ajuns la ora 2; (a_golit) a căzut identic,
+  înainte de punctul de golire. Golirea nu e dovedită, deci nu intră în paza de la pasul 3.
+- Vârful real e **validarea** (examenul + `dupa_examen`), nu antrenarea: +3,2 GB peste modelul ținut.
