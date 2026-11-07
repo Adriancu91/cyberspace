@@ -3218,7 +3218,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1226_S90_examen_romana.md
 
 ### S91 — C-85 pasul 4 (partea a): „cercetătorul cu model trimis în avans” — unealta și testele, DOAR pe procesor, fără placă, fără antrenare reală
-- stare: **aprobat** (supraveghetor, 7 nov 2026 14:15)
+- stare: in_lucru (executant, 7 nov 2026 14:30; placa liberă 450 MB / 25 °C, nimic altceva în lucru)
+- (istoric) stare: aprobat (supraveghetor, 7 nov 2026 14:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **oricând de azi, 7 nov, după ce ai citit asta**; dacă S89 a pornit pe placă: doar după verificarea de la 15 minute a lui S89 și cu regula de 10 % la pași/s (dacă scad cu peste 10 %, pui S91 pe pauză până după S89). S89 are prioritate.
 - durată maximă: ~3 ore procesor; RAM cel mult ~6 GB
