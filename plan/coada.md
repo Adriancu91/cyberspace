@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 7 nov 2026 (supraveghetor, 05:15):** S86 = **GATA, verificat — DA** (Muon −649 MB). Întrebarea „crește memoria de la o oră la alta?” a rămas deschisă → **S87** (jos, `aprobat`, placă ~1–1,5 h), **ziua de 7 nov, 08:00–18:30**, nimic pe placă dacă Adrian e la workstation. Nicio linie de 24 de straturi repornită până după S87. **Nimic nu se șterge** (nici `lucru/memorie_mare/`) până răspunde Adrian.
+
 **⚠ ACUM — 7 nov 2026 (supraveghetor, 02:15):** S85 = **OPRIT/NEMĂSURAT, verificat — corect** (ora 3 iar out of memory la testul rapid, ca la S77c). Placa e liberă tot restul nopții. **Ordinea acum:** **S83b** (procesor) **imediat**; **S86** (C-85 pasul 2, cu pasul nou 3b: de ce crește memoria de la o oră la alta) **în paralel, tot în noaptea asta** — partea pe placă pornește cel târziu la 05:30 și e gata până la 07:00, altfel ziua de la 08:00. Nicio linie de 24 de straturi repornită până după S86. **Nimic nu se șterge** până răspunde Adrian la S84.
 
 **⚠ ACUM — 6 nov 2026 (supraveghetor, 23:15):** S77e = **GATA, verificat** (e1 ȚINE, e2 AJUTĂ PUȚIN — cifrele se potrivesc cu pragurile). S84 = **GATA, verificat** (nimic șters). S83 = **oprit, motiv bun** (−32 octeți doar din antet) → reluarea e **S83b** (accept mărimea reală). **Ordinea în noaptea asta:** **S85** pe placă ACUM (5 ore pe rețeta e1, pornire **cel târziu 00:30**); **S83b** pe procesor **după ce S85 a trecut verificarea de la 15 minute** (regula de 10 % la pașii/s), sau imediat dacă S85 nu pornește. Mâine ziua (7 nov, 08:00–18:30): **S86** (C-85 pasul 2, memoria plăcii la modelul mare, măsurare scurtă), după ce S85 e `gata`/`oprit`. **Nimic nu se șterge** până răspunde Adrian la S84.
@@ -3107,7 +3109,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0239_S83b_model_513.md
 
 ### S86 — C-85 pasul 2: memoria plăcii la modelul mare — Muon (o singură stare) față de AdamW + paza de memorie la fiecare oră (măsurare scurtă pe placă, fără antrenare lungă)
-- stare: gata (executant, 7 nov 2026 04:06; verdict DA: Muon −649 MB la antrenare; AdamW 4 × 24 out of memory la validare; 3b fără răspuns sigur)
+- stare: gata — **verificat de supraveghetor 7 nov 05:15: DA corect** (3.706 − 3.057 = 649 MB ≥ 400; placa max 6.431 MB / 63 °C; `gpt_24.pt` SHA neschimbat; 1278 teste trec). Muon încape la 4 × 24, 6 × 16, 12 × 8; AdamW 4 × 24 nu mai încape la validare. Pasul 3b rămâne deschis → **S87**.
+- (istoric) stare: gata (executant, 7 nov 2026 04:06; verdict DA: Muon −649 MB la antrenare; AdamW 4 × 24 out of memory la validare; 3b fără răspuns sigur)
 - (istoric) stare: in_lucru (executant, 7 nov 2026 03:00; S83b gata, placa liberă 456 MB / 26 °C)
 - (istoric) stare: **aprobat** (Adrian, COMENZI.md C-85 pasul 2, 6 nov 2026 17:56; pașii scriși de supraveghetor 6 nov 23:15)
 - tip: placă (măsurare ~45–60 min) + procesor (unealtă, teste)
@@ -3126,3 +3129,27 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: docs/preinregistrari/<data>_memorie_mare.md (de scris înainte de partea pe placă)
 - aprobat de: Adrian (COMENZI.md C-85, 6 nov 2026 17:56, pasul 2)
 - raport: docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md
+
+### S87 — C-85 pasul 2, continuare (3b): crește memoria plăcii de la o oră la alta? 3 „ore” scurte cu Muon lot 4 × 24, în ordinea orchestratorului, cu și fără golire (placă ~1–1,5 h)
+- stare: **aprobat** (supraveghetor, 7 nov 2026 05:15)
+- tip: placă (măsurare, fără antrenare lungă) + procesor (unealtă, teste)
+- fereastră: **zi, 7 nov 2026, 08:00–18:30** (totul gata până la 18:30; dacă nu apuci, noaptea 7→8 de la 19:00). Nimic pe placă dacă Adrian e la workstation.
+- durată maximă: 1,5 ore pe placă + ~1 oră procesor
+- de ce: S77c și S85 au căzut de două ori exact la testul rapid de la ora 3; proba din S86 (Muon, 2 ore) a arătat vârful urcând 2.289 → 4.390 MB de la ora 1 la ora 2. Fără răspuns nu pornim nicio noapte lungă cu modelul de 24 de straturi. Observație de la mine (citit în `kronos/orchestrator.py`, liniile ~191–231, NU se modifică): în orchestrator ordinea e **test rapid → antrenare → examen**, iar `model_test` rămâne ținut în memorie în timpul antrenării și examenului (e eliberat abia la ieșirea din experiment); unealta din S86 făcea ordinea invers.
+- ce faci:
+  1. În `unelte/masoara_memorie_mare.py` (doar `unelte/`) adaugi o opțiune `--ordine orchestrator` pentru `unul`: în fiecare „oră”, exact ca `kronos/orchestrator.py`: construiești `model_test`, test rapid (2 s + 500 de caractere) → construiești `model` → antrenare (50 de pași de optimizator, ca în S86) → validare (`ExamenBpb().examineaza` doar chemat + `dupa_examen`), cu `model_test` încă ținut. La sfârșitul orei nu ștergi nimic explicit (variabilele se suprascriu la ora următoare, ca la ieșirea din funcție). Scrii `memory_allocated`, `memory_reserved` și `nvidia-smi` **la începutul fiecărei ore** și înainte/după fiecare fază (ce face deja `faza`).
+  2. **Variantele** (fiecare în proces nou, din copia `gpt_24.pt`, Muon lot 4 × 24, plafonul PyTorch 5.800 MB, 3 „ore”; te oprești la out of memory sau peste 6.700 MB nvidia-smi și notezi la ce oră și fază):
+     (b_orch) ordinea orchestratorului, fără golire;
+     (b_orch_gc) la fel, plus la **începutul fiecărei ore** `gc.collect()` + `torch.cuda.empty_cache()` (exact ce poate face cârligul din `unelte/antrenare_recalcul.py` dinaintea testului rapid);
+     (b_orch_del) la fel ca (b_orch_gc), plus `del model_test` + `gc.collect()` + `empty_cache()` **înainte** de construirea lui `model` — doar ca informație (în orchestratorul real asta ar cere o schimbare în `kronos/`, deci „da”-ul lui Adrian; NU o faci în `kronos/`).
+  3. Pre-înregistrare ÎNAINTE de partea pe placă: `python unelte/preinregistrare.py --nume memorie_ore --titlu "S87: crește memoria plăcii de la o oră la alta?"`, cu pragurile (scrise de supraveghetor, DA/NU):
+     - **P1 „memoria crește”:** la (b_orch), `memory_allocated` la începutul orei 3 minus la începutul orei 1 ≥ **300 MB**, sau (b_orch) cade cu out of memory / trece de 6.700 MB înainte de sfârșitul orei 3 → DA; altfel NU.
+     - **P2 „golirea ajută”:** (b_orch_gc) termină toate 3 orele, cu vârful nvidia-smi ≤ **6.600 MB** și creșterea de la P1 sub **100 MB** → DA; altfel NU.
+     - informativ (fără prag): cât scade vârful la antrenare și la validare la (b_orch_del) față de (b_orch_gc).
+     Commit + push înainte de placă.
+  4. **Dacă P2 = DA:** pui `gc.collect()` înaintea lui `torch.cuda.empty_cache()` în paza din `unelte/antrenare_recalcul.py` (cârligul de la linia ~126–131), cu un test nou fără placă (că se cheamă `gc.collect` înainte de citire). **Dacă P2 = NU și (b_orch_del) trece:** NU schimbi nimic, scrii în raport schimbarea exactă din `kronos/orchestrator.py` (care rând, ce face) ca propunere pentru Adrian. Dacă niciuna nu trece: scrii ce se vede (unde crește, cu cât) și 1–2 variante.
+  5. `python -m pytest` (toate trec); raport `docs/rapoarte/<data>_<ora>_S87_memorie_ore.md` (tabel pe ore × variante: alocat la început, vârfuri pe faze, nvidia-smi; verdictele P1/P2; recomandarea pentru o noapte lungă Muon — fără s-o pornești); închizi pre-înregistrarea; coada → `gata`; commit + push. Dosarul `lucru/memorie_ore/` rămâne.
+- Nu atingi `kronos/` (doar citit), `module/` (doar citit), `module/examen_bpb.py`, paznicul, jurnalul, #459/#477/#513, `gpt_24.pt` (doar citit, SHA înainte = după), `lucru/memorie_mare/`, liniile `w2_mare_24*`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
+- pre-înregistrare: docs/preinregistrari/<data>_memorie_ore.md (de scris înainte de partea pe placă)
+- aprobat de: supraveghetor, 7 nov 2026 05:15 (granițele 2 și 5: măsurare + unealtă în `unelte/`; în cadrul C-85 pasul 2, aprobat de Adrian 6 nov 17:56)
+- raport: docs/rapoarte/…

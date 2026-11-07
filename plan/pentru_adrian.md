@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 7 noiembrie 2026, 05:15 — Muon economisește memorie (DA); azi aflăm de ce se umple memoria la ora 3
+
+- **S86: GATA, verificat de mine — DA.** Cu optimizatorul Muon, modelul de 24 de straturi folosește la antrenare cu 649 MB mai puțin decât cu AdamW (pragul cerea 400). Cu Muon încape la toate cele 3 mărimi de lot; cu AdamW, lotul obișnuit nu mai încape deloc. Placa n-a fost în pericol (max 6.431 MB, 63 °C); 1278 teste trec.
+- **Rămas deschis:** de ce crește memoria de la o oră la alta (de aici căderile de la ora 3). Am găsit un indiciu în cod: modelul de test al fiecărei ore rămâne ținut în memorie cât timp se antrenează modelul cel mare.
+- **Pus în coadă (aprobat de mine): S87**, azi ziua (08:00–18:30, ~1–1,5 h pe placă): 3 ore scurte cu Muon, exact în ordinea în care lucrează Kronos, cu și fără golirea memoriei, cu praguri scrise dinainte. Dacă golirea ajută, executantul o pune în unealta de antrenare; dacă trebuie schimbat nucleul `kronos/`, te întreb pe tine.
+- **Aștept de la tine (fără grabă):** (1) S84: „ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”; (2) Release-ul #513 (comanda e în `docs/integrare_kronos/MODEL.md`); (3) opțional: „da/nu” la stările pe 8 biți (ar instala `bitsandbytes`) și dacă ștergem `lucru/memorie_mare/` (9,8 GB, copii de lucru).
+
 ## 7 noiembrie 2026, 04:06 — (executant, S86 / C-85 pasul 2) memoria plăcii la modelul mare: GATA
 
 - Verdict **DA**: Muon scade vârful la antrenare cu 649 MB față de AdamW. AdamW lot 4 × 24 cade cu out of memory la validare; Muon încape la loturile 4 × 24, 6 × 16 și 12 × 8 (vârf 6.273–6.373 MB, la validare). Paza de memorie la fiecare oră e pusă. Întrebarea „crește memoria de la o oră la alta” a rămas fără răspuns sigur. 1278 teste trec. Raport: `docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md`.
@@ -126,25 +133,3 @@
 - **C-76 → S79 (aprobat), după S78:** cât ocupă fiecare dosar din `C:\Kronos\`, ce e doar în arhiva de mutare de 25,6 GB și o propunere de curățenie pe grupuri, cu GB eliberați. **Nimic șters** — tu alegi grupurile.
 - **Ordinea după 14:00:** S77a (Kronos mai mare, test pe placă, gata până la 18:30) → S78 → S79; acestea două merg doar pe procesor și disc și pot continua noaptea fără să încetinească S77b. S76c probabil mâine de la 08:00. Nimic nu rulează acum (fereastra ta până la ~14:00).
 - **Aștept de la tine:** **`claude setup-token` pe workstation ÎNAINTE să pleci** — autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul de dimineață se opresc. Scrie-mi „token făcut” în COMENZI.md. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 11:15 — Fereastra ta continuă până la ~14:00; Kronos merge mai repede în OS (256 simboluri/s)
-
-- **Nimic nou de la 09:05:** nu rulează nimic pe placă sau pe procesor (cum ai cerut în C-73), executantul așteaptă cuminte; **1221 teste trec** (ultima verificare, azi-noapte). Nicio comandă nouă pentru Kronos în hub.
-- **Vestea bună din testul tău de azi (os-242, stick normal):** Kronos #477 în OS — CONTROL **TRECE**, viteza **256 simboluri/s** (ieri 206, alaltăieri 125). Am trecut-o în starea Kronos din hub.
-- **După 14:00:** pornește **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă), gata până la 18:30; **S76c** după ea sau mâine de la 08:00. S77b (noaptea) o scriu la 17:15 / 20:15, după cifrele S77a.
-- **Aștept de la tine:** **`claude setup-token` pe workstation ÎNAINTE să pleci (până la 14:00)** — autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul de dimineață se opresc. Scrie-mi în hub (COMENZI.md) „token făcut” ca să știu. Când vrei: dacă #513 îl înlocuiește pe #477 (recomand după S76c). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 09:05 — Fereastra ta prelungită până la ~14:00: totul așteaptă după tine
-
-- **Am văzut prelungirea (C-73, 08:59):** până pe la **14:00** nimic nu rulează pe placă și nimic lung pe procesor. Acum nu rulează nimic (placa liberă, noaptea S76b s-a terminat curat, **1221 teste trec**, raportul de dimineață e la locul lui).
-- **Mutat în coadă:** **S77a** (Kronos mai mare: aceeași ieșire + memorie și viteză pe placă) pornește **după 14:00** și trebuie gata până la 18:30. **S76c** (instrucțiuni formulate altfel, pe procesor) vine după ea doar dacă S77a e gata până pe la 15:30; altfel **mâine dimineață, de la 08:00** — ca să nu încarce procesorul peste noaptea modelului mare.
-- **La noapte:** S77b (prima noapte a modelului mai mare) o scriu la 17:15 / 20:15, după cifrele S77a, cu pre-înregistrare.
-- **Aștept de la tine:** **`claude setup-token` pe workstation — acum, cât ești acolo** (autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul se opresc). Când vrei: dacă #513 îl înlocuiește pe #477 (recomand după S76c). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 07:40 — Răspunsurile în română (S76b): AJUTĂ; azi, după fereastra ta, primul test pentru Kronos mai mare (S77a)
-
-- **S76b gata, verificat de mine: AJUTĂ.** Copia **#513** urmează acum instrucțiunile din examenul ascuns: **98,97** din 100 (#477: 37,47; pragul era 47,47). Nu s-a stricat nimic: româna 1,2060 (#477: 1,2097 — puțin mai bine), codul și poveștile tot puțin mai bine. Placa max 5.936 MB / 63 °C, **1221 teste trec**. Atenție: examenul folosea aceleași 8 tipuri de instrucțiuni ca exercițiile, deci încă nu știm dacă urmează instrucțiuni *formulate altfel*.
-- **Fereastra ta C-73 (~08:30–09:45):** nimic nu rulează pe placă și nu pornește nimic până la 09:45.
-- **Pus în coadă (aprobat de mine), după 09:45:** **S77a** — Kronos crescut din #477 de la 12 la 24–42 de straturi (~180–310M parametri), straturile noi pornite „neutre” ca să dea exact aceeași ieșire; verificăm asta (și pe vectorii KGR1) și măsurăm memoria și viteza pe placă, fără antrenare. Regula de alegere e scrisă dinainte: cea mai mare mărime sub 6.500 MB și cu cel puțin 2 pași/s. Apoi **S76c** (doar procesor): un examen cu instrucțiuni formulate altfel, ca să vedem cinstit dacă #513 a învățat să urmeze instrucțiuni sau doar a copiat tiparele (repar și greșeala „1,091 → 091”).
-- **La noapte:** prima noapte a modelului mai mare (S77b) — o scriu la 14:15 / 17:15, după cifrele S77a, cu pre-înregistrare.
-- **Aștept de la tine:** **`claude setup-token` pe workstation — AZI, cât ești acolo** (autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul se opresc). Când vrei: dacă #513 îl înlocuiește pe #477 (îți recomand să aștepți S76c, azi după-amiază). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
