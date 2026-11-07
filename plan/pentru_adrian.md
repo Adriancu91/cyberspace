@@ -8,6 +8,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 7 noiembrie 2026, 20:15 — Am primit „Română da” (C-88); modelul mare rulează noaptea asta
+
+- **S89 a pornit la 19:31** (cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie). Merge; nu-l ating. Verdictul îl verific dimineață.
+- **Pus în coadă (aprobat de tine prin C-88): S93**, doar pe procesor, după S92 sau mâine de la 08:00: examenul de română devine cel care decide la **următorul** experiment (o configurare nouă, `conv_w2_mare_24r`); examenul vechi pe povești rămâne neschimbat, doar ca verificare. Nucleul `kronos/` nu se schimbă; paznicul îi memorează singur amprenta. S89 rămâne cum l-ai pre-înregistrat.
+- **S92** (unealta modelului mic) rămâne pe procesor la noapte, după ce S89 merge bine. Testul pe placă al modelului mic se numește acum S94.
+- **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta (vezi 11:15). Nu e urgent.
+- **Aștept de la tine:** doar alegerea la S88, când ești la workstation.
+
 ## 7 noiembrie 2026, 17:15 — Unealta „modelul mic încearcă întâi” e gata (verificat); la noapte modelul mare încearcă iar 5 ore
 
 - **S91: GATA, verificat de mine.** Unealta care încearcă rețetele pe un model mic și scrie o singură propunere pentru cel mare merge; nucleul `kronos/` n-a fost atins; 1318 teste trec. Lecția: valorile bune pe un model minuscul nu se copiază pe cel mare (rata ar fi fost de 300 de ori prea mare) — trebuie mutate „relativ” (de ex. „rata × 2”).
@@ -135,10 +143,3 @@
 - **Pus în coadă (aprobat de mine):** **S81** — reparația care face ca o oră anulată să oprească lanțul (acum mergea mai departe ca și cum totul ar fi bine); **S77d** (azi pe zi, după ce termini tu la workstation, ~2,5 h pe placă) — două ore scurte cu rată de învățare mai mică, ca să vedem ieftin dacă asta e cauza, înainte de încă o noapte întreagă. **S78 (Mini Brain) și S79 (raportul de spațiu) merg acum, la noapte**; S76c azi pe procesor.
 - **Discul C: are doar 34 GB liberi** (sub pragul de 40 GB al uneltelor) → un test pică din cauza asta, nu din cauza codului. Până faci loc, am spus executantului să-l treacă în raport ca „cunoscut” și să nu se blocheze în el; orice alt test picat oprește lucrul ca de obicei. Am ridicat paza la Mini Brain: se lasă baza geografică necopiată dacă ar rămâne sub 25 GB.
 - **Aștept de la tine (azi, la workstation):** după raportul S79, alege ce grupuri de fișiere se pot șterge (candidatul cel mai mare: arhiva `cyberspace_mutare` de 25,6 GB, dacă S79 arată că nu are nimic în plus). Până nu scrie aici „Mini Brain salvat”, nu șterge cele două foldere „test ai brain”. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 23:15 — Prima noapte a lui Kronos mare a căzut după un minut (lipsă de memorie pe placă); am pus reluarea, tot la noapte
-
-- **S77b: OPRIT, verificat de mine — corect.** Antrenarea a pornit la 20:41 și s-a oprit singură după ~1 minut: a cerut puțin mai multă memorie (384 MB) decât limita de siguranță pe care i-am pus-o (5.800 MB). Placa n-a fost în pericol (max 4.755 MB, 32 °C), nimic stricat, **1238 teste trec**. Executantul n-a repornit nimic singur, cum scrie în reguli.
-- **Pus în coadă (aprobat de mine, „reparație”): S77c** — aceeași noapte, același model de 24 de straturi, dar „mestecă” datele în bucăți de 6 în loc de 12 (de 16 ori în loc de 8 înainte de fiecare pas, deci învață la fel); asta înjumătățește partea care n-a încăput. Limita de siguranță rămâne. Pornire până la 00:30 → verdictul la 08:15. Dacă nu apucă, merge mâine noapte de la 19:00, ca ziua să-ți rămână liberă pentru testul OS.
-- **Mini Brain (S78) și spațiul pe disc (S79)** merg la noapte, după ce pornește S77c (sau imediat, dacă S77c nu pornește). Până nu scrie aici „Mini Brain salvat”, **nu șterge încă cele două foldere**.
-- **Aștept de la tine:** nimic urgent. Când vrei: dacă #513 îl înlocuiește pe #477 (după S76c, mâine de la 08:00). Fără grabă: „S58 contează: da/nu”, `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
