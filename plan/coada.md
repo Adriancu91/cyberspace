@@ -3133,7 +3133,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md
 
 ### S87 — C-85 pasul 2, continuare (3b): crește memoria plăcii de la o oră la alta? 3 „ore” scurte cu Muon lot 4 × 24, în ordinea orchestratorului, cu și fără golire (placă ~1–1,5 h)
-- stare: in_lucru (executant, 7 nov 2026 08:30; Adrian inactiv ~10,9 h, placa liberă 474 MB / 23 °C). Unealta (`ore`) + 9 teste + pre-înregistrarea `2026-11-07_memorie_ore.md` în 5ffd7ac (1286 trec, 1 sărit), urcate înainte de placă. Proba cap-coadă 08:37–08:46 (b, `--golire del`, 2 ore × 1 pas, `lucru/cascada/S87_proba/proba/`, nu intră în verdict): cod 0, vârf 6.437 MB. Măsurarea pornită prin cascadă 08:46:45, proces 7708 → `lucru/memorie_ore/s87.json`, ~70 min.
+- stare: gata (executant, 7 nov 2026 10:04; măsurarea 08:46–09:50 cod 0; P1 = DA: fără golire 0 → 1.341 → 1.355 MB ținuți la începutul orelor, (b_orch) out of memory la ora 3 în antrenare; P2 = DA: cu gc.collect + empty_cache 16 MB, 3 ore, vârf 6.399 MB; gc.collect pus în paza din `unelte/antrenare_recalcul.py` + 2 teste; 1288 teste trec, 1 sărit; placa max 62 °C; SHA gpt_24 neschimbat)
+- (istoric) stare: in_lucru (executant, 7 nov 2026 08:30; Adrian inactiv ~10,9 h, placa liberă 474 MB / 23 °C). Unealta (`ore`) + 9 teste + pre-înregistrarea `2026-11-07_memorie_ore.md` în 5ffd7ac (1286 trec, 1 sărit), urcate înainte de placă. Proba cap-coadă 08:37–08:46 (b, `--golire del`, 2 ore × 1 pas, `lucru/cascada/S87_proba/proba/`, nu intră în verdict): cod 0, vârf 6.437 MB. Măsurarea pornită prin cascadă 08:46:45, proces 7708 → `lucru/memorie_ore/s87.json`, ~70 min.
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 05:15)
 - tip: placă (măsurare, fără antrenare lungă) + procesor (unealtă, teste)
 - fereastră: **zi, 7 nov 2026, 08:00–18:30** (totul gata până la 18:30; dacă nu apuci, noaptea 7→8 de la 19:00). Nimic pe placă dacă Adrian e la workstation.
@@ -3155,7 +3156,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/` (doar citit), `module/` (doar citit), `module/examen_bpb.py`, paznicul, jurnalul, #459/#477/#513, `gpt_24.pt` (doar citit, SHA înainte = după), `lucru/memorie_mare/`, liniile `w2_mare_24*`. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/<data>_memorie_ore.md (de scris înainte de partea pe placă)
 - aprobat de: supraveghetor, 7 nov 2026 05:15 (granițele 2 și 5: măsurare + unealtă în `unelte/`; în cadrul C-85 pasul 2, aprobat de Adrian 6 nov 17:56)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-07_1004_S87_memorie_ore.md
 
 ### S88 — C-86: ștergerea celor 82 de modele intermediare (~33,4 GB) din lista S84 și, după S87, a copiilor de lucru `lucru/memorie_mare/` (9,8 GB) (procesor + disc)
 - stare: **aprobat** (Adrian, COMENZI.md C-86, 7 nov 2026 08:14; pașii scriși de supraveghetor 7 nov 08:15)

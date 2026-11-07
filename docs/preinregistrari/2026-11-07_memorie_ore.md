@@ -63,3 +63,35 @@ de la testul rapid al orei 3) și o oprește o golire `gc.collect()` + `torch.cu
   memoria nu crește în ordinea orchestratorului; căderile S77c/S85 ar avea altă cauză (de ex. vârful din validare cu
   examenele suplimentare, sau fragmentarea, nu memoria ținută).
 - P2 = NU cu (b_orch_gc) căzută: golirea de la începutul orei nu e de ajuns; ce ține memoria e o referință vie.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-07 10:04, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+Cifrele măsurării (`lucru/memorie_ore/s87.json`, rularea 08:46:45–09:50:36, cod 0; adăugate de executant la 10:04):
+
+- `memory_allocated` la intrarea în oră (după golire, la variantele cu golire): (b_orch) 0 → 1.341 → **1.355 MB**
+  (creștere 1.355 MB); (b_orch_gc) 0 → 16 → **16 MB** (înainte de golire 1.343 / 1.346); (b_orch_del) 0 → 16 → 16 MB.
+- (b_orch) a căzut cu **out of memory la ora 3, în antrenare** (PyTorch a cerut încă 64 MiB), după vârful 3.949 MB
+  PyTorch; vârful nvidia-smi 6.439 MB. Exact locul căderilor S77c/S85 (ora 3).
+- (b_orch_gc) a terminat toate 3 orele; vârful nvidia-smi **6.399 MB** (la validare, orele 2–3).
+- (b_orch_del) a terminat toate 3 orele; vârful nvidia-smi 6.441 MB.
+- Placa: maxim 62 °C. SHA-256 `gpt_24.pt` înainte = după (`d35e3dbe…92cc`).
+
+## Verdictul
+
+*Scris de executant la 2026-11-07 10:04, strict după pragurile de mai sus.*
+
+- **P1 „memoria crește”: DA** — creșterea la (b_orch) e 1.355 MB ≥ 300 MB, iar (b_orch) a căzut cu out of memory
+  înainte de sfârșitul orei 3.
+- **P2 „golirea ajută”: DA** — (b_orch_gc) a terminat toate 3 orele, vârful nvidia-smi 6.399 MB ≤ 6.600 MB, creșterea
+  16 MB < 100 MB.
+- Informativ, (b_orch_del) față de (b_orch_gc) la orele 2–3: vârful la antrenare scade 4.378 → 3.050 MB PyTorch
+  (nvidia-smi 5.577 → 4.201), dar vârful la validare nu scade (5.509 → 5.454 / 5.477 PyTorch; nvidia-smi 6.399 →
+  6.415 / 6.441). Deci `del model_test` nu mută vârful total, care e la validare.
+- Ambele așteptări (P1 = DA, vârful validării ~6.300–6.500 MB) s-au confirmat; la P2 nu aveam o așteptare sigură — a ieșit
+  că memoria rămasă e ținută de cicluri de obiecte (pe care le eliberează `gc.collect()`), nu de o referință vie.

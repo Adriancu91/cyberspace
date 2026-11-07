@@ -185,6 +185,34 @@ def test_paza_fara_citire_continua():
     assert M().antreneaza(None, 2.0) == {"pasi": 1}
 
 
+def test_paza_cheama_gc_collect_inainte_de_empty_cache_si_de_citire(monkeypatch):
+    """S87 (P2 = DA): golirea de la începutul orei = gc.collect(), apoi empty_cache(), apoi citirea nvidia-smi."""
+    import gc
+
+    ordine = []
+    monkeypatch.setattr(gc, "collect", lambda *a, **k: ordine.append("gc") or 0)
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "empty_cache", lambda: ordine.append("empty_cache"))
+
+    def citeste():
+        ordine.append("nvidia-smi")
+        return 1000
+
+    assert ar.verifica_memoria(1, 6700, citeste) == 1000
+    assert ordine == ["gc", "empty_cache", "nvidia-smi"]
+
+
+def test_paza_cheama_gc_collect_si_fara_placa(monkeypatch):
+    import gc
+
+    ordine = []
+    monkeypatch.setattr(gc, "collect", lambda *a, **k: ordine.append("gc") or 0)
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    monkeypatch.setattr(torch.cuda, "empty_cache", lambda: ordine.append("empty_cache"))
+    assert ar.verifica_memoria(1, 6700, lambda: None) is None
+    assert ordine == ["gc"]
+
+
 def test_paza_a_doua_instalare_si_dezinstalarea():
     class M(_ModelFals):
         pass

@@ -123,10 +123,17 @@ def nvidia_smi_mb() -> int | None:
 
 
 def verifica_memoria(ora: int, prag_mb: int = PRAG_PAZA_MB, citeste: Any = None) -> int | None:
-    """Înainte de testul rapid al orei: golește memoria rezervată fără folos (empty_cache), citește nvidia-smi; peste
-    prag ridică PazaMemorie cu ora și MB (ora se anulează → antrenare_lunga iese cu cod 1 și motivul în log)."""
+    """Înainte de testul rapid al orei: strânge obiectele rămase din ora trecută (gc.collect), golește memoria rezervată
+    fără folos (empty_cache), citește nvidia-smi; peste prag ridică PazaMemorie cu ora și MB (ora se anulează →
+    antrenare_lunga iese cu cod 1 și motivul în log).
+
+    S87: fără gc.collect, la începutul orei 2 și 3 rămâneau ținuți ~1.340 MB (cicluri de obiecte din ora trecută) și
+    ora 3 cădea cu out of memory la antrenare; cu gc.collect + empty_cache rămân 16 MB."""
+    import gc
+
     import torch
 
+    gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     mb = (citeste or nvidia_smi_mb)()
