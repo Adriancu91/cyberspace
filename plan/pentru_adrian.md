@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 7 noiembrie 2026, 02:15 — Kronos mare a căzut iar la ora 3 (lipsă de memorie); în noaptea asta aflăm de ce
+
+- **S85: OPRIT, verificat de mine — corect.** Modelul de 24 de straturi a învățat 2 ore din 5, apoi la începutul orei 3 n-a mai încăput în limita de memorie (placa n-a fost în pericol: max 6.431 MB, 61 °C; nimic stricat, 1254 teste trec). Fără ora 5 nu există verdict (NEMĂSURAT). Informativ, după 2 ore: ține ce știa (română 1,2108, pornirea 1,2096), dar nu e mai bun decât #513 (1,2060).
+- **E a doua noapte la rând când cade exact în același loc** → nu e întâmplare: ceva se adună în memoria plăcii de la o oră la alta. Nu mai repornim modelul mare până nu aflăm cauza.
+- **Mutat în noaptea asta (aprobate deja):** **S83b** (#513 devine modelul în uz, pe procesor) acum; **S86** (pasul 2 din C-85, aprobat de tine) adus de mâine în noaptea asta, cu o întrebare în plus: crește memoria de la o „oră” la alta și se repară golind-o după fiecare test?
+- **Aștept de la tine:** doar răspunsul la S84 („ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”). Fără grabă.
+
 ## 6 noiembrie 2026, 23:15 — Kronos mare a trecut proba de o oră; de la noapte încearcă 5 ore; #513 se reia după o mică corectură
 
 - **S77e: GATA, verificat de mine.** Cu rata mică (e1), modelul de 24 de straturi **nu mai strică** ce știa (ȚINE, la limită: R2 0,4072, română 1,2120, cod 0,7286); cu rata dublă (e2) strică puțin. Încă nu e mai bun decât #477 — doar nu mai dă înapoi.
@@ -133,12 +140,3 @@
 - **Pus în coadă (aprobat de mine), după 09:45:** **S77a** — Kronos crescut din #477 de la 12 la 24–42 de straturi (~180–310M parametri), straturile noi pornite „neutre” ca să dea exact aceeași ieșire; verificăm asta (și pe vectorii KGR1) și măsurăm memoria și viteza pe placă, fără antrenare. Regula de alegere e scrisă dinainte: cea mai mare mărime sub 6.500 MB și cu cel puțin 2 pași/s. Apoi **S76c** (doar procesor): un examen cu instrucțiuni formulate altfel, ca să vedem cinstit dacă #513 a învățat să urmeze instrucțiuni sau doar a copiat tiparele (repar și greșeala „1,091 → 091”).
 - **La noapte:** prima noapte a modelului mai mare (S77b) — o scriu la 14:15 / 17:15, după cifrele S77a, cu pre-înregistrare.
 - **Aștept de la tine:** **`claude setup-token` pe workstation — AZI, cât ești acolo** (autentificarea expiră de mâine, 6 nov; fără ea executantul și raportul se opresc). Când vrei: dacă #513 îl înlocuiește pe #477 (îți recomand să aștepți S76c, azi după-amiază). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
-## 5 noiembrie 2026, 02:20 — Noaptea pe răspunsurile în română (S76b) a pornit; nimic de făcut pentru tine acum
-
-- **Rulează: S76b** — 5 ore de învățare pe exercițiile în română, pe o copie a lui #477 (#477 rămâne în uz), pornită pe la **23:30–23:40**. Sfârșitul estimat: antrenarea ~05:10, examenele până pe la ~05:45, deci mult înainte de 06:45.
-- **Pre-înregistrarea e urcată ÎNAINTE de pornire și verificată de mine:** pragurile sunt exact cele stabilite (AJUTĂ = cel puțin **47,47** la instrucțiuni, acum 37,47; NU AJUTĂ sub 40,47; STRICĂ dacă felurile vechi scad sub 98 sau româna/codul se strică cu peste 0,005). Configurarea e copia rețetei S51, cu 5 ore.
-- Executantul n-a mai scris nimic de la 23:32 (normal cât rulează antrenarea, sub cele 3 ore de alarmă). Verdictul îl verific la 05:15 / 08:15; tot atunci scriu primul pas din **S77** (Kronos mai mare) pentru ziua de azi.
-- **Nimic nou pus în coadă**, nicio comandă nouă pentru Kronos în hub.
-- **Aștept de la tine:** **`claude setup-token` pe workstation până pe 6 nov** (rămâne valabil — mâine e ultima zi). Fără grabă: „S58 contează: da/nu”, permisiunea `taskkill`, ora limită 18:30 la bucla automată, Release-ul #477.
-
