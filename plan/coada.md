@@ -3182,7 +3182,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1040_S88_stergere.md
 
 ### S89 — Reluarea S85: 5 ore pe Kronos de 24 de straturi, rețeta e1 neschimbată, linie nouă `w2_mare_24g`, cu paza nouă (gc.collect la fiecare oră) — e mai bun decât #513 la timp egal? (placa, ~6,5 h)
-- stare: in_lucru (executant, 7 nov 2026 19:30; fereastra de noapte, placa liberă 450 MB / 25 °C; C: 80 GB liberi; `gc.collect()` în paza din `unelte/antrenare_recalcul.py`; `lucru/w2_mare_24g/` nu există)
+- stare: in_lucru (executant, 7 nov 2026 19:30; fereastra de noapte, placa liberă 450 MB / 25 °C; C: 80 GB liberi; `gc.collect()` în paza din `unelte/antrenare_recalcul.py`; `lucru/w2_mare_24g/` nu există). Configurarea + pre-înregistrarea `2026-11-07_w2_mare_24g.md` în 8056bdd, urcate înainte de placă. Lanțul `lucru/cascada/S89_proba/s89.py` (copia lui s85.py + verificarea gc.collect + citirile nvidia-smi în `smi.jsonl`) pornit prin cascadă 19:31:30, proces 25092.
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 11:15)
 - tip: placă (antrenare 5 ore + examene ~1–1,5 ore)
 - fereastră: **noaptea 7→8 nov, pornire de la 19:00, cel târziu la 00:30**; examenele gata până la 07:45. Dacă nu pornește până la 00:30, rămâne `aprobat` pentru noaptea 8→9 de la 19:00 (refaci pre-înregistrarea cu data nouă). Nimic pe placă dacă Adrian e la workstation (vezi notele de sus / hub).
