@@ -80,3 +80,87 @@ def test_main_toate_merge_cap_coada(tmp_path, monkeypatch):
     monkeypatch.setattr(mm, "in_proces_nou", lambda *a, **k: {"memoria_creste": False})
     assert mm.main(["toate", "--pasi-optimizator", "2"]) == 0
     assert (tmp_path / "s86.json").exists()
+
+
+# --- S87: ordinea orchestratorului ---
+
+def _ora(i, alocat, dupa_golire=None, varf=0):
+    o = {"ora": i, "inceput": {"alocat_mb": alocat}, "antrenare": {"varf_nvidia_smi_mb": varf}}
+    if dupa_golire is not None:
+        o["inceput_dupa_golire"] = {"alocat_mb": dupa_golire}
+    return o
+
+
+def test_alocat_inceput_foloseste_valoarea_dupa_golire():
+    ore = [_ora(1, 1000, 900), _ora(2, 1500, 950), _ora(3, 2000)]
+    assert mm.alocat_inceput(ore) == [900, 950, 2000]
+    assert mm.crestere_ora3({"ore": ore}) == 1100
+    assert mm.crestere_ora3({"ore": ore[:2]}) is None
+
+
+def _var(alocari, terminat=True, varf=5000, **extra):
+    return {"ore": [_ora(i + 1, a) for i, a in enumerate(alocari)], "terminat": terminat,
+            "nvidia_smi_varf_parinte_mb": varf, "cod": 0 if terminat else 1, **extra}
+
+
+def test_verdicte_memoria_creste_si_golirea_ajuta():
+    v = mm.verdicte_s87({"b_orch": _var([1000, 1200, 1400]), "b_orch_gc": _var([1000, 1010, 1050], varf=6600),
+                         "b_orch_del": _var([1000, 1000, 1000])})
+    assert v["P1_memoria_creste"] == "DA" and v["crestere_b_orch_mb"] == 400
+    assert v["P2_golirea_ajuta"] == "DA" and v["crestere_b_orch_gc_mb"] == 50
+    assert v["b_orch_del_trece"] is True
+
+
+def test_verdicte_nu_cand_nu_creste_si_golirea_trece_de_6600():
+    v = mm.verdicte_s87({"b_orch": _var([1000, 1100, 1299]), "b_orch_gc": _var([1000, 1000, 1000], varf=6601),
+                         "b_orch_del": _var([1000])})
+    assert v["P1_memoria_creste"] == "NU" and v["P2_golirea_ajuta"] == "NU"
+
+
+def test_verdicte_caderea_inainte_de_ora3_e_da_la_p1_si_nu_la_p2():
+    cazut = _var([1000, 1500], terminat=False, eroare="out of memory: x")
+    v = mm.verdicte_s87({"b_orch": cazut, "b_orch_gc": cazut, "b_orch_del": cazut})
+    assert v["P1_memoria_creste"] == "DA" and v["P2_golirea_ajuta"] == "NU" and v["b_orch_del_trece"] is False
+    peste = _var([1000, 1000, 1000], varf=6701)
+    assert mm.verdicte_s87({"b_orch": peste, "b_orch_gc": peste})["P1_memoria_creste"] == "DA"
+
+
+def test_varful_ia_si_fazele_copilului():
+    r = {"ore": [_ora(1, 0, varf=6650)], "nvidia_smi_varf_parinte_mb": 6000}
+    assert mm.varf_nvidia(r) == 6650
+
+
+def test_ore_refuza_a_doua_oara(tmp_path, monkeypatch):
+    monkeypatch.setattr(mm, "DOSAR_ORE", tmp_path)
+    (tmp_path / "s87.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(SystemExit):
+        mm.ore(1, 5800)
+
+
+def test_ore_ruleaza_cele_trei_variante_in_ordinea_orchestratorului(tmp_path, monkeypatch):
+    monkeypatch.setattr(mm, "DOSAR_ORE", tmp_path)
+    monkeypatch.setattr(mm, "SURSA", tmp_path / "nu_exista.pt")
+    chemari = []
+
+    def fals(varianta, repetari, pasi, goleste, eticheta, memorie, dosar=None, golire=None):
+        chemari.append((varianta, repetari, goleste, eticheta, dosar, golire))
+        return _var([1000, 1000, 1000])
+
+    monkeypatch.setattr(mm, "in_proces_nou", fals)
+    assert mm.main(["ore", "--pasi-optimizator", "2"]) == 0
+    assert chemari == [("b", 3, False, "b_orch", tmp_path, "nimic"), ("b", 3, False, "b_orch_gc", tmp_path, "gc"),
+                       ("b", 3, False, "b_orch_del", tmp_path, "del")]
+    assert (tmp_path / "s87.json").exists()
+
+
+def test_unul_cu_ordinea_orchestratorului_alege_functia_noua(tmp_path, monkeypatch):
+    primit = {}
+
+    def fals(varianta, repetari, pasi, golire, iesire, memorie):
+        primit.update(varianta=varianta, repetari=repetari, golire=golire)
+        return {"terminat": True}
+
+    monkeypatch.setattr(mm, "ruleaza_orchestrator", fals)
+    assert mm.main(["unul", "--varianta", "b", "--repetari", "3", "--iesire", str(tmp_path / "r.json"),
+                    "--ordine", "orchestrator", "--golire", "del"]) == 0
+    assert primit == {"varianta": "b", "repetari": 3, "golire": "del"}
