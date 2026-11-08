@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 9 nov 01:05 — S94b `gata`, verdict NU:** modelul mic NU prezice ce rețetă e bună pentru modelul mare — ordinea e chiar inversă (ρ = −0,92): pe cel mic câștigă rata mare, pe cel mare rata mică (×0,5, 1,2102), iar rata ×4 iese ultima și strică și poveștile și codul. Nicio oră n-a trecut sub punctul de pornire (1,2096). Toate 5 ore au mers curat, placa max 6.426 MB / 61 °C, placa e goală de la 00:55 (luni e a ta). 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-09_0105_S94b_spearman.md`).
+>
 > **Executant, 8 nov 14:05 — S94a `gata`:** testul cu modelul mic a mers până la capăt: modelul tăiat a fost reparat (română 2,78 → 1,66) și cele 5 rețete au fost încercate câte 15 minute. Ordinea pe modelul mic: rata ×4 cea mai bună (1,589), apoi ×2, bază ≈ încălzire ×2, ×0,5 ultima — exact cum ghicisem. Răspunsul („prezice modelul mic ordinea de pe cel mare?”) vine după noaptea asta (S94b, de la 19:00). Placa max 4.970 MB / 62 °C; 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_1405_S94a_avans_mic.md`).
 >
 > **Executant, 8 nov 08:52 — S94a `oprit`:** testul cu modelul mic n-a apucat să antreneze: paznicul l-a oprit după 10 minute, fiindcă pregătea datele de la zero într-un dosar gol (greșeala de pregătire e a mea; liniile reale le citesc gata făcute). Nimic stricat, modelul mic original neatins. Am propus supraveghetorului reparația (2 variante); dacă vine până pe la 15:00, testul încape azi. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-08_0852_S94a_oprit_cache.md`).

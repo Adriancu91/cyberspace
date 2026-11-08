@@ -97,3 +97,46 @@ noaptea 9→10.
 - Pe cel mic, ×0,5 câștigă sau toate 5 sunt la egalitate (sub 0,002) → modelul mic nu deosebește rețetele în 15 min.
 - Repararea dă peste 2,0 după 45 min → modelul tăiat e mai stricat decât credeam (de spus în raport; clasamentul mic
   rămâne valid, dar mai puțin sigur).
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-09 01:05, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+| # | linia | început | val_bpb | decizia | fapte noi | fapte | nota | motivul |
+|---|---|---|---|---|---|---|---|---|
+| 540 | avans_s94_mare_1 | 08.11 19:34 | — | pastrat | — | — | — |  |
+| 541 | examen_validari_ws | 08.11 20:38 | — | masurat | — | — | — |  |
+| 542 | avans_s94_mare_2 | 08.11 20:38 | — | pastrat | — | — | — |  |
+| 543 | examen_validari_ws | 08.11 21:42 | — | masurat | — | — | — |  |
+| 544 | avans_s94_mare_3 | 08.11 21:43 | — | pastrat | — | — | — |  |
+| 545 | examen_validari_ws | 08.11 22:46 | — | masurat | — | — | — |  |
+| 546 | avans_s94_mare_4 | 08.11 22:47 | — | pastrat | — | — | — |  |
+| 547 | examen_validari_ws | 08.11 23:50 | — | masurat | — | — | — |  |
+| 548 | avans_s94_mare_5 | 08.11 23:51 | — | pastrat | — | — | — |  |
+| 549 | examen_validari_ws | 09.11 00:55 | — | masurat | — | — | — |  |
+
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+## Verdictul
+
+*Scris de executant la 2026-11-09 01:05, strict după pragurile de mai sus. Raport: `docs/rapoarte/2026-11-09_0105_S94b_spearman.md`.*
+
+Toate 5 încercările mari măsurate (niciuna anulată de pază), deci verdictul se poate da.
+
+| rețeta | mic `romana_bpb` (15 min) | rang mic | mare `romana_bpb` (1 oră) | rang mare |
+|---|---|---|---|---|
+| 1 bază | 1,6311 | 3,5 | 1,21184 | 2 |
+| 2 rata ×0,5 | 1,6441 | 5 | 1,21020 | 2 |
+| 3 rata ×2 | 1,6116 | 2 | 1,21581 | 4 |
+| 4 rata ×4 | 1,5892 | 1 | 1,22323 | 5 |
+| 5 încălzire ×2 | 1,6312 | 3,5 | 1,21184 | 2 |
+
+Pe cel mare, 2, 1 și 5 sunt toate la mai puțin de 0,002 una de alta (0,00165 și 0,000005) → egalitate, rang mediu 2.
+
+- **ρ Spearman = −0,92** (cu egalitățile cerute; fără egalități pe cel mare ar fi −1,00).
+- Câștigătorul mic (rata ×4) e pe **locul 5 (ultimul)** pe cel mare.
+- ρ ≤ 0,3 → **NU**: modelul mic de 6 straturi NU prezice clasamentul rețetelor pe modelul de 24; îl prezice invers.
+- Așteptarea mea (ρ 0,3–0,5, NU cu 30 %) a fost greșită în sensul „mai rău”: ordinea mare ghicită 3 < 1 < 5 < 2 < 4, cea reală 2 < 1 ≈ 5 < 3 < 4.
+- Regula C-88: rata ×2 (cod curat 0,7314 > 0,7297) „strică codul”; rata ×4 (val_bpb 0,4135 > 0,4100, cod 0,7376) „strică poveștile și codul”.
+- De reținut: niciuna din cele 5 ore nu a coborât sub pornirea `gpt_24.pt` (1,2096); cea mai bună (×0,5) 1,2102.
