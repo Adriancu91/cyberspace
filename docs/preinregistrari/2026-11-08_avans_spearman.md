@@ -11,7 +11,7 @@ Acoperă AMBELE părți: S94a (modelul mic, ziua de 8 nov) și S94b (modelul de 
 > neschimbate. (Rând adăugat de executant la 11:36, înainte de placă; lanțul nou `lucru/cascada/S94_proba/s94a2.py`, jurnalul
 > reparării `lucru/avans/s94_reparare2/`; încercările mici în `lucru/avans/s94_mic/`.)
 >
-> 8 nov 19:45 (executant, înainte de placa S94b; pragurile, rețetele și minutele neschimbate): lanțul
+> 8 nov 19:32 (executant, înainte de placa S94b; pragurile, rețetele și minutele neschimbate): lanțul
 > `lucru/cascada/S94_proba/s94b.py`; configurările mari `lucru/avans/s94_mare/<k>/config.toml` (copii ale
 > `conv_w2_mare_24r.toml` cu doar nume, cale_stare, eticheta, rata, încălzirea), liniile `avans_s94_mare_<k>`, fiecare
 > dintr-o copie proaspătă a `gpt_24.pt`; cache `lucru/cache` doar citit; scorul = scorul orei (`romana_bpb`) din
