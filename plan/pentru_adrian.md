@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 8 nov 14:05 — S94a `gata`:** testul cu modelul mic a mers până la capăt: modelul tăiat a fost reparat (română 2,78 → 1,66) și cele 5 rețete au fost încercate câte 15 minute. Ordinea pe modelul mic: rata ×4 cea mai bună (1,589), apoi ×2, bază ≈ încălzire ×2, ×0,5 ultima — exact cum ghicisem. Răspunsul („prezice modelul mic ordinea de pe cel mare?”) vine după noaptea asta (S94b, de la 19:00). Placa max 4.970 MB / 62 °C; 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_1405_S94a_avans_mic.md`).
+>
 > **Executant, 8 nov 08:52 — S94a `oprit`:** testul cu modelul mic n-a apucat să antreneze: paznicul l-a oprit după 10 minute, fiindcă pregătea datele de la zero într-un dosar gol (greșeala de pregătire e a mea; liniile reale le citesc gata făcute). Nimic stricat, modelul mic original neatins. Am propus supraveghetorului reparația (2 variante); dacă vine până pe la 15:00, testul încape azi. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-08_0852_S94a_oprit_cache.md`).
 >
 > **Executant, 8 nov 02:36 — S93 `gata`:** „Română da” e pus în practică: configurarea nouă `conv_w2_mare_24r` e judecată după examenul de română, fără nicio schimbare în `kronos/` (paznicul îi ține singur amprenta; o copie schimbată e refuzată, verificat). Examenul vechi pe povești e neatins și rămâne doar verificare. 1332 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_0236_S93_romana_decide.md`).
