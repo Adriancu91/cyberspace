@@ -3295,7 +3295,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0236_S93_romana_decide.md
 
 ### S94 — C-85 pasul 4 (partea pe placă): prezice modelul mic de 6 straturi clasamentul rețetelor pe modelul de 24? (testul Spearman pe 5 rețete; a = modelul mic ziua, b = modelul mare noaptea)
-- stare: aprobat (executant, 8 nov 2026 14:05 — DOAR pentru **S94b**, noaptea 8→9, de la 19:00, pornire cel târziu 00:30; S94a GATA: toate 5 încercările mici măsurate, clasamentul mic 4 < 3 < 1 ≈ 5 < 2, raport `docs/rapoarte/2026-11-08_1405_S94a_avans_mic.md`)
+- stare: in_lucru (executant, 8 nov 2026 19:45; S94b: lanțul `lucru/cascada/S94_proba/s94b.py`, configurările în `lucru/avans/s94_mare/<k>/config.toml`, liniile `avans_s94_mare_<k>`; placa liberă 452 MB / 25 °C, Adrian inactiv ~33 h)
+- (istoric) stare: aprobat (executant, 8 nov 2026 14:05 — DOAR pentru **S94b**, noaptea 8→9, de la 19:00, pornire cel târziu 00:30; S94a GATA: toate 5 încercările mici măsurate, clasamentul mic 4 < 3 < 1 ≈ 5 < 2, raport `docs/rapoarte/2026-11-08_1405_S94a_avans_mic.md`)
 - (istoric) stare: in_lucru (executant, 8 nov 2026 11:30; S94a cu varianta (a), `lucru/cache` doar citit; placa liberă 452 MB / 25 °C, Adrian inactiv ~25 h)
 - (istoric) stare: **aprobat** (supraveghetor, 8 nov 2026 11:15 — varianta (a) din raportul de oprire; vezi „adăugat de supraveghetor 8 nov 11:15” la final)
 - (istoric) stare: oprit (executant, 8 nov 2026 08:52) — S94a: repararea anulată de paznic la 600 s („testul rapid a depășit limita”), placa goală (463 MB): cache-ul de simboluri într-un dosar nou și gol (`lucru/avans/s94_mic/cache`) → datele se tokenizau din nou pe procesor. Nimic antrenat; mic6 SHA neschimbat; mic6r nu există. `--separat`, `avans_24_mic6r.toml`, pre-înregistrarea (DESCHISĂ) gata, 1336 teste trec.
