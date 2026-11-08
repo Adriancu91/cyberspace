@@ -3291,7 +3291,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0236_S93_romana_decide.md
 
 ### S94 — C-85 pasul 4 (partea pe placă): prezice modelul mic de 6 straturi clasamentul rețetelor pe modelul de 24? (testul Spearman pe 5 rețete; a = modelul mic ziua, b = modelul mare noaptea)
-- stare: in_lucru (executant, 8 nov 2026 08:30; partea S94a)
+- stare: oprit (executant, 8 nov 2026 08:52) — S94a: repararea anulată de paznic la 600 s („testul rapid a depășit limita”), placa goală (463 MB): cache-ul de simboluri într-un dosar nou și gol (`lucru/avans/s94_mic/cache`) → datele se tokenizau din nou pe procesor. Nimic antrenat; mic6 SHA neschimbat; mic6r nu există. `--separat`, `avans_24_mic6r.toml`, pre-înregistrarea (DESCHISĂ) gata, 1336 teste trec.
+- motiv: comanda a picat (testul rapid > 600 s, cache gol); propun (a) `lucru/cache` doar citit / (b) copie a cache-ului — vezi raportul
+- (istoric) stare: in_lucru (executant, 8 nov 2026 08:30; partea S94a)
 - (istoric) stare: **aprobat** (supraveghetor, 8 nov 2026 02:15)
 - tip: placă
 - fereastră: **S94a — ziua de 8 nov, 08:00–18:30**, DOAR după ce **S93 e `gata`** (configurarea mică are nevoie de portul `examen_romana`; dacă S93 e `oprit`, S94 nu pornește — scrii în coadă și aștepți). Durată ~2,5 h pe placă; dacă nu poate porni până la 15:30, rămâne pentru ziua următoare liberă (NU luni 9 nov — ziua aia placa e a lui Adrian, C-83). **S94b — noaptea 8→9 nov, de la 19:00**, doar dacă S94a e `gata` cu toate 5 încercările măsurate; trebuie terminat (antrenare + note) până la **07:00 luni** — luni placa e a lui Adrian. Dacă S94b nu poate porni până la 00:30, nu pornește (rămâne pentru noaptea 9→10). Nimic pe placă dacă Adrian e la workstation.
@@ -3308,7 +3310,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/` (niciun modul), `module/examen_bpb.py`, `module/examen_romana.py`, paznicul, jurnalul (doar prin platformă), configurările existente (inclusiv `avans_24_mic6`, `conv_w2_mare_24g`, `conv_w2_mare_24r`), #459/#477/#513/#536, `gpt_24.pt` și `mic6/gpt.pt` (doar citite), `lucru/w2_mare_24*/`. Niciun model nou nu înlocuiește #513 nicăieri. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: docs/preinregistrari/2026-11-08_avans_spearman.md (scrisă ÎNAINTE de S94a, acoperă ambele părți)
 - aprobat de: Adrian (COMENZI.md C-85 pasul 4, 6 nov 2026 17:56 — modelul mic trimis în avans); pașii scriși de supraveghetor 8 nov 2026 02:15 (granițele 1, 2 și 5: rulări scurte pe modelul de 24 existent și pe modelul mic cerut de C-85, note, unealtă fără `kronos/`)
-- raport: docs/rapoarte/<data>_<ora>_S94a_avans_mic.md și docs/rapoarte/<data>_<ora>_S94b_spearman.md
+- raport: docs/rapoarte/<data>_<ora>_S94a_avans_mic.md și docs/rapoarte/<data>_<ora>_S94b_spearman.md; oprirea din 8 nov: docs/rapoarte/2026-11-08_0852_S94a_oprit_cache.md
 - **adăugat de supraveghetor 8 nov 05:15 (după S93, nimic din pașii de mai sus schimbat):**
   - S93 e `gata` (verificat) → S94a poate porni azi de la 08:00.
   - Când scrii `config/avans_24_mic6r.toml`, adaugă-l în lista din `teste/test_examen_romana.py::test_doar_in_configurarile_aprobate` (cum cere raportul S93); altfel testul pică intenționat. E singura schimbare permisă la acel test.
