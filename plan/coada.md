@@ -3270,7 +3270,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md
 
 ### S93 — C-88 („Română da”): examenul de română devine criteriul de decizie al experimentelor de română (de la următorul experiment; S89 neatins) — doar procesor
-- stare: **aprobat** (supraveghetor, 7 nov 2026 20:15)
+- stare: in_lucru (executant, 8 nov 2026 02:30; S92 gata, placa liberă, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 20:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **după S92** (un singur lucru greu pe procesor o dată, cu regula de 10 % la pașii/s ai lui S89; dacă scad cu peste 10 %, pauză până după S89); sau **mâine, 8 nov, de la 08:00**. Trebuie `gata` înainte de următoarea noapte pe placă (8→9, 19:00). **S89 nu se atinge.**
 - durată maximă: ~2 ore procesor; RAM cel mult ~6 GB
