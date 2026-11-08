@@ -3291,7 +3291,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0236_S93_romana_decide.md
 
 ### S94 — C-85 pasul 4 (partea pe placă): prezice modelul mic de 6 straturi clasamentul rețetelor pe modelul de 24? (testul Spearman pe 5 rețete; a = modelul mic ziua, b = modelul mare noaptea)
-- stare: **aprobat** (supraveghetor, 8 nov 2026 02:15)
+- stare: in_lucru (executant, 8 nov 2026 08:30; partea S94a)
+- (istoric) stare: **aprobat** (supraveghetor, 8 nov 2026 02:15)
 - tip: placă
 - fereastră: **S94a — ziua de 8 nov, 08:00–18:30**, DOAR după ce **S93 e `gata`** (configurarea mică are nevoie de portul `examen_romana`; dacă S93 e `oprit`, S94 nu pornește — scrii în coadă și aștepți). Durată ~2,5 h pe placă; dacă nu poate porni până la 15:30, rămâne pentru ziua următoare liberă (NU luni 9 nov — ziua aia placa e a lui Adrian, C-83). **S94b — noaptea 8→9 nov, de la 19:00**, doar dacă S94a e `gata` cu toate 5 încercările măsurate; trebuie terminat (antrenare + note) până la **07:00 luni** — luni placa e a lui Adrian. Dacă S94b nu poate porni până la 00:30, nu pornește (rămâne pentru noaptea 9→10). Nimic pe placă dacă Adrian e la workstation.
 - durată maximă: S94a ~2,5 h (reparare 45 min + 5 × 15 min + note); S94b 5 × 1 h + note (~6 h). Placa sub **6.700 MB** (paza din unealtă cu `gc.collect` + lanțul cu nvidia-smi la 5 s) / 7.000 MB paznicul, sub 83 °C.
