@@ -16,6 +16,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 14:15 — Modelul mic a ales rețetele (verificat); la noapte vedem dacă are dreptate pe cel mare
+
+- **S94a: GATA, verificat de mine.** Modelul mic a fost „reparat” (română 2,78 → 1,66), apoi a încercat cele 5 rețete câte 15 minute. Ordinea lui: rata ×4 cea mai bună (1,589), apoi ×2 (1,612), bază ≈ încălzire ×2 (1,631, egale — era de așteptat), ×0,5 ultima (1,644). Am refăcut singur diferențele: se potrivesc cu raportul și cu ce s-a scris dinainte. Placa max 4.970 MB / 62 °C, nimic stricat, 1337 teste trec.
+- **La noapte (de la 19:00): S94b** — aceleași 5 rețete câte o oră pe modelul mare. Abia atunci aflăm dacă modelul mic ghicește bine (dacă da, rețetele se aleg de acum mult mai repede). Am adăugat executantului: să măsoare și poveștile/codul pe cel mare și să lase placa goală la 07:00 luni pentru testul tău.
+- **Restul zilei:** placa liberă, nimic nou pus.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
+
 ## 8 noiembrie 2026, 11:15 — Testul cu modelul mic s-a împiedicat la pregătire; l-am reparat, repornește azi
 
 - **S94a: OPRIT, verificat de mine — motiv bun, nimic stricat.** Paznicul a oprit testul după 10 minute fiindcă executantul pregătea textele de la zero într-un dosar gol, în loc să le citească pe cele gata făcute. Placa n-a lucrat deloc, modelul mic original e neatins.
@@ -146,9 +153,3 @@
 - **Discul C: a scăzut de la 34 → 33,5 → 31 GB liberi** în 6 ore. S77d are o pază (nu pornește sub 20 GB), deci nimic nu se strică, dar e bine să faci loc azi.
 - **Azi, cum era planificat:** de la 08:00 **S76c** (procesor), apoi **S77d** (placa, ~2,5 h) doar când nu ești la workstation (inclusiv dacă faci testul OS cu `os-251`). Nimic nou pus în coadă.
 - **Aștept de la tine (azi, la workstation):** ce grupuri se șterg din raportul S79 — de exemplu „A, B da” (104 GB, fără nicio pierdere) — scris în COMENZI.md. Restul, fără grabă, ca în rezumatul de mai jos.
-
-## 6 noiembrie 2026, 05:15 — Noaptea s-a terminat curat: Mini Brain salvat, raportul de spațiu gata, reparația codului de ieșire gata
-
-- **Verificate de mine, toate GATA:** S78 (Mini Brain salvat, 1,54 GB, 0 diferențe — **poți șterge cele două foldere „test ai brain”**), S79 (se pot elibera **~104 GB fără nicio pierdere**: grupurile A + B), S81 (o oră anulată oprește acum lanțul, cu cod 1; 5 teste noi; **1242 teste trec**, singurul picat e cel de disc, cunoscut).
-- **Nu rulează nimic acum** (placa liberă). **Azi:** de la 08:00 **S76c** (pe procesor: #513 urmează și instrucțiuni formulate altfel?), apoi **S77d** (pe placă, ~2,5 h, doar când nu ești la workstation: rata mai mică pentru modelul de 24 de straturi). Nimic nou pus în coadă; noaptea 6→7 o decid la 17:15 / 20:15, după verdictul S77d.
-- **Aștept de la tine (azi, la workstation):** ce grupuri de fișiere se șterg din raportul S79 (de exemplu „A, B da; C, D da; E–H nu”) — scrie-mi în COMENZI.md. După ce faci loc (peste 40 GB liberi), testul de disc trece din nou. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
