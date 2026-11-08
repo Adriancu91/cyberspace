@@ -29,6 +29,11 @@ relativ, modelul de pornire din `cale_stare` (dacă e în afara dosarului de ie�
 încercare pornește din ACELAȘI fișier, care nu se scrie niciodată; starea de după încercare merge în `<iesire>/stare/`.
 Fără `--relativ`, totul ca înainte.
 
+Rețete strict separate (`--separat`, S94, 8 nov 2026): fiecare încercare = rețeta de bază cu O SINGURĂ schimbare (câte
+una pentru fiecare valoare din spațiul cercetătorului), rulată separat, cu jurnalul mic propriu în
+`<iesire>/incercari/<k>/`; niciuna nu devine baza celor de după (fără --separat, una păstrată le schimbă baza).
+`--incercari` trebuie să fie exact numărul rețetelor. Cache-ul de simboluri e comun, în `<iesire>/cache/`.
+
 Comenzi:
   python -X utf8 unelte/cercetator_avans.py --config-mic config/avans_proba_mic.toml \
       --config-mare config/avans_proba_mare.toml --incercari 5 --minute-pe-incercare 1 --iesire lucru/avans/demo
@@ -504,12 +509,150 @@ def ruleaza(config_mic: Config, config_mare: Config, incercari: int, minute: flo
     return rezultat
 
 
+def retete_separate(config: Config) -> list[dict[str, Any]]:
+    """Rețetele strict separate (S94): punctul de plecare + câte O SINGURĂ schimbare față de el, pentru fiecare valoare
+    din spațiul cercetătorului (în ordinea din configurare). Nicio rețetă nu devine baza alteia."""
+    baza = {p: copy.deepcopy(config.setari_port(p)) for p in config.paznic.get("porturi_modificabile", ["model"])}
+    retete = [{"descriere": "punct de plecare (rețeta de bază)", "setari": copy.deepcopy(baza)}]
+    for port, setari in _spatiu_cercetator(config).items():
+        for cheie, valori in setari.items():
+            for v in valori:
+                if baza.get(port, {}).get(cheie) == v:
+                    continue
+                s = copy.deepcopy(baza)
+                s.setdefault(port, {})[cheie] = v
+                retete.append({"descriere": f"o singură schimbare: {port}.{cheie} = {v}", "setari": s})
+    return retete
+
+
+def ruleaza_separat(config_mic: Config, config_mare: Config, incercari: int, minute: float, iesire: Path,
+                    orchestrator_cls: Any = None, relativ: bool = False,
+                    scara: tuple[str, ...] = SETARI_CU_SCARA) -> dict[str, Any]:
+    """Ca `ruleaza`, dar fiecare rețetă = baza cu O SINGURĂ schimbare, rulată separat (jurnal mic propriu în
+    `<iesire>/incercari/<k>/`), toate din același model de pornire. `incercari` trebuie să fie exact numărul rețetelor."""
+    from kronos.orchestrator import Orchestrator
+
+    orchestrator_cls = orchestrator_cls or Orchestrator
+    iesire = iesire.resolve()
+    if (iesire / "clasament.json").exists():
+        raise Refuz(f"{iesire / 'clasament.json'} există deja: nu scriu peste o rulare veche (alege alt --iesire)")
+    verifica_spatiu(config_mic, config_mare)
+    pornire = amprenta_pornire(config_mic)
+    relative = setari_relative(config_mic, config_mare, scara) if relativ else {}
+    if relativ:
+        de_rulat = pregateste_relativ(config_mic, iesire, relative)
+        sursa = de_rulat.setari_port("model").get("stare_de_pornire")
+        if sursa and not Path(sursa).exists():
+            raise Refuz(f"modelul de pornire {sursa} nu există: nu pornesc de la zero pe tăcute")
+    else:
+        de_rulat = config_mic
+    retete = retete_separate(de_rulat)
+    if incercari != len(retete):
+        raise Refuz(f"cu --separat, spațiul dă {len(retete)} rețete (baza + câte o schimbare), dar --incercari = "
+                    f"{incercari}: pune --incercari {len(retete)}")
+    model = de_rulat.setari_port("model")
+    if not relativ and model.get("cale_stare") and not model.get("stare_de_pornire"):
+        raise Refuz("--separat fără --relativ cere stare_de_pornire în configurarea mică (altfel fiecare încercare ar "
+                    "porni din starea lăsată de cea dinainte)")
+    baza = retete[0]["setari"]
+    amprente = Path(config_mic.director_lucru) / "amprente.json"
+    iesire.mkdir(parents=True, exist_ok=True)
+    start = time.perf_counter()
+    fise: list[dict[str, Any]] = []
+    scor, mai_mic = None, True
+    for k, reteta in enumerate(retete, start=1):
+        dosar = iesire / "incercari" / str(k)
+        cfg = copy.deepcopy(de_rulat)
+        for port, setari in reteta["setari"].items():
+            cfg.porturi[port]["setari"] = copy.deepcopy(setari)
+        if cfg.setari_port("model").get("stare_de_pornire"):  # starea de după încercare, separat pe încercare
+            cfg.porturi["model"]["setari"]["cale_stare"] = str((dosar / "stare" / "gpt.pt").resolve())
+        rulare = pregateste_config_mic(cfg, dosar, minute)
+        if "director_cache" in rulare.setari_port("model"):  # cache-ul de simboluri e același pentru toate
+            rulare.porturi["model"]["setari"]["director_cache"] = str((iesire / "cache").resolve())
+        rulare.director_lucru.mkdir(parents=True, exist_ok=True)
+        if amprente.exists():
+            shutil.copyfile(amprente, rulare.director_lucru / "amprente.json")
+        o = orchestrator_cls(rulare)
+        if o.cel_mai_bun is not None:
+            raise Refuz(f"jurnalul mic din {rulare.director_lucru} are deja experimente pe linia {rulare.nume}")
+        scor, mai_mic = o.examen.scor_principal, bool(o.examen.mai_mic_e_mai_bun)
+        rezultate = o.ruleaza(numar_experimente=0)
+        for f in rezultate:
+            f = dict(f)
+            f["setari_rulate"] = f.get("setari")  # cu dosarele încercării (cale_stare, cache)
+            f["setari"] = copy.deepcopy(reteta["setari"])  # rețeta, ca să se compare cu baza
+            f["id"] = k
+            f["propunere"] = {"descriere": reteta["descriere"]}
+            fise.append(f)
+    secunde = time.perf_counter() - start
+
+    randuri = clasament(fise, baza, scor, mai_mic, relative)
+    castigator = next((x for x in randuri if x["scor"] is not None), None)
+    if castigator is None:
+        raise Refuz("nicio încercare n-a dat un scor valid: nu am ce propune")
+    schimbari = (schimbari_mari(castigator["schimbari"], castigator["setari"], relative) if relativ
+                 else castigator["schimbari"])
+    scris = datetime.now().strftime("%Y-%m-%d %H:%M")
+    antet = (f"PROPUNERE scrisă de unelte/cercetator_avans.py --separat la {scris} — NU a fost rulată.\n"
+             f"Copie a {config_mare.cale_fisier} cu DOAR setările câștigătorului de pe modelul mic schimbate.\n"
+             f"Modelul mic: {config_mic.cale_fisier}, câștigătorul încercarea {castigator['id']}, {scor} = "
+             f"{castigator['scor']:.4f}.\nSe pornește doar printr-o sarcină separată, cu pre-înregistrare.")
+    text, diff = scrie_propunere(config_mare, schimbari, antet)
+    (iesire / "propunere_mare.toml").write_text(text, encoding="utf-8")
+    (iesire / "propunere_mare.diff").write_text(diff, encoding="utf-8")
+    rezultat = {
+        "scris": scris,
+        "separat": True,
+        "config_mic": str(config_mic.cale_fisier),
+        "config_mare": str(config_mare.cale_fisier),
+        "linie_mica": de_rulat.nume,
+        "scor": scor,
+        "mai_mic_e_mai_bun": mai_mic,
+        "incercari_cerute": incercari,
+        "incercari_facute": len(fise),
+        "minute_pe_incercare": minute,
+        "secunde_total": round(secunde, 1),
+        "pornire": pornire,
+        "clasament": randuri,
+        "castigator": castigator["id"],
+        "propunere": {"fisier": "propunere_mare.toml", "schimbari": schimbari, "diff": diff},
+    }
+    if relativ:
+        rezultat["relativ"] = {f"{p}.{k}": {kk: vv for kk, vv in r.items() if kk != "harta"}
+                               for (p, k), r in relative.items()}
+        rezultat["propunere"]["schimbari_pe_mic"] = castigator["schimbari"]
+    (iesire / "clasament.json").write_text(json.dumps(rezultat, ensure_ascii=False, indent=2, default=str),
+                                           encoding="utf-8")
+    (iesire / "clasament.md").write_text(_md(rezultat), encoding="utf-8")
+    return rezultat
+
+
 def proba(config_mic: Config, config_mare: Config, incercari: int, minute: float, iesire: Path,
-          relativ: bool = False, scara: tuple[str, ...] = SETARI_CU_SCARA) -> str:
+          relativ: bool = False, scara: tuple[str, ...] = SETARI_CU_SCARA, separat: bool = False) -> str:
     """Ce ar face, fără să antreneze și fără să scrie nimic."""
     perechi = verifica_spatiu(config_mic, config_mare)
     pornire = amprenta_pornire(config_mic)
     spatiu = _spatiu_cercetator(config_mic)
+    if separat:
+        relative = setari_relative(config_mic, config_mare, scara) if relativ else {}
+        de_rulat = pregateste_relativ(config_mic, iesire.resolve(), relative) if relativ else config_mic
+        retete = retete_separate(de_rulat)
+        model = de_rulat.setari_port("model")
+        linii = [
+            "PROBA cu --separat (nimic antrenat, nimic scris). Cu --porneste aș face, fiecare încercare separat:",
+            f"  modelul mic: {config_mic.cale_fisier}, linia {config_mic.nume}; scorul = portul examen",
+            f"  fiecare încercare pornește din: {model.get('stare_de_pornire') or model.get('cale_stare') or 'zero'}",
+            f"  {len(retete)} rețete (cerute {incercari}), {minute:g} min antrenare fiecare:",
+        ]
+        for i, r in enumerate(retete, start=1):
+            extra = ("; " + "; ".join(f"{k} ×{v['factor']:g} (mic {v['mic']}, mare {v['mare']})"
+                                      for k, v in info_relativ(r["setari"], relative).items())) if relativ else ""
+            linii.append(f"    {i}. {r['descriere']}{extra}")
+        linii.append(f"  scriu doar în: {iesire.resolve()} (încercarea k în incercari/<k>/)")
+        if incercari != len(retete):
+            linii.append(f"  ATENȚIE: --incercari {incercari} ≠ {len(retete)} rețete → --porneste ar refuza")
+        return "\n".join(linii)
     if relativ:
         relative = setari_relative(config_mic, config_mare, scara)
         de_rulat = pregateste_relativ(config_mic, iesire.resolve(), relative)
@@ -583,6 +726,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="spațiul setărilor cu scară = factori față de rețetă (mic × factor pe mic, mare × factor pe mare)")
     ap.add_argument("--scara", nargs="*", default=[],
                     help=f"setări cu scară în plus față de {', '.join(SETARI_CU_SCARA)} (doar cu --relativ)")
+    ap.add_argument("--separat", action="store_true",
+                    help="S94: fiecare rețetă = baza cu O SINGURĂ schimbare, rulată separat; niciuna nu devine bază")
     a = ap.parse_args(argv)
     scara = SETARI_CU_SCARA + tuple(s for s in a.scara if s not in SETARI_CU_SCARA)
     if a.procesor:
@@ -597,9 +742,10 @@ def main(argv: list[str] | None = None) -> int:
         if a.scara and not a.relativ:
             raise Refuz("--scara are sens doar cu --relativ")
         if not a.porneste:
-            print(proba(mic, mare, a.incercari, a.minute_pe_incercare, iesire, a.relativ, scara))
+            print(proba(mic, mare, a.incercari, a.minute_pe_incercare, iesire, a.relativ, scara, a.separat))
             return 0
-        r = ruleaza(mic, mare, a.incercari, a.minute_pe_incercare, iesire, relativ=a.relativ, scara=scara)
+        fa = ruleaza_separat if a.separat else ruleaza
+        r = fa(mic, mare, a.incercari, a.minute_pe_incercare, iesire, relativ=a.relativ, scara=scara)
     except Refuz as e:
         print(f"REFUZ: {e}", file=sys.stderr)
         return 2

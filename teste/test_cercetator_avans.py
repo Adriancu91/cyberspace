@@ -282,6 +282,73 @@ def test_configurarea_mica_de_6_straturi():
     assert ma["n_straturi"] == 6 and ma["cale_stare"] == "lucru/avans/mic6/gpt.pt"
 
 
+# ---- S94: rețete strict separate (--separat) ------------------------------------------------------------------------
+
+
+def test_separat_fiecare_reteta_o_singura_schimbare(tmp_path, monkeypatch):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch)
+    relative = ca.setari_relative(mic, mare, ("netezire",))
+    retete = ca.retete_separate(ca.pregateste_relativ(mic, (tmp_path / "iesire").resolve(), relative))
+    baza = retete[0]["setari"]["model"]
+    assert [(r["setari"]["model"]["netezire"], r["setari"]["model"]["ordin"]) for r in retete] == [
+        (1.0, 1), (0.1, 1), (0.5, 1), (2.0, 1), (1.0, 2), (1.0, 3)]
+    for r in retete[1:]:
+        assert len([k for k in baza if r["setari"]["model"][k] != baza[k]]) == 1
+
+
+def test_separat_ruleaza_fiecare_din_baza_si_refuza_alt_numar(tmp_path, monkeypatch):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch)
+    with pytest.raises(ca.Refuz, match="--incercari 6"):
+        ca.ruleaza_separat(mic, mare, 5, 0.05, tmp_path / "iesire", relativ=True, scara=("netezire",))
+    assert not (tmp_path / "iesire" / "incercari").exists()
+    r = ca.ruleaza_separat(mic, mare, 6, 0.05, tmp_path / "iesire", relativ=True, scara=("netezire",))
+    cl = r["clasament"]
+    assert r["separat"] and r["incercari_facute"] == 6 and sorted(x["id"] for x in cl) == [1, 2, 3, 4, 5, 6]
+    for x in cl:  # nicio rețetă combinată: față de bază, cel mult o schimbare
+        n = sum(len(s) for s in x["schimbari"].values())
+        assert n == (0 if x["id"] == 1 else 1)
+    for k in range(1, 7):  # fiecare cu jurnalul propriu, un singur experiment
+        jurnale = list((tmp_path / "iesire" / "incercari" / str(k) / "kronos_lucru").glob("*"))
+        assert jurnale
+    assert (tmp_path / "iesire" / "propunere_mare.toml").exists()
+    with pytest.raises(ca.Refuz, match="există deja"):
+        ca.ruleaza_separat(mic, mare, 6, 0.05, tmp_path / "iesire", relativ=True, scara=("netezire",))
+    assert not (tmp_path / "lucru").exists()  # nimic scris în afara ieșirii
+
+
+def test_separat_proba_si_main(tmp_path, monkeypatch, capsys):
+    _configurari_relative(tmp_path, monkeypatch)
+    argv = ["--config-mic", "mic.toml", "--config-mare", "mare.toml", "--minute-pe-incercare", "0.05",
+            "--iesire", "iesire", "--relativ", "--scara", "netezire", "--separat"]
+    assert ca.main(argv + ["--incercari", "6"]) == 0
+    out = capsys.readouterr().out
+    assert "--separat" in out and "6. o singură schimbare: model.ordin = 3" in out
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["mare.toml", "mic.toml"]
+    assert ca.main(argv + ["--incercari", "4", "--porneste"]) == 2 and not (tmp_path / "iesire").exists()
+
+
+def test_configurarea_mica_s94():
+    mic = citeste_config(RADACINA / "config" / "avans_24_mic6r.toml")
+    mare = citeste_config(RADACINA / "config" / "conv_w2_mare_24r.toml")
+    relative = ca.setari_relative(mic, mare)
+    retete = ca.retete_separate(ca.pregateste_relativ(mic, RADACINA / "lucru" / "avans" / "s94_mic", relative))
+    info = [ca.info_relativ(r["setari"], relative) for r in retete]
+    assert [(i["model.rata_invatare"]["mic"], i["model.incalzire_pasi"]["mic"]) for i in info] == [
+        (1e-05, 1000), (5e-06, 1000), (2e-05, 1000), (4e-05, 1000), (1e-05, 2000)]
+    assert [(i["model.rata_invatare"]["mare"], i["model.incalzire_pasi"]["mare"]) for i in info] == [
+        (1e-05, 1000), (5e-06, 1000), (2e-05, 1000), (4e-05, 1000), (1e-05, 2000)]
+    a = tomllib.loads((RADACINA / "config" / "avans_24_mic6.toml").read_text(encoding="utf-8"))
+    b = tomllib.loads((RADACINA / "config" / "avans_24_mic6r.toml").read_text(encoding="utf-8"))
+    r24 = tomllib.loads((RADACINA / "config" / "conv_w2_mare_24r.toml").read_text(encoding="utf-8"))
+    assert b["porturi"]["examen"] == r24["porturi"]["examen"]
+    assert b["platforma"]["nume"] == "avans_24_mic6r"
+    assert b["porturi"]["model"]["setari"]["cale_stare"] == "lucru/avans/mic6r/gpt.pt"
+    for t in (a, b):
+        t["platforma"].pop("nume"), t["antrenare_lunga"].pop("eticheta"), t["porturi"].pop("examen")
+        t["porturi"]["model"]["setari"].pop("cale_stare"), t["porturi"]["cercetator"]["setari"].pop("spatiu")
+    assert a == b
+
+
 def test_unealta_nu_importa_din_module():
     arbore = ast.parse((RADACINA / "unelte" / "cercetator_avans.py").read_text(encoding="utf-8"))
     importuri = [n.module for n in ast.walk(arbore) if isinstance(n, ast.ImportFrom)] + [

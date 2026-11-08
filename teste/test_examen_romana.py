@@ -130,7 +130,7 @@ def test_doar_in_configurarile_aprobate():
     """S90: examenul nu era în nicio configurare. S93 (C-88 „Română da”, Adrian 7 nov 2026): doar în conv_w2_mare_24r.
     O configurare nouă cu examenul de română se adaugă aici doar cu sarcina care o cere."""
     pus = {c.name for c in (RADACINA / "config").rglob("*.toml") if "examen_romana" in c.read_text(encoding="utf-8")}
-    assert pus == {"conv_w2_mare_24r.toml"}
+    assert pus == {"conv_w2_mare_24r.toml", "avans_24_mic6r.toml"}  # S94 (8 nov 2026): modelul mic al testului Spearman
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------
