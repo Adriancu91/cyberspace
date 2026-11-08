@@ -14,6 +14,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 11:15 — Testul cu modelul mic s-a împiedicat la pregătire; l-am reparat, repornește azi
+
+- **S94a: OPRIT, verificat de mine — motiv bun, nimic stricat.** Paznicul a oprit testul după 10 minute fiindcă executantul pregătea textele de la zero într-un dosar gol, în loc să le citească pe cele gata făcute. Placa n-a lucrat deloc, modelul mic original e neatins.
+- **Am ales reparația (a):** testul citește textele gata pregătite din dosarul folosit de toate liniile, doar citire, cu verificare la final că nu s-a schimbat nimic acolo. Pragurile și rețetele rămân exact cele scrise dinainte.
+- **Azi pe placă: S94a din nou** (~2,5 h, pornire cel târziu la 15:30); **la noapte S94b** pe modelul mare, gata până luni 07:00.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
+
 ## 8 noiembrie 2026, 05:15 — Examenul de română decide de acum (verificat); azi modelul mic încearcă 5 rețete
 
 - **S93: GATA, verificat de mine.** „Română da”-ul tău e pus în practică: noua configurare a modelului mare (`conv_w2_mare_24r`) e judecată după română, nu după povești. Paznicul îi ține singur amprenta (o copie schimbată a examenului e refuzată — verificat). Nucleul `kronos/` și examenul vechi n-au fost atinse; 1332 teste trec.
@@ -143,10 +150,3 @@
 - **Verificate de mine, toate GATA:** S78 (Mini Brain salvat, 1,54 GB, 0 diferențe — **poți șterge cele două foldere „test ai brain”**), S79 (se pot elibera **~104 GB fără nicio pierdere**: grupurile A + B), S81 (o oră anulată oprește acum lanțul, cu cod 1; 5 teste noi; **1242 teste trec**, singurul picat e cel de disc, cunoscut).
 - **Nu rulează nimic acum** (placa liberă). **Azi:** de la 08:00 **S76c** (pe procesor: #513 urmează și instrucțiuni formulate altfel?), apoi **S77d** (pe placă, ~2,5 h, doar când nu ești la workstation: rata mai mică pentru modelul de 24 de straturi). Nimic nou pus în coadă; noaptea 6→7 o decid la 17:15 / 20:15, după verdictul S77d.
 - **Aștept de la tine (azi, la workstation):** ce grupuri de fișiere se șterg din raportul S79 (de exemplu „A, B da; C, D da; E–H nu”) — scrie-mi în COMENZI.md. După ce faci loc (peste 40 GB liberi), testul de disc trece din nou. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
-
-## 6 noiembrie 2026, 03:11 — (executant, S79 / C-76) Spațiul pe workstation: se pot elibera ~104 GB fără nicio pierdere
-
-- **Discul C: 33,46 GB liberi din 510,6.** `C:\Kronos\` ocupă 186 GB (modelele `.pt` singure 114 GB), Desktop-ul 104 GB, cache-urile Hugging Face + pip 30 GB.
-- **Arhiva `cyberspace_mutare` (26,20 GB) nu are nimic în plus:** tot ce e în ea e pe disc, SHA-256 identic. (Atenție: e în `Desktop\proiect\`, nu în `de sters\proiect\`.)
-- **Propunerea, pe grupuri:** A (cele două foldere Mini Brain, 78,07 GB) + B (arhiva de mutare, 26,20 GB) = **104 GB fără nicio pierdere**; C (82 de modele intermediare, ~33 GB) + D (`gpt.pt` din 28 de linii închise, ~29 GB) = risc mic; E–H (școala veche `cyberspace-cod` 40 GB, Hugging Face 26 GB, cache de simboluri 11 GB, pip 4 GB) le decizi tu. **Nimic șters.**
-- **Aștept de la tine:** ce grupuri se șterg (de exemplu „A, B da; C, D da; E–H nu”). Raportul cu listele exacte: `docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md`.
