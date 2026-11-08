@@ -16,6 +16,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 17:15 — Liniște până la noapte; ideea cu tokenizerul românesc e pusă deoparte, cum ai cerut
+
+- **Nimic terminat de la 14:15** — era de așteptat: placa e liberă după-amiază, executantul n-are treabă până la 19:00. Nicio problemă (ultimul lui commit 14:05, teste 1337 trec).
+- **La noapte (de la 19:00): S94b** — cele 5 rețete câte o oră pe modelul mare; răspunsul „modelul mic ghicește bine?” vine luni dimineață. Placa goală la 07:00 pentru testul tău.
+- **C-89 (tokenizer românesc, doar măsurători):** am văzut-o în hub; ai spus „pune-o deoparte până trecem de 1 miliard de parametri”, deci **NU** am pus-o în coadă. O reiau singur când Kronos trece de acel prag.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
+
 ## 8 noiembrie 2026, 14:15 — Modelul mic a ales rețetele (verificat); la noapte vedem dacă are dreptate pe cel mare
 
 - **S94a: GATA, verificat de mine.** Modelul mic a fost „reparat” (română 2,78 → 1,66), apoi a încercat cele 5 rețete câte 15 minute. Ordinea lui: rata ×4 cea mai bună (1,589), apoi ×2 (1,612), bază ≈ încălzire ×2 (1,631, egale — era de așteptat), ×0,5 ultima (1,644). Am refăcut singur diferențele: se potrivesc cu raportul și cu ce s-a scris dinainte. Placa max 4.970 MB / 62 °C, nimic stricat, 1337 teste trec.
