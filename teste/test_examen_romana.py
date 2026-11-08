@@ -126,6 +126,108 @@ def test_modulul_nu_importa_din_kronos():
     assert not [m for m in importuri if m and (m == "kronos" or m.startswith("kronos."))]
 
 
-def test_nu_e_in_nicio_configurare():
-    pus = [c.name for c in (RADACINA / "config").rglob("*.toml") if "examen_romana" in c.read_text(encoding="utf-8")]
-    assert pus == []
+def test_doar_in_configurarile_aprobate():
+    """S90: examenul nu era în nicio configurare. S93 (C-88 „Română da”, Adrian 7 nov 2026): doar în conv_w2_mare_24r.
+    O configurare nouă cu examenul de română se adaugă aici doar cu sarcina care o cere."""
+    pus = {c.name for c in (RADACINA / "config").rglob("*.toml") if "examen_romana" in c.read_text(encoding="utf-8")}
+    assert pus == {"conv_w2_mare_24r.toml"}
+
+
+# --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------
+
+AMPRENTA_EXAMEN_BPB = "0ca9cf74498438062f9bb92b828c3c6a8c60c879393b2093d2ab7f5e441d3028"  # 8 nov 2026, înainte de S93
+
+
+def _config_proba_romana(tmp_path: Path, monkeypatch, modul: str = "module.examen_romana:ExamenRomana"):
+    """config/proba.toml (model n-gram, procesor) cu portul examen = examen_romana pe validări mici din tmp_path."""
+    from kronos.config import citeste_config
+
+    monkeypatch.chdir(tmp_path)
+    validari, amprente = _validari(tmp_path)
+    val = ", ".join(f'{n} = "{Path(c).as_posix()}"' for n, c in validari.items())
+    amp = ", ".join(f'"{Path(c).as_posix()}" = "{h}"' for c, h in amprente.items())
+    text = (RADACINA / "config" / "proba.toml").read_text(encoding="utf-8")
+    vechi = 'modul = "module.examen_bpb:ExamenBpb"\n'
+    assert text.count(vechi) == 1
+    text = text.replace(vechi, f'modul = "{modul}"\nsetari = {{ caractere = 300, validari = {{ {val} }}, '
+                               f'amprente = {{ {amp} }} }}\n')
+    text = text.replace("buget_antrenare_secunde = 10", "buget_antrenare_secunde = 1")
+    text = text.replace("propozitii = 4000", "propozitii = 600")
+    text = text.replace('modul = "module.interfata_consola:InterfataConsola"',
+                        'modul = "module.interfata_consola:InterfataConsola"\nsetari = { tacut = true }')
+    fisier = tmp_path / "proba_romana.toml"
+    fisier.write_text(text, encoding="utf-8")
+    return citeste_config(fisier)
+
+
+def test_portul_examen_decide_dupa_romana_bpb(tmp_path, monkeypatch):
+    from kronos.orchestrator import Orchestrator
+
+    config = _config_proba_romana(tmp_path, monkeypatch)
+    o = Orchestrator(config)
+    assert type(o.examen).__name__ == "ExamenRomana"
+    assert (o.examen.scor_principal, o.examen.mai_mic_e_mai_bun) == ("romana_bpb", True)
+    fise = o.ruleaza(3)
+    masurate = [f for f in fise if f["decizie"] != "anulat"]
+    assert len(masurate) >= 2, [f.get("motiv") for f in fise]
+    assert all("romana_bpb" in f["scoruri"] and "val_bpb" not in f["scoruri"] for f in masurate)
+    assert masurate[0]["decizie"] == "pastrat"
+    for f in masurate[1:]:  # decizia: câștig = anterior − romana_bpb (mai mic = mai bun), peste prag_zgomot
+        assert f["castig"] == pytest.approx(f["scor_anterior"] - f["scoruri"]["romana_bpb"])
+        assert (f["decizie"] == "pastrat") == (f["castig"] > config.prag_zgomot)
+    amprente = json.loads((config.director_lucru / "amprente.json").read_text(encoding="utf-8"))
+    assert amprente == {"module.examen_romana.ExamenRomana": sha256(RADACINA / "module" / "examen_romana.py")}
+
+
+def test_paznicul_refuza_examenul_de_romana_schimbat(tmp_path, monkeypatch):
+    """O copie a clasei (alt pachet, în tmp_path): prima rulare îi memorează amprenta; după o schimbare → anulat."""
+    import shutil
+
+    from kronos.contracte import Propunere
+    from kronos.orchestrator import Orchestrator
+
+    pachet = tmp_path / "pachet_s93"
+    pachet.mkdir()
+    (pachet / "__init__.py").write_text("", encoding="utf-8")
+    copie = pachet / "examen_romana_copie.py"
+    shutil.copyfile(RADACINA / "module" / "examen_romana.py", copie)
+    monkeypatch.syspath_prepend(str(tmp_path))
+    config = _config_proba_romana(tmp_path, monkeypatch, "pachet_s93.examen_romana_copie:ExamenRomana")
+    o = Orchestrator(config)
+    assert o.experiment(Propunere("prima"))["decizie"] == "pastrat"
+    assert o.experiment(Propunere("a doua", {"model": {"ordin": 2}}))["decizie"] != "anulat"
+    with copie.open("a", encoding="utf-8") as f:
+        f.write("\n# schimbare\n")
+    fisa = Orchestrator(config).experiment(Propunere("după schimbare", {"model": {"ordin": 3}}))
+    assert fisa["decizie"] == "anulat"
+    assert "pachet_s93.examen_romana_copie.ExamenRomana" in fisa["motiv"] and "s-a schimbat" in fisa["motiv"]
+
+
+def test_config_24r_difera_de_24g_doar_prin_campurile_s93():
+    import tomllib
+
+    g = tomllib.loads((RADACINA / "config" / "conv_w2_mare_24g.toml").read_text(encoding="utf-8"))
+    r = tomllib.loads((RADACINA / "config" / "conv_w2_mare_24r.toml").read_text(encoding="utf-8"))
+    assert r["platforma"]["nume"] == "w2_mare_24r"
+    assert r["porturi"]["model"]["setari"]["cale_stare"] == "lucru/w2_mare_24r/gpt.pt"
+    assert "C-88" in r["antrenare_lunga"]["eticheta"]
+    assert r["porturi"]["examen"] == {"modul": "module.examen_romana:ExamenRomana",
+                                      "setari": {"caractere": 100000, "cu_r1": False}}
+    assert (g["platforma"]["nume"], g["porturi"]["model"]["setari"]["cale_stare"]) == \
+        ("w2_mare_24g", "lucru/w2_mare_24g/gpt.pt")
+    for d in (g, r):
+        d["platforma"].pop("nume")
+        d["porturi"]["model"]["setari"].pop("cale_stare")
+        d["antrenare_lunga"].pop("eticheta")
+        d["porturi"].pop("examen")
+    assert g == r
+    antet = (RADACINA / "config" / "conv_w2_mare_24r.toml").read_text(encoding="utf-8").split("[platforma]")[0]
+    assert "examen de decizie: română, C-88" in antet
+
+
+def test_examen_bpb_neschimbat():
+    assert sha256(RADACINA / "module" / "examen_bpb.py") == AMPRENTA_EXAMEN_BPB
+    import tomllib
+
+    g = tomllib.loads((RADACINA / "config" / "conv_w2_mare_24g.toml").read_text(encoding="utf-8"))
+    assert g["porturi"]["examen"]["modul"] == "module.examen_bpb:ExamenBpb"  # S89 neatins

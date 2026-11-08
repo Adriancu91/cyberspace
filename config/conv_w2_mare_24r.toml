@@ -1,0 +1,62 @@
+# S93 (C-88 „Română da”, aprobat de Adrian 7 nov 2026 17:45; pașii scriși de supraveghetor 7 nov 20:15):
+# examen de decizie: română, C-88 — portul `examen` = module.examen_romana:ExamenRomana (romana_bpb, mai mic = mai bine).
+# Copie a config/conv_w2_mare_24g.toml (S89), cu DOAR `nume`, `cale_stare`, eticheta, acest antet și [porturi.examen] schimbate.
+# examen_bpb (povești) rămâne neschimbat și se măsoară mai departe în lanțul de după noapte (examen_validari_ws.py), doar ca verificare.
+# Rețeta (rata, lotul, optimizatorul) o alege supraveghetorul după verdictul S89, în sarcina de noapte; aici e încă rețeta e1 din 24g.
+#   python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24r.toml --ore 5
+
+[platforma]
+# Linie nouă; starea de pornire e copia lui lucru/w2_mare/gpt_24.pt în cale_stare (lucru/w2_mare_24r/ nu există înainte).
+nume = "w2_mare_24r"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 4, rata_invatare = 0.00001, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24r/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 18000, adunare_loturi = 24, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S93: examen de decizie: română, C-88 (rețeta se alege după S89)"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_romana:ExamenRomana"
+setari = { caractere = 100000, cu_r1 = false }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [4] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

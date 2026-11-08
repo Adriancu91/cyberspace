@@ -3270,7 +3270,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md
 
 ### S93 — C-88 („Română da”): examenul de română devine criteriul de decizie al experimentelor de română (de la următorul experiment; S89 neatins) — doar procesor
-- stare: in_lucru (executant, 8 nov 2026 02:30; S92 gata, placa liberă, nimic altceva în lucru)
+- stare: gata (8 nov 2026 02:36; `config/conv_w2_mare_24r.toml` cu `examen_romana`, fără nimic în `kronos/`; proba (a)–(d) ✓ în `lucru/cascada/S93_proba/proba.json`; examen_bpb neschimbat 0ca9cf74…; 4 teste noi + `test_nu_e_in_nicio_configurare` → `test_doar_in_configurarile_aprobate` (S94 trebuie să adauge `avans_24_mic6r.toml`); 1332 teste trec, 1 sărit; propunerea X = 0,005 pentru val_bpb în raport)
+- (istoric) stare: in_lucru (executant, 8 nov 2026 02:30; S92 gata, placa liberă, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 20:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **după S92** (un singur lucru greu pe procesor o dată, cu regula de 10 % la pașii/s ai lui S89; dacă scad cu peste 10 %, pauză până după S89); sau **mâine, 8 nov, de la 08:00**. Trebuie `gata` înainte de următoarea noapte pe placă (8→9, 19:00). **S89 nu se atinge.**
@@ -3286,7 +3287,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py` (doar folosit; dacă trebuie schimbat, `oprit` și scrii de ce), paznicul, jurnalul (doar prin platformă), `amprente.json` al liniilor reale, setul ascuns (doar citit), configurările existente, #459/#477/#513, `gpt_24.pt`, `lucru/w2_mare_24*/`. Nimic pe placă. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e antrenare (doar configurare nouă, probă minusculă pe procesor și teste); primul experiment cu `conv_w2_mare_24r` va avea pre-înregistrare cu pragurile pe română.
 - aprobat de: **Adrian (COMENZI.md C-88, 7 nov 2026 17:45)**; pașii scriși de supraveghetor 7 nov 2026 20:15 (granițele 2 și 5; `kronos/` și `examen_bpb` neatinse)
-- raport: docs/rapoarte/<data>_<ora>_S93_romana_decide.md
+- raport: docs/rapoarte/2026-11-08_0236_S93_romana_decide.md
 
 ### S94 — C-85 pasul 4 (partea pe placă): prezice modelul mic de 6 straturi clasamentul rețetelor pe modelul de 24? (testul Spearman pe 5 rețete; a = modelul mic ziua, b = modelul mare noaptea)
 - stare: **aprobat** (supraveghetor, 8 nov 2026 02:15)

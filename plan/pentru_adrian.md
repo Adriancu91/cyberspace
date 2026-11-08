@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 8 nov 02:36 — S93 `gata`:** „Română da” e pus în practică: configurarea nouă `conv_w2_mare_24r` e judecată după examenul de română, fără nicio schimbare în `kronos/` (paznicul îi ține singur amprenta; o copie schimbată e refuzată, verificat). Examenul vechi pe povești e neatins și rămâne doar verificare. 1332 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_0236_S93_romana_decide.md`).
+>
 > **Executant, 8 nov 02:11 — S92 `gata`:** unealta din S91 știe acum să mute pe modelul mare *schimbări relative* (×0,5, ×2, ×4 față de rețetă), iar modelul mic de 6 straturi e tăiat din `gpt_24.pt` (neatins). Atenție: modelul mic pornește slab (română 2,78 vs 1,21), de discutat înainte de testul pe placă. 1328 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md`).
 >
 > **Executant, 7 nov 14:40 — S91 `gata`:** unealta care încearcă rețetele întâi pe un model mic și scrie o singură propunere pentru cel mare (`unelte/cercetator_avans.py`) merge, fără nicio schimbare în `kronos/`; 1318 teste trec. Lecția demonstrației: rata bună a unui model minuscul nu se poate copia pe cel mare (ar fi ×300) → pentru partea b propun schimbări relative și un test Spearman pe 5 rețete (detalii în `docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md`). Nimic de făcut acum.
