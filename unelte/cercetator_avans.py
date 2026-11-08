@@ -139,8 +139,14 @@ def _sub(cale: Path, dosar: Path) -> bool:
     return cale == dosar or dosar in cale.parents
 
 
-def pregateste_config_mic(config_mic: Config, iesire: Path, minute: float) -> Config:
-    """Copia configurării mici cu tot ce se scrie mutat în `iesire` și bugetul de M minute pe încercare."""
+def _dosar_cache(iesire: Path, cache: Path | None) -> str:
+    """Dosarul cache-ului de simboluri: cel dat cu --cache (S94, doar citit, ex. `lucru/cache`), altfel `<iesire>/cache`."""
+    return str((Path(cache) if cache is not None else iesire / "cache").resolve())
+
+
+def pregateste_config_mic(config_mic: Config, iesire: Path, minute: float, cache: Path | None = None) -> Config:
+    """Copia configurării mici cu tot ce se scrie mutat în `iesire` și bugetul de M minute pe încercare.
+    Cu `cache` dat, cache-ul de simboluri e acel dosar (nu `<iesire>/cache`)."""
     buget = minute * 60.0
     timp_max = float(config_mic.paznic.get("timp_max_secunde", 600))
     if buget > timp_max:
@@ -162,7 +168,7 @@ def pregateste_config_mic(config_mic: Config, iesire: Path, minute: float) -> Co
                                              "director": str((iesire / "stocare").resolve())}
     model = noua.porturi["model"].setdefault("setari", {})
     if "director_cache" in model:
-        noua.porturi["model"]["setari"] = {**model, "director_cache": str((iesire / "cache").resolve())}
+        noua.porturi["model"]["setari"] = {**model, "director_cache": _dosar_cache(iesire, cache)}
     return noua
 
 
@@ -435,7 +441,7 @@ def _md(rezultat: dict[str, Any]) -> str:
 
 def ruleaza(config_mic: Config, config_mare: Config, incercari: int, minute: float, iesire: Path,
             orchestrator_cls: Any = None, relativ: bool = False,
-            scara: tuple[str, ...] = SETARI_CU_SCARA) -> dict[str, Any]:
+            scara: tuple[str, ...] = SETARI_CU_SCARA, cache: Path | None = None) -> dict[str, Any]:
     from kronos.orchestrator import Orchestrator
 
     orchestrator_cls = orchestrator_cls or Orchestrator
@@ -452,7 +458,7 @@ def ruleaza(config_mic: Config, config_mare: Config, incercari: int, minute: flo
             raise Refuz(f"modelul de pornire {sursa} nu există: nu pornesc de la zero pe tăcute")
     else:
         de_rulat = config_mic
-    rulare = pregateste_config_mic(de_rulat, iesire, minute)
+    rulare = pregateste_config_mic(de_rulat, iesire, minute, cache)
     iesire.mkdir(parents=True, exist_ok=True)
     rulare.director_lucru.mkdir(parents=True, exist_ok=True)
     amprente = Path(config_mic.director_lucru) / "amprente.json"
@@ -527,7 +533,7 @@ def retete_separate(config: Config) -> list[dict[str, Any]]:
 
 def ruleaza_separat(config_mic: Config, config_mare: Config, incercari: int, minute: float, iesire: Path,
                     orchestrator_cls: Any = None, relativ: bool = False,
-                    scara: tuple[str, ...] = SETARI_CU_SCARA) -> dict[str, Any]:
+                    scara: tuple[str, ...] = SETARI_CU_SCARA, cache: Path | None = None) -> dict[str, Any]:
     """Ca `ruleaza`, dar fiecare rețetă = baza cu O SINGURĂ schimbare, rulată separat (jurnal mic propriu în
     `<iesire>/incercari/<k>/`), toate din același model de pornire. `incercari` trebuie să fie exact numărul rețetelor."""
     from kronos.orchestrator import Orchestrator
@@ -567,9 +573,9 @@ def ruleaza_separat(config_mic: Config, config_mare: Config, incercari: int, min
             cfg.porturi[port]["setari"] = copy.deepcopy(setari)
         if cfg.setari_port("model").get("stare_de_pornire"):  # starea de după încercare, separat pe încercare
             cfg.porturi["model"]["setari"]["cale_stare"] = str((dosar / "stare" / "gpt.pt").resolve())
-        rulare = pregateste_config_mic(cfg, dosar, minute)
+        rulare = pregateste_config_mic(cfg, dosar, minute, cache)
         if "director_cache" in rulare.setari_port("model"):  # cache-ul de simboluri e același pentru toate
-            rulare.porturi["model"]["setari"]["director_cache"] = str((iesire / "cache").resolve())
+            rulare.porturi["model"]["setari"]["director_cache"] = _dosar_cache(iesire, cache)
         rulare.director_lucru.mkdir(parents=True, exist_ok=True)
         if amprente.exists():
             shutil.copyfile(amprente, rulare.director_lucru / "amprente.json")
@@ -629,7 +635,8 @@ def ruleaza_separat(config_mic: Config, config_mare: Config, incercari: int, min
 
 
 def proba(config_mic: Config, config_mare: Config, incercari: int, minute: float, iesire: Path,
-          relativ: bool = False, scara: tuple[str, ...] = SETARI_CU_SCARA, separat: bool = False) -> str:
+          relativ: bool = False, scara: tuple[str, ...] = SETARI_CU_SCARA, separat: bool = False,
+          cache: Path | None = None) -> str:
     """Ce ar face, fără să antreneze și fără să scrie nimic."""
     perechi = verifica_spatiu(config_mic, config_mare)
     pornire = amprenta_pornire(config_mic)
@@ -650,6 +657,7 @@ def proba(config_mic: Config, config_mare: Config, incercari: int, minute: float
                                       for k, v in info_relativ(r["setari"], relative).items())) if relativ else ""
             linii.append(f"    {i}. {r['descriere']}{extra}")
         linii.append(f"  scriu doar în: {iesire.resolve()} (încercarea k în incercari/<k>/)")
+        linii.append(f"  cache-ul de simboluri: {_dosar_cache(iesire.resolve(), cache)}")
         if incercari != len(retete):
             linii.append(f"  ATENȚIE: --incercari {incercari} ≠ {len(retete)} rețete → --porneste ar refuza")
         return "\n".join(linii)
@@ -728,6 +736,8 @@ def main(argv: list[str] | None = None) -> int:
                     help=f"setări cu scară în plus față de {', '.join(SETARI_CU_SCARA)} (doar cu --relativ)")
     ap.add_argument("--separat", action="store_true",
                     help="S94: fiecare rețetă = baza cu O SINGURĂ schimbare, rulată separat; niciuna nu devine bază")
+    ap.add_argument("--cache", default=None,
+                    help="dosarul cache-ului de simboluri (ex. lucru/cache, doar citit); implicit <iesire>/cache")
     a = ap.parse_args(argv)
     scara = SETARI_CU_SCARA + tuple(s for s in a.scara if s not in SETARI_CU_SCARA)
     if a.procesor:
@@ -741,11 +751,14 @@ def main(argv: list[str] | None = None) -> int:
         iesire = Path(a.iesire)
         if a.scara and not a.relativ:
             raise Refuz("--scara are sens doar cu --relativ")
+        cache = Path(a.cache) if a.cache else None
+        if cache is not None and not cache.is_dir():
+            raise Refuz(f"--cache {cache} nu e un dosar existent: nu fac simboluri de la zero pe tăcute")
         if not a.porneste:
-            print(proba(mic, mare, a.incercari, a.minute_pe_incercare, iesire, a.relativ, scara, a.separat))
+            print(proba(mic, mare, a.incercari, a.minute_pe_incercare, iesire, a.relativ, scara, a.separat, cache))
             return 0
         fa = ruleaza_separat if a.separat else ruleaza
-        r = fa(mic, mare, a.incercari, a.minute_pe_incercare, iesire, relativ=a.relativ, scara=scara)
+        r = fa(mic, mare, a.incercari, a.minute_pe_incercare, iesire, relativ=a.relativ, scara=scara, cache=cache)
     except Refuz as e:
         print(f"REFUZ: {e}", file=sys.stderr)
         return 2

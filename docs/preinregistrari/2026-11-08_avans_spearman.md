@@ -7,6 +7,10 @@ se adaugă doar secțiunea „Ce a ieșit” (python unelte/preinregistrare.py -
 Acoperă AMBELE părți: S94a (modelul mic, ziua de 8 nov) și S94b (modelul de 24, noaptea 8→9 nov). Sarcina: S94 din
 `plan/coada.md` (C-85 pasul 4, aprobat de Adrian 6 nov 2026; pașii scriși de supraveghetor 8 nov 2026 02:15).
 
+> 8 nov 11:15: repornire cu cache-ul `lucru/cache` (varianta a, oprirea din 08:52); pragurile, rețetele și minutele
+> neschimbate. (Rând adăugat de executant la 11:36, înainte de placă; lanțul nou `lucru/cascada/S94_proba/s94a2.py`, jurnalul
+> reparării `lucru/avans/s94_reparare2/`; încercările mici în `lucru/avans/s94_mic/`.)
+
 ## Întrebarea
 
 Ordinea în care modelul MIC (6 straturi, tăiat din `gpt_24.pt`, 15 min pe rețetă) clasează 5 rețete de antrenare după

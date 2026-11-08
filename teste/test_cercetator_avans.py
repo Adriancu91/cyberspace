@@ -327,6 +327,48 @@ def test_separat_proba_si_main(tmp_path, monkeypatch, capsys):
     assert ca.main(argv + ["--incercari", "4", "--porneste"]) == 2 and not (tmp_path / "iesire").exists()
 
 
+class _OrchestratorCache:
+    """Orchestrator de jucărie (S94, --cache): notează director_cache din fiecare încercare și dă un scor."""
+    vazute: list[str] = []
+
+    def __init__(self, config):
+        self.config = config
+        self.cel_mai_bun = None
+        self.examen = type("E", (), {"scor_principal": "scor", "mai_mic_e_mai_bun": True})()
+
+    def ruleaza(self, numar_experimente=0):
+        model = self.config.setari_port("model")
+        _OrchestratorCache.vazute.append(model["director_cache"])
+        return [{"setari": {"model": dict(model)}, "scoruri": {"scor": float(len(_OrchestratorCache.vazute))}}]
+
+
+def test_cache_dat_e_folosit_de_toate_incercarile(tmp_path, monkeypatch, capsys):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch)
+    mic.porturi["model"]["setari"] = {**mic.setari_port("model"), "director_cache": "cache_vechi"}
+    iesire = (tmp_path / "iesire").resolve()
+    cache = tmp_path / "cache_comun"
+    cache.mkdir()
+    # fără --cache: ca înainte, <iesire>/cache
+    assert ca.pregateste_config_mic(mic, iesire, 0.05).setari_port("model")["director_cache"] == \
+        str((iesire / "cache").resolve())
+    assert ca.pregateste_config_mic(mic, iesire, 0.05, cache).setari_port("model")["director_cache"] == \
+        str(cache.resolve())
+    _OrchestratorCache.vazute = []
+    ca.ruleaza_separat(mic, mare, 6, 0.05, iesire, orchestrator_cls=_OrchestratorCache, relativ=True,
+                       scara=("netezire",), cache=cache)
+    assert _OrchestratorCache.vazute == [str(cache.resolve())] * 6
+    _OrchestratorCache.vazute = []
+    ca.ruleaza_separat(mic, mare, 6, 0.05, tmp_path / "iesire2", orchestrator_cls=_OrchestratorCache, relativ=True,
+                       scara=("netezire",))
+    assert _OrchestratorCache.vazute == [str((tmp_path / "iesire2" / "cache").resolve())] * 6
+    assert sorted(p.name for p in cache.iterdir()) == []  # unealta n-a scris nimic în cache-ul dat
+    argv = ["--config-mic", "mic.toml", "--config-mare", "mare.toml", "--minute-pe-incercare", "0.05",
+            "--iesire", "iesire3", "--relativ", "--scara", "netezire", "--separat", "--incercari", "6"]
+    assert ca.main(argv + ["--cache", "nu_exista", "--porneste"]) == 2 and not (tmp_path / "iesire3").exists()
+    assert ca.main(argv + ["--cache", "cache_comun"]) == 0
+    assert f"cache-ul de simboluri: {cache.resolve()}" in capsys.readouterr().out
+
+
 def test_configurarea_mica_s94():
     mic = citeste_config(RADACINA / "config" / "avans_24_mic6r.toml")
     mare = citeste_config(RADACINA / "config" / "conv_w2_mare_24r.toml")
