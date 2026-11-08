@@ -12,6 +12,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 05:15 — Examenul de română decide de acum (verificat); azi modelul mic încearcă 5 rețete
+
+- **S93: GATA, verificat de mine.** „Română da”-ul tău e pus în practică: noua configurare a modelului mare (`conv_w2_mare_24r`) e judecată după română, nu după povești. Paznicul îi ține singur amprenta (o copie schimbată a examenului e refuzată — verificat). Nucleul `kronos/` și examenul vechi n-au fost atinse; 1332 teste trec.
+- **Regula nouă pentru pre-înregistrări (din „da”-ul tău C-88):** „mai bun” se judecă pe română; poveștile și codul doar verifică să nu se strice (voie cel mult +0,005).
+- **Azi pe placă (de la 08:00, ~2,5 h): S94a** — modelul mic de 6 straturi e „reparat” 45 min, apoi încearcă 5 rețete × 15 min. La noapte (S94b) aceleași 5 rețete pe modelul mare, gata până luni 07:00. Am adăugat executantului 3 atenționări din raportul S93.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
+
 ## 8 noiembrie 2026, 02:15 — Modelul mare a trecut toată noaptea, dar iese la egalitate cu #513
 
 - **S89: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a mers toate cele 5 ore fără să cadă (leacul de memorie funcționează: vârf 6.465 MB, 62 °C). La română a ieșit **1,2063**, iar #513 are **1,2060** — practic egal (pragul de „mai bun” era 1,2010). Nimic nu s-a stricat. Explicația: în același timp, modelul mare a „citit” doar o treime din textele lui #513, fiindcă e de două ori mai mare.
@@ -141,9 +148,3 @@
 - **Arhiva `cyberspace_mutare` (26,20 GB) nu are nimic în plus:** tot ce e în ea e pe disc, SHA-256 identic. (Atenție: e în `Desktop\proiect\`, nu în `de sters\proiect\`.)
 - **Propunerea, pe grupuri:** A (cele două foldere Mini Brain, 78,07 GB) + B (arhiva de mutare, 26,20 GB) = **104 GB fără nicio pierdere**; C (82 de modele intermediare, ~33 GB) + D (`gpt.pt` din 28 de linii închise, ~29 GB) = risc mic; E–H (școala veche `cyberspace-cod` 40 GB, Hugging Face 26 GB, cache de simboluri 11 GB, pip 4 GB) le decizi tu. **Nimic șters.**
 - **Aștept de la tine:** ce grupuri se șterg (de exemplu „A, B da; C, D da; E–H nu”). Raportul cu listele exacte: `docs/rapoarte/2026-11-06_0311_S79_spatiu_workstation.md`.
-
-## 6 noiembrie 2026, 02:40 — (executant, S78 / C-77) Mini Brain salvat
-
-- **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere** (`test ai brain v13 clean` și `test ai brain`).
-  Arhiva: `C:\Kronos\arhiva\mini-brain\` (3.260 de fișiere + 2 pachete git, inclusiv baza geografică activă; 0 diferențe la verificare).
-  Raportul: `docs/rapoarte/2026-11-06_0240_S78_mini_brain.md`. Nimic șters de mine.

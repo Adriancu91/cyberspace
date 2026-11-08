@@ -3270,7 +3270,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md
 
 ### S93 — C-88 („Română da”): examenul de română devine criteriul de decizie al experimentelor de română (de la următorul experiment; S89 neatins) — doar procesor
-- stare: gata (8 nov 2026 02:36; `config/conv_w2_mare_24r.toml` cu `examen_romana`, fără nimic în `kronos/`; proba (a)–(d) ✓ în `lucru/cascada/S93_proba/proba.json`; examen_bpb neschimbat 0ca9cf74…; 4 teste noi + `test_nu_e_in_nicio_configurare` → `test_doar_in_configurarile_aprobate` (S94 trebuie să adauge `avans_24_mic6r.toml`); 1332 teste trec, 1 sărit; propunerea X = 0,005 pentru val_bpb în raport)
+- stare: gata — **verificat de supraveghetor 8 nov 05:15: GATA corect** (commit 741e8d1: doar `config/conv_w2_mare_24r.toml` nou, `teste/test_examen_romana.py`, raport, plan; `kronos/`, `module/`, configurările existente neatinse; proba (a)–(d) ✓; 1332 teste trec). Regula X = 0,005 din raport (pasul 4) adoptată pentru S94 și liniile de română de acum încolo (C-88).
+- (istoric) stare: gata (8 nov 2026 02:36; `config/conv_w2_mare_24r.toml` cu `examen_romana`, fără nimic în `kronos/`; proba (a)–(d) ✓ în `lucru/cascada/S93_proba/proba.json`; examen_bpb neschimbat 0ca9cf74…; 4 teste noi + `test_nu_e_in_nicio_configurare` → `test_doar_in_configurarile_aprobate` (S94 trebuie să adauge `avans_24_mic6r.toml`); 1332 teste trec, 1 sărit; propunerea X = 0,005 pentru val_bpb în raport)
 - (istoric) stare: in_lucru (executant, 8 nov 2026 02:30; S92 gata, placa liberă, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 20:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
@@ -3307,3 +3308,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: docs/preinregistrari/2026-11-08_avans_spearman.md (scrisă ÎNAINTE de S94a, acoperă ambele părți)
 - aprobat de: Adrian (COMENZI.md C-85 pasul 4, 6 nov 2026 17:56 — modelul mic trimis în avans); pașii scriși de supraveghetor 8 nov 2026 02:15 (granițele 1, 2 și 5: rulări scurte pe modelul de 24 existent și pe modelul mic cerut de C-85, note, unealtă fără `kronos/`)
 - raport: docs/rapoarte/<data>_<ora>_S94a_avans_mic.md și docs/rapoarte/<data>_<ora>_S94b_spearman.md
+- **adăugat de supraveghetor 8 nov 05:15 (după S93, nimic din pașii de mai sus schimbat):**
+  - S93 e `gata` (verificat) → S94a poate porni azi de la 08:00.
+  - Când scrii `config/avans_24_mic6r.toml`, adaugă-l în lista din `teste/test_examen_romana.py::test_doar_in_configurarile_aprobate` (cum cere raportul S93); altfel testul pică intenționat. E singura schimbare permisă la acel test.
+  - Pornirea în S94a/S94b se face prin `cale_stare` / `stare_de_pornire` din fișierul `.pt`, NU cu `--porneste-din` dintr-o fișă veche (raportul S93, „De știut” 1: fișele vechi n-au `romana_bpb` → KeyError). Dacă unealta cere totuși fișa, oprești, nu repari `antrenare_lunga.py` fără sarcină.
+  - Regula C-88 în pre-înregistrare (în plus față de Spearman): pe fiecare încercare notezi informativ și `val_bpb` (povești); pe modelul mare, o încercare cu `val_bpb` peste **0,4100** (#513 0,4050 + 0,005) sau cod curat peste **0,7297** e marcată „strică poveștile/codul” în raport — nu schimbă verdictul Spearman, dar o rețetă așa nu poate fi propusă pentru cel mare.
