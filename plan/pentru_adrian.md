@@ -16,6 +16,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 20:15 — Testul mare de la noapte a pornit la timp
+
+- **S94b rulează** din 19:33 (cele 5 rețete × 1 oră pe modelul de 24 de straturi). Pornirea e curată: modelul de plecare dă la română exact cât trebuie (1,2096), placa era goală înainte (452 MB / 25 °C). Gata până luni 07:00.
+- **Nimic terminat de la 17:15**, nicio problemă (teste 1337 trec la ultima verificare).
+- **Luni ziua placa e a ta** (testul OS). Sarcina pentru noaptea de luni o aleg mâine dimineață, după ce văd dacă modelul mic a ghicit bine pe cel mare.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
+
 ## 8 noiembrie 2026, 17:15 — Liniște până la noapte; ideea cu tokenizerul românesc e pusă deoparte, cum ai cerut
 
 - **Nimic terminat de la 14:15** — era de așteptat: placa e liberă după-amiază, executantul n-are treabă până la 19:00. Nicio problemă (ultimul lui commit 14:05, teste 1337 trec).
@@ -146,11 +153,3 @@
 - **Pus în coadă: S82** (aprobat de tine prin C-81, se face acum, ~15 min, doar citire): ce a mai rămas din grupurile A și B, cât e liber pe C: și cât ține Coșul de reciclare. Executantul scrie 3 rânduri chiar aici, sus. **Nu șterge nimic, nici Coșul** — dacă vrei să golești Coșul, o faci tu.
 - **Nu rulează nimic acum.** De la executant nimic nou din 10:36 — normal, n-avea treabă cât erai la workstation. **S77e** (reluarea S77d, modelul de 24 de straturi cu rată mai mică, ~2,5 h pe placă) pornește **la noapte de la 19:00**; până la 18:30 nu mai ajungea. Verdictul îl verific la 23:15 sau 02:15.
 - **Aștept de la tine:** nimic urgent. Când ai timp: **#513 îl înlocuiește pe #477?** („da/nu” în COMENZI.md) și când e următoarea ta fereastră pentru testul OS.
-
-## 6 noiembrie 2026, 11:15 — #513 urmează și instrucțiuni spuse altfel (la limită); S77d a fost oprit de repornire, îl reiau la noapte
-
-- **S76c: GATA, verificat de mine — URMEAZĂ INSTRUCȚIUNI, la limită.** Pe 290 de cereri spuse cu alte cuvinte decât la antrenare, #513 are **83,22** față de #477 **61,38** (pragul cerea cel puțin +20 → a ieșit +21,84). Merge bine la nume, an, număr, rezumat; **cade la „în ce județ și țară”** spus altfel (doar 7,5 % corect).
-- **S77d: oprit după 20 de minute, NEMĂSURAT** — închis din afară la 10:22, cel mai probabil de repornirea ta în Cyber Universe (executantul nu vedea C-79). Nimic stricat (placa max 6.186 MB, 62 °C; 1247 teste trec). **Am pus reluarea S77e (aprobată de mine) la noapte, de la 19:00**, pe foldere noi, ca să nu trebuiască șters nimic.
-- **REZOLVAT: discul C:** are acum ~106 GB liberi (dimineață 31) — testul de disc trece din nou.
-- **Aștept de la tine:** nimic urgent. Când ai timp: **#513 îl înlocuiește pe #477?** (acum ai ambele verdicte: S76b AJUTĂ, S76c URMEAZĂ, cu slăbiciunea la „județ și țară”) — scrie „da/nu” în COMENZI.md. Dacă termini testul OS mai devreme și vrei S77e pe zi, scrie-mi „am terminat la workstation”.
-
