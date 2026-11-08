@@ -10,6 +10,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 8 noiembrie 2026, 02:15 — Modelul mare a trecut toată noaptea, dar iese la egalitate cu #513
+
+- **S89: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a mers toate cele 5 ore fără să cadă (leacul de memorie funcționează: vârf 6.465 MB, 62 °C). La română a ieșit **1,2063**, iar #513 are **1,2060** — practic egal (pragul de „mai bun” era 1,2010). Nimic nu s-a stricat. Explicația: în același timp, modelul mare a „citit” doar o treime din textele lui #513, fiindcă e de două ori mai mare.
+- **S92: GATA, verificat.** Unealta care încearcă rețetele întâi pe un model mic e pregătită; modelul mic (6 straturi, tăiat din cel mare) pornește slab și trebuie „reparat” scurt înainte de test.
+- **Acum, pe procesor: S93** (examenul de română devine cel care decide — „Română da”-ul tău).
+- **Pus în coadă (aprobat de mine, în „Da”-ul tău la C-85): S94** — azi ziua modelul mic încearcă 5 rețete (~2,5 h pe placă, după S93), la noapte modelul mare încearcă aceleași 5 rețete câte o oră. Aflăm dacă modelul mic ghicește corect ce rețetă e bună pentru cel mare. Totul se termină până luni la 07:00, ca placa să fie liberă pentru testul tău.
+- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
+
 ## 7 noiembrie 2026, 20:15 — Am primit „Română da” (C-88); modelul mare rulează noaptea asta
 
 - **S89 a pornit la 19:31** (cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie). Merge; nu-l ating. Verdictul îl verific dimineață.
@@ -137,11 +145,3 @@
 - **Mini Brain salvat (1,54 GB în arhivă) — Adrian poate șterge ambele foldere** (`test ai brain v13 clean` și `test ai brain`).
   Arhiva: `C:\Kronos\arhiva\mini-brain\` (3.260 de fișiere + 2 pachete git, inclusiv baza geografică activă; 0 diferențe la verificare).
   Raportul: `docs/rapoarte/2026-11-06_0240_S78_mini_brain.md`. Nimic șters de mine.
-
-
-## 6 noiembrie 2026, 02:15 — Kronos mare a mers doar 2 ore din 5 (iar lipsă de memorie) și a ieșit mai slab; discul C: aproape plin
-
-- **S77c: OPRIT, verificat de mine — corect.** Modelul de 24 de straturi a învățat 2 ore, apoi la ora 3 n-a mai încăput în limita de memorie (placa n-a fost în pericol: max 6.433 MB, 64 °C). Fără ora 5 nu există verdict (NEMĂSURAT). Dar cifrele de la ora 2 spun cinstit: **a dat înapoi** față de #477 (română 1,2268 față de 1,2096; codul și poveștile tot mai rău), încă din prima oră. #477 rămâne în uz, nimic stricat.
-- **Pus în coadă (aprobat de mine):** **S81** — reparația care face ca o oră anulată să oprească lanțul (acum mergea mai departe ca și cum totul ar fi bine); **S77d** (azi pe zi, după ce termini tu la workstation, ~2,5 h pe placă) — două ore scurte cu rată de învățare mai mică, ca să vedem ieftin dacă asta e cauza, înainte de încă o noapte întreagă. **S78 (Mini Brain) și S79 (raportul de spațiu) merg acum, la noapte**; S76c azi pe procesor.
-- **Discul C: are doar 34 GB liberi** (sub pragul de 40 GB al uneltelor) → un test pică din cauza asta, nu din cauza codului. Până faci loc, am spus executantului să-l treacă în raport ca „cunoscut” și să nu se blocheze în el; orice alt test picat oprește lucrul ca de obicei. Am ridicat paza la Mini Brain: se lasă baza geografică necopiată dacă ar rămâne sub 25 GB.
-- **Aștept de la tine (azi, la workstation):** după raportul S79, alege ce grupuri de fișiere se pot șterge (candidatul cel mai mare: arhiva `cyberspace_mutare` de 25,6 GB, dacă S79 arată că nu are nimic în plus). Până nu scrie aici „Mini Brain salvat”, nu șterge cele două foldere „test ai brain”. Fără grabă: dacă #513 îl înlocuiește pe #477 (după S76c), „S58 contează: da/nu”, `taskkill`, ora 18:30 la bucla automată, Release-ul #477.
