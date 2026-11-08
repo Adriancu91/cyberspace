@@ -1,0 +1,61 @@
+# S92 (C-85 pasul 4, partea b; scris 8 nov 2026): modelul MIC „trimis în avans” pentru linia de 24 de straturi.
+# Copie a config/conv_w2_mare_24f.toml, cu DOAR n_straturi = 6, cale_stare, nume, eticheta, acest antet și cercetătorul schimbate.
+# Modelul mic = 6 blocuri tăiate din lucru/w2_mare/gpt_24.pt (unelte/creste_model.py taie), aceleași date și același tokenizer.
+# Spațiul cercetătorului e în FACTORI față de rețetă (doar cu unelte/cercetator_avans.py --relativ):
+#   python -X utf8 unelte/cercetator_avans.py --relativ --config-mic config/avans_24_mic6.toml \
+#       --config-mare config/conv_w2_mare_24f.toml --incercari 5 --minute-pe-incercare 15 --iesire lucru/avans/s92_proba
+
+[platforma]
+# Linia mică; unealta mută jurnalul, amprentele, stocarea și cache-ul în dosarul --iesire.
+nume = "avans_24_mic6"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 6, n_capete = 12, n_emb = 768, context = 512, lot = 4, rata_invatare = 0.00001, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/avans/mic6/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 18000, adunare_loturi = 24, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S92: modelul mic trimis în avans (6 blocuri tăiate din gpt_24.pt), rețeta e1, spațiul cercetătorului în factori"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { rata_invatare = [0.5, 2.0, 4.0], incalzire_pasi = [0.5, 2.0] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

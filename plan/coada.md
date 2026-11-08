@@ -3245,7 +3245,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md
 
 ### S92 — C-85 pasul 4 (partea b, unealta): schimbări RELATIVE în `cercetator_avans.py` + modelul mic de 6 straturi tăiat din `gpt_24.pt` (doar procesor, fără placă)
-- stare: in_lucru (executant, 8 nov 2026 02:00; S89 gata, nimic altceva în lucru)
+- stare: gata (8 nov 2026 02:11; `--relativ` + `creste_model.py taie` + `config/avans_24_mic6.toml`; mic6 = blocurile 0, 4, 8, 14, 18, 22 din gpt_24.pt, SHA 6507546b…9e26, română la pornire 2,7783; gpt_24.pt SHA neschimbat; proba fără --porneste; 1328 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 8 nov 2026 02:00; S89 gata, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 7 nov 2026 17:15)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1` pentru tot)
 - fereastră: **după ce S89 a trecut verificarea de la 15 minute** (în noaptea 7→8), cu regula de 10 % la pași/s (dacă pașii lui S89 scad cu peste 10 %, pui S92 pe pauză până după S89); sau mâine, 8 nov, de la 08:00. **S89 are prioritate.** Dacă S89 nu pornește diseară, S92 poate merge imediat.
@@ -3262,7 +3263,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Nu atingi `kronos/`, `module/` (niciun modul), `module/examen_bpb.py`, `module/examen_romana.py`, paznicul, jurnalul (doar prin platformă), configurările existente, #459/#477/#513, `gpt_24.pt` (doar citit), `lucru/w2_mare_24*/` (S89 scrie acolo!). Nimic pe placă. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e antrenare (doar unealtă, tăiere și probă fără `--porneste`); partea pe placă (S93) va avea pre-înregistrare.
 - aprobat de: Adrian (COMENZI.md C-85 pasul 4, 6 nov 2026 17:56); pașii scriși de supraveghetor 7 nov 2026 17:15 (granița 5: unelte noi în `unelte/` + teste, fără `kronos/` și fără examen; modelul mic e cel cerut de C-85 pasul 4)
-- raport: docs/rapoarte/<data>_<ora>_S92_avans_relativ.md
+- raport: docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md
 
 ### S93 — C-88 („Română da”): examenul de română devine criteriul de decizie al experimentelor de română (de la următorul experiment; S89 neatins) — doar procesor
 - stare: **aprobat** (supraveghetor, 7 nov 2026 20:15)

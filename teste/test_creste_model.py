@@ -143,3 +143,61 @@ def test_alegerea_dupa_regula():
     assert cm.alege([r(24, 6400, 3.0), r(24, 5000, 2.5, True)])["recalcul"] is False
     assert cm.alege([r(24, 6600, 3.0), r(24, 5000, 2.5, True)])["recalcul"] is True
     assert cm.alege([r(12, 3000, 6.4), r(24, 6600, 1.9)]) is None
+
+
+# ---- S92: tăierea (modelul mic trimis în avans) ----------------------------------------------------------------------
+
+def test_taie_alege_dintre_straturile_care_lucreaza():
+    r = _retea_mica()
+    crescuta = cm.creste_stare(r.state_dict(), 2, 4)  # 0 și 2 lucrează, 1 și 3 neutre
+    alese, neutre, motiv = cm.alege_blocuri(crescuta, 4, 2)
+    assert neutre == [1, 3] and alese == [0, 2] and "neutre" in motiv
+    # 12 → 24 → 6: dintre cele 12 originale (pozițiile pare), împrăștiate, primul și ultimul păstrate
+    stare24 = {f"straturi.{i}.{rest}": torch.zeros(1) if (i % 2 and rest in cm.NULE) else torch.ones(1)
+               for i in range(24) for rest in cm.NULE}
+    alese, neutre, _ = cm.alege_blocuri(stare24, 24, 6)
+    assert neutre == list(range(1, 24, 2)) and alese == [0, 4, 8, 14, 18, 22]
+    with pytest.raises(ValueError):
+        cm.alege_blocuri(crescuta, 4, 4)
+    with pytest.raises(ValueError):
+        cm.alege_blocuri(crescuta, 4, 0)
+
+
+def test_taie_pastreaza_formele_si_da_aceeasi_iesire_cand_scoate_doar_neutrele(tmp_path):
+    r, sursa = _sursa(tmp_path)
+    crescut = tmp_path / "gpt_4.pt"
+    cm.creste(str(sursa), 4, str(crescut))
+    iesire = tmp_path / "mic" / "gpt_2.pt"
+    info = cm.taie(str(crescut), 2, str(iesire))
+    assert info["sha256_din"] == info["sha256_din_dupa"] and info["blocuri_pastrate"] == [0, 2]
+    s = torch.load(iesire, map_location="cpu", weights_only=True)
+    vechi = torch.load(crescut, map_location="cpu", weights_only=True)["retea"]
+    assert s["setari"] == {**MIC, "n_straturi": 2} and s["pasi_total"] == 0 and not s["optimizator"]["state"]
+    for cheie in ("emb_token.weight", "cap.weight"):
+        assert s["retea"][cheie].shape == vechi[cheie].shape and torch.equal(s["retea"][cheie], vechi[cheie])
+    assert not any(k.startswith("straturi.2.") for k in s["retea"])
+    mica = cm.retea_din(s["setari"], s["retea"])
+    rez = cm.compara_retele(r, mica, [list(range(5, 45))])
+    assert rez["dif_max_logit"] <= 1e-5  # a scos doar straturile neutre: aceeași rețea ca sursa de 2
+    with pytest.raises(FileExistsError):
+        cm.taie(str(crescut), 2, str(iesire))
+    assert cm.main(["taie", "--din", str(crescut), "--straturi", "4", "--iesire", str(tmp_path / "x.pt")]) == 2
+    assert cm.main(["taie", "--din", str(crescut), "--straturi", "2", "--iesire", str(iesire)]) == 2
+    assert not (tmp_path / "x.pt").exists()
+
+
+def test_taie_cap_coada_prin_main_si_clasa_S51_il_incarca(tmp_path):
+    from module.model_muon import ModelGPTConversatieMuon
+    from module.tokenizer_bpe import TokenizerBPE
+
+    _, sursa = _sursa(tmp_path)
+    crescut = tmp_path / "gpt_4.pt"
+    cm.creste(str(sursa), 4, str(crescut))
+    iesire = tmp_path / "gpt_1.pt"
+    assert cm.main(["taie", "--din", str(crescut), "--straturi", "1", "--iesire", str(iesire)]) == 0
+    m = ModelGPTConversatieMuon(**{**MIC, "n_straturi": 1}, tokenizer="bpe",
+                                cale_tokenizer=str(cm.RADACINA / cm.TOKENIZER), stare_de_pornire=str(iesire),
+                                dispozitiv="cpu", adunare_loturi=8)
+    m.tok = TokenizerBPE.incarca(cm.RADACINA / cm.TOKENIZER)
+    m._pregateste_reteaua()
+    assert m.continuat and m.pasi_total == 0 and m.pornit_din == str(iesire)

@@ -5,6 +5,7 @@ Un strat nou e copia stratului vechi de dedesubt (ln1, atentie.in_proj, ln2, mlp
 ieșire ca cea veche (arhitectura e pre-LN, cu `ln` final). Straturile noi se împrăștie uniform printre cele vechi.
 
     python unelte/creste_model.py creste --din lucru/w2_reteta_A_cont3/gpt.pt --straturi 24 --iesire lucru/w2_mare/gpt_24.pt
+    python unelte/creste_model.py taie --din lucru/w2_mare/gpt_24.pt --straturi 6 --iesire lucru/avans/mic6/gpt.pt  # S92
     python unelte/creste_model.py identic --straturi 24 30 --json lucru/w2_mare/identic.json     # procesor, fp32
     python unelte/creste_model.py masoara --straturi 12 24 30 36 42 --json lucru/w2_mare/masoara.json   # placa
     python unelte/creste_model.py romana --gpt lucru/w2_mare/gpt_24.pt --json ...   # română curat pe un fișier
@@ -21,6 +22,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import subprocess
 import sys
 import threading
@@ -119,6 +121,72 @@ def creste(din: str, straturi: int, iesire: str) -> dict[str, Any]:
 
 def stare_vechi_straturi(din: str | Path) -> int:
     return int(citeste_sursa(din)[0]["n_straturi"])
+
+
+# ---- tăierea (S92): modelul mic „trimis în avans”, din aceleași greutăți ------------------------------------------
+
+def straturi_neutre(stare: dict[str, Any], n: int) -> list[int]:
+    """Straturile care adună exact 0 la fluxul rezidual (atentie.out_proj și mlp[2] pe zero: cele puse de `creste`)."""
+    return [i for i in range(n) if all(not stare[f"straturi.{i}.{rest}"].any() for rest in NULE)]
+
+
+def alege_blocuri(stare: dict[str, Any], n: int, k: int) -> tuple[list[int], list[int], str]:
+    """Ce `k` blocuri din `n` se păstrează: (alese, neutre, motivul). Straturile neutre nu fac nimic, deci se aleg
+    întâi dintre cele care lucrează; dintre ele, k împrăștiate uniform, cu primul și ultimul păstrate."""
+    if not 1 <= k < n:
+        raise ValueError(f"tai doar la mai puține straturi: {n} → {k}")
+    neutre = straturi_neutre(stare, n)
+    active = [i for i in range(n) if i not in neutre]
+    if len(active) >= k:
+        baza, motiv = active, (f"{len(neutre)} din {n} straturi sunt neutre (adună 0): aleg {k} din cele "
+                                f"{len(active)} care lucrează")
+    else:
+        baza, motiv = list(range(n)), f"doar {len(active)} straturi lucrează (< {k}): aleg din toate {n}"
+    if k == 1:
+        alese = [baza[-1]]
+    else:
+        alese = [baza[int(math.floor(i * (len(baza) - 1) / (k - 1) + 0.5))] for i in range(k)]
+    return alese, neutre, motiv + ", împrăștiate uniform, cu primul și ultimul păstrate"
+
+
+def taie_stare(stare: dict[str, Any], alese: list[int]) -> dict[str, Any]:
+    """state_dict-ul cu doar blocurile `alese` (în ordine, renumerotate 0..k−1); încorporările, `ln` final și capul
+    copiate. Tensori noi, sursa neatinsă."""
+    rezultat: dict[str, Any] = {k: v.clone() for k, v in stare.items() if not k.startswith("straturi.")}
+    for i, j in enumerate(alese):
+        prefix = f"straturi.{j}."
+        for cheie, t in stare.items():
+            if cheie.startswith(prefix):
+                rezultat[f"straturi.{i}.{cheie[len(prefix):]}"] = t.clone()
+    return rezultat
+
+
+def taie(din: str, straturi: int, iesire: str) -> dict[str, Any]:
+    import torch
+
+    from module.model_gpt import _GPT
+
+    cale = Path(iesire)
+    if cale.exists():
+        raise FileExistsError(f"{cale} există deja: nu scriu peste el")
+    inainte = sha256(din)
+    setari, stare, _ = citeste_sursa(din)
+    n = int(setari["n_straturi"])
+    alese, neutre, motiv = alege_blocuri(stare, n, straturi)
+    noi = {**setari, "n_straturi": straturi}
+    retea = _GPT(stare["emb_token.weight"].shape[0], **noi)
+    retea.load_state_dict(taie_stare(stare, alese))
+    optimizator = torch.optim.AdamW(retea.parameters(), lr=5e-5, weight_decay=0.1)  # gol: nu se copiază
+    cale.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"setari": noi, "retea": retea.state_dict(), "optimizator": optimizator.state_dict(), "pasi_total": 0,
+                "minute": 0.0, "scor": None}, cale)
+    info = {"din": din, "sha256_din": inainte, "sha256_din_dupa": sha256(din), "straturi_din": n,
+            "straturi": straturi, "blocuri_pastrate": alese, "straturi_neutre_in_sursa": neutre, "motiv": motiv,
+            "iesire": str(cale), "sha256": sha256(cale),
+            "parametri": sum(t.numel() for k, t in retea.state_dict().items() if k != "cap.weight"),
+            "pasi_total": 0, "minute": 0.0}
+    cale.with_suffix(".json").write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
+    return info
 
 
 # ---- aceeași ieșire (procesor, fp32) ---------------------------------------------------------------------------------
@@ -376,6 +444,10 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--din", default=SURSA)
     c.add_argument("--straturi", type=int, required=True)
     c.add_argument("--iesire", required=True)
+    t = sub.add_parser("taie")
+    t.add_argument("--din", required=True)
+    t.add_argument("--straturi", type=int, required=True)
+    t.add_argument("--iesire", required=True)
     i = sub.add_parser("identic")
     i.add_argument("--din", default=SURSA)
     i.add_argument("--straturi", type=int, nargs="+", required=True)
@@ -400,6 +472,12 @@ def main(argv: list[str] | None = None) -> int:
     a = p.parse_args(argv)
     if a.ce == "creste":
         rez: Any = creste(a.din, a.straturi, a.iesire)
+    elif a.ce == "taie":
+        try:
+            rez = taie(a.din, a.straturi, a.iesire)
+        except (FileExistsError, ValueError) as e:
+            print(f"REFUZ: {e}", file=sys.stderr)
+            return 2
     elif a.ce == "identic":
         rez = identic(a.straturi, a.din, a.fire)
     elif a.ce == "romana":

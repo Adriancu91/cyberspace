@@ -161,6 +161,127 @@ def test_propunerea_pe_linia_mare_reala_schimba_doar_rata():
         ca.scrie_propunere(mare, {"model": {"n_straturi": 6}}, "antet")
 
 
+# ---- S92: modul relativ (factori față de rețetă) --------------------------------------------------------------------
+
+SPATIU_RELATIV = '{ model = { netezire = [0.1, 0.5, 2.0], ordin = [2, 3] } }'
+
+
+def _configurari_relative(tmp_path, monkeypatch, netezire_mare="0.5", spatiu=SPATIU_RELATIV):
+    mic, _ = _configurari(tmp_path, monkeypatch, spatiu)
+    text = (tmp_path / "mare.toml").read_text(encoding="utf-8")
+    assert "netezire = 1.0" in text
+    (tmp_path / "mare.toml").write_text(text.replace("netezire = 1.0", f"netezire = {netezire_mare}"), encoding="utf-8")
+    return mic, citeste_config(tmp_path / "mare.toml")
+
+
+def test_aplica_factor_rotunjeste():
+    assert ca.aplica_factor(1000, 0.5) == 500 and ca.aplica_factor(1000, 2.0) == 2000
+    assert ca.aplica_factor(3, 0.5) == 2 and ca.aplica_factor(1, 0.1) == 1  # întreg, cel puțin 1
+    assert ca.aplica_factor(0.00001, 4.0) == 4e-05 and ca.aplica_factor(0.00003, 1 / 3) == 1e-05  # 3 cifre
+    assert isinstance(ca.aplica_factor(1000, 0.5), int) and isinstance(ca.aplica_factor(1.0, 2), float)
+
+
+def test_relativ_factorul_pe_ambele_modele_si_propunerea(tmp_path, monkeypatch):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch)
+    r = ca.ruleaza(mic, mare, 6, 0.05, tmp_path / "iesire", relativ=True, scara=("netezire",))
+    cl = r["clasament"]
+    assert r["relativ"]["model.netezire"]["mic"] == 1.0 and r["relativ"]["model.netezire"]["mare"] == 0.5
+    for x in cl:  # pe modelul mic s-a încercat valoarea mică × factor; pe cel mare ar fi valoarea mare × factor
+        info = x["relativ"]["model.netezire"]
+        assert x["setari"]["model"]["netezire"] == info["mic"] == ca.aplica_factor(1.0, info["factor"])
+        assert info["mare"] == ca.aplica_factor(0.5, info["factor"]) and info["factor"] in (1.0, 0.1, 0.5, 2.0)
+    assert {x["relativ"]["model.netezire"]["factor"] for x in cl} == {1.0, 0.1, 0.5, 2.0}
+    castigator = cl[0]
+    asteptat_mare = {}
+    for port, setari in castigator["schimbari"].items():
+        for k, v in setari.items():
+            asteptat_mare.setdefault(port, {})[k] = (castigator["relativ"]["model.netezire"]["mare"]
+                                                     if k == "netezire" else v)  # ordin: mutat ca valoare
+    assert r["propunere"]["schimbari"] == asteptat_mare and r["propunere"]["schimbari_pe_mic"] == castigator["schimbari"]
+    propusa = tomllib.loads((tmp_path / "iesire" / "propunere_mare.toml").read_text(encoding="utf-8"))
+    asteptat = tomllib.loads((tmp_path / "mare.toml").read_text(encoding="utf-8"))
+    for port, setari in asteptat_mare.items():
+        asteptat["porturi"][port]["setari"].update(setari)
+    assert propusa == asteptat  # restul fișierului identic
+    md = (tmp_path / "iesire" / "clasament.md").read_text(encoding="utf-8")
+    assert "×0.1 (mic 0.1, mare 0.05)" in md
+
+
+def test_relativ_refuza_factor_si_valoare_lipsa(tmp_path, monkeypatch):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch, spatiu='{ model = { netezire = [0.5, -1.0] } }')
+    with pytest.raises(ca.Refuz, match="nu e un număr pozitiv"):
+        ca.setari_relative(mic, mare, ("netezire",))
+    mic, mare = _configurari_relative(tmp_path, monkeypatch, spatiu='{ model = { netezire = [0.5, 0] } }')
+    with pytest.raises(ca.Refuz, match="nu e un număr pozitiv"):
+        ca.setari_relative(mic, mare, ("netezire",))
+    mic, mare = _configurari_relative(tmp_path, monkeypatch, netezire_mare='"multa"')
+    with pytest.raises(ca.Refuz, match="valoare numerică"):
+        ca.setari_relative(mic, mare, ("netezire",))
+    cod = ca.main(["--config-mic", "mic.toml", "--config-mare", "mare.toml", "--incercari", "3",
+                   "--minute-pe-incercare", "0.05", "--iesire", "iesire", "--relativ", "--scara", "netezire",
+                   "--porneste"])
+    assert cod == 2 and not (tmp_path / "iesire").exists()
+    mare.porturi["model"]["setari"] = {"ordin": 1}  # setarea lipsește cu totul din configurarea mare
+    with pytest.raises(ca.Refuz, match="nu există în configurarea mare"):
+        ca.verifica_spatiu(mic, mare)
+    with pytest.raises(ca.Refuz, match="valoare numerică"):
+        ca.setari_relative(mic, mare, ("netezire",))
+
+
+def test_fara_setari_cu_scara_relativ_da_aceleasi_rezultate(tmp_path, monkeypatch):
+    mic, mare = _configurari(tmp_path, monkeypatch)
+    vechi = ca.ruleaza(mic, mare, 4, 0.05, tmp_path / "a")
+    nou = ca.ruleaza(mic, mare, 4, 0.05, tmp_path / "b", relativ=True, scara=())
+    assert vechi["incercari_facute"] == nou["incercari_facute"] == 4
+    assert [(x["schimbari"], x["scor"]) for x in vechi["clasament"]] == [(x["schimbari"], x["scor"]) for x in nou["clasament"]]
+    assert vechi["propunere"]["schimbari"] == nou["propunere"]["schimbari"]
+    assert (tmp_path / "a" / "propunere_mare.toml").read_text(encoding="utf-8").split("\n", 4)[4] == \
+        (tmp_path / "b" / "propunere_mare.toml").read_text(encoding="utf-8").split("\n", 4)[4]
+
+
+def test_relativ_porneste_mereu_din_acelasi_fisier(tmp_path, monkeypatch):
+    mic, mare = _configurari_relative(tmp_path, monkeypatch)
+    mic.porturi["model"]["setari"] = {**mic.setari_port("model"), "cale_stare": "lucru/w2_mare/gpt_24.pt"}
+    relative = ca.setari_relative(mic, mare, ("netezire",))
+    noua = ca.pregateste_relativ(mic, (tmp_path / "iesire").resolve(), relative)
+    model = noua.setari_port("model")
+    assert model["stare_de_pornire"] == "lucru/w2_mare/gpt_24.pt"
+    assert ca._sub(ca.Path(model["cale_stare"]), tmp_path / "iesire")
+    assert noua.setari_port("cercetator")["spatiu"]["model"]["netezire"] == [0.1, 0.5, 2.0]
+    assert mic.setari_port("model")["cale_stare"] == "lucru/w2_mare/gpt_24.pt"  # originalul neatins
+    ca.pregateste_config_mic(noua, (tmp_path / "iesire").resolve(), 0.05)  # nu mai e refuzat
+    with pytest.raises(ca.Refuz, match="nu există"):  # fișierul de pornire lipsește → nu pornește de la zero
+        ca.ruleaza(mic, mare, 2, 0.05, tmp_path / "iesire", relativ=True, scara=("netezire",))
+
+
+def test_proba_relativ_arata_retetele_si_nu_scrie(tmp_path, monkeypatch, capsys):
+    _configurari_relative(tmp_path, monkeypatch)
+    cod = ca.main(["--config-mic", "mic.toml", "--config-mare", "mare.toml", "--incercari", "4",
+                   "--minute-pe-incercare", "0.05", "--iesire", "iesire", "--relativ", "--scara", "netezire"])
+    out = capsys.readouterr().out
+    assert cod == 0 and "modul RELATIV" in out
+    assert "1. punct de plecare: model.netezire ×1 (mic 1.0, mare 0.5)" in out
+    assert "model.netezire ×0.1 (mic 0.1, mare 0.05)" in out and out.count("\n    ") >= 5
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["mare.toml", "mic.toml"]
+    assert ca.main(["--config-mic", "mic.toml", "--config-mare", "mare.toml", "--incercari", "4",
+                    "--minute-pe-incercare", "0.05", "--iesire", "iesire", "--scara", "netezire"]) == 2
+
+
+def test_configurarea_mica_de_6_straturi():
+    mic = citeste_config(RADACINA / "config" / "avans_24_mic6.toml")
+    mare = citeste_config(RADACINA / "config" / "conv_w2_mare_24f.toml")
+    relative = ca.setari_relative(mic, mare)
+    assert [aplica for aplica in ca.spatiu_absolut(ca._spatiu_cercetator(mic), relative)["model"].values()] == [
+        [5e-06, 2e-05, 4e-05], [500, 2000]]
+    a = tomllib.loads((RADACINA / "config" / "avans_24_mic6.toml").read_text(encoding="utf-8"))
+    b = tomllib.loads((RADACINA / "config" / "conv_w2_mare_24f.toml").read_text(encoding="utf-8"))
+    for t in (a, b):
+        t["platforma"].pop("nume"), t["antrenare_lunga"].pop("eticheta"), t["porturi"].pop("cercetator")
+    ma, mb = a["porturi"]["model"].pop("setari"), b["porturi"]["model"].pop("setari")
+    assert a == b and {k for k in ma if ma[k] != mb.get(k)} == {"n_straturi", "cale_stare"} and set(ma) == set(mb)
+    assert ma["n_straturi"] == 6 and ma["cale_stare"] == "lucru/avans/mic6/gpt.pt"
+
+
 def test_unealta_nu_importa_din_module():
     arbore = ast.parse((RADACINA / "unelte" / "cercetator_avans.py").read_text(encoding="utf-8"))
     importuri = [n.module for n in ast.walk(arbore) if isinstance(n, ast.ImportFrom)] + [
