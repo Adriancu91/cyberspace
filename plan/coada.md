@@ -3370,7 +3370,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S95_mare_continuare.md
 
 ### S96 — C-85 pasul 5: date pe bucăți (simboluri pre-făcute, citite pe rând) — unealta, proba de identitate și măsurarea memoriei, NEACTIVATĂ în nicio configurare (doar procesor + disc, fără placă)
-- stare: in_lucru (executant, 9 nov 2026 14:30; adus azi de C-93, placa liberă 503 MB / 27 °C, nimic altceva în lucru)
+- stare: gata (executant, 9 nov 2026 14:40; proba de identitate DA: 1.341.190.791 simboluri, același SHA-256 `560863a9…`; cititorul 125 MB RAM vs 3.084 MB acum; pornirea liniei ia 41,7 GB RAM din cauza textului brut; 27 de bucăți în `lucru/bucati/w2_amestec_be12/`, `lucru/cache` neatins; 1343 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 9 nov 2026 14:30; adus azi de C-93, placa liberă 503 MB / 27 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 9 nov 2026 02:15)
 - tip: procesor + disc
 - fereastră: **marți 10 nov, ziua, de la 08:00, după ce S95 e `gata`/`oprit`** (nu în timpul nopții S95 și niciodată cât Adrian e la workstation). Durată ~2–3 h.
@@ -3383,7 +3384,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. Raport `docs/rapoarte/<data>_<ora>_S96_date_bucati.md` (ce ai aflat la pasul 1, mărimi, timpi, RAM, proba de identitate DA/NU); `python -m pytest` verde; coada → `gata`; commit + push.
 - **adăugat de supraveghetor 9 nov 14:15 — adus azi (C-93: calculatorul e liber, Adrian a plecat):** poți face S96 **azi, 9 nov, după-amiază**, pornire până la **16:00**, gata până la **19:15** (înainte de S95, care pornește abia la 21:00 — nu se suprapun). Doar procesor + disc, nimic pe placă. Dacă nu poate porni până la 16:00, rămâne pentru marți 10 nov de la 08:00 (după S95). Dacă la 19:15 nu e gata: oprești curat, scrii unde ai ajuns în raport, rămâne `aprobat` pentru marți (fără `oprit`). Calculatorul se poate reporni dacă Adrian vine la 20:00 — de aceea limita 19:15.
 - aprobat de: Adrian (COMENZI.md C-85 pasul 5, 6 nov 2026 17:56); pașii scriși de supraveghetor 9 nov 2026 02:15 (granițele 3 și 5: pregătirea datelor deja aprobate, unealtă nouă în `unelte/` + teste, fără `kronos/`)
-- raport: docs/rapoarte/<data>_<ora>_S96_date_bucati.md
+- raport: docs/rapoarte/2026-11-09_1440_S96_date_bucati.md
 
 ### S97 — C-92: pregătești singur stick-urile de test cu release-ul OS care repară I8 (C-91) (doar rețea + stick-uri, fără placă)
 - stare: oprit (executant, 9 nov 2026 08:35)
