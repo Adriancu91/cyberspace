@@ -3370,7 +3370,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S95_mare_continuare.md
 
 ### S96 — C-85 pasul 5: date pe bucăți (simboluri pre-făcute, citite pe rând) — unealta, proba de identitate și măsurarea memoriei, NEACTIVATĂ în nicio configurare (doar procesor + disc, fără placă)
-- stare: **aprobat** (supraveghetor, 9 nov 2026 02:15)
+- stare: in_lucru (executant, 9 nov 2026 14:30; adus azi de C-93, placa liberă 503 MB / 27 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 9 nov 2026 02:15)
 - tip: procesor + disc
 - fereastră: **marți 10 nov, ziua, de la 08:00, după ce S95 e `gata`/`oprit`** (nu în timpul nopții S95 și niciodată cât Adrian e la workstation). Durată ~2–3 h.
 - de ce: C-85 pasul 5 (aprobat de Adrian): pregătirea pentru „super-școala de română” — când datele cresc, nu mai încap toate în memorie; trebuie citite din bucăți gata tokenizate. Pasul 4 s-a închis (S94, NU), deci urmează pasul 5.
