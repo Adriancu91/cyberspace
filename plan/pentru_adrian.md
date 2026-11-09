@@ -18,6 +18,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 19:10 — Am primit C-94: antrenarea de noapte poate porni de acum, placa liberă la 06:45
+
+- **C-94 preluat:** nu mai vii diseară, testul OS e mâine la 07:15. Am anulat pauza 19:30–21:00: **S95** (5 ore din #536, rata ×0,5, judecat pe română) poate porni de acum, cel târziu la 00:00, și **eliberează placa până la 06:45**. De la 06:45 nimic pe placă până scrii tu că ai terminat.
+- **Stick-urile rămân neatinse** (S97 oprit). **S98** (doar procesor) pornește tot doar după testul tău de mâine.
+- Nimic nou terminat de la 17:15; executantul a scris ultima dată azi după-amiază (S96 gata). Nicio problemă.
+- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). **Mâine, când termini testul, spune că workstation-ul e liber.** Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 9 noiembrie 2026, 17:15 — Datele „pe bucăți” merg (verificat); la noapte S95 de la 21:00, cum ai cerut
 
 - **S96: GATA, verificat de mine — DA.** Unealta nouă citește datele de antrenare pe bucăți și dă exact aceleași 1,34 miliarde de simboluri (aceeași amprentă), cu 125 MB de memorie în loc de 3 GB. Aflare importantă: la pornirea antrenării, memoria mare (41,7 GB) o ia textul brut citit întreg doar ca să-i facă amprenta — asta s-ar sufoca prima la datele mai mari pentru română. Nimic din nucleu atins, 1343 teste trec.
@@ -152,9 +159,3 @@
 
 - #513 e acum modelul implicit (KGR1 Q8_0, 110.859.008 octeți, SHA `66f734b3…5859`); aceleași simboluri ca PyTorch, marje 0,095–0,172; #477 și #459 rămân rezerve; 1258 teste trec. Raport: `docs/rapoarte/2026-11-07_0239_S83b_model_513.md`. **De făcut de tine:** Release-ul (comanda e în raport și în `docs/integrare_kronos/MODEL.md`; `gh` îmi cere aprobare).
 
-## 7 noiembrie 2026, 02:15 — Kronos mare a căzut iar la ora 3 (lipsă de memorie); în noaptea asta aflăm de ce
-
-- **S85: OPRIT, verificat de mine — corect.** Modelul de 24 de straturi a învățat 2 ore din 5, apoi la începutul orei 3 n-a mai încăput în limita de memorie (placa n-a fost în pericol: max 6.431 MB, 61 °C; nimic stricat, 1254 teste trec). Fără ora 5 nu există verdict (NEMĂSURAT). Informativ, după 2 ore: ține ce știa (română 1,2108, pornirea 1,2096), dar nu e mai bun decât #513 (1,2060).
-- **E a doua noapte la rând când cade exact în același loc** → nu e întâmplare: ceva se adună în memoria plăcii de la o oră la alta. Nu mai repornim modelul mare până nu aflăm cauza.
-- **Mutat în noaptea asta (aprobate deja):** **S83b** (#513 devine modelul în uz, pe procesor) acum; **S86** (pasul 2 din C-85, aprobat de tine) adus de mâine în noaptea asta, cu o întrebare în plus: crește memoria de la o „oră” la alta și se repară golind-o după fiecare test?
-- **Aștept de la tine:** doar răspunsul la S84 („ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”). Fără grabă.
