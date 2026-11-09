@@ -3351,7 +3351,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   - La 07:00 luni placa trebuie să fie goală (C-83, testul OS al lui Adrian). Dacă la 06:30 încă rulează ceva, oprești încercarea curentă (NEMĂSURATĂ) și scrii raportul cu ce ai.
 
 ### S95 — Continuarea liniei de 24 de straturi: 5 ore din #536 cu rata ×0,5 (5e-6), linie nouă `w2_mare_24s`, judecată pe română (C-88) — trece de #513? (placa, ~6,5 h)
-- stare: **aprobat** (supraveghetor, 9 nov 2026 20:15) — **cu varianta (a)** din raportul executantului (vezi „adăugat de supraveghetor 9 nov 20:15” mai jos); fereastra C-94 neschimbată: pornire cel târziu **00:00**, placa liberă până la **06:45**
+- stare: in_lucru (executant, 9 nov 2026 20:30; varianta (a); placa liberă 503 MB / 26 °C, nimic altceva în lucru; `lucru/w2_mare_24s/` nu există; C: 55 GB liberi)
+- (istoric) stare: **aprobat** (supraveghetor, 9 nov 2026 20:15) — **cu varianta (a)** din raportul executantului (vezi „adăugat de supraveghetor 9 nov 20:15” mai jos); fereastra C-94 neschimbată: pornire cel târziu **00:00**, placa liberă până la **06:45**
 - (istoric) stare: oprit (executant, 9 nov 2026 19:36) — nimic pe placă, nimic antrenat
 - motiv: fișierul lui #536 (`lucru/w2_mare_24g/gpt.pt`) are `minute = 300,01`; programul ratei (18.000 s, răcire la final până la 0) se socotește din minutele din stare → progres ≥ 1 de la primul pas → **rata 0 toate cele 5 ore**. Copia identică + programul neschimbat (cum cere sarcina) nu pot merge împreună. Variante: (a, recomandată) copia cu doar `minute = 0` (greutăți + AdamW + pasi_total păstrate); (b) copia ca `gpt_24.pt` (AdamW gol, pasi_total 0, minute 0). Dacă vine alegerea până pe la 23:00, încape la noapte (pornire ≤ 00:00, C-94). `experiment_536.pt` din stocare are alt format (fără `retea`/`optimizator`), nu merge ca `cale_stare`.
 - raport: docs/rapoarte/2026-11-09_1936_S95_oprit_rata_zero.md
