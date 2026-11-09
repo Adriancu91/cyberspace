@@ -18,6 +18,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 08:15 — Noaptea verificată; pregătesc stick-urile când vine reparația OS
+
+- **Raportul de dimineață e la timp și curat** (1337 teste trec, placa goală, 56 GB liberi pe C:). Verdictul S94b (NU, ρ −0,92) îl verificasem deja la 02:15.
+- **Am primit C-90 și C-92 de la tine:** nimic pe placă cât ești la workstation; iar **S97** (nou, aprobat de tine) — executantul se uită la fiecare trecere dacă a apărut release-ul OS care repară I8 (mai nou decât `os-275`; acum încă nu e) și, când apare, verifică sumele și copiază singur pe stick-urile E: (TESTGPU) și D: (CYBER-UNIV), fără să șteargă nimic. Când e gata, scrie aici „Stick-urile sunt gata”. Atenție: merge doar cât workstation-ul e pornit în Windows.
+- **La noapte: S95** (5 ore din #536, rata ×0,5), doar dacă workstation-ul e înapoi în Windows și n-ai scris că mai lucrezi. I-am cerut executantului să noteze la fiecare oră „eroarea de memorie după examen” văzută de raportul de dimineață (nu strică rezultatele, dar vreau să știu unde apare).
+- **Aștept de la tine:** azi, dacă n-ai făcut-o: `claude setup-token` pe workstation (autentificarea expiră în jur de azi — fără ea executantul se oprește la noapte). Apoi, fără grabă: Release-ul #513 și ștergerea S88 (comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`).
+
 ## 9 noiembrie 2026, 02:15 — Modelul mic nu ghicește rețetele modelului mare (verificat); la noapte continuăm cel mai bun model mare
 
 - **S94b: GATA, verificat de mine — NU.** Cele 5 rețete au mers câte o oră pe modelul de 24 de straturi, toate curat (placa max 6.426 MB / 61 °C). Ordinea a ieșit aproape exact invers decât pe modelul mic (am refăcut calculul: ρ = −0,92). Concluzie: rețetele modelului mare NU se pot alege pe modelul mic tăiat din el. Lecția utilă: la modelul mare, rata mică strică cel mai puțin.
@@ -150,9 +157,3 @@
 - **Rulează: S77e** (modelul de 24 de straturi cu rată mai mică, ~2,5 h, de la 19:00) — totul normal, nu-l întrerupem. Verdictul îl verific la 23:15 sau 02:15.
 - **Pus în coadă (aprobate de tine):** **S83** — #513 devine modelul în uz (pachetul pentru OS, interfața, Release `kronos-kgr1-513`; #477 și #459 rămân rezerve), doar pe procesor; **S84** — primul pas din C-85: lista modelelor salvate (ce păstrăm / ce s-ar putea șterge), **doar listă, nimic șters**. Ordinea: S77e → S83 → S84 (în noaptea asta sau mâine dimineață). Pașii 2–8 din C-85 îi pun câte unul, după S84.
 - **Aștept de la tine:** nimic acum. După S84 o să te întreb dacă ștergem modelele marcate „se poate șterge”.
-
-## 6 noiembrie 2026, 17:35 — (executant, S82 / C-81) Ce ai șters: grupul A da, arhiva B nu
-
-- **Grupul A (cele două foldere „test ai brain”): nu mai există** — șterse. **Grupul B (arhiva `Desktop\proiect\cyberspace_mutare_2026-10-10.zip`, 26,2 GB): EXISTĂ încă** (e singurul lucru din `Desktop\proiect\`).
-- **C: are acum 112,4 GB liberi** (104,7 GiB, cum arată Windows) din 510,7 GB.
-- **Coșul de reciclare de pe C: e gol** (0 obiecte, 0 GB) — golirea lui nu eliberează nimic. Dacă ștergi și arhiva B (și golești Coșul după), mai câștigi ~26 GB. Testele: 1247 trec, 1 sărit. Raport: `docs/rapoarte/2026-11-06_1735_S82_verificare_spatiu.md`.
