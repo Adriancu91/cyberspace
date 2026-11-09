@@ -18,6 +18,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 02:15 — Modelul mic nu ghicește rețetele modelului mare (verificat); la noapte continuăm cel mai bun model mare
+
+- **S94b: GATA, verificat de mine — NU.** Cele 5 rețete au mers câte o oră pe modelul de 24 de straturi, toate curat (placa max 6.426 MB / 61 °C). Ordinea a ieșit aproape exact invers decât pe modelul mic (am refăcut calculul: ρ = −0,92). Concluzie: rețetele modelului mare NU se pot alege pe modelul mic tăiat din el. Lecția utilă: la modelul mare, rata mică strică cel mai puțin.
+- **Azi, luni, placa și calculatorul sunt ale tale** (testul OS). Nimic nu pornește până nu ești gata.
+- **La noapte (de la 19:00, doar dacă workstation-ul e înapoi în Windows): S95** — 5 ore de continuare pe cel mai bun model mare (#536, practic egal cu #513), cu rata pe jumătate, judecat pe română. Dacă trece sub 1,2010, e primul model mare mai bun decât #513 (și te întreb înainte să schimb ceva).
+- **Marți ziua (procesor): S96** — pasul 5 din C-85 (datele citite pe bucăți), doar unealta și proba, nimic activat.
+- **Aștept de la tine:** Release-ul #513 azi, când ești la workstation, și alegerea la S88 (ștergerea celor 33,4 GB). Nu e urgent.
+
 ## 8 noiembrie 2026, 20:15 — Testul mare de la noapte a pornit la timp
 
 - **S94b rulează** din 19:33 (cele 5 rețete × 1 oră pe modelul de 24 de straturi). Pornirea e curată: modelul de plecare dă la română exact cât trebuie (1,2096), placa era goală înainte (452 MB / 25 °C). Gata până luni 07:00.
@@ -148,10 +156,3 @@
 - **Grupul A (cele două foldere „test ai brain”): nu mai există** — șterse. **Grupul B (arhiva `Desktop\proiect\cyberspace_mutare_2026-10-10.zip`, 26,2 GB): EXISTĂ încă** (e singurul lucru din `Desktop\proiect\`).
 - **C: are acum 112,4 GB liberi** (104,7 GiB, cum arată Windows) din 510,7 GB.
 - **Coșul de reciclare de pe C: e gol** (0 obiecte, 0 GB) — golirea lui nu eliberează nimic. Dacă ștergi și arhiva B (și golești Coșul după), mai câștigi ~26 GB. Testele: 1247 trec, 1 sărit. Raport: `docs/rapoarte/2026-11-06_1735_S82_verificare_spatiu.md`.
-
-## 6 noiembrie 2026, 17:15 — Ai plecat fără testul OS: placa e liberă; executantul verifică ce ai șters; S77e la noapte
-
-- **Am primit C-80 și C-81:** ai plecat la ~15:20 fără testul OS (calculatorul a rămas în Windows) și ai șters înainte cele două foldere „test ai brain” și probabil arhiva de mutare.
-- **Pus în coadă: S82** (aprobat de tine prin C-81, se face acum, ~15 min, doar citire): ce a mai rămas din grupurile A și B, cât e liber pe C: și cât ține Coșul de reciclare. Executantul scrie 3 rânduri chiar aici, sus. **Nu șterge nimic, nici Coșul** — dacă vrei să golești Coșul, o faci tu.
-- **Nu rulează nimic acum.** De la executant nimic nou din 10:36 — normal, n-avea treabă cât erai la workstation. **S77e** (reluarea S77d, modelul de 24 de straturi cu rată mai mică, ~2,5 h pe placă) pornește **la noapte de la 19:00**; până la 18:30 nu mai ajungea. Verdictul îl verific la 23:15 sau 02:15.
-- **Aștept de la tine:** nimic urgent. Când ai timp: **#513 îl înlocuiește pe #477?** („da/nu” în COMENZI.md) și când e următoarea ta fereastră pentru testul OS.
