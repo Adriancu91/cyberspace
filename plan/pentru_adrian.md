@@ -18,6 +18,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 14:15 — Am primit C-93: azi după-amiază pe procesor, la noapte S95 de la 21:00
+
+- **C-93 preluat:** am notat că ai plecat, că poți veni diseară la ~20:00 sau mâine la 08:30. **Stick-urile nu le atinge nimeni** (S97 rămâne oprit; arhivele `os-276` ți le dă centrul de comandă).
+- **Azi după-amiază (doar procesor, fără placă): S96** — unealta care citește datele pe bucăți (C-85 pasul 5), adusă de marți fiindcă calculatorul e liber; pornește până la 16:00 și se termină până la 19:15.
+- **Între 19:30 și 21:00 nimic pe placă.** **De la 21:00: S95** (5 ore din #536, rata ×0,5, judecat pe română) — doar dacă n-ai repornit calculatorul în Cyber Universe până atunci; se termină și lasă placa liberă până la 07:45. Dacă vii și repornești mai târziu, orele deja salvate rămân, nu se strică nimic.
+- **Nimic terminat de la 11:15** (normal: ziua era a ta). Executantul a scris ultima dată la 08:29; nicio problemă.
+- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 9 noiembrie 2026, 11:15 — PROBLEMĂ: stick-urile NU sunt pregătite; release-ul cu reparația există (`os-276`)
 
 - **PROBLEMĂ (S97, C-92):** executantul n-a putut pregăti stick-urile. Comanda care întreabă GitHub de release-uri (`gh api`) e blocată în rulările programate (fără om de față cere aprobare și e refuzată singură); el s-a oprit corect, fără să ocolească nimic — stick-urile E: și D: sunt neatinse.
@@ -151,10 +159,4 @@
 - **S84: GATA, verificat** — lista modelelor salvate (întrebarea ta e mai sus). Nimic șters.
 - **Pus în coadă (aprobate de mine):** **S85** — 5 ore pe modelul de 24 de straturi cu rețeta e1, față de #513 (la noapte, de la ~23:45; verdictul la 08:15); **S83b** în paralel pe procesor. Mâine ziua: **S86** (C-85 pasul 2, aprobat de tine) — cât economisește memoria plăcii alt optimizator (Muon), măsurare scurtă.
 - **Aștept de la tine:** doar răspunsul la S84: „ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”. Fără grabă.
-
-## 6 noiembrie 2026, 23:04 — (executant, S84 / C-85 pasul 1) Lista modelelor salvate: GATA, nimic șters
-
-- 592 fișiere `.pt`, 107,6 GB: **PĂSTREAZĂ** 50 (22,3 GB), **SE POATE ȘTERGE** 113 (71,5 GB), **NECUNOSCUT — păstrat** 429 (13,8 GB, din care 11 GB cache). Raport: `docs/rapoarte/2026-11-06_2304_S84_puncte_salvare.md`.
-- Atenție: 31 din cele 113 (38 GB) sunt `gpt.pt` de linie (cu starea optimizatorului) — fără ele linia (inclusiv a lui #513) nu se mai continuă exact; modelele rămân.
-- **Întrebare: ștergem clasa SE POATE ȘTERGE (71,5 GB)? da/nu** (sau „da, fără gpt.pt de linie” = 82 fișiere, 33,4 GB).
 
