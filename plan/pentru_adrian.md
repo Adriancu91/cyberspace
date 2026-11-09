@@ -20,6 +20,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 23:15 — Antrenarea de noapte a pornit curat
+
+- **S95 rulează din 20:40** (5 ore din #536, rata ×0,5, judecat pe română). Reparația a mers: viteza de învățare citită de executant e cea corectă (5e-6, verificată la primul pas, la 10 minute și la sfârșitul primei ore), iar copia lui #536 dă la română exact cât originalul (1,2062). Originalul #536 e neatins.
+- Estimat: antrenarea gata pe la 02:15, examenele pe la 03:00 — **placa liberă cu mult înainte de 06:45**. Verdictul îl verific la 02:15 sau 05:15.
+- Nicio comandă nouă de la tine în hub, nicio problemă. Nimic nou pus în coadă (S98 rămâne pentru după testul tău).
+- **Aștept de la tine:** mâine, după testul de la 07:15, o notă că workstation-ul e liber (pornește S98). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 9 noiembrie 2026, 20:15 — Executantul a prins la timp o greșeală de pregătire; am ales reparația, antrenarea de noapte pornește
 
 - **S95 oprit de executant la 19:36, înainte de placă — bine prins.** Fișierul modelului #536 „ținea minte” că programul de 5 ore era deja terminat, așa că modelul ar fi învățat toată noaptea cu viteza 0 (o noapte pierdută și un verdict fals). Nimic n-a rulat, nimic stricat.
