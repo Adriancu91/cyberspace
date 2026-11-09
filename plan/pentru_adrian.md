@@ -18,6 +18,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 11:15 — PROBLEMĂ: stick-urile NU sunt pregătite; release-ul cu reparația există (`os-276`)
+
+- **PROBLEMĂ (S97, C-92):** executantul n-a putut pregăti stick-urile. Comanda care întreabă GitHub de release-uri (`gh api`) e blocată în rulările programate (fără om de față cere aprobare și e refuzată singură); el s-a oprit corect, fără să ocolească nimic — stick-urile E: și D: sunt neatinse.
+- **Release-ul cu reparația e gata:** `os-276` (publicat 08:54, CI verde, verificat de mine pe GitHub) = reparația lui I8 (C-91).
+- **Aștept de la tine (când revii la workstation, ~13:00) — una din două:** (1) cel mai simplu: deschizi Claude Code pe workstation, în dosarul `C:\Kronos\cyberspace`, și scrii „fă S97 acum” — îți cere „da” la descărcare și la copiere; sau (2) faci tu pașii 1–3 din lista „REÎNCERCAREA DE AZI” din `stare/cyber-universe.md` din hub, cu Rufus și `cyber-universe-gpu-scrie-usb.img` din `os-276`. Apoi oprire completă, cablu scos 30 s, pornești de pe TESTGPU, `gpu lant` + `DA`.
+- **Restul:** S94b verificat azi-noapte (NU); placa goală cât ești la workstation (C-90); **la noapte S95** doar dacă workstation-ul e înapoi în Windows. Nu uita `claude setup-token` (autentificarea expiră în jur de azi).
+
 ## 9 noiembrie 2026, 08:15 — Noaptea verificată; pregătesc stick-urile când vine reparația OS
 
 - **Raportul de dimineață e la timp și curat** (1337 teste trec, placa goală, 56 GB liberi pe C:). Verdictul S94b (NU, ρ −0,92) îl verificasem deja la 02:15.
@@ -151,9 +158,3 @@
 - Atenție: 31 din cele 113 (38 GB) sunt `gpt.pt` de linie (cu starea optimizatorului) — fără ele linia (inclusiv a lui #513) nu se mai continuă exact; modelele rămân.
 - **Întrebare: ștergem clasa SE POATE ȘTERGE (71,5 GB)? da/nu** (sau „da, fără gpt.pt de linie” = 82 fișiere, 33,4 GB).
 
-## 6 noiembrie 2026, 20:15 — Am primit „Da 513” și „Da” la module; S77e rulează de la 19:00
-
-- **S82: GATA, verificat de mine.** Cele două foldere „test ai brain” sunt șterse; **arhiva de mutare (26,2 GB) e încă în `Desktop\proiect\`** — dacă vrei, o ștergi tu și golești Coșul după (+26 GB). C: are acum 112 GB liberi; 1247 teste trec.
-- **Rulează: S77e** (modelul de 24 de straturi cu rată mai mică, ~2,5 h, de la 19:00) — totul normal, nu-l întrerupem. Verdictul îl verific la 23:15 sau 02:15.
-- **Pus în coadă (aprobate de tine):** **S83** — #513 devine modelul în uz (pachetul pentru OS, interfața, Release `kronos-kgr1-513`; #477 și #459 rămân rezerve), doar pe procesor; **S84** — primul pas din C-85: lista modelelor salvate (ce păstrăm / ce s-ar putea șterge), **doar listă, nimic șters**. Ordinea: S77e → S83 → S84 (în noaptea asta sau mâine dimineață). Pașii 2–8 din C-85 îi pun câte unul, după S84.
-- **Aștept de la tine:** nimic acum. După S84 o să te întreb dacă ștergem modelele marcate „se poate șterge”.

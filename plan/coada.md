@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 9 nov 2026 (supraveghetor, 11:15):** **S97 = OPRIT, verificat — motiv bun** (`gh api` cere aprobare în rularea programată și e refuzat; nimic descărcat, stick-urile neatinse). Release-ul cu reparația **există: `os-276`** (publicat 08:54, CI verde; verificat de supraveghetor pe GitHub). **S97 rămâne `oprit`** — nu-l reîncerca singur în rulările programate (pică la fel); îl face Adrian cu tine de față (sesiune interactivă: „fă S97 acum”, cu `os-276`) sau manual. Restul neschimbat: nimic pe placă cât e Adrian la workstation (C-90); S95 la noapte doar dacă workstation-ul e în Windows; S96 marți.
+
 **⚠ ACUM — 9 nov 2026 (supraveghetor, 08:15; COMENZI.md C-90 și C-92, Adrian):** Adrian e la workstation pentru testul OS (C-90, de la ~08:50; pleacă și revine până la ~13:00, poate mai rămâne după): **nimic pe placă** până scrie el că a plecat (sau ~14:00); calculatorul se repornește în Cyber Universe de mai multe ori — o sarcină pe procesor întreruptă de repornire se reia după, **fără** `oprit`. **S97 (C-92, NOU, `aprobat` de Adrian):** la fiecare trecere verifici dacă a apărut release-ul OS care repară I8 (mai nou decât `os-275`) și, când apare, pregătești singur stick-urile E: și D: — pașii exacți jos, la S97. S97 are prioritate față de orice altă sarcină de procesor azi (nu folosește placa). **S95** rămâne pentru noaptea 9→10 (am adăugat la el nota despre „eroarea după examen” din raportul de dimineață). S96 marți. S88: Adrian poate rula el ștergerea (C-90).
 
 **⚠ ACUM — 9 nov 2026 (supraveghetor, 02:15):** **S94 = GATA, verificat — NU** (ρ recalculat de mine: −0,918 cu rangurile pre-înregistrate; pe valorile brute −0,97 — raportul spune „−1,00 fără egalități”, mică greșeală de calcul, verdictul nu se schimbă; câștigătorul mic ×4 ultimul pe cel mare; placa max 6.426 MB / 61 °C; 1337 teste). Modelul mic de 6 straturi NU se folosește la alegerea ratei pentru cel de 24. **Luni 9 nov, ziua: NIMIC pe placă și nimic lung pe procesor** (fereastra lui Adrian, C-83 — testul OS). **Noaptea 9→10, placa, de la 19:00: S95** (jos, `aprobat`) — continuarea lui #536 cu rata ×0,5, 5 ore, judecată pe română; pornește DOAR dacă workstation-ul e înapoi în Windows și Adrian a terminat (nicio notă nouă de la el în hub/coadă că mai lucrează). **S96** (C-85 pasul 5, doar procesor) — după S95: marți 10 nov de la 08:00. S88 rămâne `oprit` până scrie Adrian.
@@ -3380,6 +3382,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S97 — C-92: pregătești singur stick-urile de test cu release-ul OS care repară I8 (C-91) (doar rețea + stick-uri, fără placă)
 - stare: oprit (executant, 9 nov 2026 08:35)
+- notă supraveghetor 9 nov 11:15: release-ul de folosit e **`os-276`** (verificat, CI verde); se face doar într-o sesiune cu Adrian de față.
 - motiv: cere aprobarea lui Adrian: permisiunea pentru `gh api` — în rularea programată (fără om) comanda de la pasul 0 cere aprobare și e refuzată, deci nu pot vedea dacă există release-ul nou; nu am ocolit (nimic descărcat, nimic scris pe D:/E:)
 - (istoric) stare: **aprobat** (Adrian, COMENZI.md C-92, 9 nov 2026 08:14; preluat de supraveghetor 08:15)
 - tip: procesor + rețea + stick-uri USB (NU placa video)
