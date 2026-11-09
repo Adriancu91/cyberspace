@@ -3379,7 +3379,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S96_date_bucati.md
 
 ### S97 — C-92: pregătești singur stick-urile de test cu release-ul OS care repară I8 (C-91) (doar rețea + stick-uri, fără placă)
-- stare: **aprobat** (Adrian, COMENZI.md C-92, 9 nov 2026 08:14; preluat de supraveghetor 08:15)
+- stare: oprit (executant, 9 nov 2026 08:35)
+- motiv: cere aprobarea lui Adrian: permisiunea pentru `gh api` — în rularea programată (fără om) comanda de la pasul 0 cere aprobare și e refuzată, deci nu pot vedea dacă există release-ul nou; nu am ocolit (nimic descărcat, nimic scris pe D:/E:)
+- (istoric) stare: **aprobat** (Adrian, COMENZI.md C-92, 9 nov 2026 08:14; preluat de supraveghetor 08:15)
 - tip: procesor + rețea + stick-uri USB (NU placa video)
 - fereastră: **azi, 9 nov, la fiecare trecere a ta, cât timp workstation-ul e în Windows**, până când stick-urile sunt gata (sau până scrie Adrian altceva). Nu așteaptă fereastra plăcii.
 - context (de la Adrian): stick-urile rămân băgate în workstation: **TESTGPU = E:** (stick de test, FAT32, cu `firmware\`) și **CYBER-UNIV = D:** (stick normal, cu `firmware\` și `kronos\` + #513).
@@ -3393,4 +3395,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nicio repornire, nimic pe placa video, nicio ștergere, nimic scris în afara E:\, D:\ și dosarului de descărcare. Nu atingi `kronos/`, `module/`, `config/`, paznicul, jurnalul. Firmware-ul NVIDIA nu se urcă nicăieri.
 - excepție scrisă pentru regula ta (descărcare + copiere pe stick-uri): **aprobată de Adrian** prin C-92, 9 nov 2026 08:14 — doar pentru acest release și aceste două stick-uri.
 - aprobat de: Adrian (COMENZI.md C-92, 9 nov 2026 08:14)
-- raport: docs/rapoarte/<data>_<ora>_S97_stickuri.md
+- raport: docs/rapoarte/2026-11-09_0835_S97_oprit_gh_blocat.md
