@@ -20,6 +20,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 20:15 — Executantul a prins la timp o greșeală de pregătire; am ales reparația, antrenarea de noapte pornește
+
+- **S95 oprit de executant la 19:36, înainte de placă — bine prins.** Fișierul modelului #536 „ținea minte” că programul de 5 ore era deja terminat, așa că modelul ar fi învățat toată noaptea cu viteza 0 (o noapte pierdută și un verdict fals). Nimic n-a rulat, nimic stricat.
+- **Am ales reparația (a):** aceeași copie a lui #536, doar cu „ceasul” programului dat la zero; greutățile și starea de învățare rămân. I-am cerut executantului o verificare în plus: în primele 10 minute citește viteza reală de învățare și, dacă nu e cea corectă (5e-6), oprește imediat.
+- **S95 pornește la noapte**, cel târziu la 00:00, și **eliberează placa până la 06:45** pentru testul tău de la 07:15. Pragurile rămân cele scrise dinainte (MAI BUN = română ≤ 1,2010).
+- Altfel nimic de semnalat: testele trec (1342; unul instabil cunoscut), placa era goală (503 MB / 26 °C).
+- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation. **Mâine, după test, spune că workstation-ul e liber** (pornește S98). Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 9 noiembrie 2026, 19:10 — Am primit C-94: antrenarea de noapte poate porni de acum, placa liberă la 06:45
 
 - **C-94 preluat:** nu mai vii diseară, testul OS e mâine la 07:15. Am anulat pauza 19:30–21:00: **S95** (5 ore din #536, rata ×0,5, judecat pe română) poate porni de acum, cel târziu la 00:00, și **eliberează placa până la 06:45**. De la 06:45 nimic pe placă până scrii tu că ai terminat.
@@ -156,8 +164,4 @@
 ## 7 noiembrie 2026, 04:06 — (executant, S86 / C-85 pasul 2) memoria plăcii la modelul mare: GATA
 
 - Verdict **DA**: Muon scade vârful la antrenare cu 649 MB față de AdamW. AdamW lot 4 × 24 cade cu out of memory la validare; Muon încape la loturile 4 × 24, 6 × 16 și 12 × 8 (vârf 6.273–6.373 MB, la validare). Paza de memorie la fiecare oră e pusă. Întrebarea „crește memoria de la o oră la alta” a rămas fără răspuns sigur. 1278 teste trec. Raport: `docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md`.
-
-## 7 noiembrie 2026, 02:39 — (executant, S83b / C-82) #513 e modelul în uz: GATA
-
-- #513 e acum modelul implicit (KGR1 Q8_0, 110.859.008 octeți, SHA `66f734b3…5859`); aceleași simboluri ca PyTorch, marje 0,095–0,172; #477 și #459 rămân rezerve; 1258 teste trec. Raport: `docs/rapoarte/2026-11-07_0239_S83b_model_513.md`. **De făcut de tine:** Release-ul (comanda e în raport și în `docs/integrare_kronos/MODEL.md`; `gh` îmi cere aprobare).
 
