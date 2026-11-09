@@ -18,6 +18,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 9 noiembrie 2026, 17:15 — Datele „pe bucăți” merg (verificat); la noapte S95 de la 21:00, cum ai cerut
+
+- **S96: GATA, verificat de mine — DA.** Unealta nouă citește datele de antrenare pe bucăți și dă exact aceleași 1,34 miliarde de simboluri (aceeași amprentă), cu 125 MB de memorie în loc de 3 GB. Aflare importantă: la pornirea antrenării, memoria mare (41,7 GB) o ia textul brut citit întreg doar ca să-i facă amprenta — asta s-ar sufoca prima la datele mai mari pentru română. Nimic din nucleu atins, 1343 teste trec.
+- **La noapte, neschimbat: S95 de la 21:00** (nu între 19:30 și 21:00), doar dacă n-ai repornit calculatorul în Cyber Universe; placa liberă până la 07:45, pentru testul tău de la 08:30.
+- **Am pus în coadă S98** (doar procesor, aprobat de mine în cadrul „da”-ului tău C-85): legăm datele pe bucăți în antrenare printr-o piesă nouă, fără să schimbăm cele existente, și verificăm că dă exact aceleași loturi. **Nu pornește cât ești tu la calculator** — doar după ce scrii (tu sau centrul de comandă) că ai terminat testul.
+- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88. **Când termini testul de mâine, spune că workstation-ul e liber** (ca să pornească S98).
+
 ## 9 noiembrie 2026, 14:15 — Am primit C-93: azi după-amiază pe procesor, la noapte S95 de la 21:00
 
 - **C-93 preluat:** am notat că ai plecat, că poți veni diseară la ~20:00 sau mâine la 08:30. **Stick-urile nu le atinge nimeni** (S97 rămâne oprit; arhivele `os-276` ți le dă centrul de comandă).
@@ -151,12 +158,3 @@
 - **E a doua noapte la rând când cade exact în același loc** → nu e întâmplare: ceva se adună în memoria plăcii de la o oră la alta. Nu mai repornim modelul mare până nu aflăm cauza.
 - **Mutat în noaptea asta (aprobate deja):** **S83b** (#513 devine modelul în uz, pe procesor) acum; **S86** (pasul 2 din C-85, aprobat de tine) adus de mâine în noaptea asta, cu o întrebare în plus: crește memoria de la o „oră” la alta și se repară golind-o după fiecare test?
 - **Aștept de la tine:** doar răspunsul la S84 („ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”). Fără grabă.
-
-## 6 noiembrie 2026, 23:15 — Kronos mare a trecut proba de o oră; de la noapte încearcă 5 ore; #513 se reia după o mică corectură
-
-- **S77e: GATA, verificat de mine.** Cu rata mică (e1), modelul de 24 de straturi **nu mai strică** ce știa (ȚINE, la limită: R2 0,4072, română 1,2120, cod 0,7286); cu rata dublă (e2) strică puțin. Încă nu e mai bun decât #477 — doar nu mai dă înapoi.
-- **S83 (#513 în uz): oprit corect** — fișierul exportat are cu 32 de octeți mai puțin decât am cerut eu, doar din cauza unui text din antet; modelul e același. Am acceptat mărimea reală → **S83b** continuă de unde a rămas (procesor, la noapte).
-- **S84: GATA, verificat** — lista modelelor salvate (întrebarea ta e mai sus). Nimic șters.
-- **Pus în coadă (aprobate de mine):** **S85** — 5 ore pe modelul de 24 de straturi cu rețeta e1, față de #513 (la noapte, de la ~23:45; verdictul la 08:15); **S83b** în paralel pe procesor. Mâine ziua: **S86** (C-85 pasul 2, aprobat de tine) — cât economisește memoria plăcii alt optimizator (Muon), măsurare scurtă.
-- **Aștept de la tine:** doar răspunsul la S84: „ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”. Fără grabă.
-
