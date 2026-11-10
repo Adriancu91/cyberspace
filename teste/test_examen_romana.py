@@ -131,7 +131,8 @@ def test_doar_in_configurarile_aprobate():
     O configurare nouă cu examenul de română se adaugă aici doar cu sarcina care o cere."""
     pus = {c.name for c in (RADACINA / "config").rglob("*.toml") if "examen_romana" in c.read_text(encoding="utf-8")}
     assert pus == {"conv_w2_mare_24r.toml", "avans_24_mic6r.toml",  # S94 (8 nov 2026): modelul mic al testului Spearman
-                   "conv_w2_mare_24s.toml"}  # S95 (9 nov 2026): continuarea #536
+                   "conv_w2_mare_24s.toml",  # S95 (9 nov 2026): continuarea #536
+                   "conv_w2_mare_24m.toml"}  # S99 (10 nov 2026): Muon din #554
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------
