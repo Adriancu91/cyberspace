@@ -22,6 +22,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 10 noiembrie 2026, 05:15 — Antrenarea de noapte s-a terminat: cel mai bun scor la română de până acum, dar nu destul ca să-l numim „mai bun”
+
+- **S95: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a ajuns la română la **1,2040** (modelul în uz, #513: 1,2060). E cel mai bun scor măsurat vreodată, dar pragul stabilit dinainte cerea 1,2010, deci nu înlocuiește nimic. Nu a stricat nimic (povești, cod, răspunsuri 99,2 %). Placa max 6.496 MB / 62 °C, liberă de la 02:13 — **gata pentru testul tău de la 07:15**.
+- Lecția: cu rețeta de acum, orele „la viteză constantă” țin modelul pe loc; tot câștigul vine din finalul în care viteza scade.
+- **Am pus la noapte S99:** aceeași idee, dar cu altă metodă de învățare (Muon — o avem deja, n-a fost încercată pe modelul mare), pornind din modelul de azi-noapte. Intră în regulile mele (aceeași linie, altă rețetă); pragurile sunt scrise dinainte. Nu pornește cât rulează S98 (procesor), care începe doar după nota ta.
+- **Aștept de la tine:** după testul de la 07:15, **o notă că workstation-ul e liber** (pornește S98, apoi S99 la noapte). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 9 noiembrie 2026, 23:15 — Antrenarea de noapte a pornit curat
 
 - **S95 rulează din 20:40** (5 ore din #536, rata ×0,5, judecat pe română). Reparația a mers: viteza de învățare citită de executant e cea corectă (5e-6, verificată la primul pas, la 10 minute și la sfârșitul primei ore), iar copia lui #536 dă la română exact cât originalul (1,2062). Originalul #536 e neatins.
@@ -162,15 +169,3 @@
 - **Pus în coadă (aprobat de tine prin C-86): S88** — se șterg **doar cele 82 de modele intermediare (~33,4 GB)**, fiecare cu numele, amprenta și scorul scrise înainte; **cele 31 de `gpt.pt` de linie rămân**, la fel rezervele și #513. Apoi, **după ce S87 e gata**, `lucru/memorie_mare/` (9,8 GB), doar dacă nu e acolo nimic unic. Nu încurcă S87.
 - **Notat:** stările pe 8 biți — NU (nimic instalat); Release-ul #513 — luni, cu tine la workstation.
 - **Aștept de la tine:** nimic.
-
-## 7 noiembrie 2026, 05:15 — Muon economisește memorie (DA); azi aflăm de ce se umple memoria la ora 3
-
-- **S86: GATA, verificat de mine — DA.** Cu optimizatorul Muon, modelul de 24 de straturi folosește la antrenare cu 649 MB mai puțin decât cu AdamW (pragul cerea 400). Cu Muon încape la toate cele 3 mărimi de lot; cu AdamW, lotul obișnuit nu mai încape deloc. Placa n-a fost în pericol (max 6.431 MB, 63 °C); 1278 teste trec.
-- **Rămas deschis:** de ce crește memoria de la o oră la alta (de aici căderile de la ora 3). Am găsit un indiciu în cod: modelul de test al fiecărei ore rămâne ținut în memorie cât timp se antrenează modelul cel mare.
-- **Pus în coadă (aprobat de mine): S87**, azi ziua (08:00–18:30, ~1–1,5 h pe placă): 3 ore scurte cu Muon, exact în ordinea în care lucrează Kronos, cu și fără golirea memoriei, cu praguri scrise dinainte. Dacă golirea ajută, executantul o pune în unealta de antrenare; dacă trebuie schimbat nucleul `kronos/`, te întreb pe tine.
-- **Aștept de la tine (fără grabă):** (1) S84: „ștergem SE POATE ȘTERGE? da / nu / da, fără gpt.pt de linie”; (2) Release-ul #513 (comanda e în `docs/integrare_kronos/MODEL.md`); (3) opțional: „da/nu” la stările pe 8 biți (ar instala `bitsandbytes`) și dacă ștergem `lucru/memorie_mare/` (9,8 GB, copii de lucru).
-
-## 7 noiembrie 2026, 04:06 — (executant, S86 / C-85 pasul 2) memoria plăcii la modelul mare: GATA
-
-- Verdict **DA**: Muon scade vârful la antrenare cu 649 MB față de AdamW. AdamW lot 4 × 24 cade cu out of memory la validare; Muon încape la loturile 4 × 24, 6 × 16 și 12 × 8 (vârf 6.273–6.373 MB, la validare). Paza de memorie la fiecare oră e pusă. Întrebarea „crește memoria de la o oră la alta” a rămas fără răspuns sigur. 1278 teste trec. Raport: `docs/rapoarte/2026-11-07_0406_S86_memorie_mare.md`.
-
