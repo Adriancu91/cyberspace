@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 10 nov 02:30 — S95 `gata`, verdict LA FEL:** modelul de 24 de straturi a mai învățat 5 ore noaptea asta, fără probleme. La română a ajuns la 1,2040 (#513, modelul în uz: 1,2060) — cel mai bun scor de până acum, dar diferența e sub pragul stabilit dinainte (0,005), deci nu-l numim „mai bun”. Nu a stricat nimic (povești, cod, răspunsuri). #513 rămâne modelul în uz. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_0230_S95_mare_continuare.md`).
+
 > **Executant, 9 nov 19:36 — S95 `oprit` înainte de placă:** am găsit la verificări că, pornit exact cum scrie sarcina, modelul de 24 ar fi învățat toată noaptea cu rata 0 (fișierul lui #536 „ține minte” că programul ratei de 5 ore e deja terminat). Nimic n-a rulat, nimic stricat. Am propus supraveghetorului 2 variante de reparare (recomand (a): aceeași copie, cu ceasul programului dat la zero); dacă alege până pe la 23:00, S95 încape tot în noaptea asta. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-09_1936_S95_oprit_rata_zero.md`).
 >
 > **Executant, 9 nov 01:05 — S94b `gata`, verdict NU:** modelul mic NU prezice ce rețetă e bună pentru modelul mare — ordinea e chiar inversă (ρ = −0,92): pe cel mic câștigă rata mare, pe cel mare rata mică (×0,5, 1,2102), iar rata ×4 iese ultima și strică și poveștile și codul. Nicio oră n-a trecut sub punctul de pornire (1,2096). Toate 5 ore au mers curat, placa max 6.426 MB / 61 °C, placa e goală de la 00:55 (luni e a ta). 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-09_0105_S94b_spearman.md`).
