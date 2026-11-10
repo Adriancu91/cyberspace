@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 10 noiembrie 2026, 23:15 — Rețeta Muon a stricat modelul mare; la noapte o probă scurtă cu pași de 20 de ori mai mici
+
+- **S99: GATA, verificat de mine — STRICĂ** (rezultat negativ, nimic defect). Rețeta Muon, cu pașii mari aleși, a stricat modelul de 24 de straturi din prima oră: româna de la 1,2039 la **1,2853** (mai mic = mai bine), poveștile și codul peste praguri. Lanțul s-a oprit singur după ora 1, exact cum era scris dinainte. Răspunsurile la întrebări au rămas bune (99,2 %). Placa max 6.492 MB / 62 °C, liberă de la 21:58.
+- **#513 rămâne modelul în uz**, #554 rămâne cel mai bun la română; modelul stricat (#558) nu se folosește nicăieri.
+- **Am pus la noapte S100:** o probă de cel mult 2 ore cu aceeași rețetă, dar cu pași de **20 de ori mai mici**, ca să aflăm dacă vina era a pașilor prea mari sau a metodei. Se oprește singură după o oră dacă strică; placa liberă cel târziu la 05:30. **S98** (doar procesor) mâine de la 08:00.
+- Dacă și proba asta nu mișcă modelul, continuările modelului „crescut” de 24 de straturi s-au terminat; următorul pas (antrenat de la zero / mai mult text) e decizia ta — e propunerea „Kronos mare pe ce avem” din hub, la care am scris poziția Kronos.
+- **Aștept de la tine:** nimic acum. Fără grabă: testul `os-278`, Release-ul #513, ștergerea S88 și, când vrei, un „da/nu” la propunerea din hub.
+
 > **Executant, 10 nov 22:05 — S99 `gata`, verdict STRICĂ (rezultat negativ, nimic defect):** rețeta Muon, încercată pe modelul de 24 de straturi, l-a stricat din prima oră: româna a urcat de la 1,2039 la 1,2853 (mai mic = mai bine), poveștile de la 0,4038 la 0,4447. Lanțul a oprit singur antrenarea după ora 1, cum era scris dinainte, deci orele 2–5 nu s-au mai făcut. Răspunsurile la întrebări au rămas bune (R1 99,2). #513 rămâne modelul în uz, #554 rămâne cel mai bun la română; modelul stricat nu se folosește nicăieri. Placa e liberă de la 21:58 (max 6.492 MB / 62 °C). De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_2205_S99_muon_mare.md`).
 >
 > **Executant, 10 nov 02:30 — S95 `gata`, verdict LA FEL:** modelul de 24 de straturi a mai învățat 5 ore noaptea asta, fără probleme. La română a ajuns la 1,2040 (#513, modelul în uz: 1,2060) — cel mai bun scor de până acum, dar diferența e sub pragul stabilit dinainte (0,005), deci nu-l numim „mai bun”. Nu a stricat nimic (povești, cod, răspunsuri). #513 rămâne modelul în uz. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_0230_S95_mare_continuare.md`).
@@ -161,11 +169,3 @@
 - **Acum, pe procesor: S93** (examenul de română devine cel care decide — „Română da”-ul tău).
 - **Pus în coadă (aprobat de mine, în „Da”-ul tău la C-85): S94** — azi ziua modelul mic încearcă 5 rețete (~2,5 h pe placă, după S93), la noapte modelul mare încearcă aceleași 5 rețete câte o oră. Aflăm dacă modelul mic ghicește corect ce rețetă e bună pentru cel mare. Totul se termină până luni la 07:00, ca placa să fie liberă pentru testul tău.
 - **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
-
-## 7 noiembrie 2026, 20:15 — Am primit „Română da” (C-88); modelul mare rulează noaptea asta
-
-- **S89 a pornit la 19:31** (cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie). Merge; nu-l ating. Verdictul îl verific dimineață.
-- **Pus în coadă (aprobat de tine prin C-88): S93**, doar pe procesor, după S92 sau mâine de la 08:00: examenul de română devine cel care decide la **următorul** experiment (o configurare nouă, `conv_w2_mare_24r`); examenul vechi pe povești rămâne neschimbat, doar ca verificare. Nucleul `kronos/` nu se schimbă; paznicul îi memorează singur amprenta. S89 rămâne cum l-ai pre-înregistrat.
-- **S92** (unealta modelului mic) rămâne pe procesor la noapte, după ce S89 merge bine. Testul pe placă al modelului mic se numește acum S94.
-- **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta (vezi 11:15). Nu e urgent.
-- **Aștept de la tine:** doar alegerea la S88, când ești la workstation.
