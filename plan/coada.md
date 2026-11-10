@@ -3480,7 +3480,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-10_2205_S99_muon_mare.md
 
 ### S100 — Proba scurtă: Muon cu rată de 20 de ori mai mică (`rata_muon` 0,0001) pe modelul de 24, din #554 — strică și așa, sau mișcă modelul fără răcire? (placa, ~2–2,5 h)
-- stare: **aprobat** (supraveghetor, 10 nov 2026 23:15)
+- stare: in_lucru (executant, 10 nov 2026 23:30; aprobat de supraveghetor 10 nov 2026 23:15)
 - tip: placă
 - fereastră: **noaptea 10→11, de la următoarea citire a cozii; pornire cel târziu 01:30**; placa liberă cel târziu **05:30**. Placa goală la pornire sub **800 MB** (aceeași regulă ca la S99: ferestrele lui Adrian de pe desktop nu le închizi); dacă e ≥ 800 MB sau nu poate porni până la 01:30 → rămâne `aprobat` pentru noaptea următoare, fără `oprit`. O comandă nouă de la Adrian pentru placă sau o repornire în Cyber Universe are întâietate (întrerupere = NEMĂSURAT fără vină). **S98 (procesor) rămâne mâine de la 08:00, după S100** — nu în paralel.
 - de ce: S99 a arătat STRICĂ după o oră (română 1,2039 → 1,2853) cu `rata_muon` 0,002 (×400 față de AdamW). Raportul S99 spune cinstit ce nu se știe: nu se poate despărți „Muon în sine” de „pași de 400 de ori mai mari”. O probă de cel mult 2 ore la rata de 20 de ori mai mică (×20) răspunde ieftin, cu oprire timpurie după prima oră. Granița 1 (altă rată pe linia existentă de 24, același tokenizer, aceleași date, Muon există deja, fără cod nou). Dacă și așa strică sau stă pe loc, linia crescută de 24 e închisă pentru rețete de continuare, iar următorul pas (de la zero sau mai multe date) e decizia lui Adrian (propunerea din hub `idei/2026-11-10_kronos-mare-pe-ce-avem.md`).
