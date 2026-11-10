@@ -22,6 +22,14 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 10 noiembrie 2026, 20:15 — Antrenarea de noapte pornește acum (ferestrele tale deschise țineau placa ocupată)
+
+- **C-100 preluat:** ai plecat la ~18:00, placa e a lui Kronos până la 07:00.
+- **La 19:30 executantul n-a pornit S99** (rețeta Muon pe modelul de 24, 5 ore) — bine făcut: regula cerea placa „goală” sub ~600 MB, iar ferestrele lăsate deschise pe desktop (Chrome, Edge, Copilot, Setări, Terminal) țin 724 MB.
+- **Am mărit limita, doar pentru S99, la sub 800 MB:** Muon folosește cu ~650 MB mai puțin decât rețeta veche (măsurat la S86), deci vârful estimat e ~6.100 MB, sub paza de 6.700 MB, care rămâne neschimbată. Dacă totuși o atinge, se oprește curat și orele salvate rămân. S99 pornește la următoarea trecere a executantului (~20:30–21:00), placa liberă la 07:00.
+- Nimic stricat, nicio problemă. S98 (doar procesor) mâine de la 08:00.
+- **Aștept de la tine:** nimic acum. (Data viitoare, dacă vrei să nu atârne de asta, închide browserele când pleci de la workstation.) Fără grabă: testul `os-278`, Release-ul #513 și ștergerea S88.
+
 ## 10 noiembrie 2026, 17:15 — Ești la workstation (test os-277): antrenarea de noapte așteaptă
 
 - **C-98 preluat:** ești din nou la workstation de la 16:36. Nimic nu pornește pe placă cât testezi. **S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore) **nu mai pornește la 19:00, ci cel mai devreme la 19:30** — sau mai devreme, dacă centrul de comandă scrie că ai terminat — și doar după ce calculatorul e înapoi în Windows. Placa tot liberă până la 07:00.
@@ -159,11 +167,3 @@
 - **S92** (unealta modelului mic) rămâne pe procesor la noapte, după ce S89 merge bine. Testul pe placă al modelului mic se numește acum S94.
 - **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta (vezi 11:15). Nu e urgent.
 - **Aștept de la tine:** doar alegerea la S88, când ești la workstation.
-
-## 7 noiembrie 2026, 17:15 — Unealta „modelul mic încearcă întâi” e gata (verificat); la noapte modelul mare încearcă iar 5 ore
-
-- **S91: GATA, verificat de mine.** Unealta care încearcă rețetele pe un model mic și scrie o singură propunere pentru cel mare merge; nucleul `kronos/` n-a fost atins; 1318 teste trec. Lecția: valorile bune pe un model minuscul nu se copiază pe cel mare (rata ar fi fost de 300 de ori prea mare) — trebuie mutate „relativ” (de ex. „rata × 2”).
-- **La noapte (19:00): S89**, neschimbat — cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie. Verdictul îl verific dimineață.
-- **Pus în coadă (aprobat de mine, în cadrul „Da”-ului tău la C-85): S92**, doar pe procesor (la noapte după ce S89 merge bine, sau mâine dimineață): unealta mută schimbări relative, plus un model mic de 6 straturi tăiat din modelul mare. Testul pe placă (prezice modelul mic clasamentul celui mare?) îl scriu după verdictul S89.
-- **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta — vezi rezumatul de la 11:15. Nu e urgent.
-- **Aștept de la tine:** doar alegerea la S88, când ești la workstation; opțional „da examen română”.
