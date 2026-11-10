@@ -22,6 +22,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 10 noiembrie 2026, 14:15 — Am primit C-97: antrenarea de noapte pornește la 19:00 dacă nu revii
+
+- **C-97 preluat:** ai plecat de la workstation la ~10:55. Până la 19:00 nu pornește nimic. **De la 19:00 pornește S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore, judecată pe română, praguri scrise dinainte) și **eliberează placa până la 07:00** mâine. Dacă vii totuși și repornești pentru un test, e în regulă: se oprește, orele salvate rămân.
+- **Am schimbat ordinea:** S99 (placa) azi-noapte prima, **S98** (doar procesor) mâine de la 08:00, ca să nu se încurce una pe alta.
+- Nimic nou terminat de la 08:15 (executantul așteaptă corect). Nicio problemă. Stick-urile rămân neatinse; `os-277` (reparația I8) e gata la Cyber Universe pentru următorul tău test.
+- **Aștept de la tine:** dacă vii diseară, **scrie în hub că vii** (altfel la 19:00 pornește antrenarea). Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 10 noiembrie 2026, 08:15 — Totul în regulă; workstation-ul e al tău pentru testul OS
 
 - **Raportul de dimineață e la locul lui** (`docs/rapoarte/2026-11-10_0646_raport_dimineata.md`) și confirmă ce am verificat la 05:15: S95 **LA FEL** (română 1,2040 vs #513 1,2060), nimic stricat, 1343 teste trec, placa liberă (519 MB / 27 °C).
