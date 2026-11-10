@@ -22,6 +22,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 10 noiembrie 2026, 17:15 — Ești la workstation (test os-277): antrenarea de noapte așteaptă
+
+- **C-98 preluat:** ești din nou la workstation de la 16:36. Nimic nu pornește pe placă cât testezi. **S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore) **nu mai pornește la 19:00, ci cel mai devreme la 19:30** — sau mai devreme, dacă centrul de comandă scrie că ai terminat — și doar după ce calculatorul e înapoi în Windows. Placa tot liberă până la 07:00.
+- Nimic nou terminat la Kronos de la 14:15 (executantul așteaptă corect). Nicio problemă.
+- Testul tău `os-277`: eroarea veche (0xbadf5620) a dispărut, acum apare un „timeout după 2 s” — e la Cyber Universe / cyber-gpu (C-99), nu la Kronos.
+- **Aștept de la tine:** când termini testul, **scrie în hub că ai terminat** (sau, dacă vrei placa toată seara, scrie asta — altfel S99 pornește de la 19:30). Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 10 noiembrie 2026, 14:15 — Am primit C-97: antrenarea de noapte pornește la 19:00 dacă nu revii
 
 - **C-97 preluat:** ai plecat de la workstation la ~10:55. Până la 19:00 nu pornește nimic. **De la 19:00 pornește S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore, judecată pe română, praguri scrise dinainte) și **eliberează placa până la 07:00** mâine. Dacă vii totuși și repornești pentru un test, e în regulă: se oprește, orele salvate rămân.
@@ -158,13 +165,5 @@
 - **S91: GATA, verificat de mine.** Unealta care încearcă rețetele pe un model mic și scrie o singură propunere pentru cel mare merge; nucleul `kronos/` n-a fost atins; 1318 teste trec. Lecția: valorile bune pe un model minuscul nu se copiază pe cel mare (rata ar fi fost de 300 de ori prea mare) — trebuie mutate „relativ” (de ex. „rata × 2”).
 - **La noapte (19:00): S89**, neschimbat — cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie. Verdictul îl verific dimineață.
 - **Pus în coadă (aprobat de mine, în cadrul „Da”-ului tău la C-85): S92**, doar pe procesor (la noapte după ce S89 merge bine, sau mâine dimineață): unealta mută schimbări relative, plus un model mic de 6 straturi tăiat din modelul mare. Testul pe placă (prezice modelul mic clasamentul celui mare?) îl scriu după verdictul S89.
-- **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta — vezi rezumatul de la 11:15. Nu e urgent.
-- **Aștept de la tine:** doar alegerea la S88, când ești la workstation; opțional „da examen română”.
-
-## 7 noiembrie 2026, 14:15 — Examenul de română e gata ca modul (verificat, DA); la noapte modelul mare încearcă iar 5 ore
-
-- **S90: GATA, verificat de mine — DA.** Examenul de română e acum un modul separat și dă aceleași cifre ca înainte: #513 **1,2060** (reper 1,2060), #477 **1,2096** (reper 1,2097) — ambele în toleranța ± 0,001; nota R1 pe setul ascuns 99,27 = exact ca pe placă. Setul e păzit cu amprente. **Nu e pus în nicio configurare.** 1306 teste trec. Dacă vrei ca orele de antrenare să fie judecate și după română, scrie „da examen română” (paznicul îi va memora amprenta).
-- **La noapte (19:00): S89** — cele 5 ore ale modelului de 24 de straturi, cu leacul de memorie din S87. Verdictul îl verific dimineață.
-- **Pus în coadă (aprobat de tine prin C-85): S91**, azi pe procesor (~3 h, fără placă): pasul 4 — unealta care încearcă rețetele întâi pe un model mic și trimite pe cel mare doar câștigătorul. Azi doar unealta și teste; proba pe placă vine separat.
 - **S88 (ștergerea celor 33,4 GB):** încă așteaptă mâna ta — vezi rezumatul de la 11:15. Nu e urgent.
 - **Aștept de la tine:** doar alegerea la S88, când ești la workstation; opțional „da examen română”.
