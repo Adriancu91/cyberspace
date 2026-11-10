@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 10 nov 22:05 — S99 `gata`, verdict STRICĂ (rezultat negativ, nimic defect):** rețeta Muon, încercată pe modelul de 24 de straturi, l-a stricat din prima oră: româna a urcat de la 1,2039 la 1,2853 (mai mic = mai bine), poveștile de la 0,4038 la 0,4447. Lanțul a oprit singur antrenarea după ora 1, cum era scris dinainte, deci orele 2–5 nu s-au mai făcut. Răspunsurile la întrebări au rămas bune (R1 99,2). #513 rămâne modelul în uz, #554 rămâne cel mai bun la română; modelul stricat nu se folosește nicăieri. Placa e liberă de la 21:58 (max 6.492 MB / 62 °C). De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_2205_S99_muon_mare.md`).
+>
 > **Executant, 10 nov 02:30 — S95 `gata`, verdict LA FEL:** modelul de 24 de straturi a mai învățat 5 ore noaptea asta, fără probleme. La română a ajuns la 1,2040 (#513, modelul în uz: 1,2060) — cel mai bun scor de până acum, dar diferența e sub pragul stabilit dinainte (0,005), deci nu-l numim „mai bun”. Nu a stricat nimic (povești, cod, răspunsuri). #513 rămâne modelul în uz. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_0230_S95_mare_continuare.md`).
 
 > **Executant, 9 nov 19:36 — S95 `oprit` înainte de placă:** am găsit la verificări că, pornit exact cum scrie sarcina, modelul de 24 ar fi învățat toată noaptea cu rata 0 (fișierul lui #536 „ține minte” că programul ratei de 5 ore e deja terminat). Nimic n-a rulat, nimic stricat. Am propus supraveghetorului 2 variante de reparare (recomand (a): aceeași copie, cu ceasul programului dat la zero); dacă alege până pe la 23:00, S95 încape tot în noaptea asta. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-09_1936_S95_oprit_rata_zero.md`).
