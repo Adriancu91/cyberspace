@@ -22,6 +22,13 @@
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
 
+## 10 noiembrie 2026, 08:15 — Totul în regulă; workstation-ul e al tău pentru testul OS
+
+- **Raportul de dimineață e la locul lui** (`docs/rapoarte/2026-11-10_0646_raport_dimineata.md`) și confirmă ce am verificat la 05:15: S95 **LA FEL** (română 1,2040 vs #513 1,2060), nimic stricat, 1343 teste trec, placa liberă (519 MB / 27 °C).
+- **Nu rulează nimic** și nu pornește nimic până la nota ta (regula C-94). Nicio comandă nouă pentru Kronos în hub (C-95, laptopul ca al doilea calculator de test, e la cyber-gpu și l-ai parcat).
+- Coada rămâne: **S98** (doar procesor) după nota ta, **S99** (Muon, placa) la noapte.
+- **Aștept de la tine:** după testul `os-276`, **o notă că workstation-ul e liber** (în hub `COMENZI.md` sau aici). Fără grabă: Release-ul #513 și ștergerea S88.
+
 ## 10 noiembrie 2026, 05:15 — Antrenarea de noapte s-a terminat: cel mai bun scor la română de până acum, dar nu destul ca să-l numim „mai bun”
 
 - **S95: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a ajuns la română la **1,2040** (modelul în uz, #513: 1,2060). E cel mai bun scor măsurat vreodată, dar pragul stabilit dinainte cerea 1,2010, deci nu înlocuiește nimic. Nu a stricat nimic (povești, cod, răspunsuri 99,2 %). Placa max 6.496 MB / 62 °C, liberă de la 02:13 — **gata pentru testul tău de la 07:15**.
@@ -161,11 +168,3 @@
 - **S87: GATA, verificat de mine — P1 DA, P2 DA.** Memoria creștea: de la o oră la alta rămâneau ținuți ~1.340 MB din ora trecută, iar ora 3 cădea (exact ca în nopțile S77c și S85). Cu o „strângere de gunoi” la începutul fiecărei ore rămân doar 16 MB și trec toate orele (vârf 6.399 MB, sub limita 6.600). Leacul e pus în unealta de antrenare; `kronos/` nu trebuie schimbat. 1294 teste trec.
 - **Pus în coadă (aprobate de mine):** **S89** la noapte (19:00): reluarea nopții de 5 ore a modelului de 24 de straturi, aceeași rețetă, acum cu leacul — vedem dacă bate #513. **S90** azi pe procesor (C-85 pasul 3, aprobat de tine): examenul de română ca modul separat; **nu-l activez nicăieri** fără tine.
 - **Aștept de la tine:** doar alegerea (1) sau (2) la ștergere, când ai timp.
-
-## 7 noiembrie 2026, 08:15 — Am primit răspunsurile tale (C-86); ștergerea celor 33 GB intră azi, după S87
-
-- **Raportul de dimineață (06:46) e la locul lui** și se potrivește cu ce am verificat: S85 NEMĂSURAT, S86 DA, #513 în uz; **1278 teste trec, 0 pică**; C: are 86 GB liberi; placa liberă (456 MB, 25 °C).
-- **Azi pe placă: S87** (08:00–18:30, ~1–1,5 h): de ce crește memoria de la o oră la alta. Încă n-a pornit — normal, executantul verifică la fiecare 30 de minute.
-- **Pus în coadă (aprobat de tine prin C-86): S88** — se șterg **doar cele 82 de modele intermediare (~33,4 GB)**, fiecare cu numele, amprenta și scorul scrise înainte; **cele 31 de `gpt.pt` de linie rămân**, la fel rezervele și #513. Apoi, **după ce S87 e gata**, `lucru/memorie_mare/` (9,8 GB), doar dacă nu e acolo nimic unic. Nu încurcă S87.
-- **Notat:** stările pe 8 biți — NU (nimic instalat); Release-ul #513 — luni, cu tine la workstation.
-- **Aștept de la tine:** nimic.
