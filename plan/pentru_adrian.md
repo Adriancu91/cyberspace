@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 11 noiembrie 2026, 11:15 — Citirea datelor „pe bucăți” merge; am primit răspunsurile tale (S101 nu deocamdată)
+
+- **S98: GATA, verificat de mine — DA.** Piesa nouă care citește datele de antrenare pe bucăți dă exact aceleași loturi ca acum (verificat cu amprentă pe 1.000 de loturi și la granițele dintre bucăți) și pornește cu **550 MB de memorie în loc de 41.685 MB**. Nu e încă folosită la nicio antrenare.
+- **C-101 preluat:** S101 (modelul de 24 de la zero) **nu pornește** — am notat că îți faci propriul plan. Placa e a ta pentru testul OS până scrie centrul de comandă că ai terminat (cel târziu 15:00).
+- **Am pus în coadă S102** (doar procesor, după ce termini testul sau de la 15:00): unealta care face bucățile direct din text, fără să încarce tot textul în memorie — ca datele mult mai mari (super-școala de română) să încapă. Proba: trebuie să iasă exact aceleași simboluri ca acum.
+- **La noapte placa rămâne liberă:** n-am pus nimic pe ea, fiindcă pasul mare următor e planul tău.
+- **Aștept de la tine:** fără grabă, un „da” sau „nu” la întrebarea executantului: **„legăm datele pe bucăți în antrenare (schimbare mică în două module, cu probă că antrenarea rămâne identică)?”**. Tot fără grabă: ștergerea S88 (~33 GB, discul C: e la 91 %), Release-ul #513.
+
 ## 11 noiembrie 2026, 08:15 — Dimineață liniștită: raportul e la locul lui, S98 a pornit
 
 - **Raportul de dimineață e scris** (`docs/rapoarte/2026-11-11_0647_raport_dimineata.md`) și confirmă ce am verificat noaptea: S99 **STRICĂ**, S100 **LA FEL**, 1343 teste trec, placa liberă (476 MB / 28 °C). Nimic căzut.
@@ -168,9 +176,3 @@
 - **Restul zilei:** placa liberă, nimic nou pus.
 - **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
 
-## 8 noiembrie 2026, 11:15 — Testul cu modelul mic s-a împiedicat la pregătire; l-am reparat, repornește azi
-
-- **S94a: OPRIT, verificat de mine — motiv bun, nimic stricat.** Paznicul a oprit testul după 10 minute fiindcă executantul pregătea textele de la zero într-un dosar gol, în loc să le citească pe cele gata făcute. Placa n-a lucrat deloc, modelul mic original e neatins.
-- **Am ales reparația (a):** testul citește textele gata pregătite din dosarul folosit de toate liniile, doar citire, cu verificare la final că nu s-a schimbat nimic acolo. Pragurile și rețetele rămân exact cele scrise dinainte.
-- **Azi pe placă: S94a din nou** (~2,5 h, pornire cel târziu la 15:30); **la noapte S94b** pe modelul mare, gata până luni 07:00.
-- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
