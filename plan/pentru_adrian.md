@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 11 noiembrie 2026, 02:15 — Proba Muon cu pași mici: nu strică, dar nici nu ajută; modelul „crescut” de 24 a ajuns la capăt
+
+- **S100: GATA, verificat de mine — LA FEL** (nimic defect). Cu pași de 20 de ori mai mici, rețeta Muon n-a mai stricat modelul de 24 de straturi, dar nici nu l-a făcut mai bun: româna **1,2055** după 2 ore (pornire 1,2039; mai mic = mai bine). Povești, cod și răspunsuri la întrebări au rămas bune (99,2 %). Placa max 6.277 MB / 63 °C, liberă de la 01:59.
+- **Concluzia:** la S99 vina era a pașilor prea mari. Dar modelul „crescut” de 24 nu se mai mișcă la nicio rețetă încercată, așa că închid continuările lui (cum scrisesem dinainte). **#513 rămâne modelul în uz.**
+- **Azi de la 08:00: S98** (doar procesor, citirea datelor pe bucăți). Pe placă nu mai pun nimic singur.
+- **Am pus în coadă S101, care așteaptă „da”-ul tău:** modelul de 24 de straturi **antrenat de la zero** (pasul P1 din propunerea „Kronos mare pe ce avem” din hub), ~7 nopți. Răspunde la întrebarea „ajută mărimea?”.
+- **Aștept de la tine:** un „da” sau „nu” la P1 / S101, când vrei (dacă vine până pe la 18:00, poate porni chiar la noapte). Fără grabă: testul `os-278`, Release-ul #513, ștergerea S88.
+
 ## 10 noiembrie 2026, 23:15 — Rețeta Muon a stricat modelul mare; la noapte o probă scurtă cu pași de 20 de ori mai mici
 
 - **S99: GATA, verificat de mine — STRICĂ** (rezultat negativ, nimic defect). Rețeta Muon, cu pașii mari aleși, a stricat modelul de 24 de straturi din prima oră: româna de la 1,2039 la **1,2853** (mai mic = mai bine), poveștile și codul peste praguri. Lanțul s-a oprit singur după ora 1, exact cum era scris dinainte. Răspunsurile la întrebări au rămas bune (99,2 %). Placa max 6.492 MB / 62 °C, liberă de la 21:58.
@@ -164,10 +172,3 @@
 - **Azi pe placă (de la 08:00, ~2,5 h): S94a** — modelul mic de 6 straturi e „reparat” 45 min, apoi încearcă 5 rețete × 15 min. La noapte (S94b) aceleași 5 rețete pe modelul mare, gata până luni 07:00. Am adăugat executantului 3 atenționări din raportul S93.
 - **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
 
-## 8 noiembrie 2026, 02:15 — Modelul mare a trecut toată noaptea, dar iese la egalitate cu #513
-
-- **S89: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a mers toate cele 5 ore fără să cadă (leacul de memorie funcționează: vârf 6.465 MB, 62 °C). La română a ieșit **1,2063**, iar #513 are **1,2060** — practic egal (pragul de „mai bun” era 1,2010). Nimic nu s-a stricat. Explicația: în același timp, modelul mare a „citit” doar o treime din textele lui #513, fiindcă e de două ori mai mare.
-- **S92: GATA, verificat.** Unealta care încearcă rețetele întâi pe un model mic e pregătită; modelul mic (6 straturi, tăiat din cel mare) pornește slab și trebuie „reparat” scurt înainte de test.
-- **Acum, pe procesor: S93** (examenul de română devine cel care decide — „Română da”-ul tău).
-- **Pus în coadă (aprobat de mine, în „Da”-ul tău la C-85): S94** — azi ziua modelul mic încearcă 5 rețete (~2,5 h pe placă, după S93), la noapte modelul mare încearcă aceleași 5 rețete câte o oră. Aflăm dacă modelul mic ghicește corect ce rețetă e bună pentru cel mare. Totul se termină până luni la 07:00, ca placa să fie liberă pentru testul tău.
-- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
