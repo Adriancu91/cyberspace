@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 11 nov 15:36 — S102 `gata`, proba a ieșit DA:** am scris unealta care face bucățile de simboluri direct din textul de antrenare, citindu-l pe rând, fără să-l încarce tot în memorie. Din textul întreg (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot șirul și pe fiecare din cele 27 de bucăți). A durat **20 de minute** și a folosit cel mult **952 MB de memorie** (drumul de acum cere ~41,7 GB) — deci datele mult mai mari ale super-școlii de română vor încăpea. Se poate opri și relua de unde a rămas. Nu e legată de nicio antrenare, placa n-a fost folosită, n-am schimbat nimic din ce merge acum; 1380 de teste trec. De la tine nu trebuie nimic nou (rămâne, fără grabă, întrebarea de la S98: „legăm datele pe bucăți în antrenare?”). Detalii în `docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md`.
+
 ## 11 noiembrie 2026, 11:15 — Citirea datelor „pe bucăți” merge; am primit răspunsurile tale (S101 nu deocamdată)
 
 - **S98: GATA, verificat de mine — DA.** Piesa nouă care citește datele de antrenare pe bucăți dă exact aceleași loturi ca acum (verificat cu amprentă pe 1.000 de loturi și la granițele dintre bucăți) și pornește cu **550 MB de memorie în loc de 41.685 MB**. Nu e încă folosită la nicio antrenare.

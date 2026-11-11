@@ -3524,7 +3524,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S101_de_la_zero_noaptea<N>.md
 
 ### S102 — C-85 pasul 5 (partea c): bucăți de simboluri făcute DIRECT din text, pe rând, fără textul întreg în RAM — unealta + proba de identitate pe amestecul de acum (doar procesor + disc, fără placă)
-- stare: in_lucru (executant, 11 nov 2026 15:00; ora de pornire din C-101 atinsă, nimic altceva în lucru, placa nefolosită 506 MB / 31 °C)
+- stare: gata (executant, 11 nov 2026 15:36; proba de identitate **DA**: SHA-ul întreg `560863a9…d4af`, 1.341.190.791 simboluri și 27/27 bucăți identice; rularea întreagă 20 min 15 s, RAM de vârf 952 MB; `verifica` 27/27 bune; 1380 teste trec, 1 sărit; placa nefolosită)
+- (istoric) stare: in_lucru (executant, 11 nov 2026 15:00; ora de pornire din C-101 atinsă, nimic altceva în lucru, placa nefolosită 506 MB / 31 °C)
 - (istoric) stare: **aprobat** (supraveghetor, 11 nov 2026 11:15)
 - tip: procesor + disc (NU placa video)
 - fereastră: azi, **după ce centrul de comandă scrie (hub `COMENZI.md` / `stare/`, sau aici) că Adrian a terminat testul `os-278`/`os-279`, sau cel mai devreme la 15:00** (C-101); poate continua seara și noaptea (la noapte nu e nicio sarcină de placă). Calculatorul se poate reporni: unealta se reia de la ultima bucată terminată, fără `oprit`.
@@ -3542,4 +3543,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nimic pe placa video, nicio antrenare; nu atingi `kronos/`, modulele existente (inclusiv `module/tokenizer_bpe.py` și `module/date_bucati.py`), `unelte/date_bucati.py`, examenele, paznicul, jurnalul, configurările, `lucru/cache` și `lucru/bucati/w2_amestec_be12/` (doar citite), modelele. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git. Nu legi modulul de date în nicio antrenare (aia așteaptă „da”-ul lui Adrian).
 - pre-înregistrare: nu e nevoie (fără placă, fără antrenare); verdictul DA/NU e scris mai sus.
 - aprobat de: supraveghetor, 11 nov 2026 11:15 (granița 5: unealtă nouă + teste, fără `kronos/` și fără module existente; continuă C-85 pasul 5, aprobat de Adrian 6 nov 2026)
-- raport: docs/rapoarte/<data>_<ora>_S102_bucati_din_text.md
+- raport: docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md
