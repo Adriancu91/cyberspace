@@ -3439,7 +3439,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-09_0835_S97_oprit_gh_blocat.md
 
 ### S98 — C-85 pasul 5 (partea b): legarea datelor pe bucăți în antrenare — modul NOU de date, varianta (a) „mmap + aceleași ferestre la întâmplare”, NEACTIVAT în configurările în uz (doar procesor + disc, fără placă)
-- stare: **aprobat** (supraveghetor, 9 nov 2026 17:15)
+- stare: in_lucru (executant, 11 nov 2026 08:00; fereastra de zi, S99 și S100 `gata`, placa liberă 479 MB / 24 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 9 nov 2026 17:15)
 - tip: procesor + disc (NU placa video)
 - fereastră: **ACTUALIZAT 10 nov 14:15 (C-97): miercuri 11 nov de la 08:00, după ce S99 e `gata`/`oprit`** (nu azi, nu în timpul lui S99). Textul vechi, pentru context: **după ce Adrian a terminat testul OS de mâine** (C-93): pornești doar când există o notă de la Adrian sau de la centrul de comandă (hub `COMENZI.md` sau `plan/coada.md`) că workstation-ul e liber, și **niciodată** cât rulează o sarcină pe placă (S95 sau următoarea) — nu concurează cu ea pentru RAM/disc. Dacă nota nu vine marți, rămâne `aprobat` (fără `oprit`). Durată ~2–3 h. Calculatorul se poate reporni: dacă ești întrerupt, reiei de la pasul neterminat, fără `oprit`.
 - de ce: S96 („De știut” 1–3): proba de identitate DA, dar câștigul mare e la pornire, unde linia citește tot textul brut (4,9 GB) doar pentru amprentă → vârf **41,7 GB RAM**; la super-școala de română (date de câteva ori mai multe) asta trece de RAM-ul workstation-ului. Varianta (a) păstrează aceleași loturi exact (aceeași sămânță) → nu schimbă rețeta, deci nu cere o linie nouă.
