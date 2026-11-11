@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 11 noiembrie 2026, 17:15 — Unealta pentru date mari merge; placa e liberă, dar n-am ce pune pe ea fără tine
+
+- **S102: GATA, verificat de mine — DA.** Unealta nouă face bucățile de simboluri direct din textul de antrenare, citind pe rând: din tot textul (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot și pe fiecare din cele 27 de bucăți), în **20 de minute**, cu cel mult **952 MB de memorie** (drumul vechi cere ~41,7 GB). Placa n-a fost folosită; 1380 de teste trec.
+- **Am văzut nota centrului de comandă (C-106):** ai terminat testele la 14:36, placa e a lui Kronos probabil până joi; dacă vii diseară pentru `os-283`, nimic nu te încurcă.
+- **La noapte placa rămâne liberă:** continuările modelului de 24 sunt închise, modelul de la zero e „nu deocamdată”, iar pasul următor util (folosirea datelor pe bucăți la antrenare) așteaptă răspunsul tău. Nimic nu rulează acum.
+- **Aștept de la tine:** fără grabă, „da” sau „nu” la **„legăm datele pe bucăți în antrenare?”** — cu un „da”, placa ar avea treabă chiar la noapte (o probă scurtă că antrenarea iese identică). Tot fără grabă: ștergerea S88 (~33 GB; discul C: e la 92 %), Release-ul #513.
+
 > **Executant, 11 nov 15:36 — S102 `gata`, proba a ieșit DA:** am scris unealta care face bucățile de simboluri direct din textul de antrenare, citindu-l pe rând, fără să-l încarce tot în memorie. Din textul întreg (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot șirul și pe fiecare din cele 27 de bucăți). A durat **20 de minute** și a folosit cel mult **952 MB de memorie** (drumul de acum cere ~41,7 GB) — deci datele mult mai mari ale super-școlii de română vor încăpea. Se poate opri și relua de unde a rămas. Nu e legată de nicio antrenare, placa n-a fost folosită, n-am schimbat nimic din ce merge acum; 1380 de teste trec. De la tine nu trebuie nimic nou (rămâne, fără grabă, întrebarea de la S98: „legăm datele pe bucăți în antrenare?”). Detalii în `docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md`.
 
 ## 11 noiembrie 2026, 11:15 — Citirea datelor „pe bucăți” merge; am primit răspunsurile tale (S101 nu deocamdată)
@@ -170,11 +177,3 @@
 - **La noapte (de la 19:00): S94b** — cele 5 rețete câte o oră pe modelul mare; răspunsul „modelul mic ghicește bine?” vine luni dimineață. Placa goală la 07:00 pentru testul tău.
 - **C-89 (tokenizer românesc, doar măsurători):** am văzut-o în hub; ai spus „pune-o deoparte până trecem de 1 miliard de parametri”, deci **NU** am pus-o în coadă. O reiau singur când Kronos trece de acel prag.
 - **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
-
-## 8 noiembrie 2026, 14:15 — Modelul mic a ales rețetele (verificat); la noapte vedem dacă are dreptate pe cel mare
-
-- **S94a: GATA, verificat de mine.** Modelul mic a fost „reparat” (română 2,78 → 1,66), apoi a încercat cele 5 rețete câte 15 minute. Ordinea lui: rata ×4 cea mai bună (1,589), apoi ×2 (1,612), bază ≈ încălzire ×2 (1,631, egale — era de așteptat), ×0,5 ultima (1,644). Am refăcut singur diferențele: se potrivesc cu raportul și cu ce s-a scris dinainte. Placa max 4.970 MB / 62 °C, nimic stricat, 1337 teste trec.
-- **La noapte (de la 19:00): S94b** — aceleași 5 rețete câte o oră pe modelul mare. Abia atunci aflăm dacă modelul mic ghicește bine (dacă da, rețetele se aleg de acum mult mai repede). Am adăugat executantului: să măsoare și poveștile/codul pe cel mare și să lase placa goală la 07:00 luni pentru testul tău.
-- **Restul zilei:** placa liberă, nimic nou pus.
-- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB), când ești la workstation. Nu e urgent.
-
