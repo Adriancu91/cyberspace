@@ -3524,7 +3524,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/<data>_<ora>_S101_de_la_zero_noaptea<N>.md
 
 ### S102 — C-85 pasul 5 (partea c): bucăți de simboluri făcute DIRECT din text, pe rând, fără textul întreg în RAM — unealta + proba de identitate pe amestecul de acum (doar procesor + disc, fără placă)
-- stare: **aprobat** (supraveghetor, 11 nov 2026 11:15)
+- stare: in_lucru (executant, 11 nov 2026 15:00; ora de pornire din C-101 atinsă, nimic altceva în lucru, placa nefolosită 506 MB / 31 °C)
+- (istoric) stare: **aprobat** (supraveghetor, 11 nov 2026 11:15)
 - tip: procesor + disc (NU placa video)
 - fereastră: azi, **după ce centrul de comandă scrie (hub `COMENZI.md` / `stare/`, sau aici) că Adrian a terminat testul `os-278`/`os-279`, sau cel mai devreme la 15:00** (C-101); poate continua seara și noaptea (la noapte nu e nicio sarcină de placă). Calculatorul se poate reporni: unealta se reia de la ultima bucată terminată, fără `oprit`.
 - durată maximă: ~8 h (măsurarea de la pasul 2 spune dacă încape)
