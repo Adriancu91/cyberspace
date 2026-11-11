@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 11 noiembrie 2026, 08:15 — Dimineață liniștită: raportul e la locul lui, S98 a pornit
+
+- **Raportul de dimineață e scris** (`docs/rapoarte/2026-11-11_0647_raport_dimineata.md`) și confirmă ce am verificat noaptea: S99 **STRICĂ**, S100 **LA FEL**, 1343 teste trec, placa liberă (476 MB / 28 °C). Nimic căzut.
+- **Rulează acum: S98** (doar procesor, de la 08:00, ~2–3 ore) — citirea datelor „pe bucăți”, ca antrenările mari să nu mai ceară 41 GB de memorie la pornire. Pe placă nu rulează nimic.
+- N-am pus nimic nou pe placă: pasul următor e **S101** (modelul de 24 de straturi de la zero, ~7 nopți), care așteaptă „da”-ul tău. Discul C: are 44 GB liberi, destul pentru S101 (cere 30 GB), dar se umple.
+- **De știut:** workstation-ul a repornit aseară pe la 23:15, fără să strice nimic (nimic nu rula atunci). Dacă n-ai repornit tu, spune-mi.
+- **Aștept de la tine:** un „da” sau „nu” la S101 (dacă vine până pe la 18:00, poate porni la noapte). Fără grabă: ștergerea modelelor intermediare (S88, ~33 GB, ajută discul), testul `os-278`, Release-ul #513.
+
 ## 11 noiembrie 2026, 02:15 — Proba Muon cu pași mici: nu strică, dar nici nu ajută; modelul „crescut” de 24 a ajuns la capăt
 
 - **S100: GATA, verificat de mine — LA FEL** (nimic defect). Cu pași de 20 de ori mai mici, rețeta Muon n-a mai stricat modelul de 24 de straturi, dar nici nu l-a făcut mai bun: româna **1,2055** după 2 ore (pornire 1,2039; mai mic = mai bine). Povești, cod și răspunsuri la întrebări au rămas bune (99,2 %). Placa max 6.277 MB / 63 °C, liberă de la 01:59.
