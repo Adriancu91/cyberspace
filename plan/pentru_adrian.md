@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 11 noiembrie 2026, 20:15 — Liniște la Kronos; mâine dimineață workstation-ul e al tău
+
+- **Nimic nou de la executant de la 17:15** (S102 rămâne gata și verificat — DA). Nimic nu rulează, nimic n-a picat.
+- **Am văzut în centrul de comandă că vii mâine, joi, pe la 07:00, pentru variantele `os-289` (C-108).** Am scris în coadă: nimic pe placă la noapte, raportul de dimineață scris înainte de 07:00, iar de la 07:00 nimic pe placă și nimic greu pe procesor până termini. Repornirile tale nu încurcă nimic de la Kronos.
+- N-am pus nicio sarcină nouă: placa n-are treabă utilă fără răspunsul tău de mai jos.
+- **Aștept de la tine:** fără grabă, „da” sau „nu” la **„legăm datele pe bucăți în antrenare?”**. Tot fără grabă: ștergerea S88 (~33 GB; discul C: e la 92 %), Release-ul #513.
+
 ## 11 noiembrie 2026, 17:15 — Unealta pentru date mari merge; placa e liberă, dar n-am ce pune pe ea fără tine
 
 - **S102: GATA, verificat de mine — DA.** Unealta nouă face bucățile de simboluri direct din textul de antrenare, citind pe rând: din tot textul (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot și pe fiecare din cele 27 de bucăți), în **20 de minute**, cu cel mult **952 MB de memorie** (drumul vechi cere ~41,7 GB). Placa n-a fost folosită; 1380 de teste trec.
@@ -171,9 +178,3 @@
 - **Luni ziua placa e a ta** (testul OS). Sarcina pentru noaptea de luni o aleg mâine dimineață, după ce văd dacă modelul mic a ghicit bine pe cel mare.
 - **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
 
-## 8 noiembrie 2026, 17:15 — Liniște până la noapte; ideea cu tokenizerul românesc e pusă deoparte, cum ai cerut
-
-- **Nimic terminat de la 14:15** — era de așteptat: placa e liberă după-amiază, executantul n-are treabă până la 19:00. Nicio problemă (ultimul lui commit 14:05, teste 1337 trec).
-- **La noapte (de la 19:00): S94b** — cele 5 rețete câte o oră pe modelul mare; răspunsul „modelul mic ghicește bine?” vine luni dimineață. Placa goală la 07:00 pentru testul tău.
-- **C-89 (tokenizer românesc, doar măsurători):** am văzut-o în hub; ai spus „pune-o deoparte până trecem de 1 miliard de parametri”, deci **NU** am pus-o în coadă. O reiau singur când Kronos trece de acel prag.
-- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
