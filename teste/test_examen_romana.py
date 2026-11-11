@@ -133,7 +133,8 @@ def test_doar_in_configurarile_aprobate():
     assert pus == {"conv_w2_mare_24r.toml", "avans_24_mic6r.toml",  # S94 (8 nov 2026): modelul mic al testului Spearman
                    "conv_w2_mare_24s.toml",  # S95 (9 nov 2026): continuarea #536
                    "conv_w2_mare_24m.toml",  # S99 (10 nov 2026): Muon din #554
-                   "conv_w2_mare_24n.toml"}  # S100 (10 nov 2026): Muon ×20 din #554
+                   "conv_w2_mare_24n.toml",  # S100 (10 nov 2026): Muon ×20 din #554
+                   "conv_w2_mare_24_bucati.toml"}  # S98 (11 nov 2026): copia de probă a lui 24r, nu se antrenează cu ea
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------

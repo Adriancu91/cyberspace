@@ -90,6 +90,10 @@ MODULE = [
     ("date", "module.date_tinystories:DateTinyStories", {"director": "__tinystories_mic__"}),
     ("date", "module.date_amestec:DateAmestec", {"cale_antrenare": "__amestec_temporar__", "cale_validare": ""}),
     ("date", "module.date_cod:DateCod", {"director": "__simboluri_cod__", "context": 16, "previzualizare": True}),
+    pytest.param(
+        "date", "module.date_bucati:DateBucati", {"director": "__bucati_mici__", "previzualizare": True},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("examen", "module.examen_cod_validare:ExamenCodValidare", {}),
     ("examen", "module.examen_romana:ExamenRomana", {"validari": "__romana_mica__"}),
@@ -160,6 +164,10 @@ def _setari_reale(setari, tmp_path):
         from teste.cod_mic import scrie_simboluri
 
         setari.update(scrie_simboluri(tmp_path))
+    if setari.get("director") == "__bucati_mici__":  # bucăți mici de simboluri, nu cele din lucru/bucati/
+        from teste.bucati_mici import scrie_bucati
+
+        setari.update(scrie_bucati(tmp_path))
     if setari.get("cale_tokenizer") == "__tokenizer_mic__":
         from module.date_mostra import DateMostra
         from module.tokenizer_bpe import antreneaza_bpe

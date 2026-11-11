@@ -1,0 +1,62 @@
+# S98 (C-85 pasul 5, partea b; Adrian 6 nov 2026, pașii scriși de supraveghetor 9 nov 2026): configurare DE PROBĂ pentru
+# datele pe bucăți. Copie a config/conv_w2_mare_24r.toml (S93) cu DOAR portul `date` mutat pe module.date_bucati:DateBucati,
+# `nume`, `cale_stare` (în lucru/proba_bucati/), eticheta și acest antet.
+# NU SE ANTRENEAZĂ CU EA: modelul de acum cere textul întreg, iar modulul nou dă doar ferestre de simboluri (refuză cu o
+# eroare clară). Folosită doar de unelte/bucati_legare.py (proba de identitate a loturilor și măsurarea pornirii).
+# Legarea într-o antrenare reală e o decizie separată.
+
+[platforma]
+# Doar de probă: nicio stare de pornire, nicio antrenare (S98).
+nume = "proba_bucati"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 4, rata_invatare = 0.00001, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/proba_bucati/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 18000, adunare_loturi = 24, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S98: configurare de probă pentru datele pe bucăți (nu se antrenează cu ea)"
+
+[porturi.date]
+modul = "module.date_bucati:DateBucati"
+setari = { director = "lucru/bucati/w2_amestec_be12", cale_validare = "date/tinystories_r2/validare.txt", cale_tokenizer = "date/ws/bpe_16384.json" }
+
+[porturi.examen]
+modul = "module.examen_romana:ExamenRomana"
+setari = { caractere = 100000, cu_r1 = false }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [4] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

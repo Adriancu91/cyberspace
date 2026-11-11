@@ -1,0 +1,26 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "date_bucati"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Simbolurile de antrenare gata făcute, pe bucăți (unelte/date_bucati.py), citite prin mmap: ferestre trase la sorți ca în bucla de antrenare, amprenta din index, refuz la bucăți stricate. Nelegat de nicio antrenare (S98)."
+format = "modul-v0"
+
+[contract]
+port = "date"
+versiune_contract = "1"
+
+[depinde]
+
+[ofera]
+"text_antrenare" = "textul de antrenare, mereu același"
+"text_validare" = "textul de validare, nefolosit la antrenare"
+"sir_antrenare" = "șirul întreg de simboluri văzut ca un singur tablou (len, felii), citit din bucăți prin mmap"
+"lot" = "un lot de ferestre trase la sorți cu torch.randint pe tot șirul, ca în bucla de antrenare"
+"ferestre" = "ferestrele de la locurile date: intrarea și ținta mutată cu unu"
+"amprenta" = "amprenta datelor, din index: SHA-256 al șirului + SHA-256 al tokenizerului"
+
+[rulare]
+limbaj = "python"
+intrare = "module.date_bucati:DateBucati"
+teste = "python -m pytest teste/test_date_bucati.py && python -m pytest teste_contracte -k DateBucati"
