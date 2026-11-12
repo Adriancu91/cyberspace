@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 19:25 — Ai terminat testul: placa e iar a lui Kronos, S105 poate porni la noapte
+
+- **Am văzut nota de la 19:19 (C-111):** ai terminat și ai plecat. Am scris în coadă că **S105** (#554 față de #513 pe texte nevăzute + examenul de conversație) poate porni de acum, cel târziu la 23:00. Dacă workstation-ul a rămas în Cyber Universe, S105 trece pe noaptea următoare — nu e o problemă.
+- **Am văzut C-112:** ai rulat singur ștergerea S88 — 82 de modele intermediare, 33,4 GB; cele 31 de `gpt.pt` de linie au fost refuzate, cum trebuia. Am marcat S88 `gata`. Mâine dimineață executantul verifică doar prin citire jurnalul ștergerii și spațiul de pe C: (nu șterge nimic).
+- **Nimic nou de la executant de la 11:15**; nimic n-a picat.
+- **Aștept de la tine:** nimic acum. Fără grabă: dosarul `lucru\memorie_mare` (~10,5 GB), pe care ai zis că îl ștergi de mână; Release-ul #513.
+
 ## 12 noiembrie 2026, 17:25 — Am văzut că vii acum la test; Kronos îți lasă placa liberă
 
 - **C-111 preluat:** vii pe la 17:55 pentru testul cu variante (`os-289`). Am scris în coadă: nimic pe placă și nimic greu pe procesor cât ești tu acolo; repornirile tale nu încurcă nimic.
@@ -174,12 +181,4 @@
 - **La noapte, neschimbat: S95 de la 21:00** (nu între 19:30 și 21:00), doar dacă n-ai repornit calculatorul în Cyber Universe; placa liberă până la 07:45, pentru testul tău de la 08:30.
 - **Am pus în coadă S98** (doar procesor, aprobat de mine în cadrul „da”-ului tău C-85): legăm datele pe bucăți în antrenare printr-o piesă nouă, fără să schimbăm cele existente, și verificăm că dă exact aceleași loturi. **Nu pornește cât ești tu la calculator** — doar după ce scrii (tu sau centrul de comandă) că ai terminat testul.
 - **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88. **Când termini testul de mâine, spune că workstation-ul e liber** (ca să pornească S98).
-
-## 9 noiembrie 2026, 14:15 — Am primit C-93: azi după-amiază pe procesor, la noapte S95 de la 21:00
-
-- **C-93 preluat:** am notat că ai plecat, că poți veni diseară la ~20:00 sau mâine la 08:30. **Stick-urile nu le atinge nimeni** (S97 rămâne oprit; arhivele `os-276` ți le dă centrul de comandă).
-- **Azi după-amiază (doar procesor, fără placă): S96** — unealta care citește datele pe bucăți (C-85 pasul 5), adusă de marți fiindcă calculatorul e liber; pornește până la 16:00 și se termină până la 19:15.
-- **Între 19:30 și 21:00 nimic pe placă.** **De la 21:00: S95** (5 ore din #536, rata ×0,5, judecat pe română) — doar dacă n-ai repornit calculatorul în Cyber Universe până atunci; se termină și lasă placa liberă până la 07:45. Dacă vii și repornești mai târziu, orele deja salvate rămân, nu se strică nimic.
-- **Nimic terminat de la 11:15** (normal: ziua era a ta). Executantul a scris ultima dată la 08:29; nicio problemă.
-- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88.
 
