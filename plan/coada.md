@@ -3622,7 +3622,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md
 
 ### S106 — #554 față de #513 (și #477) pe examenele „răspuns din text” (S15 mare + S4), cum e folosit modelul de fapt; plus renumărarea răspunsurilor S105 cu „Nu scrie în text.” la întrebările-capcană (placa scurt + procesor)
-- stare: in_lucru (executant, 12 nov 2026 20:30)
+- stare: gata (executant, 12 nov 2026 20:55) — **LA FEL** după amândoi martorii: corecte din 140 după profesor #554 **81** față de #513 **80** (+1; pragul 7), după verificator 82 față de 79 (+3) → **„#513 rămâne”**. S15 43 față de 40 ((b2) 13/11 din 50, (e) 30/29 din 30), S4 38 față de 40; #477 (reper) 75. „Nu scrie în text.” pe nedrept 28 față de 30 din 125; „Nu scrie” corect 10 față de 11 din 15. Renumărarea S105: la cele 20 de capcane amândouă refuză la 16 (examenul le dăduse corect la 1 și 0). 9 minute, cod 0; placa max 4.272 MB / 62 °C; SHA neschimbate; 1407 teste trec, 1 sărit.
+- (istoric) stare: in_lucru (executant, 12 nov 2026 20:30)
 - (istoric) stare: **aprobat** (supraveghetor, 12 nov 2026 20:15; granița 2: examene, comparații, notări)
 - tip: placă (~30–60 min) + procesor
 - fereastră: **noaptea 12→13 nov**, de acum; pornire cel târziu **23:30**, placa liberă până la **06:30** (raportul de dimineață 07:40). Dacă nu apucă, trece în noaptea 13→14 (nu e `oprit`). Doar cu workstation-ul în Windows și placa goală (< 800 MB).
@@ -3642,6 +3643,6 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. Paza: 6.700 MB / 83 °C; elevul iese de pe placă înainte de profesor (cum face deja unealta). Dacă ceva nu se poate măsura → NEMĂSURAT cu motivul, fără reparații pe ascuns.
   6. `python -m pytest` verde; raport `docs/rapoarte/<data>_<ora>_S106_text_554_513.md`: tabelele pe 3 modele, (b2) pe tipuri, renumărarea S105, verdictul strict după praguri, **20 de răspunsuri alese cu `random.Random(1113)`** (aceleași întrebări la #513 și #554, cu întrebarea, referința, răspunsurile și notele), placa max MB/°C, durata; pre-înregistrarea închisă; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
 - **NU:** nicio antrenare; nu atingi `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py`, `unelte/examen_conversatie.py`, `unelte/renoteaza_text.py` (doar le folosești), fișierele de examen din `docs/conversatie/`, paznicul, configurările, modelele (doar citite, SHA înainte = după). Nimic descărcat, plătit sau șters. Modelul din interfață nu se schimbă.
-- pre-înregistrare: docs/preinregistrari/2026-11-12_text_554_513.md (o scrii tu, la pasul 1)
+- pre-înregistrare: docs/preinregistrari/2026-11-12_text_554_513.md (scrisă și urcată fb015e8 înainte de placă; închisă, cu „Verdictul”)
 - aprobat de: supraveghetor, 12 nov 2026 20:15 (granița 2; urmarea propunerii 1(b) din raportul S105; C-110 punctul 3)
-- raport: docs/rapoarte/<data>_<ora>_S106_text_554_513.md
+- raport: docs/rapoarte/2026-11-12_2046_S106_text_554_513.md
