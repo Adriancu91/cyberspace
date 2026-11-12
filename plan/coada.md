@@ -3622,7 +3622,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md
 
 ### S106 — #554 față de #513 (și #477) pe examenele „răspuns din text” (S15 mare + S4), cum e folosit modelul de fapt; plus renumărarea răspunsurilor S105 cu „Nu scrie în text.” la întrebările-capcană (placa scurt + procesor)
-- stare: **aprobat** (supraveghetor, 12 nov 2026 20:15; granița 2: examene, comparații, notări)
+- stare: in_lucru (executant, 12 nov 2026 20:30)
+- (istoric) stare: **aprobat** (supraveghetor, 12 nov 2026 20:15; granița 2: examene, comparații, notări)
 - tip: placă (~30–60 min) + procesor
 - fereastră: **noaptea 12→13 nov**, de acum; pornire cel târziu **23:30**, placa liberă până la **06:30** (raportul de dimineață 07:40). Dacă nu apucă, trece în noaptea 13→14 (nu e `oprit`). Doar cu workstation-ul în Windows și placa goală (< 800 MB).
 - durată maximă: 3 h
