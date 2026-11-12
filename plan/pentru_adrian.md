@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 11:15 — Proba pe placă a ieșit DA: datele pe bucăți sunt gata; la noapte comparăm #554 cu #513
+
+- **S104: GATA, verificat de mine — DA.** Pe modelul adevărat de 24 de straturi, 300 de pași: cu datele pe bucăți modelul primește **exact aceleași loturi** ca înainte, iar pierderile diferă cel mult cu 0,000326 — cât diferă placa de ea însăși de la o rulare la alta (0,000303; pragul scris dinainte: 0,000607). Pornirea cere **2.156 MB de memorie în loc de 41.709 MB**, la aceeași viteză. Placa: max 3.834 MB / 61 °C. Nucleul `kronos/`, examenele și modelele în uz neatinse; 1407 teste trec.
+- **Ce înseamnă:** de acum Kronos poate antrena pe date mult mai mari fără să-i trebuiască 42 GB de memorie. Nicio antrenare nu e încă mutată pe bucăți.
+- **Rulează acum:** nimic. Placa e liberă până diseară (n-am pus a doua sarcină de placă în fereastra de zi).
+- **La noapte: S105** (deja în coadă): #554 față de #513 pe texte nevăzute de niciun model și la examenul de conversație (cu 20 de răspunsuri alese la întâmplare).
+- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
+
 ## 12 noiembrie 2026, 08:15 — Legarea datelor pe bucăți: verificată, DA; acum rulează proba pe placă
 
 - **S103: GATA, verificat de mine — DA.** Un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a dat **exact aceleași pierderi la toți cei 200 de pași** (bit cu bit), aceleași loturi și aceleași greutăți la final; datele vechi rulate de două ori dau și ele același rezultat. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Am verificat că **nucleul `kronos/` și examenele n-au fost atinse**; 1390 teste trec.
@@ -175,9 +183,3 @@
 - **Aștept de la tine (când revii la workstation, ~13:00) — una din două:** (1) cel mai simplu: deschizi Claude Code pe workstation, în dosarul `C:\Kronos\cyberspace`, și scrii „fă S97 acum” — îți cere „da” la descărcare și la copiere; sau (2) faci tu pașii 1–3 din lista „REÎNCERCAREA DE AZI” din `stare/cyber-universe.md` din hub, cu Rufus și `cyber-universe-gpu-scrie-usb.img` din `os-276`. Apoi oprire completă, cablu scos 30 s, pornești de pe TESTGPU, `gpu lant` + `DA`.
 - **Restul:** S94b verificat azi-noapte (NU); placa goală cât ești la workstation (C-90); **la noapte S95** doar dacă workstation-ul e înapoi în Windows. Nu uita `claude setup-token` (autentificarea expiră în jur de azi).
 
-## 9 noiembrie 2026, 08:15 — Noaptea verificată; pregătesc stick-urile când vine reparația OS
-
-- **Raportul de dimineață e la timp și curat** (1337 teste trec, placa goală, 56 GB liberi pe C:). Verdictul S94b (NU, ρ −0,92) îl verificasem deja la 02:15.
-- **Am primit C-90 și C-92 de la tine:** nimic pe placă cât ești la workstation; iar **S97** (nou, aprobat de tine) — executantul se uită la fiecare trecere dacă a apărut release-ul OS care repară I8 (mai nou decât `os-275`; acum încă nu e) și, când apare, verifică sumele și copiază singur pe stick-urile E: (TESTGPU) și D: (CYBER-UNIV), fără să șteargă nimic. Când e gata, scrie aici „Stick-urile sunt gata”. Atenție: merge doar cât workstation-ul e pornit în Windows.
-- **La noapte: S95** (5 ore din #536, rata ×0,5), doar dacă workstation-ul e înapoi în Windows și n-ai scris că mai lucrezi. I-am cerut executantului să noteze la fiecare oră „eroarea de memorie după examen” văzută de raportul de dimineață (nu strică rezultatele, dar vreau să știu unde apare).
-- **Aștept de la tine:** azi, dacă n-ai făcut-o: `claude setup-token` pe workstation (autentificarea expiră în jur de azi — fără ea executantul se oprește la noapte). Apoi, fără grabă: Release-ul #513 și ștergerea S88 (comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`).
