@@ -1,0 +1,62 @@
+# S104 (C-110, Adrian 12 nov 2026; pașii scriși de supraveghetor 12 nov 06:55): configurare DE PROBĂ pentru proba pe placă
+# a datelor pe bucăți — rulările V1 și V2, cu datele VECHI (textul întreg).
+# Copie a config/conv_w2_mare_24n.toml (S100) cu DOAR `nume`, `cale_stare`, eticheta și acest antet.
+# NU e o linie de model: folosită doar de unelte/proba_placa.py (300 de pași de optimizare, fără jurnal, fără examen,
+# fără stare salvată). Starea de pornire: lucru/proba_placa/vechi/gpt.pt = copia lui #554 cu `minute = 0` și
+# optimizatorul gol (aceeași ca la S99/S100), doar citită.
+
+[platforma]
+# Doar de probă (S104): starea de pornire e copia lui #554 în cale_stare; nimic nu se salvează.
+nume = "proba_placa_vechi"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 4, rata_invatare = 0.000005, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/proba_placa/vechi/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 18000, adunare_loturi = 24, racire_finala = 0.25, optimizator = "muon", rata_muon = 0.0001 }
+
+[antrenare_lunga]
+eticheta = "S104: proba pe placă a datelor pe bucăți, rularea cu datele vechi (nu e o linie de model)"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_romana:ExamenRomana"
+setari = { caractere = 100000, cu_r1 = false }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [4] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

@@ -139,7 +139,8 @@ def test_configurarile_in_uz_raman_pe_calea_veche():
         modul, clasa = date["modul"].split(":")
         if hasattr(getattr(importlib.import_module(modul), clasa), "sir_antrenare"):
             cu_sir.add(cale.name)
-    assert cu_sir == {"conv_w2_mare_24_bucati.toml"}
+    # S104 (C-110, 12 nov 2026): proba_placa_bucati.toml = configurarea de probă a rulării B de pe placă
+    assert cu_sir == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml"}
     for nume in ("conv_w2_mare_24r.toml", "conv_w2_mare_24n.toml", "conv_w2.toml"):
         c = tomllib.loads((RADACINA / "config" / nume).read_text(encoding="utf-8"))
         assert c["porturi"]["date"]["modul"] == "module.date_amestec:DateAmestec"
