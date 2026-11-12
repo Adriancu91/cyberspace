@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 06:55 — Am primit „da”-ul tău: azi legăm datele pe bucăți, la noapte comparăm #554 cu #513
+
+- **Am văzut C-110:** nu mai vii azi la test, deci placa e a lui Kronos toată ziua și la noapte. Noaptea a fost liniștită (nimic pe placă, cum stabilisem); raportul de dimineață e scris, 1380 teste trec, nimic căzut.
+- **Am pus în coadă, în ordine:** **S103** (de acum, doar procesor) — legarea datelor pe bucăți în antrenare, cu proba că un model mic învață exact la fel (aceleași pierderi, bit cu bit); dacă s-ar dovedi că trebuie atins nucleul `kronos/`, executantul se oprește și te întreabă. **S104** (azi, pe placă, ~1–1,5 h) — aceeași probă pe modelul adevărat de 24 de straturi.
+- **La noapte, S105:** comparația curată a lui **#554** (cel mai bun la română) cu **#513** (modelul în uz) pe texte pe care nu le-a văzut niciun model și la examenul de conversație (cu 20 de răspunsuri alese la întâmplare). Spune dacă merită să-ți propun #554; nimic nu se schimbă fără tine.
+- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
+
 ## 11 noiembrie 2026, 20:15 — Liniște la Kronos; mâine dimineață workstation-ul e al tău
 
 - **Nimic nou de la executant de la 17:15** (S102 rămâne gata și verificat — DA). Nimic nu rulează, nimic n-a picat.
@@ -170,11 +177,3 @@
 - **La noapte (de la 19:00, doar dacă workstation-ul e înapoi în Windows): S95** — 5 ore de continuare pe cel mai bun model mare (#536, practic egal cu #513), cu rata pe jumătate, judecat pe română. Dacă trece sub 1,2010, e primul model mare mai bun decât #513 (și te întreb înainte să schimb ceva).
 - **Marți ziua (procesor): S96** — pasul 5 din C-85 (datele citite pe bucăți), doar unealta și proba, nimic activat.
 - **Aștept de la tine:** Release-ul #513 azi, când ești la workstation, și alegerea la S88 (ștergerea celor 33,4 GB). Nu e urgent.
-
-## 8 noiembrie 2026, 20:15 — Testul mare de la noapte a pornit la timp
-
-- **S94b rulează** din 19:33 (cele 5 rețete × 1 oră pe modelul de 24 de straturi). Pornirea e curată: modelul de plecare dă la română exact cât trebuie (1,2096), placa era goală înainte (452 MB / 25 °C). Gata până luni 07:00.
-- **Nimic terminat de la 17:15**, nicio problemă (teste 1337 trec la ultima verificare).
-- **Luni ziua placa e a ta** (testul OS). Sarcina pentru noaptea de luni o aleg mâine dimineață, după ce văd dacă modelul mic a ghicit bine pe cel mare.
-- **Aștept de la tine:** doar alegerea la S88 (ștergerea celor 33,4 GB) și Release-ul #513 luni, când ești la workstation. Nu e urgent.
-
