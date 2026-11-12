@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 17:25 — Am văzut că vii acum la test; Kronos îți lasă placa liberă
+
+- **C-111 preluat:** vii pe la 17:55 pentru testul cu variante (`os-289`). Am scris în coadă: nimic pe placă și nimic greu pe procesor cât ești tu acolo; repornirile tale nu încurcă nimic.
+- **Nimic nou de la executant de la 11:15** (S104 rămâne gata și verificat — DA); nimic nu rulează, nimic n-a picat.
+- **S105** (#554 față de #513 pe texte nevăzute + examenul de conversație) **nu mai pornește la 19:00**, ci doar după ce centrul de comandă scrie că ai terminat, cel târziu la 23:00; altfel trece pe noaptea următoare.
+- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
+
 ## 12 noiembrie 2026, 11:15 — Proba pe placă a ieșit DA: datele pe bucăți sunt gata; la noapte comparăm #554 cu #513
 
 - **S104: GATA, verificat de mine — DA.** Pe modelul adevărat de 24 de straturi, 300 de pași: cu datele pe bucăți modelul primește **exact aceleași loturi** ca înainte, iar pierderile diferă cel mult cu 0,000326 — cât diferă placa de ea însăși de la o rulare la alta (0,000303; pragul scris dinainte: 0,000607). Pornirea cere **2.156 MB de memorie în loc de 41.709 MB**, la aceeași viteză. Placa: max 3.834 MB / 61 °C. Nucleul `kronos/`, examenele și modelele în uz neatinse; 1407 teste trec.
@@ -175,11 +182,4 @@
 - **Între 19:30 și 21:00 nimic pe placă.** **De la 21:00: S95** (5 ore din #536, rata ×0,5, judecat pe română) — doar dacă n-ai repornit calculatorul în Cyber Universe până atunci; se termină și lasă placa liberă până la 07:45. Dacă vii și repornești mai târziu, orele deja salvate rămân, nu se strică nimic.
 - **Nimic terminat de la 11:15** (normal: ziua era a ta). Executantul a scris ultima dată la 08:29; nicio problemă.
 - **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 9 noiembrie 2026, 11:15 — PROBLEMĂ: stick-urile NU sunt pregătite; release-ul cu reparația există (`os-276`)
-
-- **PROBLEMĂ (S97, C-92):** executantul n-a putut pregăti stick-urile. Comanda care întreabă GitHub de release-uri (`gh api`) e blocată în rulările programate (fără om de față cere aprobare și e refuzată singură); el s-a oprit corect, fără să ocolească nimic — stick-urile E: și D: sunt neatinse.
-- **Release-ul cu reparația e gata:** `os-276` (publicat 08:54, CI verde, verificat de mine pe GitHub) = reparația lui I8 (C-91).
-- **Aștept de la tine (când revii la workstation, ~13:00) — una din două:** (1) cel mai simplu: deschizi Claude Code pe workstation, în dosarul `C:\Kronos\cyberspace`, și scrii „fă S97 acum” — îți cere „da” la descărcare și la copiere; sau (2) faci tu pașii 1–3 din lista „REÎNCERCAREA DE AZI” din `stare/cyber-universe.md` din hub, cu Rufus și `cyber-universe-gpu-scrie-usb.img` din `os-276`. Apoi oprire completă, cablu scos 30 s, pornești de pe TESTGPU, `gpu lant` + `DA`.
-- **Restul:** S94b verificat azi-noapte (NU); placa goală cât ești la workstation (C-90); **la noapte S95** doar dacă workstation-ul e înapoi în Windows. Nu uita `claude setup-token` (autentificarea expiră în jur de azi).
 
