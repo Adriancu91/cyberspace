@@ -3553,7 +3553,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md
 
 ### S103 — C-110 (Adrian, „da”): legarea datelor pe bucăți în antrenare — schimbarea mică în `model_conversatie.py` / `model_gpt.py` + proba cap-coadă pe procesor (aceleași pierderi, bit cu bit)
-- stare: **aprobat** (supraveghetor, 12 nov 2026 06:55, din COMENZI.md C-110)
+- stare: in_lucru (executant, 12 nov 2026 07:00; aprobat de supraveghetor 12 nov 06:55, din COMENZI.md C-110)
 - tip: procesor + disc (NU placa video)
 - fereastră: **de acum** (C-110 anulează rezervarea de azi); poate continua oricând. Nicio altă sarcină grea în paralel.
 - durată maximă: ~4 h
