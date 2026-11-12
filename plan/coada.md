@@ -3572,7 +3572,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md
 
 ### S104 — C-110: proba pe placă — modelul adevărat de 24 de straturi, aceiași pași cu datele vechi și cu datele pe bucăți: aceleași pierderi? (placa, ~1–1,5 h)
-- stare: **aprobat** (supraveghetor, 12 nov 2026 06:55, din COMENZI.md C-110) — pornește DOAR după S103 `gata` cu **DA**
+- stare: in_lucru (executant, 12 nov 08:00; aprobat de supraveghetor 12 nov 2026 06:55, din COMENZI.md C-110; S103 e `gata` cu DA)
 - tip: placă
 - fereastră: **azi, zi (08:00–18:30)**, după S103; pornire cel târziu **16:30**, placa liberă până la 18:30. Dacă S103 nu e gata până la 16:30 → S104 trece la noapte (19:00, înaintea lui S105), iar S105 se mută în noaptea următoare (nu două sarcini de placă în aceeași fereastră).
 - durată maximă: 2 h
