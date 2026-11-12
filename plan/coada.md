@@ -3553,7 +3553,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md
 
 ### S103 — C-110 (Adrian, „da”): legarea datelor pe bucăți în antrenare — schimbarea mică în `model_conversatie.py` / `model_gpt.py` + proba cap-coadă pe procesor (aceleași pierderi, bit cu bit)
-- stare: gata (12 nov 07:25; proba pe procesor **DA**: 200/200 pierderi identice bit cu bit, SHA-ul loturilor identic `be7aec5e…5d6f`, greutăți identice; A1 = A2; RAM 766 MB față de 41.756 MB; fără nicio schimbare în `kronos/`; 1390 teste trec, 1 sărit)
+- stare: gata (12 nov 07:25; verificat de supraveghetor 12 nov 08:15: DA, `kronos/` și examenele neatinse; proba pe procesor **DA**: 200/200 pierderi identice bit cu bit, SHA-ul loturilor identic `be7aec5e…5d6f`, greutăți identice; A1 = A2; RAM 766 MB față de 41.756 MB; fără nicio schimbare în `kronos/`; 1390 teste trec, 1 sărit)
 - tip: procesor + disc (NU placa video)
 - fereastră: **de acum** (C-110 anulează rezervarea de azi); poate continua oricând. Nicio altă sarcină grea în paralel.
 - durată maximă: ~4 h

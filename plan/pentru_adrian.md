@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 08:15 — Legarea datelor pe bucăți: verificată, DA; acum rulează proba pe placă
+
+- **S103: GATA, verificat de mine — DA.** Un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a dat **exact aceleași pierderi la toți cei 200 de pași** (bit cu bit), aceleași loturi și aceleași greutăți la final; datele vechi rulate de două ori dau și ele același rezultat. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Am verificat că **nucleul `kronos/` și examenele n-au fost atinse**; 1390 teste trec.
+- **Raportul de dimineață e la locul lui** (noapte liniștită, nimic pe placă, cum stabilisem).
+- **Rulează acum: S104** (pe placă, de la 08:00, ~1–1,5 h): aceeași probă pe modelul adevărat de 24 de straturi. Pre-înregistrarea e scrisă înainte de pornire, cum cere regula.
+- **La noapte: S105** (deja în coadă): #554 față de #513 pe texte nevăzute și la examenul de conversație. N-am pus nimic nou.
+- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
+
 > **Executant, 12 nov 07:25 — S103 `gata`, proba a ieșit DA:** am legat datele pe bucăți în antrenare, cu o schimbare mică în două module (`model_gpt.py`, `model_conversatie.py`); **nucleul `kronos/` n-a trebuit atins**. Proba pe procesor: un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a primit **exact aceleași loturi și a dat exact aceleași pierderi, bit cu bit, la toți cei 200 de pași** (și greutățile de la sfârșit sunt identice); la fel și cu rețeta Muon a liniei de 24 și fără conversație. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Antrenarea scrie acum în jurnal și amprenta datelor (`2b2492ec78569c2b`). Configurările în uz n-au fost atinse și merg ca până acum; **nicio antrenare adevărată nu folosește încă bucățile** — urmează proba pe placă (S104, azi după 08:00). **1390 de teste trec.** De la tine nu trebuie nimic. Detalii în `docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md`.
 
 ## 12 noiembrie 2026, 06:55 — Am primit „da”-ul tău: azi legăm datele pe bucăți, la noapte comparăm #554 cu #513
@@ -171,11 +179,3 @@
 - **Am primit C-90 și C-92 de la tine:** nimic pe placă cât ești la workstation; iar **S97** (nou, aprobat de tine) — executantul se uită la fiecare trecere dacă a apărut release-ul OS care repară I8 (mai nou decât `os-275`; acum încă nu e) și, când apare, verifică sumele și copiază singur pe stick-urile E: (TESTGPU) și D: (CYBER-UNIV), fără să șteargă nimic. Când e gata, scrie aici „Stick-urile sunt gata”. Atenție: merge doar cât workstation-ul e pornit în Windows.
 - **La noapte: S95** (5 ore din #536, rata ×0,5), doar dacă workstation-ul e înapoi în Windows și n-ai scris că mai lucrezi. I-am cerut executantului să noteze la fiecare oră „eroarea de memorie după examen” văzută de raportul de dimineață (nu strică rezultatele, dar vreau să știu unde apare).
 - **Aștept de la tine:** azi, dacă n-ai făcut-o: `claude setup-token` pe workstation (autentificarea expiră în jur de azi — fără ea executantul se oprește la noapte). Apoi, fără grabă: Release-ul #513 și ștergerea S88 (comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`).
-
-## 9 noiembrie 2026, 02:15 — Modelul mic nu ghicește rețetele modelului mare (verificat); la noapte continuăm cel mai bun model mare
-
-- **S94b: GATA, verificat de mine — NU.** Cele 5 rețete au mers câte o oră pe modelul de 24 de straturi, toate curat (placa max 6.426 MB / 61 °C). Ordinea a ieșit aproape exact invers decât pe modelul mic (am refăcut calculul: ρ = −0,92). Concluzie: rețetele modelului mare NU se pot alege pe modelul mic tăiat din el. Lecția utilă: la modelul mare, rata mică strică cel mai puțin.
-- **Azi, luni, placa și calculatorul sunt ale tale** (testul OS). Nimic nu pornește până nu ești gata.
-- **La noapte (de la 19:00, doar dacă workstation-ul e înapoi în Windows): S95** — 5 ore de continuare pe cel mai bun model mare (#536, practic egal cu #513), cu rata pe jumătate, judecat pe română. Dacă trece sub 1,2010, e primul model mare mai bun decât #513 (și te întreb înainte să schimb ceva).
-- **Marți ziua (procesor): S96** — pasul 5 din C-85 (datele citite pe bucăți), doar unealta și proba, nimic activat.
-- **Aștept de la tine:** Release-ul #513 azi, când ești la workstation, și alegerea la S88 (ștergerea celor 33,4 GB). Nu e urgent.
