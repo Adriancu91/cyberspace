@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 20:15 — #554 nu bate #513 (verificat); la noapte o măsurare scurtă pe „răspuns din text”
+
+- **S105 gata, verificat de mine — „#513 rămâne”.** Pe texte nevăzute, #554 e mai bun cu doar 0,0016 (pragul 0,005) → LA FEL; la conversație 1,913 față de 1,900 (pragul 0,3) → LA FEL. Am refăcut calculul față de praguri: verdictul e corect.
+- **Ce am aflat în plus:** examenul de conversație nu mai desparte modelele (întrebările vin fără text, iar modelele răspund cinstit „Nu scrie în text.”).
+- **Pus în coadă pentru la noapte: S106** (aprobat de mine, doar examene, ~1 oră pe placă): #513 față de #554 pe examenele în care modelul primește textul alături — așa cum îl folosești de fapt. Nicio antrenare, nimic șters sau descărcat.
+- Mâine dimineață executantul verifică doar prin citire ștergerea ta de la S88.
+- **Aștept de la tine:** nimic. Fără grabă: dosarul `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
+
 > **Executant, 12 nov 20:00 — S105 `gata`: #554 nu e mai bun decât #513 → #513 rămâne.** Pe texte pe care nu le-a văzut niciun model, modelul de 24 de straturi (#554) e la română mai bun cu doar 0,0016 (1,1249 față de 1,1265; pragul scris dinainte era 0,005) → **LA FEL**. La examenul de conversație: nota 1,913 față de 1,900 (pragul: 0,3) → **LA FEL**. Deci nu-ți propun #554 ca model în uz; n-am schimbat nimic. **De știut:** la examenul de conversație amândouă au luat doar 1,9 din 10, fiindcă la întrebările puse fără text alături răspund aproape mereu „Nu scrie în text.” (cinstit, dar notat cu 1) — examenul acesta, cum e acum, nu mai desparte modelele; am scris supraveghetorului două variante. A durat 11 minute; placa cel mult 4.490 MB / 55 °C; nimic descărcat, șters sau antrenat. Raportul întreg, cu 20 de răspunsuri: `docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md`. **Aștept de la tine:** nimic.
 
 ## 12 noiembrie 2026, 19:25 — Ai terminat testul: placa e iar a lui Kronos, S105 poate porni la noapte
@@ -176,11 +184,3 @@
 - **Stick-urile rămân neatinse** (S97 oprit). **S98** (doar procesor) pornește tot doar după testul tău de mâine.
 - Nimic nou terminat de la 17:15; executantul a scris ultima dată azi după-amiază (S96 gata). Nicio problemă.
 - **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). **Mâine, când termini testul, spune că workstation-ul e liber.** Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 9 noiembrie 2026, 17:15 — Datele „pe bucăți” merg (verificat); la noapte S95 de la 21:00, cum ai cerut
-
-- **S96: GATA, verificat de mine — DA.** Unealta nouă citește datele de antrenare pe bucăți și dă exact aceleași 1,34 miliarde de simboluri (aceeași amprentă), cu 125 MB de memorie în loc de 3 GB. Aflare importantă: la pornirea antrenării, memoria mare (41,7 GB) o ia textul brut citit întreg doar ca să-i facă amprenta — asta s-ar sufoca prima la datele mai mari pentru română. Nimic din nucleu atins, 1343 teste trec.
-- **La noapte, neschimbat: S95 de la 21:00** (nu între 19:30 și 21:00), doar dacă n-ai repornit calculatorul în Cyber Universe; placa liberă până la 07:45, pentru testul tău de la 08:30.
-- **Am pus în coadă S98** (doar procesor, aprobat de mine în cadrul „da”-ului tău C-85): legăm datele pe bucăți în antrenare printr-o piesă nouă, fără să schimbăm cele existente, și verificăm că dă exact aceleași loturi. **Nu pornește cât ești tu la calculator** — doar după ce scrii (tu sau centrul de comandă) că ai terminat testul.
-- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). Fără grabă: Release-ul #513 și ștergerea S88. **Când termini testul de mâine, spune că workstation-ul e liber** (ca să pornească S98).
-
