@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 12 nov 20:00 — S105 `gata`: #554 nu e mai bun decât #513 → #513 rămâne.** Pe texte pe care nu le-a văzut niciun model, modelul de 24 de straturi (#554) e la română mai bun cu doar 0,0016 (1,1249 față de 1,1265; pragul scris dinainte era 0,005) → **LA FEL**. La examenul de conversație: nota 1,913 față de 1,900 (pragul: 0,3) → **LA FEL**. Deci nu-ți propun #554 ca model în uz; n-am schimbat nimic. **De știut:** la examenul de conversație amândouă au luat doar 1,9 din 10, fiindcă la întrebările puse fără text alături răspund aproape mereu „Nu scrie în text.” (cinstit, dar notat cu 1) — examenul acesta, cum e acum, nu mai desparte modelele; am scris supraveghetorului două variante. A durat 11 minute; placa cel mult 4.490 MB / 55 °C; nimic descărcat, șters sau antrenat. Raportul întreg, cu 20 de răspunsuri: `docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md`. **Aștept de la tine:** nimic.
+
 ## 12 noiembrie 2026, 19:25 — Ai terminat testul: placa e iar a lui Kronos, S105 poate porni la noapte
 
 - **Am văzut nota de la 19:19 (C-111):** ai terminat și ai plecat. Am scris în coadă că **S105** (#554 față de #513 pe texte nevăzute + examenul de conversație) poate porni de acum, cel târziu la 23:00. Dacă workstation-ul a rămas în Cyber Universe, S105 trece pe noaptea următoare — nu e o problemă.

@@ -3598,7 +3598,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_0936_S104_proba_bucati_placa.md
 
 ### S105 — Comparația curată #554 față de #513 (și #477): examenul neutru (texte apărute după 12 oct) + examenul de conversație — e #554 mai bun și pe ce n-a văzut nimeni? (placa, noaptea, ~3–5 h)
-- stare: in_lucru (executant, 12 nov 2026 19:30)
+- stare: gata (executant, 12 nov 2026 20:08) — neutru **LA FEL** (`wikipedia_ro_nou` #554 1,1249 față de #513 1,1265, −0,0016; pragul 0,005), conversație **LA FEL** (1,913 față de 1,900; pragul 0,3) → **„#513 rămâne”**. De știut: la conversație amândouă răspund aproape mereu „Nu scrie în text.” (nota 1) — examenul nu mai desparte modelele (propuneri în raport). 11 minute, cod 0; placa max 4.490 MB / 55 °C; 1407 teste trec, 1 sărit.
+- (istoric) stare: in_lucru (executant, 12 nov 2026 19:30)
 - (istoric) stare: **aprobat** (supraveghetor, 12 nov 2026 06:55; granița 2: examene, comparații, inclusiv examenul neutru) — C-110 punctul 3
 - tip: placă (+ procesor)
 - fereastră: **noaptea 12→13 nov — nota „Adrian a terminat” A VENIT (C-111, 19:19): poate porni de acum**, pornire cel târziu **23:00**, placa liberă până la 06:30 (raportul de dimineață 07:40). NU pornește cât rulează S103/S104. Dacă S104 a alunecat în noaptea asta → S105 trece în noaptea 13→14.
@@ -3615,4 +3616,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nicio antrenare; nu atingi `kronos/`, examenele oficiale (`examen_bpb.py`, `examen_romana.py`), paznicul, configurările, modelele (#513, #554, #477 doar citite), `date/neutru/` (doar citit). Nimic descărcat, plătit sau șters. Modelul din interfață nu se schimbă.
 - pre-înregistrare: docs/preinregistrari/2026-11-12_compara_554_513.md
 - aprobat de: supraveghetor, 12 nov 2026 06:55 (granița 2; C-110 punctul 3: „pasul următor cel mai util din granițe, fără S101”)
-- raport: docs/rapoarte/<data>_<ora>_S105_compara_554_513.md
+- raport: docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md
