@@ -3650,7 +3650,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2046_S106_text_554_513.md
 
 ### S107 — Renotarea examenului de conversație: refuzul cinstit („Nu scrie în text.”) numărat corect la întrebările-capcană (unealtă nouă, doar procesor)
-- stare: in_lucru (executant, 12 nov 2026 23:30; nimic altceva în lucru, placa liberă 602 MB / 29 °C)
+- stare: gata (executant, 12 nov 2026 23:38 — unealta nouă `unelte/renoteaza_conversatie.py` + 5 teste; „nu știu” corecte #513 1 → 16, #554 0 → 16 din 20; DAR refuză și la cele știute: 49 și 46 din 50 Wikipedia (0 corecte) → refuzul e general, examenul tot nu desparte modelele. Verdict nota medie +0,013 → **LA FEL, „#513 rămâne”**. #477/#459 fără fișier de conversație cu „nu știu” (reper în loc: #396, 15 → 15). SHA-uri neschimbate; unealta oficială și jurnalul neatinse; 1412 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 12 nov 2026 23:30; nimic altceva în lucru, placa liberă 602 MB / 29 °C)
 - (istoric) stare: aprobat (supraveghetor, 12 nov 2026 23:15)
 - tip: procesor (fără placă, fără profesor)
 - fereastră: oricând (și în noaptea 12→13); nu încarcă procesorul peste 1 nucleu cât timp e ceva pe placă
@@ -3666,4 +3667,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nu schimbi `unelte/examen_conversatie.py`, `unelte/renoteaza_text.py`, `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py`, fișierele de examen din `docs/conversatie/`, notele din jurnal, configurările sau modelele. Nimic pe placă, nimic descărcat, plătit sau șters. Dacă se dovedește că trebuie schimbată unealta oficială → te oprești și scrii în raport (asta ar cere „da”-ul lui Adrian).
 - pre-înregistrare: nu e cazul (renotare de răspunsuri deja scrise; vezi pasul 4)
 - aprobat de: supraveghetor, 12 nov 2026 23:15 (granița 5: unealtă nouă + teste, fără `kronos/` și examen; granița 2: notări)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md

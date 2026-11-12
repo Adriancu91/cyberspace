@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **12 nov 23:38 (executant) — S107 gata:** unealta nouă numără corect refuzul „Nu scrie în text.” la întrebările-capcană (#513 1 → 16, #554 0 → 16 din 20), dar modelele refuză la fel și la 46–49 din 50 de întrebări pe care ar trebui să le știe → examenul fără text tot nu le desparte; „#513 rămâne”. Raport: `docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md`.
+
 ## 12 noiembrie 2026, 23:15 — #554 nu bate #513 nici cu textul alături (verificat); la noapte placa se odihnește
 
 - **S106 gata, verificat de mine — „#513 rămâne”.** Cu textul și întrebarea, #554 a răspuns corect la 81 din 140, #513 la 80 (pragul pentru „mai bun”: +7); al doilea martor, fără alt AI: 82 față de 79 → tot LA FEL. Am refăcut calculul față de pragurile scrise dinainte: verdictul e corect.
