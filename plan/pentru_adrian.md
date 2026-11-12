@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+> **Executant, 12 nov 07:25 — S103 `gata`, proba a ieșit DA:** am legat datele pe bucăți în antrenare, cu o schimbare mică în două module (`model_gpt.py`, `model_conversatie.py`); **nucleul `kronos/` n-a trebuit atins**. Proba pe procesor: un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a primit **exact aceleași loturi și a dat exact aceleași pierderi, bit cu bit, la toți cei 200 de pași** (și greutățile de la sfârșit sunt identice); la fel și cu rețeta Muon a liniei de 24 și fără conversație. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Antrenarea scrie acum în jurnal și amprenta datelor (`2b2492ec78569c2b`). Configurările în uz n-au fost atinse și merg ca până acum; **nicio antrenare adevărată nu folosește încă bucățile** — urmează proba pe placă (S104, azi după 08:00). **1390 de teste trec.** De la tine nu trebuie nimic. Detalii în `docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md`.
+
 ## 12 noiembrie 2026, 06:55 — Am primit „da”-ul tău: azi legăm datele pe bucăți, la noapte comparăm #554 cu #513
 
 - **Am văzut C-110:** nu mai vii azi la test, deci placa e a lui Kronos toată ziua și la noapte. Noaptea a fost liniștită (nimic pe placă, cum stabilisem); raportul de dimineață e scris, 1380 teste trec, nimic căzut.

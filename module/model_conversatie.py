@@ -43,7 +43,7 @@ class ModelGPTConversatie(ModelGPTContinuu):
     MANIFEST = {
         "nume": "model_gpt_conversatie",
         "port": "model",
-        "versiune": "0.1.0",
+        "versiune": "0.1.1",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 5500},
         "permisiuni": ["citire_fisier", "scriere_fisier"],
@@ -102,7 +102,8 @@ class ModelGPTConversatie(ModelGPTContinuu):
         from module.tokenizer_bpe import TokenizerBPE
 
         self.tok = TokenizerBPE.incarca(self.cale_tokenizer)
-        date_t = torch.as_tensor(self._simboluri(date.text_antrenare()))
+        sir, date_pe_bucati = self._sir_din_date(date)  # S103: simbolurile gata făcute, dacă datele le au
+        date_t = sir if sir is not None else torch.as_tensor(self._simboluri(date.text_antrenare()))
         hrana_t = torch.as_tensor(self._simboluri(Path(self.hrana).read_text(encoding="utf-8"))) if self.hrana else None
         perechi = self.perechi_codificate()
         self._pregateste_reteaua()
@@ -150,6 +151,8 @@ class ModelGPTConversatie(ModelGPTContinuu):
             "pasi_total": self.pasi_total, "minute_total": round(self.minute_total, 1), "continuat": self.continuat,
             "pornit_din": self.pornit_din, "rata_la_final": rata,
         }
+        if date_pe_bucati is not None:
+            statistici["date_pe_bucati"] = date_pe_bucati
         if self.dispozitiv.type == "cuda":
             statistici["memorie_rezervata_mb"] = round(torch.cuda.max_memory_reserved() / 2**20)
         return statistici

@@ -2,7 +2,7 @@
 [modul]
 nume = "model_gpt_conversatie"
 proiect = "kronos"
-versiune = "0.1.0"
+versiune = "0.1.1"
 descriere = "GPT-ul care continuă, antrenat în plus pe perechi întrebare → răspuns (școala de conversație)."
 format = "modul-v0"
 

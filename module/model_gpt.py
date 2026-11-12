@@ -44,6 +44,7 @@ lui literă completă (nimic din viitor).
 
 from __future__ import annotations
 
+import hashlib
 import math
 import time
 from pathlib import Path
@@ -135,7 +136,7 @@ class ModelGPT:
     MANIFEST = {
         "nume": "model_gpt",
         "port": "model",
-        "versiune": "0.7.0",
+        "versiune": "0.7.1",
         "versiune_contract": 1,
         "resurse": {"gpu": True, "memorie_gpu_mb": 4000},
         "permisiuni": [],
@@ -335,6 +336,26 @@ class ModelGPT:
         assert self.tok is not None
         return self.tok.codifica(text)
 
+    def _sir_din_date(self, date: Any) -> tuple[Any, dict[str, Any] | None]:
+        """S103 (C-110): dacă portul „date” are `sir_antrenare()` (datele pe bucăți, module/date_bucati.py), antrenarea
+        ia șirul de simboluri gata făcute de acolo, fără textul brut; întoarce șirul și ce date sunt (pentru statistici:
+        amprenta, SHA-ul șirului întreg, SHA-ul tokenizerului). Altfel (None, None): textul, exact ca până acum.
+        Simbolurile trebuie să fie făcute cu tokenizerul modelului; altfel refuză."""
+        da_sirul = getattr(date, "sir_antrenare", None)
+        if not callable(da_sirul):
+            return None, None
+        if self.tokenizer != "bpe":
+            raise ValueError("datele pe bucăți sunt simboluri gata făcute: cer tokenizer = \"bpe\" (cel cu care s-au făcut)")
+        descriere = date.descriere()
+        sha_date = (descriere.get("tokenizer") or {}).get("sha256")
+        sha_model = hashlib.sha256(Path(self.cale_tokenizer).read_bytes()).hexdigest()
+        if sha_date != sha_model:
+            raise ValueError(f"datele pe bucăți sunt făcute cu alt tokenizer ({str(sha_date)[:16]}…) decât al modelului "
+                             f"({sha_model[:16]}…, {self.cale_tokenizer}); nu pornesc")
+        sir = da_sirul()
+        return sir, {"amprenta": descriere["amprenta"], "sha256_sir": descriere["sha256_tot"],
+                     "sha256_tokenizer": sha_date, "simboluri": len(sir), "bucati": descriere.get("bucati")}
+
     def _pregateste_reteaua(self) -> None:
         """Rețeaua și optimizatorul ei. Aici: de la zero; modelele care continuă le încarcă din starea salvată."""
         self._construieste()
@@ -393,11 +414,15 @@ class ModelGPT:
         return loss.item()
 
     def antreneaza(self, date: Any, buget_secunde: float) -> dict[str, Any]:
-        text = date.text_antrenare()
+        sir, date_pe_bucati = self._sir_din_date(date)  # S103: simbolurile gata făcute, dacă datele le au
+        if sir is not None and (self._are_pozitii() or not self._textul_ramane_in_ram):
+            raise ValueError("datele pe bucăți merg doar cu un model care ține datele în RAM (model_continuu și urmașii) "
+                             "și fără memoria ierarhică (ea cere textul)")
+        text = "" if sir is not None else date.text_antrenare()
         simboluri = None
         if self.tokenizer == "bpe":
             self.tok = TokenizerBPE.incarca(self.cale_tokenizer)
-            simboluri = self._simboluri(text)
+            simboluri = None if sir is not None else self._simboluri(text)
         else:
             self.vocabular = sorted(set(text)) + [NECUNOSCUT]
         locul = torch.device("cpu") if self._textul_ramane_in_ram else self.dispozitiv
@@ -409,7 +434,10 @@ class ModelGPT:
             pregatire = time.perf_counter() - inceput_pregatire
         self._pregateste_reteaua()
         assert self.retea is not None
-        date_t = (torch.as_tensor(simboluri) if simboluri is not None else self._codifica(text)).to(locul)
+        if sir is not None:
+            date_t = sir  # se citește pe ferestre, prin mmap; în RAM nu stă șirul întreg
+        else:
+            date_t = (torch.as_tensor(simboluri) if simboluri is not None else self._codifica(text)).to(locul)
         if not self._textul_ramane_in_ram:
             date_t = date_t.long()
         ctx = self.setari["context"]
@@ -425,6 +453,8 @@ class ModelGPT:
                 hrana_t = hrana_t.long()
             if len(hrana_t) <= ctx + 1:
                 raise ValueError("hrana e mai scurtă decât contextul")
+            if sir is not None:  # același tip de numere ca șirul pe bucăți, ca ferestrele să se lipească într-un lot
+                hrana_t = hrana_t.to(sir[0:0].dtype)
         secvente_hrana = 0
 
         self.retea.train()
@@ -476,6 +506,8 @@ class ModelGPT:
         if self.tokenizer == "bpe":
             statistici["tokenizer"] = "bpe"
             statistici["simboluri_antrenare"] = len(date_t)
+        if date_pe_bucati is not None:
+            statistici["date_pe_bucati"] = date_pe_bucati
         if self.retea.memorie is not None:
             statistici["parametri_memorie"] = sum(p.numel() for p in self.retea.memorie.parameters()) + (
                 self.retea.proiectie_memorie.weight.numel()

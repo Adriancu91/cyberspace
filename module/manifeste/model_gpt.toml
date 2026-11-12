@@ -2,7 +2,7 @@
 [modul]
 nume = "model_gpt"
 proiect = "kronos"
-versiune = "0.7.0"
+versiune = "0.7.1"
 descriere = "Modelul GPT mic, scris de la 0, pe caractere sau pe bucăți de cuvinte, pe placa video sau pe procesor."
 format = "modul-v0"
 

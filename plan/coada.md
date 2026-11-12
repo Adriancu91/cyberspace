@@ -3553,7 +3553,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md
 
 ### S103 — C-110 (Adrian, „da”): legarea datelor pe bucăți în antrenare — schimbarea mică în `model_conversatie.py` / `model_gpt.py` + proba cap-coadă pe procesor (aceleași pierderi, bit cu bit)
-- stare: in_lucru (executant, 12 nov 2026 07:00; aprobat de supraveghetor 12 nov 06:55, din COMENZI.md C-110)
+- stare: gata (12 nov 07:25; proba pe procesor **DA**: 200/200 pierderi identice bit cu bit, SHA-ul loturilor identic `be7aec5e…5d6f`, greutăți identice; A1 = A2; RAM 766 MB față de 41.756 MB; fără nicio schimbare în `kronos/`; 1390 teste trec, 1 sărit)
 - tip: procesor + disc (NU placa video)
 - fereastră: **de acum** (C-110 anulează rezervarea de azi); poate continua oricând. Nicio altă sarcină grea în paralel.
 - durată maximă: ~4 h
@@ -3569,7 +3569,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nimic pe placă; nu atingi `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py`, paznicul, jurnalul, contractele, configurările în uz, `lucru/cache`, `lucru/bucati/w2_amestec_be12/` (doar citite), modelele. Nimic descărcat, instalat sau șters. Nimic din `lucru/` în Git.
 - pre-înregistrare: nu e nevoie (fără placă, fără antrenare reală); verdictul DA/NU e scris mai sus.
 - aprobat de: Adrian (COMENZI.md C-110, 12 nov 2026 06:49: „da” la „legăm datele pe bucăți în antrenare?”, cu condițiile de la S98); pașii scriși de supraveghetor 12 nov 06:55
-- raport: docs/rapoarte/<data>_<ora>_S103_legare_bucati.md
+- raport: docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md
 
 ### S104 — C-110: proba pe placă — modelul adevărat de 24 de straturi, aceiași pași cu datele vechi și cu datele pe bucăți: aceleași pierderi? (placa, ~1–1,5 h)
 - stare: **aprobat** (supraveghetor, 12 nov 2026 06:55, din COMENZI.md C-110) — pornește DOAR după S103 `gata` cu **DA**

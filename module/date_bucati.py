@@ -15,8 +15,10 @@
   altfel spune clar că modelul trebuie să citească ferestrele, ca o antrenare să nu învețe din greșeală doar din
   previzualizare.
 
-Modulul NU e legat de nicio configurare în uz: modelele de acum cer textul întreg (`date.text_antrenare()`), deci cu
-ele refuză. Legarea într-o antrenare reală e o decizie separată.
+Legarea (S103, C-110, „da”-ul lui Adrian din 12 noiembrie 2026): modelele GPT care țin datele în RAM (model_continuu și
+urmașii: conversație, Muon) văd că portul are `sir_antrenare()` și iau șirul de aici, fără text; în statistici scriu
+amprenta acestor date. Un model care cere textul întreg (`date.text_antrenare()`) e refuzat în continuare.
+Modulul NU e pus în nicio configurare în uz (doar în cea de probă); asta se face doar cu sarcina care o cere.
 """
 
 from __future__ import annotations
