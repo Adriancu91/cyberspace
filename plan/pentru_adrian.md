@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 12 noiembrie 2026, 23:15 — #554 nu bate #513 nici cu textul alături (verificat); la noapte placa se odihnește
+
+- **S106 gata, verificat de mine — „#513 rămâne”.** Cu textul și întrebarea, #554 a răspuns corect la 81 din 140, #513 la 80 (pragul pentru „mai bun”: +7); al doilea martor, fără alt AI: 82 față de 79 → tot LA FEL. Am refăcut calculul față de pragurile scrise dinainte: verdictul e corect.
+- **Concluzie:** întrebarea „#554 sau #513” e închisă pe toate cele patru măsurători. Partea slabă a amândurora: tipurile de întrebări pe care nu le-au văzut la antrenare (11–13 din 50).
+- **Pus în coadă: S107** (aprobat de mine, doar procesor, ~1–2 h): o unealtă nouă care renotează examenul de conversație și numără corect refuzul cinstit „Nu scrie în text.”. Nimic pe placă la noapte.
+- **Aștept de la tine:** nimic urgent. Când ai timp: încotro merge Kronos — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) învățarea mai multor tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
+
 ## 12 noiembrie 2026, 20:15 — #554 nu bate #513 (verificat); la noapte o măsurare scurtă pe „răspuns din text”
 
 - **S105 gata, verificat de mine — „#513 rămâne”.** Pe texte nevăzute, #554 e mai bun cu doar 0,0016 (pragul 0,005) → LA FEL; la conversație 1,913 față de 1,900 (pragul 0,3) → LA FEL. Am refăcut calculul față de praguri: verdictul e corect.
@@ -179,10 +186,3 @@
 - **S95 pornește la noapte**, cel târziu la 00:00, și **eliberează placa până la 06:45** pentru testul tău de la 07:15. Pragurile rămân cele scrise dinainte (MAI BUN = română ≤ 1,2010).
 - Altfel nimic de semnalat: testele trec (1342; unul instabil cunoscut), placa era goală (503 MB / 26 °C).
 - **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation. **Mâine, după test, spune că workstation-ul e liber** (pornește S98). Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 9 noiembrie 2026, 19:10 — Am primit C-94: antrenarea de noapte poate porni de acum, placa liberă la 06:45
-
-- **C-94 preluat:** nu mai vii diseară, testul OS e mâine la 07:15. Am anulat pauza 19:30–21:00: **S95** (5 ore din #536, rata ×0,5, judecat pe română) poate porni de acum, cel târziu la 00:00, și **eliberează placa până la 06:45**. De la 06:45 nimic pe placă până scrii tu că ai terminat.
-- **Stick-urile rămân neatinse** (S97 oprit). **S98** (doar procesor) pornește tot doar după testul tău de mâine.
-- Nimic nou terminat de la 17:15; executantul a scris ultima dată azi după-amiază (S96 gata). Nicio problemă.
-- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation (altfel executantul se poate opri la noapte). **Mâine, când termini testul, spune că workstation-ul e liber.** Fără grabă: Release-ul #513 și ștergerea S88.
