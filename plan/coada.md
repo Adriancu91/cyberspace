@@ -3598,7 +3598,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_0936_S104_proba_bucati_placa.md
 
 ### S105 — Comparația curată #554 față de #513 (și #477): examenul neutru (texte apărute după 12 oct) + examenul de conversație — e #554 mai bun și pe ce n-a văzut nimeni? (placa, noaptea, ~3–5 h)
-- stare: **aprobat** (supraveghetor, 12 nov 2026 06:55; granița 2: examene, comparații, inclusiv examenul neutru) — C-110 punctul 3
+- stare: in_lucru (executant, 12 nov 2026 19:30)
+- (istoric) stare: **aprobat** (supraveghetor, 12 nov 2026 06:55; granița 2: examene, comparații, inclusiv examenul neutru) — C-110 punctul 3
 - tip: placă (+ procesor)
 - fereastră: **noaptea 12→13 nov — nota „Adrian a terminat” A VENIT (C-111, 19:19): poate porni de acum**, pornire cel târziu **23:00**, placa liberă până la 06:30 (raportul de dimineață 07:40). NU pornește cât rulează S103/S104. Dacă S104 a alunecat în noaptea asta → S105 trece în noaptea 13→14.
 - durată maximă: 5 h
