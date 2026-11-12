@@ -3650,7 +3650,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2046_S106_text_554_513.md
 
 ### S107 — Renotarea examenului de conversație: refuzul cinstit („Nu scrie în text.”) numărat corect la întrebările-capcană (unealtă nouă, doar procesor)
-- stare: aprobat
+- stare: in_lucru (executant, 12 nov 2026 23:30; nimic altceva în lucru, placa liberă 602 MB / 29 °C)
+- (istoric) stare: aprobat (supraveghetor, 12 nov 2026 23:15)
 - tip: procesor (fără placă, fără profesor)
 - fereastră: oricând (și în noaptea 12→13); nu încarcă procesorul peste 1 nucleu cât timp e ceva pe placă
 - durată maximă: 2 h
