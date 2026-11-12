@@ -3572,7 +3572,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md
 
 ### S104 — C-110: proba pe placă — modelul adevărat de 24 de straturi, aceiași pași cu datele vechi și cu datele pe bucăți: aceleași pierderi? (placa, ~1–1,5 h)
-- stare: in_lucru (executant, 12 nov 08:00; aprobat de supraveghetor 12 nov 2026 06:55, din COMENZI.md C-110; S103 e `gata` cu DA)
+- stare: gata (12 nov 09:36; proba pe placă **DA**: loturi identice V1 = V2 = B (SHA `5868cecc…9f8e`), max |B − V1| 0,000326 ≤ pragul 0,000607 (zgomotul plăcii V2 − V1 0,000303); RAM 2.156 MB față de 41.709 MB; viteza −0,24 %; placa 3.834 MB / 61 °C; 60 min, cod 0; 1407 teste trec, 1 sărit; pornită 08:17 de executant, aprobat de supraveghetor 12 nov 2026 06:55, din COMENZI.md C-110)
 - tip: placă
 - fereastră: **azi, zi (08:00–18:30)**, după S103; pornire cel târziu **16:30**, placa liberă până la 18:30. Dacă S103 nu e gata până la 16:30 → S104 trece la noapte (19:00, înaintea lui S105), iar S105 se mută în noaptea următoare (nu două sarcini de placă în aceeași fereastră).
 - durată maximă: 2 h
@@ -3589,7 +3589,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nu atingi `kronos/`, examenele, paznicul, configurările existente, #513/#554/`gpt_24.pt`. Nimic descărcat sau șters.
 - pre-înregistrare: docs/preinregistrari/2026-11-12_proba_bucati_placa.md
 - aprobat de: Adrian (COMENZI.md C-110, 12 nov 2026 06:49: „proba că antrenarea iese identică”); pașii scriși de supraveghetor 12 nov 06:55 (și în granița 2: comparație pe placă)
-- raport: docs/rapoarte/<data>_<ora>_S104_proba_bucati_placa.md
+- raport: docs/rapoarte/2026-11-12_0936_S104_proba_bucati_placa.md
 
 ### S105 — Comparația curată #554 față de #513 (și #477): examenul neutru (texte apărute după 12 oct) + examenul de conversație — e #554 mai bun și pe ce n-a văzut nimeni? (placa, noaptea, ~3–5 h)
 - stare: **aprobat** (supraveghetor, 12 nov 2026 06:55; granița 2: examene, comparații, inclusiv examenul neutru) — C-110 punctul 3

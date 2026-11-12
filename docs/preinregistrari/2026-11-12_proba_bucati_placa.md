@@ -132,3 +132,47 @@ supraveghetor (o întrerupere prin repornire nu e vina nimănui).
 4. V1 și V2 citesc simbolurile vechi din `lucru/cache` (41,7 GB RAM la pornire): calculatorul are 128 GB, dar rulările merg
    una după alta, niciodată două odată.
 5. RAM-ul „la pornire” = vârful procesului după ce datele sunt încărcate și modelul e pe placă (îl notez și doar după date).
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-12 09:36, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+(Așa trebuie: proba nu e un experiment Kronos. Cifrele ei sunt în `lucru/proba_placa/s104/s104.json`.)
+
+Proba a mers de la 08:17:03 la 09:17:31 (60 min 27 s), cod 0, fără nicio oprire a pazei. Fiecare rulare: 7.200 de loturi =
+300 de pași de optimizare.
+
+| | V1 (date vechi) | V2 (date vechi, a doua oară) | B (date pe bucăți) |
+|---|---|---|---|
+| SHA-256 peste toate loturile | `5868cecc…9f8e` | `5868cecc…9f8e` | `5868cecc…9f8e` |
+| pierderea la pasul 1 | 1,3649532 | 1,3649532 | 1,3649532 |
+| pasul 50 | 1,4319511 | 1,4320763 | 1,4321398 |
+| pasul 100 | 1,3774002 | 1,3773727 | 1,3773411 |
+| pasul 200 | 1,2597989 | 1,2601021 | 1,2600622 |
+| pasul 300 | 1,1923089 | 1,1921617 | 1,1920678 |
+| RAM de vârf | 41.709 MB | 41.710 MB | 2.156 MB |
+| simboluri/s | 12.698,9 | 12.665,4 | 12.668,7 |
+| placa (nvidia-smi) max | 3.834 MB / 61 °C | 3.834 MB / 61 °C | 3.834 MB / 61 °C |
+
+- Loturile: identice V1 = V2 = B (toate cele 7.200).
+- Zgomotul plăcii, max |V2 − V1| pe pașii de optimizare: **0,000303** (la pasul 200). Placa NU se repetă bit cu bit.
+- max |B − V1| pe pașii de optimizare: **0,000326** (la pasul 109). Pragul = max(2 × 0,000303; 1e-5) = **0,000607**.
+- Informativ, lot cu lot (7.200): max |V2 − V1| 0,002343, max |B − V1| 0,002322, pragul 0,004685 → aceeași citire.
+- Starea de pornire neschimbată după fiecare rulare (`759963dc…6d60`); #554, #513, `gpt_24.pt`, `lucru/cache` și bucățile neschimbate.
+
+## Verdictul
+
+**DA** — strict după prag: SHA-ul loturilor identic V1 = B pe toți pașii **și** max |B − V1| = 0,000326 ≤ 0,000607.
+
+Față de așteptări: loturile identice (cum ghicisem, 97 %); placa nu se repetă bit cu bit (ramura de 45 %), dar zgomotul e mai
+mic decât ghicisem (0,0003, nu 0,001–0,01); B − V1 e de aceeași mărime ca zgomotul (de 1,07 ori). Greșit ghicit: pierderea
+primului pas (1,36, nu 1,5–2,5) și memoria plăcii (3.834 MB, nu 4.450–4.750). RAM B 2.156 MB (sub 4.000, sub ce ghicisem);
+viteza B cu 0,24 % sub V1 (sub 5 %).
+
+De ținut minte (nu schimbă verdictul): B se desparte de V1 de la pasul 2, iar V2 de V1 abia de la pasul 6. E o singură
+pereche de rulări, iar mărimea diferențelor e aceeași, deci nu pot spune din proba asta dacă e întâmplare sau nu; pe procesor
+(S103) cele două căi au dat rezultate identice bit cu bit.
