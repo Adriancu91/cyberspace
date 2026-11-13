@@ -3673,7 +3673,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md
 
 ### S108 — Pentru alegerea lui Adrian: câte exemple din fiecare tip de întrebare a văzut linia modelului în uz și câte s-ar putea face din datele deja descărcate (doar procesor, doar citire)
-- stare: in_lucru (executant, 13 nov 2026 08:06; nimic altceva în lucru, placa liberă 553 MB / 29 °C; 1412 teste trec, 1 sărit)
+- stare: gata (executant, 13 nov 2026 08:30 — doar citire, ~1 min pe trecere, un nucleu; 11 din 13 tipuri (b2) au 0 exemple în linie („țară” 223 instrucțiuni, „oraș” 4); tipurile (e) 14–719; din Wikipedia descărcată ~6.150 de întrebări noi estimate pentru cele 12 tipuri slabe (mostre de 10 citite: 5–10/10 bune); fișierele de lucru doar în `lucru/cascada/S108/`; 1412 teste trec, 1 sărit, înainte și după)
+- (istoric) stare: in_lucru (executant, 13 nov 2026 08:06; nimic altceva în lucru, placa liberă 553 MB / 29 °C; 1412 teste trec, 1 sărit)
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 02:15)
 - tip: procesor (fără placă, fără profesor)
 - fereastră: zi, de la 08:00 (după raportul de dimineață); nu încarcă procesorul peste 2 nuclee dacă Adrian e la workstation
@@ -3688,4 +3689,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nu antrenezi, nu scrii date de antrenare noi, nu schimbi generatoare, configurări, `kronos/`, `module/`, examenele sau jurnalul. Nimic pe placă, nimic descărcat, plătit sau șters.
 - pre-înregistrare: nu e cazul (numărare în date, nicio măsurare de model)
 - aprobat de: supraveghetor, 13 nov 2026 02:15 (granița 2: analize/notări; granița 3: lucru doar pe date deja descărcate, aici doar citire)
-- raport: docs/rapoarte/…_S108_tipuri_intrebari.md
+- raport: docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md
