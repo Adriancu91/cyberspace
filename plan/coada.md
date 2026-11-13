@@ -3778,6 +3778,26 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   9. **Rapoarte:** `docs/rapoarte/<data>_<ora>_S110_24z2_pregatire.md` (pașii 0–5: tăietura, scurgerile, cache-ul, testele, proba, alegerea ratei), apoi `..._S110_24z2_12h.md`, `..._24h.md` și `..._final.md` (româna pe ore, curba pierderii, verdictul strict, placa max MB/°C, simboluri văzute pe surse, discul); un rând sus în `plan/pentru_adrian.md` la fiecare; coada → `gata`; commit + push. **Apoi direct S111.**
 - **NU:** nu atingi `kronos/`, examenele, paznicul, jurnalul, configurările existente, `module/` (doar folosești `ModelGPTCod`), #513/#554/#577 (doar citite), `lucru/bucati/` și fișierele existente din `date/` (doar citite). Nimic descărcat, nimic șters (nici modelele orare, nici dosarele probei vechi).
 - pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24z2.md (după proba de rată, înainte de rularea mare)
+- (executant, 13 nov 17:40) **ce rulase pe pașii VECHI (rescrierea de la 17:15 mi-a venit abia la `pull`-ul de după
+  commit):** pasul 0 (1435 teste trec, 1 sărit; placa 585 MB / 31 °C; C: 68 GB liberi; bucățile 27/27); 254ab72:
+  `config/conv_w2_mare_24z.toml` (pașii vechi, cu `ModelGPTConversatieMuon`) + `teste/test_s110_rata_reluare.py` (8 teste,
+  citește 24z: după reluare încălzirea NU repornește, progresul = minutele din stare / durata) + `conv_w2_mare_24z.toml`
+  adăugat în listele a 3 teste de pază (`test_examen_romana.py`, `test_legare_bucati.py`, `test_modul_date_bucati.py`).
+  Proba de rată veche pornită 17:21 prin cascadă (procesul 25452, `lucru/cascada/S110/proba_rata.py`, ieșiri în
+  `lucru/proba_24z/`): **pierderea primului lot 422,67** (= C1, confirmat), lotul 1001: 34,54; placa 4.293 MB / 62 °C.
+  **NEVALABILĂ, nu se folosește.**
+- (executant, 13 nov 17:40) **N-am putut-o opri:** `taskkill` și `Stop-Process` cer aprobarea omului (rulare fără om).
+  Nu ocolesc permisiunea. Proba se oprește singură după 2 × 30 min, pe la **~18:30**; nu salvează niciun model (doar
+  `lucru/proba_24z/{a,b}/proba.json`, `alegerea.json`, care rămân pe loc, nevalabile). Până atunci nu pornesc nimic greu
+  (scanarea scurgerilor și cache-ul ar fi a doua sarcină grea în paralel). **Rularea următoare, după ce
+  `cascada.py sarcina S110` arată că s-a terminat:** pașii noi 0–5, cu `porneste S110 --din-nou` pentru placă.
+- (executant, 13 nov 17:40) **întrebări pentru supraveghetor (pasul 3):** (1) `conv_w2_mare_24z2.toml` și cele două
+  configurări de probă vor avea `DateBucati`, deci vor pica și `test_legare_bucati.py::test_configurarile_in_uz_raman_pe_calea_veche`
+  și `test_modul_date_bucati.py::test_modulul_nu_e_in_nicio_configurare_in_uz` (aceeași regulă „se adaugă doar cu
+  sarcina care o cere”), nu doar `test_examen_romana.py`. Propun (a) le adaug și acolo, cu comentariul „S110 (C-120)”;
+  (b) altfel spune cum. (2) `conv_w2_mare_24z.toml` (pașii vechi) e deja în Git, iar cele 3 teste o au în liste: (a) o las,
+  cu antetul „NEVALABILĂ, înlocuită de 24z2”; (b) o scot (din Git rămâne în istoric) și o scot și din liste. Fără răspuns
+  până la pasul 3, fac (1a) și (2a) și scriu în raport.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49 + 11:11; C-120 „da” 17:03 pentru româna FineWeb-2 deja descărcată); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, rescrise 17:15 după C-120 (C1–C6, E1, E2 verificate în cod)
 - raport: docs/rapoarte/…
 

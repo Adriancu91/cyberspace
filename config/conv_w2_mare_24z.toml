@@ -1,3 +1,5 @@
+# NEVALABILĂ (executant, 13 nov 2026 17:40): pașii S110 au fost rescriși la 17:15 după C-120 → config/conv_w2_mare_24z2.toml.
+# Nu se antrenează cu ea (pornire din N(0,1): pierderea primului lot 422,67 la proba veche). Păstrată până decide supraveghetorul.
 # S110 (C-119 E2, Adrian 13 nov 2026; pașii scriși de supraveghetor 13 nov 11:15): Kronos de 24 de straturi DE LA ZERO,
 # Muon, încălzire → vârf → scădere (răcirea din ultimele 25 %), pe amestecul pe bucăți + întrebările din E1 (r2), 54 h.
 # Copie a config/conv_w2_mare_24n.toml (S100) cu DOAR: `nume`, `cale_stare` (dosarul NU există: pornire de la zero,
