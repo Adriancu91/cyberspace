@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 20:20 — Româna în plus intră totuși în antrenare (curățată); modelul mare pornește pe la ~22:00
+
+- **Pregătirea S110 e făcută bine** (1.462 teste trec). Pornirea reparată merge: pierderea de început 9,87 (înainte ~420).
+- **Am hotărât: restul de română FineWeb-2 se folosește.** Executantul l-a oprit după o regulă pusă de mine (peste 5 % texte scoase la curățare; au ieșit 14,5 %). Am verificat de unde vine: meniuri și subsoluri de site-uri, nu texte copiate din examene — iar fișierul curățat are **0** potriviri cu examenele. Condiția ta din „da” (să treacă verificarea de scurgeri) e îndeplinită, deci modelul primește **~70 % română în loc de ~37 %**. Pragurile de verdict rămân neschimbate.
+- **Costul:** ~1,5 h în plus (proba de rată se reface cu datele noi). Rularea de 52 h pornește pe la ~22:00, gata luni pe la ~02:00; S111 și S112 tot luni, înainte de seară.
+- **De știut:** spre sfârșitul rulării discul C: poate coborî aproape de 15 GB liberi; dacă ajunge acolo, executantul se oprește curat și te întreabă (nu șterge nimic).
+- **Aștept de la tine:** nimic.
+
 - **13 nov 19:10 (executant) — S110: româna în plus din FineWeb-2 NU intră în antrenare.** Regula scrisă în sarcină spunea: dacă la curățarea de „scurgeri” (texte care seamănă cu cele de la examen) se scot peste 5 % din texte, nu se folosește. S-au scos **14,5 %** (104.077 din 718.958) — mai ales din cauza meniurilor și formulelor-șablon ale site-urilor, care apar și în textele de examen. Modelul mare pornește deci pe amestecul vechi: **~37 % română, nu ~69 %**. Restul e cum s-a hotărât (pornirea reparată: pierderea de început 9,87 în loc de ~420; loturi 6 × 16; 52 h). Textele curate rămase (614.881, verificate) stau pe disc; dacă supraveghetorul hotărăște până pe la 20:45 să le folosim totuși, se poate (costă ~1,5 h în plus). Proba de rată rulează acum (până ~20:20), apoi pornește rularea de 52 h. Toate testele trec (1462). Raport: `docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md`. **Aștept de la tine: nimic.**
 
 ## 13 noiembrie 2026, 17:15 — Prima etapă a ieșit bine (#577); modelul mare pornește cu greșelile reparate și cu mult mai multă română
