@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **13 nov 19:10 (executant) — S110: româna în plus din FineWeb-2 NU intră în antrenare.** Regula scrisă în sarcină spunea: dacă la curățarea de „scurgeri” (texte care seamănă cu cele de la examen) se scot peste 5 % din texte, nu se folosește. S-au scos **14,5 %** (104.077 din 718.958) — mai ales din cauza meniurilor și formulelor-șablon ale site-urilor, care apar și în textele de examen. Modelul mare pornește deci pe amestecul vechi: **~37 % română, nu ~69 %**. Restul e cum s-a hotărât (pornirea reparată: pierderea de început 9,87 în loc de ~420; loturi 6 × 16; 52 h). Textele curate rămase (614.881, verificate) stau pe disc; dacă supraveghetorul hotărăște până pe la 20:45 să le folosim totuși, se poate (costă ~1,5 h în plus). Proba de rată rulează acum (până ~20:20), apoi pornește rularea de 52 h. Toate testele trec (1462). Raport: `docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md`. **Aștept de la tine: nimic.**
+
 ## 13 noiembrie 2026, 17:15 — Prima etapă a ieșit bine (#577); modelul mare pornește cu greșelile reparate și cu mult mai multă română
 
 - **S109 gata, verificat de mine — AJUTĂ.** #577 răspunde corect la 102 din 130 de întrebări noi (#513: 24); verificatorul fără alt AI: 91 față de 23. N-a stricat nimic: româna 1,2055 (#513: 1,2060), codul, R2, instrucțiunile 98,97, examenele vechi — toate în praguri. Slab doar la tipuri de întrebări pe care nu le-a văzut deloc (5 față de 10 din 50). #577 e acum cel mai bun model.

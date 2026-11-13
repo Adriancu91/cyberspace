@@ -3798,8 +3798,25 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   (b) altfel spune cum. (2) `conv_w2_mare_24z.toml` (pașii vechi) e deja în Git, iar cele 3 teste o au în liste: (a) o las,
   cu antetul „NEVALABILĂ, înlocuită de 24z2”; (b) o scot (din Git rămâne în istoric) și o scot și din liste. Fără răspuns
   până la pasul 3, fac (1a) și (2a) și scriu în raport.
+- (executant, 13 nov 19:10) **pașii noi 0–3 FĂCUȚI, pasul 4 (proba de rată) PORNIT la 19:06** (procesul 1984, lanțul
+  `lucru/cascada/S110/probe.py`: (a) apoi (b), fiecare `antrenare_recalcul.py --config config/proba_24z2_<a|b>.toml --ore 1`;
+  sfârșit ~20:20). Proba veche s-a încheiat singură la 18:22 (nevalabilă, nefolosită). Primul lot al probei (a): **9,8748**
+  (< 11 ✓); placa la lot 6: 5.373 MB / 62 °C. Commit `fa7fb1a`: unealta, configurările, testele; **1462 teste trec, 1 sărit**.
+- (executant, 13 nov 19:10) **⚠ pasul 1e: restul FineWeb-2 NU se folosește.** Curățarea de scurgeri a scos **14,48 % din
+  texte** (104.077 din 718.958; prag 5 %), aproape toate din cauza textelor-șablon ale site-urilor comune cu validarea
+  FineWeb-2. După regulă: `hrana = ""`, fără `fractie_hrana` → amestecul real e **~37 % română** (nu ~69 %). Fișierul curat
+  (`date/ws/hrana_fineweb_rest/antrenare.txt`, 614.881 texte, 1,93 GB, a doua verificare = 0, SHA `167108e7…08dd`) stă pe
+  disc, nefolosit; cache-ul de simboluri (1d) nu l-am mai făcut. **Supraveghetor: dacă vrei totuși FineWeb-ul, scrie-o aici
+  înainte de rularea mare (~20:45–21:00)**; atunci refac și proba de rată (~70 min în plus). Fără rând nou, merg pe regula 1e.
+- (executant, 13 nov 19:10) la întrebările de la 17:40, fără răspuns: am făcut **(1a)** (cele 3 configurări noi adăugate și
+  în listele din `test_legare_bucati.py` și `test_modul_date_bucati.py`) și **(2a)** (`conv_w2_mare_24z.toml` rămâne, cu
+  antetul „NEVALABILĂ”). O greșeală a uneltei mele, găsită de a doua verificare și reparată (cu test), e descrisă în raport.
+- (executant, 13 nov 19:10) **rularea următoare, după ce `cascada.py sarcina S110` arată că proba s-a încheiat:** aleg rata
+  după regula de la pasul 4 (româna celor două probe din jurnal; pierderile în `lucru/cascada/S110/proba_<a|b>_pierderi.json`),
+  o pun în `conv_w2_mare_24z2.toml`, pre-înregistrarea (pasul 5), commit + push, `git pull`, apoi pasul 6 prin
+  `cascada.py porneste S110 --din-nou`.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49 + 11:11; C-120 „da” 17:03 pentru româna FineWeb-2 deja descărcată); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, rescrise 17:15 după C-120 (C1–C6, E1, E2 verificate în cod)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3 + pornirea probei; urmează proba și alegerea ratei, apoi 12 h / 24 h / final)
 
 ### S111 — C-119 E3: învățarea conversației pe baza nouă de 24 (~7 h) + toate examenele; alegerea câștigătorului (placa ~7 h + ~1 h examene)
 - stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — pornește doar după S110 `gata` sau `oprit` la un punct de control
