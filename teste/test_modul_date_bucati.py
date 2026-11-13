@@ -265,4 +265,5 @@ def test_modulul_nu_e_in_nicio_configurare_in_uz():
     """S98: neactivat. O configurare de antrenare cu datele pe bucăți se adaugă aici doar cu sarcina care o cere."""
     cu_bucati = {c.name for c in (RADACINA / "config").rglob("*.toml") if "date_bucati" in c.read_text(encoding="utf-8")}
     # S104 (C-110, 12 nov 2026): proba_placa_bucati.toml = configurarea de probă a rulării B de pe placă (nu o linie de model)
-    assert cu_bucati == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml"}
+    # S110 (C-119 E2, Adrian 13 nov 2026): conv_w2_mare_24z.toml = prima linie de model pe bucăți, cerută de sarcină
+    assert cu_bucati == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml", "conv_w2_mare_24z.toml"}

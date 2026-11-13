@@ -137,7 +137,8 @@ def test_doar_in_configurarile_aprobate():
                    "conv_w2_mare_24_bucati.toml",  # S98 (11 nov 2026): copia de probă a lui 24r, nu se antrenează cu ea
                    # S104 (C-110, 12 nov 2026): copiile de probă ale lui 24n pentru proba pe placă a datelor pe bucăți;
                    # unelte/proba_placa.py nu dă niciun examen cu ele
-                   "proba_placa_vechi.toml", "proba_placa_bucati.toml"}
+                   "proba_placa_vechi.toml", "proba_placa_bucati.toml",
+                   "conv_w2_mare_24z.toml"}  # S110 (C-119 E2, 13 nov 2026): 24 de straturi de la zero, română la 12/24/54 h
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------
