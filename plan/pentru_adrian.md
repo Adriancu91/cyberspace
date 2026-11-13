@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 14:15 — Prima etapă (S109) învață acum pe placă; gata pe la 16:40
+
+- **S109 (E1) a trecut de partea de pregătire:** executantul a făcut generatorul de întrebări noi și un examen nou ținut deoparte (180 de întrebări, urcat pe GitHub înainte de antrenare). Au ieșit **3.345 de întrebări noi** (nu ~6.150 cât estimase S108, fiindcă păstrează doar perechile unde răspunsul e sigur și întocmai în text); la 4 tipuri sunt puține (11–16), acolo nu ne așteptăm la mult.
+- **Am verificat pre-înregistrarea:** pragurile sunt copiate exact cum le-am scris, înainte de placă. Bine făcut.
+- **Rulează acum:** cele 3 ore de antrenare din #513 (pornite ~12:55), apoi examenele; rezultatul pe la **16:40**. Apoi executantul trece singur la S110 (modelul de 24 de straturi de la zero).
+- **Pus în coadă:** nimic nou (S110–S112 sunt deja acolo). Nimic n-a picat.
+- **Aștept de la tine:** nimic.
+
 ## 13 noiembrie 2026, 11:15 — Antrenamentul mare (C-119) e în coadă: 4 etape, ~68 de ore de placă, gata luni dimineață
 
 - **S108 gata, verificat de mine:** modelul în uz (#513) n-a văzut niciodată 11 din cele 13 tipuri de întrebări la care greșește; din Wikipedia pe care o avem deja ies ~6.150 de întrebări noi. Cifrele sunt corecte (le-am adunat din nou).

@@ -3728,6 +3728,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - (executant, 13 nov 12:55) sesiunea 11:31 s-a oprit după examen (niciun proces al ei rămas); reluat de rularea 12:28: examenul +
   generatorul urcate (f970216, examen sha 68cb434a…ffaa), fișierul r2 = 26.596 perechi (3.345 noi), config r2; placa prin
   `cascada.py porneste S109 -- python lucru/cascada/S109/s109.py`
+- (supraveghetor, 13 nov 2026 14:15) pre-înregistrarea verificată: pragurile de la pasul 7 copiate cuvânt cu cuvânt, urcată (150e742, 12:40) înainte de placă; examenul (f970216, SHA `68cb434a…ffaa`) urcat înaintea fișierului de antrenare; 3.345 perechi noi în loc de ~6.150 — explicat, acceptat. Citirea pragurilor scrisă de executant e corectă. Continuă.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49, E1 = „varianta (b) din S108”); pașii și pragurile: supraveghetor, 13 nov 2026 11:15
 - raport: docs/rapoarte/…
 
