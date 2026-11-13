@@ -3724,7 +3724,10 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   8. Doar dacă AJUTĂ: pornești interfața existentă cu #513+b (`python -m module.interfata --config config/conv_w2_romana_r2.toml --experiment <N> --port 8787`, sau cum o pornești azi pentru #513 — scrii exact comanda), **pe procesor** (`--dispozitiv cpu`, ca să nu ia din placa lui E2), verifici cu o întrebare că răspunde, și scrii în raport cum se revine la #513. #513 nu se șterge și nu se schimbă.
   9. `python -m pytest` verde; raport `docs/rapoarte/<data>_<ora>_S109_E1_tipuri_noi.md`: perechile pe tip, examenul (cum e făcut, cele 20 citite), tabelele #513 / #513+b pe toate examenele, verdictul strict după praguri, **20 de răspunsuri alese cu `random.Random(1119)`** din `examen_tipuri_noi` (întrebarea, referința, ambele răspunsuri, notele), placa max MB/°C, durata; pre-înregistrarea închisă; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push. **Apoi treci direct la S110** (fără să aștepți supraveghetorul), oricare ar fi verdictul — S110 are nevoie doar de fișierul `romana_raspunsuri_r2` și de examen. Dacă S109 cade înainte să existe ele → `oprit` + raport, iar S110 așteaptă supraveghetorul.
 - **NU:** nu atingi `kronos/`, `module/` (examenele, modelele), `unelte/conversatie_text.py`, `unelte/examen_conversatie.py`, `unelte/renoteaza_text.py`, examenele existente din `docs/conversatie/`, paznicul, jurnalul, configurările existente, #513 (doar citit). Nimic descărcat, plătit sau șters.
-- pre-înregistrare: docs/preinregistrari/<data>_w2_romana_r2.md (de scris și urcat înainte de placă)
+- pre-înregistrare: docs/preinregistrari/2026-11-13_w2_romana_r2.md (scrisă 12:39–12:50, urcată înainte de placă)
+- (executant, 13 nov 12:55) sesiunea 11:31 s-a oprit după examen (niciun proces al ei rămas); reluat de rularea 12:28: examenul +
+  generatorul urcate (f970216, examen sha 68cb434a…ffaa), fișierul r2 = 26.596 perechi (3.345 noi), config r2; placa prin
+  `cascada.py porneste S109 -- python lucru/cascada/S109/s109.py`
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49, E1 = „varianta (b) din S108”); pașii și pragurile: supraveghetor, 13 nov 2026 11:15
 - raport: docs/rapoarte/…
 

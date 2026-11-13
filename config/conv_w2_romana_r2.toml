@@ -1,0 +1,60 @@
+# S109 (C-119 E1, aprobat de Adrian 13 nov 2026 10:49; pașii: supraveghetor 11:15): 3 ore din #513 pe o copie, pe
+# perechile S76a + perechile noi pentru cele 13 tipuri (b2) (`unelte/conversatie_tipuri.py`). Copie exactă a
+# config/conv_w2_romana_r1.toml (S76b, cea care a dat #513), cu DOAR: `nume`, `cale_stare`, `conversatie`,
+# `durata_scaderii_secunde` (3 ore = 10800), eticheta și acest antet schimbate.
+#   python unelte/antrenare_lunga.py --config config/conv_w2_romana_r2.toml --ore 3 --porneste-din 513
+
+[platforma]
+# Linie nouă, ca `--porneste-din 513` să se aplice (lucru/w2_romana_r2/ nu există la 13 nov).
+nume = "w2_romana_r2"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_muon:ModelGPTConversatieMuon"
+setari = { n_straturi = 12, n_capete = 12, n_emb = 768, context = 512, lot = 12, rata_invatare = 0.00005, rata_care_scade = true, incalzire_pasi = 100, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_romana_r2/gpt.pt", director_cache = "lucru/cache", samanta = 0, examene_suplimentare = ["fapte", "fapte_noi", "profesor"], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/fapte/povesti.txt", fractie_hrana = 0.05, conversatie = "lucru/romana_raspunsuri_r2/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 10800, adunare_loturi = 8, racire_finala = 0.25, optimizator = "adamw" }
+
+[antrenare_lunga]
+eticheta = "S109 (C-119 E1): 3 ore din #513 pe răspunsurile în română + tipurile (b2) noi"
+
+[porturi.date]
+modul = "module.date_amestec:DateAmestec"
+setari = { cale_antrenare = "date/ws/amestec/antrenare.txt", cale_validare = "date/tinystories_r2/validare.txt" }
+
+[porturi.examen]
+modul = "module.examen_bpb:ExamenBpb"
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [12] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"
