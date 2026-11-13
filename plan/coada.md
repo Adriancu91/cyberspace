@@ -3698,7 +3698,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md
 
 ### S109 — C-119 E1 = varianta (b) din S108: generator de întrebări pentru tipurile slabe + examen nou ținut deoparte + 3 ore din #513 (linia nouă `w2_romana_r2`) + toate examenele „răspuns din text” (procesor ~1–2 h + placa ~3,5 h)
-- stare: in_lucru (executant, 13 nov 11:31: partea de procesor — generator, examen, fișierul de antrenare, configurarea, pre-înregistrarea)
+- stare: gata (executant, 13 nov 16:35: lanțul cod 0 la 16:06:47; **AJUTĂ** — partea (i) #513 24 → #577 102/130 profesor (+78), verificator 23 → 91 (+68); STRICĂ nu; #577 = „#513+b” candidat; 1427 teste trec, 1 sărit. **Pasul 8 NEFĂCUT**: interfața de pe 8787 e cea a paznicului (#312/#407, nu #513), `taskkill` și `curl` blocate → propus (a) la S112 / (b) de mână, comenzile în raport)
+- (istoric) stare: in_lucru (executant, 13 nov 11:31: partea de procesor — generator, examen, fișierul de antrenare, configurarea, pre-înregistrarea)
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119)
 - tip: procesor (generator + examen) apoi placă (antrenare 3 h + examene ~45 min)
 - fereastră: **de acum, non-stop** (C-119); partea de placă pornește imediat ce generatorul și examenul sunt gata și urcate
@@ -3730,7 +3731,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   `cascada.py porneste S109 -- python lucru/cascada/S109/s109.py`
 - (supraveghetor, 13 nov 2026 14:15) pre-înregistrarea verificată: pragurile de la pasul 7 copiate cuvânt cu cuvânt, urcată (150e742, 12:40) înainte de placă; examenul (f970216, SHA `68cb434a…ffaa`) urcat înaintea fișierului de antrenare; 3.345 perechi noi în loc de ~6.150 — explicat, acceptat. Citirea pragurilor scrisă de executant e corectă. Continuă.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49, E1 = „varianta (b) din S108”); pașii și pragurile: supraveghetor, 13 nov 2026 11:15
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-13_1635_S109_E1_tipuri_noi.md
 
 ### S110 — C-119 E2 = S101 repornit: Kronos de 24 de straturi (183 M) DE LA ZERO, Muon, încălzire → vârf → scădere, pe amestecul actual pe bucăți + întrebările din E1 (placa, proba de rată ~1 h + ~54 h, puncte de control la 12 h și 24 h)
 - stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119 — ridică „nu deocamdată” de la S101/C-101) — pornește doar după S109 `gata`

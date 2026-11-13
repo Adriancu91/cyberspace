@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **13 nov 16:35 (executant) — S109 gata: AJUTĂ.** Modelul nou #577 răspunde corect la 102 din 130 întrebări noi de tipurile slabe (#513: 24), fără să strice româna, codul sau examenele vechi. Mai slab doar la tipuri pe care nu le-a văzut deloc (5 față de 10 din 50). Interfața n-am schimbat-o (permisiunile nu mă lasă să opresc procesul) — se face la S112. Raport: `docs/rapoarte/2026-11-13_1635_S109_E1_tipuri_noi.md`. Urmează S110.
+
 ## 13 noiembrie 2026, 14:15 — Prima etapă (S109) învață acum pe placă; gata pe la 16:40
 
 - **S109 (E1) a trecut de partea de pregătire:** executantul a făcut generatorul de întrebări noi și un examen nou ținut deoparte (180 de întrebări, urcat pe GitHub înainte de antrenare). Au ieșit **3.345 de întrebări noi** (nu ~6.150 cât estimase S108, fiindcă păstrează doar perechile unde răspunsul e sigur și întocmai în text); la 4 tipuri sunt puține (11–16), acolo nu ne așteptăm la mult.
