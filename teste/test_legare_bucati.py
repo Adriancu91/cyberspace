@@ -141,7 +141,9 @@ def test_configurarile_in_uz_raman_pe_calea_veche():
             cu_sir.add(cale.name)
     # S104 (C-110, 12 nov 2026): proba_placa_bucati.toml = configurarea de probă a rulării B de pe placă
     # S110 (C-119 E2, Adrian 13 nov 2026): conv_w2_mare_24z.toml = prima linie de model pe bucăți (24 de straturi de la zero)
-    assert cu_sir == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml", "conv_w2_mare_24z.toml"}
+    # S110 (C-120, 13 nov 2026): conv_w2_mare_24z2.toml (înlocuiește 24z, rămasă nevalabilă) + probele ei de rată
+    assert cu_sir == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml", "conv_w2_mare_24z.toml",
+                      "conv_w2_mare_24z2.toml", "proba_24z2_a.toml", "proba_24z2_b.toml"}
     for nume in ("conv_w2_mare_24r.toml", "conv_w2_mare_24n.toml", "conv_w2.toml"):
         c = tomllib.loads((RADACINA / "config" / nume).read_text(encoding="utf-8"))
         assert c["porturi"]["date"]["modul"] == "module.date_amestec:DateAmestec"
