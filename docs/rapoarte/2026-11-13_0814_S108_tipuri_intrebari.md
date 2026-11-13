@@ -129,6 +129,18 @@ La 4 tipuri (pictor, câștigător, soț, personaj) ar fi doar 30–70 de exempl
 
 `CUDA_VISIBLE_DEVICES=-1 python -m pytest`: înainte **1412 trec, 1 sărit**; după: **1412 trec, 1 sărit** (6 min 40 s, ambele).
 
+## Modelele #513 și #554 există încă (adaosul supraveghetorului, 08:15; doar citire)
+
+| model | fișierul | mărime | SHA-256 |
+|---|---|---|---|
+| #513 | `lucru/stocare/modele/experiment_513.pt` | 392.400.973 B | `605c4084f0a5db125b1e6c2c037b8e3d96abd17c1d62ec76efe439ecaba58b2c` (= cel din S106 ✓) |
+| #513 | `lucru/w2_romana_r1/gpt.pt` (starea liniei) | 1.176.555.593 B | `b9214d729b1b2f1996e077facdbe82e1d0eb6b99e996ee58d8899d80a61acda3` |
+| #554 | `lucru/stocare/modele/experiment_554.pt` | 732.670.301 B | `6a6d97d0a6808be56e23c4ef8a940da397b3d04cda85727460a6d379aa2923fd` (= cel din S106 ✓) |
+| #554 | `lucru/w2_mare_24s/gpt.pt` (starea liniei) | 2.197.380.401 B | `ee39471fade93c5c019f360cfad1dca7506cb9bb17ae893c67b67b0b0c194e5e` |
+
+Testul `test_kronos_cod_examen` (picat o dată în raportul de dimineață) a trecut în ambele rulări complete de azi (08:00 și
+08:30). N-am reparat nimic.
+
 ## Fișierele
 
 - Scripturile și rezultatele, doar în `lucru/cascada/S108/` (nu sunt în Git): `numara.py` (unealta de numărat, doar citire),

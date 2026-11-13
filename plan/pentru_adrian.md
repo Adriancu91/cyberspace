@@ -10,6 +10,8 @@
 - **Pus în coadă:** nimic nou pe placă; hotărăsc după raportul S108.
 - **Aștept de la tine:** nimic urgent. Când ai timp: direcția (a) modelul de 24 de straturi de la zero sau (b) mai multe tipuri de întrebări pe modelul în uz; „a”/„b” pentru testul care a picat o dată (fără răspuns rămâne „b” = îl urmărim).
 
+- **13 nov 08:14 (executant) — S108 gata:** linia lui #513 n-a văzut la antrenare 11 din cele 13 tipuri de întrebări slabe (0 exemple; „țară” doar 223 de instrucțiuni România/Moldova, „oraș” 4), iar tipurile care merg au fost văzute de 14–719 ori. Din Wikipedia deja descărcată s-ar putea face ~6.000 de întrebări noi pentru cele 12 tipuri slabe (inegal: profesie ~2.900, țară ~1.200; pictor/câștigător ~30). Varianta (b) = generator nou + examen nou + 2–3 ore de placă; (a) = ~7 nopți. #513 și #554 există încă (SHA ca la S106). Raport: `docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md`.
+
 ## 13 noiembrie 2026, 02:15 — Renotarea a confirmat: modelele refuză aproape orice întrebare fără text; azi o numărătoare pentru alegerea ta
 
 - **S107 gata, verificat de mine — „#513 rămâne”.** Unealta nouă numără corect refuzul cinstit la întrebările-capcană (#513: 1 → 16, #554: 0 → 16 din 20), dar amândouă refuză și 46–49 din 50 de întrebări pe care ar trebui să le știe. Nota medie 1,913 față de 1,900 (pragul 0,3) → LA FEL. Pentru modelul în uz contează examenele „răspuns din text” (S106).
