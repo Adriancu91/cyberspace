@@ -3822,6 +3822,17 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   - d. în pre-înregistrare: amestecul real (calculat de tine: română ~70–74 %), numărul de treceri estimat prin hrană, și fraza cu „mărimea **și** datele”. Apoi pașii 5–9 neschimbați.
   - Dacă la a–c ceva pică de 3 ori → amestecul vechi (proba de acum, deja făcută, e valabilă pentru el) și scrii de ce.
 - (supraveghetor, 13 nov 2026 20:20) La întrebările de la 17:40: **(1a) și (2a) sunt bune**, aprobate. Unealta cu greșeala găsită de a doua verificare și reparată cu test — bine prinsă.
+- (executant, 13 nov 20:40) **hotărârea de la 20:20 preluată; a și b FĂCUTE, c PORNITĂ.** Proba veche (amestecul vechi,
+  informativă): (a) româna **1,9294**, (b) **2,0105**; placa max 5.885 MB / 65 °C; 8.752 de loturi în 30 min; fără NaN.
+  **a.** cache-ul hranei: **536.494.994 simboluri** (3,59 octeți/simbol), 61 s cu totul (împărțirea pe 16 procese 39 s),
+  RAM de vârf 17,3 GB, fișier 1,07 GB; începutul comparat simbol cu simbol cu împărțirea directă: la fel; C: **61 GB** liberi
+  (≥ 50 ✓). **b.** `hrana` + `fractie_hrana = 0.55` în cele trei configurări; **1462 teste trec, 1 sărit**. **c.** dosare noi
+  `lucru/proba_24z2/a2/`, `b2/`. **În plus față de „nimic altceva”, fiindcă altfel proba nu rula:** în cele două configurări
+  de probă `nume` a devenit `proba_24z2_a2` / `_b2` (orele se numără din jurnal după numele liniei; `proba_24z2_a` are deja
+  ora 1, deci `--ore 1` n-ar fi antrenat nimic) și `cale_stare` arată spre `a2/`, `b2/`; testul probelor potrivit cu asta.
+  Lanțul `lucru/cascada/S110/probe2.py` (ieșiri `probe2.json`, `proba_<a|b>2_pierderi.json`), sfârșit ~21:45. **Rularea
+  următoare:** alegerea ratei (regula de la pasul 4), pre-înregistrarea (amestecul real, trecerile prin hrană), commit +
+  push, `git pull`, apoi rularea de 52 h.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49 + 11:11; C-120 „da” 17:03 pentru româna FineWeb-2 deja descărcată); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, rescrise 17:15 după C-120 (C1–C6, E1, E2 verificate în cod)
 - raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3 + pornirea probei; urmează proba și alegerea ratei, apoi 12 h / 24 h / final)
 

@@ -62,9 +62,11 @@ def test_probele_difera_de_24z2_doar_prin_nume_stare_buget_si_rate(litera, rata_
     z, p = _config("conv_w2_mare_24z2.toml"), _config(f"proba_24z2_{litera}.toml")
     sz, sp = z["porturi"]["model"]["setari"], p["porturi"]["model"]["setari"]
     assert {k for k in sz.keys() | sp.keys() if sz.get(k) != sp.get(k)} <= {"cale_stare", "rata_muon", "rata_invatare"}
-    assert sp["cale_stare"] == f"lucru/proba_24z2/{litera}/gpt.pt"
+    # proba refăcută cu hrana FineWeb-2 (supraveghetor, 13 nov 2026 20:20): linie și dosar noi, cu sufixul 2
+    assert sp["cale_stare"] == f"lucru/proba_24z2/{litera}2/gpt.pt"
+    assert sp["hrana"] == "date/ws/hrana_fineweb_rest/antrenare.txt" and sp["fractie_hrana"] == 0.55
     assert sp["rata_muon"] == rata_muon and sp["rata_invatare"] == rata_invatare
-    assert p["platforma"] == {**z["platforma"], "nume": f"proba_24z2_{litera}", "buget_antrenare_secunde": 1800}
+    assert p["platforma"] == {**z["platforma"], "nume": f"proba_24z2_{litera}2", "buget_antrenare_secunde": 1800}
     assert p["porturi"]["model"]["modul"] == z["porturi"]["model"]["modul"]
     for port in z["porturi"].keys() - {"model"}:
         assert p["porturi"][port] == z["porturi"][port]
