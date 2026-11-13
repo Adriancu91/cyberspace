@@ -1,0 +1,2790 @@
+{
+ "nota": "S109 (C-119 E1, 13 nov 2026): examenul ținut deoparte pentru tipurile de întrebări. (i) = cele 13 tipuri (b2) din S15, acum antrenate de `unelte/conversatie_tipuri.py`, pe texte și subiecte scoase din antrenare; „formulare”: „noua” = o formulare care NU apare în generator. (ii) = tipuri care nu sunt nici în S15, nici în generator, nici în antrenarea liniei. Fără „Nu scrie” și fără da/nu. Sursa: Wikipedia RO descărcată, aceleași filtre și excluderi ca S108; sămânța 109.",
+ "sursa": "date/ws/curat/wikipedia_ro/antrenare.txt",
+ "sha256_sursa": "e27c66ba98b3df6838835ed594a6a76997cae841e19d56dce56d742669410353",
+ "candidati": 21331,
+ "motive": {
+  "textul prea scurt, prea lung sau rupt": 88631,
+  "început necurat": 142179,
+  "text deja folosit la antrenare în linia lui #513": 14320,
+  "bune": 21331,
+  "bucată dintr-un examen S15/S4/text*/S76a/neutru": 4096,
+  "cuvânt necunoscut": 5603,
+  "bucată dintr-o validare (regula generatorului)": 227,
+  "subiect repetat": 970
+ },
+ "disponibile_i": {
+  "actori": 490,
+  "canal": 87,
+  "castigator": 40,
+  "functie": 109,
+  "oras": 329,
+  "personaj": 24,
+  "pictor": 74,
+  "premiu": 23,
+  "producator": 310,
+  "profesie": 2894,
+  "sot": 29,
+  "tara": 753,
+  "post": 222
+ },
+ "disponibile_ii": {
+  "nationalitate": 10,
+  "continent": 10,
+  "absolvit": 3,
+  "limba": 10,
+  "gen_muzical": 10,
+  "instrument": 7,
+  "sport": 10
+ },
+ "verificari": {
+  "raspunsuri_care_nu_sunt_in_text": [],
+  "texte_repetate": 0,
+  "pe_categorie": {
+   "i": 130,
+   "ii": 50
+  },
+  "i_pe_tip": {
+   "actori": 10,
+   "canal": 10,
+   "castigator": 10,
+   "functie": 10,
+   "oras": 10,
+   "personaj": 10,
+   "pictor": 10,
+   "premiu": 10,
+   "producator": 10,
+   "profesie": 10,
+   "sot": 10,
+   "tara": 10,
+   "post": 10
+  },
+  "i_formulari_noi_pe_tip": {
+   "actori": 4,
+   "canal": 4,
+   "castigator": 4,
+   "functie": 4,
+   "oras": 4,
+   "personaj": 4,
+   "pictor": 4,
+   "premiu": 4,
+   "producator": 4,
+   "profesie": 4,
+   "sot": 4,
+   "tara": 4,
+   "post": 4
+  },
+  "ii_pe_tip": {
+   "nationalitate": 8,
+   "continent": 8,
+   "absolvit": 3,
+   "limba": 8,
+   "gen_muzical": 8,
+   "instrument": 7,
+   "sport": 8
+  },
+  "sabloane_noi_care_sunt_si_in_generator": []
+ },
+ "perechi": [
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Tatăl meu e cel mai tare este un film românesc din 2012 regizat de Radu Potcoavă. Rolurile principale au fost interpretate de actorii Gavril Pătru, Alfred Wegeman, Valentin Popescu.",
+   "intrebare": "Ce actori apar în Tatăl meu e cel mai tare?",
+   "raspuns": "Gavril Pătru, Alfred Wegeman, Valentin Popescu.",
+   "cheie": [
+    "Gavril Pătru, Alfred Wegeman, Valentin Popescu"
+   ],
+   "formulare": "generator",
+   "subiect": "Tatăl meu e cel mai tare",
+   "grup": "tipuri_noi_0"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Audrey Rose este un film de groază psihologic american din 1977 regizat de Robert Wise. Rolurile principale sunt interpretate de actorii Marsha Mason și Anthony Hopkins. Este bazat pe un roman omonim de Frank De Felitta.",
+   "intrebare": "Cine sunt actorii principali din Audrey Rose?",
+   "raspuns": "Marsha Mason și Anthony Hopkins.",
+   "cheie": [
+    "Marsha Mason și Anthony Hopkins"
+   ],
+   "formulare": "generator",
+   "subiect": "Audrey Rose",
+   "grup": "tipuri_noi_1"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "De ce eu? sau Cristian este un film românesc din anul 2015 regizat de Tudor Giurgiu. Rolurile principale sunt interpretate de actorii Emilian Oprea, Andreea Vasile și Mihai Constantin.",
+   "intrebare": "Cine joacă în rolurile principale din De ce eu? sau Cristian?",
+   "raspuns": "Emilian Oprea, Andreea Vasile și Mihai Constantin.",
+   "cheie": [
+    "Emilian Oprea, Andreea Vasile și Mihai Constantin"
+   ],
+   "formulare": "generator",
+   "subiect": "De ce eu? sau Cristian",
+   "grup": "tipuri_noi_2"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Fără sfârșit (poloneză: Bez końca) este un film polonez din 1985 regizat de Krzysztof Kieślowski. Rolurile principale au fost interpretate de actorii Grażyna Szapołowska, Maria Pakulnis și Aleksander Bardini.",
+   "intrebare": "Ce interpreți are Fără sfârșit în rolurile principale?",
+   "raspuns": "Grażyna Szapołowska, Maria Pakulnis și Aleksander Bardini.",
+   "cheie": [
+    "Grażyna Szapołowska, Maria Pakulnis și Aleksander Bardini"
+   ],
+   "formulare": "noua",
+   "subiect": "Fără sfârșit",
+   "grup": "tipuri_noi_3"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Sechestrați fără voie este un film românesc din 2017 regizat de Tudor Botezatu. Rolurile principale au fost interpretate de actorii Dan Condurache, Virgil Aioanei, Cosmin Seleși.",
+   "intrebare": "Ce interpreți are Sechestrați fără voie în rolurile principale?",
+   "raspuns": "Dan Condurache, Virgil Aioanei, Cosmin Seleși.",
+   "cheie": [
+    "Dan Condurache, Virgil Aioanei, Cosmin Seleși"
+   ],
+   "formulare": "noua",
+   "subiect": "Sechestrați fără voie",
+   "grup": "tipuri_noi_4"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Seksmisja este un film polonez din 1984 regizat de Juliusz Machulski. Este un film SF de comedie de acțiune care a devenit film idol. Conține un substrat ascuns de satiră politică specific timpului și locului producerii sale. Rolurile principale au fost interpretate de actorii Jerzy Stuhr, Olgierd Łukaszewicz și Beata Tyszkiewicz.",
+   "intrebare": "Cine sunt actorii principali din Seksmisja?",
+   "raspuns": "Jerzy Stuhr, Olgierd Łukaszewicz și Beata Tyszkiewicz.",
+   "cheie": [
+    "Jerzy Stuhr, Olgierd Łukaszewicz și Beata Tyszkiewicz"
+   ],
+   "formulare": "generator",
+   "subiect": "Seksmisja",
+   "grup": "tipuri_noi_5"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Mitică Popescu este un film românesc din 1984 regizat de Manole Marcus și inspirat din piesa omonimă a scriitorului Camil Petrescu. Rolurile principale au fost interpretate de actorii Micaela Caracaș, Mircea Jida și Remus Mărgineanu.",
+   "intrebare": "Ce actori apar în Mitică Popescu?",
+   "raspuns": "Micaela Caracaș, Mircea Jida și Remus Mărgineanu.",
+   "cheie": [
+    "Micaela Caracaș, Mircea Jida și Remus Mărgineanu"
+   ],
+   "formulare": "generator",
+   "subiect": "Mitică Popescu",
+   "grup": "tipuri_noi_6"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Shocker (titlu original: Shocker) este un film american slasher din 1989 regizat de Wes Craven. Rolurile principale au fost interpretate de actorii Michael Murphy, Peter Berg, Cami Cooper și Mitch Pileggi.",
+   "intrebare": "Pe cine vedem în rolurile principale din Shocker?",
+   "raspuns": "Michael Murphy, Peter Berg, Cami Cooper și Mitch Pileggi.",
+   "cheie": [
+    "Michael Murphy, Peter Berg, Cami Cooper și Mitch Pileggi"
+   ],
+   "formulare": "noua",
+   "subiect": "Shocker",
+   "grup": "tipuri_noi_7"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Glissando este un film românesc din 1984 scris și regizat de Mircea Daneliuc după nuvela Omul din vis a lui Cezar Petrescu. În rolurile principale au jucat actorii Ștefan Iordache, Tora Vasilescu și Ioan Fiscuteanu.",
+   "intrebare": "Pe cine vedem în rolurile principale din Glissando?",
+   "raspuns": "Ștefan Iordache, Tora Vasilescu și Ioan Fiscuteanu.",
+   "cheie": [
+    "Ștefan Iordache, Tora Vasilescu și Ioan Fiscuteanu"
+   ],
+   "formulare": "noua",
+   "subiect": "Glissando",
+   "grup": "tipuri_noi_8"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "actori",
+   "text": "Canalul este un film românesc din 2014 regizat de Cornel Mihalache. Rolurile principale au fost interpretate de actorii Marian Râlea, Claudiu Bleonț, Richard Bovnoczki,.",
+   "intrebare": "Ce actori apar în Canalul?",
+   "raspuns": "Marian Râlea, Claudiu Bleonț, Richard Bovnoczki.",
+   "cheie": [
+    "Marian Râlea, Claudiu Bleonț, Richard Bovnoczki"
+   ],
+   "formulare": "generator",
+   "subiect": "Canalul",
+   "grup": "tipuri_noi_9"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "America’s Next Top Model este un concurs de frumusețe în mai multe etape, transmis de postul TV \"United Paramount Network\", emisiunea este moderată de Tyra Banks. În Germania există o emisiune TV asemănătoare numită Germany’s Next Topmodel, ea fiind moderată de Heidi Klum.",
+   "intrebare": "Care televiziune a transmis America’s Next Top Model?",
+   "raspuns": "Pe TV.",
+   "cheie": [
+    "TV"
+   ],
+   "formulare": "noua",
+   "subiect": "America’s Next Top Model",
+   "grup": "tipuri_noi_10"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Punct de criză (titlu original: Threshold) este un serial de televiziune americano-britanic dramatic științifico-fantastic care a avut premiera pe CBS în septembrie 2005.",
+   "intrebare": "La ce televiziune a apărut Punct de criză?",
+   "raspuns": "Pe CBS.",
+   "cheie": [
+    "CBS"
+   ],
+   "formulare": "noua",
+   "subiect": "Punct de criză",
+   "grup": "tipuri_noi_11"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Star's End este o emisiune radiofonică, săptămânală, de cinci ore ce difuzează predominant muzică New Age și Ambient, transmisă de WXPN, post de radio al Universității din Pennsylvania, din Philadelphia. Este cea de-a doua emisiune ca longevitate de genul său din lume, după Hearts of Space.",
+   "intrebare": "La ce televiziune a apărut Star's End?",
+   "raspuns": "Pe WXPN.",
+   "cheie": [
+    "WXPN"
+   ],
+   "formulare": "noua",
+   "subiect": "Star's End",
+   "grup": "tipuri_noi_12"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Dezastrele regelui Arthur (engleză King Arthur's Disasters) este un serial de animație britanic difuzat pentru prima oară pe CITV pe data de 11 aprilie 2005. Este co-creat de Paul Parkes și Will Ashurst și urmărește încercările Regele Arthur, asistat de vrăjitorul Merlin, să o seducă pe auto-obsedata prințesă Guinevere. Datorită popularității serialului, s-a lansat un al doilea sezon ce și-a început transmisia pe CITV din 6 noiembrie 2005. Genevieve Dexter servește ca producător executiv al serialului.",
+   "intrebare": "Ce canal a difuzat Dezastrele regelui Arthur?",
+   "raspuns": "Pe CITV.",
+   "cheie": [
+    "CITV"
+   ],
+   "formulare": "generator",
+   "subiect": "Dezastrele regelui Arthur",
+   "grup": "tipuri_noi_13"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Prețul cel bun este o emisiune concurs de televiziune care este difuzată de postul Antena 1 și a debutat în septembrie 2021. Este varianta românească a francizei The Price Is Right care a fost prima dată difuzată în Statele Unite ale Americii în anul 1956.",
+   "intrebare": "Care televiziune a transmis Prețul cel bun?",
+   "raspuns": "Pe Antena 1.",
+   "cheie": [
+    "Antena 1"
+   ],
+   "formulare": "noua",
+   "subiect": "Prețul cel bun",
+   "grup": "tipuri_noi_14"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Sheena este un serial de acțiune-aventură/fantasy american ce a rulat prima oară în America între 2000 și 2002. În România, serialul a fost difuzat de Antena 1 și AXN.",
+   "intrebare": "Pe ce canal a rulat Sheena?",
+   "raspuns": "Pe Antena 1.",
+   "cheie": [
+    "Antena 1"
+   ],
+   "formulare": "generator",
+   "subiect": "Sheena",
+   "grup": "tipuri_noi_15"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Iubire ascunsă (turcă: Așk-ı Memnu) este un serial de televiziune romantic dramatic turcesc produs de Ay Yapım. A fost produs și transmis în premieră de Kanal D (Turcia) între 2008 și 2010. Este adaptat după romanul omonim Așk-ı Memnu scris de autorul Halit Ziya Ușaklıgil, dar acțiunea serialului are loc în Istanbulul de astăzi în loc de secolul al XIX-lea ca în roman.",
+   "intrebare": "Pe ce post de televiziune a rulat Iubire ascunsă?",
+   "raspuns": "Pe Kanal D.",
+   "cheie": [
+    "Kanal D"
+   ],
+   "formulare": "generator",
+   "subiect": "Iubire ascunsă",
+   "grup": "tipuri_noi_16"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "The Looney Tunes Show este un serial animat difuzat pe canalul Cartoon Network, personajele fiind din celebrele serii de desene animate Looney Tunes și Merrie Melodies produs de Warner Bros.",
+   "intrebare": "Ce canal a difuzat The Looney Tunes Show?",
+   "raspuns": "Pe Cartoon Network.",
+   "cheie": [
+    "Cartoon Network"
+   ],
+   "formulare": "generator",
+   "subiect": "The Looney Tunes Show",
+   "grup": "tipuri_noi_17"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Spirala (din engleză Helix) este un serial de televiziune american științifico-fantastic thriller care a avut premiera pe Syfy la 10 ianuarie 2014. Serialul prezintă povestea unei echipe de oameni de știință de la Centrul pentru Controlul și Prevenirea Bolilor, care călătoresc la un centru de cercetare aflat în regiunea arctică pentru a investiga un potențial focar de boală. Odată sosiți aici, ajung să fie blocați într-o situație pe viață și pe moarte, care ar putea decide viitorul omenirii.",
+   "intrebare": "Pe ce canal a avut premiera Spirala?",
+   "raspuns": "Pe Syfy.",
+   "cheie": [
+    "Syfy"
+   ],
+   "formulare": "generator",
+   "subiect": "Spirala",
+   "grup": "tipuri_noi_18"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "canal",
+   "text": "Laboratorul lui Dexter este un serial american de desene animate difuzat pe canalul Cartoon Network. A fost creat în anul 1995 de Genndy Tartakovsky și produs de Cartoon Network Studios (în sezoanele 1, 3 și 4) și de Hanna-Barbera Cartoons (în sezonul 2).",
+   "intrebare": "Pe ce canal a rulat Laboratorul lui Dexter?",
+   "raspuns": "Pe Cartoon Network.",
+   "cheie": [
+    "Cartoon Network"
+   ],
+   "formulare": "generator",
+   "subiect": "Laboratorul lui Dexter",
+   "grup": "tipuri_noi_19"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1960-1961 a fost a 23-a ediție a Cupei României la fotbal. A fost prima ediție câștigată de Arieșul Turda în finala unui meci cu Rapid București. Câștigătoarea ediției anterioare, Progresul București, a fost eliminată în sferturile de finală.",
+   "intrebare": "Cine s-a impus în Ediția 1960-1961?",
+   "raspuns": "Arieșul Turda.",
+   "cheie": [
+    "Arieșul Turda"
+   ],
+   "formulare": "noua",
+   "subiect": "Ediția 1960-1961",
+   "grup": "tipuri_noi_20"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Cupa României 2018-2019 a fost cea de-a 81-a ediție a celui mai vechi turneu eliminator din fotbalul românesc. A fost câștigată de FC Viitorul, care a învins în finală FC Astra Giurgiu. Ca urmare, Viitorul s-a calificat direct în a treia rundă de calificare a UEFA Europa League 2019-2020.",
+   "intrebare": "Cine a câștigat Cupa României 2018-2019?",
+   "raspuns": "FC Viitorul.",
+   "cheie": [
+    "FC Viitorul"
+   ],
+   "formulare": "generator",
+   "subiect": "Cupa României 2018-2019",
+   "grup": "tipuri_noi_21"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1974-1975 a fost a 37-a ediție a Cupei României la fotbal. A fost câștigată de Rapid București, care a învins-o în finală pe Universitatea Craiova cu scorul de 2-1. Câștigătoarea ediției anterioare, Jiul Petroșani, a fost eliminată în optimi.",
+   "intrebare": "Cine a fost câștigătorul în Ediția 1974-1975?",
+   "raspuns": "Rapid București.",
+   "cheie": [
+    "Rapid București"
+   ],
+   "formulare": "generator",
+   "subiect": "Ediția 1974-1975",
+   "grup": "tipuri_noi_22"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Campionatul Mondial de polo pe apă este un turneu internațional de polo care are loc odată la doi ani ca parte a Campionatului Mondial de Natație. Ultima ediție a fost câștigată de Serbia la masculin și Statele Unite la feminin.",
+   "intrebare": "Cine a câștigat Campionatul Mondial de polo pe apă?",
+   "raspuns": "Serbia.",
+   "cheie": [
+    "Serbia"
+   ],
+   "formulare": "generator",
+   "subiect": "Campionatul Mondial de polo pe apă",
+   "grup": "tipuri_noi_23"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1965-1966 a fost a 28-a ediție a Cupei României la fotbal. A fost câștigată de Steaua București învingând în finală echipa UTA Arad cu scorul de 4-0. Câștigătoarea ediției anterioare, „U” Cluj, a fost eliminată în sferturi chiar de Dinamo București.",
+   "intrebare": "Cine a ieșit învingător în Ediția 1965-1966?",
+   "raspuns": "Steaua București.",
+   "cheie": [
+    "Steaua București"
+   ],
+   "formulare": "generator",
+   "subiect": "Ediția 1965-1966",
+   "grup": "tipuri_noi_24"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 2002-2003 a fost a 65-a ediție a Cupei României la fotbal. A fost câștigată de Dinamo București, care a învins-o în finală pe FC Național București.",
+   "intrebare": "Cine a câștigat Ediția 2002-2003?",
+   "raspuns": "Dinamo București.",
+   "cheie": [
+    "Dinamo București"
+   ],
+   "formulare": "generator",
+   "subiect": "Ediția 2002-2003",
+   "grup": "tipuri_noi_25"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1980-1981 a fost a 43-a ediție a Cupei României la fotbal. A fost câștigată de Universitatea Craiova, care a învins-o în finală pe Politehnica Timișoara cu scorul de 6-0.",
+   "intrebare": "Cui i-a revenit victoria în Ediția 1980-1981?",
+   "raspuns": "Universitatea Craiova.",
+   "cheie": [
+    "Universitatea Craiova"
+   ],
+   "formulare": "noua",
+   "subiect": "Ediția 1980-1981",
+   "grup": "tipuri_noi_26"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1948-1949 a fost a 12-a ediție a Cupei României la fotbal. Pentru prima dată trofeul a fost câștigat de CSCA București, viitoarea Steaua București. Finala cu CSU Cluj a fost cea mai întârziată finală a competiției din punct de vedere calendaristic, având loc cu cinci zile înainte de Crăciun. A fost prima finală arbitrată de un arbitru din afara Bucureștiului: Adalbert Kincs din Lugoj.",
+   "intrebare": "Cine s-a impus în Ediția 1948-1949?",
+   "raspuns": "CSCA București.",
+   "cheie": [
+    "CSCA București"
+   ],
+   "formulare": "noua",
+   "subiect": "Ediția 1948-1949",
+   "grup": "tipuri_noi_27"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Ediția 1961-1962 a fost a 24-a ediție a Cupei României la fotbal. A fost câștigată de Steaua București în finala unui meci cu Rapid București. Câștigătoarea ediției anterioare, Arieșul Turda, a fost eliminată în șaisprezecimi.",
+   "intrebare": "Cui i-a revenit victoria în Ediția 1961-1962?",
+   "raspuns": "Steaua București.",
+   "cheie": [
+    "Steaua București"
+   ],
+   "formulare": "noua",
+   "subiect": "Ediția 1961-1962",
+   "grup": "tipuri_noi_28"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "castigator",
+   "text": "Cupa UEFA 1978-1979 a fost a 8-a ediție a competiției de fotbal Cupa UEFA și a 21-a dacă se iau în calcul cele 13 ediții ale Cupei Orașelor Târguri (Inter-Cities Fairs Cup). A fost câștigată de Borussia Mönchengladbach.",
+   "intrebare": "Cine a fost câștigătorul în Cupa UEFA 1978-1979?",
+   "raspuns": "Borussia Mönchengladbach.",
+   "cheie": [
+    "Borussia Mönchengladbach"
+   ],
+   "formulare": "generator",
+   "subiect": "Cupa UEFA 1978-1979",
+   "grup": "tipuri_noi_29"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Michel Camdessus (n. 1 mai 1933) este un economist francez. Din 16 ianuarie 1987 și până în 14 februarie 2000, el a îndeplinit funcția de director general al Fondului Monetar Internațional.",
+   "intrebare": "Ce funcție a ocupat Michel Camdessus?",
+   "raspuns": "Director general al Fondului Monetar Internațional.",
+   "cheie": [
+    "director general al Fondului Monetar Internațional"
+   ],
+   "formulare": "generator",
+   "subiect": "Michel Camdessus",
+   "grup": "tipuri_noi_30"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Dumitru Moinescu (n. 25 iunie 1952) este un fost deputat român în legislatura 1990-1992 ales în județul Constanța pe listele partidului FSN. În legislatura 1992-1996, Dumitru Moinescu a fost deputat pe listele PD. Între 1997-2000(Martie) a fost secretar de stat la Ministerul Comunicațiilor. Între 2000(martie)-2000(decembrie) a fost Președinte al Autorității Naționale ptr Turism. În perioada 2000-2004, Dumitru Moinescu a fost primarul municipiului Medgidia. În 2011, Dumitru Moinescu a fost condamnat definitiv la 6 luni de închisoare cu suspendare pentru infracțiunea de favorizare a infractorului.",
+   "intrebare": "Care a fost funcția lui Dumitru Moinescu?",
+   "raspuns": "Primarul municipiului Medgidia.",
+   "cheie": [
+    "primarul municipiului Medgidia"
+   ],
+   "formulare": "generator",
+   "subiect": "Dumitru Moinescu",
+   "grup": "tipuri_noi_31"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "George Crin Laurențiu Antonescu (n. 21 septembrie 1959, Tulcea) este un om politic român, președinte al Partidului Național Liberal din 2009 până în 2014, președinte al Senatului României între 2012-2014. A fost candidatul PNL la alegerile prezidențiale din 2009, unde s-a clasat pe locul al treilea. În perioada 10 iulie 2012 - 31 august 2012 a fost președinte interimar al României, pe durata suspendării din funcție a lui Traian Băsescu.",
+   "intrebare": "Ce demnitate a avut George Crin Laurențiu Antonescu?",
+   "raspuns": "Președinte interimar al României.",
+   "cheie": [
+    "președinte interimar al României"
+   ],
+   "formulare": "noua",
+   "subiect": "George Crin Laurențiu Antonescu",
+   "grup": "tipuri_noi_32"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Adrian Năstase (n. 22 iunie 1950, București, Republica Socialistă România) este un politician social-democrat român, fost profesor de drept public internațional. Între 1990-1992 a fost ministru de externe al României din partea FSN, apoi președinte al Camerei Deputaților între 1992-1996 și 2004-2006, din partea PDSR, respectiv PSD. Între decembrie 2000 și decembrie 2004 a fost cel de-al 59-lea prim-ministru al României.",
+   "intrebare": "Ce demnitate a avut Adrian Năstase?",
+   "raspuns": "Ministru de externe al României din partea FSN.",
+   "cheie": [
+    "ministru de externe al României din partea FSN"
+   ],
+   "formulare": "noua",
+   "subiect": "Adrian Năstase",
+   "grup": "tipuri_noi_33"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Radu Stroe (n. 31 august 1949, Osoi, Iași) este un politician român, parlamentar între 2000–2008 și 2010–2016. Până în decembrie 1989 a fost membru al PCR; a fost ales în mai multe legislaturi deputat și senator în Parlamentul României din partea PNL. În perioada 2006–2007 a fost ministru delegat pentru coordonarea Secretariatului General al Guvernului Tăriceanu.",
+   "intrebare": "În ce funcție a servit Radu Stroe?",
+   "raspuns": "Ministru delegat pentru coordonarea Secretariatului General al Guvernului Tăriceanu.",
+   "cheie": [
+    "ministru delegat pentru coordonarea Secretariatului General al Guvernului Tăriceanu"
+   ],
+   "formulare": "noua",
+   "subiect": "Radu Stroe",
+   "grup": "tipuri_noi_34"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Rovnag Ibrahim oglu Abdullayev (; n. 3 aprilie 1965 în Nakhchivan City, Azerbaidjan) este directorul companiei petroliere, SOCAR și președintele Asociației Federațiilor de Fotbal a Azerbaidjanului. El este, de asemenea, deputat al Adunării Naționale a Azerbaidjanului.",
+   "intrebare": "Ce funcție ocupă Rovnag Ibrahim oglu Abdullayev?",
+   "raspuns": "Directorul companiei petroliere.",
+   "cheie": [
+    "directorul companiei petroliere"
+   ],
+   "formulare": "generator",
+   "subiect": "Rovnag Ibrahim oglu Abdullayev",
+   "grup": "tipuri_noi_35"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Lev Aristidovici Casso a fost un avocat, profesor universitar și politician țarist. În perioada anilor 1910-1914 a fost ministru al educației în guvernele Stolîpin și Kokovțov.",
+   "intrebare": "Care a fost funcția lui Lev Aristidovici Casso?",
+   "raspuns": "Ministru al educației în guvernele Stolîpin și Kokovțov.",
+   "cheie": [
+    "ministru al educației în guvernele Stolîpin și Kokovțov"
+   ],
+   "formulare": "generator",
+   "subiect": "Lev Aristidovici Casso",
+   "grup": "tipuri_noi_36"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Guri Ivanovici Marciuk (n. 8 iunie 1925 - d. 24 martie 2013) a fost un matematician ucrainean, care a îndeplinit funcția de președinte al Academiei Ruse de Științe (1986-1991). A fost ales ca membru de onoare al Academiei Române (în 1991).",
+   "intrebare": "Care a fost funcția lui Guri Ivanovici Marciuk?",
+   "raspuns": "Președinte al Academiei Ruse de Științe.",
+   "cheie": [
+    "președinte al Academiei Ruse de Științe"
+   ],
+   "formulare": "generator",
+   "subiect": "Guri Ivanovici Marciuk",
+   "grup": "tipuri_noi_37"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Mamuka Bakhtadze este un politician georgian, care a deținut funcția de prim-ministru al Georgiei din 20 iunie 2018 până în 2 septembrie 2019. Bakhtadze și-a anunțat oficial demisia prin intermediul Facebook.",
+   "intrebare": "În ce funcție a servit Mamuka Bakhtadze?",
+   "raspuns": "Prim-ministru al Georgiei.",
+   "cheie": [
+    "prim-ministru al Georgiei"
+   ],
+   "formulare": "noua",
+   "subiect": "Mamuka Bakhtadze",
+   "grup": "tipuri_noi_38"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "functie",
+   "text": "Ivan Zaharovici Susaikov (n. 1903 - d. 1962) a fost un general-colonel sovietic de tancuri, care a luptat în cel de-al Doilea Război Mondial. El a fost vicepreședinte al Comisiei Aliate de Control din România.",
+   "intrebare": "Ce funcție a îndeplinit Ivan Zaharovici Susaikov?",
+   "raspuns": "Vicepreședinte al Comisiei Aliate de Control din România.",
+   "cheie": [
+    "vicepreședinte al Comisiei Aliate de Control din România"
+   ],
+   "formulare": "generator",
+   "subiect": "Ivan Zaharovici Susaikov",
+   "grup": "tipuri_noi_39"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Enosis Neon Paralimni este un club de fotbal cipriot cu sediul în Paralamni.Echipa susține meciurile de acasă pe Stadionul Paralimni cu o capacitate de 5.800 de locuri.",
+   "intrebare": "Unde își are sediul Enosis Neon Paralimni?",
+   "raspuns": "În Paralamni.",
+   "cheie": [
+    "Paralamni"
+   ],
+   "formulare": "generator",
+   "subiect": "Enosis Neon Paralimni",
+   "grup": "tipuri_noi_40"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Brussels Airlines este o companie aeriană belgiană, cu sediul la Bruxelles și cu baza operativă la Aeroportul Bruxelles-Zaventem. Brussels Airlines este o companie ce aparține de Deutsche Lufthansa AG și care este membră a alianței aeriene Star Alliance.",
+   "intrebare": "Care e orașul în care își are sediul Brussels Airlines?",
+   "raspuns": "În Bruxelles.",
+   "cheie": [
+    "Bruxelles"
+   ],
+   "formulare": "noua",
+   "subiect": "Brussels Airlines",
+   "grup": "tipuri_noi_41"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Atromitos FC este un club de fotbal grecesc cu sediul în Peristeri, Atena.Echipa susține meciurile de acasă pe Stadionul Peristeri cu o capacitate de 10.200 de locuri.",
+   "intrebare": "Ce oraș găzduiește sediul lui Atromitos FC?",
+   "raspuns": "În Peristeri.",
+   "cheie": [
+    "Peristeri"
+   ],
+   "formulare": "noua",
+   "subiect": "Atromitos FC",
+   "grup": "tipuri_noi_42"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Meebo (deseori stilizat ca meebo) a fost un furnizor de servicii de mesagerie instantanee și rețele sociale. A fost fondată în septembrie 2005 de Sandy Jen, Seth Sternberg și Elaine Wherry și avea sediul în Mountain View, California. Inițial, compania a oferit un serviciu de mesagerie instantanee bazat pe web, extinzându-și oferta în chat online mai general și chiar direcții de rețele sociale. În iunie 2012, Google a achiziționat Meebo pentru a fuziona personalul companiei cu echipa de dezvoltatori Google+.",
+   "intrebare": "În ce oraș se află sediul lui Meebo?",
+   "raspuns": "În Mountain View.",
+   "cheie": [
+    "Mountain View"
+   ],
+   "formulare": "generator",
+   "subiect": "Meebo",
+   "grup": "tipuri_noi_43"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Casa lui Mihalache Cațica este un monument istoric de însemnătate națională din orașul Chișinău. A fost construită la începutul secolului al XIX-lea. Fațadele sunt soluționate în stil clasic. Casa a aparținut vistierului grec Mihalache Cațica și în ea a activat Loja francmasonică „Ovidiu-25”.",
+   "intrebare": "Care e orașul în care se află Casa lui Mihalache Cațica?",
+   "raspuns": "În Chișinău.",
+   "cheie": [
+    "Chișinău"
+   ],
+   "formulare": "noua",
+   "subiect": "Casa lui Mihalache Cațica",
+   "grup": "tipuri_noi_44"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Russkaia jizn a fost o revistă literară și social-politică, publicată din aprilie 2007 până în iunie 2009, în orașul Moscova. În perioada octombrie 2012-martie 2013 revista a existat doar ca o publicație online.",
+   "intrebare": "Russkaia jizn se află în ce oraș?",
+   "raspuns": "În Moscova.",
+   "cheie": [
+    "Moscova"
+   ],
+   "formulare": "generator",
+   "subiect": "Russkaia jizn",
+   "grup": "tipuri_noi_45"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "League of the South (în română Liga Sudul; LS) este o organizație naționalistă, și supremacistă cu sediul central în Killen, Alabama a cărei scop principal este „o republică sudistă liberă și independentă”.",
+   "intrebare": "Ce oraș găzduiește sediul lui League of the South?",
+   "raspuns": "În Killen.",
+   "cheie": [
+    "Killen"
+   ],
+   "formulare": "noua",
+   "subiect": "League of the South",
+   "grup": "tipuri_noi_46"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Casa Alexandru Văsescu este un monument istoric din municipiul Botoșani, județul Botoșani, România. Este situată în zona centrală a municipiului pe Aleea Rapsodiei 6 lângă Casa Constantin Zamfirescu. Clădirea a fost în proprietatea lui Alexandru Văsescu. În trecut aici a mai fost Internatul Liceului „Carmen Sylva”. Acum este sediul Direcției pentru Cultură și Patrimoniu Național din Botoșani și Biblioteca Județeană Mihai Eminescu Botoșani Mediateca.",
+   "intrebare": "În ce oraș e Casa Alexandru Văsescu?",
+   "raspuns": "În Botoșani.",
+   "cheie": [
+    "Botoșani"
+   ],
+   "formulare": "generator",
+   "subiect": "Casa Alexandru Văsescu",
+   "grup": "tipuri_noi_47"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Patinoar PO este o haltă situată în orașul Otopeni, județul Ilfov. Este compusă dintr-o platformă cu un peron care deservește o cale ferată, la 18 km de Gara de Nord. Trenurile sunt programate să plece de la Patinoar PO la fiecare 40 minute și durează aproximativ 36 de minute până la Gara de Nord. Stația a fost deschisă la 13 septembrie 2020, împreună cu stația Aeroport Henri Coandă T1, cu câteva luni înainte de campionatul de fotbal Euro 2020.",
+   "intrebare": "În ce oraș e Patinoar PO?",
+   "raspuns": "În Otopeni.",
+   "cheie": [
+    "Otopeni"
+   ],
+   "formulare": "generator",
+   "subiect": "Patinoar PO",
+   "grup": "tipuri_noi_48"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "oras",
+   "text": "Club Sporting Cristal SA este un club sportiv peruan situat în orașul Lima. A fost fondat la în districtul Rímac de către inginerul Ricardo Bentín Mujica și soția sa Esther Grande de Bentín, proprietari ai fabricii de bere peruane Backus și Johnston. Clubul și fabrica de bere au fost strâns legate de la înființarea sa și din acest motiv este cunoscut în mod popular ca los Cerveceros („berarii”).",
+   "intrebare": "Club Sporting Cristal SA se află în ce oraș?",
+   "raspuns": "În Lima.",
+   "cheie": [
+    "Lima"
+   ],
+   "formulare": "generator",
+   "subiect": "Club Sporting Cristal SA",
+   "grup": "tipuri_noi_49"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Sara Gilbert este o actriță, regizoare și producătoare americană cunoscută pentru rolul ei de Darlene Conner în serialul ABC Roseanne (1988-1997; 2018), pentru care a primit două nominalizări la Primetime Emmy Award. Este, de asemenea, creator și fost co-gazdă a emisiunii de zi CBS The Talk și a avut un rol recurent în rolul Leslie Winkle în Teoria Big Bang de la CBS.",
+   "intrebare": "Pe cine a întruchipat Sara Gilbert în Teoria Big Bang de la CBS?",
+   "raspuns": "Leslie Winkle.",
+   "cheie": [
+    "Leslie Winkle"
+   ],
+   "formulare": "noua",
+   "subiect": "Sara Gilbert",
+   "grup": "tipuri_noi_50"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Avan Tudor Jogia (n. 9 februarie 1992) este un actor canadian. Avan a debutat în actorie în 2006, interpretând rolul lui Danny Araujo în O fată ca mine, regizat de nominalizatul la Oscar, Agnieszka Holland. În 2007 a apărut în producția de televiziune Aliens în America interpretând rolul lui \"Sam\". În 2008 a jucat rolul lui Champ din filmul Gym Teacher: The Movie și Tajid în Spectacular, ambele pentru rețeaua de televiziune Nickelodeon. În 2014 joacă în miniseria Tut, alături de actorul Ben Kingsley. Jogia de asemenea îl interpretează pe Ben Stark în seria de televiziune Caprica, un serial realizat de producătorii Battlestar Galactica pentru canalul american Sci Fi Channel.",
+   "intrebare": "Pe cine a întruchipat Avan Tudor Jogia în O fată ca mine?",
+   "raspuns": "Danny Araujo.",
+   "cheie": [
+    "Danny Araujo"
+   ],
+   "formulare": "noua",
+   "subiect": "Avan Tudor Jogia",
+   "grup": "tipuri_noi_51"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Randall Rudy „Randy” Quaid (n. 1 octombrie 1950, Houston, Texas) este un actor american probabil cel mai cunoscut pentru rolul Vărului Eddie din filmele National Lampoon's Vacation și National Lampoon's Christmas Vacation. A fost nominalizat la premiul Oscar pentru apariții în filme ca Ultima misiune, Ziua independenței, Kingpin sau Brokeback Mountain.",
+   "intrebare": "Ce personaj a jucat Randall Rudy „Randy” Quaid în National Lampoon's Vacation?",
+   "raspuns": "Vărului Eddie.",
+   "cheie": [
+    "Vărului Eddie"
+   ],
+   "formulare": "generator",
+   "subiect": "Randall Rudy „Randy” Quaid",
+   "grup": "tipuri_noi_52"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Piotr Petrovici Fiodorov este un actor rus. Este cunoscut pentru rolul lui Guy Gaal în Insula locuită (2009), ca Gromov în Stalingrad (2013) și ca Iakovlev în Duelistul (2016).",
+   "intrebare": "Ce personaj a jucat Piotr Petrovici Fiodorov în Insula locuită?",
+   "raspuns": "Guy Gaal.",
+   "cheie": [
+    "Guy Gaal"
+   ],
+   "formulare": "generator",
+   "subiect": "Piotr Petrovici Fiodorov",
+   "grup": "tipuri_noi_53"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Scott Edward Adkins (n. 17 iunie 1976) este un actor și artist marțial englez. Este cunoscut în special pentru rolul lui Yuri Boyka din Undisputed II: Last Man Standing și Undisputed III: Redemption, Bradley Hume din Holby City, și Hector din The Expendables 2.",
+   "intrebare": "Ce rol a interpretat Scott Edward Adkins în Undisputed II: Last Man Standing?",
+   "raspuns": "Yuri Boyka.",
+   "cheie": [
+    "Yuri Boyka"
+   ],
+   "formulare": "generator",
+   "subiect": "Scott Edward Adkins",
+   "grup": "tipuri_noi_54"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Nikita Mihailovici Efremov este un actor de teatru rus, actor de voce și dublaj, cunoscut pentru rolurile sale din serialele de televiziune Londongrad (2015), The Thaw (2013) și din filmul Cenușăreasa (2012). A interpretat rolul lui Alexei Pajitnov în filmul Tetris care a avut premiera la 31 martie 2023, pe serviciul de streaming Apple TV+. Nikita este fiul lui Mihail Efremov și un nepot al lui Oleg Efremov.",
+   "intrebare": "Pe cine a jucat Nikita Mihailovici Efremov în Tetris care a avut premiera la 31 martie 2023?",
+   "raspuns": "Alexei Pajitnov.",
+   "cheie": [
+    "Alexei Pajitnov"
+   ],
+   "formulare": "generator",
+   "subiect": "Nikita Mihailovici Efremov",
+   "grup": "tipuri_noi_55"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Nichelle Nichols a fost o actriță americană, cântăreață și actriță de voce. A cântat cu Duke Ellington și Lionel Hampton înainte să-și înceapă cariera actoricească. Este cel mai cunoscută pentru rolul Locotenentului Uhura de pe USS Enterprise din franciza Star Trek.",
+   "intrebare": "Datorită cărui rol e cunoscută Nichelle Nichols?",
+   "raspuns": "Locotenentului Uhura.",
+   "cheie": [
+    "Locotenentului Uhura"
+   ],
+   "formulare": "generator",
+   "subiect": "Nichelle Nichols",
+   "grup": "tipuri_noi_56"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Michele Placido este un actor, regizor și scenarist italian. Este cunoscut în special pentru rolul lui Corrado Cattani din serialul de televiziune La piovra (Caracatița).",
+   "intrebare": "În pielea cărui personaj a intrat Michele Placido în La piovra?",
+   "raspuns": "Corrado Cattani.",
+   "cheie": [
+    "Corrado Cattani"
+   ],
+   "formulare": "noua",
+   "subiect": "Michele Placido",
+   "grup": "tipuri_noi_57"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Madison \"Maddie\" De La Garza (n. 28 decembrie 2001) este un copil actor american, sora binecunoscutei Demi Lovato. Ea este cunoscută mai ales pentru rolul lui Juanita Solis în Desperate Housewives.",
+   "intrebare": "În pielea cărui personaj a intrat Madison \"Maddie\" De La Garza în Desperate Housewives?",
+   "raspuns": "Juanita Solis.",
+   "cheie": [
+    "Juanita Solis"
+   ],
+   "formulare": "noua",
+   "subiect": "Madison \"Maddie\" De La Garza",
+   "grup": "tipuri_noi_58"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "personaj",
+   "text": "Patrick Warburton (n. 14 noiembrie 1964) este un actor american, cunoscut pentru rolul lui David Puddy în Seinfeld și ca fiind actorul de voce al lui Joe Swanson din Family Guy.",
+   "intrebare": "Ce rol a avut Patrick Warburton în Seinfeld?",
+   "raspuns": "David Puddy.",
+   "cheie": [
+    "David Puddy"
+   ],
+   "formulare": "generator",
+   "subiect": "Patrick Warburton",
+   "grup": "tipuri_noi_59"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Berthe Morisot cu evantai este o pictură în ulei pe pânză din 1874 a pictorului francez Édouard Manet. Este ultimul dintre cele douăsprezece portrete pe care Manet le-a realizat având-o drept model pe Berthe Morisot între 1868 și 1874, pictat imediat după căsătoria acesteia cu fratele pictorului Eugène, după care ea nu a mai pozat pentru el. O prezintă îmbrăcată în doliu după tatăl ei, dar purtând un inel de logodnă.",
+   "intrebare": "Care artist e autorul lui Berthe Morisot cu evantai?",
+   "raspuns": "Édouard Manet.",
+   "cheie": [
+    "Édouard Manet"
+   ],
+   "formulare": "noua",
+   "subiect": "Berthe Morisot cu evantai",
+   "grup": "tipuri_noi_60"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Bricul Mercur atacat de două corăbii turcești este o pictură în ulei realizată în anul 1892 de pictorul rus Ivan Aivazovski. Aivazovski a pictat peste 6000 de tablouri, mai multe de jumătate dintre ele fiind peisaje marine.",
+   "intrebare": "Care artist e autorul lui Bricul Mercur atacat de două corăbii turcești?",
+   "raspuns": "Ivan Aivazovski.",
+   "cheie": [
+    "Ivan Aivazovski"
+   ],
+   "formulare": "noua",
+   "subiect": "Bricul Mercur atacat de două corăbii turcești",
+   "grup": "tipuri_noi_61"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Balconul este o pictură în ulei pe pânză din 1868 a pictorului francez Édouard Manet. Înfățișează patru persoane pe un balcon, dintre care una stă jos; pictorița Berthe Morisot, care s-a căsătorit cu fratele lui Manet, Eugène, în 1874. În centru este pictorul Jean Baptiste Antoine Guillemet. În dreapta se află Fanny Claus, o violonistă. Al patrulea personaj, parțial întunecat pe fundalul interiorului, este posibil să fie Léon Leenhoff, fiul lui Manet. A fost expus la Salonul de la Paris din 1869, apoi păstrat de Manet până la moartea sa, în 1883. A fost vândut pictorului Gustave Caillebotte în 1884, care l-a lăsat statului francez în 1894. În prezent, este în custodia Musée d'Orsay la Paris.",
+   "intrebare": "Ce pictor a realizat Balconul?",
+   "raspuns": "Édouard Manet.",
+   "cheie": [
+    "Édouard Manet"
+   ],
+   "formulare": "generator",
+   "subiect": "Balconul",
+   "grup": "tipuri_noi_62"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Sena la Bougival este o pictură în ulei pe pânză din 1876 a pictorului francez Alfred Sisley și este acum expusă la Metropolitan Museum of Art din New York.",
+   "intrebare": "Cine a pictat Sena la Bougival?",
+   "raspuns": "Alfred Sisley.",
+   "cheie": [
+    "Alfred Sisley"
+   ],
+   "formulare": "generator",
+   "subiect": "Sena la Bougival",
+   "grup": "tipuri_noi_63"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Autoportret cu paletă este o pictură în ulei pe pânză din 1879 a pictorului francez Édouard Manet. Această lucrare impresionistă târzie este unul dintre cele două autoportrete ale sale. Autoportretul lui Velasquez în Las Meninas a fost inspirația pentru pictura lui Manet, care, în ciuda aluziei la lucrările precedente ale artistului, este foarte modernă aducând în centrul atenției personalitatea artistului.",
+   "intrebare": "Al cui tablou este Autoportret cu paletă?",
+   "raspuns": "Édouard Manet.",
+   "cheie": [
+    "Édouard Manet"
+   ],
+   "formulare": "generator",
+   "subiect": "Autoportret cu paletă",
+   "grup": "tipuri_noi_64"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Portul Gloucester este un tablou de la sfârșitul secolului al XIX-lea realizat de artistul american William Morris Hunt. Realizat în ulei pe pânză, pictura impresionistă înfățișează dimineața în portul Gloucester, un mare port de pescuit din Noua Anglie. Pictura a fost una dintre primele incursiuni ale lui Hunt în școala impresionismului, iar crearea Portului Gloucester și a altor câtorva lucrări inspirate de impresionism a stârnit interesul oamenilor din Boston pentru mișcarea impresionistă. Pictura este în prezent expusă la Museum of Fine Arts.",
+   "intrebare": "Cărui pictor i se datorează Portul Gloucester?",
+   "raspuns": "William Morris Hunt.",
+   "cheie": [
+    "William Morris Hunt"
+   ],
+   "formulare": "noua",
+   "subiect": "Portul Gloucester",
+   "grup": "tipuri_noi_65"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Stație de alimentare este o pictură din 1940 a pictorului american Edward Hopper. Aceasta prezintă o stație de alimentare americană aflată la capătul unei autostrăzi.",
+   "intrebare": "Care artist e autorul lui Stație de alimentare?",
+   "raspuns": "Edward Hopper.",
+   "cheie": [
+    "Edward Hopper"
+   ],
+   "formulare": "noua",
+   "subiect": "Stație de alimentare",
+   "grup": "tipuri_noi_66"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Compoziție suprematistă (dreptunghi albastru peste bară roșie) este o pictură a pictorului suprematist rus Kazimir Malevici din perioada sa cubo-futuristă. Cunoscut ca pionier al artei abstracte geometrice, pictura reprezintă o constelație de forme geometrice și culori repartizate spațial cu austeritate maximă.",
+   "intrebare": "Cine a pictat Compoziție suprematistă?",
+   "raspuns": "Kazimir Malevici.",
+   "cheie": [
+    "Kazimir Malevici"
+   ],
+   "formulare": "generator",
+   "subiect": "Compoziție suprematistă",
+   "grup": "tipuri_noi_67"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Portretul lui Antoine-Laurent Lavoisier și al soției sale este o pictură în ulei realizată în anul 1788 de pictorul francez Jacques-Louis David. În tablou este reprezentat chimistul francez Antoine Lavoisier și soția și colaboratoarea sa Marie-Anne Pierrette Paulze.",
+   "intrebare": "Cine a pictat Portretul lui Antoine-Laurent Lavoisier și al soției sale?",
+   "raspuns": "Jacques-Louis David.",
+   "cheie": [
+    "Jacques-Louis David"
+   ],
+   "formulare": "generator",
+   "subiect": "Portretul lui Antoine-Laurent Lavoisier și al soției sale",
+   "grup": "tipuri_noi_68"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "pictor",
+   "text": "Tinere doamne pe malul Senei (vară) este un tablou pictat în ulei pe pânză, realizat în 1856-1857 de pictorul francez Gustave Courbet. El l-a pictat între sfârșitul anului 1856 și începutul anului 1857 și l-a prezentat juriului Salonului de la Paris, care l-a acceptat și l-a expus la 15 iunie 1857 alături de două portrete și trei peisaje ale aceluiași artist.",
+   "intrebare": "Ce pictor a realizat Tinere doamne pe malul Senei?",
+   "raspuns": "Gustave Courbet.",
+   "cheie": [
+    "Gustave Courbet"
+   ],
+   "formulare": "generator",
+   "subiect": "Tinere doamne pe malul Senei",
+   "grup": "tipuri_noi_69"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Suflet (titlu original: Soul) este un film animat de fantezie și aventură produs de Pixar Animation Studios și Walt Disney Pictures. A primit Premiul Oscar pentru cel mai bun film de animație.",
+   "intrebare": "Ce distincție a primit Suflet?",
+   "raspuns": "Premiul Oscar.",
+   "cheie": [
+    "Premiul Oscar"
+   ],
+   "formulare": "noua",
+   "subiect": "Suflet",
+   "grup": "tipuri_noi_70"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Poartă-ți plugul peste oasele morților este un roman de mister din 2009 al scriitoarei poloneze Olga Tokarczuk. A fost ecranizat în 2017 de Agnieszka Holland ca Tablou de vânătoare și a primit Premiul Alfred Bauer la Festivalul Internațional de Film de la Berlin.",
+   "intrebare": "Ce premiu a primit Poartă-ți plugul peste oasele morților?",
+   "raspuns": "Premiul Alfred Bauer.",
+   "cheie": [
+    "Premiul Alfred Bauer"
+   ],
+   "formulare": "generator",
+   "subiect": "Poartă-ți plugul peste oasele morților",
+   "grup": "tipuri_noi_71"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Elizabeth Ann Scarborough (n. 23 martie, 1947, Kansas City, Kansas) este o scriitoare americană de science-fiction. A câștigat premiul Nebula pentru cel mai bun roman în 1989 cu romanul The Healer's War.",
+   "intrebare": "Ce premiu a câștigat Elizabeth Ann Scarborough?",
+   "raspuns": "Premiul Nebula.",
+   "cheie": [
+    "premiul Nebula"
+   ],
+   "formulare": "generator",
+   "subiect": "Elizabeth Ann Scarborough",
+   "grup": "tipuri_noi_72"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Omul de răchită (titlu original: The Wicker Man) este un film de groază britanic din 1973 regizat de Robin Hardy. Rolurile principale au fost interpretate de actorii Edward Woodward, Christopher Lee, Diane Cilento, Ingrid Pitt și Britt Ekland. A primit Premiul Saturn pentru cel mai bun film de groază.",
+   "intrebare": "Ce premiu a obținut Omul de răchită?",
+   "raspuns": "Premiul Saturn.",
+   "cheie": [
+    "Premiul Saturn"
+   ],
+   "formulare": "generator",
+   "subiect": "Omul de răchită",
+   "grup": "tipuri_noi_73"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Carieră de politician (titlu original: All the King's Men) este un film american dramatic din 1949 regizat, produs și scris de Robert Rossen. Rolurile principale au fost interpretate de actorii Broderick Crawford, John Ireland, Joanne Dru și John Derek. A câștigat Premiul Oscar pentru cel mai bun film.",
+   "intrebare": "Ce premiu a obținut Carieră de politician?",
+   "raspuns": "Premiul Oscar.",
+   "cheie": [
+    "Premiul Oscar"
+   ],
+   "formulare": "generator",
+   "subiect": "Carieră de politician",
+   "grup": "tipuri_noi_74"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Electric Velocipede este o revistă americană de ficțiune speculativă care a început să fie publicată în anul 2001. A câștigat premiul Hugo (Best Fanzine, 2009).",
+   "intrebare": "Ce distincție a primit Electric Velocipede?",
+   "raspuns": "Premiul Hugo.",
+   "cheie": [
+    "premiul Hugo"
+   ],
+   "formulare": "noua",
+   "subiect": "Electric Velocipede",
+   "grup": "tipuri_noi_75"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Toate păsările din cer este un roman științifico-fantastic al scriitoarei americane Charlie Jane Anders. A apărut prima dată în ianuarie 2016 la editura Tor Books. A primit Premiul Nebula pentru cel mai bun roman.",
+   "intrebare": "Ce premiu a obținut Toate păsările din cer?",
+   "raspuns": "Premiul Nebula.",
+   "cheie": [
+    "Premiul Nebula"
+   ],
+   "formulare": "generator",
+   "subiect": "Toate păsările din cer",
+   "grup": "tipuri_noi_76"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Fetița din capătul străzii (titlu original: The Little Girl Who Lives Down the Lane) este un film de groază canadiano-francez din 1976 regizat de Nicolas Gessner. Rolurile principale au fost interpretate de actorii Jodie Foster, Martin Sheen, Alexis Smith, Mort Shuman și Scott Jacoby. A primit Premiul Saturn pentru cel mai bun film de groază.",
+   "intrebare": "Ce distincție a primit Fetița din capătul străzii?",
+   "raspuns": "Premiul Saturn.",
+   "cheie": [
+    "Premiul Saturn"
+   ],
+   "formulare": "noua",
+   "subiect": "Fetița din capătul străzii",
+   "grup": "tipuri_noi_77"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "Werner Arber (n. 3 iunie 1929, Gränichen) este un microbiolog și genetician elvețian care în anul 1978 a primit Premiul Nobel pentru Medicină (împreună cu americanii Hamilton Smith și Daniel Nathans) pentru cercetarea în domeniul enzimelor de restricție.",
+   "intrebare": "Ce premiu i s-a acordat lui Werner Arber?",
+   "raspuns": "Premiul Nobel.",
+   "cheie": [
+    "Premiul Nobel"
+   ],
+   "formulare": "noua",
+   "subiect": "Werner Arber",
+   "grup": "tipuri_noi_78"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "premiu",
+   "text": "The Encyclopedia of Science Fiction (Enciclopedia Științifico-Fantasticului) este o lucrare de referință în limba engleză a literaturii științifico-fantastice și a ficțiunii speculative în general, prima dată publicată în 1979. Din octombrie 2011, a treia ediție este disponibilă online. A primit Premiul Hugo pentru cea mai bună carte non-ficțiune.",
+   "intrebare": "Ce premiu a obținut The Encyclopedia of Science Fiction?",
+   "raspuns": "Premiul Hugo.",
+   "cheie": [
+    "Premiul Hugo"
+   ],
+   "formulare": "generator",
+   "subiect": "The Encyclopedia of Science Fiction",
+   "grup": "tipuri_noi_79"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Majesty and Decay este cel de-al optulea album al formației americane de death metal Immolation. Lansat pe 9 martie 2010, a fost înregistrat la Millbrook Sound Studios din New York, produs de Paul Orofino și mixat de Zack Ohren.",
+   "intrebare": "Cine e producătorul lui Majesty and Decay?",
+   "raspuns": "Paul Orofino.",
+   "cheie": [
+    "Paul Orofino"
+   ],
+   "formulare": "generator",
+   "subiect": "Majesty and Decay",
+   "grup": "tipuri_noi_80"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Aladdin este un film musical de fantezie din anul 2019 regizat de Guy Ritchie, pe baza unui scenariu de John August, produs de Walt Disney Pictures. Este un live-action al filmului clasic din 1992 Aladdin, care se bazează pe povestea arabă cu Aladin din O mie și una de nopți. Filmul îi reunește în distribuție pe Mena Massoud în rolul lui Aladin, alături de Will Smith, Naomi Scott, Marwan Kenzari, Navid Negahban, Nasim Pedrad și Billy Magnussen.",
+   "intrebare": "Cine semnează producția lui Aladdin?",
+   "raspuns": "Walt Disney Pictures.",
+   "cheie": [
+    "Walt Disney Pictures"
+   ],
+   "formulare": "noua",
+   "subiect": "Aladdin",
+   "grup": "tipuri_noi_81"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Bolt este un film de animație american din anul 2008 produs de Walt Disney Animation Studios, fiind al 49-lea film animat de Disney. Este regizat de Chris Williams care a lucrat și pentru filmele Mulan și Împăratul Vrăjit.",
+   "intrebare": "Cui îi aparține producția lui Bolt?",
+   "raspuns": "Walt Disney Animation Studios.",
+   "cheie": [
+    "Walt Disney Animation Studios"
+   ],
+   "formulare": "noua",
+   "subiect": "Bolt",
+   "grup": "tipuri_noi_82"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Cotitura cea mare este un film de război sovietic, în limba rusă, din 1945, regizat de Fridrikh Ermler, bazat pe un scenariu de Boris Ciirskov. Filmul a fost unul dintre cele care au câștigat Palme d'Or la ediția din 1946. A fost produs de GOSKINO la Kinostudia Lenfilm, distribuit în SUA de Artkino Pictures și restaurat în 1967 la Lenfilm Studio. Titlul de lucru al filmului a fost General de armată.",
+   "intrebare": "Cine a produs Cotitura cea mare?",
+   "raspuns": "GOSKINO.",
+   "cheie": [
+    "GOSKINO"
+   ],
+   "formulare": "generator",
+   "subiect": "Cotitura cea mare",
+   "grup": "tipuri_noi_83"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Vulpea și câinele 2 este un film de animație american direct-pe-video, continuarea filmului Vulpea și câinele. Film a fost produs de Disney Toon Studios, regizat de Jim Kammerud și lansat de Walt Disney Pictures pe 12 decembrie 2006 în Statele Unite.",
+   "intrebare": "Cine a produs Vulpea și câinele 2?",
+   "raspuns": "Disney Toon Studios.",
+   "cheie": [
+    "Disney Toon Studios"
+   ],
+   "formulare": "generator",
+   "subiect": "Vulpea și câinele 2",
+   "grup": "tipuri_noi_84"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Charlot la music-hall este un film american de comedie din 1915 produs de Jess Robbins și scris și regizat de Charlie Chaplin, al 12-lea film al său pentru Essanay Studios. În alte roluri interpretează actorii Edna Purviance, Leo White, Charlotte Mineau și Dee Lampton.",
+   "intrebare": "Cine a realizat producția lui Charlot la music-hall?",
+   "raspuns": "Jess Robbins.",
+   "cheie": [
+    "Jess Robbins"
+   ],
+   "formulare": "generator",
+   "subiect": "Charlot la music-hall",
+   "grup": "tipuri_noi_85"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Hero Elementary este un serial de televiziune animat canadiano-american creat de Carol-Lynn Parente și Christine Ferraro și produs de Twin Cities PBS și Portfolio Entertainment și PBS Kids.",
+   "intrebare": "Cine semnează producția lui Hero Elementary?",
+   "raspuns": "Twin Cities PBS.",
+   "cheie": [
+    "Twin Cities PBS"
+   ],
+   "formulare": "noua",
+   "subiect": "Hero Elementary",
+   "grup": "tipuri_noi_86"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Bounty este un baton de ciocolată cu nucă de cocos produs de Mars, Incorporated și vândut la nivel mondial. Acesta a fost introdus în 1951 în Marea Britanie și Canada. Este vândut în mai multe variante, cu unul, două sau trei batoane, acoperite cu ciocolată cu lapte sau ciocolată neagră.",
+   "intrebare": "Cine e producătorul lui Bounty?",
+   "raspuns": "Mars.",
+   "cheie": [
+    "Mars"
+   ],
+   "formulare": "generator",
+   "subiect": "Bounty",
+   "grup": "tipuri_noi_87"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "Jiefang C-30 sau Jiefang CA 30 a fost un camion produs de FAW Jiefang din 1966 până în 1986. Cele mai multe variante ale camionului au fost întrerupte în 1986, dar producția de camioane cu șasiu și camioane militare a continuat până în 2015. În jur de 309.058 produs și vândut din 1956 până în 2015, în care a fost întrerupt în cele din urmă.",
+   "intrebare": "Cui îi aparține producția lui Jiefang C-30 sau Jiefang CA 30?",
+   "raspuns": "FAW Jiefang.",
+   "cheie": [
+    "FAW Jiefang"
+   ],
+   "formulare": "noua",
+   "subiect": "Jiefang C-30 sau Jiefang CA 30",
+   "grup": "tipuri_noi_88"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "producator",
+   "text": "The Iron Horse este un film western mut din 1924. Regizat de John Ford și produs de Fox Film, acesta a reprezentat o piatră de hotar în relația regizorului cu genul western. A devenit primul film important al lui Ford, cu precădere datorită studioului Fox, care a depășit bugetul inițial în încercarea de a dobândi succesul obținut de o altă producție western. În 2011, acest film a fost declarat drept „semnificativ din punct de vedere cultural, istoric sau estetic” de către Biblioteca Congresului Statelor Unite și selectat pentru păstrare în Registrul Național de Film.",
+   "intrebare": "Cine a produs The Iron Horse?",
+   "raspuns": "Fox Film.",
+   "cheie": [
+    "Fox Film"
+   ],
+   "formulare": "generator",
+   "subiect": "The Iron Horse",
+   "grup": "tipuri_noi_89"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Juan Eduardo Esnáider (n. 5 martie 1973) este un fost fotbalist argentinian, care acum este antrenor. A petrecut cea mai mare parte a carierei sale profesionale în Spania. El a fost cunoscut ca un jucător puternic, cu un joc aerian excelent.",
+   "intrebare": "Care e profesia lui Juan Eduardo Esnáider?",
+   "raspuns": "Fotbalist.",
+   "cheie": [
+    "fotbalist"
+   ],
+   "formulare": "generator",
+   "subiect": "Juan Eduardo Esnáider",
+   "grup": "tipuri_noi_90"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Iuri Mefodievici Solomin este un actor și regizor rus, care a fost director artistic al Teatrului Mic din Moscova (din 1988) și ministru al culturii al RSFS Ruse (1990-1991).",
+   "intrebare": "Ce face Iuri Mefodievici Solomin de meserie?",
+   "raspuns": "Actor și regizor.",
+   "cheie": [
+    "actor și regizor"
+   ],
+   "formulare": "noua",
+   "subiect": "Iuri Mefodievici Solomin",
+   "grup": "tipuri_noi_91"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Robert Klein (n.9 septembrie 1918 Timișoara - april 1967 Settignano) a fost un filozof și istoric de artă francez și istoric al ideilor, evreu originar din România. S-a distins prin cercetarea scrierilor artiștilor din perioada Renașterii.",
+   "intrebare": "Ce ocupație a avut Robert Klein?",
+   "raspuns": "Filozof și istoric.",
+   "cheie": [
+    "filozof și istoric"
+   ],
+   "formulare": "noua",
+   "subiect": "Robert Klein",
+   "grup": "tipuri_noi_92"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Loïc Rémy (n. 2 ianuarie 1987) este un fotbalist internațional francez care în prezent evoluează la clubul englez din Premier League, Chelsea și la naționala de fotbal a Franței. Rémy este de profil atacant, însă adesea i se acordă în teren funcția de mijlocaș ofensiv sau al doilea vârf.",
+   "intrebare": "Ce face Loïc Rémy de meserie?",
+   "raspuns": "Fotbalist.",
+   "cheie": [
+    "fotbalist"
+   ],
+   "formulare": "noua",
+   "subiect": "Loïc Rémy",
+   "grup": "tipuri_noi_93"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Jean Frédéric Joliot-Curie - născut Jean Frédéric Joliot - a fost un chimist și fizician francez, laureat al Premiului Nobel pentru chimie (1935), împreună cu soția sa, Irène Joliot-Curie.",
+   "intrebare": "Care a fost profesia lui Jean Frédéric Joliot-Curie - născut Jean Frédéric Joliot -?",
+   "raspuns": "Chimist și fizician.",
+   "cheie": [
+    "chimist și fizician"
+   ],
+   "formulare": "generator",
+   "subiect": "Jean Frédéric Joliot-Curie - născut Jean Frédéric Joliot -",
+   "grup": "tipuri_noi_94"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Oscar Isaac este un actor și muzician americano-guatemalez. Pentru rolul său din filmul Inside Llewyn Davis a fost nominalizat la Premiul Globul de Aur pentru cel mai bun actor. Mai este cunoscut pentru rolurile din Cel mai violent an (2014) și SF-ul Ex Machina (2015).",
+   "intrebare": "Care e profesia lui Oscar Isaac?",
+   "raspuns": "Actor și muzician.",
+   "cheie": [
+    "actor și muzician"
+   ],
+   "formulare": "generator",
+   "subiect": "Oscar Isaac",
+   "grup": "tipuri_noi_95"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Thomas Henry Huxley a fost un biolog britanic, om de știință, reprezentant al agnosticismului. A avut o mare influență asupra științelor naturale din secolul al XIX-lea. A fost susținător al empirismului lui David Hume și a Teoriei evoluționiste a lui Charles Darwin, fiind poreclit „Bulldog-ul lui Darwin” (Darwin's Bulldog).",
+   "intrebare": "Ce ocupație a avut Thomas Henry Huxley?",
+   "raspuns": "Biolog.",
+   "cheie": [
+    "biolog"
+   ],
+   "formulare": "noua",
+   "subiect": "Thomas Henry Huxley",
+   "grup": "tipuri_noi_96"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Valentin Musteață (n. 23 aprilie 1938, Nezavertailovca) este un inginer moldovean, doctor habilitat în științe tehnice, profesor universitar la Catedra Termotehnică și Management în Energetică de la Universitatea Tehnică a Moldovei. În anul 2000 a fost ales membru corespondent al Academiei de Științe a Moldovei, fost membru PCUS.",
+   "intrebare": "Ce profesie are Valentin Musteață?",
+   "raspuns": "Inginer.",
+   "cheie": [
+    "inginer"
+   ],
+   "formulare": "generator",
+   "subiect": "Valentin Musteață",
+   "grup": "tipuri_noi_97"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Katrine Lunde (n. 30 martie 1980, în Kristiansand) este o handbalistă norvegiană care joacă pentru clubul Vipers Kristiansand și echipa națională a Norvegiei. Ea evoluează pe postul de portar și este sora geamănă a handbalistei Kristine Lunde-Borgersen. Printre realizările ei ca sportivă se numără obținerea unor medalii de aur la Jocurile Olimpice, Campionatul Mondial și Campionatul European, precum și câștigarea unor trofee de club în Liga Campionilor EHF, campionatul Danemarcei și cel al Ungariei.",
+   "intrebare": "Cu ce se ocupă Katrine Lunde?",
+   "raspuns": "Handbalistă.",
+   "cheie": [
+    "handbalistă"
+   ],
+   "formulare": "generator",
+   "subiect": "Katrine Lunde",
+   "grup": "tipuri_noi_98"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "profesie",
+   "text": "Noëlle Châtelet (n. 16 octombrie 1944, Meudon, lângă Paris) este o actriță și autoare franceză. Locuiește în Paris, unde predă la Université Paris 5 René Descartes, Stiintele Comunicarii.",
+   "intrebare": "Care e profesia lui Noëlle Châtelet?",
+   "raspuns": "Actriță.",
+   "cheie": [
+    "actriță"
+   ],
+   "formulare": "generator",
+   "subiect": "Noëlle Châtelet",
+   "grup": "tipuri_noi_99"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Rosanna Lauren Arquette (n. 10 august 1959, New York) este o actriță americană. Ea este cea mai în vârstă dintre cei cinci copii din familie. Bunicul ei a fost un actor comic, iar tatăl actor, a întemeiat grupa satirică Committee. La vârsta de 15 Rosanna a început să cutreiere SUA cu autostopul, iar la 17 ani a jucat roluri episodice în seriale. A început să aibă succes între anii 1980 - 1990, când poate fi văzută jucând frecvent roluri neconvenționale, excentrice în filme numeroase. Este căsătorită cu John Sidel, cu care o fiică.",
+   "intrebare": "Rosanna Lauren Arquette s-a căsătorit cu cine?",
+   "raspuns": "Cu John Sidel.",
+   "cheie": [
+    "John Sidel"
+   ],
+   "formulare": "generator",
+   "subiect": "Rosanna Lauren Arquette",
+   "grup": "tipuri_noi_100"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Horace Engdahl este un critic literar, eseist și traducător suedez, care a îndeplinit între 1999 și 2009 funcția de președinte al Academiei Suedeze. Din 1989 este căsătorit cu Ebba Witt-Brattström, una din cele mai cunoscute profesoare în istoria literaturii.",
+   "intrebare": "Cu cine s-a căsătorit Horace Engdahl?",
+   "raspuns": "Cu Ebba Witt-Brattström.",
+   "cheie": [
+    "Ebba Witt-Brattström"
+   ],
+   "formulare": "generator",
+   "subiect": "Horace Engdahl",
+   "grup": "tipuri_noi_101"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Erika Sawajiri este o actriță, un fotomodel și o cântăreață pop japoneză. Ea a jucat în filme precum Pacchigi și seriale precum 1 Litre no Namida. A fost căsătorită cu Tsuyoshi Takashiro, dar au divorțat în 2013.",
+   "intrebare": "Cine i-a fost partener de viață lui Erika Sawajiri?",
+   "raspuns": "Cu Tsuyoshi Takashiro.",
+   "cheie": [
+    "Tsuyoshi Takashiro"
+   ],
+   "formulare": "noua",
+   "subiect": "Erika Sawajiri",
+   "grup": "tipuri_noi_102"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Marea Ducesă Kira Kirillovna a Rusiei (9 mai 1909 – 8 septembrie 1967) a fost a doua fiică a Marelui Duce Kiril Vladimirovici al Rusiei și a Prințeseia Victoria Melita de Saxa-Coburg și Gotha. S-a căsătorit cu Prințul Louis Ferdinand al Prusiei.",
+   "intrebare": "Cu cine s-a unit prin căsătorie Marea Ducesă Kira Kirillovna a Rusiei?",
+   "raspuns": "Cu Prințul Louis Ferdinand.",
+   "cheie": [
+    "Prințul Louis Ferdinand"
+   ],
+   "formulare": "generator",
+   "subiect": "Marea Ducesă Kira Kirillovna a Rusiei",
+   "grup": "tipuri_noi_103"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Prințesa Margareta a Prusiei (Margarete Beatrice Feodora) (22 aprilie 1872 - 22 ianuarie 1954) a fost fiica regelui Frederic al III-lea al Germaniei și a Prințesei Victoria a Regatului Unit. S-a căsătorit cu Prințul Frederic Carol de Hesse. Și-a pierdut trei fii în cele două războaie mondiale.",
+   "intrebare": "Cu cine s-a căsătorit Prințesa Margareta a Prusiei?",
+   "raspuns": "Cu Prințul Frederic Carol de Hesse.",
+   "cheie": [
+    "Prințul Frederic Carol de Hesse"
+   ],
+   "formulare": "generator",
+   "subiect": "Prințesa Margareta a Prusiei",
+   "grup": "tipuri_noi_104"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Petre Alexandrescu (n. 3 ianuarie 1930, Paris – d. 18 iulie 2009, București) a fost un istoric al Antichității, arheolog, istoric al religiilor român. A fost căsătorit cu Maria Alexandrescu Vianu. Au avut împreună un fiu, pe Vlad Alexandrescu.",
+   "intrebare": "Pe cine a luat în căsătorie Petre Alexandrescu?",
+   "raspuns": "Cu Maria Alexandrescu Vianu.",
+   "cheie": [
+    "Maria Alexandrescu Vianu"
+   ],
+   "formulare": "noua",
+   "subiect": "Petre Alexandrescu",
+   "grup": "tipuri_noi_105"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Carol al X-lea Gustav (8 noiembrie 1622 – 13 februarie 1660) a fost rege al Suediei din 1654 până la moartea sa. A fost fiul lui Ioan Casimir, Conte Palatin de Zweibrücken-Kleeburg și al Ecaterinei a Suediei. După decesul tatălui său a devenit Conte Palatin. S-a căsătorit cu Hedwig Eleonora de Holstein-Gottorp și au avut un singur fiu, Carol al XI-lea al Suediei.",
+   "intrebare": "Pe cine a luat în căsătorie Carol al X-lea Gustav?",
+   "raspuns": "Cu Hedwig Eleonora de Holstein-Gottorp.",
+   "cheie": [
+    "Hedwig Eleonora de Holstein-Gottorp"
+   ],
+   "formulare": "noua",
+   "subiect": "Carol al X-lea Gustav",
+   "grup": "tipuri_noi_106"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Caroline Harrison (n. 1 octombrie 1832 - d. 25 octombrie 1892) a fost soția lui Benjamin Harrison, Președinte al Statelor Unite ale Americii. A fost Prima Doamnă a Statelor Unite ale Americii între 1889 și 1892.",
+   "intrebare": "Cine a fost soțul lui Caroline Harrison?",
+   "raspuns": "Benjamin Harrison.",
+   "cheie": [
+    "Benjamin Harrison"
+   ],
+   "formulare": "generator",
+   "subiect": "Caroline Harrison",
+   "grup": "tipuri_noi_107"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Natallia Arsiennieva a fost o poetă bielorusă, reprezentativă pentru mișcarea națională din Belarus. A fost căsătorită cu Francišak Kušal (1895-1968).",
+   "intrebare": "Pe cine a luat în căsătorie Natallia Arsiennieva?",
+   "raspuns": "Cu Francišak Kušal.",
+   "cheie": [
+    "Francišak Kušal"
+   ],
+   "formulare": "noua",
+   "subiect": "Natallia Arsiennieva",
+   "grup": "tipuri_noi_108"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "sot",
+   "text": "Maria Theresa a Austriei (21 martie 1801 – 12 ianuarie 1855) a fost arhiducesă de Austria și prințesă de Toscana. În 1817 s-a căsătorit cu Carol Albert de Sardinia și mai târziu a devenit regină a Sardiniei. A fost fiica lui Ferdinand al III-lea, Mare Duce de Toscana și a Luisei de Neapole și Sicilia. A fost numită după bunica sa, împărăteasa Maria Tereza a Austriei.",
+   "intrebare": "Maria Theresa a Austriei s-a căsătorit cu cine?",
+   "raspuns": "Cu Carol Albert de Sardinia.",
+   "cheie": [
+    "Carol Albert de Sardinia"
+   ],
+   "formulare": "generator",
+   "subiect": "Maria Theresa a Austriei",
+   "grup": "tipuri_noi_109"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Dieceza de Hildesheim este una din cele douăzecișișapte de episcopii ale Bisericii Romano-Catolice din Germania, cu sediul în orașul Hildesheim. Dieceza de Hildesheim se află în provincia mitropolitană a Arhidiecezei de Hamburg.",
+   "intrebare": "În ce țară se găsește Dieceza de Hildesheim?",
+   "raspuns": "În Germania.",
+   "cheie": [
+    "Germania"
+   ],
+   "formulare": "generator",
+   "subiect": "Dieceza de Hildesheim",
+   "grup": "tipuri_noi_110"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Nong Bua Lamphu este o provincie (changwat) din Thailanda. Situată în regiunea de Nord-Est, provincia Nong Bua Lamphu are în componența sa 6 districte (amphoe), 59 de sub-districte (tambon) și 636 de sate (muban).",
+   "intrebare": "Care e țara în care se află Nong Bua Lamphu?",
+   "raspuns": "În Thailanda.",
+   "cheie": [
+    "Thailanda"
+   ],
+   "formulare": "generator",
+   "subiect": "Nong Bua Lamphu",
+   "grup": "tipuri_noi_111"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Petrom Aviation Otopeni este o companie care are ca activitate de bază comercializarea produselor petroliere de aviație (în principal petrol turboreactor) către companiile aeriene române și străine care operează pe aeroporturile din România.",
+   "intrebare": "În ce țară se găsește Petrom Aviation Otopeni?",
+   "raspuns": "În România.",
+   "cheie": [
+    "România"
+   ],
+   "formulare": "generator",
+   "subiect": "Petrom Aviation Otopeni",
+   "grup": "tipuri_noi_112"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Riberalta este un oraș din Bolivia, capitala provinciei Vaca Díez și a municipalității Riberalta. Riberalta, care este situat pe malul de sud-est al râului Beni, se găsește nordul Boliviei, în zona confluenței râurilor Beni și Madre de Dios.",
+   "intrebare": "În care țară se află Riberalta?",
+   "raspuns": "În Bolivia.",
+   "cheie": [
+    "Bolivia"
+   ],
+   "formulare": "noua",
+   "subiect": "Riberalta",
+   "grup": "tipuri_noi_113"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Comitatul Rusk este unul din cele 72 de comitate din statul Wisconsin din Statele Unite ale Americii. Sediul acestui comitat este Ladysmith. Conform recensământului din anul 2000, populația sa a fost 15.347 de locuitori.",
+   "intrebare": "În ce țară se află Comitatul Rusk?",
+   "raspuns": "În Statele Unite ale Americii.",
+   "cheie": [
+    "Statele Unite ale Americii"
+   ],
+   "formulare": "generator",
+   "subiect": "Comitatul Rusk",
+   "grup": "tipuri_noi_114"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Limanul Șagani este un liman sărat din Bugeac, pe teritoriul de azi al regiunii Odesa din Ucraina, fiind separat de Marea Neagră printr-un dig îngust de nisip. Suprafața lacului se află pe teritoriul Raionului Tatarbunar.",
+   "intrebare": "Ce țară găzduiește Limanul Șagani?",
+   "raspuns": "În Ucraina.",
+   "cheie": [
+    "Ucraina"
+   ],
+   "formulare": "noua",
+   "subiect": "Limanul Șagani",
+   "grup": "tipuri_noi_115"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Peer este un oraș din regiunea Flandra din Belgia. Comuna este formată din localitățile Peer, Grote-Brogel, Kleine-Brogel și Wijchmaal. Suprafața totală este de 86,95 km². La 1 ianuarie 2008 comuna avea o populație totală de 15.996 locuitori.",
+   "intrebare": "Peer se află în ce țară?",
+   "raspuns": "În Belgia.",
+   "cheie": [
+    "Belgia"
+   ],
+   "formulare": "generator",
+   "subiect": "Peer",
+   "grup": "tipuri_noi_116"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Lacul Garda (Lago di Garda sau Benaco în italiană) este cel mai mare lac din Italia cu o circumferință de 144 km și o suprafața de 370 de km pătrați. Este un lac alpin, format în craterul unui vulcan la sfârșitul ultimei glaciațiuni. Lacul este situat în nordul Italiei, la jumătatea distanței dintre Veneția și Milano. Pe malurile sale se află numeroase localități din provinciile Brescia, Verona și Trento.",
+   "intrebare": "Lacul Garda se află în ce țară?",
+   "raspuns": "În Italia.",
+   "cheie": [
+    "Italia"
+   ],
+   "formulare": "generator",
+   "subiect": "Lacul Garda",
+   "grup": "tipuri_noi_117"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Craterul Boltîș este un crater de impact meteoritic în Regiunea Kirovohrad din Ucraina. Craterul are 24 km în diametru și vârsta sa este estimată la 65.17 ± 0.64 milioane ani, estimarea vârstei este făcută pe baza datării cu argon.",
+   "intrebare": "În care țară se află Craterul Boltîș?",
+   "raspuns": "În Ucraina.",
+   "cheie": [
+    "Ucraina"
+   ],
+   "formulare": "noua",
+   "subiect": "Craterul Boltîș",
+   "grup": "tipuri_noi_118"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "tara",
+   "text": "Mănăstirea Nechit este o mănăstire ortodoxă din România situată în satul Nechit, județul Neamț. Obștea este reprezentată de 15 monahi, în frunte cu părintele stareț, arhimandritul Zenovie Grigore.",
+   "intrebare": "În care țară se află Mănăstirea Nechit?",
+   "raspuns": "În România.",
+   "cheie": [
+    "România"
+   ],
+   "formulare": "noua",
+   "subiect": "Mănăstirea Nechit",
+   "grup": "tipuri_noi_119"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "María Gomes Da Costa (n. 13 aprilie 1999, în Roquetas de Mar) este o handbalistă din Spania care evoluează pe postul de intermediar stânga pentru clubul românesc CS Minaur Baia Mare și echipa națională a Spaniei.",
+   "intrebare": "Pe ce poziție joacă María Gomes Da Costa?",
+   "raspuns": "Intermediar stânga.",
+   "cheie": [
+    "intermediar stânga"
+   ],
+   "formulare": "noua",
+   "subiect": "María Gomes Da Costa",
+   "grup": "tipuri_noi_120"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Rea Réka Mészáros (n. 14 aprilie 1994, în Vác) este o handbalistă maghiară care joacă pentru clubul FTC-Rail Cargo Hungaria și echipa națională a Ungariei. Mészáros evoluează pe postul de pivot.",
+   "intrebare": "Rea Réka Mészáros joacă pe ce post?",
+   "raspuns": "Pivot.",
+   "cheie": [
+    "pivot"
+   ],
+   "formulare": "generator",
+   "subiect": "Rea Réka Mészáros",
+   "grup": "tipuri_noi_121"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Wíres José de Souza sau mai simplu Wíres (n. 30 decembrie 1982) este un fotbalist brazilian care joacă pe postul de mijlocaș defensiv pentru echipa Rio Ave FC. În vara anului 2011 a fost aproape de un transfer la FC Steaua București.",
+   "intrebare": "Ce post ocupă Wíres José de Souza sau mai simplu Wíres în echipă?",
+   "raspuns": "Mijlocaș defensiv.",
+   "cheie": [
+    "mijlocaș defensiv"
+   ],
+   "formulare": "generator",
+   "subiect": "Wíres José de Souza sau mai simplu Wíres",
+   "grup": "tipuri_noi_122"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Rade Krunić (; n. 7 octombrie 1993) este un fotbalist profesionist bosniac care joacă pe postul de mijlocaș pentru echipa de Serie A Empoli și pentru echipa națională a Bosniei și Herțegovinei.",
+   "intrebare": "Pe ce poziție joacă Rade Krunić?",
+   "raspuns": "Mijlocaș.",
+   "cheie": [
+    "mijlocaș"
+   ],
+   "formulare": "noua",
+   "subiect": "Rade Krunić",
+   "grup": "tipuri_noi_123"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Janina Luca (n. 22 noiembrie 1986, Focșani) este o fostă handbalistă din România și fostă componentă a echipei naționale, care a evoluat pe postul de intermediar dreapta. Ultimele echipe de club la care a jucat au fost CSM Ploiești și HCM Râmnicu Vâlcea.",
+   "intrebare": "În ce poziție a evoluat Janina Luca?",
+   "raspuns": "Intermediar dreapta.",
+   "cheie": [
+    "intermediar dreapta"
+   ],
+   "formulare": "noua",
+   "subiect": "Janina Luca",
+   "grup": "tipuri_noi_124"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Markéta Jeřábková (n. 8 februarie 1996, în Plzeň) este o handbalistă din Cehia care joacă pentru Vipers Kristiansand și echipa națională a Cehiei. Jeřábková, care evoluează pe postul de intermediar stânga, a făcut parte din selecționata Cehiei care a luat parte la Campionatul Mondial din 2017, fiind a doua marcatoare a echipei după Iveta Luzumová, cu 43 de goluri din 101 aruncări.",
+   "intrebare": "Pe ce poziție joacă Markéta Jeřábková?",
+   "raspuns": "Intermediar stânga.",
+   "cheie": [
+    "intermediar stânga"
+   ],
+   "formulare": "noua",
+   "subiect": "Markéta Jeřábková",
+   "grup": "tipuri_noi_125"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Sebastian Prödl (n. 21 iunie 1987) este un fotbalist austriac, care evoluează pe postul de fundaș la clubul Watford FC din Premier League și la echipa națională de fotbal a Austriei.",
+   "intrebare": "Pe ce post evoluează Sebastian Prödl?",
+   "raspuns": "Fundaș.",
+   "cheie": [
+    "fundaș"
+   ],
+   "formulare": "generator",
+   "subiect": "Sebastian Prödl",
+   "grup": "tipuri_noi_126"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Leonel Olímpio (n. 7 iulie 1982, Jaguariaíva, Paraná) este un fotbalist brazilian care evoluează pe postul de mijlocaș la clubul Varzim SC. A jucat pentru Sheriff Tiraspol în Divizia Națională din Republica Moldova.",
+   "intrebare": "Ce post ocupă Leonel Olímpio în echipă?",
+   "raspuns": "Mijlocaș.",
+   "cheie": [
+    "mijlocaș"
+   ],
+   "formulare": "generator",
+   "subiect": "Leonel Olímpio",
+   "grup": "tipuri_noi_127"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Alban Bekim Hoxha (; n. 23 noiembrie 1987) este un fotbalist profesionist albanez care joacă pe postul de portar pentru clubul albanez Partizani Tirana și pentru echipa națională a Albaniei.",
+   "intrebare": "Alban Bekim Hoxha joacă pe ce post?",
+   "raspuns": "Portar.",
+   "cheie": [
+    "portar"
+   ],
+   "formulare": "generator",
+   "subiect": "Alban Bekim Hoxha",
+   "grup": "tipuri_noi_128"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "i",
+   "tip": "post",
+   "text": "Natalia Savcîn (în n. 18 ianuarie 1996, în Ivano-Frankivsk) este o handbalistă din Ucraina care evoluează pe postul de intermediar stânga pentru clubul maghiar Kisvárdai KC și echipa națională a Ucrainei. Anterior, din 2020 până în octombrie 2021, ea a evoluat pentru clubul român CS Gloria 2018 Bistrița-Năsăud.",
+   "intrebare": "Pe ce post evoluează Natalia Savcîn?",
+   "raspuns": "Intermediar stânga.",
+   "cheie": [
+    "intermediar stânga"
+   ],
+   "formulare": "generator",
+   "subiect": "Natalia Savcîn",
+   "grup": "tipuri_noi_129"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Cerasela Iosifescu (n. 1966, Coteana, județul Olt) este o actriță română de teatru și de film, absolventă a IATC, București (1991) la clasa profesoarei Sanda Manu. Cerasela Iosifescu a fost încă de la absolvire actriță a teatrului Nottara din București, debutând cu rolul Reginei Maria din piesa Regele moare de Eugen Ionescu, în regia lui Dominic Dembinski.",
+   "intrebare": "Ce naționalitate are Cerasela Iosifescu?",
+   "raspuns": "Română.",
+   "cheie": [
+    "română"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Cerasela Iosifescu",
+   "grup": "tipuri_noi_130"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Abyei este un teritoriu din Africa, situat în partea de vest-nord-vest a zonei Marilor Lacuri Africane. Acest teritoriu, în prezent cu un statut de cvasi-independență, nu aparține nici de Sudan, nici de Sudanul de Sud. Abyei este situat aproximativ la mijlocul graniței centrale dintre Sudan și Sudanul de Sud.",
+   "intrebare": "Pe ce continent se află Abyei?",
+   "raspuns": "În Africa.",
+   "cheie": [
+    "Africa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Abyei",
+   "grup": "tipuri_noi_131"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "absolvit",
+   "text": "Albert Denn (pseudonim pentru Albert Denis Militaru) este un poet și traducător român născut în anul 1990 la Balș. În 2003, împreună cu familia, emigrează în Spania. După ce a absolvit Facultatea de Filologie Hispanică a Universității din Valencia în 2015, a revenit în România cu o bursă Erasmus unde a devenit asistent la Universitatea din București. Actualmente, Albert este doctorand în cadrul Universității din Valencia, Facultatea de Filologie, Traducere și Comunicare (Departamentul de Lingvistică) și profesor de limba spaniolă la Institutul Cervantes din București.",
+   "intrebare": "Ce instituție a absolvit Albert Denn?",
+   "raspuns": "Facultatea de Filologie Hispanică a Universității din Valencia.",
+   "cheie": [
+    "Facultatea de Filologie Hispanică a Universității din Valencia"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Albert Denn",
+   "grup": "tipuri_noi_132"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Berliner Tageblatt sau BT a fost un ziar de limba germană publicat în Berlin din 1872 până în 1939. Împreună cu Frankfurter Zeitung, el a devenit unul dintre cele mai importante ziare liberale germane ale timpului său.",
+   "intrebare": "În ce limbă este Berliner Tageblatt sau BT?",
+   "raspuns": "În limba germană.",
+   "cheie": [
+    "germană"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Berliner Tageblatt sau BT",
+   "grup": "tipuri_noi_133"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "The Moody Blues este o formație rock engleză originară din Erdington, Birmingham. Membrii fondatori, Michael Pinder și Ray Thomas cântau la început muzică rhythm and blues în Birmingham în 1964 împreună cu Graeme Edge și alții iar mai târziu formației s-au alăturat John Lodge și Justin Hayward care au trasat direcția grupului spre rock progresiv. Printre inovațiile de care a dat dovadă trupa a fost și fuziunea cu muzica clasică, fuziune reprezentată cel mai bine pe albumul lor din 1967, Days of Future Passed.",
+   "intrebare": "Ce gen de muzică face The Moody Blues?",
+   "raspuns": "Rock.",
+   "cheie": [
+    "rock"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "The Moody Blues",
+   "grup": "tipuri_noi_134"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Jonathan Richard Guy \"Jonny\" Greenwood (n. 5 noiembrie 1971, Oxford) este un muzician și compozitor englez, membru al formației rock Radiohead. Greenwood este un multi-instrumentalist: cântă la chitară, orgă, pian, xilofon, glockenspiel, Ondes Martenot și muzicuță. Este fratele colegului său de trupă Colin Greenwood.",
+   "intrebare": "La ce instrument cântă Jonathan Richard Guy \"Jonny\" Greenwood?",
+   "raspuns": "La chitară.",
+   "cheie": [
+    "chitară"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Jonathan Richard Guy \"Jonny\" Greenwood",
+   "grup": "tipuri_noi_135"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Ana Carolina Amorim Taleska (n. 1 aprilie 1983, în Blumenau, Santa Catarina) este o jucătoare de handbal din Brazilia care s-a aflat cel mai recent sub contract cu clubul maghiar Alcoa FKC.",
+   "intrebare": "Ce sport practică Ana Carolina Amorim Taleska?",
+   "raspuns": "Handbal.",
+   "cheie": [
+    "handbal"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Ana Carolina Amorim Taleska",
+   "grup": "tipuri_noi_136"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Virgil Ianțu este un cântăreț și prezentator român. Virgil Ianțu a fost prezentatorul multor emisiuni de pe postul român de televiziune Prima TV precum: Vrei să fii miliardar?, Copiii spun lucruri trăsnite și Te crezi mai deștept?.",
+   "intrebare": "Ce naționalitate are Virgil Ianțu?",
+   "raspuns": "Român.",
+   "cheie": [
+    "român"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Virgil Ianțu",
+   "grup": "tipuri_noi_137"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Românii din Germania sunt una din comunitățile diasporei românești din Europa Occidentală. Potrivit datelor statistice din 2016 numărul de cetățeni români rezidenți în Germania la data de 31 decembrie 2015 era de 452.718 (față de 94.326 în 2008).",
+   "intrebare": "Pe ce continent se află Românii din Germania?",
+   "raspuns": "În Europa.",
+   "cheie": [
+    "Europa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Românii din Germania",
+   "grup": "tipuri_noi_138"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "absolvit",
+   "text": "Rasmus Lerdorf (născut în 22 noiembrie 1968 în Qeqertarsuaq, Groenlanda) este un programator danezo-groenlandez cunoscut în special pentru crearea limbajului de programare PHP. Este autorul primelor două versiuni. Lerdorf a participat de asemenea în dezvoltarea versiunilor ulterioare, făcând parte din grupul de programatori care îi include pe Andi Gutmans și Zeev Suraski, care mai târziu au fondat Zend Technologies. În 1993 a absolvit Universitatea din Waterloo cu un titlu de Bachelor of Applied Science în Systems Design Engineering. Din septembrie 2002, este angajat al Yahoo!",
+   "intrebare": "Ce instituție a absolvit Rasmus Lerdorf?",
+   "raspuns": "Universitatea din Waterloo.",
+   "cheie": [
+    "Universitatea din Waterloo"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Rasmus Lerdorf",
+   "grup": "tipuri_noi_139"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Marea Enciclopedie Sovietică este una dintre cele mai mari enciclopedii publicate vreodată în limba rusă, tipărită de statul sovietic din 1926 până în 1990.",
+   "intrebare": "În ce limbă este Marea Enciclopedie Sovietică?",
+   "raspuns": "În limba rusă.",
+   "cheie": [
+    "rusă"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Marea Enciclopedie Sovietică",
+   "grup": "tipuri_noi_140"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "OK Go este o trupă americană de rock, originară din Chicago, Illinois, acum în Los Angeles, California. Trupa este compusă din Damian Kulash (voce principală, chitară), Tim Nordwind (chitară bas și voce), Dan Konopka (baterie și percuție) și Andy Ross (chitară, clape și voce), care s-a alăturat în 2005, înlocuindu-l pe Andy Duncan. Trupa este cunoscută pentru videoclipurile sale muzicale complicate filmate într-o singură scenă.",
+   "intrebare": "Ce gen de muzică face OK Go?",
+   "raspuns": "Rock.",
+   "cheie": [
+    "rock"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "OK Go",
+   "grup": "tipuri_noi_141"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Lucius „Tawl” Ross (n. 5 octombrie 1948, Wagram, North Carolina) este un muzician american, care a cântat la chitară ritmică pentru trupa Funkadelic între 1968 și 1971, apărând pe primele trei albume ale formației. A părăsit grupul în 1971, la scurt timp după o experiență neplăcută cu LSD. S-a mutat în North Carolina renunțând la scena muzicală.",
+   "intrebare": "La ce instrument cântă Lucius „Tawl” Ross?",
+   "raspuns": "La chitară.",
+   "cheie": [
+    "chitară"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Lucius „Tawl” Ross",
+   "grup": "tipuri_noi_142"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Máximo González Mereira (n. 20 iulie 1983) este jucător profesionist de tenis din Argentina. Cea mai înaltă poziție în clasamentul ATP la simplu este locul 58 obținut în iulie 2009, iar la dublu, locul 22, obținut la 22 aprilie 2019.",
+   "intrebare": "Ce sport practică Máximo González Mereira?",
+   "raspuns": "Tenis.",
+   "cheie": [
+    "tenis"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Máximo González Mereira",
+   "grup": "tipuri_noi_143"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Lambertus „Bert” van Marwijk (pronunțat ; n. 19 mai 1952 în Deventer, Overijssel) este un fost jucător neerlandez de fotbal, acum antrenor al naționalei Arabiei Saudite.",
+   "intrebare": "Ce naționalitate are Lambertus „Bert” van Marwijk?",
+   "raspuns": "Neerlandez.",
+   "cheie": [
+    "neerlandez"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Lambertus „Bert” van Marwijk",
+   "grup": "tipuri_noi_144"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Carierele neolitice de silex de la Spiennes sunt cele mai mari și mai vechi mine neolitice din Europa, aflându-se în apropierea satului valon Spiennes, de la sud-est de Mons, Belgia. Minele au funcționat în mijlocul și spre sfârșitul perioadei neolitice (4300-2200 î.e.n.). Situl și zona înconjurătoare au fost adăugate în lista patrimoniului mondial UNESCO în anul 2000.",
+   "intrebare": "Pe ce continent se află Carierele neolitice de silex de la Spiennes?",
+   "raspuns": "În Europa.",
+   "cheie": [
+    "Europa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Carierele neolitice de silex de la Spiennes",
+   "grup": "tipuri_noi_145"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "absolvit",
+   "text": "Serhii Sviatcenko (; n. 1952 în Harkov) este un artist ucrainean care trăiește în Danemarca din 1990. Sviatchenko a absolvit Academia de Arte și Arhitectură în Harkov în 1975, iar în 1986 a obținut o diplomă de doctorat la Școala de arhitectură din Kiev.",
+   "intrebare": "Ce instituție a absolvit Serhii Sviatcenko?",
+   "raspuns": "Academia de Arte și Arhitectură în Harkov.",
+   "cheie": [
+    "Academia de Arte și Arhitectură în Harkov"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Serhii Sviatcenko",
+   "grup": "tipuri_noi_146"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Pistis Sophia sau Cartea sacră a gnosticilor din Egipt este un important text gnostic care a fost descoperit în 1773, posibil scris la începutul secolului al II-lea în limba coptă. În acest text sunt dezvăluite structuri complexe și ierarhii ale Cerului, familiare în învățăturile gnostice.",
+   "intrebare": "În ce limbă este Pistis Sophia sau Cartea sacră a gnosticilor din Egipt?",
+   "raspuns": "În limba coptă.",
+   "cheie": [
+    "coptă"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Pistis Sophia sau Cartea sacră a gnosticilor din Egipt",
+   "grup": "tipuri_noi_147"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "Scarlet Aura este o formație românească de heavy metal și muzică rock din București, România. Formația a fost inițial formată în 2014 sub numele AURA, dar mai târziu, în 2015, și-a schimbat titulatura în Scarlet Aura. De la înființare, trupa a lansat opt albume complete, un DVD live și două EP-uri. Datorită imaginii trupei cu purtarea aripilor pe scenă, fanii au numit Scarlet Aura \"Îngerii Rockului Românesc\".",
+   "intrebare": "Ce gen de muzică face Scarlet Aura?",
+   "raspuns": "Heavy metal.",
+   "cheie": [
+    "heavy metal"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Scarlet Aura",
+   "grup": "tipuri_noi_148"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Dave „The Beast” Spitz (n. 1 aprilie 1955 în New York) este un muzician american care a cântat la chitară bas pentru Black Sabbath din 1985 până în 1987 apărând pe albumul Seventh Star (1986). Cu toate că a fost creditat și pe albumul The Eternal Idol (1987), nu a cântat pe acesta. De fapt în timpul înregistrării albumului a fost concediat de către producătorul Jegg Glixman din cauza comportamentului său.",
+   "intrebare": "La ce instrument cântă Dave „The Beast” Spitz?",
+   "raspuns": "La chitară bas.",
+   "cheie": [
+    "chitară bas"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Dave „The Beast” Spitz",
+   "grup": "tipuri_noi_149"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Hugo Gaston (n. 26 septembrie 2000) este un jucător francez de tenis. Cea mai bună clasare a sa la simplu în clasamentul ATP este locul 58 mondial, la 11 iulie 2022, iar la dublu locul 220, la 16 mai 2022. În 2018 a câștigat Australian Open pentru juniori la dublu împreună cu compatriotul său, Clément Tabur.",
+   "intrebare": "Ce sport practică Hugo Gaston?",
+   "raspuns": "Tenis.",
+   "cheie": [
+    "tenis"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Hugo Gaston",
+   "grup": "tipuri_noi_150"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Nancy Nabil Ajram (n. 16 mai 1983, Beirut) este o cântăreață libaneză de muzică arăbească. Fiind supranumită «Madonna Estului», Ajram a lansat șapte albume de studio care au fost comercializate în peste 30 de milioane de exemplare pe plan internațional. Cel mai recent material discografic al său, intitulat 7 (2010), a fost comercializat în peste 500.000 de copii în săptămâna lansării.",
+   "intrebare": "Ce naționalitate are Nancy Nabil Ajram?",
+   "raspuns": "Libaneză.",
+   "cheie": [
+    "libaneză"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Nancy Nabil Ajram",
+   "grup": "tipuri_noi_151"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Tibetul este un podiș în Asia, la nord-est de Himalaya. Acesta este patria tradițională a poporului tibetan și al altor câteva grupuri etnice, cum ar fi Monpas, Qiang și Lhobas, iar acum este, de asemenea, locuită de un număr considerabil de etnici Han și Hui.",
+   "intrebare": "Pe ce continent se află Tibetul?",
+   "raspuns": "În Asia.",
+   "cheie": [
+    "Asia"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Tibetul",
+   "grup": "tipuri_noi_152"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Rotten Tomatoes (în traducere „Roșii stricate”) este un site web în limba engleză unde apar informații și comentarii despre diferite filme sau jocuri pe computer. Numele generic de „tomate” provine din perioada „Vaudeville” (secolul al XVI-lea) când dezaprobarea publicului era exprimată prin aruncarea de tomate alterate pe scenă.",
+   "intrebare": "În ce limbă este Rotten Tomatoes?",
+   "raspuns": "În limba engleză.",
+   "cheie": [
+    "engleză"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Rotten Tomatoes",
+   "grup": "tipuri_noi_153"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "Heaven Upside Down este al zecelea album de studio al trupei de rock americane Marilyn Manson, lansat pe 6 octombrie 2017 de Loma Vista Recordings și Caroline International . Albumul avea titlul inițial Say10 și trebuia să fie lansat de Ziua Îndrăgostiților . Cu toate acestea, lansarea a fost întârziată din cauza faptului că Manson a fost nemulțumit de calitatea înregistrării până la acea dată, precum și a angajamentelor față de turneul în care se aflau, precum și a programului de înregistrare al producătorului Tyler Bates. De asemenea, a fost întârziată de moartea tatălui lui Manson, Hugh Warner, care a murit în timpul producției albumului și căreia albumul i-a fost, mai târziu, dedicat.",
+   "intrebare": "Ce gen de muzică face Heaven Upside Down?",
+   "raspuns": "Rock.",
+   "cheie": [
+    "rock"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Heaven Upside Down",
+   "grup": "tipuri_noi_154"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Doug Ingle (n. 9 septembrie 1945, Omaha, Nebraska, SUA) este unul din membrii fondatori al trupei Iron Butterfly pentru care a cântat la orgă și voce, fiind și principalul compozitor al formației. A cântat pentru o scurtă perioadă și cu grupul pop Stark Naked and the Car Thieves la începutul anilor 1970 după ce a părăsit Iron Butterfly.",
+   "intrebare": "La ce instrument cântă Doug Ingle?",
+   "raspuns": "La orgă.",
+   "cheie": [
+    "orgă"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Doug Ingle",
+   "grup": "tipuri_noi_155"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Nikola Mektić (n. 24 decembrie 1988) este un jucător profesionist de tenis croat. Specialist în dublu, a ajuns pe locul 1 mondial la dublu masculin în octombrie 2021, devenind cel de-al 55-lea jucător din istoria ATP care a realizat acest lucru și al doilea din Croația care a deținut vreodată această poziție.",
+   "intrebare": "Ce sport practică Nikola Mektić?",
+   "raspuns": "Tenis.",
+   "cheie": [
+    "tenis"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Nikola Mektić",
+   "grup": "tipuri_noi_156"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Robert Carlyle (n. 14 aprilie 1961, Glasgow, Scoția) este un actor scoțian de film și televiziune, câștigător al unui premiu BAFTA și al premiului Screen Actors Guild Award.",
+   "intrebare": "Ce naționalitate are Robert Carlyle?",
+   "raspuns": "Scoțian.",
+   "cheie": [
+    "scoțian"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Robert Carlyle",
+   "grup": "tipuri_noi_157"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Râul Volga este cel mai lung râu din Europa și o arteră comercială importantă a acestui continent. Apariția tehnologiei motorului cu aburi a permis transportul mai ușor al mărfurilor în amonte. Primele nave cu aburi pe râul Volga au apărut în anul 1821.",
+   "intrebare": "Pe ce continent se află Râul Volga?",
+   "raspuns": "În Europa.",
+   "cheie": [
+    "Europa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Râul Volga",
+   "grup": "tipuri_noi_158"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Kritik este o revistă culturală bilunară în limba daneză, cu un accent pus pe literatură și critică literară. Sediul revistei a fost la Copenhaga (Danemarca).",
+   "intrebare": "În ce limbă este Kritik?",
+   "raspuns": "În limba daneză.",
+   "cheie": [
+    "daneză"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Kritik",
+   "grup": "tipuri_noi_159"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "Stone Gon' este un album de muzică soul lansat de Barry White în 1973. Discul rămâne unul dintre cele mai reușite ale lui White ajungând în fruntea topurilor muzicale încă de la lansarea originală.",
+   "intrebare": "Ce gen de muzică face Stone Gon'?",
+   "raspuns": "Soul.",
+   "cheie": [
+    "soul"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Stone Gon'",
+   "grup": "tipuri_noi_160"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Maceo Parker (n. 14 februarie 1943) este un saxofonist american de funk și soul jazz, cel mai cunoscut pentru activitatea sa cu James Brown în anii 1960 cât și cu Parliament-Funkadelic în anii 1970. Parker era un om important în trupa lui Brown cântând la saxofon alto, tenor și bariton. Este la fel de cunoscut și pentru propriile concerte pe care a început să le susțină sub propriul nume încă de la începutul anilor 1990.",
+   "intrebare": "La ce instrument cântă Maceo Parker?",
+   "raspuns": "La saxofon.",
+   "cheie": [
+    "saxofon"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Maceo Parker",
+   "grup": "tipuri_noi_161"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Jack Alexander Draper (n. 22 decembrie 2001) este un jucător profesionist de tenis din Regatul Unit. Cea mai înaltă poziție în clasamentul ATP la simplu este locul 38 mondial, la 16 ianuarie 2023.",
+   "intrebare": "Ce sport practică Jack Alexander Draper?",
+   "raspuns": "Tenis.",
+   "cheie": [
+    "tenis"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Jack Alexander Draper",
+   "grup": "tipuri_noi_162"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Adriana-Diana Tușa este un politician român, deputat în Parlamentul României în mandatul 2008-2012 din partea PNL Brăila și în mandatul 2012-2016 din partea USL București.",
+   "intrebare": "Ce naționalitate are Adriana-Diana Tușa?",
+   "raspuns": "Român.",
+   "cheie": [
+    "român"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Adriana-Diana Tușa",
+   "grup": "tipuri_noi_163"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Presura de munte (Emberiza cia) este o pasăre parțial migratoare din familia emberizidelor (Emberizidae), ordinul paseriformelor (Passeriformes) care cuibărește în regiunile montane din Europa, Asia și nord-vestul Africii. Iarna populațiile din nord migrează spre sud. Cuibul este construit aproape de sol, între bolovani, crăpături de stânci și maluri pietroase. Are o talie de 16 cm. Masculul este cenușiu pe cap cu dungi negre și rare; gâtul este cenușiu; spinarea, abdomenul și târtița sunt brun-roșcate și tărcate; coada este întunecată cu margini albe. Femela are culorile mai șterse. Se hrănește cu semințe și insecte.",
+   "intrebare": "Pe ce continent se află Presura de munte?",
+   "raspuns": "În Europa.",
+   "cheie": [
+    "Europa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Presura de munte",
+   "grup": "tipuri_noi_164"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Nordrand este un film în limba germană din 1999 regizat de Barbara Albert. Este o co-producție internațională între Austria, Germania și Elveția, deși a fost candidatul Austriei pentru cel Mai bun Film într-o Limbă Străină la a 72-a ediție a Premiilor Oscar, unde nu a reușit să primească o nominalizare. Filmul abordează marginalizarea migranților și minorităților etnice din Viena pe fondul creșterii xenofobiei încurajate de Jörg Haider și Partidul Libertății din Austria.",
+   "intrebare": "În ce limbă este Nordrand?",
+   "raspuns": "În limba germană.",
+   "cheie": [
+    "germană"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Nordrand",
+   "grup": "tipuri_noi_165"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "Siarhei Mihalok este un muzician rock și actor bielorus. El a fost liderul proeminentei formații rock Leapis Trubețkoi, care s-a desființat la sfârșitul verii lui 2014.",
+   "intrebare": "Ce gen de muzică face Siarhei Mihalok?",
+   "raspuns": "Rock.",
+   "cheie": [
+    "rock"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Siarhei Mihalok",
+   "grup": "tipuri_noi_166"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Elton Dean (n. 28 octombrie 1945, d. 8 februarie 2006) a fost un muzician de jazz care a cântat la saxofon, saxello și ocazional la claviaturi. Și-a început cariera în formația Bluesology (condusă de Long John Baldry), care îl avea la claviaturi pe Elton John (care pe atunci folosea numele de botez, Reginald Dwight).",
+   "intrebare": "La ce instrument cântă Elton Dean?",
+   "raspuns": "La saxofon.",
+   "cheie": [
+    "saxofon"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Elton Dean",
+   "grup": "tipuri_noi_167"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Neal Skupski (n. 1 decembrie 1989) este un jucător britanic de tenis profesionist. Cea mai înaltă poziție în clasamentul ATP este locul 14 mondial la dublu, atins la 9 august 2021.",
+   "intrebare": "Ce sport practică Neal Skupski?",
+   "raspuns": "Tenis.",
+   "cheie": [
+    "tenis"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Neal Skupski",
+   "grup": "tipuri_noi_168"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Viorel Ștefan (n. 7 ianuarie 1992, Crevedia) este un fotbalist român aflat sub contract cu clubul Dinamo București. A fost împrumutat la CS Buftea până în iulie 2012.",
+   "intrebare": "Ce naționalitate are Viorel Ștefan?",
+   "raspuns": "Român.",
+   "cheie": [
+    "român"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Viorel Ștefan",
+   "grup": "tipuri_noi_169"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "CHIP este o revistă de calculatoare și comunicații publicată de CHIP Holding (deținută de grupul de media german Hubert Burda Media) în 15 țări din Europa și Asia.",
+   "intrebare": "Pe ce continent se află CHIP?",
+   "raspuns": "În Europa.",
+   "cheie": [
+    "Europa"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "CHIP",
+   "grup": "tipuri_noi_170"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Revue des deux Mondes (în română: Revista celor două lumi) este o revistă literară și de afaceri culturale în limba franceză care a fost publicată, lunar, la Paris din 1829.",
+   "intrebare": "În ce limbă este Revue des deux Mondes?",
+   "raspuns": "În limba franceză.",
+   "cheie": [
+    "franceză"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Revue des deux Mondes",
+   "grup": "tipuri_noi_171"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "O-Zone este o formație de muzică pop compusă din Dan Bălan, Radu Sîrbu și Arsenie Todiraș. Considerați a fi parte a curentului artistic românesc din regiunea istorică Moldova, care constă din numeroși artiști și muzicieni moldoveni afirmați plenar în România și Republica Moldova, așa-numita \"invazie moldovenească\", trio-ul s-a axat pe stilurile dance și eurodance, ajungând cu câteva din melodiile lor să ocupe primul loc în topurile românești, moldovenești și internaționale.",
+   "intrebare": "Ce gen de muzică face O-Zone?",
+   "raspuns": "Pop.",
+   "cheie": [
+    "pop"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "O-Zone",
+   "grup": "tipuri_noi_172"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "instrument",
+   "text": "Michel Teló (n. 21 ianuarie 1981, Medianeira) este un cântăreț și compozitor brazilian. Teló a făcut parte din două formații muzicale, dar acesta era în trupa „Grupo Tradição” când cariera sa de cântăreț a început. Cele mai mari hituri ale grupului au fost „Goodbye”, „Cauldron”, „Forever My Life”, „The Brazilian” și „I Want You”. În afară de faptul că este cantautor el este, de asemenea, dansator și cântă la acordeon, chitară și muzicuță.",
+   "intrebare": "La ce instrument cântă Michel Teló?",
+   "raspuns": "La acordeon.",
+   "cheie": [
+    "acordeon"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Michel Teló",
+   "grup": "tipuri_noi_173"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Martín Gastón Demichelis (n. 20 decembrie 1980 în Justiniano Posse, Córdoba) este un jucător de fotbal argentinian retras din activitate care ultima oară a evoluat pentru clubul spaniol Malaga postul de fundaș central.",
+   "intrebare": "Ce sport practică Martín Gastón Demichelis?",
+   "raspuns": "Fotbal.",
+   "cheie": [
+    "fotbal"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Martín Gastón Demichelis",
+   "grup": "tipuri_noi_174"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "nationalitate",
+   "text": "Andrei Voronin este un fotbalist ucrainean. S-a născut la Odesa, pe data de 21 iulie 1979. A jucat la patru cluburi din Germania. În sezonul 2002-2003 a fost golgheter în 2.",
+   "intrebare": "Ce naționalitate are Andrei Voronin?",
+   "raspuns": "Ucrainean.",
+   "cheie": [
+    "ucrainean"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Andrei Voronin",
+   "grup": "tipuri_noi_175"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "continent",
+   "text": "Atacama este un deșert de coastă, din America de Sud, format datorită curenților marini reci ce saturează aerul, eliminând astfel precipitațiile. Deșertul Atacama este cel mai arid deșert, din lume, precipitațiile fiind de 1,8 l/m.p. la 10 ani. El se află situat pe coasta de nord vest sudamericană în nordul statului Chile limitat la vest de coasta Pacificului, la Sud de Peru și la est de Bolivia și Argentina.",
+   "intrebare": "Pe ce continent se află Atacama?",
+   "raspuns": "În America de Sud.",
+   "cheie": [
+    "America de Sud"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Atacama",
+   "grup": "tipuri_noi_176"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "limba",
+   "text": "Die Karpathen (Carpații) a fost o publicație bilunară în limba germană, care a apărut în perioada 1907 - 1914 la Brașov, Transilvania, Imperiul Austro-Ungar.",
+   "intrebare": "În ce limbă este Die Karpathen?",
+   "raspuns": "În limba germană.",
+   "cheie": [
+    "germană"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Die Karpathen",
+   "grup": "tipuri_noi_177"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "gen_muzical",
+   "text": "Siouxsie and the Banshees a fost o trupă de rock britanic, care s-a format în 1976. Condusă de Siouxsie Sioux (solistă vocal) și Steven Severin (bas), singurii membri constanți ai trupei, the Banshees a fost creată sub influența trupei punk însă, când a început să înregistreze (1978), aceasta suna precum o trupă post-punk.",
+   "intrebare": "Ce gen de muzică face Siouxsie and the Banshees?",
+   "raspuns": "Rock.",
+   "cheie": [
+    "rock"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Siouxsie and the Banshees",
+   "grup": "tipuri_noi_178"
+  },
+  {
+   "fel": "text",
+   "limba": "ro",
+   "categorie": "ii",
+   "tip": "sport",
+   "text": "Vasile Darie (n. 5 noiembrie 1960, Brăila) este un antrenor de fotbal român. Întreaga sa carieră, atât ca fotbalist cât și ca antrenor este legată de Dacia Unirea Brăila. La Dacia Unirea Brăila a ocupat începând cu 2006 următoarele posturi: antrenorul echipei de juniori (2006-2007), antrenor secund (2008-2009) și antrenor principal (2007-2008 și 2009-2010).",
+   "intrebare": "Ce sport practică Vasile Darie?",
+   "raspuns": "Fotbal.",
+   "cheie": [
+    "fotbal"
+   ],
+   "formulare": "tip_neantrenat",
+   "subiect": "Vasile Darie",
+   "grup": "tipuri_noi_179"
+  }
+ ]
+}
