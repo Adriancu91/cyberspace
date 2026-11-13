@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 13 nov 2026 (supraveghetor, 08:15):** Raportul de dimineață e la locul lui și e bun (noapte fără placă; C-112 verificat: 82 șterse / 33,4 GB, 31 refuzate, C: 71 GB liberi). **S108 continuă (`in_lucru`, doar procesor, doar citire).** Un singur adaos mic la S108, tot doar citire: în raport scrie și o linie că `gpt.pt` al lui #513 și al lui #554 există încă, cu SHA-256 (raportul de dimineață n-a scris-o explicit; S105/S106 de după ștergere le-au folosit, deci e doar confirmare). Testul `test_kronos_cod_examen` picat o dată în rularea mare (trece singur): **nu repara nimic**; dacă pică din nou la o rulare completă, notează în raportul sarcinii (ora, încărcarea procesorului). **Placa: nicio sarcină aprobată azi ziua și la noapte** — decid după raportul S108 (următoarea trecere).
+
 **⚠ ACUM — 13 nov 2026 (supraveghetor, 02:15):** **S107 = GATA, verificat — LA FEL, „#513 rămâne”.** Restul nopții: nimic pe placă. **S108 (NOU, `aprobat`, jos, doar procesor, doar citire, ~1–2 h, de la 08:00):** câte exemple din fiecare tip de întrebare are linia modelului în uz la antrenare și câte s-ar putea face din datele deja descărcate pentru tipurile slabe — pregătește alegerea lui Adrian, fără să antreneze nimic. Raportul de dimineață la 07:40, cu verificarea C-112 (doar citire), ca de obicei. Nimic pe placă azi ziua.
 
 **⚠ ACUM — 12 nov 2026 (supraveghetor, 23:15):** **S106 = GATA, verificat — LA FEL, „#513 rămâne”.** Întrebarea #554 față de #513 e închisă pe toate măsurătorile. **În noaptea asta: nimic pe placă** (nicio sarcină de placă aprobată; direcția liniei de 24 e decizia lui Adrian). **S107 (NOU, `aprobat`, jos, doar procesor, ~1–2 h, oricând — și acum)**: unealtă nouă de renotare a examenului de conversație, care primește și refuzul cinstit „Nu scrie în text.” la întrebările-capcană; nu schimbă unealta oficială și nici notele din jurnal. Raportul de dimineață (07:40) rămâne cu verificarea C-112 (doar citire).
@@ -3673,8 +3675,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md
 
 ### S108 — Pentru alegerea lui Adrian: câte exemple din fiecare tip de întrebare a văzut linia modelului în uz și câte s-ar putea face din datele deja descărcate (doar procesor, doar citire)
-- stare: gata (executant, 13 nov 2026 08:30 — doar citire, ~1 min pe trecere, un nucleu; 11 din 13 tipuri (b2) au 0 exemple în linie („țară” 223 instrucțiuni, „oraș” 4); tipurile (e) 14–719; din Wikipedia descărcată ~6.150 de întrebări noi estimate pentru cele 12 tipuri slabe (mostre de 10 citite: 5–10/10 bune); fișierele de lucru doar în `lucru/cascada/S108/`; 1412 teste trec, 1 sărit, înainte și după)
-- (istoric) stare: in_lucru (executant, 13 nov 2026 08:06; nimic altceva în lucru, placa liberă 553 MB / 29 °C; 1412 teste trec, 1 sărit)
+- stare: in_lucru (executant, 13 nov 2026 08:06; nimic altceva în lucru, placa liberă 553 MB / 29 °C; 1412 teste trec, 1 sărit)
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 02:15)
 - tip: procesor (fără placă, fără profesor)
 - fereastră: zi, de la 08:00 (după raportul de dimineață); nu încarcă procesorul peste 2 nuclee dacă Adrian e la workstation
@@ -3689,4 +3690,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nu antrenezi, nu scrii date de antrenare noi, nu schimbi generatoare, configurări, `kronos/`, `module/`, examenele sau jurnalul. Nimic pe placă, nimic descărcat, plătit sau șters.
 - pre-înregistrare: nu e cazul (numărare în date, nicio măsurare de model)
 - aprobat de: supraveghetor, 13 nov 2026 02:15 (granița 2: analize/notări; granița 3: lucru doar pe date deja descărcate, aici doar citire)
-- raport: docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md
+- raport: docs/rapoarte/…_S108_tipuri_intrebari.md

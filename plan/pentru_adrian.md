@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 08:15 — Noapte curată, discul are iar loc; acum se numără tipurile de întrebări
+
+- **Raportul de dimineață e scris și e bun:** noaptea placa s-a odihnit, nimic n-a căzut. Ștergerea ta de ieri (C-112) a mers: 82 de modele, 33,4 GB; discul C: are acum **71 GB liberi** (ieri 41 GB).
+- **Testele:** 1.411 trec; unul (examenul de cod, are o limită de timp) a picat o dată în rularea mare și trece singur — îl urmărim, nu reparăm nimic deocamdată.
+- **Rulează acum: S108** (doar procesor, doar citire, ~1–2 h): câte exemple din fiecare tip de întrebare a văzut modelul în uz și câte s-ar putea face din datele deja descărcate — cifrele pentru alegerea ta (a)/(b).
+- **Pus în coadă:** nimic nou pe placă; hotărăsc după raportul S108.
+- **Aștept de la tine:** nimic urgent. Când ai timp: direcția (a) modelul de 24 de straturi de la zero sau (b) mai multe tipuri de întrebări pe modelul în uz; „a”/„b” pentru testul care a picat o dată (fără răspuns rămâne „b” = îl urmărim).
+
 ## 13 noiembrie 2026, 02:15 — Renotarea a confirmat: modelele refuză aproape orice întrebare fără text; azi o numărătoare pentru alegerea ta
 
 - **S107 gata, verificat de mine — „#513 rămâne”.** Unealta nouă numără corect refuzul cinstit la întrebările-capcană (#513: 1 → 16, #554: 0 → 16 din 20), dar amândouă refuză și 46–49 din 50 de întrebări pe care ar trebui să le știe. Nota medie 1,913 față de 1,900 (pragul 0,3) → LA FEL. Pentru modelul în uz contează examenele „răspuns din text” (S106).
@@ -9,7 +17,6 @@
 - **Pus în coadă: S108** (aprobat de mine, doar procesor, doar citire, azi de la 08:00): câte exemple din fiecare tip de întrebare a văzut modelul la antrenare și câte s-ar putea face din datele deja descărcate pentru tipurile slabe („actori”, „profesie”, „canal”…). Așa varianta (b) de mai jos primește cifre. Nimic antrenat, descărcat sau șters.
 - **Aștept de la tine:** nimic urgent. Când ai timp: direcția — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) mai multe tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
 
-- **13 nov 08:14 (executant) — S108 gata:** linia lui #513 n-a văzut la antrenare 11 din cele 13 tipuri de întrebări slabe (0 exemple; „țară” doar 223 de instrucțiuni România/Moldova, „oraș” 4), iar tipurile care merg au fost văzute de 14–719 ori. Din Wikipedia deja descărcată s-ar putea face ~6.000 de întrebări noi pentru cele 12 tipuri slabe (inegal: profesie ~2.900, țară ~1.200; pictor/câștigător ~30). Varianta (b) = generator nou + examen nou + 2–3 ore de placă; (a) = ~7 nopți. Raport: `docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md`.
 - **12 nov 23:38 (executant) — S107 gata:** unealta nouă numără corect refuzul „Nu scrie în text.” la întrebările-capcană (#513 1 → 16, #554 0 → 16 din 20), dar modelele refuză la fel și la 46–49 din 50 de întrebări pe care ar trebui să le știe → examenul fără text tot nu le desparte; „#513 rămâne”. Raport: `docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md`.
 
 ## 12 noiembrie 2026, 23:15 — #554 nu bate #513 nici cu textul alături (verificat); la noapte placa se odihnește
@@ -182,9 +189,3 @@
 - **Am pus la noapte S99:** aceeași idee, dar cu altă metodă de învățare (Muon — o avem deja, n-a fost încercată pe modelul mare), pornind din modelul de azi-noapte. Intră în regulile mele (aceeași linie, altă rețetă); pragurile sunt scrise dinainte. Nu pornește cât rulează S98 (procesor), care începe doar după nota ta.
 - **Aștept de la tine:** după testul de la 07:15, **o notă că workstation-ul e liber** (pornește S98, apoi S99 la noapte). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
 
-## 9 noiembrie 2026, 23:15 — Antrenarea de noapte a pornit curat
-
-- **S95 rulează din 20:40** (5 ore din #536, rata ×0,5, judecat pe română). Reparația a mers: viteza de învățare citită de executant e cea corectă (5e-6, verificată la primul pas, la 10 minute și la sfârșitul primei ore), iar copia lui #536 dă la română exact cât originalul (1,2062). Originalul #536 e neatins.
-- Estimat: antrenarea gata pe la 02:15, examenele pe la 03:00 — **placa liberă cu mult înainte de 06:45**. Verdictul îl verific la 02:15 sau 05:15.
-- Nicio comandă nouă de la tine în hub, nicio problemă. Nimic nou pus în coadă (S98 rămâne pentru după testul tău).
-- **Aștept de la tine:** mâine, după testul de la 07:15, o notă că workstation-ul e liber (pornește S98). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
