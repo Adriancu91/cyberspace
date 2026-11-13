@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 11:15 — Antrenamentul mare (C-119) e în coadă: 4 etape, ~68 de ore de placă, gata luni dimineață
+
+- **S108 gata, verificat de mine:** modelul în uz (#513) n-a văzut niciodată 11 din cele 13 tipuri de întrebări la care greșește; din Wikipedia pe care o avem deja ies ~6.150 de întrebări noi. Cifrele sunt corecte (le-am adunat din nou).
+- **Am preluat comanda ta C-119 („da” 10:49 + 11:11).** În coadă, una după alta, cu praguri scrise de mine dinainte: **S109 (E1, de acum, ~5 h)** = întrebări noi pe tipurile slabe + un examen nou ținut deoparte + 3 ore din #513 → dacă iese mai bun, intră în interfață. **S110 (E2, ~55 h)** = modelul de 24 de straturi de la zero, cu verificare la 12 h și 24 h (dacă e pe drumul greșit se oprește și orele nu se consumă pe altceva). **S111 (E3, ~8 h)** = învățarea conversației + toate examenele, alege câștigătorul. **S112 (E4)** = câștigătorul în interfața de convorbire (port 8787, și de pe telefon prin Tailscale) + raportul final pentru luni seara.
+- **Rulează acum:** nimic încă; executantul ia S109 la următoarea trecere (~11:30). Placa e a lui Kronos non-stop până luni seara.
+- **De știut, cinstit:** ținta realistă e română corectă și legată pe subiecte cunoscute, nu „ca ChatGPT” — va greși fapte. Discul: dacă scade sub 15 GB liberi, se oprește și te întreabă (nu șterge nimic singur).
+- **Aștept de la tine:** nimic. Ne vedem luni seara cu modelul în interfață.
+
 ## 13 noiembrie 2026, 08:15 — Noapte curată, discul are iar loc; acum se numără tipurile de întrebări
 
 - **Raportul de dimineață e scris și e bun:** noaptea placa s-a odihnit, nimic n-a căzut. Ștergerea ta de ieri (C-112) a mers: 82 de modele, 33,4 GB; discul C: are acum **71 GB liberi** (ieri 41 GB).
@@ -183,11 +191,4 @@
 - **Nu rulează nimic** și nu pornește nimic până la nota ta (regula C-94). Nicio comandă nouă pentru Kronos în hub (C-95, laptopul ca al doilea calculator de test, e la cyber-gpu și l-ai parcat).
 - Coada rămâne: **S98** (doar procesor) după nota ta, **S99** (Muon, placa) la noapte.
 - **Aștept de la tine:** după testul `os-276`, **o notă că workstation-ul e liber** (în hub `COMENZI.md` sau aici). Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 10 noiembrie 2026, 05:15 — Antrenarea de noapte s-a terminat: cel mai bun scor la română de până acum, dar nu destul ca să-l numim „mai bun”
-
-- **S95: GATA, verificat de mine — LA FEL.** Modelul de 24 de straturi a ajuns la română la **1,2040** (modelul în uz, #513: 1,2060). E cel mai bun scor măsurat vreodată, dar pragul stabilit dinainte cerea 1,2010, deci nu înlocuiește nimic. Nu a stricat nimic (povești, cod, răspunsuri 99,2 %). Placa max 6.496 MB / 62 °C, liberă de la 02:13 — **gata pentru testul tău de la 07:15**.
-- Lecția: cu rețeta de acum, orele „la viteză constantă” țin modelul pe loc; tot câștigul vine din finalul în care viteza scade.
-- **Am pus la noapte S99:** aceeași idee, dar cu altă metodă de învățare (Muon — o avem deja, n-a fost încercată pe modelul mare), pornind din modelul de azi-noapte. Intră în regulile mele (aceeași linie, altă rețetă); pragurile sunt scrise dinainte. Nu pornește cât rulează S98 (procesor), care începe doar după nota ta.
-- **Aștept de la tine:** după testul de la 07:15, **o notă că workstation-ul e liber** (pornește S98, apoi S99 la noapte). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
 
