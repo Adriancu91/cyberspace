@@ -3734,7 +3734,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-13_1635_S109_E1_tipuri_noi.md
 
 ### S110 — C-119 E2 = S101 repornit: Kronos de 24 de straturi (183 M) DE LA ZERO, Muon, încălzire → vârf → scădere, pe amestecul actual pe bucăți + întrebările din E1 (placa, proba de rată ~1 h + ~54 h, puncte de control la 12 h și 24 h)
-- stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119 — ridică „nu deocamdată” de la S101/C-101) — pornește doar după S109 `gata`
+- stare: in_lucru (executant, 13 nov 2026 17:00; S109 `gata`, placa liberă 585 MB / 31 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119 — ridică „nu deocamdată” de la S101/C-101) — pornește doar după S109 `gata`
 - tip: placă (non-stop, salvare la fiecare oră, reluare din ultima oră salvată după orice întrerupere)
 - fereastră: imediat după S109, non-stop până la ~54 h de antrenare (C-119)
 - durată maximă: proba 1 h + 54 h antrenare + examenele de la punctele de control
