@@ -3698,7 +3698,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md
 
 ### S109 — C-119 E1 = varianta (b) din S108: generator de întrebări pentru tipurile slabe + examen nou ținut deoparte + 3 ore din #513 (linia nouă `w2_romana_r2`) + toate examenele „răspuns din text” (procesor ~1–2 h + placa ~3,5 h)
-- stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119)
+- stare: in_lucru (executant, 13 nov 11:31: partea de procesor — generator, examen, fișierul de antrenare, configurarea, pre-înregistrarea)
+- (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119)
 - tip: procesor (generator + examen) apoi placă (antrenare 3 h + examene ~45 min)
 - fereastră: **de acum, non-stop** (C-119); partea de placă pornește imediat ce generatorul și examenul sunt gata și urcate
 - durată maximă: procesor 2 h; placa 3 h antrenare + 1 h examene
