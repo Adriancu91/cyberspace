@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 17:15 — Prima etapă a ieșit bine (#577); modelul mare pornește cu greșelile reparate și cu mult mai multă română
+
+- **S109 gata, verificat de mine — AJUTĂ.** #577 răspunde corect la 102 din 130 de întrebări noi (#513: 24); verificatorul fără alt AI: 91 față de 23. N-a stricat nimic: româna 1,2055 (#513: 1,2060), codul, R2, instrucțiunile 98,97, examenele vechi — toate în praguri. Slab doar la tipuri de întrebări pe care nu le-a văzut deloc (5 față de 10 din 50). #577 e acum cel mai bun model.
+- **Am preluat C-120 (revizia + „da”-ul tău de la 17:03).** Am verificat în cod greșeala de pornire (pierderea de început ~411 în loc de ~9,7) și am rescris S110: pornire corectă, loturi mai eficiente (~+20 % text pe oră), fără examenele de engleză la fiecare oră, iar **restul de ~2,45 GB de română FineWeb-2, deja descărcat, intră în antrenare (~69 % română în loc de ~34 %)** — doar după ce se scot textele care seamănă cu examenele. Dacă verificarea aceea pică, merge pe amestecul vechi și îți scriu de ce.
+- **Pragurile de oprire de la 12 h / 24 h** le-am făcut mai cinstite (la 24 h modelul încă învață cu viteză maximă; cele vechi l-ar fi oprit degeaba cam o dată din două). Antrenarea: **52 h** în loc de 54, ca S111 și S112 să fie gata luni după-amiază. La S111: rată mai mică (1e-5, cea care a ținut la 24 de straturi).
+- **Rulează acum:** executantul pregătește datele (procesor, ~1–1,5 h), apoi proba de rată (~1,2 h), apoi rularea mare, pe la ~20:00–21:00. Gata pe la luni dimineață.
+- **De știut:** interfața de pe telefon (port 8787) arată încă modele vechi (#312/#407), nu #513/#577 — executantul n-are voie să oprească procesul. Se schimbă la S112. Dacă vrei #577 mai devreme, comanda e în raportul S109 (opțional).
+- **Aștept de la tine:** nimic.
+
 - **13 nov 16:35 (executant) — S109 gata: AJUTĂ.** Modelul nou #577 răspunde corect la 102 din 130 întrebări noi de tipurile slabe (#513: 24), fără să strice româna, codul sau examenele vechi. Mai slab doar la tipuri pe care nu le-a văzut deloc (5 față de 10 din 50). Interfața n-am schimbat-o (permisiunile nu mă lasă să opresc procesul) — se face la S112. Raport: `docs/rapoarte/2026-11-13_1635_S109_E1_tipuri_noi.md`. Urmează S110.
 
 ## 13 noiembrie 2026, 14:15 — Prima etapă (S109) învață acum pe placă; gata pe la 16:40
@@ -187,18 +196,3 @@
 - Nimic nou terminat la Kronos de la 14:15 (executantul așteaptă corect). Nicio problemă.
 - Testul tău `os-277`: eroarea veche (0xbadf5620) a dispărut, acum apare un „timeout după 2 s” — e la Cyber Universe / cyber-gpu (C-99), nu la Kronos.
 - **Aștept de la tine:** când termini testul, **scrie în hub că ai terminat** (sau, dacă vrei placa toată seara, scrie asta — altfel S99 pornește de la 19:30). Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 10 noiembrie 2026, 14:15 — Am primit C-97: antrenarea de noapte pornește la 19:00 dacă nu revii
-
-- **C-97 preluat:** ai plecat de la workstation la ~10:55. Până la 19:00 nu pornește nimic. **De la 19:00 pornește S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore, judecată pe română, praguri scrise dinainte) și **eliberează placa până la 07:00** mâine. Dacă vii totuși și repornești pentru un test, e în regulă: se oprește, orele salvate rămân.
-- **Am schimbat ordinea:** S99 (placa) azi-noapte prima, **S98** (doar procesor) mâine de la 08:00, ca să nu se încurce una pe alta.
-- Nimic nou terminat de la 08:15 (executantul așteaptă corect). Nicio problemă. Stick-urile rămân neatinse; `os-277` (reparația I8) e gata la Cyber Universe pentru următorul tău test.
-- **Aștept de la tine:** dacă vii diseară, **scrie în hub că vii** (altfel la 19:00 pornește antrenarea). Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 10 noiembrie 2026, 08:15 — Totul în regulă; workstation-ul e al tău pentru testul OS
-
-- **Raportul de dimineață e la locul lui** (`docs/rapoarte/2026-11-10_0646_raport_dimineata.md`) și confirmă ce am verificat la 05:15: S95 **LA FEL** (română 1,2040 vs #513 1,2060), nimic stricat, 1343 teste trec, placa liberă (519 MB / 27 °C).
-- **Nu rulează nimic** și nu pornește nimic până la nota ta (regula C-94). Nicio comandă nouă pentru Kronos în hub (C-95, laptopul ca al doilea calculator de test, e la cyber-gpu și l-ai parcat).
-- Coada rămâne: **S98** (doar procesor) după nota ta, **S99** (Muon, placa) la noapte.
-- **Aștept de la tine:** după testul `os-276`, **o notă că workstation-ul e liber** (în hub `COMENZI.md` sau aici). Fără grabă: Release-ul #513 și ștergerea S88.
-
