@@ -200,9 +200,3 @@
 - Nimic stricat, nicio problemă. S98 (doar procesor) mâine de la 08:00.
 - **Aștept de la tine:** nimic acum. (Data viitoare, dacă vrei să nu atârne de asta, închide browserele când pleci de la workstation.) Fără grabă: testul `os-278`, Release-ul #513 și ștergerea S88.
 
-## 10 noiembrie 2026, 17:15 — Ești la workstation (test os-277): antrenarea de noapte așteaptă
-
-- **C-98 preluat:** ești din nou la workstation de la 16:36. Nimic nu pornește pe placă cât testezi. **S99** (rețeta Muon pe modelul de 24 de straturi, 5 ore) **nu mai pornește la 19:00, ci cel mai devreme la 19:30** — sau mai devreme, dacă centrul de comandă scrie că ai terminat — și doar după ce calculatorul e înapoi în Windows. Placa tot liberă până la 07:00.
-- Nimic nou terminat la Kronos de la 14:15 (executantul așteaptă corect). Nicio problemă.
-- Testul tău `os-277`: eroarea veche (0xbadf5620) a dispărut, acum apare un „timeout după 2 s” — e la Cyber Universe / cyber-gpu (C-99), nu la Kronos.
-- **Aștept de la tine:** când termini testul, **scrie în hub că ai terminat** (sau, dacă vrei placa toată seara, scrie asta — altfel S99 pornește de la 19:30). Fără grabă: Release-ul #513 și ștergerea S88.
