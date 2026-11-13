@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 13 nov 2026 (supraveghetor, 02:15):** **S107 = GATA, verificat — LA FEL, „#513 rămâne”.** Restul nopții: nimic pe placă. **S108 (NOU, `aprobat`, jos, doar procesor, doar citire, ~1–2 h, de la 08:00):** câte exemple din fiecare tip de întrebare are linia modelului în uz la antrenare și câte s-ar putea face din datele deja descărcate pentru tipurile slabe — pregătește alegerea lui Adrian, fără să antreneze nimic. Raportul de dimineață la 07:40, cu verificarea C-112 (doar citire), ca de obicei. Nimic pe placă azi ziua.
+
 **⚠ ACUM — 12 nov 2026 (supraveghetor, 23:15):** **S106 = GATA, verificat — LA FEL, „#513 rămâne”.** Întrebarea #554 față de #513 e închisă pe toate măsurătorile. **În noaptea asta: nimic pe placă** (nicio sarcină de placă aprobată; direcția liniei de 24 e decizia lui Adrian). **S107 (NOU, `aprobat`, jos, doar procesor, ~1–2 h, oricând — și acum)**: unealtă nouă de renotare a examenului de conversație, care primește și refuzul cinstit „Nu scrie în text.” la întrebările-capcană; nu schimbă unealta oficială și nici notele din jurnal. Raportul de dimineață (07:40) rămâne cu verificarea C-112 (doar citire).
 
 **⚠ ACUM — 12 nov 2026 (supraveghetor, 20:15):** **S105 = GATA, verificat — LA FEL, „#513 rămâne”.** Placa e liberă în restul nopții → **S106 (NOU, `aprobat`, jos)**: #513 față de #554 (+ #477 reper) pe examenele „răspuns din text” (S15 mare și S4), adică felul în care e folosit modelul de fapt (cu textul alături), plus o renumărare a răspunsurilor S105 deja scrise. Pornire cel târziu **23:30**, placa liberă până la 06:30; pre-înregistrarea întâi. Verificarea C-112 (doar citire) rămâne la raportul de dimineață.
@@ -3650,7 +3652,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2046_S106_text_554_513.md
 
 ### S107 — Renotarea examenului de conversație: refuzul cinstit („Nu scrie în text.”) numărat corect la întrebările-capcană (unealtă nouă, doar procesor)
-- stare: gata (executant, 12 nov 2026 23:38 — unealta nouă `unelte/renoteaza_conversatie.py` + 5 teste; „nu știu” corecte #513 1 → 16, #554 0 → 16 din 20; DAR refuză și la cele știute: 49 și 46 din 50 Wikipedia (0 corecte) → refuzul e general, examenul tot nu desparte modelele. Verdict nota medie +0,013 → **LA FEL, „#513 rămâne”**. #477/#459 fără fișier de conversație cu „nu știu” (reper în loc: #396, 15 → 15). SHA-uri neschimbate; unealta oficială și jurnalul neatinse; 1412 teste trec, 1 sărit)
+- stare: gata — **verificat de supraveghetor 13 nov 2026 02:15: LA FEL corect, „#513 rămâne”** (nota medie 1,913 − 1,900 = +0,013 < 0,3; „nu știu” 16 = 16; doar fișiere noi: unealta, testele, raportul; SHA-urile uneltei oficiale și ale rezultatelor S105 neschimbate; 1412 teste). Lecție: refuzul e general (46–49 din 50 de întrebări știute refuzate), deci examenul fără text nu desparte modelele din linia „text”.
+- (istoric) stare: gata (executant, 12 nov 2026 23:38 — unealta nouă `unelte/renoteaza_conversatie.py` + 5 teste; „nu știu” corecte #513 1 → 16, #554 0 → 16 din 20; DAR refuză și la cele știute: 49 și 46 din 50 Wikipedia (0 corecte) → refuzul e general, examenul tot nu desparte modelele. Verdict nota medie +0,013 → **LA FEL, „#513 rămâne”**. #477/#459 fără fișier de conversație cu „nu știu” (reper în loc: #396, 15 → 15). SHA-uri neschimbate; unealta oficială și jurnalul neatinse; 1412 teste trec, 1 sărit)
 - (istoric) stare: in_lucru (executant, 12 nov 2026 23:30; nimic altceva în lucru, placa liberă 602 MB / 29 °C)
 - (istoric) stare: aprobat (supraveghetor, 12 nov 2026 23:15)
 - tip: procesor (fără placă, fără profesor)
@@ -3668,3 +3671,20 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - pre-înregistrare: nu e cazul (renotare de răspunsuri deja scrise; vezi pasul 4)
 - aprobat de: supraveghetor, 12 nov 2026 23:15 (granița 5: unealtă nouă + teste, fără `kronos/` și examen; granița 2: notări)
 - raport: docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md
+
+### S108 — Pentru alegerea lui Adrian: câte exemple din fiecare tip de întrebare a văzut linia modelului în uz și câte s-ar putea face din datele deja descărcate (doar procesor, doar citire)
+- stare: **aprobat** (supraveghetor, 13 nov 2026 02:15)
+- tip: procesor (fără placă, fără profesor)
+- fereastră: zi, de la 08:00 (după raportul de dimineață); nu încarcă procesorul peste 2 nuclee dacă Adrian e la workstation
+- durată maximă: 2 h
+- de ce: S106 a arătat că slăbiciunea comună a modelelor e la tipurile de întrebări nevăzute la antrenare ((b2): 9–13 din 50; la „actori”, „canal”, „profesie”, „câștigător” 0), iar tipurile văzute merg 29–30 din 30. Adrian are de ales direcția: (a) S101, 24 de straturi de la zero, sau (b) mai multe tipuri de întrebări pe linia modelului în uz. S108 pune cifre lângă varianta (b): cât de mare ar fi, din ce date, fără să antreneze nimic.
+- ce faci:
+  0. `python -m pytest` verde.
+  1. Afli din jurnal/configurare ce fișier de conversație („răspuns din text”) a folosit linia lui #513 la antrenare (scrii calea și SHA-ul). Numeri, pe tipuri, câte exemple are pentru fiecare din cele 13 tipuri (b2) din S106 și cele 11 tipuri (e) (dacă tipul nu e scris în fișier, îl deduci cu aceleași reguli ca generatorul S15 — scrii cum; fără ghicit de mână).
+  2. Pentru fiecare tip (b2) cu 0–2 corecte la S106: câte întrebări noi de acel tip s-ar putea face **din datele deja descărcate și aprobate** (ex. Wikipedia RO din `date/ws/`), cu aceeași regulă ca generatorul existent; dacă generatorul nu știe tipul, scrii doar estimarea (câte texte au informația), fără să scrii generator nou. **Verifici că textele examenelor S15/S4/neutru nu intră în numărătoare** (scrii cum ai exclus).
+  3. Un tabel: tipul · exemple la antrenare · corecte la S106 (#513) · exemple posibile din datele existente. Plus o estimare scurtă pentru varianta (b) (câte exemple noi, cât timp de placă ar cere o rulare scurtă pe linia lui #513) — doar estimare, nu o propui ca sarcină aprobată.
+  4. Raport `docs/rapoarte/<data>_<ora>_S108_tipuri_intrebari.md` (cu un paragraf simplu pentru Adrian: ce înseamnă (a) și (b) în cifre), un rând sus în `plan/pentru_adrian.md`, coada → `gata`, commit + push. Fișierele de lucru doar în `lucru/cascada/S108/`.
+- **NU:** nu antrenezi, nu scrii date de antrenare noi, nu schimbi generatoare, configurări, `kronos/`, `module/`, examenele sau jurnalul. Nimic pe placă, nimic descărcat, plătit sau șters.
+- pre-înregistrare: nu e cazul (numărare în date, nicio măsurare de model)
+- aprobat de: supraveghetor, 13 nov 2026 02:15 (granița 2: analize/notări; granița 3: lucru doar pe date deja descărcate, aici doar citire)
+- raport: docs/rapoarte/…_S108_tipuri_intrebari.md

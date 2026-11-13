@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 02:15 — Renotarea a confirmat: modelele refuză aproape orice întrebare fără text; azi o numărătoare pentru alegerea ta
+
+- **S107 gata, verificat de mine — „#513 rămâne”.** Unealta nouă numără corect refuzul cinstit la întrebările-capcană (#513: 1 → 16, #554: 0 → 16 din 20), dar amândouă refuză și 46–49 din 50 de întrebări pe care ar trebui să le știe. Nota medie 1,913 față de 1,900 (pragul 0,3) → LA FEL. Pentru modelul în uz contează examenele „răspuns din text” (S106).
+- **Rulează acum:** nimic; noaptea fără placă, nimic n-a picat.
+- **Pus în coadă: S108** (aprobat de mine, doar procesor, doar citire, azi de la 08:00): câte exemple din fiecare tip de întrebare a văzut modelul la antrenare și câte s-ar putea face din datele deja descărcate pentru tipurile slabe („actori”, „profesie”, „canal”…). Așa varianta (b) de mai jos primește cifre. Nimic antrenat, descărcat sau șters.
+- **Aștept de la tine:** nimic urgent. Când ai timp: direcția — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) mai multe tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
+
 - **12 nov 23:38 (executant) — S107 gata:** unealta nouă numără corect refuzul „Nu scrie în text.” la întrebările-capcană (#513 1 → 16, #554 0 → 16 din 20), dar modelele refuză la fel și la 46–49 din 50 de întrebări pe care ar trebui să le știe → examenul fără text tot nu le desparte; „#513 rămâne”. Raport: `docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md`.
 
 ## 12 noiembrie 2026, 23:15 — #554 nu bate #513 nici cu textul alături (verificat); la noapte placa se odihnește
@@ -180,11 +187,3 @@
 - Estimat: antrenarea gata pe la 02:15, examenele pe la 03:00 — **placa liberă cu mult înainte de 06:45**. Verdictul îl verific la 02:15 sau 05:15.
 - Nicio comandă nouă de la tine în hub, nicio problemă. Nimic nou pus în coadă (S98 rămâne pentru după testul tău).
 - **Aștept de la tine:** mâine, după testul de la 07:15, o notă că workstation-ul e liber (pornește S98). Dacă n-ai făcut-o: `claude setup-token`. Fără grabă: Release-ul #513 și ștergerea S88.
-
-## 9 noiembrie 2026, 20:15 — Executantul a prins la timp o greșeală de pregătire; am ales reparația, antrenarea de noapte pornește
-
-- **S95 oprit de executant la 19:36, înainte de placă — bine prins.** Fișierul modelului #536 „ținea minte” că programul de 5 ore era deja terminat, așa că modelul ar fi învățat toată noaptea cu viteza 0 (o noapte pierdută și un verdict fals). Nimic n-a rulat, nimic stricat.
-- **Am ales reparația (a):** aceeași copie a lui #536, doar cu „ceasul” programului dat la zero; greutățile și starea de învățare rămân. I-am cerut executantului o verificare în plus: în primele 10 minute citește viteza reală de învățare și, dacă nu e cea corectă (5e-6), oprește imediat.
-- **S95 pornește la noapte**, cel târziu la 00:00, și **eliberează placa până la 06:45** pentru testul tău de la 07:15. Pragurile rămân cele scrise dinainte (MAI BUN = română ≤ 1,2010).
-- Altfel nimic de semnalat: testele trec (1342; unul instabil cunoscut), placa era goală (503 MB / 26 °C).
-- **Aștept de la tine:** dacă n-ai făcut-o, `claude setup-token` pe workstation. **Mâine, după test, spune că workstation-ul e liber** (pornește S98). Fără grabă: Release-ul #513 și ștergerea S88.
