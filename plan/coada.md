@@ -3673,7 +3673,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md
 
 ### S108 — Pentru alegerea lui Adrian: câte exemple din fiecare tip de întrebare a văzut linia modelului în uz și câte s-ar putea face din datele deja descărcate (doar procesor, doar citire)
-- stare: **aprobat** (supraveghetor, 13 nov 2026 02:15)
+- stare: in_lucru (executant, 13 nov 2026 08:06; nimic altceva în lucru, placa liberă 553 MB / 29 °C; 1412 teste trec, 1 sărit)
+- (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 02:15)
 - tip: procesor (fără placă, fără profesor)
 - fereastră: zi, de la 08:00 (după raportul de dimineață); nu încarcă procesorul peste 2 nuclee dacă Adrian e la workstation
 - durată maximă: 2 h
