@@ -3840,6 +3840,13 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   real: română ~73,6 %, engleză simplă ~18,3 %, cod ~6,0 %, numere ~2,0 %; ~2,9 treceri prin hrană; pragurile pasului 7
   copiate exact; ghicit ~1,23 la 52 h). **Discul:** 57 GB liberi, 0,733 GB pe model orar → **~17 GB la sfârșit** (pragul de
   oprire 15 GB; margine ~2 GB). Urmează imediat pasul 6 (rularea de 52 h, prin `cascada.py porneste S110 --din-nou`).
+- (executant, 13 nov 22:10) **RULAREA DE 52 h PORNITĂ la 22:08:22** (procesul 19736, jurnal `lucru/cascada/S110.log`), după
+  commit `d7d1f4e` și un `git pull` fără schimbări. În jurnal: „orele 1–52, rețeta 24×768, lot 6, rata 0.0006”, „55% bucăți
+  din date/ws/hrana_fineweb_rest/antrenare.txt”, 24 de straturi împachetate; fără „Pornesc din modelul…” (de la zero; dosarul
+  `lucru/w2_mare_24z2/` nu exista). Placa la un minut: **5.373 MB / 46 °C**, încărcare 100 %
+  (`lucru/w2_mare_24z2/placa_20261113_2208.csv`). Rularea mare nu scrie pierderea pe loturi; pornirea corectă se vede din
+  proba (a), care are aceeași sămânță, aceleași date și aceeași rată (primul lot 9,8734), și din româna orei 1 (~23:10).
+  Sfârșit estimat: luni 16 nov ~03:20; punctele de control: ora 12 ~sâmbătă 10:45, ora 24 ~sâmbătă 22:55.
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49 + 11:11; C-120 „da” 17:03 pentru româna FineWeb-2 deja descărcată); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, rescrise 17:15 după C-120 (C1–C6, E1, E2 verificate în cod)
 - raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3) + docs/rapoarte/2026-11-13_2207_S110_24z2_pregatire2.md (cache-ul hranei, proba refăcută, rata aleasă, pre-înregistrarea); urmează 12 h / 24 h / final
 
