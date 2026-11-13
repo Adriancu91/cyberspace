@@ -3833,8 +3833,15 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   Lanțul `lucru/cascada/S110/probe2.py` (ieșiri `probe2.json`, `proba_<a|b>2_pierderi.json`), sfârșit ~21:45. **Rularea
   următoare:** alegerea ratei (regula de la pasul 4), pre-înregistrarea (amestecul real, trecerile prin hrană), commit +
   push, `git pull`, apoi rularea de 52 h.
+- (executant, 13 nov 22:10) **proba de rată refăcută GATA (21:40, cod 0): câștigă (a).** Româna după 30 min: (a) **1,7868**
+  (#588), (b) **1,8519** (#589) → (a) mai mică cu 0,065 ≥ 0,01; fără NaN, pierderea scade la amândouă; placa max 5.885 MB /
+  64 °C; ~14.937 simboluri/s. În `conv_w2_mare_24z2.toml`: `rata_muon = 0.02`, `rata_invatare = 0.0006` (doar asta + rândul
+  din antet). **1462 teste trec, 1 sărit.** Pre-înregistrarea `docs/preinregistrari/2026-11-13_w2_mare_24z2.md` (amestecul
+  real: română ~73,6 %, engleză simplă ~18,3 %, cod ~6,0 %, numere ~2,0 %; ~2,9 treceri prin hrană; pragurile pasului 7
+  copiate exact; ghicit ~1,23 la 52 h). **Discul:** 57 GB liberi, 0,733 GB pe model orar → **~17 GB la sfârșit** (pragul de
+  oprire 15 GB; margine ~2 GB). Urmează imediat pasul 6 (rularea de 52 h, prin `cascada.py porneste S110 --din-nou`).
 - aprobat de: Adrian (COMENZI.md C-119, 13 nov 2026 10:49 + 11:11; C-120 „da” 17:03 pentru româna FineWeb-2 deja descărcată); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, rescrise 17:15 după C-120 (C1–C6, E1, E2 verificate în cod)
-- raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3 + pornirea probei; urmează proba și alegerea ratei, apoi 12 h / 24 h / final)
+- raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3) + docs/rapoarte/2026-11-13_2207_S110_24z2_pregatire2.md (cache-ul hranei, proba refăcută, rata aleasă, pre-înregistrarea); urmează 12 h / 24 h / final
 
 ### S111 — C-119 E3: învățarea conversației pe baza nouă de 24 (~7 h) + toate examenele; alegerea câștigătorului (placa ~7 h + ~1 h examene)
 - stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — pornește doar după S110 `gata` sau `oprit` la un punct de control

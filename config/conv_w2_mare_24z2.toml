@@ -12,7 +12,8 @@
 #     `durata_scaderii_secunde = 187200` (52 h); (`racire_finala = 0.25`, `fractie_rata_finala = 1.0`, `optimizator = "muon"`
 #     erau deja așa în 24n);
 #   - `examene_suplimentare = []` (fără fapte / fapte noi / profesor la fiecare oră; româna rămâne, din portul `examen`);
-#   - `rata_muon` și `rata_invatare` din proba de rată (pasul 4; config/proba_24z2_a.toml și _b.toml);
+#   - `rata_muon = 0.02` și `rata_invatare = 0.0006` = varianta (a), aleasă de proba de rată refăcută (13 nov 21:40:
+#     româna după 30 min (a) 1,7868 față de (b) 1,8519; config/proba_24z2_a.toml și _b.toml);
 #   - `spatiu = { model = { lot = [6] } }`, eticheta și acest antet.
 #   python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24z2.toml --ore 52 --pauza 5
 
@@ -36,7 +37,7 @@ porturi_modificabile = ["model"]
 
 [porturi.model]
 modul = "module.model_gpt_cod:ModelGPTCod"
-setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 6, rata_invatare = 0.0003, rata_care_scade = true, incalzire_pasi = 6400, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24z2/gpt.pt", director_cache = "lucru/cache", samanta = 24, examene_suplimentare = [], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/ws/hrana_fineweb_rest/antrenare.txt", fractie_hrana = 0.55, conversatie = "lucru/romana_raspunsuri_r2/antrenare.jsonl", fractie_conversatie = 0.05, durata_scaderii_secunde = 187200, adunare_loturi = 16, racire_finala = 0.25, optimizator = "muon", rata_muon = 0.01, abatere_incorporari = 0.02 }
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 6, rata_invatare = 0.0006, rata_care_scade = true, incalzire_pasi = 6400, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24z2/gpt.pt", director_cache = "lucru/cache", samanta = 24, examene_suplimentare = [], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/ws/hrana_fineweb_rest/antrenare.txt", fractie_hrana = 0.55, conversatie = "lucru/romana_raspunsuri_r2/antrenare.jsonl", fractie_conversatie = 0.05, durata_scaderii_secunde = 187200, adunare_loturi = 16, racire_finala = 0.25, optimizator = "muon", rata_muon = 0.02, abatere_incorporari = 0.02 }
 
 [antrenare_lunga]
 eticheta = "S110: Kronos 24 de straturi de la zero, pornire 0,02, Muon, lot 6 × 16, hrană FineWeb-2 rest 55 %, 52 h (C-119 E2, C-120)"
