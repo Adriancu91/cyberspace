@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 13 noiembrie 2026, 23:15 — Modelul mare învață de la 22:08; totul verificat, gata luni pe la 03:20
+
+- **S110 a pornit corect** (22:08): modelul de 24 de straturi, de la zero, cu **~74 % română**. Am verificat singur: viteza de învățare aleasă e cea care a câștigat la probă (1,79 față de 1,85), iar ghicitul și pragurile au fost scrise și urcate pe GitHub **înainte** de pornire, copiate exact.
+- **Rulează acum:** cele 52 de ore (placa 5.373 MB / 46 °C, sub limite). Primul punct de control: ora 12, sâmbătă ~10:45; al doilea: ora 24, sâmbătă ~23:00. Dacă la unul dintre ele nu mai învață, se oprește singur și orele nu se consumă pe altceva.
+- **Pus în coadă:** nimic nou (S111 și S112 urmează luni, după S110). Nimic n-a picat.
+- **De știut:** la sfârșit discul C: ajunge pe la ~17 GB liberi (pragul de oprire 15 GB). Dacă vrei margine, poți scrie în hub „da, șterge probele de rată” (~8,6 GB, nu mai folosesc). Fără asta, dacă discul ajunge la 15 GB, Kronos se oprește curat și te întreabă — nu se strică nimic.
+- **Aștept de la tine:** nimic obligatoriu.
+
 ## 13 noiembrie 2026, 20:20 — Româna în plus intră totuși în antrenare (curățată); modelul mare pornește pe la ~22:00
 
 - **Pregătirea S110 e făcută bine** (1.462 teste trec). Pornirea reparată merge: pierderea de început 9,87 (înainte ~420).
@@ -193,12 +201,3 @@
 > **Executant, 7 nov 12:26 — S90 `gata`:** examenul de română e acum un modul separat (`module/examen_romana.py`) și dă exact cifrele vechi (#513 1,2060, #477 1,2096; R1 #513 99,27 ca pe placă). **Nu e pus în nicio configurare** — dacă vrei să decidă orele după română, spune „da” (detalii în `docs/rapoarte/2026-11-07_1226_S90_examen_romana.md`). 1306 teste trec.
 >
 > **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
-
-## 10 noiembrie 2026, 20:15 — Antrenarea de noapte pornește acum (ferestrele tale deschise țineau placa ocupată)
-
-- **C-100 preluat:** ai plecat la ~18:00, placa e a lui Kronos până la 07:00.
-- **La 19:30 executantul n-a pornit S99** (rețeta Muon pe modelul de 24, 5 ore) — bine făcut: regula cerea placa „goală” sub ~600 MB, iar ferestrele lăsate deschise pe desktop (Chrome, Edge, Copilot, Setări, Terminal) țin 724 MB.
-- **Am mărit limita, doar pentru S99, la sub 800 MB:** Muon folosește cu ~650 MB mai puțin decât rețeta veche (măsurat la S86), deci vârful estimat e ~6.100 MB, sub paza de 6.700 MB, care rămâne neschimbată. Dacă totuși o atinge, se oprește curat și orele salvate rămân. S99 pornește la următoarea trecere a executantului (~20:30–21:00), placa liberă la 07:00.
-- Nimic stricat, nicio problemă. S98 (doar procesor) mâine de la 08:00.
-- **Aștept de la tine:** nimic acum. (Data viitoare, dacă vrei să nu atârne de asta, închide browserele când pleci de la workstation.) Fără grabă: testul `os-278`, Release-ul #513 și ștergerea S88.
-
