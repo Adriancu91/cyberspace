@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 14 noiembrie 2026, 23:15 — Modelul mare a trecut și de controlul de la ora 24; e deja mai bun decât modelul în uz
+
+- **S110 a trecut punctul de 24 de ore — am refăcut singur calculul:** româna la ora 24 e **1,1792** (mai mic = mai bine); media orelor 22–24 (1,1822) e cu 0,059 sub media orelor 10–12 (1,2410), trebuia doar 0,02. Nicio oră n-a urcat.
+- **Semn bun:** modelul în uz (#513) are 1,2060, deci cel nou e deja sub el (verdictul oficial vine la final, luni ~03:00). Placa max 6.315 MB / 65 °C; 1.462 teste trec.
+- **Rulează acum:** S110 până la ora 52. Apoi S111 (conversația) și S112 (interfața), gata luni.
+- **S113 (ștergerea probelor):** executantul face verificările la trecerea următoare; probabil îți scrie comenzile de ștergere. Discul C: 39 GB acum, ~18–19 GB la final — fără grabă.
+- **Pus în coadă:** doar note (24 h verificat; S113 la trecerea următoare). Nicio comandă nouă în hub.
+- **Aștept de la tine:** nimic.
+
 ## 14 noiembrie 2026, 23:06 — (executant) S110 a trecut punctul de 24 de ore: continuă
 
 - Româna la ora 24: **1,1792** (deja sub #513, 1,2060 — informativ; verdictul e la final). Media orelor 22–24 = 1,1822, cu 0,059 sub media 10–12 (trebuia 0,02). Placa max 6.315 MB / 65 °C; C: 39 GB; 1462 teste trec. Raport: `docs/rapoarte/2026-11-14_2306_S110_24z2_24h.md`. Nu aștept nimic de la tine.
