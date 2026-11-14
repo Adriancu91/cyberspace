@@ -3880,3 +3880,23 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** `kronos/` neatins; #513 rămâne pe disc neschimbat; nimic descărcat, instalat sau șters.
 - aprobat de: Adrian (COMENZI.md C-119, E4); pașii: supraveghetor, 13 nov 2026 11:15
 - raport: docs/rapoarte/…
+
+### S113 — C-121 (Adrian, „da”): ștergerea probelor de rată nefolosite ale S110 (~8,6 GB) pentru marja pe C: — lista exactă, verificarea și comanda (doar procesor + disc, fără placă, fără întreruperea S110)
+- stare: **aprobat** (supraveghetor, 14 nov 2026 11:15; Adrian, COMENZI.md C-121, 14 nov 11:09) — se poate face **acum, în timp ce S110 rulează** (nu folosește placa; ~10–15 min de citit pe disc). Nu oprești, nu încetinești și nu atingi S110.
+- tip: procesor + disc (fără placă)
+- fereastră: oricând, cât mai repede (marja de disc contează spre sfârșitul S110, luni ~03:00)
+- durată maximă: 30 min
+- de ce: la sfârșitul S110 discul C: ar ajunge la ~17 GB liberi, aproape de pragul de oprire (15 GB). Adrian a spus „da” la ștergerea probelor de rată (C-121).
+- **LISTA EXACTĂ (nimic în afara ei):**
+  1. dosarul întreg `lucru/proba_24z/` — proba de rată veche, NEVALABILĂ (13 nov 17:21, pierderea primului lot 422,67); conține doar `{a,b}/proba.json`, `alegerea.json` (ce mai e acolo, notezi în raport).
+  2. dosarul întreg `lucru/proba_24z2/` — subdosarele `a/`, `b/` (prima probă, informativă) și `a2/`, `b2/` (proba refăcută; alegerea (a) e deja scrisă în coadă, în raportul `2026-11-13_2207_S110_24z2_pregatire2.md` și în pre-înregistrare), ~5,7 GB.
+  3. modelele de probă **#586, #587, #588, #589** din `lucru/stocare/modele/` (liniile `proba_24z2_a`, `proba_24z2_b`, `proba_24z2_a2`, `proba_24z2_b2`), ~2,9 GB. Verifici în jurnal (doar citire) că exact aceste 4 numere aparțin acestor 4 linii; dacă vreun număr ține de altă linie, NU-l atingi și îl notezi.
+- **NU se atinge:** `lucru/w2_mare_24z2/` (rularea S110 în curs, starea și modelele ei orare), modelele #513, #554, #577 și orice rezervă, orice `gpt.pt` de altă linie, `lucru/jurnal` / jurnalul `kronos/`, `date/`, amprentele, `lucru/export/`, `lucru/cascada/`. Configurările `config/proba_24z2_a.toml` / `_b.toml` rămân în Git (nu se șterg).
+- ce faci:
+  1. **Verifici prin citire:** mărimea fiecărui element din listă (GB), SHA-256 pentru cele 4 modele; cu `grep` în `config/` (în afară de `proba_24z2_*.toml`) și `docs/preinregistrari/` că nicio configurare în uz și nicio pre-înregistrare deschisă (S110 `w2_mare_24z2`, S111 `w2_mare_24zc`) nu folosește vreo cale din listă sau numerele #586–#589. C: liber înainte.
+  2. **Ștergerea:** regula ta de executant pune „ștergerea de modele sau date” la „ce NU ai voie” (ca la S88). **Dacă regula ta nu are o excepție pentru ștergeri cu „aprobat de: Adrian”, NU ștergi nimic:** scrii în raport, sus, **comenzile exacte PowerShell pentru Adrian** (în `C:\Kronos\cyberspace`; pentru dosare `Remove-Item -Recurse -Force` cu căile complete; pentru cele 4 modele căile complete ale fișierelor, sau `unelte/puncte_salvare.py sterge` cu o listă `lucru/puncte_salvare/lista_S113.json` făcută de tine, dacă unealta o primește — jurnalul ștergerii scris ÎNAINTE), apoi `Get-PSDrive C` ca să vadă spațiul. Stare: `oprit — așteaptă ca Adrian să ruleze comenzile din raport`. Dacă regula ta are excepția, ștergi tu exact lista și notezi căile + GB.
+  3. Dacă la pasul 1 ceva nu se potrivește (mărimi foarte diferite de ~8,6 GB în total, un număr de model de altă linie, o cale folosită undeva) → nu propui ștergerea acelui element, scrii de ce.
+  4. `python -m pytest` (doar dacă ai schimbat ceva în Git; altfel nu e nevoie); raport `docs/rapoarte/<data>_<ora>_S113_stergere_probe.md` (lista cu căi + GB + SHA, verificările, comenzile pentru Adrian sau ce s-a șters, C: înainte/după); un rând sus în `plan/pentru_adrian.md`; coada → `gata`/`oprit`; commit + push.
+- **NU:** nimic descărcat sau instalat; `kronos/`, `module/`, examenul, paznicul neatinse; nimic din `lucru/` în Git.
+- aprobat de: Adrian (COMENZI.md C-121, 14 nov 2026 11:09); lista exactă: supraveghetor, 14 nov 2026 11:15
+- raport: docs/rapoarte/…

@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 14 noiembrie 2026, 11:15 — Am primit „da”-ul pentru ștergerea probelor (C-121); modelul mare merge mai departe
+
+- **Comanda ta C-121 e preluată:** am pus în coadă sarcina **S113** cu lista exactă: dosarele `lucru/proba_24z/` și `lucru/proba_24z2/` și modelele de probă #586–#589 (~8,6 GB). Nu se atinge nimic altceva (S110 în curs, #513, #554, #577, jurnalul, datele).
+- **De știut:** ca la ștergerea din 7 noiembrie (S88), executantul are probabil voie doar să verifice lista, nu să apese el „șterge”. În cazul ăsta îți scrie în raportul S113 **comenzile exacte**, pe care le rulezi tu la workstation (~2 minute). Nu e grabă mare: contează până luni dimineață.
+- **Rulează acum: S110**, modelul mare (ora ~13 din 52). La 08:15 avea româna 1,2734 și scădea în fiecare oră. Punctul de 12 h trebuia trecut pe la 10:20; executantul n-a scris încă raportul lui (ultimul semn de la el: 08:49, adică acum ~2,5 h — încă în regulă). Îl verific la 14:15.
+- **Pus în coadă:** doar S113 (fără placă). Placa rămâne la S110 până luni; urmează S111, S112.
+- **Aștept de la tine:** nimic acum. Mai târziu, dacă executantul îți scrie comenzile de ștergere, rulezi comenzile din raportul S113.
+
 ## 14 noiembrie 2026, 08:15 — Modelul mare învață bine (ora 8 din 52); nimic de făcut
 
 - **Raportul de dimineață e scris și e corect** (`docs/rapoarte/2026-11-14_0648_raport_dimineata.md`; am refăcut singur calculele). 1.462 teste trec, 0 picate.
@@ -168,11 +176,3 @@
 - N-am pus nimic nou pe placă: pasul următor e **S101** (modelul de 24 de straturi de la zero, ~7 nopți), care așteaptă „da”-ul tău. Discul C: are 44 GB liberi, destul pentru S101 (cere 30 GB), dar se umple.
 - **De știut:** workstation-ul a repornit aseară pe la 23:15, fără să strice nimic (nimic nu rula atunci). Dacă n-ai repornit tu, spune-mi.
 - **Aștept de la tine:** un „da” sau „nu” la S101 (dacă vine până pe la 18:00, poate porni la noapte). Fără grabă: ștergerea modelelor intermediare (S88, ~33 GB, ajută discul), testul `os-278`, Release-ul #513.
-
-## 11 noiembrie 2026, 02:15 — Proba Muon cu pași mici: nu strică, dar nici nu ajută; modelul „crescut” de 24 a ajuns la capăt
-
-- **S100: GATA, verificat de mine — LA FEL** (nimic defect). Cu pași de 20 de ori mai mici, rețeta Muon n-a mai stricat modelul de 24 de straturi, dar nici nu l-a făcut mai bun: româna **1,2055** după 2 ore (pornire 1,2039; mai mic = mai bine). Povești, cod și răspunsuri la întrebări au rămas bune (99,2 %). Placa max 6.277 MB / 63 °C, liberă de la 01:59.
-- **Concluzia:** la S99 vina era a pașilor prea mari. Dar modelul „crescut” de 24 nu se mai mișcă la nicio rețetă încercată, așa că închid continuările lui (cum scrisesem dinainte). **#513 rămâne modelul în uz.**
-- **Azi de la 08:00: S98** (doar procesor, citirea datelor pe bucăți). Pe placă nu mai pun nimic singur.
-- **Am pus în coadă S101, care așteaptă „da”-ul tău:** modelul de 24 de straturi **antrenat de la zero** (pasul P1 din propunerea „Kronos mare pe ce avem” din hub), ~7 nopți. Răspunde la întrebarea „ajută mărimea?”.
-- **Aștept de la tine:** un „da” sau „nu” la P1 / S101, când vrei (dacă vine până pe la 18:00, poate porni chiar la noapte). Fără grabă: testul `os-278`, Release-ul #513, ștergerea S88.
