@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 14 noiembrie 2026, 14:15 — Modelul mare a trecut de primul control (ora 12); nimic de făcut
+
+- **S110 a trecut punctul de 12 ore — am refăcut singur calculul:** româna la ora 12 e **1,2335** (ora 13: 1,2256); media orelor 10–12 (1,2410) e cu 0,083 sub media orelor 4–6 (1,3243), trebuia doar 0,02. Scade în fiecare oră. Placa max 6.315 MB / 65 °C; 1.462 teste trec.
+- **Mai are de recuperat ~0,02** până la modelul în uz #513 (1,2060), iar viteza de învățare e încă la maxim — șanse bune, dar nu sigur.
+- **Următorul control: ora 24, pe la 22:30** (media orelor 22–24 trebuie ≤ 1,2210). Final luni ~03:00.
+- **S113 (ștergerea probelor):** executantul întrebase dacă o poate face acum, în paralel; i-am scris în coadă că **da** (e doar citire pe disc, fără placă). Discul C: are 47 GB, la final ~18–19 GB — fără grabă.
+- **Aștept de la tine:** nimic. Mai târziu, poate, să rulezi comenzile de ștergere din raportul S113.
+
 ## 14 noiembrie 2026, 11:37 — (executant) S110 a trecut punctul de 12 ore: continuă
 
 - Româna la ora 12: **1,2335** (ora 13: 1,2256), scade în fiecare oră; media orelor 10–12 e cu 0,083 sub media orelor 4–6 (trebuia ≥ 0,02). Placa max 6.315 MB / 65 °C; C: 47 GB liberi; 1462 teste trec. Raport: `docs/rapoarte/2026-11-14_1137_S110_24z2_12h.md`. Aștept de la tine: nimic.
@@ -164,19 +172,3 @@
 - **Aștept de la tine:** fără grabă, „da” sau „nu” la **„legăm datele pe bucăți în antrenare?”** — cu un „da”, placa ar avea treabă chiar la noapte (o probă scurtă că antrenarea iese identică). Tot fără grabă: ștergerea S88 (~33 GB; discul C: e la 92 %), Release-ul #513.
 
 > **Executant, 11 nov 15:36 — S102 `gata`, proba a ieșit DA:** am scris unealta care face bucățile de simboluri direct din textul de antrenare, citindu-l pe rând, fără să-l încarce tot în memorie. Din textul întreg (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot șirul și pe fiecare din cele 27 de bucăți). A durat **20 de minute** și a folosit cel mult **952 MB de memorie** (drumul de acum cere ~41,7 GB) — deci datele mult mai mari ale super-școlii de română vor încăpea. Se poate opri și relua de unde a rămas. Nu e legată de nicio antrenare, placa n-a fost folosită, n-am schimbat nimic din ce merge acum; 1380 de teste trec. De la tine nu trebuie nimic nou (rămâne, fără grabă, întrebarea de la S98: „legăm datele pe bucăți în antrenare?”). Detalii în `docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md`.
-
-## 11 noiembrie 2026, 11:15 — Citirea datelor „pe bucăți” merge; am primit răspunsurile tale (S101 nu deocamdată)
-
-- **S98: GATA, verificat de mine — DA.** Piesa nouă care citește datele de antrenare pe bucăți dă exact aceleași loturi ca acum (verificat cu amprentă pe 1.000 de loturi și la granițele dintre bucăți) și pornește cu **550 MB de memorie în loc de 41.685 MB**. Nu e încă folosită la nicio antrenare.
-- **C-101 preluat:** S101 (modelul de 24 de la zero) **nu pornește** — am notat că îți faci propriul plan. Placa e a ta pentru testul OS până scrie centrul de comandă că ai terminat (cel târziu 15:00).
-- **Am pus în coadă S102** (doar procesor, după ce termini testul sau de la 15:00): unealta care face bucățile direct din text, fără să încarce tot textul în memorie — ca datele mult mai mari (super-școala de română) să încapă. Proba: trebuie să iasă exact aceleași simboluri ca acum.
-- **La noapte placa rămâne liberă:** n-am pus nimic pe ea, fiindcă pasul mare următor e planul tău.
-- **Aștept de la tine:** fără grabă, un „da” sau „nu” la întrebarea executantului: **„legăm datele pe bucăți în antrenare (schimbare mică în două module, cu probă că antrenarea rămâne identică)?”**. Tot fără grabă: ștergerea S88 (~33 GB, discul C: e la 91 %), Release-ul #513.
-
-## 11 noiembrie 2026, 08:15 — Dimineață liniștită: raportul e la locul lui, S98 a pornit
-
-- **Raportul de dimineață e scris** (`docs/rapoarte/2026-11-11_0647_raport_dimineata.md`) și confirmă ce am verificat noaptea: S99 **STRICĂ**, S100 **LA FEL**, 1343 teste trec, placa liberă (476 MB / 28 °C). Nimic căzut.
-- **Rulează acum: S98** (doar procesor, de la 08:00, ~2–3 ore) — citirea datelor „pe bucăți”, ca antrenările mari să nu mai ceară 41 GB de memorie la pornire. Pe placă nu rulează nimic.
-- N-am pus nimic nou pe placă: pasul următor e **S101** (modelul de 24 de straturi de la zero, ~7 nopți), care așteaptă „da”-ul tău. Discul C: are 44 GB liberi, destul pentru S101 (cere 30 GB), dar se umple.
-- **De știut:** workstation-ul a repornit aseară pe la 23:15, fără să strice nimic (nimic nu rula atunci). Dacă n-ai repornit tu, spune-mi.
-- **Aștept de la tine:** un „da” sau „nu” la S101 (dacă vine până pe la 18:00, poate porni la noapte). Fără grabă: ștergerea modelelor intermediare (S88, ~33 GB, ajută discul), testul `os-278`, Release-ul #513.

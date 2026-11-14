@@ -3738,6 +3738,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S110 — C-119 E2 (revizuită după C-120): Kronos de 24 de straturi (183 M) DE LA ZERO, pornire corectă (încorporări 0,02), Muon, lot 6 × 16, amestec ~69 % română (+ restul FineWeb-2 deja descărcat), ~52 h, puncte de control la 12 h și 24 h
 - stare: in_lucru (executant, 13 nov 2026 17:00; S109 `gata`, placa liberă 585 MB / 31 °C, nimic altceva în lucru)
+- (supraveghetor, 14 nov 2026 14:15) **Punctul de 12 h: CONTINUĂ — verificat de mine.** Media orelor 10–12 = 1,2410, media 4–6 = 1,3243, diferența 0,0833 (≥ 0,02); ora 12 = 1,2335 (≤ 1,90); nicio oră în sus. Ora 24 (~22:30): media orelor 22–24 trebuie ≤ **1,2210** și ora 24 ≤ 1,70.
 - **(supraveghetor, 13 nov 2026 17:15) PAȘII S-AU SCHIMBAT (C-120, „da” Adrian 17:03).** Rularea mare NU pornește pe pașii vechi. Dacă ai pornit deja proba de rată sau rularea cu `module.model_muon:ModelGPTConversatieMuon` / pornirea implicită: o oprești curat, rezultatul ei **nu e valabil** (nu-l folosești), scrii în raport ce rulase și cât; dosarele ei (`lucru/proba_24z/…`, `lucru/w2_mare_24z/`) le **lași pe loc** (nu ștergi) și folosești dosare noi, cu sufixul `2` (mai jos). Pașii vechi sunt în istoricul Git (`45410ab`).
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, COMENZI.md C-119 — ridică „nu deocamdată” de la S101/C-101) — pornește doar după S109 `gata`
 - tip: procesor (~1–1,5 h: datele, scurgerile, testele) apoi placă (proba ~1,2 h + ~52 h, salvare la fiecare oră, reluare din ultima oră salvată după orice întrerupere)
@@ -3883,6 +3884,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S113 — C-121 (Adrian, „da”): ștergerea probelor de rată nefolosite ale S110 (~8,6 GB) pentru marja pe C: — lista exactă, verificarea și comanda (doar procesor + disc, fără placă, fără întreruperea S110)
 - stare: **aprobat** (supraveghetor, 14 nov 2026 11:15; Adrian, COMENZI.md C-121, 14 nov 11:09) — se poate face **acum, în timp ce S110 rulează** (nu folosește placa; ~10–15 min de citit pe disc). Nu oprești, nu încetinești și nu atingi S110.
+- **(supraveghetor, 14 nov 2026 14:15) RĂSPUNS la întrebarea din raportul de 12 h: DA, S113 se face ÎN PARALEL cu S110.** Regula „o singură sarcină grea” (REGULI_CASCADA: „O singură sarcină grea pe placă o dată”) privește placa; S113 e doar citire pe disc + raport, fără placă. Faci verificările de la pasul 1 la prima ta trecere, chiar dacă `cascada` arată „liber: false” din cauza S110, apoi scrii comenzile pentru Adrian (pasul 2). S110 rămâne `in_lucru` neatinsă.
 - tip: procesor + disc (fără placă)
 - fereastră: oricând, cât mai repede (marja de disc contează spre sfârșitul S110, luni ~03:00)
 - durată maximă: 30 min
