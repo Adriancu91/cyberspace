@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 14 noiembrie 2026, 08:15 — Modelul mare învață bine (ora 8 din 52); nimic de făcut
+
+- **Raportul de dimineață e scris și e corect** (`docs/rapoarte/2026-11-14_0648_raport_dimineata.md`; am refăcut singur calculele). 1.462 teste trec, 0 picate.
+- **Rulează acum: S110** — la ora 8 din 52, nota la română **1,2734**, a scăzut în fiecare oră (ora 1: 1,5657). E deja sub cât ghicise executantul pentru ora 24 (~1,28). Modelul în uz (#513) are 1,2060, deci mai are ~0,067 de recuperat. Placa 5.803 MB / 62 °C, sub limite.
+- **Puncte de control:** ora 12 pe la **10:20** (trebuie ca media orelor 10–12 ≤ 1,3043 — aproape sigur trece), ora 24 pe la **22:35**. Final luni ~03:05.
+- **Pus în coadă:** nimic nou (placa e ocupată până luni; urmează S111, S112). Nicio comandă nouă în hub.
+- **De știut:** nu pune fișiere mari pe discul C: până luni (50 GB liberi acum, ~17–18 GB la final).
+- **Aștept de la tine:** nimic.
+
 ## 13 noiembrie 2026, 23:15 — Modelul mare învață de la 22:08; totul verificat, gata luni pe la 03:20
 
 - **S110 a pornit corect** (22:08): modelul de 24 de straturi, de la zero, cu **~74 % română**. Am verificat singur: viteza de învățare aleasă e cea care a câștigat la probă (1,79 față de 1,85), iar ghicitul și pragurile au fost scrise și urcate pe GitHub **înainte** de pornire, copiate exact.
@@ -167,37 +176,3 @@
 - **Azi de la 08:00: S98** (doar procesor, citirea datelor pe bucăți). Pe placă nu mai pun nimic singur.
 - **Am pus în coadă S101, care așteaptă „da”-ul tău:** modelul de 24 de straturi **antrenat de la zero** (pasul P1 din propunerea „Kronos mare pe ce avem” din hub), ~7 nopți. Răspunde la întrebarea „ajută mărimea?”.
 - **Aștept de la tine:** un „da” sau „nu” la P1 / S101, când vrei (dacă vine până pe la 18:00, poate porni chiar la noapte). Fără grabă: testul `os-278`, Release-ul #513, ștergerea S88.
-
-## 10 noiembrie 2026, 23:15 — Rețeta Muon a stricat modelul mare; la noapte o probă scurtă cu pași de 20 de ori mai mici
-
-- **S99: GATA, verificat de mine — STRICĂ** (rezultat negativ, nimic defect). Rețeta Muon, cu pașii mari aleși, a stricat modelul de 24 de straturi din prima oră: româna de la 1,2039 la **1,2853** (mai mic = mai bine), poveștile și codul peste praguri. Lanțul s-a oprit singur după ora 1, exact cum era scris dinainte. Răspunsurile la întrebări au rămas bune (99,2 %). Placa max 6.492 MB / 62 °C, liberă de la 21:58.
-- **#513 rămâne modelul în uz**, #554 rămâne cel mai bun la română; modelul stricat (#558) nu se folosește nicăieri.
-- **Am pus la noapte S100:** o probă de cel mult 2 ore cu aceeași rețetă, dar cu pași de **20 de ori mai mici**, ca să aflăm dacă vina era a pașilor prea mari sau a metodei. Se oprește singură după o oră dacă strică; placa liberă cel târziu la 05:30. **S98** (doar procesor) mâine de la 08:00.
-- Dacă și proba asta nu mișcă modelul, continuările modelului „crescut” de 24 de straturi s-au terminat; următorul pas (antrenat de la zero / mai mult text) e decizia ta — e propunerea „Kronos mare pe ce avem” din hub, la care am scris poziția Kronos.
-- **Aștept de la tine:** nimic acum. Fără grabă: testul `os-278`, Release-ul #513, ștergerea S88 și, când vrei, un „da/nu” la propunerea din hub.
-
-> **Executant, 11 nov 08:15 — S98 `gata`, proba a ieșit DA:** am scris piesa nouă care citește datele de antrenare „pe bucăți” de pe disc, în loc să încarce tot textul în memorie. Proba: primele 1.000 de loturi de antrenare ies exact la fel ca acum (verificat cu amprentă), inclusiv acolo unde o bucată se termină și începe următoarea. Câștigul: partea de date pornește cu **550 MB de memorie în loc de 41.685 MB** și în 13 secunde în loc de 41 — deci date de câteva ori mai multe (super-școala de română) vor încăpea. Piesa NU e încă folosită la nicio antrenare și n-am schimbat nimic din ce merge acum. Ca să fie folosită, trebuie o schimbare mică în două module existente — asta e întrebarea pentru tine, fără grabă: **„legăm datele pe bucăți în antrenare (cu probă că antrenarea rămâne identică)?” da / nu.** Placa n-a fost folosită; 1358 de teste trec (detalii în `docs/rapoarte/2026-11-11_0815_S98_bucati_legare.md`).
->
-> **Executant, 11 nov 02:01 — S100 `gata`, verdict LA FEL (nimic defect):** proba de 2 ore cu rețeta Muon și pași de 20 de ori mai mici n-a mai stricat modelul de 24 de straturi, dar nici nu l-a mișcat în bine: româna 1,2057 după ora 1 și 1,2055 după ora 2 (pornirea 1,2039; mai mic = mai bine; pragul pentru „mișcă” era ≤ 1,2030). Poveștile, codul și răspunsurile la întrebări au rămas bune (R1 99,2 / 100). Deci la S99 vina era a pașilor prea mari, iar cu pași mici Muon ține modelul pe loc, ca AdamW. #513 rămâne modelul în uz, #554 cel mai bun la română. Placa e liberă de la 01:59 (max 6.277 MB / 63 °C). Discul C: e la 91 % (44 GB liberi). De la tine nu trebuie nimic acum (detalii în `docs/rapoarte/2026-11-11_0201_S100_muon_mic.md`).
->
-> **Executant, 10 nov 22:05 — S99 `gata`, verdict STRICĂ (rezultat negativ, nimic defect):** rețeta Muon, încercată pe modelul de 24 de straturi, l-a stricat din prima oră: româna a urcat de la 1,2039 la 1,2853 (mai mic = mai bine), poveștile de la 0,4038 la 0,4447. Lanțul a oprit singur antrenarea după ora 1, cum era scris dinainte, deci orele 2–5 nu s-au mai făcut. Răspunsurile la întrebări au rămas bune (R1 99,2). #513 rămâne modelul în uz, #554 rămâne cel mai bun la română; modelul stricat nu se folosește nicăieri. Placa e liberă de la 21:58 (max 6.492 MB / 62 °C). De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_2205_S99_muon_mare.md`).
->
-> **Executant, 10 nov 02:30 — S95 `gata`, verdict LA FEL:** modelul de 24 de straturi a mai învățat 5 ore noaptea asta, fără probleme. La română a ajuns la 1,2040 (#513, modelul în uz: 1,2060) — cel mai bun scor de până acum, dar diferența e sub pragul stabilit dinainte (0,005), deci nu-l numim „mai bun”. Nu a stricat nimic (povești, cod, răspunsuri). #513 rămâne modelul în uz. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-10_0230_S95_mare_continuare.md`).
-
-> **Executant, 9 nov 19:36 — S95 `oprit` înainte de placă:** am găsit la verificări că, pornit exact cum scrie sarcina, modelul de 24 ar fi învățat toată noaptea cu rata 0 (fișierul lui #536 „ține minte” că programul ratei de 5 ore e deja terminat). Nimic n-a rulat, nimic stricat. Am propus supraveghetorului 2 variante de reparare (recomand (a): aceeași copie, cu ceasul programului dat la zero); dacă alege până pe la 23:00, S95 încape tot în noaptea asta. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-09_1936_S95_oprit_rata_zero.md`).
->
-> **Executant, 9 nov 01:05 — S94b `gata`, verdict NU:** modelul mic NU prezice ce rețetă e bună pentru modelul mare — ordinea e chiar inversă (ρ = −0,92): pe cel mic câștigă rata mare, pe cel mare rata mică (×0,5, 1,2102), iar rata ×4 iese ultima și strică și poveștile și codul. Nicio oră n-a trecut sub punctul de pornire (1,2096). Toate 5 ore au mers curat, placa max 6.426 MB / 61 °C, placa e goală de la 00:55 (luni e a ta). 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-09_0105_S94b_spearman.md`).
->
-> **Executant, 8 nov 14:05 — S94a `gata`:** testul cu modelul mic a mers până la capăt: modelul tăiat a fost reparat (română 2,78 → 1,66) și cele 5 rețete au fost încercate câte 15 minute. Ordinea pe modelul mic: rata ×4 cea mai bună (1,589), apoi ×2, bază ≈ încălzire ×2, ×0,5 ultima — exact cum ghicisem. Răspunsul („prezice modelul mic ordinea de pe cel mare?”) vine după noaptea asta (S94b, de la 19:00). Placa max 4.970 MB / 62 °C; 1337 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_1405_S94a_avans_mic.md`).
->
-> **Executant, 8 nov 08:52 — S94a `oprit`:** testul cu modelul mic n-a apucat să antreneze: paznicul l-a oprit după 10 minute, fiindcă pregătea datele de la zero într-un dosar gol (greșeala de pregătire e a mea; liniile reale le citesc gata făcute). Nimic stricat, modelul mic original neatins. Am propus supraveghetorului reparația (2 variante); dacă vine până pe la 15:00, testul încape azi. De la tine nu trebuie nimic (detalii în `docs/rapoarte/2026-11-08_0852_S94a_oprit_cache.md`).
->
-> **Executant, 8 nov 02:36 — S93 `gata`:** „Română da” e pus în practică: configurarea nouă `conv_w2_mare_24r` e judecată după examenul de română, fără nicio schimbare în `kronos/` (paznicul îi ține singur amprenta; o copie schimbată e refuzată, verificat). Examenul vechi pe povești e neatins și rămâne doar verificare. 1332 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_0236_S93_romana_decide.md`).
->
-> **Executant, 8 nov 02:11 — S92 `gata`:** unealta din S91 știe acum să mute pe modelul mare *schimbări relative* (×0,5, ×2, ×4 față de rețetă), iar modelul mic de 6 straturi e tăiat din `gpt_24.pt` (neatins). Atenție: modelul mic pornește slab (română 2,78 vs 1,21), de discutat înainte de testul pe placă. 1328 teste trec. Nimic de făcut acum (detalii în `docs/rapoarte/2026-11-08_0211_S92_avans_relativ.md`).
->
-> **Executant, 7 nov 14:40 — S91 `gata`:** unealta care încearcă rețetele întâi pe un model mic și scrie o singură propunere pentru cel mare (`unelte/cercetator_avans.py`) merge, fără nicio schimbare în `kronos/`; 1318 teste trec. Lecția demonstrației: rata bună a unui model minuscul nu se poate copia pe cel mare (ar fi ×300) → pentru partea b propun schimbări relative și un test Spearman pe 5 rețete (detalii în `docs/rapoarte/2026-11-07_1440_S91_cercetator_avans.md`). Nimic de făcut acum.
->
-> **Executant, 7 nov 12:26 — S90 `gata`:** examenul de română e acum un modul separat (`module/examen_romana.py`) și dă exact cifrele vechi (#513 1,2060, #477 1,2096; R1 #513 99,27 ca pe placă). **Nu e pus în nicio configurare** — dacă vrei să decidă orele după română, spune „da” (detalii în `docs/rapoarte/2026-11-07_1226_S90_examen_romana.md`). 1306 teste trec.
->
-> **Executant, 7 nov 10:40 — S88 `oprit`, nimic șters:** unealta și proba sunt gata (exact 82 fișiere / 33,44 GB, amprentele identice, `gpt.pt`-urile de linie refuzate), dar regula mea interzice ștergerea „oricum ar fi scris în coadă”. **Rulezi tu comanda din `docs/rapoarte/2026-11-07_1040_S88_stergere.md`, sau îmi dai o excepție scrisă în regulă?**
