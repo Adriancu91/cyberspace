@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 14 noiembrie 2026, 20:15 — Liniște: modelul mare merge spre controlul de la ora 24 (~22:30); nimic de făcut
+
+- **Nimic nou de la 14:15:** executantul n-a mai scris nimic din 11:37 (normal în timpul S110 — scrie doar la punctele de control). S110 e la ~ora 22 din 52; următorul semn al lui e raportul de 24 h, pe la **22:30** (media orelor 22–24 trebuie ≤ 1,2210).
+- **De urmărit (nu e problemă încă):** S113 (verificările pentru ștergerea probelor) nu e făcută, deși i-am scris la 14:15 că o poate face în paralel. Nu e grabă — contează abia luni dimineață, iar dacă discul ajunge la 15 GB, Kronos se oprește curat. Dacă la 23:15 lipsește și raportul de 24 h, îți scriu.
+- **Pus în coadă:** doar o notă la S113 (s-o facă după raportul de 24 h). Nicio comandă nouă în hub.
+- **Aștept de la tine:** nimic.
+
 ## 14 noiembrie 2026, 14:15 — Modelul mare a trecut de primul control (ora 12); nimic de făcut
 
 - **S110 a trecut punctul de 12 ore — am refăcut singur calculul:** româna la ora 12 e **1,2335** (ora 13: 1,2256); media orelor 10–12 (1,2410) e cu 0,083 sub media orelor 4–6 (1,3243), trebuia doar 0,02. Scade în fiecare oră. Placa max 6.315 MB / 65 °C; 1.462 teste trec.
@@ -163,12 +170,3 @@
 - **Am văzut în centrul de comandă că vii mâine, joi, pe la 07:00, pentru variantele `os-289` (C-108).** Am scris în coadă: nimic pe placă la noapte, raportul de dimineață scris înainte de 07:00, iar de la 07:00 nimic pe placă și nimic greu pe procesor până termini. Repornirile tale nu încurcă nimic de la Kronos.
 - N-am pus nicio sarcină nouă: placa n-are treabă utilă fără răspunsul tău de mai jos.
 - **Aștept de la tine:** fără grabă, „da” sau „nu” la **„legăm datele pe bucăți în antrenare?”**. Tot fără grabă: ștergerea S88 (~33 GB; discul C: e la 92 %), Release-ul #513.
-
-## 11 noiembrie 2026, 17:15 — Unealta pentru date mari merge; placa e liberă, dar n-am ce pune pe ea fără tine
-
-- **S102: GATA, verificat de mine — DA.** Unealta nouă face bucățile de simboluri direct din textul de antrenare, citind pe rând: din tot textul (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot și pe fiecare din cele 27 de bucăți), în **20 de minute**, cu cel mult **952 MB de memorie** (drumul vechi cere ~41,7 GB). Placa n-a fost folosită; 1380 de teste trec.
-- **Am văzut nota centrului de comandă (C-106):** ai terminat testele la 14:36, placa e a lui Kronos probabil până joi; dacă vii diseară pentru `os-283`, nimic nu te încurcă.
-- **La noapte placa rămâne liberă:** continuările modelului de 24 sunt închise, modelul de la zero e „nu deocamdată”, iar pasul următor util (folosirea datelor pe bucăți la antrenare) așteaptă răspunsul tău. Nimic nu rulează acum.
-- **Aștept de la tine:** fără grabă, „da” sau „nu” la **„legăm datele pe bucăți în antrenare?”** — cu un „da”, placa ar avea treabă chiar la noapte (o probă scurtă că antrenarea iese identică). Tot fără grabă: ștergerea S88 (~33 GB; discul C: e la 92 %), Release-ul #513.
-
-> **Executant, 11 nov 15:36 — S102 `gata`, proba a ieșit DA:** am scris unealta care face bucățile de simboluri direct din textul de antrenare, citindu-l pe rând, fără să-l încarce tot în memorie. Din textul întreg (4,9 GB) au ieșit **exact aceleași 1.341.190.791 de simboluri** ca acum (aceeași amprentă pe tot șirul și pe fiecare din cele 27 de bucăți). A durat **20 de minute** și a folosit cel mult **952 MB de memorie** (drumul de acum cere ~41,7 GB) — deci datele mult mai mari ale super-școlii de română vor încăpea. Se poate opri și relua de unde a rămas. Nu e legată de nicio antrenare, placa n-a fost folosită, n-am schimbat nimic din ce merge acum; 1380 de teste trec. De la tine nu trebuie nimic nou (rămâne, fără grabă, întrebarea de la S98: „legăm datele pe bucăți în antrenare?”). Detalii în `docs/rapoarte/2026-11-11_1536_S102_bucati_din_text.md`.

@@ -3885,6 +3885,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 ### S113 — C-121 (Adrian, „da”): ștergerea probelor de rată nefolosite ale S110 (~8,6 GB) pentru marja pe C: — lista exactă, verificarea și comanda (doar procesor + disc, fără placă, fără întreruperea S110)
 - stare: **aprobat** (supraveghetor, 14 nov 2026 11:15; Adrian, COMENZI.md C-121, 14 nov 11:09) — se poate face **acum, în timp ce S110 rulează** (nu folosește placa; ~10–15 min de citit pe disc). Nu oprești, nu încetinești și nu atingi S110.
 - **(supraveghetor, 14 nov 2026 14:15) RĂSPUNS la întrebarea din raportul de 12 h: DA, S113 se face ÎN PARALEL cu S110.** Regula „o singură sarcină grea” (REGULI_CASCADA: „O singură sarcină grea pe placă o dată”) privește placa; S113 e doar citire pe disc + raport, fără placă. Faci verificările de la pasul 1 la prima ta trecere, chiar dacă `cascada` arată „liber: false” din cauza S110, apoi scrii comenzile pentru Adrian (pasul 2). S110 rămâne `in_lucru` neatinsă.
+- **(supraveghetor, 14 nov 2026 20:15) încă nefăcută.** Fă verificările S113 la prima trecere după raportul de 24 h al S110 (sau imediat, dacă S110 s-a oprit). Restul neschimbat.
 - tip: procesor + disc (fără placă)
 - fereastră: oricând, cât mai repede (marja de disc contează spre sfârșitul S110, luni ~03:00)
 - durată maximă: 30 min
