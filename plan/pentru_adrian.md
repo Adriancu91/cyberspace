@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 15 noiembrie 2026, 17:15 — Verificările pentru ștergere sunt corecte; modelul mare e la ora 41 și tot scade
+
+- **S113 verificat de mine:** executantul a citit lista și se potrivește exact (`proba_24z2` 6,07 GB + 4 modele × 0,73 GB = **~9,0 GB**; #586–#589 sunt chiar cele 4 probe, nimic altceva nu le folosește). N-a șters nimic (n-are voie) — e normal, nu e o problemă.
+- **S110 merge:** ora 41 din 52, româna **1,1363** (ora 31: 1,1603; modelul în uz #513: 1,2060). Placa 5.653 MB / 62 °C. Gata luni pe la 02:00–03:00.
+- **Discul, socoteala refăcută:** C: 28,3 GB acum (scade ~0,57 GB/oră) → ~22 GB la finalul S110 → ~18 GB după S111. Peste pragul de oprire (15 GB), deci S111 poate porni și fără ștergere; marja e mică, dar nu urgentă.
+- **Pus în coadă:** doar o notă (S113 verificat; S111 pornește oricum). Nicio comandă nouă în hub.
+- **Aștept de la tine:** când ajungi la workstation (luni seara e bine), cele 7 comenzi PowerShell din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md` (~2 minute, câștigi ~9 GB).
+
 ## 15 noiembrie 2026, 16:00 (executantul) — S113: am verificat lista de ștergere; comenzile te așteaptă
 
 - Totul din listă se potrivește: **~9,0 GB** (dosarele `proba_24z` și `proba_24z2` + modelele #586–#589, doar probele de rată). Nimic nu le mai folosește.
@@ -155,18 +163,3 @@
 - **Am văzut C-112:** ai rulat singur ștergerea S88 — 82 de modele intermediare, 33,4 GB; cele 31 de `gpt.pt` de linie au fost refuzate, cum trebuia. Am marcat S88 `gata`. Mâine dimineață executantul verifică doar prin citire jurnalul ștergerii și spațiul de pe C: (nu șterge nimic).
 - **Nimic nou de la executant de la 11:15**; nimic n-a picat.
 - **Aștept de la tine:** nimic acum. Fără grabă: dosarul `lucru\memorie_mare` (~10,5 GB), pe care ai zis că îl ștergi de mână; Release-ul #513.
-
-## 12 noiembrie 2026, 17:25 — Am văzut că vii acum la test; Kronos îți lasă placa liberă
-
-- **C-111 preluat:** vii pe la 17:55 pentru testul cu variante (`os-289`). Am scris în coadă: nimic pe placă și nimic greu pe procesor cât ești tu acolo; repornirile tale nu încurcă nimic.
-- **Nimic nou de la executant de la 11:15** (S104 rămâne gata și verificat — DA); nimic nu rulează, nimic n-a picat.
-- **S105** (#554 față de #513 pe texte nevăzute + examenul de conversație) **nu mai pornește la 19:00**, ci doar după ce centrul de comandă scrie că ai terminat, cel târziu la 23:00; altfel trece pe noaptea următoare.
-- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
-
-## 12 noiembrie 2026, 11:15 — Proba pe placă a ieșit DA: datele pe bucăți sunt gata; la noapte comparăm #554 cu #513
-
-- **S104: GATA, verificat de mine — DA.** Pe modelul adevărat de 24 de straturi, 300 de pași: cu datele pe bucăți modelul primește **exact aceleași loturi** ca înainte, iar pierderile diferă cel mult cu 0,000326 — cât diferă placa de ea însăși de la o rulare la alta (0,000303; pragul scris dinainte: 0,000607). Pornirea cere **2.156 MB de memorie în loc de 41.709 MB**, la aceeași viteză. Placa: max 3.834 MB / 61 °C. Nucleul `kronos/`, examenele și modelele în uz neatinse; 1407 teste trec.
-- **Ce înseamnă:** de acum Kronos poate antrena pe date mult mai mari fără să-i trebuiască 42 GB de memorie. Nicio antrenare nu e încă mutată pe bucăți.
-- **Rulează acum:** nimic. Placa e liberă până diseară (n-am pus a doua sarcină de placă în fereastra de zi).
-- **La noapte: S105** (deja în coadă): #554 față de #513 pe texte nevăzute de niciun model și la examenul de conversație (cu 20 de răspunsuri alese la întâmplare).
-- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.

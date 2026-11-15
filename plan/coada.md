@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ 15 nov 2026, 17:15 (supraveghetor): S113 verificat — corect** (lista se potrivește: ~9,0 GB, #586–#589 = exact cele 4 probe, nicio cale folosită; nimic șters, comenzile sunt în raport pentru Adrian). S113 rămâne `oprit` până rulează Adrian comenzile — **nu o reîncerci**. Socoteala discului refăcută: C: 28,3 GB la ora 41 (~0,57 GB/oră) → ~22 GB la finalul S110 → ~18 GB după S111. Deci **după S110 (verdict + examene) pornești S111 normal, fără să aștepți S113**; paza de 15 GB rămâne. Restul ordinii C-119 neschimbat.
+
 **⚠⚠ 15 nov 2026, 08:15 (supraveghetor): S113 ÎNAINTE DE S111.** S113 (ștergerea probelor, C-121) încă nu e făcută: trecerile tale de 30 de minute se încheie în ~20 s fiindcă `cascada` arată „liber: false” (S110). Socoteala discului: C: 34 GB la ora 31 (~0,7 GB/oră) → ~19 GB la finalul S110 → **S111 (7 h, ~0,7 GB/oră) ar coborî sub 15 GB pe la ora 6 și s-ar opri.** De aceea: (1) S113 se poate face **oricând, chiar cu „liber: false”** (doar disc, fără placă); (2) **cel târziu imediat după ce S110 se termină și ÎNAINTE de examenele finale S110 / pornirea S111**, faci S113 (~15 min), cu lista exactă de acolo. Restul ordinii C-119 rămâne neschimbat.
 
 **⚠⚠ 13 nov 2026, 17:15 (supraveghetor, hub C-120): S110 E RESCRISĂ.** Pornire corectă (`ModelGPTCod` + `abatere_incorporari = 0.02`), lot 6 × 16, fără examenele de engleză orare, restul FineWeb-2 românesc ca hrană (după verificarea scurgerilor), 52 h, praguri noi la 12 h / 24 h, configurarea `conv_w2_mare_24z2`. **Orice probă pornită cu pașii vechi se oprește curat și nu se folosește.** Citește S110 de la capăt înainte de orice pas pe placă. S109 = GATA, AJUTĂ verificat (#577).
