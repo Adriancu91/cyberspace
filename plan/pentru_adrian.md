@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 15 noiembrie 2026, 08:15 — Noaptea a mers bine: modelul mare la ora 31, cel mai bun scor de până acum
+
+- **Raportul de dimineață e scris și corect** (`docs/rapoarte/2026-11-15_0648_raport_dimineata.md`; am verificat cifrele): S110 la ora 31 din 52, româna **1,1603** (ora 24: 1,1792; #513 are 1,2060) — a scăzut în fiecare oră, nicio regulă de oprire atinsă. Placa 5.653 MB / 62 °C.
+- **Testele: 1.461 trec, 1 pică** — cel știut dinainte: o siguranță care cere 40 GB liberi pe disc (acum 34 GB). Nu e o stricăciune; trece la loc când se face loc.
+- **De urmărit — discul:** S113 (ștergerea probelor, ~8,6 GB, „da”-ul tău C-121) tot nu e făcută: executantul se oprește la fiecare trecere fiindcă placa e ocupată. La finalul S110 rămân ~19 GB, iar S111 (7 h) ar coborî sub 15 GB pe la ora 6 și s-ar opri curat. Am scris sus în coadă: S113 oricând, **cel târziu între S110 și S111**.
+- **Rulează acum:** S110 până luni ~03:10; apoi S113, verdictul S110, S111, S112.
+- **Aștept de la tine:** nimic acum. Dacă executantul nu are voie să apese el ștergerea, îți lasă comenzile în raportul S113 (le rulezi când ajungi).
+
 ## 14 noiembrie 2026, 23:15 — Modelul mare a trecut și de controlul de la ora 24; e deja mai bun decât modelul în uz
 
 - **S110 a trecut punctul de 24 de ore — am refăcut singur calculul:** româna la ora 24 e **1,1792** (mai mic = mai bine); media orelor 22–24 (1,1822) e cu 0,059 sub media orelor 10–12 (1,2410), trebuia doar 0,02. Nicio oră n-a urcat.
@@ -157,15 +165,3 @@
 - **Rulează acum:** nimic. Placa e liberă până diseară (n-am pus a doua sarcină de placă în fereastra de zi).
 - **La noapte: S105** (deja în coadă): #554 față de #513 pe texte nevăzute de niciun model și la examenul de conversație (cu 20 de răspunsuri alese la întâmplare).
 - **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
-
-## 12 noiembrie 2026, 08:15 — Legarea datelor pe bucăți: verificată, DA; acum rulează proba pe placă
-
-- **S103: GATA, verificat de mine — DA.** Un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a dat **exact aceleași pierderi la toți cei 200 de pași** (bit cu bit), aceleași loturi și aceleași greutăți la final; datele vechi rulate de două ori dau și ele același rezultat. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Am verificat că **nucleul `kronos/` și examenele n-au fost atinse**; 1390 teste trec.
-- **Raportul de dimineață e la locul lui** (noapte liniștită, nimic pe placă, cum stabilisem).
-- **Rulează acum: S104** (pe placă, de la 08:00, ~1–1,5 h): aceeași probă pe modelul adevărat de 24 de straturi. Pre-înregistrarea e scrisă înainte de pornire, cum cere regula.
-- **La noapte: S105** (deja în coadă): #554 față de #513 pe texte nevăzute și la examenul de conversație. N-am pus nimic nou.
-- **Aștept de la tine:** nimic acum. Fără grabă: ștergerea S88 (~33 GB; discul C: la 92 %), Release-ul #513.
-
-> **Executant, 12 nov 09:36 — S104 `gata`, proba pe placă a ieșit DA:** modelul adevărat de 24 de straturi, antrenat câte 300 de pași de două ori cu datele vechi și o dată cu datele pe bucăți, a primit **exact aceleași loturi** de fiecare dată, iar pierderile cu bucățile diferă de cele cu datele vechi (cel mult 0,000326) **cât diferă placa de ea însăși de la o rulare la alta** (0,000303; pragul scris dinainte era 0,000607). Cu bucățile, pornirea cere **2.156 MB de memorie în loc de 41.709 MB**, la aceeași viteză. Placa: cel mult 3.834 MB și 61 °C. Un lucru de știut: placa nu se repetă bit cu bit nici cu aceleași date, deci „identic” înseamnă aici „în limita zgomotului plăcii” (pe procesor, la S103, a fost identic bit cu bit). #513, #554 și `kronos/` neatinse; **1407 teste trec**. Nicio antrenare adevărată nu folosește încă bucățile. De la tine nu trebuie nimic. Detalii în `docs/rapoarte/2026-11-12_0936_S104_proba_bucati_placa.md`.
-
-> **Executant, 12 nov 07:25 — S103 `gata`, proba a ieșit DA:** am legat datele pe bucăți în antrenare, cu o schimbare mică în două module (`model_gpt.py`, `model_conversatie.py`); **nucleul `kronos/` n-a trebuit atins**. Proba pe procesor: un model mic, antrenat 200 de pași o dată cu datele vechi și o dată cu bucățile, a primit **exact aceleași loturi și a dat exact aceleași pierderi, bit cu bit, la toți cei 200 de pași** (și greutățile de la sfârșit sunt identice); la fel și cu rețeta Muon a liniei de 24 și fără conversație. Pornirea cere **766 MB de memorie în loc de 41.756 MB**. Antrenarea scrie acum în jurnal și amprenta datelor (`2b2492ec78569c2b`). Configurările în uz n-au fost atinse și merg ca până acum; **nicio antrenare adevărată nu folosește încă bucățile** — urmează proba pe placă (S104, azi după 08:00). **1390 de teste trec.** De la tine nu trebuie nimic. Detalii în `docs/rapoarte/2026-11-12_0725_S103_legare_bucati.md`.
