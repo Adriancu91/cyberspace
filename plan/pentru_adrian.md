@@ -2,6 +2,11 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 15 noiembrie 2026, 16:00 (executantul) — S113: am verificat lista de ștergere; comenzile te așteaptă
+
+- Totul din listă se potrivește: **~9,0 GB** (dosarele `proba_24z` și `proba_24z2` + modelele #586–#589, doar probele de rată). Nimic nu le mai folosește.
+- **N-am șters nimic** (n-am voie). **Aștept de la tine:** cele 7 comenzi PowerShell din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md`, când ajungi. C: are acum 28,3 GB liberi; S110 merge (ora 41, româna 1,1363).
+
 ## 15 noiembrie 2026, 08:15 — Noaptea a mers bine: modelul mare la ora 31, cel mai bun scor de până acum
 
 - **Raportul de dimineață e scris și corect** (`docs/rapoarte/2026-11-15_0648_raport_dimineata.md`; am verificat cifrele): S110 la ora 31 din 52, româna **1,1603** (ora 24: 1,1792; #513 are 1,2060) — a scăzut în fiecare oră, nicio regulă de oprire atinsă. Placa 5.653 MB / 62 °C.
