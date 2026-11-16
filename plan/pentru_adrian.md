@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 14:15 — Antrenamentul mare s-a încheiat (#651 câștigă, verificat); am pus în coadă cererile tale de azi
+
+- **S111 verificat de mine: #651 CÂȘTIGĂ** (am refăcut sumele: 228 răspunsuri corecte față de 221; româna 1,0878 față de 1,2055; R1 99,31). **S112:** #651 e pe 8787. **C-122:** am notat că 6.922 MB e în regulă și că temperatura e paza principală.
+- **Pus în coadă (comenzile tale C-123, C-124, C-126):** **S114** fila Chat cu forma învățată + mesajul de sus nou și **S115** pornirea directă cu #651 după repornire — de acum, pe procesor. **S116** date de chat fără text (Wikipedia + conversații pe șabloane, fără alt AI) + un examen de chat ținut deoparte — azi. **S117** 4 ore de învățat chat-ul din #651, la noapte; intră în interfață doar dacă chat-ul crește clar (+30 din 200), iar româna și „din text” nu scad. **S118** butoanele 👍/👎 și „răspunsul corect ar fi…”, plus bucla care schimbă modelul doar dacă trece examenele.
+- 4 ore, nu mai mult: pe C: sunt ~19 GB, iar paza de disc oprește la 15 GB.
+- **Aștept de la tine:** nimic. (Dacă vrei teste GPU pe workstation diseară, scrie în hub — Kronos lasă placa liberă.)
+
 ## 16 noiembrie 2026, 13:09 (executant) — S112 / C-119 gata: #651 e în interfață (http://100.90.150.35:8787/)
 
 - **Interfața de pe 8787 rulează cu #651** (procesor). Fila „Întreabă din text”: 2/2 corecte, ~10 s. ⚠ Fila de chat fără text dă fraze fără sens (modelul știe doar „text + întrebare”). ⚠ După o repornire, paznicul pornește interfața veche (#312/#407) — comanda de revenire la #651 e în raport. Placa folosită din 72 h: ~67 h. Raport: `docs/rapoarte/2026-11-16_1309_C-119_final.md`. Aștept de la tine: „da”/„nu” pentru (1) #651 implicit în `interfata_ws.ps1`, (2) fila de chat în forma „Întrebare: … Răspuns:”.
@@ -139,31 +146,3 @@
 - **Rulează acum:** cele 3 ore de antrenare din #513 (pornite ~12:55), apoi examenele; rezultatul pe la **16:40**. Apoi executantul trece singur la S110 (modelul de 24 de straturi de la zero).
 - **Pus în coadă:** nimic nou (S110–S112 sunt deja acolo). Nimic n-a picat.
 - **Aștept de la tine:** nimic.
-
-## 13 noiembrie 2026, 11:15 — Antrenamentul mare (C-119) e în coadă: 4 etape, ~68 de ore de placă, gata luni dimineață
-
-- **S108 gata, verificat de mine:** modelul în uz (#513) n-a văzut niciodată 11 din cele 13 tipuri de întrebări la care greșește; din Wikipedia pe care o avem deja ies ~6.150 de întrebări noi. Cifrele sunt corecte (le-am adunat din nou).
-- **Am preluat comanda ta C-119 („da” 10:49 + 11:11).** În coadă, una după alta, cu praguri scrise de mine dinainte: **S109 (E1, de acum, ~5 h)** = întrebări noi pe tipurile slabe + un examen nou ținut deoparte + 3 ore din #513 → dacă iese mai bun, intră în interfață. **S110 (E2, ~55 h)** = modelul de 24 de straturi de la zero, cu verificare la 12 h și 24 h (dacă e pe drumul greșit se oprește și orele nu se consumă pe altceva). **S111 (E3, ~8 h)** = învățarea conversației + toate examenele, alege câștigătorul. **S112 (E4)** = câștigătorul în interfața de convorbire (port 8787, și de pe telefon prin Tailscale) + raportul final pentru luni seara.
-- **Rulează acum:** nimic încă; executantul ia S109 la următoarea trecere (~11:30). Placa e a lui Kronos non-stop până luni seara.
-- **De știut, cinstit:** ținta realistă e română corectă și legată pe subiecte cunoscute, nu „ca ChatGPT” — va greși fapte. Discul: dacă scade sub 15 GB liberi, se oprește și te întreabă (nu șterge nimic singur).
-- **Aștept de la tine:** nimic. Ne vedem luni seara cu modelul în interfață.
-
-## 13 noiembrie 2026, 08:15 — Noapte curată, discul are iar loc; acum se numără tipurile de întrebări
-
-- **Raportul de dimineață e scris și e bun:** noaptea placa s-a odihnit, nimic n-a căzut. Ștergerea ta de ieri (C-112) a mers: 82 de modele, 33,4 GB; discul C: are acum **71 GB liberi** (ieri 41 GB).
-- **Testele:** 1.411 trec; unul (examenul de cod, are o limită de timp) a picat o dată în rularea mare și trece singur — îl urmărim, nu reparăm nimic deocamdată.
-- **Rulează acum: S108** (doar procesor, doar citire, ~1–2 h): câte exemple din fiecare tip de întrebare a văzut modelul în uz și câte s-ar putea face din datele deja descărcate — cifrele pentru alegerea ta (a)/(b).
-- **Pus în coadă:** nimic nou pe placă; hotărăsc după raportul S108.
-- **Aștept de la tine:** nimic urgent. Când ai timp: direcția (a) modelul de 24 de straturi de la zero sau (b) mai multe tipuri de întrebări pe modelul în uz; „a”/„b” pentru testul care a picat o dată (fără răspuns rămâne „b” = îl urmărim).
-
-- **13 nov 08:14 (executant) — S108 gata:** linia lui #513 n-a văzut la antrenare 11 din cele 13 tipuri de întrebări slabe (0 exemple; „țară” doar 223 de instrucțiuni România/Moldova, „oraș” 4), iar tipurile care merg au fost văzute de 14–719 ori. Din Wikipedia deja descărcată s-ar putea face ~6.000 de întrebări noi pentru cele 12 tipuri slabe (inegal: profesie ~2.900, țară ~1.200; pictor/câștigător ~30). Varianta (b) = generator nou + examen nou + 2–3 ore de placă; (a) = ~7 nopți. #513 și #554 există încă (SHA ca la S106). Raport: `docs/rapoarte/2026-11-13_0814_S108_tipuri_intrebari.md`.
-
-## 13 noiembrie 2026, 02:15 — Renotarea a confirmat: modelele refuză aproape orice întrebare fără text; azi o numărătoare pentru alegerea ta
-
-- **S107 gata, verificat de mine — „#513 rămâne”.** Unealta nouă numără corect refuzul cinstit la întrebările-capcană (#513: 1 → 16, #554: 0 → 16 din 20), dar amândouă refuză și 46–49 din 50 de întrebări pe care ar trebui să le știe. Nota medie 1,913 față de 1,900 (pragul 0,3) → LA FEL. Pentru modelul în uz contează examenele „răspuns din text” (S106).
-- **Rulează acum:** nimic; noaptea fără placă, nimic n-a picat.
-- **Pus în coadă: S108** (aprobat de mine, doar procesor, doar citire, azi de la 08:00): câte exemple din fiecare tip de întrebare a văzut modelul la antrenare și câte s-ar putea face din datele deja descărcate pentru tipurile slabe („actori”, „profesie”, „canal”…). Așa varianta (b) de mai jos primește cifre. Nimic antrenat, descărcat sau șters.
-- **Aștept de la tine:** nimic urgent. Când ai timp: direcția — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) mai multe tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
-
-- **12 nov 23:38 (executant) — S107 gata:** unealta nouă numără corect refuzul „Nu scrie în text.” la întrebările-capcană (#513 1 → 16, #554 0 → 16 din 20), dar modelele refuză la fel și la 46–49 din 50 de întrebări pe care ar trebui să le știe → examenul fără text tot nu le desparte; „#513 rămâne”. Raport: `docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md`.
-
