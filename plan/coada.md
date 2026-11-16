@@ -3859,7 +3859,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3) + docs/rapoarte/2026-11-13_2207_S110_24z2_pregatire2.md (cache-ul hranei, proba refăcută, rata aleasă, pre-înregistrarea) + docs/rapoarte/2026-11-14_1137_S110_24z2_12h.md (12 h: CONTINUĂ — ora 12 1,2335, media 10–12 1,2410 vs 4–6 1,3243) + docs/rapoarte/2026-11-14_2306_S110_24z2_24h.md (24 h: CONTINUĂ — ora 24 1,1792, media 22–24 1,1822 vs 10–12 1,2410) + docs/rapoarte/2026-11-16_0348_S110_24z2_final.md (final: MAI BUN — #641 1,0891 vs #513 1,2060)
 
 ### S111 — C-119 E3: învățarea conversației pe baza nouă de 24 (~7 h) + toate examenele; alegerea câștigătorului (placa ~7 h + ~1 h examene)
-- stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — pornește doar după S110 `gata` sau `oprit` la un punct de control
+- stare: in_lucru (executant, 16 nov 2026 04:00; S110 `gata` — varianta A; placa liberă 439 MB / 29 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — pornește doar după S110 `gata` sau `oprit` la un punct de control
 - tip: placă
 - fereastră: imediat după S110, non-stop
 - durată maximă: 7 h antrenare + 1,5 h examene
