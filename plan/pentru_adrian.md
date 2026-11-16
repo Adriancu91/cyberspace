@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 08:15 — Mulțumesc pentru ștergere: discul are loc, conversația învață mai departe
+
+- **REZOLVAT: discul.** Ai rulat comenzile de ștergere (S113, C-121) de pe telefon, toate fără eroare: C: are acum **~22,8 GB** liberi. Cu ~0,73 GB pe oră, S111 ar trebui să meargă toate cele 7 ore fără să se oprească la 15 GB. S113 = gata.
+- **Raportul de dimineață e scris și corect** (`docs/rapoarte/2026-11-16_0657_raport_dimineata.md`): S110 MAI BUN (#641 1,0891 față de #513 1,2060); S111 orele 1–2: româna 1,0889 → 1,0886 (stă pe loc, normal — acum învață conversația). Placa 6.411 MB / 61 °C.
+- **Testele:** 1.462 trec, 1 pică (cel știut, cere 40 GB liberi). La prima rulare de azi au picat 19, la a doua nu — probabil din cauza discului plin de atunci. Urmăresc dacă se repetă.
+- **Rulează acum:** S111 până pe la ~11:20, apoi examenele și alegerea câștigătorului; apoi S112 (câștigătorul în interfață + raportul final pentru diseară).
+- **Aștept de la tine:** nimic.
+
 ## 16 noiembrie 2026, 05:15 — Modelul mare de la zero e MAI BUN (verificat de mine); acum învață conversația
 
 - **S110 verificat de mine: MAI BUN.** Româna curată a modelului nou **#641 = 1,0891**, a modelului în uz **#513 = 1,2060** (pragul pentru MAI BUN: ≤ 1,2010). Confirmat și pe textele noi, nevăzute: 1,0125 față de 1,1265. Codul și poveștile englezești ceva mai slabe (așteptat, informativ).
@@ -150,11 +158,4 @@
 - **Aștept de la tine:** nimic urgent. Când ai timp: direcția — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) mai multe tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
 
 - **12 nov 23:38 (executant) — S107 gata:** unealta nouă numără corect refuzul „Nu scrie în text.” la întrebările-capcană (#513 1 → 16, #554 0 → 16 din 20), dar modelele refuză la fel și la 46–49 din 50 de întrebări pe care ar trebui să le știe → examenul fără text tot nu le desparte; „#513 rămâne”. Raport: `docs/rapoarte/2026-11-12_2338_S107_renotare_conversatie.md`.
-
-## 12 noiembrie 2026, 23:15 — #554 nu bate #513 nici cu textul alături (verificat); la noapte placa se odihnește
-
-- **S106 gata, verificat de mine — „#513 rămâne”.** Cu textul și întrebarea, #554 a răspuns corect la 81 din 140, #513 la 80 (pragul pentru „mai bun”: +7); al doilea martor, fără alt AI: 82 față de 79 → tot LA FEL. Am refăcut calculul față de pragurile scrise dinainte: verdictul e corect.
-- **Concluzie:** întrebarea „#554 sau #513” e închisă pe toate cele patru măsurători. Partea slabă a amândurora: tipurile de întrebări pe care nu le-au văzut la antrenare (11–13 din 50).
-- **Pus în coadă: S107** (aprobat de mine, doar procesor, ~1–2 h): o unealtă nouă care renotează examenul de conversație și numără corect refuzul cinstit „Nu scrie în text.”. Nimic pe placă la noapte.
-- **Aștept de la tine:** nimic urgent. Când ai timp: încotro merge Kronos — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) învățarea mai multor tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
 
