@@ -374,9 +374,11 @@ def test_linia_de_comanda_cere_un_creier_si_o_configurare_buna(tmp_path, capsys)
     assert "Nu pot porni" in capsys.readouterr().out
 
 
-def test_pornirea_automata_pune_407_in_fila_din_text():
-    """S13 (21 octombrie 2026, aprobat de Adrian): paznicul de procese pornește interfața prin unelte/interfata_ws.ps1,
-    deci acolo e modelul filei „Întreabă din text”: #407 (noaptea 11), nu #401. Chatul rămâne #312."""
+def test_pornirea_automata_pune_651_in_ambele_file():
+    """S13 (21 octombrie 2026): paznicul de procese pornește interfața prin unelte/interfata_ws.ps1, deci acolo sunt
+    modelele implicite. S115 (16 noiembrie 2026, C-124, aprobat de Adrian): #651 în ambele file, cu configurarea lui."""
     script = (Path(__file__).resolve().parents[1] / "unelte" / "interfata_ws.ps1").read_text(encoding="utf-8")
-    assert "[int]$ExperimentText = 407," in script and "[int]$Experiment = 312," in script
-    assert CreierText(407, "lucru-inexistent").eticheta == "Kronos #407 — răspunde doar din textul dat."
+    assert '[string]$Config = "config/conv_w2_mare_24zc.toml",' in script
+    assert "[int]$ExperimentText = 651," in script and "[int]$Experiment = 651," in script
+    assert '"--dispozitiv", "cpu"' in script and '$env:CUDA_VISIBLE_DEVICES = "-1"' in script
+    assert CreierText(651, "lucru-inexistent").eticheta == "Kronos #651 — răspunde doar din textul dat."

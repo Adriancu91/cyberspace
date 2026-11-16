@@ -3959,14 +3959,15 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-123, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S115 — C-124: după repornirea workstation-ului, interfața pornește direct cu #651 (procesor)
-- stare: in_lucru (executant, 16 nov 2026 15:00; placa liberă 490 MB / 29 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 15:13 — `interfata_ws.ps1` implicit `config/conv_w2_mare_24zc.toml`, #651 în ambele file, procesor, 8787; testul vechi #312/#407 înlocuit; pornită fără parametri la 15:06:41 → `/api/stare` „Kronos (elev, modelul #651)” și „Kronos #651 — răspunde doar din textul dat.”; 1465 teste trec, 1 sărit, 0 pică)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 15:00; placa liberă 490 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-124, 16 nov 13:47)
 - tip: procesor (fără placă)
 - fereastră: oricând — **de acum** (poate fi în același commit cu S114 sau imediat după)
 - durată maximă: 30 min
 - ce faci: în `unelte/interfata_ws.ps1` valorile implicite → `-Config config/conv_w2_mare_24zc.toml`, `-Experiment 651`, `-ExperimentText 651`, procesor (`--dispozitiv cpu` / `CUDA_VISIBLE_DEVICES=-1`, ca acum), port 8787. Nu schimbi programarea din Windows și nici `paznic_procese_ws.ps1` (doar valorile din fișierul pe care îl pornește). Dacă un test verifică vechile valori, îl actualizezi; `python -m pytest` verde. Verifici fără repornire: oprești interfața, o pornești **prin `interfata_ws.ps1` fără parametri** și te uiți că „cine răspunde” = #651. În raport: comanda de revenire la #312/#407 sau #513 (cu parametri), ca să rămână scrisă.
 - **NU:** nicio setare Windows, nicio sarcină programată nouă; `kronos/` neatins.
-- raport: în același raport cu S114 (secțiune separată) sau `docs/rapoarte/<data>_<ora>_S115_pornire_651.md`; un rând în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- raport: docs/rapoarte/2026-11-16_1513_S115_pornire_651.md (cerut: în același raport cu S114 (secțiune separată) sau `docs/rapoarte/<data>_<ora>_S115_pornire_651.md`; un rând în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
 - aprobat de: Adrian (COMENZI.md C-124, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S116 — C-126 A1: date de conversație FĂRĂ text alături, făcute automat (fără alt AI) + examenul de chat ținut deoparte (procesor)

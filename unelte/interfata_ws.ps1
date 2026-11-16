@@ -5,12 +5,14 @@
 # 17 octombrie 2026: pana acum interfata se pornea de mana sau din Claude Code si cadea odata cu el.
 # 20 octombrie 2026 (S5): si fila "Intreaba din text", cu modelul -ExperimentText (#401); -ExperimentText 0 = fara fila.
 # 21 octombrie 2026 (S13, aprobat de Adrian): fila "Intreaba din text" trece de la #401 la #407 (noaptea 11).
+# 16 noiembrie 2026 (S115, C-124, aprobat de Adrian): implicit #651 in ambele file (config/conv_w2_mare_24zc.toml).
+#   Revenire la cele vechi: -Config config/ws_w1.toml -Experiment 312 -ExperimentText 407
 #
 #   powershell -NoProfile -ExecutionPolicy Bypass -File unelte\interfata_ws.ps1
 param(
-    [string]$Config = "config/ws_w1.toml",
-    [int]$Experiment = 312,
-    [int]$ExperimentText = 407,
+    [string]$Config = "config/conv_w2_mare_24zc.toml",
+    [int]$Experiment = 651,
+    [int]$ExperimentText = 651,
     [int]$Port = 8787
 )
 

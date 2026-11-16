@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 15:13 (executant) — S115 / C-124 gata: după o repornire, interfața pornește singură cu #651
+
+- Paznicul pornește acum interfața direct cu **#651 în ambele file** (Chat și „din text”), pe procesor, portul 8787 — nu mai revine la #312/#407. Verificat: am pornit-o fără parametri și răspunde #651. Comanda de revenire la modelele vechi e în raport. Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1513_S115_pornire_651.md`. Aștept de la tine: nimic.
+
 ## 16 noiembrie 2026, 14:40 (executant) — S114 / C-123 gata: fila Chat răspunde scurt; mesajul de sus nou
 
 - **Fila Chat** întreabă acum #651 în forma învățată și se oprește singură: „salut” → „salut, te ascult.”, „Cine ești?” → „Sunt un program de calculator. Mă numesc Kronos.”, dar faptele fără text sunt încă greșite („Care este capitala României?” → „Nu scrie în text.”) — le învață C-126 (S116–S117). Fila „din text” dă exact aceleași răspunsuri ca la C-119. ⚠ La 14:30 paznicul pornise iar interfața veche (#312/#407); am repus #651 (S115 rezolvă asta). Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1440_S114_fila_chat.md`. Aștept de la tine: nimic.
