@@ -3896,7 +3896,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-16_1238_S111_E3_conversatie.md
 
 ### S112 — C-119 E4: câștigătorul în interfața de convorbire (port 8787, local + Tailscale) + raportul final pentru luni seara (procesor; placa doar dacă modelul rulează pe ea)
-- stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — după S111 `gata`
+- stare: in_lucru (executant, 16 nov 2026 13:00; S111 `gata`, câștigătorul #651; placa liberă 689 MB / 30 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — după S111 `gata`
 - tip: procesor (interfața) — fără antrenare
 - fereastră: imediat după S111
 - durată maximă: 1 h
