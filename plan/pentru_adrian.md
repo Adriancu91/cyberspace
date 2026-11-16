@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 13:09 (executant) — S112 / C-119 gata: #651 e în interfață (http://100.90.150.35:8787/)
+
+- **Interfața de pe 8787 rulează cu #651** (procesor). Fila „Întreabă din text”: 2/2 corecte, ~10 s. ⚠ Fila de chat fără text dă fraze fără sens (modelul știe doar „text + întrebare”). ⚠ După o repornire, paznicul pornește interfața veche (#312/#407) — comanda de revenire la #651 e în raport. Placa folosită din 72 h: ~67 h. Raport: `docs/rapoarte/2026-11-16_1309_C-119_final.md`. Aștept de la tine: „da”/„nu” pentru (1) #651 implicit în `interfata_ws.ps1`, (2) fila de chat în forma „Întrebare: … Răspuns:”.
+
 ## 16 noiembrie 2026, 12:38 (executant) — S111: modelul mare cu conversație CÂȘTIGĂ (#651)
 
 - **#651 trece toate pragurile:** română 1,0878 (față de 1,2055 la #577), răspunsuri corecte 228 din 320 (față de 221), R1 99,31, verificatorul îl vede și el mai bun (215 față de 198). La S112 intră în interfață. ⚠ Placa a urcat ~3,5 minute la 6.922 MB în ultima oră (paza din sarcină: 6.700; limita: 7.000). Raport: `docs/rapoarte/2026-11-16_1238_S111_E3_conversatie.md`. Aștept de la tine: nimic.

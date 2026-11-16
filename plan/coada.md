@@ -3896,7 +3896,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-16_1238_S111_E3_conversatie.md
 
 ### S112 — C-119 E4: câștigătorul în interfața de convorbire (port 8787, local + Tailscale) + raportul final pentru luni seara (procesor; placa doar dacă modelul rulează pe ea)
-- stare: in_lucru (executant, 16 nov 2026 13:00; S111 `gata`, câștigătorul #651; placa liberă 689 MB / 30 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 13:09 — interfața de pe 8787 rulează cu **#651** pe procesor din 13:01:22 (procesul 12892; cea veche #312/#407 oprită); verificat de pe 100.90.150.35:8787: din text 2/2 corecte (~9–11 s), chat fără text 3/3 fraze fără sens (fila de chat nu folosește forma învățată — semnalat, nereparat); după repornire paznicul aduce tot #312/#407 (comanda pentru #651 în raport, propus „da” pentru valorile din `interfata_ws.ps1`); placa ~66,8 h din 72; 1462 teste trec, 1 pică (cel cunoscut, spațiu C5), 1 sărit)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 13:00; S111 `gata`, câștigătorul #651; placa liberă 689 MB / 30 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — după S111 `gata`
 - tip: procesor (interfața) — fără antrenare
 - fereastră: imediat după S111
@@ -3908,7 +3909,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   4. **Raportul final C-119** `docs/rapoarte/<data>_<ora>_C-119_final.md`: ce a ieșit din fiecare etapă (cifre), ce model vorbește acum cu el, ce știe și ce nu (exemple), ore de placă folosite din 72, ce ar urma (fluența mare cere mai mult text = FineWeb-2, „da” separat). Un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
 - **NU:** `kronos/` neatins; #513 rămâne pe disc neschimbat; nimic descărcat, instalat sau șters.
 - aprobat de: Adrian (COMENZI.md C-119, E4); pașii: supraveghetor, 13 nov 2026 11:15
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-16_1309_C-119_final.md
 
 ### S113 — C-121 (Adrian, „da”): ștergerea probelor de rată nefolosite ale S110 (~8,6 GB) pentru marja pe C: — lista exactă, verificarea și comanda (doar procesor + disc, fără placă, fără întreruperea S110)
 - stare: **gata** (supraveghetor, 16 nov 2026 08:15): Adrian a rulat cele 7 comenzi din raport prin Remote Desktop, toate fără eroare (hub C-121, 16 nov 06:48); C: **22,84 GB** liberi la ~ora 2,6 a S111 (raportul de dimineață: 23 GB la 06:56). Rezultat: ~9 GB eliberați, marja S111 refăcută.
