@@ -72,7 +72,8 @@ class Aplicatie:
         self.adresa_permisa: Callable[[str], bool] = retea.adresa_permisa
 
     def stare(self) -> dict[str, Any]:
-        return {"creier": self.creier.eticheta, "configurare": self.configurare,
+        return {"creier": self.creier.eticheta, "ce_stie": getattr(self.creier, "ce_stie", None),
+                "configurare": self.configurare,
                 "lungime_maxima_mesaj": LUNGIME_MAXIMA_MESAJ, "lungime_raspuns": self.lungime_raspuns,
                 "din_text": self.creier_text.eticheta if self.creier_text is not None else None,
                 "lungime_maxima_paragraf": LUNGIME_MAXIMA_PARAGRAF}

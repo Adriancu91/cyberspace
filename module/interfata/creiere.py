@@ -38,35 +38,74 @@ class CreierFals:
 
 
 class CreierKronos:
-    """Elevul: modelul salvat de Kronos la experimentul dat. Răspunde continuând textul primit, cu
-    model.genereaza(inceput, lungime), adică exact ce știe modelul, fără nicio înfrumusețare."""
+    """Elevul: modelul salvat de Kronos la experimentul dat.
 
-    def __init__(self, experiment: int, director_lucru: str | Path = "lucru", dispozitiv: str = "cpu") -> None:
+    - Un model de conversație (are perechi întrebare → răspuns la antrenare, setarea „conversatie”; ex. #651) primește
+      întrebarea exact în forma de la antrenare fără text alături („Întrebare: …⏎Răspuns:”, S114 / C-123), scrie fără
+      întâmplare (ca fila „din text”) cel mult `simboluri` bucăți și se oprește la sfârșitul răspunsului (primul rând
+      nou sau <|endoftext|>).
+    - Orice alt model continuă textul primit, cu model.genereaza(inceput, lungime), ca până acum.
+    Exact ce spune modelul, fără nicio înfrumusețare."""
+
+    def __init__(self, experiment: int, director_lucru: str | Path = "lucru", dispozitiv: str = "cpu",
+                 simboluri: int = 80) -> None:
         self.experiment = int(experiment)
         self.director_lucru = Path(director_lucru)
         self.dispozitiv = dispozitiv
+        self.simboluri = int(simboluri)  # limita de siguranță a filei Chat la modelele de conversație
         self.eticheta = f"Kronos (elev, modelul #{self.experiment})"
         self._model: Any = None
+        self._fisa: dict[str, Any] | None = None
         self._zavor = threading.Lock()  # un singur răspuns pe rând: modelul nu e făcut pentru mai multe fire
 
     @property
     def incarcat(self) -> bool:
         return self._model is not None
 
+    def _fisa_modelului(self) -> dict[str, Any]:
+        if self._fisa is None:
+            from kronos.jurnal import Jurnal
+            from unelte.modele_salvate import fisa_modelului
+
+            self._fisa = fisa_modelului(Jurnal(self.director_lucru), self.experiment)
+        return self._fisa
+
     def _incarca(self) -> Any:
         # Importurile sunt aici, nu sus, ca pornirea interfeței (și creierul fals) să nu încarce nimic greu.
-        from kronos.jurnal import Jurnal
-        from unelte.modele_salvate import fisa_modelului, incarca_modelul
+        from unelte.modele_salvate import incarca_modelul
 
-        fisa = fisa_modelului(Jurnal(self.director_lucru), self.experiment)
+        fisa = self._fisa_modelului()
         dispozitiv = self.dispozitiv if _are_setarea_dispozitiv(fisa["module"]["model"]["cale"]) else ""
         return incarca_modelul(fisa, dispozitiv)
+
+    @property
+    def ce_stie(self) -> str | None:
+        """Mesajul de sus al paginii, pentru un model de conversație (cu numărul lui); None = pagina își păstrează
+        mesajul ei (modelele vechi, care doar continuă povești)."""
+        try:
+            conversatie = self._fisa_modelului().get("setari", {}).get("model", {}).get("conversatie")
+        except Exception:  # noqa: BLE001 - fără fișă, mesajul de sus rămâne cel din pagină; eroarea apare la întrebare
+            return None
+        if not conversatie:
+            return None
+        return (f"Kronos #{self.experiment} scrie în română; răspunde cel mai bine cu un text alături, în fila "
+                f"«Întreabă din text». Fără text, faptele pot fi greșite.")
 
     def raspunde(self, text: str, lungime: int) -> str:
         with self._zavor:
             if self._model is None:
                 self._model = self._incarca()
+            if e_model_de_conversatie(self._model):
+                from module.model_conversatie import intrebarea
+
+                raspuns = taie(str(self._model.completeaza(intrebarea(text), self.simboluri)))
+                return raspuns[: max(0, int(lungime))]
             return str(self._model.genereaza(text, int(lungime)))
+
+
+def e_model_de_conversatie(model: Any) -> bool:
+    """A învățat modelul perechi întrebare → răspuns (setarea „conversatie”) și poate scrie fără întâmplare?"""
+    return bool(getattr(model, "conversatie", "")) and callable(getattr(model, "completeaza", None))
 
 
 class TextPreaLung(ValueError):

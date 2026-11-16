@@ -319,6 +319,51 @@ def test_fila_din_text_pe_server(tmp_path):
     assert "Întreabă din text" in html and 'id="paragraf"' in html and 'id="intrebare"' in html
 
 
+class ModelChatFals(ModelTextFals):
+    """În locul lui #651 (S114): un model de conversație (are setarea „conversatie”) care nu se oprește singur."""
+
+    conversatie = "lucru/romana_raspunsuri_r2/antrenare.jsonl"
+
+    def genereaza(self, inceput: str, lungime: int) -> str:  # fila Chat nu trebuie să-l mai folosească
+        raise AssertionError("modelul de conversație nu continuă la întâmplare în fila Chat")
+
+
+def creier_chat_fals(simboluri: int = 80, conversatie: bool = True) -> tuple[CreierKronos, ModelChatFals]:
+    model = ModelChatFals()
+    creier = CreierKronos(651, "lucru-inexistent", simboluri=simboluri)
+    creier._incarca = lambda: model  # type: ignore[method-assign]
+    creier._fisa = {"setari": {"model": {"conversatie": model.conversatie if conversatie else ""}}}
+    return creier, model
+
+
+def test_fila_chat_da_forma_de_la_antrenare_fara_text_si_se_opreste_la_sfarsitul_raspunsului():
+    """S114 (C-123): întrebarea intră în model ca la antrenare, fără text alături („Întrebare: …⏎Răspuns:”), fără
+    întâmplare, cu limita de siguranță de `simboluri` bucăți, și se oprește la primul rând nou / <|endoftext|>."""
+    creier, model = creier_chat_fals(simboluri=60)
+    raspuns = creier.raspunde("  Câți locuitori are satul? ", 200)
+    assert raspuns == "Satul are 500 de locuitori."  # nu cele 200 de litere fixe de altădată
+    assert model.primite == [("Întrebare: Câți locuitori are satul?\nRăspuns:", 60)]
+    assert creier.raspunde("x", 5) == "Satul"  # lungimea cerută rămâne o limită de sus
+
+
+def test_mesajul_de_sus_spune_ce_stie_modelul_pornit(tmp_path):
+    creier, _ = creier_chat_fals()
+    asteptat = ("Kronos #651 scrie în română; răspunde cel mai bine cu un text alături, în fila «Întreabă din text». "
+                "Fără text, faptele pot fi greșite.")
+    assert creier.ce_stie == asteptat  # numărul vine din pornire, nu e scris de mână
+    assert CreierKronos(652, "lucru-inexistent").ce_stie is None  # fără fișă: rămâne mesajul din pagină
+    vechi, _ = creier_chat_fals(conversatie=False)
+    assert vechi.ce_stie is None  # model care doar continuă povești: rămâne mesajul din pagină
+    with server_pornit(tmp_path / "c.db", creier=creier) as (adresa, _):
+        assert json_de_la(adresa + "/api/stare")["ce_stie"] == asteptat
+        primit = json_de_la(adresa + "/api/mesaj", {"text": "salut"})
+        assert primit["raspuns"]["text"] == "Satul are 500 de locuitori."
+    with server_pornit(tmp_path / "d.db") as (adresa, _):  # creierul de probă: niciun mesaj nou
+        assert json_de_la(adresa + "/api/stare")["ce_stie"] is None
+    js = (RADACINA / "module" / "interfata" / "static" / "aplicatie.js").read_text(encoding="utf-8")
+    assert 'el("ce-stie").textContent = stare.ce_stie' in js
+
+
 def test_linia_de_comanda_cere_un_creier_si_o_configurare_buna(tmp_path, capsys):
     config = str(RADACINA / "config" / "proba.toml")
     for argumente in (["--config", config], ["--config", config, "--fals", "--experiment", "3"]):

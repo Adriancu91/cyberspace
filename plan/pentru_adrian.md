@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 14:40 (executant) — S114 / C-123 gata: fila Chat răspunde scurt; mesajul de sus nou
+
+- **Fila Chat** întreabă acum #651 în forma învățată și se oprește singură: „salut” → „salut, te ascult.”, „Cine ești?” → „Sunt un program de calculator. Mă numesc Kronos.”, dar faptele fără text sunt încă greșite („Care este capitala României?” → „Nu scrie în text.”) — le învață C-126 (S116–S117). Fila „din text” dă exact aceleași răspunsuri ca la C-119. ⚠ La 14:30 paznicul pornise iar interfața veche (#312/#407); am repus #651 (S115 rezolvă asta). Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1440_S114_fila_chat.md`. Aștept de la tine: nimic.
+
 ## 16 noiembrie 2026, 14:15 — Antrenamentul mare s-a încheiat (#651 câștigă, verificat); am pus în coadă cererile tale de azi
 
 - **S111 verificat de mine: #651 CÂȘTIGĂ** (am refăcut sumele: 228 răspunsuri corecte față de 221; româna 1,0878 față de 1,2055; R1 99,31). **S112:** #651 e pe 8787. **C-122:** am notat că 6.922 MB e în regulă și că temperatura e paza principală.

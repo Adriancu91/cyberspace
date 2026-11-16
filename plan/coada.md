@@ -3943,7 +3943,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md
 
 ### S114 — C-123: fila „Chat” a interfeței pune întrebarea în forma învățată + mesajul de sus actualizat (procesor)
-- stare: in_lucru (executant, 16 nov 2026 14:30; placa liberă 453 MB / 34 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 14:40 — fila Chat dă forma „Întrebare: …⏎Răspuns:” fără text, fără întâmplare, oprire la rândul nou, limita 80 de bucăți; mesajul de sus din `/api/stare` cu #651; 2 teste noi; interfața de pe 8787 repornită cu #651 la 14:38:49 (procesul 14624; înainte rula iar #312/#407, pornită de paznic la 14:30:22); 5 întrebări: „salut” și „Cine ești?” bune, 3 fapte greșite (cum era așteptat); „din text” 2/2 identic cu C-119; 1465 teste trec, 1 sărit, 0 pică)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 14:30; placa liberă 453 MB / 34 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-123, 16 nov 13:47)
 - tip: procesor (fără placă)
 - fereastră: oricând — **de acum**
@@ -3954,7 +3955,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   3. Teste noi în `teste/` (forma întrebării, oprirea, mesajul); `python -m pytest` verde (în afară de cel cunoscut, 40 GB).
   4. Repornești interfața de pe 8787 cu #651 (comanda din raportul C-119, procesor) și pui **5 întrebări fără text**: „salut”, „Care este capitala României?”, „Ce este fotosinteza? Explică pe scurt.”, „Cine ești?”, „Câți locuitori are Clujul?” — răspunsurile întocmai + timpul, în raport. Așteptare cinstită (de scris): răspunsuri scurte, dar faptele fără text pot fi greșite (#651 a învățat mai ales „din text”); C-126 (S116–S117) e partea care îl învață chat-ul.
 - **NU:** `kronos/` neatins; fila „din text” nu se schimbă (verifici că cele 2 întrebări din raportul C-119 dau același răspuns); nimic deschis spre internet.
-- raport: `docs/rapoarte/<data>_<ora>_S114_fila_chat.md`; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- raport: docs/rapoarte/2026-11-16_1440_S114_fila_chat.md (cerut: `docs/rapoarte/<data>_<ora>_S114_fila_chat.md`; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.)
 - aprobat de: Adrian (COMENZI.md C-123, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S115 — C-124: după repornirea workstation-ului, interfața pornește direct cu #651 (procesor)

@@ -179,6 +179,7 @@ async function porneste() {
   try {
     const stare = await cere("/api/stare");
     el("cine").textContent = "Răspunde: " + stare.creier;
+    if (stare.ce_stie) el("ce-stie").textContent = stare.ce_stie;   // ce știe modelul pornit (S114)
     lungimeMaxima = stare.lungime_maxima_mesaj;
     el("file").hidden = !stare.din_text;   // fila apare doar dacă serverul are modelul „din text”
     await incarcaModulele();
