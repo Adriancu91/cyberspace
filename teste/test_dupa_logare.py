@@ -67,9 +67,27 @@ def test_paznicul_pe_uscat_spune_ce_ar_porni(tmp_path):
     jurnal = tmp_path / "paznic.log"
     subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
                     str(RADACINA / "unelte" / "paznic_procese_ws.ps1"), "-Proba", "-Jurnal", str(jurnal), "-Exe", str(exe),
-                    "-Nume", "Proba", "-Conversatii", str(conversatii(tmp_path)), "-Port", "65431"],
+                    "-Nume", "Proba", "-Conversatii", str(conversatii(tmp_path)), "-Port", "65431",
+                    "-StopInterfata", str(tmp_path / "STOP_INTERFATA")],
                    check=True, capture_output=True, timeout=120)
     text = jurnal.read_text(encoding="utf-8-sig")
     assert f"& '{exe}' --remote-control 'Proba'" in text
     assert "interfata nu asculta pe portul 65431; as porni unelte\\interfata_ws.ps1 -Port 65431" in text
     assert "CONTINUUM" in text
+
+
+def test_paznicul_nu_porneste_interfata_cand_exista_comutatorul(tmp_path):
+    """S122 / C-129: cu fișierul STOP_INTERFATA, paznicul nu repornește interfața (se anulează ștergând fișierul)."""
+    exe = tmp_path / "claude.exe"
+    exe.write_bytes(b"")
+    stop = tmp_path / "STOP_INTERFATA"
+    stop.write_text("S122", encoding="utf-8")
+    jurnal = tmp_path / "paznic.log"
+    subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+                    str(RADACINA / "unelte" / "paznic_procese_ws.ps1"), "-Proba", "-Jurnal", str(jurnal), "-Exe", str(exe),
+                    "-Nume", "Proba", "-Conversatii", str(conversatii(tmp_path)), "-Port", "65431",
+                    "-StopInterfata", str(stop)],
+                   check=True, capture_output=True, timeout=120)
+    text = jurnal.read_text(encoding="utf-8-sig")
+    assert f"dar exista comutatorul {stop}; n-as porni-o." in text
+    assert "as porni unelte\\interfata_ws.ps1" not in text

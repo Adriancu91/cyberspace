@@ -2,7 +2,8 @@
 # (unelte/programeaza_paznic_procese_ws.ps1). Verifica trei lucruri si porneste la loc ce lipseste:
 #   1. Claude Code cu Remote Control "-Nume" (prin unelte/dupa_logare_ws.ps1 -Claude: continua conversatia folderului,
 #      sau, daca nu are niciuna, porneste o sesiune noua);
-#   2. interfata (portul -Port; prin unelte/interfata_ws.ps1);
+#   2. interfata (portul -Port; prin unelte/interfata_ws.ps1; nu, daca exista comutatorul lucru/STOP_INTERFATA,
+#      pus de S122 / C-129 cat ruleaza antrenarile; se anuleaza stergand fisierul);
 #   3. bucla CONTINUUM (prin sarcina "Kronos continuum ws"; nu, daca exista butonul STOP, lucru/STOP).
 # Fiecare repornire se scrie in lucru/paznic_procese.log (sau in -Jurnal). Cand totul ruleaza, nu scrie nimic.
 # In primele -MinuteDeLaPornire minute dupa pornirea calculatorului nu face nimic: atunci pornesc sarcinile de dupa
@@ -19,7 +20,8 @@ param(
     [string]$Exe = "",
     [string]$Conversatii = "",
     [int]$Port = 8787,
-    [double]$MinuteDeLaPornire = 5
+    [double]$MinuteDeLaPornire = 5,
+    [string]$StopInterfata = ""
 )
 
 $radacina = Split-Path -Parent $PSScriptRoot
@@ -47,7 +49,10 @@ if (-not $claude -or $Proba) {
 
 # 2. Interfata
 $interfata = $null -ne (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
-if (-not $interfata) {
+$fisierStopInterfata = if ($StopInterfata) { $StopInterfata } else { Join-Path $radacina "lucru\STOP_INTERFATA" }
+if (-not $interfata -and (Test-Path $fisierStopInterfata)) {
+    if ($Proba) { Scrie "Proba: interfata nu asculta pe portul $Port, dar exista comutatorul $fisierStopInterfata; n-as porni-o." }
+} elseif (-not $interfata) {
     if ($Proba) { Scrie "Proba (nu pornesc nimic): interfata nu asculta pe portul $Port; as porni unelte\interfata_ws.ps1 -Port $Port." }
     else {
         Scrie "Lipseste interfata (portul $Port nu asculta): o pornesc."

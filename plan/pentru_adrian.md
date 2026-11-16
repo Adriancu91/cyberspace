@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **16 nov 22:07 (executant) — S122:** interfața de pe 8787 e **oprită** de la 22:00 și nu mai pornește singură (comutatorul `lucru\STOP_INTERFATA`; ca s-o lași iar să pornească: ștergi fișierul). Pornește din nou cu câștigătorul după S119. S117 merge mai departe. Raport: `docs/rapoarte/2026-11-16_2207_S122_interfata_oprita.md`.
+
 ## 16 noiembrie 2026, 20:15 — Antrenarea de chat rulează; am pus în coadă comenzile tale C-129 și C-130
 
 - **Verificat de mine: S120 e bun** (examenul de calcule scris înaintea datelor, 2.000 de exerciții, 0 scurgeri; #651 știe acum 1 calcul din 200). **S119:** licențele sunt verificate, nimic descărcat încă.
