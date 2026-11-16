@@ -3886,6 +3886,11 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   se salvează), apoi butonul se resetează; probabil după ora 6 (~0,733 GB pe oră). Sfârșit estimat ~11:20. **Examenele NU
   sunt în lanț:** după antrenare le pornesc separat (`porneste S111 --din-nou`, cu un lanț nou de examene), pe #513, #577 și
   ultimul model al liniei `w2_mare_24zc`.
+- (executant, 16 nov 2026 11:32) **Antrenarea GATA:** cod 0 la 11:19:22, toate 7 ore (#645–#651; paza de disc n-a oprit,
+  minim 15,53 GB, C: 19,8 GB la sfârșit); ora 7 val_bpb 1,0878. **Lanțul de examene PORNIT la 11:31:28** (procesul 28220,
+  `cascada.py porneste S111 --din-nou`, lanțul `lucru/cascada/S111/s111_examene.py`, jurnal `S111/examene.json`) pe #513,
+  #577 și **#651**: validări → R1 (`reper_s111_<N>`) → S15/S4/tipuri noi → neutru (procesor). Proba de 2 întrebări pe #651
+  (11:30) a mers. Martorul S16 se socotește pe aceeași sumă ca la corecte (S15 + S4 + tipuri noi); partea (i) — informativ.
 - aprobat de: Adrian (COMENZI.md C-119, C-120); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, revizuite 17:15 (C-120)
 - raport: docs/rapoarte/…
 
