@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 05:15 — Modelul mare de la zero e MAI BUN (verificat de mine); acum învață conversația
+
+- **S110 verificat de mine: MAI BUN.** Româna curată a modelului nou **#641 = 1,0891**, a modelului în uz **#513 = 1,2060** (pragul pentru MAI BUN: ≤ 1,2010). Confirmat și pe textele noi, nevăzute: 1,0125 față de 1,1265. Codul și poveștile englezești ceva mai slabe (așteptat, informativ).
+- **Rulează acum S111** (din 04:10, ~7 h, gata pe la 11:20): modelul #641 învață conversația; apoi examenele pe #513, #577 și modelul nou, și alegerea câștigătorului. Placa 6.380 MB / 62 °C (limita 6.700).
+- **De știut — discul:** C: avea 19,4 GB la pornirea S111; fiecare oră ia ~0,73 GB, deci paza de 15 GB probabil oprește antrenarea curat după ora 6 (din 7). Nu strică nimic; i-am scris executantului să facă examenele pe ultimul model salvat și să meargă mai departe cu S112.
+- **Pus în coadă:** doar o notă (S110 verificat; ce face dacă se oprește la 15 GB). Nicio comandă nouă în hub.
+- **Aștept de la tine:** nimic acum. Când ajungi la workstation diseară: cele 7 comenzi din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md` (~2 min, ~9 GB).
+
 ## 16 noiembrie 2026, 03:48 (executantul) — S110 gata: modelul mare de la zero e MAI BUN decât #513
 
 - După 52 de ore, română curat **1,0891** față de **1,2060** la #513 (mai mic = mai bine; pragul cerea doar 1,2010). Și pe textele noi, nevăzute de nimeni: 1,0125 față de 1,1265. Codul și poveștile englezești puțin mai slabe (cum se aștepta). Atenție: s-au schimbat și mărimea, și datele.
@@ -150,21 +158,3 @@
 - **Pus în coadă: S107** (aprobat de mine, doar procesor, ~1–2 h): o unealtă nouă care renotează examenul de conversație și numără corect refuzul cinstit „Nu scrie în text.”. Nimic pe placă la noapte.
 - **Aștept de la tine:** nimic urgent. Când ai timp: încotro merge Kronos — (a) modelul de 24 de straturi de la zero (S101, ~7 nopți) sau (b) învățarea mai multor tipuri de întrebări pe modelul în uz. Fără grabă: `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
 
-## 12 noiembrie 2026, 20:15 — #554 nu bate #513 (verificat); la noapte o măsurare scurtă pe „răspuns din text”
-
-- **S105 gata, verificat de mine — „#513 rămâne”.** Pe texte nevăzute, #554 e mai bun cu doar 0,0016 (pragul 0,005) → LA FEL; la conversație 1,913 față de 1,900 (pragul 0,3) → LA FEL. Am refăcut calculul față de praguri: verdictul e corect.
-- **Ce am aflat în plus:** examenul de conversație nu mai desparte modelele (întrebările vin fără text, iar modelele răspund cinstit „Nu scrie în text.”).
-- **Pus în coadă pentru la noapte: S106** (aprobat de mine, doar examene, ~1 oră pe placă): #513 față de #554 pe examenele în care modelul primește textul alături — așa cum îl folosești de fapt. Nicio antrenare, nimic șters sau descărcat.
-- Mâine dimineață executantul verifică doar prin citire ștergerea ta de la S88.
-- **Aștept de la tine:** nimic. Fără grabă: dosarul `lucru\memorie_mare` (~10,5 GB), Release-ul #513.
-
-> **Executant, 12 nov 20:55 — S106 `gata`: și cu textul alături, #554 nu e mai bun decât #513 → #513 rămâne.** Am pus aceleași 140 de întrebări „răspuns din text” (modelul primește textul și întrebarea, cum îl folosești de fapt) la amândouă: #554 a răspuns corect la **81**, #513 la **80** (pragul scris dinainte pentru „mai bun” era +7) → **LA FEL**. Al doilea martor, verificatorul fără alt AI, zice la fel (82 față de 79). #477, modelul de dinainte: 75. Slăbiciunea comună: tipurile de întrebări pe care nu le-au văzut la antrenare (doar 11–13 din 50). Am renumărat și S105: la întrebările-capcană amândouă refuză cinstit la 16 din 20 — nota mică de acolo venea din felul de notare. A durat 9 minute; placa cel mult 4.272 MB / 62 °C; nimic descărcat, șters sau antrenat; n-am schimbat nimic. Raportul întreg, cu 20 de răspunsuri: `docs/rapoarte/2026-11-12_2046_S106_text_554_513.md`. **Aștept de la tine:** nimic.
-
-> **Executant, 12 nov 20:00 — S105 `gata`: #554 nu e mai bun decât #513 → #513 rămâne.** Pe texte pe care nu le-a văzut niciun model, modelul de 24 de straturi (#554) e la română mai bun cu doar 0,0016 (1,1249 față de 1,1265; pragul scris dinainte era 0,005) → **LA FEL**. La examenul de conversație: nota 1,913 față de 1,900 (pragul: 0,3) → **LA FEL**. Deci nu-ți propun #554 ca model în uz; n-am schimbat nimic. **De știut:** la examenul de conversație amândouă au luat doar 1,9 din 10, fiindcă la întrebările puse fără text alături răspund aproape mereu „Nu scrie în text.” (cinstit, dar notat cu 1) — examenul acesta, cum e acum, nu mai desparte modelele; am scris supraveghetorului două variante. A durat 11 minute; placa cel mult 4.490 MB / 55 °C; nimic descărcat, șters sau antrenat. Raportul întreg, cu 20 de răspunsuri: `docs/rapoarte/2026-11-12_2000_S105_compara_554_513.md`. **Aștept de la tine:** nimic.
-
-## 12 noiembrie 2026, 19:25 — Ai terminat testul: placa e iar a lui Kronos, S105 poate porni la noapte
-
-- **Am văzut nota de la 19:19 (C-111):** ai terminat și ai plecat. Am scris în coadă că **S105** (#554 față de #513 pe texte nevăzute + examenul de conversație) poate porni de acum, cel târziu la 23:00. Dacă workstation-ul a rămas în Cyber Universe, S105 trece pe noaptea următoare — nu e o problemă.
-- **Am văzut C-112:** ai rulat singur ștergerea S88 — 82 de modele intermediare, 33,4 GB; cele 31 de `gpt.pt` de linie au fost refuzate, cum trebuia. Am marcat S88 `gata`. Mâine dimineață executantul verifică doar prin citire jurnalul ștergerii și spațiul de pe C: (nu șterge nimic).
-- **Nimic nou de la executant de la 11:15**; nimic n-a picat.
-- **Aștept de la tine:** nimic acum. Fără grabă: dosarul `lucru\memorie_mare` (~10,5 GB), pe care ai zis că îl ștergi de mână; Release-ul #513.
