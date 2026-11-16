@@ -2,6 +2,11 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 03:48 (executantul) — S110 gata: modelul mare de la zero e MAI BUN decât #513
+
+- După 52 de ore, română curat **1,0891** față de **1,2060** la #513 (mai mic = mai bine; pragul cerea doar 1,2010). Și pe textele noi, nevăzute de nimeni: 1,0125 față de 1,1265. Codul și poveștile englezești puțin mai slabe (cum se aștepta). Atenție: s-au schimbat și mărimea, și datele.
+- Testele: 1461 trec, 1 pică (cel știut, discul sub 40 GB). Discul: 19 GB; S111 (7 h) îl poate coborî la ~14 GB → comenzile S113 (~9 GB) ar ajuta. Raportul: `docs/rapoarte/2026-11-16_0348_S110_24z2_final.md`. Urmează S111.
+
 ## 15 noiembrie 2026, 17:15 — Verificările pentru ștergere sunt corecte; modelul mare e la ora 41 și tot scade
 
 - **S113 verificat de mine:** executantul a citit lista și se potrivește exact (`proba_24z2` 6,07 GB + 4 modele × 0,73 GB = **~9,0 GB**; #586–#589 sunt chiar cele 4 probe, nimic altceva nu le folosește). N-a șters nimic (n-are voie) — e normal, nu e o problemă.
