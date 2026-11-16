@@ -160,6 +160,85 @@ SOCIAL_EXAMEN_COTE = {"salut": 8, "ce_faci": 7, "multumesc": 7, "la_revedere": 7
 
 
 # --------------------------------------------------------------------------------------------------------------------
+# S120 (C-128 A, 16 nov 2026): calcule simple. Pasul nou `calcule` (Random(1128)) și `amesteca2`, în dosarul NOU
+# lucru/conversatie_chat2/; pașii de mai sus și ieșirile lor rămân neschimbate.
+DOSAR2 = "lucru/conversatie_chat2"
+CALCULE = f"{DOSAR2}/perechi_calcule.jsonl"
+ANTRENARE2 = f"{DOSAR2}/antrenare.jsonl"
+EXAMEN_CALCULE = "docs/conversatie/examen_calcule.json"
+SAMANTA_CALCULE = 1128
+SEMN = {"adunare": "+", "scadere": "-", "inmultire": "×", "impartire": ":"}
+# Formulările generatorului (≥ 5 pe operație); {a}, {b} = numerele.
+FORMULARI_CALCULE: dict[str, list[str]] = {
+    "adunare": ["Cât face {a} + {b}?", "Cât face {a} plus {b}?", "cât e {a} plus {b}", "Cât este {a} + {b}?",
+                "Adună {a} cu {b}.", "{a} + {b} = ?", "Care este suma dintre {a} și {b}?", "Cât fac {a} plus {b}?"],
+    "scadere": ["Cât face {a} - {b}?", "Cât face {a} minus {b}?", "cât e {a} minus {b}", "Cât este {a} - {b}?",
+                "Scade {b} din {a}.", "{a} - {b} = ?", "Care este diferența dintre {a} și {b}?", "Cât fac {a} minus {b}?"],
+    "inmultire": ["Cât face {a}x{b}?", "Cât face {a} x {b}?", "Cât face {a} ori {b}?", "Cât fac {a} ori {b}?",
+                  "cât e {a} ori {b}", "Cât este {a} × {b}?", "Înmulțește {a} cu {b}.", "{a} * {b} = ?",
+                  "cât e {a} înmulțit cu {b}"],
+    "impartire": ["Cât face {a} : {b}?", "Cât face {a} împărțit la {b}?", "Împarte {a} la {b}.",
+                  "cât e {a} împărțit la {b}", "Cât este {a} / {b}?", "{a} : {b} = ?", "De câte ori intră {b} în {a}?"],
+}
+# Răspunsul: scurt; {r} = rezultatul, {s} = semnul.
+RASPUNS_CALCULE = ["{r}.", "{a} {s} {b} = {r}.", "Rezultatul este {r}.", "{a} {s} {b} = {r}."]
+
+
+def rezultat(op: str, a: int, b: int) -> int:
+    return {"adunare": a + b, "scadere": a - b, "inmultire": a * b, "impartire": a // b}[op]
+
+
+def numere_calcul(op: str, rng: random.Random, k: int = 0) -> tuple[int, int]:
+    """O pereche de numere pentru operație: adunare/scădere până la 1.000 (rezultatul și numerele; plafonul se alege
+    pe rând dintre 20, 100, 1.000 după `k`), înmulțire 1–12 × 1–12, împărțire exactă cu împărțitorul 2–12 și
+    rezultatul 1–100."""
+    if op in ("adunare", "scadere"):
+        m = (20, 100, 1000)[k % 3]
+        if op == "adunare":
+            a = rng.randint(1, m - 1)
+            return a, rng.randint(1, m - a)
+        a = rng.randint(2, m)
+        return a, rng.randint(1, a - 1)
+    if op == "inmultire":
+        return rng.randint(1, 12), rng.randint(1, 12)
+    b, q = rng.randint(2, 12), rng.randint(1, 100)
+    return b * q, b
+
+
+def formulare_fara_numere(intrebare: str) -> str:
+    """Forma întrebării cu numerele înlocuite („Cât face 3x7?” → „cat face n x n”), după normalizare."""
+    return " ".join(re.sub(r"\d+", " N ", norm(intrebare).replace("_", " ")).split()).replace("N", "n")
+
+
+def perechi_calcule(rng: random.Random, interzise: set[tuple[int, int, str]], cate: dict[str, int]
+                    ) -> list[dict[str, Any]]:
+    """`cate[op]` perechi pe operație; perechile de numere ale examenului (a, b, operația) nu intră niciodată.
+    La înmulțire perechile posibile sunt puține (144): se iau toate cele permise, pe rând, cu formulări diferite."""
+    perechi: list[dict[str, Any]] = []
+    for op, n in cate.items():
+        if op == "inmultire":
+            permise = [(a, b) for a in range(1, 13) for b in range(1, 13) if (a, b, op) not in interzise]
+            rng.shuffle(permise)
+            alese = [permise[i % len(permise)] for i in range(n)]
+        else:
+            alese, k = [], 0
+            while len(alese) < n:
+                a, b = numere_calcul(op, rng, k)
+                k += 1
+                if (a, b, op) not in interzise:
+                    alese.append((a, b))
+        for a, b in alese:
+            r = rezultat(op, a, b)
+            q = rng.choice(FORMULARI_CALCULE[op]).format(a=a, b=b)
+            q = q[0].upper() + q[1:] if not q[0].isdigit() and rng.random() < 0.7 else q
+            raspuns = rng.choice(RASPUNS_CALCULE).format(a=a, b=b, r=r, s=SEMN[op])
+            p = _pereche("chat_calcul", op, q, raspuns, str(r))
+            p["numere"] = [a, b]
+            perechi.append(p)
+    return perechi
+
+
+# --------------------------------------------------------------------------------------------------------------------
 def sha(cale: Path) -> str:
     h = hashlib.sha256()
     with cale.open("rb") as f:

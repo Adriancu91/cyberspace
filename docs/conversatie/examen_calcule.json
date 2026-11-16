@@ -1,0 +1,1855 @@
+{
+ "nota": "S120 (C-128 A, 16 nov 2026): examenul de calcule ținut deoparte, întrebări FĂRĂ text alături, în forma filei Chat. Corect = rezultatul exact apare ca număr întreg în răspuns (cu/fără punct de mii) și niciun alt număr diferit nu e dat ca rezultat (toate numerele din răspuns sunt dintre a, b și rezultat; după fiecare „=” vine rezultatul). Perechile (a, b, operația) sunt interzise în generator. Notarea: unelte/examen_calcule.py.",
+ "samanta": 128,
+ "cote": {
+  "adunare": 40,
+  "scadere": 40,
+  "inmultire": 70,
+  "impartire": 50
+ },
+ "formulari_noi": {
+  "adunare": [
+   "Calculează {a} + {b}.",
+   "Cât dă {a} adunat cu {b}?",
+   "Spune-mi suma lui {a} și {b}.",
+   "Cât fac {a} și cu {b}?",
+   "Dacă am {a} mere și mai primesc {b}, câte mere am?"
+  ],
+  "scadere": [
+   "Calculează {a} - {b}.",
+   "Cât rămâne dacă din {a} scad {b}?",
+   "Cât dă {a} fără {b}?",
+   "Spune-mi cât e {a} scăzut cu {b}.",
+   "Am {a} lei și cheltui {b}. Câți lei îmi rămân?"
+  ],
+  "inmultire": [
+   "Calculează {a} × {b}.",
+   "Cât dă {a} înmulțit cu {b}?",
+   "Spune-mi produsul lui {a} și {b}.",
+   "Cât înseamnă {a} luat de {b} ori?",
+   "Dacă o cutie are {a} creioane, câte creioane sunt în {b} cutii?"
+  ],
+  "impartire": [
+   "Calculează {a} : {b}.",
+   "Cât dă {a} împărțit la {b}?",
+   "Spune-mi câtul dintre {a} și {b}.",
+   "Cât iese dacă împart {a} la {b}?",
+   "Dacă împart {a} bomboane la {b} copii, câte primește fiecare?"
+  ]
+ },
+ "verificari": {
+  "pe_operatie": {
+   "adunare": 40,
+   "scadere": 40,
+   "inmultire": 70,
+   "impartire": 50
+  },
+  "formulari_noi": 80,
+  "procent_formulari_noi": 40.0,
+  "noi_care_apar_totusi_in_generator": [],
+  "perechi_de_numere_repetate": 0,
+  "rezultate_gresite": []
+ },
+ "perechi": [
+  {
+   "operatie": "adunare",
+   "a": 8,
+   "b": 7,
+   "rezultat": 15,
+   "intrebare": "Dacă am 8 mere și mai primesc 7, câte mere am?",
+   "formulare": "noua",
+   "id": "calc_000"
+  },
+  {
+   "operatie": "adunare",
+   "a": 47,
+   "b": 9,
+   "rezultat": 56,
+   "intrebare": "Cât fac 47 și cu 9?",
+   "formulare": "noua",
+   "id": "calc_001"
+  },
+  {
+   "operatie": "adunare",
+   "a": 30,
+   "b": 158,
+   "rezultat": 188,
+   "intrebare": "30 + 158 = ?",
+   "formulare": "generator",
+   "id": "calc_002"
+  },
+  {
+   "operatie": "adunare",
+   "a": 18,
+   "b": 2,
+   "rezultat": 20,
+   "intrebare": "Adună 18 cu 2.",
+   "formulare": "generator",
+   "id": "calc_003"
+  },
+  {
+   "operatie": "adunare",
+   "a": 9,
+   "b": 15,
+   "rezultat": 24,
+   "intrebare": "Cât face 9 + 15?",
+   "formulare": "generator",
+   "id": "calc_004"
+  },
+  {
+   "operatie": "adunare",
+   "a": 298,
+   "b": 381,
+   "rezultat": 679,
+   "intrebare": "Calculează 298 + 381.",
+   "formulare": "noua",
+   "id": "calc_005"
+  },
+  {
+   "operatie": "adunare",
+   "a": 15,
+   "b": 2,
+   "rezultat": 17,
+   "intrebare": "Cât fac 15 și cu 2?",
+   "formulare": "noua",
+   "id": "calc_006"
+  },
+  {
+   "operatie": "adunare",
+   "a": 67,
+   "b": 23,
+   "rezultat": 90,
+   "intrebare": "Cât fac 67 plus 23?",
+   "formulare": "generator",
+   "id": "calc_007"
+  },
+  {
+   "operatie": "adunare",
+   "a": 333,
+   "b": 506,
+   "rezultat": 839,
+   "intrebare": "333 + 506 = ?",
+   "formulare": "generator",
+   "id": "calc_008"
+  },
+  {
+   "operatie": "adunare",
+   "a": 17,
+   "b": 2,
+   "rezultat": 19,
+   "intrebare": "Care este suma dintre 17 și 2?",
+   "formulare": "generator",
+   "id": "calc_009"
+  },
+  {
+   "operatie": "adunare",
+   "a": 87,
+   "b": 5,
+   "rezultat": 92,
+   "intrebare": "Spune-mi suma lui 87 și 5.",
+   "formulare": "noua",
+   "id": "calc_010"
+  },
+  {
+   "operatie": "adunare",
+   "a": 203,
+   "b": 580,
+   "rezultat": 783,
+   "intrebare": "Calculează 203 + 580.",
+   "formulare": "noua",
+   "id": "calc_011"
+  },
+  {
+   "operatie": "adunare",
+   "a": 5,
+   "b": 10,
+   "rezultat": 15,
+   "intrebare": "Cât e 5 plus 10",
+   "formulare": "generator",
+   "id": "calc_012"
+  },
+  {
+   "operatie": "adunare",
+   "a": 9,
+   "b": 10,
+   "rezultat": 19,
+   "intrebare": "Cât fac 9 plus 10?",
+   "formulare": "generator",
+   "id": "calc_013"
+  },
+  {
+   "operatie": "adunare",
+   "a": 273,
+   "b": 457,
+   "rezultat": 730,
+   "intrebare": "Care este suma dintre 273 și 457?",
+   "formulare": "generator",
+   "id": "calc_014"
+  },
+  {
+   "operatie": "adunare",
+   "a": 11,
+   "b": 7,
+   "rezultat": 18,
+   "intrebare": "Spune-mi suma lui 11 și 7.",
+   "formulare": "noua",
+   "id": "calc_015"
+  },
+  {
+   "operatie": "adunare",
+   "a": 6,
+   "b": 52,
+   "rezultat": 58,
+   "intrebare": "Cât dă 6 adunat cu 52?",
+   "formulare": "noua",
+   "id": "calc_016"
+  },
+  {
+   "operatie": "adunare",
+   "a": 464,
+   "b": 8,
+   "rezultat": 472,
+   "intrebare": "Care este suma dintre 464 și 8?",
+   "formulare": "generator",
+   "id": "calc_017"
+  },
+  {
+   "operatie": "adunare",
+   "a": 15,
+   "b": 5,
+   "rezultat": 20,
+   "intrebare": "Adună 15 cu 5.",
+   "formulare": "generator",
+   "id": "calc_018"
+  },
+  {
+   "operatie": "adunare",
+   "a": 41,
+   "b": 32,
+   "rezultat": 73,
+   "intrebare": "Care este suma dintre 41 și 32?",
+   "formulare": "generator",
+   "id": "calc_019"
+  },
+  {
+   "operatie": "adunare",
+   "a": 786,
+   "b": 201,
+   "rezultat": 987,
+   "intrebare": "Dacă am 786 mere și mai primesc 201, câte mere am?",
+   "formulare": "noua",
+   "id": "calc_020"
+  },
+  {
+   "operatie": "adunare",
+   "a": 14,
+   "b": 2,
+   "rezultat": 16,
+   "intrebare": "Cât dă 14 adunat cu 2?",
+   "formulare": "noua",
+   "id": "calc_021"
+  },
+  {
+   "operatie": "adunare",
+   "a": 55,
+   "b": 11,
+   "rezultat": 66,
+   "intrebare": "Cât face 55 + 11?",
+   "formulare": "generator",
+   "id": "calc_022"
+  },
+  {
+   "operatie": "adunare",
+   "a": 506,
+   "b": 397,
+   "rezultat": 903,
+   "intrebare": "Cât face 506 plus 397?",
+   "formulare": "generator",
+   "id": "calc_023"
+  },
+  {
+   "operatie": "adunare",
+   "a": 19,
+   "b": 1,
+   "rezultat": 20,
+   "intrebare": "Cât face 19 + 1?",
+   "formulare": "generator",
+   "id": "calc_024"
+  },
+  {
+   "operatie": "adunare",
+   "a": 84,
+   "b": 10,
+   "rezultat": 94,
+   "intrebare": "Calculează 84 + 10.",
+   "formulare": "noua",
+   "id": "calc_025"
+  },
+  {
+   "operatie": "adunare",
+   "a": 560,
+   "b": 404,
+   "rezultat": 964,
+   "intrebare": "Cât dă 560 adunat cu 404?",
+   "formulare": "noua",
+   "id": "calc_026"
+  },
+  {
+   "operatie": "adunare",
+   "a": 17,
+   "b": 1,
+   "rezultat": 18,
+   "intrebare": "Cât face 17 plus 1?",
+   "formulare": "generator",
+   "id": "calc_027"
+  },
+  {
+   "operatie": "adunare",
+   "a": 68,
+   "b": 5,
+   "rezultat": 73,
+   "intrebare": "Cât face 68 plus 5?",
+   "formulare": "generator",
+   "id": "calc_028"
+  },
+  {
+   "operatie": "adunare",
+   "a": 914,
+   "b": 30,
+   "rezultat": 944,
+   "intrebare": "Adună 914 cu 30.",
+   "formulare": "generator",
+   "id": "calc_029"
+  },
+  {
+   "operatie": "adunare",
+   "a": 13,
+   "b": 3,
+   "rezultat": 16,
+   "intrebare": "Cât dă 13 adunat cu 3?",
+   "formulare": "noua",
+   "id": "calc_030"
+  },
+  {
+   "operatie": "adunare",
+   "a": 9,
+   "b": 4,
+   "rezultat": 13,
+   "intrebare": "Dacă am 9 mere și mai primesc 4, câte mere am?",
+   "formulare": "noua",
+   "id": "calc_031"
+  },
+  {
+   "operatie": "adunare",
+   "a": 520,
+   "b": 111,
+   "rezultat": 631,
+   "intrebare": "520 + 111 = ?",
+   "formulare": "generator",
+   "id": "calc_032"
+  },
+  {
+   "operatie": "adunare",
+   "a": 6,
+   "b": 1,
+   "rezultat": 7,
+   "intrebare": "Cât fac 6 plus 1?",
+   "formulare": "generator",
+   "id": "calc_033"
+  },
+  {
+   "operatie": "adunare",
+   "a": 99,
+   "b": 1,
+   "rezultat": 100,
+   "intrebare": "Adună 99 cu 1.",
+   "formulare": "generator",
+   "id": "calc_034"
+  },
+  {
+   "operatie": "adunare",
+   "a": 919,
+   "b": 7,
+   "rezultat": 926,
+   "intrebare": "Calculează 919 + 7.",
+   "formulare": "noua",
+   "id": "calc_035"
+  },
+  {
+   "operatie": "adunare",
+   "a": 16,
+   "b": 1,
+   "rezultat": 17,
+   "intrebare": "Dacă am 16 mere și mai primesc 1, câte mere am?",
+   "formulare": "noua",
+   "id": "calc_036"
+  },
+  {
+   "operatie": "adunare",
+   "a": 3,
+   "b": 77,
+   "rezultat": 80,
+   "intrebare": "Cât face 3 plus 77?",
+   "formulare": "generator",
+   "id": "calc_037"
+  },
+  {
+   "operatie": "adunare",
+   "a": 894,
+   "b": 85,
+   "rezultat": 979,
+   "intrebare": "Cât e 894 plus 85",
+   "formulare": "generator",
+   "id": "calc_038"
+  },
+  {
+   "operatie": "adunare",
+   "a": 13,
+   "b": 4,
+   "rezultat": 17,
+   "intrebare": "Cât face 13 plus 4?",
+   "formulare": "generator",
+   "id": "calc_039"
+  },
+  {
+   "operatie": "scadere",
+   "a": 16,
+   "b": 8,
+   "rezultat": 8,
+   "intrebare": "Spune-mi cât e 16 scăzut cu 8.",
+   "formulare": "noua",
+   "id": "calc_040"
+  },
+  {
+   "operatie": "scadere",
+   "a": 92,
+   "b": 14,
+   "rezultat": 78,
+   "intrebare": "Spune-mi cât e 92 scăzut cu 14.",
+   "formulare": "noua",
+   "id": "calc_041"
+  },
+  {
+   "operatie": "scadere",
+   "a": 823,
+   "b": 435,
+   "rezultat": 388,
+   "intrebare": "823 - 435 = ?",
+   "formulare": "generator",
+   "id": "calc_042"
+  },
+  {
+   "operatie": "scadere",
+   "a": 7,
+   "b": 2,
+   "rezultat": 5,
+   "intrebare": "Cât este 7 - 2?",
+   "formulare": "generator",
+   "id": "calc_043"
+  },
+  {
+   "operatie": "scadere",
+   "a": 77,
+   "b": 4,
+   "rezultat": 73,
+   "intrebare": "Cât face 77 - 4?",
+   "formulare": "generator",
+   "id": "calc_044"
+  },
+  {
+   "operatie": "scadere",
+   "a": 158,
+   "b": 89,
+   "rezultat": 69,
+   "intrebare": "Spune-mi cât e 158 scăzut cu 89.",
+   "formulare": "noua",
+   "id": "calc_045"
+  },
+  {
+   "operatie": "scadere",
+   "a": 9,
+   "b": 8,
+   "rezultat": 1,
+   "intrebare": "Spune-mi cât e 9 scăzut cu 8.",
+   "formulare": "noua",
+   "id": "calc_046"
+  },
+  {
+   "operatie": "scadere",
+   "a": 21,
+   "b": 14,
+   "rezultat": 7,
+   "intrebare": "Cât e 21 minus 14",
+   "formulare": "generator",
+   "id": "calc_047"
+  },
+  {
+   "operatie": "scadere",
+   "a": 60,
+   "b": 15,
+   "rezultat": 45,
+   "intrebare": "60 - 15 = ?",
+   "formulare": "generator",
+   "id": "calc_048"
+  },
+  {
+   "operatie": "scadere",
+   "a": 9,
+   "b": 5,
+   "rezultat": 4,
+   "intrebare": "Cât e 9 minus 5",
+   "formulare": "generator",
+   "id": "calc_049"
+  },
+  {
+   "operatie": "scadere",
+   "a": 43,
+   "b": 2,
+   "rezultat": 41,
+   "intrebare": "Spune-mi cât e 43 scăzut cu 2.",
+   "formulare": "noua",
+   "id": "calc_050"
+  },
+  {
+   "operatie": "scadere",
+   "a": 971,
+   "b": 371,
+   "rezultat": 600,
+   "intrebare": "Cât rămâne dacă din 971 scad 371?",
+   "formulare": "noua",
+   "id": "calc_051"
+  },
+  {
+   "operatie": "scadere",
+   "a": 3,
+   "b": 1,
+   "rezultat": 2,
+   "intrebare": "Cât este 3 - 1?",
+   "formulare": "generator",
+   "id": "calc_052"
+  },
+  {
+   "operatie": "scadere",
+   "a": 26,
+   "b": 24,
+   "rezultat": 2,
+   "intrebare": "Cât fac 26 minus 24?",
+   "formulare": "generator",
+   "id": "calc_053"
+  },
+  {
+   "operatie": "scadere",
+   "a": 530,
+   "b": 97,
+   "rezultat": 433,
+   "intrebare": "Scade 97 din 530.",
+   "formulare": "generator",
+   "id": "calc_054"
+  },
+  {
+   "operatie": "scadere",
+   "a": 10,
+   "b": 7,
+   "rezultat": 3,
+   "intrebare": "Cât dă 10 fără 7?",
+   "formulare": "noua",
+   "id": "calc_055"
+  },
+  {
+   "operatie": "scadere",
+   "a": 94,
+   "b": 4,
+   "rezultat": 90,
+   "intrebare": "Spune-mi cât e 94 scăzut cu 4.",
+   "formulare": "noua",
+   "id": "calc_056"
+  },
+  {
+   "operatie": "scadere",
+   "a": 827,
+   "b": 694,
+   "rezultat": 133,
+   "intrebare": "Scade 694 din 827.",
+   "formulare": "generator",
+   "id": "calc_057"
+  },
+  {
+   "operatie": "scadere",
+   "a": 6,
+   "b": 1,
+   "rezultat": 5,
+   "intrebare": "Cât face 6 minus 1?",
+   "formulare": "generator",
+   "id": "calc_058"
+  },
+  {
+   "operatie": "scadere",
+   "a": 25,
+   "b": 7,
+   "rezultat": 18,
+   "intrebare": "Cât e 25 minus 7",
+   "formulare": "generator",
+   "id": "calc_059"
+  },
+  {
+   "operatie": "scadere",
+   "a": 21,
+   "b": 3,
+   "rezultat": 18,
+   "intrebare": "Cât dă 21 fără 3?",
+   "formulare": "noua",
+   "id": "calc_060"
+  },
+  {
+   "operatie": "scadere",
+   "a": 7,
+   "b": 5,
+   "rezultat": 2,
+   "intrebare": "Calculează 7 - 5.",
+   "formulare": "noua",
+   "id": "calc_061"
+  },
+  {
+   "operatie": "scadere",
+   "a": 20,
+   "b": 16,
+   "rezultat": 4,
+   "intrebare": "Care este diferența dintre 20 și 16?",
+   "formulare": "generator",
+   "id": "calc_062"
+  },
+  {
+   "operatie": "scadere",
+   "a": 347,
+   "b": 21,
+   "rezultat": 326,
+   "intrebare": "Scade 21 din 347.",
+   "formulare": "generator",
+   "id": "calc_063"
+  },
+  {
+   "operatie": "scadere",
+   "a": 5,
+   "b": 3,
+   "rezultat": 2,
+   "intrebare": "Cât fac 5 minus 3?",
+   "formulare": "generator",
+   "id": "calc_064"
+  },
+  {
+   "operatie": "scadere",
+   "a": 40,
+   "b": 33,
+   "rezultat": 7,
+   "intrebare": "Spune-mi cât e 40 scăzut cu 33.",
+   "formulare": "noua",
+   "id": "calc_065"
+  },
+  {
+   "operatie": "scadere",
+   "a": 274,
+   "b": 253,
+   "rezultat": 21,
+   "intrebare": "Spune-mi cât e 274 scăzut cu 253.",
+   "formulare": "noua",
+   "id": "calc_066"
+  },
+  {
+   "operatie": "scadere",
+   "a": 10,
+   "b": 6,
+   "rezultat": 4,
+   "intrebare": "Cât fac 10 minus 6?",
+   "formulare": "generator",
+   "id": "calc_067"
+  },
+  {
+   "operatie": "scadere",
+   "a": 8,
+   "b": 6,
+   "rezultat": 2,
+   "intrebare": "Cât e 8 minus 6",
+   "formulare": "generator",
+   "id": "calc_068"
+  },
+  {
+   "operatie": "scadere",
+   "a": 338,
+   "b": 92,
+   "rezultat": 246,
+   "intrebare": "Cât este 338 - 92?",
+   "formulare": "generator",
+   "id": "calc_069"
+  },
+  {
+   "operatie": "scadere",
+   "a": 5,
+   "b": 4,
+   "rezultat": 1,
+   "intrebare": "Cât rămâne dacă din 5 scad 4?",
+   "formulare": "noua",
+   "id": "calc_070"
+  },
+  {
+   "operatie": "scadere",
+   "a": 49,
+   "b": 25,
+   "rezultat": 24,
+   "intrebare": "Cât dă 49 fără 25?",
+   "formulare": "noua",
+   "id": "calc_071"
+  },
+  {
+   "operatie": "scadere",
+   "a": 169,
+   "b": 50,
+   "rezultat": 119,
+   "intrebare": "Cât fac 169 minus 50?",
+   "formulare": "generator",
+   "id": "calc_072"
+  },
+  {
+   "operatie": "scadere",
+   "a": 4,
+   "b": 3,
+   "rezultat": 1,
+   "intrebare": "Cât face 4 - 3?",
+   "formulare": "generator",
+   "id": "calc_073"
+  },
+  {
+   "operatie": "scadere",
+   "a": 33,
+   "b": 29,
+   "rezultat": 4,
+   "intrebare": "Scade 29 din 33.",
+   "formulare": "generator",
+   "id": "calc_074"
+  },
+  {
+   "operatie": "scadere",
+   "a": 833,
+   "b": 633,
+   "rezultat": 200,
+   "intrebare": "Spune-mi cât e 833 scăzut cu 633.",
+   "formulare": "noua",
+   "id": "calc_075"
+  },
+  {
+   "operatie": "scadere",
+   "a": 2,
+   "b": 1,
+   "rezultat": 1,
+   "intrebare": "Am 2 lei și cheltui 1. Câți lei îmi rămân?",
+   "formulare": "noua",
+   "id": "calc_076"
+  },
+  {
+   "operatie": "scadere",
+   "a": 87,
+   "b": 67,
+   "rezultat": 20,
+   "intrebare": "Cât face 87 minus 67?",
+   "formulare": "generator",
+   "id": "calc_077"
+  },
+  {
+   "operatie": "scadere",
+   "a": 481,
+   "b": 159,
+   "rezultat": 322,
+   "intrebare": "Scade 159 din 481.",
+   "formulare": "generator",
+   "id": "calc_078"
+  },
+  {
+   "operatie": "scadere",
+   "a": 17,
+   "b": 15,
+   "rezultat": 2,
+   "intrebare": "Cât e 17 minus 15",
+   "formulare": "generator",
+   "id": "calc_079"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 12,
+   "rezultat": 132,
+   "intrebare": "Cât înseamnă 11 luat de 12 ori?",
+   "formulare": "noua",
+   "id": "calc_080"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 12,
+   "rezultat": 108,
+   "intrebare": "Cât înseamnă 9 luat de 12 ori?",
+   "formulare": "noua",
+   "id": "calc_081"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 11,
+   "rezultat": 77,
+   "intrebare": "Cât este 7 × 11?",
+   "formulare": "generator",
+   "id": "calc_082"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 5,
+   "rezultat": 20,
+   "intrebare": "Cât e 4 înmulțit cu 5",
+   "formulare": "generator",
+   "id": "calc_083"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 10,
+   "rezultat": 10,
+   "intrebare": "Cât e 1 ori 10",
+   "formulare": "generator",
+   "id": "calc_084"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 5,
+   "rezultat": 60,
+   "intrebare": "Cât dă 12 înmulțit cu 5?",
+   "formulare": "noua",
+   "id": "calc_085"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 6,
+   "rezultat": 54,
+   "intrebare": "Dacă o cutie are 9 creioane, câte creioane sunt în 6 cutii?",
+   "formulare": "noua",
+   "id": "calc_086"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 12,
+   "rezultat": 12,
+   "intrebare": "Cât fac 1 ori 12?",
+   "formulare": "generator",
+   "id": "calc_087"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 6,
+   "rezultat": 48,
+   "intrebare": "Cât fac 8 ori 6?",
+   "formulare": "generator",
+   "id": "calc_088"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 3,
+   "rezultat": 21,
+   "intrebare": "7 * 3 = ?",
+   "formulare": "generator",
+   "id": "calc_089"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 9,
+   "rezultat": 108,
+   "intrebare": "Cât dă 12 înmulțit cu 9?",
+   "formulare": "noua",
+   "id": "calc_090"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 10,
+   "rezultat": 50,
+   "intrebare": "Dacă o cutie are 5 creioane, câte creioane sunt în 10 cutii?",
+   "formulare": "noua",
+   "id": "calc_091"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 3,
+   "rezultat": 9,
+   "intrebare": "Cât e 3 înmulțit cu 3",
+   "formulare": "generator",
+   "id": "calc_092"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 2,
+   "rezultat": 8,
+   "intrebare": "Cât e 4 înmulțit cu 2",
+   "formulare": "generator",
+   "id": "calc_093"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 4,
+   "rezultat": 20,
+   "intrebare": "Cât face 5x4?",
+   "formulare": "generator",
+   "id": "calc_094"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 7,
+   "rezultat": 14,
+   "intrebare": "Spune-mi produsul lui 2 și 7.",
+   "formulare": "noua",
+   "id": "calc_095"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 4,
+   "rezultat": 12,
+   "intrebare": "Spune-mi produsul lui 3 și 4.",
+   "formulare": "noua",
+   "id": "calc_096"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 4,
+   "rezultat": 36,
+   "intrebare": "Cât fac 9 ori 4?",
+   "formulare": "generator",
+   "id": "calc_097"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 8,
+   "rezultat": 32,
+   "intrebare": "Cât e 4 ori 8",
+   "formulare": "generator",
+   "id": "calc_098"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 6,
+   "rezultat": 18,
+   "intrebare": "Cât e 3 ori 6",
+   "formulare": "generator",
+   "id": "calc_099"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 7,
+   "rezultat": 56,
+   "intrebare": "Spune-mi produsul lui 8 și 7.",
+   "formulare": "noua",
+   "id": "calc_100"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 10,
+   "rezultat": 120,
+   "intrebare": "Spune-mi produsul lui 12 și 10.",
+   "formulare": "noua",
+   "id": "calc_101"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 7,
+   "rezultat": 7,
+   "intrebare": "Cât face 1 x 7?",
+   "formulare": "generator",
+   "id": "calc_102"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 6,
+   "rezultat": 66,
+   "intrebare": "Înmulțește 11 cu 6.",
+   "formulare": "generator",
+   "id": "calc_103"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 6,
+   "rezultat": 36,
+   "intrebare": "Cât face 6 x 6?",
+   "formulare": "generator",
+   "id": "calc_104"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 3,
+   "rezultat": 24,
+   "intrebare": "Cât înseamnă 8 luat de 3 ori?",
+   "formulare": "noua",
+   "id": "calc_105"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 4,
+   "rezultat": 48,
+   "intrebare": "Cât înseamnă 12 luat de 4 ori?",
+   "formulare": "noua",
+   "id": "calc_106"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 8,
+   "rezultat": 72,
+   "intrebare": "Cât este 9 × 8?",
+   "formulare": "generator",
+   "id": "calc_107"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 9,
+   "rezultat": 36,
+   "intrebare": "Cât face 4 x 9?",
+   "formulare": "generator",
+   "id": "calc_108"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 4,
+   "rezultat": 44,
+   "intrebare": "Cât e 11 înmulțit cu 4",
+   "formulare": "generator",
+   "id": "calc_109"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 10,
+   "b": 5,
+   "rezultat": 50,
+   "intrebare": "Dacă o cutie are 10 creioane, câte creioane sunt în 5 cutii?",
+   "formulare": "noua",
+   "id": "calc_110"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 8,
+   "rezultat": 64,
+   "intrebare": "Cât dă 8 înmulțit cu 8?",
+   "formulare": "noua",
+   "id": "calc_111"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 9,
+   "rezultat": 18,
+   "intrebare": "Cât face 2x9?",
+   "formulare": "generator",
+   "id": "calc_112"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 11,
+   "rezultat": 11,
+   "intrebare": "Înmulțește 1 cu 11.",
+   "formulare": "generator",
+   "id": "calc_113"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 8,
+   "rezultat": 16,
+   "intrebare": "Cât face 2x8?",
+   "formulare": "generator",
+   "id": "calc_114"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 1,
+   "rezultat": 2,
+   "intrebare": "Spune-mi produsul lui 2 și 1.",
+   "formulare": "noua",
+   "id": "calc_115"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 9,
+   "rezultat": 81,
+   "intrebare": "Spune-mi produsul lui 9 și 9.",
+   "formulare": "noua",
+   "id": "calc_116"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 6,
+   "rezultat": 72,
+   "intrebare": "Cât fac 12 ori 6?",
+   "formulare": "generator",
+   "id": "calc_117"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 4,
+   "rezultat": 24,
+   "intrebare": "6 * 4 = ?",
+   "formulare": "generator",
+   "id": "calc_118"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 1,
+   "rezultat": 3,
+   "intrebare": "Cât e 3 ori 1",
+   "formulare": "generator",
+   "id": "calc_119"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 7,
+   "rezultat": 35,
+   "intrebare": "Cât înseamnă 5 luat de 7 ori?",
+   "formulare": "noua",
+   "id": "calc_120"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 10,
+   "rezultat": 40,
+   "intrebare": "Cât dă 4 înmulțit cu 10?",
+   "formulare": "noua",
+   "id": "calc_121"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 10,
+   "rezultat": 110,
+   "intrebare": "Cât face 11x10?",
+   "formulare": "generator",
+   "id": "calc_122"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 1,
+   "rezultat": 6,
+   "intrebare": "Cât face 6x1?",
+   "formulare": "generator",
+   "id": "calc_123"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 10,
+   "rezultat": 60,
+   "intrebare": "6 * 10 = ?",
+   "formulare": "generator",
+   "id": "calc_124"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 7,
+   "rezultat": 49,
+   "intrebare": "Spune-mi produsul lui 7 și 7.",
+   "formulare": "noua",
+   "id": "calc_125"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 6,
+   "rezultat": 42,
+   "intrebare": "Cât dă 7 înmulțit cu 6?",
+   "formulare": "noua",
+   "id": "calc_126"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 2,
+   "rezultat": 14,
+   "intrebare": "Cât e 7 înmulțit cu 2",
+   "formulare": "generator",
+   "id": "calc_127"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 10,
+   "b": 1,
+   "rezultat": 10,
+   "intrebare": "Cât e 10 înmulțit cu 1",
+   "formulare": "generator",
+   "id": "calc_128"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 10,
+   "b": 10,
+   "rezultat": 100,
+   "intrebare": "Cât face 10x10?",
+   "formulare": "generator",
+   "id": "calc_129"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 3,
+   "rezultat": 3,
+   "intrebare": "Cât dă 1 înmulțit cu 3?",
+   "formulare": "noua",
+   "id": "calc_130"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 5,
+   "rezultat": 35,
+   "intrebare": "Calculează 7 × 5.",
+   "formulare": "noua",
+   "id": "calc_131"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 9,
+   "rezultat": 27,
+   "intrebare": "3 * 9 = ?",
+   "formulare": "generator",
+   "id": "calc_132"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 3,
+   "rezultat": 36,
+   "intrebare": "Cât fac 12 ori 3?",
+   "formulare": "generator",
+   "id": "calc_133"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 1,
+   "rezultat": 12,
+   "intrebare": "12 * 1 = ?",
+   "formulare": "generator",
+   "id": "calc_134"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 11,
+   "rezultat": 132,
+   "intrebare": "Cât înseamnă 12 luat de 11 ori?",
+   "formulare": "noua",
+   "id": "calc_135"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 10,
+   "b": 4,
+   "rezultat": 40,
+   "intrebare": "Spune-mi produsul lui 10 și 4.",
+   "formulare": "noua",
+   "id": "calc_136"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 11,
+   "rezultat": 55,
+   "intrebare": "Cât face 5 x 11?",
+   "formulare": "generator",
+   "id": "calc_137"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 8,
+   "rezultat": 56,
+   "intrebare": "Cât fac 7 ori 8?",
+   "formulare": "generator",
+   "id": "calc_138"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 5,
+   "rezultat": 25,
+   "intrebare": "5 * 5 = ?",
+   "formulare": "generator",
+   "id": "calc_139"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 3,
+   "rezultat": 15,
+   "intrebare": "Cât dă 5 înmulțit cu 3?",
+   "formulare": "noua",
+   "id": "calc_140"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 10,
+   "rezultat": 30,
+   "intrebare": "Calculează 3 × 10.",
+   "formulare": "noua",
+   "id": "calc_141"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 4,
+   "rezultat": 28,
+   "intrebare": "Cât este 7 × 4?",
+   "formulare": "generator",
+   "id": "calc_142"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 2,
+   "rezultat": 4,
+   "intrebare": "Cât face 2 ori 2?",
+   "formulare": "generator",
+   "id": "calc_143"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 2,
+   "rezultat": 22,
+   "intrebare": "Cât face 11x2?",
+   "formulare": "generator",
+   "id": "calc_144"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 8,
+   "rezultat": 40,
+   "intrebare": "Spune-mi produsul lui 5 și 8.",
+   "formulare": "noua",
+   "id": "calc_145"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 12,
+   "rezultat": 60,
+   "intrebare": "Spune-mi produsul lui 5 și 12.",
+   "formulare": "noua",
+   "id": "calc_146"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 5,
+   "rezultat": 15,
+   "intrebare": "Cât face 3 x 5?",
+   "formulare": "generator",
+   "id": "calc_147"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 10,
+   "rezultat": 90,
+   "intrebare": "Cât face 9 ori 10?",
+   "formulare": "generator",
+   "id": "calc_148"
+  },
+  {
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 12,
+   "rezultat": 48,
+   "intrebare": "Cât face 4 ori 12?",
+   "formulare": "generator",
+   "id": "calc_149"
+  },
+  {
+   "operatie": "impartire",
+   "a": 144,
+   "b": 4,
+   "rezultat": 36,
+   "intrebare": "Cât dă 144 împărțit la 4?",
+   "formulare": "noua",
+   "id": "calc_150"
+  },
+  {
+   "operatie": "impartire",
+   "a": 250,
+   "b": 5,
+   "rezultat": 50,
+   "intrebare": "Calculează 250 : 5.",
+   "formulare": "noua",
+   "id": "calc_151"
+  },
+  {
+   "operatie": "impartire",
+   "a": 350,
+   "b": 7,
+   "rezultat": 50,
+   "intrebare": "De câte ori intră 7 în 350?",
+   "formulare": "generator",
+   "id": "calc_152"
+  },
+  {
+   "operatie": "impartire",
+   "a": 285,
+   "b": 5,
+   "rezultat": 57,
+   "intrebare": "Cât este 285 / 5?",
+   "formulare": "generator",
+   "id": "calc_153"
+  },
+  {
+   "operatie": "impartire",
+   "a": 336,
+   "b": 12,
+   "rezultat": 28,
+   "intrebare": "Cât este 336 / 12?",
+   "formulare": "generator",
+   "id": "calc_154"
+  },
+  {
+   "operatie": "impartire",
+   "a": 660,
+   "b": 11,
+   "rezultat": 60,
+   "intrebare": "Calculează 660 : 11.",
+   "formulare": "noua",
+   "id": "calc_155"
+  },
+  {
+   "operatie": "impartire",
+   "a": 55,
+   "b": 11,
+   "rezultat": 5,
+   "intrebare": "Cât dă 55 împărțit la 11?",
+   "formulare": "noua",
+   "id": "calc_156"
+  },
+  {
+   "operatie": "impartire",
+   "a": 572,
+   "b": 11,
+   "rezultat": 52,
+   "intrebare": "572 : 11 = ?",
+   "formulare": "generator",
+   "id": "calc_157"
+  },
+  {
+   "operatie": "impartire",
+   "a": 486,
+   "b": 9,
+   "rezultat": 54,
+   "intrebare": "Cât face 486 : 9?",
+   "formulare": "generator",
+   "id": "calc_158"
+  },
+  {
+   "operatie": "impartire",
+   "a": 780,
+   "b": 10,
+   "rezultat": 78,
+   "intrebare": "Cât face 780 împărțit la 10?",
+   "formulare": "generator",
+   "id": "calc_159"
+  },
+  {
+   "operatie": "impartire",
+   "a": 136,
+   "b": 4,
+   "rezultat": 34,
+   "intrebare": "Cât iese dacă împart 136 la 4?",
+   "formulare": "noua",
+   "id": "calc_160"
+  },
+  {
+   "operatie": "impartire",
+   "a": 270,
+   "b": 5,
+   "rezultat": 54,
+   "intrebare": "Cât dă 270 împărțit la 5?",
+   "formulare": "noua",
+   "id": "calc_161"
+  },
+  {
+   "operatie": "impartire",
+   "a": 368,
+   "b": 8,
+   "rezultat": 46,
+   "intrebare": "Cât este 368 / 8?",
+   "formulare": "generator",
+   "id": "calc_162"
+  },
+  {
+   "operatie": "impartire",
+   "a": 276,
+   "b": 3,
+   "rezultat": 92,
+   "intrebare": "Împarte 276 la 3.",
+   "formulare": "generator",
+   "id": "calc_163"
+  },
+  {
+   "operatie": "impartire",
+   "a": 240,
+   "b": 5,
+   "rezultat": 48,
+   "intrebare": "Cât e 240 împărțit la 5",
+   "formulare": "generator",
+   "id": "calc_164"
+  },
+  {
+   "operatie": "impartire",
+   "a": 144,
+   "b": 6,
+   "rezultat": 24,
+   "intrebare": "Cât dă 144 împărțit la 6?",
+   "formulare": "noua",
+   "id": "calc_165"
+  },
+  {
+   "operatie": "impartire",
+   "a": 168,
+   "b": 12,
+   "rezultat": 14,
+   "intrebare": "Cât iese dacă împart 168 la 12?",
+   "formulare": "noua",
+   "id": "calc_166"
+  },
+  {
+   "operatie": "impartire",
+   "a": 364,
+   "b": 4,
+   "rezultat": 91,
+   "intrebare": "364 : 4 = ?",
+   "formulare": "generator",
+   "id": "calc_167"
+  },
+  {
+   "operatie": "impartire",
+   "a": 329,
+   "b": 7,
+   "rezultat": 47,
+   "intrebare": "Cât face 329 : 7?",
+   "formulare": "generator",
+   "id": "calc_168"
+  },
+  {
+   "operatie": "impartire",
+   "a": 44,
+   "b": 4,
+   "rezultat": 11,
+   "intrebare": "Cât e 44 împărțit la 4",
+   "formulare": "generator",
+   "id": "calc_169"
+  },
+  {
+   "operatie": "impartire",
+   "a": 200,
+   "b": 10,
+   "rezultat": 20,
+   "intrebare": "Spune-mi câtul dintre 200 și 10.",
+   "formulare": "noua",
+   "id": "calc_170"
+  },
+  {
+   "operatie": "impartire",
+   "a": 40,
+   "b": 5,
+   "rezultat": 8,
+   "intrebare": "Spune-mi câtul dintre 40 și 5.",
+   "formulare": "noua",
+   "id": "calc_171"
+  },
+  {
+   "operatie": "impartire",
+   "a": 308,
+   "b": 11,
+   "rezultat": 28,
+   "intrebare": "Cât face 308 împărțit la 11?",
+   "formulare": "generator",
+   "id": "calc_172"
+  },
+  {
+   "operatie": "impartire",
+   "a": 416,
+   "b": 8,
+   "rezultat": 52,
+   "intrebare": "Împarte 416 la 8.",
+   "formulare": "generator",
+   "id": "calc_173"
+  },
+  {
+   "operatie": "impartire",
+   "a": 120,
+   "b": 10,
+   "rezultat": 12,
+   "intrebare": "120 : 10 = ?",
+   "formulare": "generator",
+   "id": "calc_174"
+  },
+  {
+   "operatie": "impartire",
+   "a": 80,
+   "b": 8,
+   "rezultat": 10,
+   "intrebare": "Cât iese dacă împart 80 la 8?",
+   "formulare": "noua",
+   "id": "calc_175"
+  },
+  {
+   "operatie": "impartire",
+   "a": 672,
+   "b": 8,
+   "rezultat": 84,
+   "intrebare": "Spune-mi câtul dintre 672 și 8.",
+   "formulare": "noua",
+   "id": "calc_176"
+  },
+  {
+   "operatie": "impartire",
+   "a": 561,
+   "b": 11,
+   "rezultat": 51,
+   "intrebare": "Cât e 561 împărțit la 11",
+   "formulare": "generator",
+   "id": "calc_177"
+  },
+  {
+   "operatie": "impartire",
+   "a": 736,
+   "b": 8,
+   "rezultat": 92,
+   "intrebare": "Împarte 736 la 8.",
+   "formulare": "generator",
+   "id": "calc_178"
+  },
+  {
+   "operatie": "impartire",
+   "a": 344,
+   "b": 4,
+   "rezultat": 86,
+   "intrebare": "344 : 4 = ?",
+   "formulare": "generator",
+   "id": "calc_179"
+  },
+  {
+   "operatie": "impartire",
+   "a": 664,
+   "b": 8,
+   "rezultat": 83,
+   "intrebare": "Dacă împart 664 bomboane la 8 copii, câte primește fiecare?",
+   "formulare": "noua",
+   "id": "calc_180"
+  },
+  {
+   "operatie": "impartire",
+   "a": 828,
+   "b": 9,
+   "rezultat": 92,
+   "intrebare": "Cât dă 828 împărțit la 9?",
+   "formulare": "noua",
+   "id": "calc_181"
+  },
+  {
+   "operatie": "impartire",
+   "a": 72,
+   "b": 12,
+   "rezultat": 6,
+   "intrebare": "Cât face 72 împărțit la 12?",
+   "formulare": "generator",
+   "id": "calc_182"
+  },
+  {
+   "operatie": "impartire",
+   "a": 210,
+   "b": 3,
+   "rezultat": 70,
+   "intrebare": "De câte ori intră 3 în 210?",
+   "formulare": "generator",
+   "id": "calc_183"
+  },
+  {
+   "operatie": "impartire",
+   "a": 60,
+   "b": 2,
+   "rezultat": 30,
+   "intrebare": "Cât face 60 împărțit la 2?",
+   "formulare": "generator",
+   "id": "calc_184"
+  },
+  {
+   "operatie": "impartire",
+   "a": 480,
+   "b": 8,
+   "rezultat": 60,
+   "intrebare": "Dacă împart 480 bomboane la 8 copii, câte primește fiecare?",
+   "formulare": "noua",
+   "id": "calc_185"
+  },
+  {
+   "operatie": "impartire",
+   "a": 252,
+   "b": 9,
+   "rezultat": 28,
+   "intrebare": "Calculează 252 : 9.",
+   "formulare": "noua",
+   "id": "calc_186"
+  },
+  {
+   "operatie": "impartire",
+   "a": 408,
+   "b": 6,
+   "rezultat": 68,
+   "intrebare": "Cât e 408 împărțit la 6",
+   "formulare": "generator",
+   "id": "calc_187"
+  },
+  {
+   "operatie": "impartire",
+   "a": 175,
+   "b": 7,
+   "rezultat": 25,
+   "intrebare": "Împarte 175 la 7.",
+   "formulare": "generator",
+   "id": "calc_188"
+  },
+  {
+   "operatie": "impartire",
+   "a": 119,
+   "b": 7,
+   "rezultat": 17,
+   "intrebare": "Cât este 119 / 7?",
+   "formulare": "generator",
+   "id": "calc_189"
+  },
+  {
+   "operatie": "impartire",
+   "a": 222,
+   "b": 3,
+   "rezultat": 74,
+   "intrebare": "Dacă împart 222 bomboane la 3 copii, câte primește fiecare?",
+   "formulare": "noua",
+   "id": "calc_190"
+  },
+  {
+   "operatie": "impartire",
+   "a": 256,
+   "b": 4,
+   "rezultat": 64,
+   "intrebare": "Calculează 256 : 4.",
+   "formulare": "noua",
+   "id": "calc_191"
+  },
+  {
+   "operatie": "impartire",
+   "a": 255,
+   "b": 3,
+   "rezultat": 85,
+   "intrebare": "Împarte 255 la 3.",
+   "formulare": "generator",
+   "id": "calc_192"
+  },
+  {
+   "operatie": "impartire",
+   "a": 376,
+   "b": 4,
+   "rezultat": 94,
+   "intrebare": "Împarte 376 la 4.",
+   "formulare": "generator",
+   "id": "calc_193"
+  },
+  {
+   "operatie": "impartire",
+   "a": 880,
+   "b": 11,
+   "rezultat": 80,
+   "intrebare": "880 : 11 = ?",
+   "formulare": "generator",
+   "id": "calc_194"
+  },
+  {
+   "operatie": "impartire",
+   "a": 350,
+   "b": 10,
+   "rezultat": 35,
+   "intrebare": "Dacă împart 350 bomboane la 10 copii, câte primește fiecare?",
+   "formulare": "noua",
+   "id": "calc_195"
+  },
+  {
+   "operatie": "impartire",
+   "a": 30,
+   "b": 6,
+   "rezultat": 5,
+   "intrebare": "Cât iese dacă împart 30 la 6?",
+   "formulare": "noua",
+   "id": "calc_196"
+  },
+  {
+   "operatie": "impartire",
+   "a": 24,
+   "b": 8,
+   "rezultat": 3,
+   "intrebare": "Cât face 24 : 8?",
+   "formulare": "generator",
+   "id": "calc_197"
+  },
+  {
+   "operatie": "impartire",
+   "a": 621,
+   "b": 9,
+   "rezultat": 69,
+   "intrebare": "De câte ori intră 9 în 621?",
+   "formulare": "generator",
+   "id": "calc_198"
+  },
+  {
+   "operatie": "impartire",
+   "a": 207,
+   "b": 9,
+   "rezultat": 23,
+   "intrebare": "Cât face 207 : 9?",
+   "formulare": "generator",
+   "id": "calc_199"
+  }
+ ]
+}
