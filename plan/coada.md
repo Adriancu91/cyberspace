@@ -4024,7 +4024,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-126, 16 nov 2026 13:53); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S120 — C-128 A: calcule simple + mai puțin „Nu scrie în text.” în datele de chat; examenul de calcule ținut deoparte (procesor)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-128, 16 nov 17:13)
+- stare: in_lucru (executant, 16 nov 2026 17:30; placa liberă 636 MB / 29 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-128, 16 nov 17:13)
 - tip: procesor (fără placă)
 - fereastră: oricând, de acum; **poate merge în paralel cu S117** (nu atinge nimic din ce folosește S117)
 - durată maximă: 3 h
