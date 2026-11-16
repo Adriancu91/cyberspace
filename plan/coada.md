@@ -4031,7 +4031,10 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-129, 16 nov 2026 17:22); pașii: supraveghetor, 16 nov 2026 20:15
 
 ### S123 — C-130: E0, test de memorare pe ultimul model S117 — 200 de perechi din antrenare (A) față de 200 ținute deoparte (B), doar diagnostic (placa ~10 min)
-- stare: in_lucru (executant, 17 nov 2026 01:30; S117 `gata` în 9b9af57, placa liberă 621 MB / 29 °C, nimic altceva în lucru)
+- stare: oprit
+- motiv: verificările dinainte de rulare au picat și în afara lui „Cu cine vorbesc?” — (2) 13 întrebări din B aproape egale (difflib ≥ 0,90) cu antrenarea, între ele „Ce știi tu să faci?” ≈ „Ce știi să faci?” (scurgere la sociale) și 10 doar din șablon; (3) subiectul „Moctezuma” din B e în antrenare (3 perechi din text). După regula sarcinii: fără rulare, întrebare la Adrian (variantele a/b în raport). Placa neatinsă; 1488 teste trec, 1 sărit.
+- raport: docs/rapoarte/2026-11-17_0140_E0_memorare.md
+- (istoric) stare: in_lucru (executant, 17 nov 2026 01:30; S117 `gata` în 9b9af57, placa liberă 621 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 20:15; Adrian, COMENZI.md C-130, 16 nov 18:05) — pornește **imediat după S117 `gata`** (raportul urcat), înainte de S121
 - tip: placă (~10 min: 400 de întrebări, ~1,4 s fiecare)
 - fereastră: golul dintre S117 și S121, oricare oră (C-129). **Niciodată în paralel cu o antrenare** (nici pe procesor). Dacă din orice motiv S121 e deja pornită → nu o întrerupi; S123 așteaptă următorul gol liber de ≥ 20 min.
