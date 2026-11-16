@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **17 nov 01:00 (executant) — S117 (chat) gata: rămâne #651.** Modelul nou #668 răspunde mai bine la chat (42 din 200 față de 25; nu mai spune „Nu scrie în text.” pe nedrept), dar pragul era 55, deci **nu intră în interfață**. Româna, „din text” și instrucțiunile n-au stricat nimic. La fapte (ani, județe) #668 inventează. Urmează E0 (S123), apoi S121 din #651. Raport: `docs/rapoarte/2026-11-17_0100_S117_chat.md`. Aștept de la tine: nimic.
+
 ## 16 noiembrie 2026, 23:15 — Totul merge; interfața e oprită, cum ai cerut
 
 - **S122 (C-129), verificat de mine:** interfața de pe 8787 e oprită de la 22:00 și paznicul nu o mai repornește (fișierul `lucru\STOP_INTERFATA`; dacă vrei chat-ul înapoi: îl ștergi). `kronos/` neatins, testele trec (1.488, 0 pică).

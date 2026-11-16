@@ -3997,7 +3997,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-123/C-126, 16 nov 2026 13:53); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S117 — C-126 A2: Kronos învață chat-ul — 4 h din #651 + toate examenele; câștigătorul în interfață (placa ~4 h + ~1 h examene)
-- stare: in_lucru (executant, 16 nov 2026 19:30; S116 `gata`, pre-înregistrarea `2026-11-16_w2_mare_24zch.md` urcată în 6f46172; fereastra de noapte, placa liberă 624 MB / 29 °C, nimic altceva în lucru; C: 64 GB liberi) — 17 nov 00:00: antrenarea GATA (cod 0, 23:35, 4 ore, #665–#668, placa max 6.569 MB / 64 °C, C: 63,4 GB); lanțul de examene pe #651 și #668 pornit 00:00:51 prin cascadă (`porneste S117 --din-nou`, proces 17696; verificările SHA trecute, placa goală 637 MB), paza > 7.000 MB / ≥ 83 °C pe fiecare pas
+- stare: gata (executant, 17 nov 2026 01:00; examenele cod 0 la 00:50; **RĂMÂNE #651**: chat (a)+(b) #668 42 vs #651 25, prag 55 → NU; română 1,0898 ✓, corecte 227 ✓, R1 98,05 ✓, (b) 32 ✓; interfața neschimbată; pre-înregistrarea închisă)
+- raport: docs/rapoarte/2026-11-17_0100_S117_chat.md
+- (istoric) stare: in_lucru (executant, 16 nov 2026 19:30; S116 `gata`, pre-înregistrarea `2026-11-16_w2_mare_24zch.md` urcată în 6f46172; fereastra de noapte, placa liberă 624 MB / 29 °C, nimic altceva în lucru; C: 64 GB liberi) — 17 nov 00:00: antrenarea GATA (cod 0, 23:35, 4 ore, #665–#668, placa max 6.569 MB / 64 °C, C: 63,4 GB); lanțul de examene pe #651 și #668 pornit 00:00:51 prin cascadă (`porneste S117 --din-nou`, proces 17696; verificările SHA trecute, placa goală 637 MB), paza > 7.000 MB / ≥ 83 °C pe fiecare pas
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-126) — pornește doar după S116 `gata` și pre-înregistrarea urcată
 - tip: placă
 - fereastră: **noapte 16 → 17 nov (19:00–07:00)**, pornire cel târziu **01:30** (altfel fereastra de zi 17 nov, 08:00–18:30). Dacă hub-ul spune că Adrian folosește workstation-ul (teste GPU/OS) → aștepți „a terminat”.
