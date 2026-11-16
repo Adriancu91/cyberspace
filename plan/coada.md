@@ -3871,7 +3871,17 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **Pragurile (fixe):** „cel mai bun de până acum” = #513+b dacă S109 a ieșit AJUTĂ, altfel #513. **24zc CÂȘTIGĂ** = română curat ≤ cel mai bun − **0,005** **și** corecte la S15 + S4 + `examen_tipuri_noi` (după profesor) ≥ cel mai bun − **10** **și** R1 pe instrucțiuni ≥ **90** **și** martorul S16 nu arată o scădere mai mare de 5. Altfel câștigă „cel mai bun de până acum”. Informativ: cod, R2, neutru, partea (ii), „Nu scrie” pe nedrept.
 - Raport `docs/rapoarte/<data>_<ora>_S111_E3_conversatie.md`: tabelul tuturor modelelor pe toate examenele, verdictul strict, **20 de răspunsuri cu `random.Random(1120)`** (aceleași întrebări la toate modelele), placa max MB/°C; pre-înregistrarea închisă; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push. **Apoi direct S112.**
 - **NU:** ca la S110. #513 nu se schimbă și nu se șterge.
-- pre-înregistrare: docs/preinregistrari/<data>_w2_mare_24zc.md
+- pre-înregistrare: docs/preinregistrari/2026-11-16_w2_mare_24zc.md (urcată în d175349, 04:10, înainte de placă)
+- (executant, 16 nov 2026 04:15) **Varianta A, ANTRENAREA PORNITĂ la 04:10:51** (procesul 25516, lanțul
+  `lucru/cascada/S111/s111.py`, jurnal `lucru/cascada/S111.log`). Commit `d175349`: `config/conv_w2_mare_24zc.toml` (diff față
+  de 24z2 doar cele cerute; testul `teste/test_s111_24zc.py`), lista din `test_examen_romana.py` + cele două liste de pază pe
+  bucăți (`test_legare_bucati.py`, `test_modul_date_bucati.py`, ca la S110 (1a)), pre-înregistrarea. **1462 teste trec, 1 pică
+  (cel cunoscut, spațiu C5), 1 sărit.** În jurnal: „Pornesc din modelul experimentului #641 (linia „w2_mare_24z2”, ora 52,
+  val_bpb 1.0891)” ✓, orele 1–7, rata 1e-05, 30 % hrană FineWeb. Placa după 3 min: **6.380 MB / 62 °C** (AdamW la lot 6; sub
+  6.700). **Paza de disc în lanț:** C: 19,4 GB la pornire; sub 15 GB → `python -m kronos opreste` (ora în curs se termină și
+  se salvează), apoi butonul se resetează; probabil după ora 6 (~0,733 GB pe oră). Sfârșit estimat ~11:20. **Examenele NU
+  sunt în lanț:** după antrenare le pornesc separat (`porneste S111 --din-nou`, cu un lanț nou de examene), pe #513, #577 și
+  ultimul model al liniei `w2_mare_24zc`.
 - aprobat de: Adrian (COMENZI.md C-119, C-120); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, revizuite 17:15 (C-120)
 - raport: docs/rapoarte/…
 
