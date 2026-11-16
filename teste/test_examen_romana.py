@@ -142,7 +142,9 @@ def test_doar_in_configurarile_aprobate():
                    # S110 (C-120, 13 nov 2026): 24 de straturi de la zero cu pornirea corectă + cele două probe de rată
                    "conv_w2_mare_24z2.toml", "proba_24z2_a.toml", "proba_24z2_b.toml",
                    # S111 (C-119 E3, 16 nov 2026): conversația pe baza de 24 (#641)
-                   "conv_w2_mare_24zc.toml"}
+                   "conv_w2_mare_24zc.toml",
+                   # S116/S117 (C-126, 16 nov 2026): chat-ul fără text din #651
+                   "conv_w2_mare_24zch.toml"}
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------

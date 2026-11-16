@@ -3971,7 +3971,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-124, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S116 — C-126 A1: date de conversație FĂRĂ text alături, făcute automat (fără alt AI) + examenul de chat ținut deoparte (procesor)
-- stare: in_lucru (executant, 16 nov 2026 15:30; S114 + S115 `gata`, placa liberă 476 MB / 29 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 15:53 — 16.389 de perechi de chat fără text (13.627 fapte, 1.400 sociale, 1.362 dialoguri), 0 scurgeri; examenul de chat `docs/conversatie/examen_chat.json` (150 fapte din 1.773 de articole ținute deoparte + 50 sociale + 4 informative); #651 = **25/200** (a 1/150, b 24/50); `lucru/conversatie_chat/antrenare.jsonl` = chat × 5 + r2, 48,5 % chat după simboluri, citit fără schimbări în `module/`; `config/conv_w2_mare_24zch.toml`; pre-înregistrarea `2026-11-16_w2_mare_24zch.md` (DESCHISĂ, `--inchide w2_mare_24zch`); 1477 teste trec, 1 sărit, 0 pică)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 15:30; S114 + S115 `gata`, placa liberă 476 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-126, 16 nov 13:53)
 - tip: procesor (fără placă)
 - fereastră: după S114 + S115 `gata`; azi după-amiază / seara (nu încurcă nimic pe placă)
@@ -3987,7 +3988,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   6. **Măsurarea de pornire pe #651** (procesor sau placă ≤ 15 min, dacă placa e liberă): `examen_chat.py` pe #651 → scorul de bază (a) și (b), răspunsurile la (c) întocmai — **înainte** de pre-înregistrare.
   7. **Pre-înregistrarea** `docs/preinregistrari/<data>_w2_mare_24zch.md` cu pragurile din S117 copiate exact, scorul de bază al lui #651, ghicirea ta; commit + push.
 - **NU:** nimic descărcat, niciun alt model sau AI; `kronos/`, `module/examen_bpb.py`, `module/examen_romana.py`, examenele vechi neatinse; nimic din `lucru/` în Git.
-- raport: `docs/rapoarte/<data>_<ora>_S116_date_chat.md`; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- raport: docs/rapoarte/2026-11-16_1553_S116_date_chat.md (cerut: `docs/rapoarte/<data>_<ora>_S116_date_chat.md`; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.)
 - aprobat de: Adrian (COMENZI.md C-123/C-126, 16 nov 2026 13:53); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S117 — C-126 A2: Kronos învață chat-ul — 4 h din #651 + toate examenele; câștigătorul în interfață (placa ~4 h + ~1 h examene)

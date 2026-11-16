@@ -145,7 +145,9 @@ def test_configurarile_in_uz_raman_pe_calea_veche():
     assert cu_sir == {"conv_w2_mare_24_bucati.toml", "proba_placa_bucati.toml", "conv_w2_mare_24z.toml",
                       "conv_w2_mare_24z2.toml", "proba_24z2_a.toml", "proba_24z2_b.toml",
                       # S111 (C-119 E3, 16 nov 2026): conversația pe baza de 24 (#641), tot pe bucăți
-                      "conv_w2_mare_24zc.toml"}
+                      "conv_w2_mare_24zc.toml",
+                      # S116/S117 (C-126, 16 nov 2026): chat-ul fără text din #651, tot pe bucăți
+                      "conv_w2_mare_24zch.toml"}
     for nume in ("conv_w2_mare_24r.toml", "conv_w2_mare_24n.toml", "conv_w2.toml"):
         c = tomllib.loads((RADACINA / "config" / nume).read_text(encoding="utf-8"))
         assert c["porturi"]["date"]["modul"] == "module.date_amestec:DateAmestec"
