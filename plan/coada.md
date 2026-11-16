@@ -3959,7 +3959,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-123, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S115 — C-124: după repornirea workstation-ului, interfața pornește direct cu #651 (procesor)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-124, 16 nov 13:47)
+- stare: in_lucru (executant, 16 nov 2026 15:00; placa liberă 490 MB / 29 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-124, 16 nov 13:47)
 - tip: procesor (fără placă)
 - fereastră: oricând — **de acum** (poate fi în același commit cu S114 sau imediat după)
 - durată maximă: 30 min
