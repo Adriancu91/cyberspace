@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 17:15 — Datele de chat sunt verificate; am pus în coadă calculele și textul nou
+
+- **Verificat de mine: S114, S115, S116 sunt bune.** Fila Chat răspunde scurt, interfața pornește singură cu #651, iar datele de chat (16.389 de perechi, fără alt AI) și examenul de chat (#651 are acum doar 25 din 200) sunt făcute corect, fără scurgeri.
+- **La noapte (de la 19:00): S117** — Kronos învață chat-ul 4 ore; intră în interfață doar dacă ajunge la cel puțin 55/200 și nu strică nimic altceva.
+- **Comenzile tale noi:** **C-128** → **S120** (în seara asta, pe procesor: exerciții de calcul simple făcute de program + un examen de calcule ținut deoparte; „Nu scrie în text.” scos din răspunsurile fără text; fără cod Python, cum ai cerut) și **S121** (mâine ziua, 4 ore pe placă: Kronos învață și calculele; intră în interfață doar dacă trece examenele). **C-127** → **S119** (după S120: descărcăm text românesc scris de oameni — restul FineWeb-2, conversațiile oasst2 în română, HPLT doar dacă licența e deschisă; discul rămâne peste 30 GB; fără antrenare deocamdată).
+- Discul C: are ~64 GB liberi. Placa: liberă până la 19:00.
+- **Aștept de la tine:** nimic acum. (Dacă CulturaX cere să accepți condiții pe site, te întreb după S119.)
+
 ## 16 noiembrie 2026, 15:53 (executant) — S116 / C-126 A1 gata: datele de chat și examenul de chat sunt făcute
 
 - **16.389 de perechi noi fără text** (fapte scurte din Wikipedia RO, salut / mulțumesc / cine ești / „nu știu”, dialoguri scurte), făcute cu reguli scrise de noi, fără alt AI și fără nimic descărcat. **Examenul de chat**, ținut deoparte: 150 de fapte din articole pe care modelul nu le vede la antrenare + 50 de întrebări sociale formulate altfel + cele 4 întrebări ale tale. **#651 acum: 25 din 200** (fapte 1/150, sociale 24/50). La noapte, S117 îl antrenează 4 ore; intră în interfață doar dacă ajunge la cel puțin 55/200 și nu pierde nimic altceva. Teste: 1.477 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1553_S116_date_chat.md`. Aștept de la tine: nimic.
@@ -118,43 +126,4 @@
 - **Puncte de control:** ora 12 pe la **10:20** (trebuie ca media orelor 10–12 ≤ 1,3043 — aproape sigur trece), ora 24 pe la **22:35**. Final luni ~03:05.
 - **Pus în coadă:** nimic nou (placa e ocupată până luni; urmează S111, S112). Nicio comandă nouă în hub.
 - **De știut:** nu pune fișiere mari pe discul C: până luni (50 GB liberi acum, ~17–18 GB la final).
-- **Aștept de la tine:** nimic.
-
-## 13 noiembrie 2026, 23:15 — Modelul mare învață de la 22:08; totul verificat, gata luni pe la 03:20
-
-- **S110 a pornit corect** (22:08): modelul de 24 de straturi, de la zero, cu **~74 % română**. Am verificat singur: viteza de învățare aleasă e cea care a câștigat la probă (1,79 față de 1,85), iar ghicitul și pragurile au fost scrise și urcate pe GitHub **înainte** de pornire, copiate exact.
-- **Rulează acum:** cele 52 de ore (placa 5.373 MB / 46 °C, sub limite). Primul punct de control: ora 12, sâmbătă ~10:45; al doilea: ora 24, sâmbătă ~23:00. Dacă la unul dintre ele nu mai învață, se oprește singur și orele nu se consumă pe altceva.
-- **Pus în coadă:** nimic nou (S111 și S112 urmează luni, după S110). Nimic n-a picat.
-- **De știut:** la sfârșit discul C: ajunge pe la ~17 GB liberi (pragul de oprire 15 GB). Dacă vrei margine, poți scrie în hub „da, șterge probele de rată” (~8,6 GB, nu mai folosesc). Fără asta, dacă discul ajunge la 15 GB, Kronos se oprește curat și te întreabă — nu se strică nimic.
-- **Aștept de la tine:** nimic obligatoriu.
-
-## 13 noiembrie 2026, 20:20 — Româna în plus intră totuși în antrenare (curățată); modelul mare pornește pe la ~22:00
-
-- **Pregătirea S110 e făcută bine** (1.462 teste trec). Pornirea reparată merge: pierderea de început 9,87 (înainte ~420).
-- **Am hotărât: restul de română FineWeb-2 se folosește.** Executantul l-a oprit după o regulă pusă de mine (peste 5 % texte scoase la curățare; au ieșit 14,5 %). Am verificat de unde vine: meniuri și subsoluri de site-uri, nu texte copiate din examene — iar fișierul curățat are **0** potriviri cu examenele. Condiția ta din „da” (să treacă verificarea de scurgeri) e îndeplinită, deci modelul primește **~70 % română în loc de ~37 %**. Pragurile de verdict rămân neschimbate.
-- **Costul:** ~1,5 h în plus (proba de rată se reface cu datele noi). Rularea de 52 h pornește pe la ~22:00, gata luni pe la ~02:00; S111 și S112 tot luni, înainte de seară.
-- **De știut:** spre sfârșitul rulării discul C: poate coborî aproape de 15 GB liberi; dacă ajunge acolo, executantul se oprește curat și te întreabă (nu șterge nimic).
-- **Aștept de la tine:** nimic.
-
-- **13 nov 22:10 (executant) — S110: proba de rată e gata, modelul mare pornește acum.** Cu româna în plus din FineWeb-2 (curățată), am încercat din nou cele două viteze de învățare, câte 30 de minute. A câștigat cea mai mare: nota la română 1,79 față de 1,85 (mai mic = mai bine). Modelul învață acum din **~74 % text românesc**. Toate testele trec (1462). Rularea de 52 de ore pornește în câteva minute și se termină **luni pe la 03:20**; îți scriu la 12 ore (sâmbătă ~10:45) și la 24 de ore (sâmbătă ~22:55). Ghicitul meu, scris dinainte: nota finală ~1,23 (modelul de acum, #513, are 1,206) — adică nu e sigur că îl bate. **De știut:** la sfârșit discul C: ajunge pe la ~17 GB liberi, aproape de pragul de oprire (15 GB). Dacă vrei mai multă margine, spune „da, șterge probele de rată” (~8,6 GB, nu mai folosesc la nimic) — eu nu șterg nimic fără tine. Raport: `docs/rapoarte/2026-11-13_2207_S110_24z2_pregatire2.md`. **Aștept de la tine: nimic obligatoriu.**
-
-- **13 nov 19:10 (executant) — S110: româna în plus din FineWeb-2 NU intră în antrenare.** Regula scrisă în sarcină spunea: dacă la curățarea de „scurgeri” (texte care seamănă cu cele de la examen) se scot peste 5 % din texte, nu se folosește. S-au scos **14,5 %** (104.077 din 718.958) — mai ales din cauza meniurilor și formulelor-șablon ale site-urilor, care apar și în textele de examen. Modelul mare pornește deci pe amestecul vechi: **~37 % română, nu ~69 %**. Restul e cum s-a hotărât (pornirea reparată: pierderea de început 9,87 în loc de ~420; loturi 6 × 16; 52 h). Textele curate rămase (614.881, verificate) stau pe disc; dacă supraveghetorul hotărăște până pe la 20:45 să le folosim totuși, se poate (costă ~1,5 h în plus). Proba de rată rulează acum (până ~20:20), apoi pornește rularea de 52 h. Toate testele trec (1462). Raport: `docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md`. **Aștept de la tine: nimic.**
-
-## 13 noiembrie 2026, 17:15 — Prima etapă a ieșit bine (#577); modelul mare pornește cu greșelile reparate și cu mult mai multă română
-
-- **S109 gata, verificat de mine — AJUTĂ.** #577 răspunde corect la 102 din 130 de întrebări noi (#513: 24); verificatorul fără alt AI: 91 față de 23. N-a stricat nimic: româna 1,2055 (#513: 1,2060), codul, R2, instrucțiunile 98,97, examenele vechi — toate în praguri. Slab doar la tipuri de întrebări pe care nu le-a văzut deloc (5 față de 10 din 50). #577 e acum cel mai bun model.
-- **Am preluat C-120 (revizia + „da”-ul tău de la 17:03).** Am verificat în cod greșeala de pornire (pierderea de început ~411 în loc de ~9,7) și am rescris S110: pornire corectă, loturi mai eficiente (~+20 % text pe oră), fără examenele de engleză la fiecare oră, iar **restul de ~2,45 GB de română FineWeb-2, deja descărcat, intră în antrenare (~69 % română în loc de ~34 %)** — doar după ce se scot textele care seamănă cu examenele. Dacă verificarea aceea pică, merge pe amestecul vechi și îți scriu de ce.
-- **Pragurile de oprire de la 12 h / 24 h** le-am făcut mai cinstite (la 24 h modelul încă învață cu viteză maximă; cele vechi l-ar fi oprit degeaba cam o dată din două). Antrenarea: **52 h** în loc de 54, ca S111 și S112 să fie gata luni după-amiază. La S111: rată mai mică (1e-5, cea care a ținut la 24 de straturi).
-- **Rulează acum:** executantul pregătește datele (procesor, ~1–1,5 h), apoi proba de rată (~1,2 h), apoi rularea mare, pe la ~20:00–21:00. Gata pe la luni dimineață.
-- **De știut:** interfața de pe telefon (port 8787) arată încă modele vechi (#312/#407), nu #513/#577 — executantul n-are voie să oprească procesul. Se schimbă la S112. Dacă vrei #577 mai devreme, comanda e în raportul S109 (opțional).
-- **Aștept de la tine:** nimic.
-
-- **13 nov 16:35 (executant) — S109 gata: AJUTĂ.** Modelul nou #577 răspunde corect la 102 din 130 întrebări noi de tipurile slabe (#513: 24), fără să strice româna, codul sau examenele vechi. Mai slab doar la tipuri pe care nu le-a văzut deloc (5 față de 10 din 50). Interfața n-am schimbat-o (permisiunile nu mă lasă să opresc procesul) — se face la S112. Raport: `docs/rapoarte/2026-11-13_1635_S109_E1_tipuri_noi.md`. Urmează S110.
-
-## 13 noiembrie 2026, 14:15 — Prima etapă (S109) învață acum pe placă; gata pe la 16:40
-
-- **S109 (E1) a trecut de partea de pregătire:** executantul a făcut generatorul de întrebări noi și un examen nou ținut deoparte (180 de întrebări, urcat pe GitHub înainte de antrenare). Au ieșit **3.345 de întrebări noi** (nu ~6.150 cât estimase S108, fiindcă păstrează doar perechile unde răspunsul e sigur și întocmai în text); la 4 tipuri sunt puține (11–16), acolo nu ne așteptăm la mult.
-- **Am verificat pre-înregistrarea:** pragurile sunt copiate exact cum le-am scris, înainte de placă. Bine făcut.
-- **Rulează acum:** cele 3 ore de antrenare din #513 (pornite ~12:55), apoi examenele; rezultatul pe la **16:40**. Apoi executantul trece singur la S110 (modelul de 24 de straturi de la zero).
-- **Pus în coadă:** nimic nou (S110–S112 sunt deja acolo). Nimic n-a picat.
 - **Aștept de la tine:** nimic.
