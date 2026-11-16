@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 23:15 — Totul merge; interfața e oprită, cum ai cerut
+
+- **S122 (C-129), verificat de mine:** interfața de pe 8787 e oprită de la 22:00 și paznicul nu o mai repornește (fișierul `lucru\STOP_INTERFATA`; dacă vrei chat-ul înapoi: îl ștergi). `kronos/` neatins, testele trec (1.488, 0 pică).
+- **Rulează S117:** la ora 2 din 4 româna era 1,0898; placa 6.563 MB / 63 °C (sub limite). Gata pe la ~23:40, apoi examenele, apoi E0 (S123) și S121 — toată noaptea.
+- Nimic nou pus în coadă (lanțul e deja plin până dimineață). Nicio comandă nouă în hub.
+- **Aștept de la tine:** nimic (CulturaX doar dacă vrei: „da CulturaX” în hub).
+
 - **16 nov 22:07 (executant) — S122:** interfața de pe 8787 e **oprită** de la 22:00 și nu mai pornește singură (comutatorul `lucru\STOP_INTERFATA`; ca s-o lași iar să pornească: ștergi fișierul). Pornește din nou cu câștigătorul după S119. S117 merge mai departe. Raport: `docs/rapoarte/2026-11-16_2207_S122_interfata_oprita.md`.
 
 ## 16 noiembrie 2026, 20:15 — Antrenarea de chat rulează; am pus în coadă comenzile tale C-129 și C-130
@@ -116,12 +123,4 @@
 - **De urmărit (nu e problemă încă):** S113 (verificările pentru ștergerea probelor) nu e făcută, deși i-am scris la 14:15 că o poate face în paralel. Nu e grabă — contează abia luni dimineață, iar dacă discul ajunge la 15 GB, Kronos se oprește curat. Dacă la 23:15 lipsește și raportul de 24 h, îți scriu.
 - **Pus în coadă:** doar o notă la S113 (s-o facă după raportul de 24 h). Nicio comandă nouă în hub.
 - **Aștept de la tine:** nimic.
-
-## 14 noiembrie 2026, 14:15 — Modelul mare a trecut de primul control (ora 12); nimic de făcut
-
-- **S110 a trecut punctul de 12 ore — am refăcut singur calculul:** româna la ora 12 e **1,2335** (ora 13: 1,2256); media orelor 10–12 (1,2410) e cu 0,083 sub media orelor 4–6 (1,3243), trebuia doar 0,02. Scade în fiecare oră. Placa max 6.315 MB / 65 °C; 1.462 teste trec.
-- **Mai are de recuperat ~0,02** până la modelul în uz #513 (1,2060), iar viteza de învățare e încă la maxim — șanse bune, dar nu sigur.
-- **Următorul control: ora 24, pe la 22:30** (media orelor 22–24 trebuie ≤ 1,2210). Final luni ~03:00.
-- **S113 (ștergerea probelor):** executantul întrebase dacă o poate face acum, în paralel; i-am scris în coadă că **da** (e doar citire pe disc, fără placă). Discul C: are 47 GB, la final ~18–19 GB — fără grabă.
-- **Aștept de la tine:** nimic. Mai târziu, poate, să rulezi comenzile de ștergere din raportul S113.
 
