@@ -3943,7 +3943,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md
 
 ### S114 — C-123: fila „Chat” a interfeței pune întrebarea în forma învățată + mesajul de sus actualizat (procesor)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-123, 16 nov 13:47)
+- stare: in_lucru (executant, 16 nov 2026 14:30; placa liberă 453 MB / 34 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-123, 16 nov 13:47)
 - tip: procesor (fără placă)
 - fereastră: oricând — **de acum**
 - durată maximă: 1,5 h
