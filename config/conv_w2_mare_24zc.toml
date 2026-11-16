@@ -1,0 +1,65 @@
+# S111 (C-119 E3, varianta A; Adrian C-119/C-120; pașii scriși de supraveghetor 13 nov 2026 11:15, revizuiți 17:15):
+# învățarea conversației pe baza nouă de 24 de straturi (#641, ultimul experiment al liniei w2_mare_24z2), 7 h.
+# Copie a config/conv_w2_mare_24z2.toml (S110) cu DOAR:
+#   - `nume = "w2_mare_24zc"`, `cale_stare = "lucru/w2_mare_24zc/gpt.pt"` (pornire din #641 cu --porneste-din 641);
+#   - `fractie_conversatie = 0.45`, `fractie_hrana = 0.30` (aceeași hrană FineWeb-2 rest);
+#   - `optimizator = "adamw"`, `rata_invatare = 0.00001`, `incalzire_pasi = 1000`, `durata_scaderii_secunde = 25200`
+#     (`racire_finala = 0.25` era deja așa în 24z2); portul `date` rămâne pe bucăți;
+#   - eticheta și acest antet. (`rata_muon` și `abatere_incorporari` rămân ca în 24z2: nu se folosesc cu AdamW / la pornirea din #641.)
+#   python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24zc.toml --ore 7 --porneste-din 641
+
+[platforma]
+# Linie nouă; pornește din ultimul experiment al liniei w2_mare_24z2 (#641) cu --porneste-din 641 (S111).
+nume = "w2_mare_24zc"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt_cod:ModelGPTCod"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 6, rata_invatare = 0.00001, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24zc/gpt.pt", director_cache = "lucru/cache", samanta = 24, examene_suplimentare = [], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/ws/hrana_fineweb_rest/antrenare.txt", fractie_hrana = 0.30, conversatie = "lucru/romana_raspunsuri_r2/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 25200, adunare_loturi = 16, racire_finala = 0.25, optimizator = "adamw", rata_muon = 0.02, abatere_incorporari = 0.02 }
+
+[antrenare_lunga]
+eticheta = "S111: conversația pe baza de 24 (#641), AdamW 1e-5, conversație 45 %, hrană FineWeb-2 rest 30 %, 7 h (C-119 E3, C-120)"
+
+[porturi.date]
+modul = "module.date_bucati:DateBucati"
+setari = { director = "lucru/bucati/w2_amestec_be12", cale_validare = "date/tinystories_r2/validare.txt", cale_tokenizer = "date/ws/bpe_16384.json" }
+
+[porturi.examen]
+modul = "module.examen_romana:ExamenRomana"
+setari = { caractere = 100000, cu_r1 = false }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [6] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

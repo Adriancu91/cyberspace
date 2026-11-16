@@ -140,7 +140,9 @@ def test_doar_in_configurarile_aprobate():
                    "proba_placa_vechi.toml", "proba_placa_bucati.toml",
                    "conv_w2_mare_24z.toml",  # S110 (C-119 E2, 13 nov 2026), pașii vechi: NEVALABILĂ, înlocuită de 24z2
                    # S110 (C-120, 13 nov 2026): 24 de straturi de la zero cu pornirea corectă + cele două probe de rată
-                   "conv_w2_mare_24z2.toml", "proba_24z2_a.toml", "proba_24z2_b.toml"}
+                   "conv_w2_mare_24z2.toml", "proba_24z2_a.toml", "proba_24z2_b.toml",
+                   # S111 (C-119 E3, 16 nov 2026): conversația pe baza de 24 (#641)
+                   "conv_w2_mare_24zc.toml"}
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------
