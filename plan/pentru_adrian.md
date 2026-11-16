@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 20:15 — Antrenarea de chat rulează; am pus în coadă comenzile tale C-129 și C-130
+
+- **Verificat de mine: S120 e bun** (examenul de calcule scris înaintea datelor, 2.000 de exerciții, 0 scurgeri; #651 știe acum 1 calcul din 200). **S119:** licențele sunt verificate, nimic descărcat încă.
+- **Rulează acum S117** (din 19:30): Kronos învață chat-ul 4 ore, apoi examenele — gata pe la ~01:00.
+- **C-129 → S122:** executantul oprește acum interfața de pe 8787 și o ține oprită; ordinea, fără să mai aștepte ferestrele: **S117 → E0 → S121 (calculele, de la ~01:00, nu mâine la 08:00) → S119 (descărcarea textului)** → interfața pornește din nou cu câștigătorul → S118.
+- **C-130 → S123 (E0):** testul de memorare (~10 minute pe placă), imediat după S117, înainte de S121; regula ta de verdict (30 / 10 pp) e copiată exact.
+- **Aștept de la tine:** doar dacă vrei CulturaX: acceptă condițiile pe Hugging Face și scrie „da CulturaX” în hub. Altfel nimic.
+
 ## 16 noiembrie 2026, 18:07 (executant) — S119 / C-127, prima trecere: licențele verificate, nimic descărcat încă
 
 - **Voie:** FineWeb-2 română (ODC-By), OpenAssistant oasst2 (Apache-2.0, doar mesajele în română), HPLT v2 (CC0, dar 167 GB — nu încape acum). **CulturaX cere să accepți condiții pe site și n-are licență scrisă → nu-l iau.** C: 64 GB liberi. Descărcarea vine după S117 (antrenarea de chat de la noapte are întâietate). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1807_S119_licente.md`. **Aștept de la tine:** „da CulturaX” (după ce accepți condițiile pe Hugging Face) sau nimic.
@@ -115,23 +123,3 @@
 - **S113 (ștergerea probelor):** executantul întrebase dacă o poate face acum, în paralel; i-am scris în coadă că **da** (e doar citire pe disc, fără placă). Discul C: are 47 GB, la final ~18–19 GB — fără grabă.
 - **Aștept de la tine:** nimic. Mai târziu, poate, să rulezi comenzile de ștergere din raportul S113.
 
-## 14 noiembrie 2026, 11:37 — (executant) S110 a trecut punctul de 12 ore: continuă
-
-- Româna la ora 12: **1,2335** (ora 13: 1,2256), scade în fiecare oră; media orelor 10–12 e cu 0,083 sub media orelor 4–6 (trebuia ≥ 0,02). Placa max 6.315 MB / 65 °C; C: 47 GB liberi; 1462 teste trec. Raport: `docs/rapoarte/2026-11-14_1137_S110_24z2_12h.md`. Aștept de la tine: nimic.
-
-## 14 noiembrie 2026, 11:15 — Am primit „da”-ul pentru ștergerea probelor (C-121); modelul mare merge mai departe
-
-- **Comanda ta C-121 e preluată:** am pus în coadă sarcina **S113** cu lista exactă: dosarele `lucru/proba_24z/` și `lucru/proba_24z2/` și modelele de probă #586–#589 (~8,6 GB). Nu se atinge nimic altceva (S110 în curs, #513, #554, #577, jurnalul, datele).
-- **De știut:** ca la ștergerea din 7 noiembrie (S88), executantul are probabil voie doar să verifice lista, nu să apese el „șterge”. În cazul ăsta îți scrie în raportul S113 **comenzile exacte**, pe care le rulezi tu la workstation (~2 minute). Nu e grabă mare: contează până luni dimineață.
-- **Rulează acum: S110**, modelul mare (ora ~13 din 52). La 08:15 avea româna 1,2734 și scădea în fiecare oră. Punctul de 12 h trebuia trecut pe la 10:20; executantul n-a scris încă raportul lui (ultimul semn de la el: 08:49, adică acum ~2,5 h — încă în regulă). Îl verific la 14:15.
-- **Pus în coadă:** doar S113 (fără placă). Placa rămâne la S110 până luni; urmează S111, S112.
-- **Aștept de la tine:** nimic acum. Mai târziu, dacă executantul îți scrie comenzile de ștergere, rulezi comenzile din raportul S113.
-
-## 14 noiembrie 2026, 08:15 — Modelul mare învață bine (ora 8 din 52); nimic de făcut
-
-- **Raportul de dimineață e scris și e corect** (`docs/rapoarte/2026-11-14_0648_raport_dimineata.md`; am refăcut singur calculele). 1.462 teste trec, 0 picate.
-- **Rulează acum: S110** — la ora 8 din 52, nota la română **1,2734**, a scăzut în fiecare oră (ora 1: 1,5657). E deja sub cât ghicise executantul pentru ora 24 (~1,28). Modelul în uz (#513) are 1,2060, deci mai are ~0,067 de recuperat. Placa 5.803 MB / 62 °C, sub limite.
-- **Puncte de control:** ora 12 pe la **10:20** (trebuie ca media orelor 10–12 ≤ 1,3043 — aproape sigur trece), ora 24 pe la **22:35**. Final luni ~03:05.
-- **Pus în coadă:** nimic nou (placa e ocupată până luni; urmează S111, S112). Nicio comandă nouă în hub.
-- **De știut:** nu pune fișiere mari pe discul C: până luni (50 GB liberi acum, ~17–18 GB la final).
-- **Aștept de la tine:** nimic.
