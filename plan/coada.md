@@ -3971,7 +3971,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-124, 16 nov 2026 13:47); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S116 — C-126 A1: date de conversație FĂRĂ text alături, făcute automat (fără alt AI) + examenul de chat ținut deoparte (procesor)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-126, 16 nov 13:53)
+- stare: in_lucru (executant, 16 nov 2026 15:30; S114 + S115 `gata`, placa liberă 476 MB / 29 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 14:15; Adrian, COMENZI.md C-126, 16 nov 13:53)
 - tip: procesor (fără placă)
 - fereastră: după S114 + S115 `gata`; azi după-amiază / seara (nu încurcă nimic pe placă)
 - durată maximă: 3 h
