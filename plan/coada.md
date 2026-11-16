@@ -3863,7 +3863,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-13_1910_S110_24z2_pregatire.md (pașii 0–3) + docs/rapoarte/2026-11-13_2207_S110_24z2_pregatire2.md (cache-ul hranei, proba refăcută, rata aleasă, pre-înregistrarea) + docs/rapoarte/2026-11-14_1137_S110_24z2_12h.md (12 h: CONTINUĂ — ora 12 1,2335, media 10–12 1,2410 vs 4–6 1,3243) + docs/rapoarte/2026-11-14_2306_S110_24z2_24h.md (24 h: CONTINUĂ — ora 24 1,1792, media 22–24 1,1822 vs 10–12 1,2410) + docs/rapoarte/2026-11-16_0348_S110_24z2_final.md (final: MAI BUN — #641 1,0891 vs #513 1,2060)
 
 ### S111 — C-119 E3: învățarea conversației pe baza nouă de 24 (~7 h) + toate examenele; alegerea câștigătorului (placa ~7 h + ~1 h examene)
-- stare: in_lucru (executant, 16 nov 2026 04:00; S110 `gata` — varianta A; placa liberă 439 MB / 29 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 12:38 — **24zc CÂȘTIGĂ, câștigătorul #651**: română curat 1,0878 ≤ 1,2005 (#577 1,2055); corecte S15+S4+tipuri noi (profesor) 228 ≥ 211 (#577 221); R1 instrucțiuni 99,31 ≥ 90; martorul S16 215 față de 198 (nu scade); antrenarea 7 h întregi cod 0, #645–#651; examenele 44 min, toate cod 0, SHA neschimbate; ⚠ placa 6.922 MB în 11:08–11:11 (ultima oră), peste paza de 6.700 din sarcină, sub 7.000; 64 °C; 1462 teste trec, 1 pică (cel cunoscut, spațiu C5), 1 sărit; pre-înregistrarea închisă cu verdictul)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 04:00; S110 `gata` — varianta A; placa liberă 439 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — pornește doar după S110 `gata` sau `oprit` la un punct de control
 - tip: placă
 - fereastră: imediat după S110, non-stop
@@ -3892,7 +3893,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   #577 și **#651**: validări → R1 (`reper_s111_<N>`) → S15/S4/tipuri noi → neutru (procesor). Proba de 2 întrebări pe #651
   (11:30) a mers. Martorul S16 se socotește pe aceeași sumă ca la corecte (S15 + S4 + tipuri noi); partea (i) — informativ.
 - aprobat de: Adrian (COMENZI.md C-119, C-120); pașii și pragurile: supraveghetor, 13 nov 2026 11:15, revizuite 17:15 (C-120)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-16_1238_S111_E3_conversatie.md
 
 ### S112 — C-119 E4: câștigătorul în interfața de convorbire (port 8787, local + Tailscale) + raportul final pentru luni seara (procesor; placa doar dacă modelul rulează pe ea)
 - stare: **aprobat** (supraveghetor, 13 nov 2026 11:15; Adrian, C-119) — după S111 `gata`
