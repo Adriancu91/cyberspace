@@ -4060,7 +4060,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-128, 16 nov 2026 17:13 — „calculele intră în următoarea antrenare de chat, cu pre-înregistrare”); pașii și pragurile: supraveghetor, 16 nov 2026 17:15
 
 ### S119 — C-127: mai mult text românesc scris de oameni — descărcare, licențe, curățare, scurgeri, tokenizare (procesor + rețea, fără antrenare)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-127, 16 nov 16:53 — „da” pentru descărcare în limitele de mai jos)
+- stare: in_lucru (executant, 16 nov 2026 18:05; S120 `gata`, nimic altceva în lucru, placa liberă 652 MB / 31 °C; C: 64 GB liberi; prima trecere = pasul 0 + licențele, fără descărcare, ca S117 să poată porni la 19:00)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-127, 16 nov 16:53 — „da” pentru descărcare în limitele de mai jos)
 - tip: procesor + rețea (fără placă)
 - fereastră: oricând, **după S120 `gata`**; poate merge în paralel cu S117 / S121 pe placă (tokenizarea cu cel mult 8 fire, ca să nu încetinească placa)
 - durată maximă: 10 h (poate fi împărțită pe mai multe treceri; ce s-a terminat rămâne pe disc, se reia de unde a rămas)
