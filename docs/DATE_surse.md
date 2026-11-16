@@ -50,3 +50,18 @@ Perechile întrebare → răspuns din `date/conversatie/` (nu intră în Git), h
 | **Helsinki-NLP/opus-mt-en-ro**, revizia `96e8fea9e4` | traducerea în română a perechilor în engleză ale profesorului, pe procesor (`unelte/traduce_conversatie.py`) | Apache 2.0 (fișa modelului; verificată pe 15 octombrie) | atribuire (OPUS-MT, Universitatea din Helsinki) |
 | **Întrebări „nu știu” în română** | scrise de Claude Code din șabloane (`unelte/nu_stiu_ro.py`) | ale proiectului | – |
 | **Lista de cuvinte pentru ortografie** | cuvintele care apar de cel puțin 3 ori în Wikipedia și Wikisource în română (`unelte/ortografie_ro.py`); dicționarul hunspell ro_RO nu e folosit (GPL-2.0 / LGPL-2.1 / MPL-1.1, nu e pe lista lui Adrian) | derivată din CC BY-SA | doar folosită local, nu se redistribuie |
+
+## Text românesc scris de oameni (S119 / C-127, licențe verificate 16 noiembrie 2026)
+
+*Scris de mână (executantul, S119 pasul 1). Licențele au fost citite de pe fișele oficiale de pe Hugging Face
+(`HfApi().dataset_info`, fără descărcare) pe 16 noiembrie 2026, ÎNAINTE de orice descărcare. Atenție: `unelte/curata_date_ws.py --raport`
+rescrie fișierul de la zero; secțiunea de mai jos trebuie pusă la loc dacă se rulează.*
+
+| Sursa | De unde (revizia fișei) | Licența pe fișă | Cere acceptarea termenilor? | Mărimea părții românești | Hotărârea |
+|---|---|---|---|---|---|
+| **(1) FineWeb-2 `ron_Latn`** | https://huggingface.co/datasets/HuggingFaceFW/fineweb-2, revizia `af9c13333e` | ODC-By 1.0 (`odc-by`) | nu | 21 fișiere, 91,75 GB (20 de antrenare de ~3,4–4,8 GB + 1 de test); pe disc e deja doar `train/000_00000.parquet` (4,85 GB, din 12 oct) | **voie** (Adrian, C-127): se iau doar fișierele care nu sunt pe disc, în bugetul de ~25 GB |
+| **(4) OpenAssistant oasst2** | https://huggingface.co/datasets/OpenAssistant/oasst2, revizia `179dd21fc5` | Apache-2.0 (`apache-2.0`) | nu | tot setul 0,35 GB (toate limbile); se păstrează DOAR mesajele cu `lang = ro` | **voie** (Adrian, C-127) |
+| **(2) HPLT v2 cleaned, română** | https://huggingface.co/datasets/HPLT/HPLT2.0_cleaned, revizia `d1324a5283` | CC0-1.0 (`cc0-1.0`) pe fișă: HPLT licențiază „ambalajul”; textele rămân ale site-urilor (aceiași termeni ca la Common Crawl) | nu | 608 fișiere cu `ron_Latn`, 166,65 GB | licența e scrisă clar pe fișă → **voie** după C-127; dar nu încape în buget după (1) + (4) — cât se ia, se scrie în raport |
+| **(3) CulturaX `ro`** | https://huggingface.co/datasets/uonlp/CulturaX, revizia `6a8734bc69` | nicio licență pe fișă (`None`) | **DA** (acces „auto”, cere acceptarea condițiilor pe site) | 65 fișiere în `ro/`, 102,43 GB | **NU se descarcă**: condițiile nu le accept eu → întrebare pentru Adrian |
+
+Seturile traduse automat (de ex. `OpenLLM-Ro/ro_sft_oasst`), textul generat de alt AI și orice licență NC rămân în afară fără „da” separat.
