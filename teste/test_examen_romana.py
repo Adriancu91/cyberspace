@@ -144,7 +144,9 @@ def test_doar_in_configurarile_aprobate():
                    # S111 (C-119 E3, 16 nov 2026): conversația pe baza de 24 (#641)
                    "conv_w2_mare_24zc.toml",
                    # S116/S117 (C-126, 16 nov 2026): chat-ul fără text din #651
-                   "conv_w2_mare_24zch.toml"}
+                   "conv_w2_mare_24zch.toml",
+                   # S120/S121 (C-128, 16 nov 2026): chat + calcule din câștigătorul S117
+                   "conv_w2_mare_24zcc.toml"}
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------

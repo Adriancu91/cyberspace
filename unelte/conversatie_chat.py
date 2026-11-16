@@ -559,6 +559,148 @@ def ori_pentru_jumatate(simb_noi: int, simb_vechi: int) -> int:
     return max(1, round(simb_vechi / max(1, simb_noi)))
 
 
+# --- S120: pașii `calcule` și `amesteca2` ----------------------------------------------------------------------------
+NU_SCRIE = "nu scrie in text"
+COTE_CALCULE = {"adunare": 500, "scadere": 500, "inmultire": 500, "impartire": 500}
+FRACTIE_CALCULE = 0.125  # din partea de chat, după simboluri (ținta 10–15 %)
+
+
+def are_nu_scrie(p: dict[str, Any]) -> bool:
+    return norm(p["raspuns"]).startswith(NU_SCRIE)
+
+
+def numere_intrebare(intrebare: str) -> list[int]:
+    return [int(x) for x in re.findall(r"\d+", intrebare.split("\n")[-1].replace(".", ""))]
+
+
+def scurgeri_calcule(perechi: list[dict[str, Any]], examen_chat: list[dict[str, Any]],
+                     examen_calc: list[dict[str, Any]]) -> dict[str, int]:
+    """Scurgerile față de ambele examene: bucăți de 8 cuvinte (examenul de chat și întrebările de calcule), întrebări
+    identice (după normalizare) și, la perechile de calcul, perechea de numere (a, b, operația) din examenul de calcule."""
+    from unelte.genereaza_conversatie import bucati
+
+    b_chat = bucati_examen(examen_chat)
+    b_calc: set[str] = set()
+    for p in examen_calc:
+        b_calc |= bucati(p["intrebare"])
+    # la examenul de chat întrebarea se compară normalizată; la calcule întocmai (litere mici), fiindcă normalizarea
+    # șterge semnele („17 + 1” și „17 - 1” ar ieși la fel)
+    q_chat = {norm(p["intrebare"]) for p in examen_chat if p["parte"] in ("a", "b")}
+    q_calc = {" ".join(p["intrebare"].lower().split()) for p in examen_calc}
+
+    def ultima(p: dict[str, Any]) -> str:
+        return p["intrebare"].split("\n")[-1].removeprefix("Întrebare: ")
+
+    triplete = {(p["a"], p["b"], p["operatie"]) for p in examen_calc}
+    return {
+        "bucata_de_8_din_examen_chat": sum(1 for p in perechi if bucati_pereche(p) & b_chat),
+        "bucata_de_8_din_examen_calcule": sum(1 for p in perechi if bucati_pereche(p) & b_calc),
+        "intrebare_identica_cu_examenul": sum(1 for p in perechi if norm(ultima(p)) in q_chat
+                                              or " ".join(ultima(p).lower().split()) in q_calc),
+        "pereche_de_numere_din_examen_calcule": sum(1 for p in perechi if p.get("fel") == "chat_calcul"
+                                                    and (*p["numere"], p["tip"]) in triplete),
+    }
+
+
+def pas_calcule(rad: Path, t0: float) -> int:
+    from unelte.examen_calcule import interzise
+
+    iesire = rad / CALCULE
+    if iesire.exists():
+        raise SystemExit(f"{iesire} există deja.")
+    ex_calc = json.loads((rad / EXAMEN_CALCULE).read_text(encoding="utf-8"))
+    ex_chat = json.loads((rad / EXAMEN).read_text(encoding="utf-8"))["perechi"]
+    interz = interzise(ex_calc)
+    perechi = perechi_calcule(random.Random(SAMANTA_CALCULE), interz, COTE_CALCULE)
+    perechi, scoase = scoate_scurgeri(perechi, ex_chat)
+    for i, p in enumerate(perechi):
+        p["id"] = f"calc_{i:06d}"
+    scurgeri = scurgeri_calcule(perechi, ex_chat, ex_calc["perechi"])
+    if any(scurgeri.values()):
+        raise SystemExit(f"scurgeri: {scurgeri}")
+    _scrie_jsonl(iesire, perechi)
+    # informativ: perechile examenului de înmulțire/adunare care apar în generator cu numerele inversate (3×7 ↔ 7×3)
+    gen = {(*p["numere"], p["tip"]) for p in perechi}
+    inversate = Counter(p["operatie"] for p in ex_calc["perechi"] if p["operatie"] in ("adunare", "inmultire")
+                        and (p["b"], p["a"], p["operatie"]) in gen and p["a"] != p["b"])
+    s116 = citeste_jsonl(rad / PERECHI)
+    r2 = citeste_jsonl(rad / R2)
+    r2_nu = sum(1 for p in r2 if are_nu_scrie(p))
+    _scrie_json(rad / DOSAR2 / "perechi_calcule_info.json", {
+        "nota": "S120 (C-128 A): perechile de calcule, random.Random(1128); perechile (a, b, operația) din "
+                "docs/conversatie/examen_calcule.json interzise.",
+        "pe_operatie": dict(Counter(p["tip"] for p in perechi)), "perechi": len(perechi),
+        "inmultire_perechi_de_numere_diferite": len({tuple(p["numere"]) for p in perechi if p["tip"] == "inmultire"}),
+        "scoase_pentru_scurgeri_chat": scoase, "scurgeri": scurgeri,
+        "informativ_examen_cu_numerele_inversate_in_generator": dict(inversate),
+        "nu_scrie_in_text": {"chat_s116_fara_text": sum(1 for p in s116 if are_nu_scrie(p)),
+                             "calcule": sum(1 for p in perechi if are_nu_scrie(p)),
+                             "r2_din_text": r2_nu, "r2_total": len(r2),
+                             "r2_procent": round(100 * r2_nu / len(r2), 2),
+                             "r2_fara_text_cu_nu_scrie": sum(1 for p in r2 if are_nu_scrie(p) and not p.get("text"))},
+        "exemple_random_1200": random.Random(1200).sample(perechi, 20),
+        "sha256": {"perechi_calcule": sha(iesire), "examen_calcule": sha(rad / EXAMEN_CALCULE)},
+        "secunde": round(time.time() - t0)})
+    print(json.dumps({"perechi": len(perechi), "scoase": scoase, **scurgeri, "inversate": dict(inversate)},
+                     ensure_ascii=False))
+    return 0
+
+
+def ori_calcule(s_chat: int, s_calc: int, s_vechi: int, fractie: float = FRACTIE_CALCULE) -> tuple[int, int]:
+    """(ori_chat, ori_calcule): partea de chat (S116 × ori_chat + calcule × ori_calcule) cât mai aproape de partea
+    „din text”, iar calculele ≈ `fractie` din partea de chat."""
+    ori_c = max(1, round(fractie * s_vechi / max(1, s_calc)))
+    ori_h = max(1, round((s_vechi - ori_c * s_calc) / max(1, s_chat)))
+    return ori_h, ori_c
+
+
+def pas_amesteca2(rad: Path, t0: float) -> int:
+    from module.tokenizer_bpe import TokenizerBPE
+
+    iesire = rad / ANTRENARE2
+    if iesire.exists():
+        raise SystemExit(f"{iesire} există deja.")
+    tok = TokenizerBPE.incarca(rad / "date/ws/bpe_16384.json")
+    chat, calc = citeste_jsonl(rad / PERECHI), citeste_jsonl(rad / CALCULE)
+    vechi_randuri = [r for r in (rad / R2).read_bytes().decode("utf-8").splitlines() if r.strip()]
+    vechi = [json.loads(r) for r in vechi_randuri]
+    vechi_toate = vechi
+    ex_calc = json.loads((rad / EXAMEN_CALCULE).read_text(encoding="utf-8"))["perechi"]
+    ex_chat = json.loads((rad / EXAMEN).read_text(encoding="utf-8"))["perechi"]
+    # r2 (datele lui #651, neschimbate pe disc) are 5 rânduri „Cu cine vorbesc?” = o întrebare (b) a examenului de
+    # chat: aici se scot din amestec (scurgerile se scot), iar numărul lor se scrie în antrenare_info.json
+    scoase_r2 = [i for i, p in enumerate(vechi) if any(scurgeri_calcule([p], ex_chat, ex_calc).values())]
+    vechi_randuri = [r for i, r in enumerate(vechi_randuri) if i not in set(scoase_r2)]
+    vechi = [p for i, p in enumerate(vechi) if i not in set(scoase_r2)]
+    scurgeri = scurgeri_calcule(chat + calc + vechi, ex_chat, ex_calc)
+    if any(scurgeri.values()):
+        raise SystemExit(f"scurgeri: {scurgeri}")
+    s_chat, s_calc, s_vechi = (numar_simboluri(x, tok) for x in (chat, calc, vechi))
+    ori_h, ori_c = ori_calcule(s_chat, s_calc, s_vechi)
+    randuri = (vechi_randuri + [json.dumps(p, ensure_ascii=False) for _ in range(ori_h) for p in chat]
+               + [json.dumps(p, ensure_ascii=False) for _ in range(ori_c) for p in calc])
+    random.Random(SAMANTA_CALCULE + 1).shuffle(randuri)
+    iesire.write_bytes(("\n".join(randuri) + "\n").encode("utf-8"))
+    total_chat = s_chat * ori_h + s_calc * ori_c
+    info = {
+        "nota": "S120: perechile de chat S116 (lucru/conversatie_chat/perechi.jsonl) × ori_chat + calculele × "
+                "ori_calcule + toate perechile „din text” ale lui #651 (r2), amestecate cu random.Random(1129).",
+        "perechi_chat": len(chat), "ori_chat": ori_h, "perechi_calcule": len(calc), "ori_calcule": ori_c,
+        "perechi_din_text": len(vechi), "perechi_total": len(randuri),
+        "simboluri": {"chat_o_data": s_chat, "calcule_o_data": s_calc, "din_text": s_vechi, "chat_total": total_chat},
+        "fractie_calcule_din_chat": round(s_calc * ori_c / total_chat, 4),
+        "fractie_chat_din_tot": round(total_chat / (total_chat + s_vechi), 4),
+        "scurgeri": scurgeri, "r2_scoase_pentru_scurgeri": len(scoase_r2),
+        "r2_scoase_intrebari": sorted({vechi_toate[i]["intrebare"] for i in scoase_r2}),
+        "sha256": {"antrenare": sha(iesire), "perechi_chat": sha(rad / PERECHI), "calcule": sha(rad / CALCULE),
+                   "r2": sha(rad / R2), "examen_chat": sha(rad / EXAMEN), "examen_calcule": sha(rad / EXAMEN_CALCULE)},
+        "secunde": round(time.time() - t0)}
+    _scrie_json(rad / DOSAR2 / "antrenare_info.json", info)
+    print(json.dumps({k: info[k] for k in ("perechi_total", "ori_chat", "ori_calcule", "fractie_calcule_din_chat",
+                                           "fractie_chat_din_tot", "scurgeri")}, ensure_ascii=False))
+    return 0
+
+
 # --------------------------------------------------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
     try:
@@ -566,11 +708,15 @@ def main(argv: list[str] | None = None) -> int:
     except (AttributeError, ValueError):
         pass
     parser = argparse.ArgumentParser(description="S116: date de chat fără text alături + examenul de chat.")
-    parser.add_argument("pas", choices=["candidati", "deoparte", "examen", "perechi", "amesteca"])
+    parser.add_argument("pas", choices=["candidati", "deoparte", "examen", "perechi", "amesteca", "calcule", "amesteca2"])
     parser.add_argument("--radacina", default=str(RADACINA))
     a = parser.parse_args(argv)
     rad = Path(a.radacina)
     t0 = time.time()
+    if a.pas == "calcule":
+        return pas_calcule(rad, t0)
+    if a.pas == "amesteca2":
+        return pas_amesteca2(rad, t0)
 
     if a.pas == "candidati":
         iesire = rad / CANDIDATI

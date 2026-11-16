@@ -2,6 +2,10 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 16 noiembrie 2026, 18:05 (executant) — S120 / C-128 A gata: exercițiile de calcul și examenul de calcule sunt făcute
+
+- **Examen de calcule nou**, ținut deoparte (200 de întrebări: adunări, scăderi, înmulțiri până la 12 × 12, împărțiri; 40 % formulate altfel decât la antrenare). **#651 acum: 1 din 200** — la jumătate din întrebări spune „Nu scrie în text.”. **2.000 de exerciții de calcul** făcute de program („Cât face 3x7?” → „3 × 7 = 21.”), fără cod Python. În datele de chat fără text, „Nu scrie în text.” apare de **0** ori. Totul e pregătit pentru S121 (mâine, după S117). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1755_S120_calcule.md`. Aștept de la tine: nimic.
+
 ## 16 noiembrie 2026, 17:15 — Datele de chat sunt verificate; am pus în coadă calculele și textul nou
 
 - **Verificat de mine: S114, S115, S116 sunt bune.** Fila Chat răspunde scurt, interfața pornește singură cu #651, iar datele de chat (16.389 de perechi, fără alt AI) și examenul de chat (#651 are acum doar 25 din 200) sunt făcute corect, fără scurgeri.

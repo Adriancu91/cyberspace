@@ -272,4 +272,6 @@ def test_modulul_nu_e_in_nicio_configurare_in_uz():
                          # S111 (C-119 E3, 16 nov 2026): conversația pe baza de 24 (#641), tot pe bucăți
                          "conv_w2_mare_24zc.toml",
                          # S116/S117 (C-126, 16 nov 2026): chat-ul fără text din #651, tot pe bucăți
-                         "conv_w2_mare_24zch.toml"}
+                         "conv_w2_mare_24zch.toml",
+                         # S120/S121 (C-128, 16 nov 2026): chat + calcule din câștigătorul S117, tot pe bucăți
+                         "conv_w2_mare_24zcc.toml"}

@@ -67,10 +67,22 @@ def numere_din(raspuns: str) -> list[int | float]:
 
 
 def corect(p: dict[str, Any], raspuns: str) -> bool:
+    """Corect = toate numerele din răspuns sunt dintre {a, b, rezultat}; după ce se scot numerele din întrebare
+    repetate (a și b, câte o dată), rămâne măcar un număr și toate sunt rezultatul; după fiecare „=” vine rezultatul.
+    Un răspuns care e doar rezultatul („11.”) e corect și când rezultatul e chiar un număr din întrebare (1 × 11).
+    (S120, 16 nov 17:50: scoaterea ecoului adăugată după prima rulare pe #651, unde „2 lei și 1.” la 2 − 1 ieșea
+    corect; regula nouă doar scade notele, iar pragurile S121 sunt față de M, măsurat cu aceeași regulă.)"""
     r, voie = p["rezultat"], {p["a"], p["b"], p["rezultat"]}
     numere = numere_din(raspuns)
     if r not in numere or any(n not in voie for n in numere):
         return False
+    if numere != [r]:
+        rest = list(numere)
+        for o in (p["a"], p["b"]):
+            if o in rest:
+                rest.remove(o)
+        if not rest or any(n != r for n in rest):
+            return False
     for bucata in raspuns.split("=")[1:]:
         dupa = numere_din(bucata)
         if not dupa or dupa[0] != r:

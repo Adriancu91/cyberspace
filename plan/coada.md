@@ -4024,7 +4024,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-126, 16 nov 2026 13:53); pașii: supraveghetor, 16 nov 2026 14:15
 
 ### S120 — C-128 A: calcule simple + mai puțin „Nu scrie în text.” în datele de chat; examenul de calcule ținut deoparte (procesor)
-- stare: in_lucru (executant, 16 nov 2026 17:30; placa liberă 636 MB / 29 °C, nimic altceva în lucru)
+- stare: gata (executant, 16 nov 2026 18:05 — examenul de calcule 200 (40 % formulări noi) urcat înaintea datelor; 2.000 de perechi de calcule, 0 perechi de numere din examen; „Nu scrie în text.” 0 în chat-ul fără text, 17,42 % în r2 (toate cu text); `lucru/conversatie_chat2/antrenare.jsonl` chat 51,8 %, calcule 12,4 % din chat, 0 scurgeri (5 rânduri r2 „Cu cine vorbesc?” scoase — scurgere veche, e și în datele S117); `config/conv_w2_mare_24zcc.toml`; #651 la calcule **1/200** (regula de notare făcută mai strictă după prima rulare: 2 → 1); 1487 teste trec, 1 sărit, 0 pică)
+- (istoric) stare: in_lucru (executant, 16 nov 2026 17:30; placa liberă 636 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-128, 16 nov 17:13)
 - tip: procesor (fără placă)
 - fereastră: oricând, de acum; **poate merge în paralel cu S117** (nu atinge nimic din ce folosește S117)
@@ -4039,7 +4040,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   5. **Configurarea** `config/conv_w2_mare_24zcc.toml` = copie a `conv_w2_mare_24zch.toml` cu DOAR `nume = "w2_mare_24zcc"`, `cale_stare = "lucru/w2_mare_24zcc/gpt.pt"`, `conversatie = "lucru/conversatie_chat2/antrenare.jsonl"` și antetul; în listele de teste. `python -m pytest` verde.
   6. **Măsurarea de bază pe #651** (procesor; placa doar dacă e liberă și ≤ 15 min, NU cât rulează S117): `examen_calcule.py` → scorul în raport. Pre-înregistrarea se scrie la S121 (când se știe modelul de pornire).
 - **NU:** nimic descărcat, niciun alt AI; cod/Python în date — nu; `kronos/`, `module/examen_bpb.py`, examenele vechi și `examen_chat.json` neatinse; nimic din `lucru/` în Git.
-- raport: `docs/rapoarte/<data>_<ora>_S120_calcule.md` (câte perechi pe fel, 20 de exemple cu `random.Random(1200)`, scorul lui #651, numărătoarea de la pasul 3); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- raport: docs/rapoarte/2026-11-16_1755_S120_calcule.md (cerut: `docs/rapoarte/<data>_<ora>_S120_calcule.md` (câte perechi pe fel, 20 de exemple cu `random.Random(1200)`, scorul lui #651, numărătoarea de la pasul 3); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.)
 - aprobat de: Adrian (COMENZI.md C-128, 16 nov 2026 17:13); pașii: supraveghetor, 16 nov 2026 17:15
 
 ### S121 — C-128 B: antrenarea de chat cu calcule — 4 h din câștigătorul S117 + toate examenele; câștigătorul în interfață (placa ~4 h + ~1,5 h examene)
