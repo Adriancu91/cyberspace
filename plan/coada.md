@@ -4021,7 +4021,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-126, 16 nov 2026 13:53); pașii și pragurile: supraveghetor, 16 nov 2026 14:15
 
 ### S122 — C-129: oprirea interfeței de pe 8787 cât rulează lanțul S117 → S123 → S121 → S119; repornirea la final cu câștigătorul (procesor)
-- stare: aprobat — oprirea făcută (executant, 16 nov 2026 22:00: 2 procese `module.interfata` #651 oprite, portul 8787 nu mai răspunde; comutatorul `lucru/STOP_INTERFATA` citit de `unelte/paznic_procese_ws.ps1` → paznicul nu o mai repornește; anulare: ștergi fișierul; S117 neatinsă; 1488 teste trec, 1 sărit), aștept sfârșitul lanțului pentru pasul 4
+- stare: in_lucru (executant, 17 nov 2026 15:00; pasul 4 — repornirea; lanțul S117 → S123 → S121 → S119 `gata`, placa liberă 440 MB / 31 °C, nimic altceva în lucru)
+- (istoric) stare: aprobat — oprirea făcută (executant, 16 nov 2026 22:00: 2 procese `module.interfata` #651 oprite, portul 8787 nu mai răspunde; comutatorul `lucru/STOP_INTERFATA` citit de `unelte/paznic_procese_ws.ps1` → paznicul nu o mai repornește; anulare: ștergi fișierul; S117 neatinsă; 1488 teste trec, 1 sărit), aștept sfârșitul lanțului pentru pasul 4
 - raport (oprirea): docs/rapoarte/2026-11-16_2207_S122_interfata_oprita.md
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 20:15; Adrian, COMENZI.md C-129, 16 nov 17:22) — **se face ACUM, chiar dacă S117 e `in_lucru`** (doar un proces pe procesor; nu atinge placa și nici procesul S117)
 - tip: procesor (fără placă), ~15 min pentru oprire; repornirea la final ~15 min
