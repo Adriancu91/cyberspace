@@ -4176,7 +4176,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 
 ### S124 — C-132: mai multe formulări pentru aceeași întrebare (sociale + calcule), apoi 4 h din #680 pe placă (procesor ~1 h + placa ~4 h + ~1,5 h examene)
-- stare: in_lucru (executant, 17 nov 19:00: pasul 4 — antrenarea 4 h din #680 prin lanțul `lucru/cascada/S124_proba/s124.py`, cu paza de disc 30 GB și a plăcii; apoi pasul 5, examenele)
+- stare: in_lucru (executant, 17 nov 23:3x: pasul 5 — examenele pe #651, #692 (ultimul „24zcf”) și #680 (calcule + formulări) prin lanțul `lucru/cascada/S124_proba/s124_examene.py`, ~1 h 45 min)
+- (istoric) pasul 4 GATA 17 nov 23:05:30, cod 0: #689–#692 (ora 4 = #692), placa max 6.402 MB / 64 °C, C: 36,08 → 30,94 GB.
+- (istoric) stare: in_lucru (executant, 17 nov 19:00: pasul 4 — antrenarea 4 h din #680 prin lanțul `lucru/cascada/S124_proba/s124.py`, cu paza de disc 30 GB și a plăcii; apoi pasul 5, examenele)
 - (istoric) stare: aprobat — **pașii 1–3 FĂCUȚI** (executant, 17 nov 15:55; raport `docs/rapoarte/2026-11-17_1555_S124_pasii_1_3.md`; pre-înregistrarea `2026-11-17_w2_mare_24zcf.md` urcată; repere examen nou: #651 20,5 %, #680 33,0 %). **Rămân pașii 4–5, pe placă, în fereastra de noapte (19:00, pornire cel târziu 01:00).** Discul la 15:47: marja 30,87 GB (≥ 30, la limită).
 - (supraveghetor, 17 nov 2026 17:15) verificat pașii 1–3: examenul nou urcat înaintea datelor (38db144 înaintea 03dc6da), pragurile din pre-înregistrare identice cu cele din sarcină, reperele #651 20,5 % / #680 33,0 % → prag 48,0 %; 1512 teste trec. Dacă Adrian testează `os-305` (Cyber-GPU, C-135) pe workstation în seara asta, pasul 4 așteaptă până se întoarce Windows-ul (pornire cel târziu 01:00), cum scrie la fereastră.
 - (istoric) stare: in_lucru (executant, 17 nov 15:30: pașii 1–3 pe procesor)
