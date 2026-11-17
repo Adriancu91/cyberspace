@@ -4092,7 +4092,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-128, 16 nov 2026 17:13); pașii: supraveghetor, 16 nov 2026 17:15
 
 ### S121 — C-128 B: antrenarea de chat cu calcule — 4 h din câștigătorul S117 + toate examenele; câștigătorul în interfață (placa ~4 h + ~1,5 h examene)
-- stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-128) — pornește doar după S117 `gata` **și** S120 `gata` **și S123 (E0) `gata`** și pre-înregistrarea urcată
+- stare: in_lucru (executant, 17 nov 2026 03:00; S117, S120, S123 `gata`; M = #651 (S117: RĂMÂNE #651); placa liberă 629 MB / 30 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 17:15; Adrian, COMENZI.md C-128) — pornește doar după S117 `gata` **și** S120 `gata` **și S123 (E0) `gata`** și pre-înregistrarea urcată
 - tip: placă
 - fereastră: **schimbat de C-129 (Adrian, 16 nov 17:22: „nu mai aștepți fereastra”; supraveghetor 20:15): imediat după S123 `gata`, oricare oră** (de exemplu noaptea 16 → 17 nov, după ~01:00). Ferestrele zi/noapte nu se mai aplică acestui lanț; paza rămâne (≤ 7.000 MB, < 83 °C, C: ≥ 15 GB). Dacă hub-ul spune că Adrian folosește workstation-ul (teste GPU/OS) → aștepți.
 - durată maximă: 4 h antrenare + 1,5 h examene
