@@ -123,6 +123,38 @@ def test_sursa_cu_alta_licenta_sau_cu_cont_nu_se_descarca(monkeypatch):
     assert descarca.verifica_hf({"hf": "x/y", "licenta": None})[0] is not None  # fără licență pe fișă: nu
 
 
+def test_descarcarea_se_opreste_inainte_de_pragul_de_disc(tmp_path, monkeypatch):
+    import shutil
+    from collections import namedtuple
+
+    import huggingface_hub
+
+    monkeypatch.setattr(descarca, "DIRECTOR", tmp_path)
+    fisa = {"licenta_pe_fisa": "odc-by", "cere_cont": False, "revizie": "abc",
+            "fisiere": {"a.parquet": 4_000_000_000, "b.parquet": 4_000_000_000}}
+    monkeypatch.setattr(descarca, "verifica_hf", lambda sursa: (None, fisa))
+    luate = []
+
+    def hf_hub_download(repo, f, repo_type, revision, local_dir):
+        luate.append(f)
+        cale = local_dir / f
+        cale.parent.mkdir(parents=True, exist_ok=True)
+        cale.write_bytes(b"x")
+        return str(cale)
+
+    monkeypatch.setattr(huggingface_hub, "hf_hub_download", hf_hub_download)
+    Disc = namedtuple("Disc", "total used free")
+    liber = iter([38e9, 33e9])  # primul încape (38 − 4 ≥ 30), al doilea nu (33 − 4 < 30)
+    monkeypatch.setattr(shutil, "disk_usage", lambda cale: Disc(0, 0, next(liber)))
+    sursa = {"hf": "x/y", "licenta": "odc-by", "fisiere": ["a.parquet", "b.parquet"], "descriere": "d", "obligatii": "o"}
+    rand = descarca.descarca("proba", sursa, doar_verifica=False)
+    assert luate == ["a.parquet"]
+    assert rand["stare"] == "oprit_disc" and rand["nedescarcate"] == ["b.parquet"] and "sub 30 GB" in rand["motiv"]
+    assert [f["fisier"] for f in rand["fisiere"]] == ["proba/a.parquet"]
+    assert descarca.SURSE["fineweb2_ro_s119"]["licenta"] == "odc-by" and descarca.SURSE["oasst2"]["licenta"] == "apache-2.0"
+    assert "data/ron_Latn/train/000_00000.parquet" not in descarca.SURSE["fineweb2_ro_s119"]["fisiere"]
+
+
 def test_date_amestec(tmp_path):
     (tmp_path / "a.txt").write_text("un text de antrenare. " * 100, encoding="utf-8")
     (tmp_path / "v.txt").write_text("un text de validare. " * 10, encoding="utf-8")

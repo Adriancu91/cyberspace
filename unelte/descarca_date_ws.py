@@ -37,6 +37,7 @@ except (AttributeError, ValueError):
 
 DIRECTOR = Path("date/ws/brut")
 LIMITA_GB = 60.0  # datele noi, în total (hotărât de Adrian, 12 octombrie 2026)
+MINIM_LIBER_GB = 30.0  # niciun fișier nu se descarcă dacă C: ar coborî sub atât (regula lui Adrian, C-127)
 
 # hf: depozitul de pe Hugging Face; fisiere: prefixul fișierelor luate (toate cele care încep așa) sau lista lor.
 SURSE: dict[str, dict[str, Any]] = {
@@ -54,6 +55,20 @@ SURSE: dict[str, dict[str, Any]] = {
         "hf": "HuggingFaceFW/fineweb-2", "fisiere": ["data/ron_Latn/train/000_00000.parquet"], "licenta": "odc-by",
         "descriere": "FineWeb-2, ron_Latn: un fișier din 20 (din el se taie o felie de 3 GB de text)",
         "obligatii": "atribuire; textele rămân ale site-urilor de unde au fost luate (termenii Common Crawl)",
+    },
+    # S119 (C-127, Adrian 16 nov 2026): încă 2 fișiere FineWeb-2 românesc (bugetul de disc: C: ≥ 30 GB) și oasst2,
+    # din care la curățare rămân doar mesajele cu lang = ro
+    "fineweb2_ro_s119": {
+        "hf": "HuggingFaceFW/fineweb-2", "licenta": "odc-by",
+        "fisiere": ["data/ron_Latn/train/000_00001.parquet", "data/ron_Latn/train/000_00002.parquet"],
+        "descriere": "FineWeb-2, ron_Latn: încă 2 fișiere din 20 (S119), altele decât cel din fineweb2_ro",
+        "obligatii": "atribuire; textele rămân ale site-urilor de unde au fost luate (termenii Common Crawl)",
+    },
+    "oasst2": {
+        "hf": "OpenAssistant/oasst2", "licenta": "apache-2.0",
+        "fisiere": ["2023-11-05_oasst2_ready.messages.jsonl.gz"],
+        "descriere": "OpenAssistant oasst2: mesajele verificate de oameni (ready), din care se păstrează doar lang = ro",
+        "obligatii": "atribuire (OpenAssistant, Apache-2.0)",
     },
     "fabule_ro": {
         "hf": "klusai/ds-tf3-ro-3m", "prefix": "data/", "licenta": "apache-2.0",
@@ -146,6 +161,12 @@ def descarca(nume: str, sursa: dict[str, Any], doar_verifica: bool) -> dict[str,
         from huggingface_hub import hf_hub_download
 
         for f in de_luat:
+            liber_gb = shutil.disk_usage(DIRECTOR.resolve().anchor).free / 1e9
+            if liber_gb - fisa["fisiere"][f] / 1e9 < MINIM_LIBER_GB and not (tinta / f).exists():
+                rand["octeti"] = sum(x["octeti"] for x in rand["fisiere"])
+                return {**rand, "stare": "oprit_disc", "nedescarcate": de_luat[de_luat.index(f):],
+                        "motiv": f"discul ar coborî sub {MINIM_LIBER_GB:.0f} GB liberi "
+                                 f"({liber_gb:.1f} GB acum, {f} are {fisa['fisiere'][f] / 1e9:.2f} GB)"}
             cale = Path(hf_hub_download(sursa["hf"], f, repo_type="dataset", revision=fisa["revizie"], local_dir=tinta))
             rand["fisiere"].append(fisier_notat(cale))
             print(f"   {cale.name}: {cale.stat().st_size / 1e6:,.0f} MB", flush=True)
