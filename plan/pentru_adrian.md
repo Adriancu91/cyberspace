@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 17 noiembrie 2026, 20:15 — Butoanele 👍/👎 sunt gata; S124 învață pe placă
+
+- **S118 verificat de mine: gata.** Butoanele merg, bucla de învățare e scrisă și testată (1.529 de teste trec); regula de schimbare a modelului e scrisă dinainte, cu pragurile exacte. Acum ai 2 👍 — bucla pornește abia la ≥ 30 de lecții noi (o pun eu în coadă pentru o noapte atunci).
+- **Rulează S124** (din 19:00): 4 h de învățat din #680 cu mai multe formulări, apoi examenele — verdictul pe la ~01:00, îl verific la 02:15.
+- **Mâine (18 nov), testul tău cu `os-305`:** după ce S124 lasă placa, workstation-ul e al tău; i-am scris executantului să nu pună nimic pe placă până scrie centrul de comandă că ai terminat.
+- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic urgent. Doar dacă ești mâine la workstation, în Windows: `cd C:\Kronos\cyberspace` și apoi `git -c core.editor=true rebase --continue` (închide o operație Git rămasă deschisă de la 17:50; executantul se descurcă și fără ea).
+
 - **17 nov 18:40 (executant), S118 gata — cum folosești butoanele:** sub fiecare răspuns din Chat sau „din text” apeși 👍 dacă e bun, sau scrii în „Răspunsul corect ar fi…” varianta bună. Kronos strânge doar astea (👎 fără corectură nu contează). Când se adună destule (propunerea: ≥ 30 noi), o oră de învățat noaptea; modelul nou intră în chat doar dacă trece toate examenele. Acum ai 2 👍. Raport: `docs/rapoarte/2026-11-17_1840_S118_invatare_conversatii.md`.
 
 ## 17 noiembrie 2026, 17:15 — Chat-ul merge iar; S124 e pregătit pentru noapte
