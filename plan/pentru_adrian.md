@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 17 noiembrie 2026, 11:15 — S121 verificat (rămâne #651); textul românesc merge mai departe
+
+- **S121 verificat de mine: rămâne #651, corect.** #680 a urcat la calcule de la 1 la 51 din 200, dar pragul scris dinainte era 61; chat-ul (40 față de 25) și restul au trecut. Interfața nu se schimbă.
+- **S119 (textul românesc nou):** curățarea a dat 2,55 milioane de texte (8 GB, de două ori mai multă română decât aveam), dar a doua verificare a găsit 162 de texte cu bucăți comune cu examenele, așa că executantul s-a oprit corect. **Am aprobat eu varianta 1** (repară căutarea, scoate cele 162, verifică iar = 0, apoi transformă textul pentru antrenare), fără să șteargă nimic și fără să coboare discul sub 30 GB. Merge pe procesor, acum.
+- **Apoi:** interfața repornită pe 8787 cu #651 → S118.
+- **Propunere nouă (S124, doar cu „da”-ul tău):** placa e liberă azi. Ca modelul să înțeleagă și formulări pe care nu le-a văzut (E0 și S121 au arătat că le ține minte pe cele văzute), aș face date cu de 3 ori mai multe formulări la calcule și saluturi, apoi 4 ore de învățat din #680.
+- **Aștept de la tine:** doar dacă vrei S124: „da S124” în hub. Altfel nimic.
+
 - **17 nov 09:06 (executant) — S121 (chat + calcule) gata: rămâne #651.** Modelul nou #680 socotește mult mai bine (51 din 200 față de 1), dar pragul era 61; la formulări noi socotește rar (5 din 80) — a ținut minte formulările. Chat-ul e mai bun (40 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 1), iar româna, „din text” și instrucțiunile nu s-au stricat. Interfața nu se schimbă. Testele: 1.488 trec. Raport: `docs/rapoarte/2026-11-17_0906_S121_calcule_chat.md`. Aștept de la tine: nimic.
 
 ## 17 noiembrie 2026, 08:15 — Antrenarea cu calcule s-a terminat; examenele rulează
@@ -125,10 +133,3 @@
 - Totul din listă se potrivește: **~9,0 GB** (dosarele `proba_24z` și `proba_24z2` + modelele #586–#589, doar probele de rată). Nimic nu le mai folosește.
 - **N-am șters nimic** (n-am voie). **Aștept de la tine:** cele 7 comenzi PowerShell din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md`, când ajungi. C: are acum 28,3 GB liberi; S110 merge (ora 41, româna 1,1363).
 
-## 15 noiembrie 2026, 08:15 — Noaptea a mers bine: modelul mare la ora 31, cel mai bun scor de până acum
-
-- **Raportul de dimineață e scris și corect** (`docs/rapoarte/2026-11-15_0648_raport_dimineata.md`; am verificat cifrele): S110 la ora 31 din 52, româna **1,1603** (ora 24: 1,1792; #513 are 1,2060) — a scăzut în fiecare oră, nicio regulă de oprire atinsă. Placa 5.653 MB / 62 °C.
-- **Testele: 1.461 trec, 1 pică** — cel știut dinainte: o siguranță care cere 40 GB liberi pe disc (acum 34 GB). Nu e o stricăciune; trece la loc când se face loc.
-- **De urmărit — discul:** S113 (ștergerea probelor, ~8,6 GB, „da”-ul tău C-121) tot nu e făcută: executantul se oprește la fiecare trecere fiindcă placa e ocupată. La finalul S110 rămân ~19 GB, iar S111 (7 h) ar coborî sub 15 GB pe la ora 6 și s-ar opri curat. Am scris sus în coadă: S113 oricând, **cel târziu între S110 și S111**.
-- **Rulează acum:** S110 până luni ~03:10; apoi S113, verdictul S110, S111, S112.
-- **Aștept de la tine:** nimic acum. Dacă executantul nu are voie să apese el ștergerea, îți lasă comenzile în raportul S113 (le rulezi când ajungi).
