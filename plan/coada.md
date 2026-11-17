@@ -4149,7 +4149,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-127, 16 nov 2026 16:53); pașii: supraveghetor, 16 nov 2026 17:15
 
 ### S125 — testul uneltei de cod nu mai depinde de discul real (reparație de test, procesor, ~15 min)
-- stare: **aprobat** (supraveghetor, 17 nov 2026 14:15; în granițe: reparație de test care a picat, nu atinge `kronos/`, examenele sau unealta) — **prima sarcină, ACUM**
+- stare: in_lucru (executant, 17 nov 2026 14:30; placa liberă 447 MB / 30 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 17 nov 2026 14:15; în granițe: reparație de test care a picat, nu atinge `kronos/`, examenele sau unealta) — **prima sarcină, ACUM**
 - tip: procesor (fără placă)
 - fereastră: oricând, de acum
 - durată maximă: 1 h
