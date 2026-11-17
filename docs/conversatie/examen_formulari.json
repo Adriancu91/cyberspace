@@ -1,0 +1,2046 @@
+{
+ "nota": "S124 (C-132, 17 nov 2026): examenul de formulări ținut deoparte, întrebări FĂRĂ text alături, în forma filei Chat; toate formulările sunt noi (nici în generatoarele S116/S120/S124, nici în examenele vechi; nicio bucată de 6 cuvinte comună cu antrenarea). Calcule: corect ca examen_calcule.py; sociale: corect = o expresie din `cuvinte_cheie` a categoriei (ca partea (b) din examen_chat.py). Scorul = calcule + sociale din 200; procentul = scorul / 2. Numerele calculelor nu apar în nicio antrenare (vezi docstring-ul din unelte/examen_formulari.py).",
+ "samanta": 124,
+ "cote_calcule": {
+  "adunare": 24,
+  "scadere": 24,
+  "inmultire": 42,
+  "impartire": 30
+ },
+ "cote_sociale": {
+  "salut": 12,
+  "ce_faci": 12,
+  "multumesc": 12,
+  "la_revedere": 11,
+  "cine_esti": 11,
+  "ce_poti": 11,
+  "nu_stiu": 11
+ },
+ "sabloane_calcule": {
+  "adunare": [
+   "Ce număr obții adunând {a} cu {b}?",
+   "La {a} adaugă {b}. Cât iese?",
+   "Ana are {a} timbre, iar Mihai are {b}. Câte timbre au împreună?",
+   "Care e totalul dintre {a} și {b}?",
+   "Pune {b} peste {a} și spune-mi cât ai.",
+   "Cât ar da {a} adunat la {b}?"
+  ],
+  "scadere": [
+   "Ce număr obții scăzând {b} din {a}?",
+   "Ia {b} din {a}. Cât rămâne?",
+   "Într-un autobuz sunt {a} oameni și coboară {b}. Câți oameni rămân?",
+   "Cu cât e mai mare {a} decât {b}?",
+   "Dacă scot {b} din {a}, ce obțin?",
+   "Care e rezultatul când micșorez {a} cu {b}?"
+  ],
+  "inmultire": [
+   "Ce număr obții înmulțind {a} cu {b}?",
+   "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "Care e produsul numerelor {a} și {b}?",
+   "{a} înmulțit cu {b} dă cât?",
+   "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "Câte roți au {a} căruțe cu câte {b} roți fiecare?"
+  ],
+  "impartire": [
+   "Ce număr obții împărțind {a} la {b}?",
+   "Câte grupe de câte {b} se pot face din {a}?",
+   "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "Care e câtul împărțirii lui {a} la {b}?",
+   "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "Dacă tai {a} în {b} părți egale, cât are o parte?"
+  ]
+ },
+ "cuvinte_cheie": {
+  "salut": [
+   "salut",
+   "buna",
+   "buna ziua",
+   "buna seara",
+   "buna dimineata",
+   "hei",
+   "salutare",
+   "ziua buna",
+   "neata",
+   "cu ce te pot ajuta"
+  ],
+  "ce_faci": [
+   "sunt bine",
+   "bine",
+   "foarte bine",
+   "merg bine",
+   "ma simt bine",
+   "excelent",
+   "in forma"
+  ],
+  "multumesc": [
+   "cu placere",
+   "nicio problema",
+   "pentru putin",
+   "oricand",
+   "n ai pentru ce"
+  ],
+  "la_revedere": [
+   "la revedere",
+   "pa",
+   "pe curand",
+   "o zi buna",
+   "noapte buna",
+   "mai vorbim",
+   "ne vedem",
+   "ne auzim",
+   "cu bine",
+   "somn usor",
+   "drum bun"
+  ],
+  "cine_esti": [
+   "kronos",
+   "model",
+   "program",
+   "limba romana",
+   "facut de la zero",
+   "inteligenta artificiala",
+   "robot"
+  ],
+  "ce_poti": [
+   "intrebari",
+   "raspund",
+   "raspunde",
+   "sa raspund",
+   "pot raspunde",
+   "pot sa raspund",
+   "ajut",
+   "text"
+  ],
+  "nu_stiu": [
+   "nu stiu",
+   "nu pot sa stiu",
+   "nu pot sti",
+   "nu am de unde",
+   "nu cunosc",
+   "nu am cum sa stiu",
+   "nu am informatii",
+   "imi pare rau"
+  ]
+ },
+ "verificari": {
+  "pe_categorie": {
+   "adunare": 24,
+   "scadere": 24,
+   "inmultire": 42,
+   "impartire": 30,
+   "salut": 12,
+   "ce_faci": 12,
+   "multumesc": 12,
+   "la_revedere": 11,
+   "cine_esti": 11,
+   "ce_poti": 11,
+   "nu_stiu": 11
+  },
+  "calcule": 120,
+  "sociale": 80,
+  "sabloane_calcule_noi": 24,
+  "sabloane_care_exista_deja": {
+   "calcule_generator": [],
+   "calcule_examen_vechi": [],
+   "sociale_generator": [],
+   "sociale_examen_vechi": []
+  },
+  "perechi_de_numere_interzise": [],
+  "perechi_de_numere_repetate": 0,
+  "sociale_repetate": 0,
+  "rezultate_gresite": [],
+  "antrenare_existenta": {
+   "cu_bucata_de_6": [],
+   "sociale_identice": [],
+   "texte_comparate": 69636
+  }
+ },
+ "sha256": {
+  "lucru/conversatie_chat/antrenare.jsonl": "1a3ad420daa59c81fdffa813eac56bae66ce12074c992ba268efdac2ac743566",
+  "lucru/conversatie_chat2/antrenare.jsonl": "740f22181b8f8c26120ab2a91fbd07e182dd1a19af0f41fd521910eb650d8e58",
+  "lucru/conversatie_chat2/perechi_calcule.jsonl": "b7416b2e6f4d4e5f22ba385664cfc76a92242be637679f03937e3325cd4efded"
+ },
+ "secunde": 5,
+ "perechi": [
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 9,
+   "b": 9,
+   "rezultat": 18,
+   "sablon": "Cât ar da {a} adunat la {b}?",
+   "intrebare": "Cât ar da 9 adunat la 9?",
+   "id": "form_000"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 1,
+   "b": 23,
+   "rezultat": 24,
+   "sablon": "Ana are {a} timbre, iar Mihai are {b}. Câte timbre au împreună?",
+   "intrebare": "Ana are 1 timbre, iar Mihai are 23. Câte timbre au împreună?",
+   "id": "form_001"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 971,
+   "b": 2,
+   "rezultat": 973,
+   "sablon": "Pune {b} peste {a} și spune-mi cât ai.",
+   "intrebare": "Pune 2 peste 971 și spune-mi cât ai.",
+   "id": "form_002"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 47,
+   "b": 3,
+   "rezultat": 50,
+   "sablon": "La {a} adaugă {b}. Cât iese?",
+   "intrebare": "La 47 adaugă 3. Cât iese?",
+   "id": "form_003"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 325,
+   "b": 170,
+   "rezultat": 495,
+   "sablon": "Ce număr obții adunând {a} cu {b}?",
+   "intrebare": "Ce număr obții adunând 325 cu 170?",
+   "id": "form_004"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 54,
+   "b": 2,
+   "rezultat": 56,
+   "sablon": "Care e totalul dintre {a} și {b}?",
+   "intrebare": "Care e totalul dintre 54 și 2?",
+   "id": "form_005"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 557,
+   "b": 243,
+   "rezultat": 800,
+   "sablon": "Cât ar da {a} adunat la {b}?",
+   "intrebare": "Cât ar da 557 adunat la 243?",
+   "id": "form_006"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 14,
+   "b": 1,
+   "rezultat": 15,
+   "sablon": "Ana are {a} timbre, iar Mihai are {b}. Câte timbre au împreună?",
+   "intrebare": "Ana are 14 timbre, iar Mihai are 1. Câte timbre au împreună?",
+   "id": "form_007"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 30,
+   "b": 28,
+   "rezultat": 58,
+   "sablon": "Pune {b} peste {a} și spune-mi cât ai.",
+   "intrebare": "Pune 28 peste 30 și spune-mi cât ai.",
+   "id": "form_008"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 104,
+   "b": 413,
+   "rezultat": 517,
+   "sablon": "La {a} adaugă {b}. Cât iese?",
+   "intrebare": "La 104 adaugă 413. Cât iese?",
+   "id": "form_009"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 19,
+   "b": 50,
+   "rezultat": 69,
+   "sablon": "Ce număr obții adunând {a} cu {b}?",
+   "intrebare": "Ce număr obții adunând 19 cu 50?",
+   "id": "form_010"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 196,
+   "b": 788,
+   "rezultat": 984,
+   "sablon": "Care e totalul dintre {a} și {b}?",
+   "intrebare": "Care e totalul dintre 196 și 788?",
+   "id": "form_011"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 97,
+   "b": 2,
+   "rezultat": 99,
+   "sablon": "Cât ar da {a} adunat la {b}?",
+   "intrebare": "Cât ar da 97 adunat la 2?",
+   "id": "form_012"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 175,
+   "b": 109,
+   "rezultat": 284,
+   "sablon": "Ana are {a} timbre, iar Mihai are {b}. Câte timbre au împreună?",
+   "intrebare": "Ana are 175 timbre, iar Mihai are 109. Câte timbre au împreună?",
+   "id": "form_013"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 78,
+   "b": 22,
+   "rezultat": 100,
+   "sablon": "Pune {b} peste {a} și spune-mi cât ai.",
+   "intrebare": "Pune 22 peste 78 și spune-mi cât ai.",
+   "id": "form_014"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 956,
+   "b": 8,
+   "rezultat": 964,
+   "sablon": "La {a} adaugă {b}. Cât iese?",
+   "intrebare": "La 956 adaugă 8. Cât iese?",
+   "id": "form_015"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 69,
+   "b": 16,
+   "rezultat": 85,
+   "sablon": "Ce număr obții adunând {a} cu {b}?",
+   "intrebare": "Ce număr obții adunând 69 cu 16?",
+   "id": "form_016"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 955,
+   "b": 8,
+   "rezultat": 963,
+   "sablon": "Care e totalul dintre {a} și {b}?",
+   "intrebare": "Care e totalul dintre 955 și 8?",
+   "id": "form_017"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 17,
+   "b": 69,
+   "rezultat": 86,
+   "sablon": "Cât ar da {a} adunat la {b}?",
+   "intrebare": "Cât ar da 17 adunat la 69?",
+   "id": "form_018"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 394,
+   "b": 255,
+   "rezultat": 649,
+   "sablon": "Ana are {a} timbre, iar Mihai are {b}. Câte timbre au împreună?",
+   "intrebare": "Ana are 394 timbre, iar Mihai are 255. Câte timbre au împreună?",
+   "id": "form_019"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 93,
+   "b": 5,
+   "rezultat": 98,
+   "sablon": "Pune {b} peste {a} și spune-mi cât ai.",
+   "intrebare": "Pune 5 peste 93 și spune-mi cât ai.",
+   "id": "form_020"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 40,
+   "b": 821,
+   "rezultat": 861,
+   "sablon": "La {a} adaugă {b}. Cât iese?",
+   "intrebare": "La 40 adaugă 821. Cât iese?",
+   "id": "form_021"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 82,
+   "b": 12,
+   "rezultat": 94,
+   "sablon": "Ce număr obții adunând {a} cu {b}?",
+   "intrebare": "Ce număr obții adunând 82 cu 12?",
+   "id": "form_022"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "adunare",
+   "operatie": "adunare",
+   "a": 904,
+   "b": 76,
+   "rezultat": 980,
+   "sablon": "Care e totalul dintre {a} și {b}?",
+   "intrebare": "Care e totalul dintre 904 și 76?",
+   "id": "form_023"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 70,
+   "b": 68,
+   "rezultat": 2,
+   "sablon": "Cu cât e mai mare {a} decât {b}?",
+   "intrebare": "Cu cât e mai mare 70 decât 68?",
+   "id": "form_024"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 105,
+   "b": 89,
+   "rezultat": 16,
+   "sablon": "Ia {b} din {a}. Cât rămâne?",
+   "intrebare": "Ia 89 din 105. Cât rămâne?",
+   "id": "form_025"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 84,
+   "b": 75,
+   "rezultat": 9,
+   "sablon": "Ce număr obții scăzând {b} din {a}?",
+   "intrebare": "Ce număr obții scăzând 75 din 84?",
+   "id": "form_026"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 62,
+   "b": 16,
+   "rezultat": 46,
+   "sablon": "Într-un autobuz sunt {a} oameni și coboară {b}. Câți oameni rămân?",
+   "intrebare": "Într-un autobuz sunt 62 oameni și coboară 16. Câți oameni rămân?",
+   "id": "form_027"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 413,
+   "b": 351,
+   "rezultat": 62,
+   "sablon": "Dacă scot {b} din {a}, ce obțin?",
+   "intrebare": "Dacă scot 351 din 413, ce obțin?",
+   "id": "form_028"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 528,
+   "b": 366,
+   "rezultat": 162,
+   "sablon": "Care e rezultatul când micșorez {a} cu {b}?",
+   "intrebare": "Care e rezultatul când micșorez 528 cu 366?",
+   "id": "form_029"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 17,
+   "b": 14,
+   "rezultat": 3,
+   "sablon": "Cu cât e mai mare {a} decât {b}?",
+   "intrebare": "Cu cât e mai mare 17 decât 14?",
+   "id": "form_030"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 777,
+   "b": 752,
+   "rezultat": 25,
+   "sablon": "Ia {b} din {a}. Cât rămâne?",
+   "intrebare": "Ia 752 din 777. Cât rămâne?",
+   "id": "form_031"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 49,
+   "b": 5,
+   "rezultat": 44,
+   "sablon": "Ce număr obții scăzând {b} din {a}?",
+   "intrebare": "Ce număr obții scăzând 5 din 49?",
+   "id": "form_032"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 624,
+   "b": 57,
+   "rezultat": 567,
+   "sablon": "Într-un autobuz sunt {a} oameni și coboară {b}. Câți oameni rămân?",
+   "intrebare": "Într-un autobuz sunt 624 oameni și coboară 57. Câți oameni rămân?",
+   "id": "form_033"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 402,
+   "b": 106,
+   "rezultat": 296,
+   "sablon": "Dacă scot {b} din {a}, ce obțin?",
+   "intrebare": "Dacă scot 106 din 402, ce obțin?",
+   "id": "form_034"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 56,
+   "b": 41,
+   "rezultat": 15,
+   "sablon": "Care e rezultatul când micșorez {a} cu {b}?",
+   "intrebare": "Care e rezultatul când micșorez 56 cu 41?",
+   "id": "form_035"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 231,
+   "b": 196,
+   "rezultat": 35,
+   "sablon": "Cu cât e mai mare {a} decât {b}?",
+   "intrebare": "Cu cât e mai mare 231 decât 196?",
+   "id": "form_036"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 168,
+   "b": 29,
+   "rezultat": 139,
+   "sablon": "Ia {b} din {a}. Cât rămâne?",
+   "intrebare": "Ia 29 din 168. Cât rămâne?",
+   "id": "form_037"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 13,
+   "b": 4,
+   "rezultat": 9,
+   "sablon": "Ce număr obții scăzând {b} din {a}?",
+   "intrebare": "Ce număr obții scăzând 4 din 13?",
+   "id": "form_038"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 209,
+   "b": 44,
+   "rezultat": 165,
+   "sablon": "Într-un autobuz sunt {a} oameni și coboară {b}. Câți oameni rămân?",
+   "intrebare": "Într-un autobuz sunt 209 oameni și coboară 44. Câți oameni rămân?",
+   "id": "form_039"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 63,
+   "b": 51,
+   "rezultat": 12,
+   "sablon": "Dacă scot {b} din {a}, ce obțin?",
+   "intrebare": "Dacă scot 51 din 63, ce obțin?",
+   "id": "form_040"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 484,
+   "b": 472,
+   "rezultat": 12,
+   "sablon": "Care e rezultatul când micșorez {a} cu {b}?",
+   "intrebare": "Care e rezultatul când micșorez 484 cu 472?",
+   "id": "form_041"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 366,
+   "b": 48,
+   "rezultat": 318,
+   "sablon": "Cu cât e mai mare {a} decât {b}?",
+   "intrebare": "Cu cât e mai mare 366 decât 48?",
+   "id": "form_042"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 56,
+   "b": 27,
+   "rezultat": 29,
+   "sablon": "Ia {b} din {a}. Cât rămâne?",
+   "intrebare": "Ia 27 din 56. Cât rămâne?",
+   "id": "form_043"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 184,
+   "b": 93,
+   "rezultat": 91,
+   "sablon": "Ce număr obții scăzând {b} din {a}?",
+   "intrebare": "Ce număr obții scăzând 93 din 184?",
+   "id": "form_044"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 73,
+   "b": 56,
+   "rezultat": 17,
+   "sablon": "Într-un autobuz sunt {a} oameni și coboară {b}. Câți oameni rămân?",
+   "intrebare": "Într-un autobuz sunt 73 oameni și coboară 56. Câți oameni rămân?",
+   "id": "form_045"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 828,
+   "b": 781,
+   "rezultat": 47,
+   "sablon": "Dacă scot {b} din {a}, ce obțin?",
+   "intrebare": "Dacă scot 781 din 828, ce obțin?",
+   "id": "form_046"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "scadere",
+   "operatie": "scadere",
+   "a": 646,
+   "b": 536,
+   "rezultat": 110,
+   "sablon": "Care e rezultatul când micșorez {a} cu {b}?",
+   "intrebare": "Care e rezultatul când micșorez 646 cu 536?",
+   "id": "form_047"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 3,
+   "rezultat": 9,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 3 ori numărul 3, cât obțin?",
+   "id": "form_048"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 2,
+   "rezultat": 4,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 2 cu 2?",
+   "id": "form_049"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 8,
+   "rezultat": 64,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 8 căruțe cu câte 8 roți fiecare?",
+   "id": "form_050"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 3,
+   "rezultat": 21,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 7 și 3?",
+   "id": "form_051"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 8,
+   "rezultat": 72,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 9 rânduri a câte 8 bănci?",
+   "id": "form_052"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 10,
+   "b": 5,
+   "rezultat": 50,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "10 înmulțit cu 5 dă cât?",
+   "id": "form_053"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 6,
+   "rezultat": 72,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 6 ori numărul 12, cât obțin?",
+   "id": "form_054"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 10,
+   "rezultat": 60,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 6 cu 10?",
+   "id": "form_055"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 3,
+   "rezultat": 24,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 8 căruțe cu câte 3 roți fiecare?",
+   "id": "form_056"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 5,
+   "rezultat": 25,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 5 și 5?",
+   "id": "form_057"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 8,
+   "rezultat": 40,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 5 rânduri a câte 8 bănci?",
+   "id": "form_058"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 8,
+   "b": 6,
+   "rezultat": 48,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "8 înmulțit cu 6 dă cât?",
+   "id": "form_059"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 2,
+   "rezultat": 14,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 2 ori numărul 7, cât obțin?",
+   "id": "form_060"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 6,
+   "rezultat": 54,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 9 cu 6?",
+   "id": "form_061"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 9,
+   "rezultat": 81,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 9 căruțe cu câte 9 roți fiecare?",
+   "id": "form_062"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 8,
+   "rezultat": 32,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 4 și 8?",
+   "id": "form_063"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 9,
+   "rezultat": 27,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 3 rânduri a câte 9 bănci?",
+   "id": "form_064"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 4,
+   "rezultat": 12,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "3 înmulțit cu 4 dă cât?",
+   "id": "form_065"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 4,
+   "rezultat": 44,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 4 ori numărul 11, cât obțin?",
+   "id": "form_066"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 7,
+   "b": 7,
+   "rezultat": 49,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 7 cu 7?",
+   "id": "form_067"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 6,
+   "rezultat": 66,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 11 căruțe cu câte 6 roți fiecare?",
+   "id": "form_068"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 12,
+   "rezultat": 48,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 4 și 12?",
+   "id": "form_069"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 5,
+   "rezultat": 15,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 3 rânduri a câte 5 bănci?",
+   "id": "form_070"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 1,
+   "rezultat": 12,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "12 înmulțit cu 1 dă cât?",
+   "id": "form_071"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 4,
+   "rezultat": 20,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 4 ori numărul 5, cât obțin?",
+   "id": "form_072"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 12,
+   "rezultat": 60,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 5 cu 12?",
+   "id": "form_073"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 6,
+   "rezultat": 18,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 3 căruțe cu câte 6 roți fiecare?",
+   "id": "form_074"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 7,
+   "rezultat": 35,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 5 și 7?",
+   "id": "form_075"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 7,
+   "rezultat": 7,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 1 rânduri a câte 7 bănci?",
+   "id": "form_076"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 2,
+   "rezultat": 22,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "11 înmulțit cu 2 dă cât?",
+   "id": "form_077"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 11,
+   "rezultat": 11,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 11 ori numărul 1, cât obțin?",
+   "id": "form_078"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 2,
+   "b": 8,
+   "rezultat": 16,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 2 cu 8?",
+   "id": "form_079"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 5,
+   "b": 11,
+   "rezultat": 55,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 5 căruțe cu câte 11 roți fiecare?",
+   "id": "form_080"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 9,
+   "rezultat": 108,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 12 și 9?",
+   "id": "form_081"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 9,
+   "b": 12,
+   "rezultat": 108,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 9 rânduri a câte 12 bănci?",
+   "id": "form_082"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 6,
+   "b": 4,
+   "rezultat": 24,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "6 înmulțit cu 4 dă cât?",
+   "id": "form_083"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 3,
+   "b": 10,
+   "rezultat": 30,
+   "sablon": "Dacă iau de {b} ori numărul {a}, cât obțin?",
+   "intrebare": "Dacă iau de 10 ori numărul 3, cât obțin?",
+   "id": "form_084"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 1,
+   "b": 10,
+   "rezultat": 10,
+   "sablon": "Ce număr obții înmulțind {a} cu {b}?",
+   "intrebare": "Ce număr obții înmulțind 1 cu 10?",
+   "id": "form_085"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 11,
+   "rezultat": 132,
+   "sablon": "Câte roți au {a} căruțe cu câte {b} roți fiecare?",
+   "intrebare": "Câte roți au 12 căruțe cu câte 11 roți fiecare?",
+   "id": "form_086"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 12,
+   "b": 4,
+   "rezultat": 48,
+   "sablon": "Care e produsul numerelor {a} și {b}?",
+   "intrebare": "Care e produsul numerelor 12 și 4?",
+   "id": "form_087"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 4,
+   "b": 10,
+   "rezultat": 40,
+   "sablon": "Câte bănci sunt în {a} rânduri a câte {b} bănci?",
+   "intrebare": "Câte bănci sunt în 4 rânduri a câte 10 bănci?",
+   "id": "form_088"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "inmultire",
+   "operatie": "inmultire",
+   "a": 11,
+   "b": 10,
+   "rezultat": 110,
+   "sablon": "{a} înmulțit cu {b} dă cât?",
+   "intrebare": "11 înmulțit cu 10 dă cât?",
+   "id": "form_089"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 234,
+   "b": 3,
+   "rezultat": 78,
+   "sablon": "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "intrebare": "Împărțim 234 mere egal în 3 coșuri. Câte mere sunt în fiecare coș?",
+   "id": "form_090"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 56,
+   "b": 4,
+   "rezultat": 14,
+   "sablon": "Ce număr obții împărțind {a} la {b}?",
+   "intrebare": "Ce număr obții împărțind 56 la 4?",
+   "id": "form_091"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 585,
+   "b": 9,
+   "rezultat": 65,
+   "sablon": "Care e câtul împărțirii lui {a} la {b}?",
+   "intrebare": "Care e câtul împărțirii lui 585 la 9?",
+   "id": "form_092"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 200,
+   "b": 4,
+   "rezultat": 50,
+   "sablon": "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "intrebare": "Cât primește fiecare dacă 200 lei se împart la 4 oameni?",
+   "id": "form_093"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 240,
+   "b": 8,
+   "rezultat": 30,
+   "sablon": "Câte grupe de câte {b} se pot face din {a}?",
+   "intrebare": "Câte grupe de câte 8 se pot face din 240?",
+   "id": "form_094"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 80,
+   "b": 2,
+   "rezultat": 40,
+   "sablon": "Dacă tai {a} în {b} părți egale, cât are o parte?",
+   "intrebare": "Dacă tai 80 în 2 părți egale, cât are o parte?",
+   "id": "form_095"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 84,
+   "b": 12,
+   "rezultat": 7,
+   "sablon": "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "intrebare": "Împărțim 84 mere egal în 12 coșuri. Câte mere sunt în fiecare coș?",
+   "id": "form_096"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 108,
+   "b": 3,
+   "rezultat": 36,
+   "sablon": "Ce număr obții împărțind {a} la {b}?",
+   "intrebare": "Ce număr obții împărțind 108 la 3?",
+   "id": "form_097"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 66,
+   "b": 3,
+   "rezultat": 22,
+   "sablon": "Care e câtul împărțirii lui {a} la {b}?",
+   "intrebare": "Care e câtul împărțirii lui 66 la 3?",
+   "id": "form_098"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 272,
+   "b": 4,
+   "rezultat": 68,
+   "sablon": "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "intrebare": "Cât primește fiecare dacă 272 lei se împart la 4 oameni?",
+   "id": "form_099"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 180,
+   "b": 4,
+   "rezultat": 45,
+   "sablon": "Câte grupe de câte {b} se pot face din {a}?",
+   "intrebare": "Câte grupe de câte 4 se pot face din 180?",
+   "id": "form_100"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 60,
+   "b": 6,
+   "rezultat": 10,
+   "sablon": "Dacă tai {a} în {b} părți egale, cât are o parte?",
+   "intrebare": "Dacă tai 60 în 6 părți egale, cât are o parte?",
+   "id": "form_101"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 376,
+   "b": 8,
+   "rezultat": 47,
+   "sablon": "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "intrebare": "Împărțim 376 mere egal în 8 coșuri. Câte mere sunt în fiecare coș?",
+   "id": "form_102"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 517,
+   "b": 11,
+   "rezultat": 47,
+   "sablon": "Ce număr obții împărțind {a} la {b}?",
+   "intrebare": "Ce număr obții împărțind 517 la 11?",
+   "id": "form_103"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 171,
+   "b": 9,
+   "rezultat": 19,
+   "sablon": "Care e câtul împărțirii lui {a} la {b}?",
+   "intrebare": "Care e câtul împărțirii lui 171 la 9?",
+   "id": "form_104"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 84,
+   "b": 3,
+   "rezultat": 28,
+   "sablon": "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "intrebare": "Cât primește fiecare dacă 84 lei se împart la 3 oameni?",
+   "id": "form_105"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 750,
+   "b": 10,
+   "rezultat": 75,
+   "sablon": "Câte grupe de câte {b} se pot face din {a}?",
+   "intrebare": "Câte grupe de câte 10 se pot face din 750?",
+   "id": "form_106"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 288,
+   "b": 9,
+   "rezultat": 32,
+   "sablon": "Dacă tai {a} în {b} părți egale, cât are o parte?",
+   "intrebare": "Dacă tai 288 în 9 părți egale, cât are o parte?",
+   "id": "form_107"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 12,
+   "b": 4,
+   "rezultat": 3,
+   "sablon": "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "intrebare": "Împărțim 12 mere egal în 4 coșuri. Câte mere sunt în fiecare coș?",
+   "id": "form_108"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 81,
+   "b": 3,
+   "rezultat": 27,
+   "sablon": "Ce număr obții împărțind {a} la {b}?",
+   "intrebare": "Ce număr obții împărțind 81 la 3?",
+   "id": "form_109"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 680,
+   "b": 8,
+   "rezultat": 85,
+   "sablon": "Care e câtul împărțirii lui {a} la {b}?",
+   "intrebare": "Care e câtul împărțirii lui 680 la 8?",
+   "id": "form_110"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 90,
+   "b": 2,
+   "rezultat": 45,
+   "sablon": "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "intrebare": "Cât primește fiecare dacă 90 lei se împart la 2 oameni?",
+   "id": "form_111"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 261,
+   "b": 3,
+   "rezultat": 87,
+   "sablon": "Câte grupe de câte {b} se pot face din {a}?",
+   "intrebare": "Câte grupe de câte 3 se pot face din 261?",
+   "id": "form_112"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 246,
+   "b": 3,
+   "rezultat": 82,
+   "sablon": "Dacă tai {a} în {b} părți egale, cât are o parte?",
+   "intrebare": "Dacă tai 246 în 3 părți egale, cât are o parte?",
+   "id": "form_113"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 196,
+   "b": 2,
+   "rezultat": 98,
+   "sablon": "Împărțim {a} mere egal în {b} coșuri. Câte mere sunt în fiecare coș?",
+   "intrebare": "Împărțim 196 mere egal în 2 coșuri. Câte mere sunt în fiecare coș?",
+   "id": "form_114"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 154,
+   "b": 11,
+   "rezultat": 14,
+   "sablon": "Ce număr obții împărțind {a} la {b}?",
+   "intrebare": "Ce număr obții împărțind 154 la 11?",
+   "id": "form_115"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 616,
+   "b": 11,
+   "rezultat": 56,
+   "sablon": "Care e câtul împărțirii lui {a} la {b}?",
+   "intrebare": "Care e câtul împărțirii lui 616 la 11?",
+   "id": "form_116"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 456,
+   "b": 6,
+   "rezultat": 76,
+   "sablon": "Cât primește fiecare dacă {a} lei se împart la {b} oameni?",
+   "intrebare": "Cât primește fiecare dacă 456 lei se împart la 6 oameni?",
+   "id": "form_117"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 356,
+   "b": 4,
+   "rezultat": 89,
+   "sablon": "Câte grupe de câte {b} se pot face din {a}?",
+   "intrebare": "Câte grupe de câte 4 se pot face din 356?",
+   "id": "form_118"
+  },
+  {
+   "parte": "calcul",
+   "categorie": "impartire",
+   "operatie": "impartire",
+   "a": 582,
+   "b": 6,
+   "rezultat": 97,
+   "sablon": "Dacă tai {a} în {b} părți egale, cât are o parte?",
+   "intrebare": "Dacă tai 582 în 6 părți egale, cât are o parte?",
+   "id": "form_119"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Te salut!",
+   "intrebare": "Te salut!",
+   "id": "form_120"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Te salut cu drag, Kronos!",
+   "intrebare": "Te salut cu drag, Kronos!",
+   "id": "form_121"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Bună, bună!",
+   "intrebare": "Bună, bună!",
+   "id": "form_122"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Noroc, Kronos!",
+   "intrebare": "Noroc, Kronos!",
+   "id": "form_123"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Hei, am venit să vorbim!",
+   "intrebare": "Hei, am venit să vorbim!",
+   "id": "form_124"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Bună ziua, sunt din nou aici.",
+   "intrebare": "Bună ziua, sunt din nou aici.",
+   "id": "form_125"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Salut, îmi face plăcere să te cunosc!",
+   "intrebare": "Salut, îmi face plăcere să te cunosc!",
+   "id": "form_126"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Bună seara tuturor!",
+   "intrebare": "Bună seara tuturor!",
+   "id": "form_127"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Salut, m-am întors!",
+   "intrebare": "Salut, m-am întors!",
+   "id": "form_128"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Bună dimineața și ție!",
+   "intrebare": "Bună dimineața și ție!",
+   "id": "form_129"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Hei, bună!",
+   "intrebare": "Hei, bună!",
+   "id": "form_130"
+  },
+  {
+   "parte": "social",
+   "categorie": "salut",
+   "sablon": "Bine te-am găsit!",
+   "intrebare": "Bine te-am găsit!",
+   "id": "form_131"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum te mai descurci?",
+   "intrebare": "Cum te mai descurci?",
+   "id": "form_132"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Ce mai e pe la tine?",
+   "intrebare": "Ce mai e pe la tine?",
+   "id": "form_133"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum îți este azi?",
+   "intrebare": "Cum îți este azi?",
+   "id": "form_134"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Ești bine dispus?",
+   "intrebare": "Ești bine dispus?",
+   "id": "form_135"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum merge viața?",
+   "intrebare": "Cum merge viața?",
+   "id": "form_136"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Te simți în regulă?",
+   "intrebare": "Te simți în regulă?",
+   "id": "form_137"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum ți-a mers azi?",
+   "intrebare": "Cum ți-a mers azi?",
+   "id": "form_138"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Ce faci de bine?",
+   "intrebare": "Ce faci de bine?",
+   "id": "form_139"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum ești în dimineața asta?",
+   "intrebare": "Cum ești în dimineața asta?",
+   "id": "form_140"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Ce mai zici, cum ești?",
+   "intrebare": "Ce mai zici, cum ești?",
+   "id": "form_141"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Toate bune la tine?",
+   "intrebare": "Toate bune la tine?",
+   "id": "form_142"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_faci",
+   "sablon": "Cum mai ești, Kronos?",
+   "intrebare": "Cum mai ești, Kronos?",
+   "id": "form_143"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mulțumesc din suflet!",
+   "intrebare": "Mulțumesc din suflet!",
+   "id": "form_144"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Îți mulțumesc pentru tot!",
+   "intrebare": "Îți mulțumesc pentru tot!",
+   "id": "form_145"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mersi, m-ai ajutat!",
+   "intrebare": "Mersi, m-ai ajutat!",
+   "id": "form_146"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mulțumesc foarte mult!",
+   "intrebare": "Mulțumesc foarte mult!",
+   "id": "form_147"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mersi de răspuns!",
+   "intrebare": "Mersi de răspuns!",
+   "id": "form_148"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Ești de mare ajutor, mulțumesc!",
+   "intrebare": "Ești de mare ajutor, mulțumesc!",
+   "id": "form_149"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mulțumesc că mi-ai răspuns!",
+   "intrebare": "Mulțumesc că mi-ai răspuns!",
+   "id": "form_150"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Merci!",
+   "intrebare": "Merci!",
+   "id": "form_151"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mersi tare mult!",
+   "intrebare": "Mersi tare mult!",
+   "id": "form_152"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mulțam!",
+   "intrebare": "Mulțam!",
+   "id": "form_153"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Îți rămân dator, mersi!",
+   "intrebare": "Îți rămân dator, mersi!",
+   "id": "form_154"
+  },
+  {
+   "parte": "social",
+   "categorie": "multumesc",
+   "sablon": "Mulțumesc, a fost util!",
+   "intrebare": "Mulțumesc, a fost util!",
+   "id": "form_155"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Trebuie să plec, pa!",
+   "intrebare": "Trebuie să plec, pa!",
+   "id": "form_156"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Pe mâine!",
+   "intrebare": "Pe mâine!",
+   "id": "form_157"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Gata pentru azi, la revedere!",
+   "intrebare": "Gata pentru azi, la revedere!",
+   "id": "form_158"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Ne mai auzim!",
+   "intrebare": "Ne mai auzim!",
+   "id": "form_159"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "O seară bună!",
+   "intrebare": "O seară bună!",
+   "id": "form_160"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Pa, pe data viitoare!",
+   "intrebare": "Pa, pe data viitoare!",
+   "id": "form_161"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Mă retrag, noapte bună!",
+   "intrebare": "Mă retrag, noapte bună!",
+   "id": "form_162"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Rămas bun!",
+   "intrebare": "Rămas bun!",
+   "id": "form_163"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Hai, pa!",
+   "intrebare": "Hai, pa!",
+   "id": "form_164"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Ciao, Kronos!",
+   "intrebare": "Ciao, Kronos!",
+   "id": "form_165"
+  },
+  {
+   "parte": "social",
+   "categorie": "la_revedere",
+   "sablon": "Pa și pe mâine!",
+   "intrebare": "Pa și pe mâine!",
+   "id": "form_166"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Tu ce ești de fapt?",
+   "intrebare": "Tu ce ești de fapt?",
+   "id": "form_167"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Cine ești, de fapt?",
+   "intrebare": "Cine ești, de fapt?",
+   "id": "form_168"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Ești un calculator?",
+   "intrebare": "Ești un calculator?",
+   "id": "form_169"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Ce ești, un om sau o mașină?",
+   "intrebare": "Ce ești, un om sau o mașină?",
+   "id": "form_170"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Aș vrea să știu cum te numești.",
+   "intrebare": "Aș vrea să știu cum te numești.",
+   "id": "form_171"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Cine te-a construit?",
+   "intrebare": "Cine te-a construit?",
+   "id": "form_172"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Cum îți spune lumea?",
+   "intrebare": "Cum îți spune lumea?",
+   "id": "form_173"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Ești o persoană adevărată?",
+   "intrebare": "Ești o persoană adevărată?",
+   "id": "form_174"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Ce fel de ființă ești?",
+   "intrebare": "Ce fel de ființă ești?",
+   "id": "form_175"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "Cine e Kronos?",
+   "intrebare": "Cine e Kronos?",
+   "id": "form_176"
+  },
+  {
+   "parte": "social",
+   "categorie": "cine_esti",
+   "sablon": "De unde vii tu?",
+   "intrebare": "De unde vii tu?",
+   "id": "form_177"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce lucruri știi să faci?",
+   "intrebare": "Ce lucruri știi să faci?",
+   "id": "form_178"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Cu ce te ocupi?",
+   "intrebare": "Cu ce te ocupi?",
+   "id": "form_179"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce te pricepi să faci?",
+   "intrebare": "Ce te pricepi să faci?",
+   "id": "form_180"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "La ce te pricepi?",
+   "intrebare": "La ce te pricepi?",
+   "id": "form_181"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce fel de ajutor oferi?",
+   "intrebare": "Ce fel de ajutor oferi?",
+   "id": "form_182"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "În ce mă poți ajuta?",
+   "intrebare": "În ce mă poți ajuta?",
+   "id": "form_183"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce știi?",
+   "intrebare": "Ce știi?",
+   "id": "form_184"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce pot să te rog să faci?",
+   "intrebare": "Ce pot să te rog să faci?",
+   "id": "form_185"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Care sunt abilitățile tale?",
+   "intrebare": "Care sunt abilitățile tale?",
+   "id": "form_186"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce poți face tu bine?",
+   "intrebare": "Ce poți face tu bine?",
+   "id": "form_187"
+  },
+  {
+   "parte": "social",
+   "categorie": "ce_poti",
+   "sablon": "Ce întrebări accepți?",
+   "intrebare": "Ce întrebări accepți?",
+   "id": "form_188"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce am în mână acum?",
+   "intrebare": "Ce am în mână acum?",
+   "id": "form_189"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Câți frați am?",
+   "intrebare": "Câți frați am?",
+   "id": "form_190"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce film o să văd diseară?",
+   "intrebare": "Ce film o să văd diseară?",
+   "id": "form_191"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Unde o să merg în vacanță?",
+   "intrebare": "Unde o să merg în vacanță?",
+   "id": "form_192"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce mi-a spus mama azi-dimineață?",
+   "intrebare": "Ce mi-a spus mama azi-dimineață?",
+   "id": "form_193"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce notă o să iau la examen?",
+   "intrebare": "Ce notă o să iau la examen?",
+   "id": "form_194"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Cum îl cheamă pe câinele meu?",
+   "intrebare": "Cum îl cheamă pe câinele meu?",
+   "id": "form_195"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce oră arată ceasul meu acum?",
+   "intrebare": "Ce oră arată ceasul meu acum?",
+   "id": "form_196"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce gust are cafeaua mea de azi?",
+   "intrebare": "Ce gust are cafeaua mea de azi?",
+   "id": "form_197"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Câte mesaje am primit azi?",
+   "intrebare": "Câte mesaje am primit azi?",
+   "id": "form_198"
+  },
+  {
+   "parte": "social",
+   "categorie": "nu_stiu",
+   "sablon": "Ce carte citesc acum?",
+   "intrebare": "Ce carte citesc acum?",
+   "id": "form_199"
+  }
+ ]
+}
