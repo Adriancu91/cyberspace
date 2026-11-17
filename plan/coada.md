@@ -4021,7 +4021,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-126, 16 nov 2026 13:53); pașii și pragurile: supraveghetor, 16 nov 2026 14:15
 
 ### S122 — C-129: oprirea interfeței de pe 8787 cât rulează lanțul S117 → S123 → S121 → S119; repornirea la final cu câștigătorul (procesor)
-- stare: in_lucru (executant, 17 nov 2026 15:00; pasul 4 — repornirea; lanțul S117 → S123 → S121 → S119 `gata`, placa liberă 440 MB / 31 °C, nimic altceva în lucru)
+- stare: gata (executant, 17 nov 2026 15:08: comutatorul `lucru/STOP_INTERFATA` șters 14:59:53; interfața pornită prin `unelte/interfata_ws.ps1` fără parametri = #651 în ambele file (câștigătorul: S117 și S121 „rămâne #651”), portul 8787 răspunde de la 15:00:01; cele 5 întrebări S114 + „Cât face 3x7?” + cele 2 „din text” C-119 verificate pe Tailscale, identice cu S114/C-119; 1497 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 17 nov 2026 15:00; pasul 4 — repornirea; lanțul S117 → S123 → S121 → S119 `gata`, placa liberă 440 MB / 31 °C, nimic altceva în lucru)
+- raport (repornirea): docs/rapoarte/2026-11-17_1508_S122_interfata_repornita.md
 - (istoric) stare: aprobat — oprirea făcută (executant, 16 nov 2026 22:00: 2 procese `module.interfata` #651 oprite, portul 8787 nu mai răspunde; comutatorul `lucru/STOP_INTERFATA` citit de `unelte/paznic_procese_ws.ps1` → paznicul nu o mai repornește; anulare: ștergi fișierul; S117 neatinsă; 1488 teste trec, 1 sărit), aștept sfârșitul lanțului pentru pasul 4
 - raport (oprirea): docs/rapoarte/2026-11-16_2207_S122_interfata_oprita.md
 - (istoric) stare: **aprobat** (supraveghetor, 16 nov 2026 20:15; Adrian, COMENZI.md C-129, 16 nov 17:22) — **se face ACUM, chiar dacă S117 e `in_lucru`** (doar un proces pe procesor; nu atinge placa și nici procesul S117)
