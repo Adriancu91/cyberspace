@@ -211,7 +211,7 @@ def cauta_in_bloc(bloc: bytes, lungime: int, toate: np.ndarray, sursa_id: np.nda
                 scoase[i].add(s)
     pastrate = b"".join(b + CAPAT for i, b in enumerate(bucati) if i not in scoase)
     return {"texte": len(bucati), "pastrate": pastrate, "scoase": [sorted(s) for s in scoase.values()],
-            "exemple": exemple, "ram_mb": ram_varf_mb()}
+            "indici_scoase": list(scoase), "exemple": exemple, "ram_mb": ram_varf_mb()}
 
 
 def _bloc_in_proces(sarcina: tuple[bytes, int]) -> dict[str, Any]:
@@ -219,10 +219,16 @@ def _bloc_in_proces(sarcina: tuple[bytes, int]) -> dict[str, Any]:
     return cauta_in_bloc(sarcina[0], sarcina[1], _TOATE, _SURSA_ID)
 
 
-def blocuri(cale: Path, inceput: int, octeti_pe_bloc: int) -> Iterator[bytes]:
-    """Fișierul de la `inceput`, pe blocuri de ~octeti_pe_bloc, tăiate după un text întreg."""
+def blocuri(cale: Path, inceput: int, octeti_pe_bloc: int,
+            sari: list[tuple[int, int]] | None = None) -> Iterator[bytes]:
+    """Fișierul de la `inceput`, pe blocuri de ~octeti_pe_bloc, tăiate după un text întreg. Cu `sari` (porțiuni de
+    octeți, S119), fișierul se citește fără ele (`unelte/fara_portiuni.py`)."""
     rest = b""
-    with cale.open("rb") as f:
+    with cale.open("rb") as f0:
+        f: Any = f0
+        if sari:
+            from unelte.fara_portiuni import FaraPortiuni
+            f = FaraPortiuni(f0, sari, cale.stat().st_size)
         f.seek(inceput)
         while True:
             nou = f.read(octeti_pe_bloc)
@@ -240,7 +246,8 @@ def blocuri(cale: Path, inceput: int, octeti_pe_bloc: int) -> Iterator[bytes]:
 
 
 def trece(cale: Path, inceput: int, lungime: int, toate: np.ndarray, sursa_id: np.ndarray, nume_surse: list[str],
-          procese: int, octeti_pe_bloc: int, dosar_lucru: Path, scrie: Any = None, spune: Any = print) -> dict[str, Any]:
+          procese: int, octeti_pe_bloc: int, dosar_lucru: Path, scrie: Any = None, spune: Any = print,
+          sari: list[tuple[int, int]] | None = None) -> dict[str, Any]:
     """O trecere prin fișier, de la `inceput`: numără textele cu bucăți comune; cu `scrie` (un fișier deschis), scrie
     textele păstrate, în ordine."""
     start = time.monotonic()
@@ -267,7 +274,7 @@ def trece(cale: Path, inceput: int, lungime: int, toate: np.ndarray, sursa_id: n
         scrisi += len(r["pastrate"])
 
     if procese <= 1:
-        for k, bloc in enumerate(blocuri(cale, inceput, octeti_pe_bloc)):
+        for k, bloc in enumerate(blocuri(cale, inceput, octeti_pe_bloc, sari)):
             octeti += len(bloc)
             aduna(cauta_in_bloc(bloc, lungime, toate, sursa_id))
             spune(f"  blocul {k + 1}: {octeti / 1e9:.2f} GB, {scoase} texte scoase din {texte}, "
@@ -290,7 +297,7 @@ def trece(cale: Path, inceput: int, lungime: int, toate: np.ndarray, sursa_id: n
                         spune(f"  {facute} blocuri: {scoase} texte scoase din {texte}, "
                               f"{time.monotonic() - start:.0f} s", flush=True)
 
-                for bloc in blocuri(cale, inceput, octeti_pe_bloc):
+                for bloc in blocuri(cale, inceput, octeti_pe_bloc, sari):
                     octeti += len(bloc)
                     in_lucru.append(grup.submit(_bloc_in_proces, (bloc, lungime)))
                     if len(in_lucru) >= 2 * procese:

@@ -15,7 +15,9 @@ Comenzi:
               estimarea pentru tot fișierul.
   scrie       --sursa <text> --tokenizer <bpe.json> --iesire lucru/bucati/<nume> [--marime 50000000]
               [--bloc-octeti 50000000] [--minim-liber-gb 15] [--limita-ore H] [--opreste-dupa-blocuri N]
-              Rularea întreagă. După fiecare bloc scrie bucățile pline, restul (rest_<n>.bin) și progres.json; la
+              [--sari <lista.json>]
+              Rularea întreagă. Cu --sari (un JSON cu „portiuni”: [[început, sfârșit], …] în octeți, texte întregi),
+              textul se citește fără porțiunile acelea, fără nicio copie pe disc (S119). După fiecare bloc scrie bucățile pline, restul (rest_<n>.bin) și progres.json; la
               repornire continuă de la ultimul bloc terminat. Refuză dacă index.json există. Coduri: 0 = terminat,
               2 = oprit din lipsă de loc pe disc, 3 = oprit la limită (de timp sau de blocuri); după 2 și 3 aceeași
               comandă continuă.
@@ -215,7 +217,7 @@ def _sterge_resturi(iesire: Path, pastreaza: str | None) -> None:
 
 def scrie(sursa: Path, tokenizer: Path, iesire: Path, marime: int = MARIME, bloc_octeti: int = BLOC_OCTETI,
           minim_liber_gb: float = 15.0, limita_ore: float | None = None,
-          opreste_dupa_blocuri: int | None = None) -> dict[str, Any]:
+          opreste_dupa_blocuri: int | None = None, sari: Path | None = None) -> dict[str, Any]:
     index_cale = iesire / "index.json"
     if index_cale.exists():
         raise FileExistsError(f"{index_cale} există deja: nu scriu peste bucăți făcute")
@@ -225,6 +227,13 @@ def scrie(sursa: Path, tokenizer: Path, iesire: Path, marime: int = MARIME, bloc
     tok = TokenizerBPE.incarca(tokenizer)
     speciale = speciale_octeti(tok)
     progres = _progres_nou(sursa, tokenizer, _tip(tok), marime)
+    portiuni: list[tuple[int, int]] | None = None
+    if sari is not None:
+        portiuni = [(int(a), int(b)) for a, b in json.loads(sari.read_text(encoding="utf-8"))["portiuni"]]
+        sarit = sum(b - a for a, b in portiuni)
+        progres["sursa"]["octeti"] -= sarit
+        progres["sursa"]["sarite"] = {"fisier": str(sari).replace("\\", "/"), "sha256": _sha256_fisier(sari),
+                                      "portiuni": len(portiuni), "octeti": sarit}
     tip = np.dtype(TIPURI[progres["tip"]]).newbyteorder("<")
     iesire.mkdir(parents=True, exist_ok=True)
     rest = np.zeros(0, dtype=tip)
@@ -241,7 +250,11 @@ def scrie(sursa: Path, tokenizer: Path, iesire: Path, marime: int = MARIME, bloc
         progres["ram_varf_mb"] = max(progres["ram_varf_mb"], ram_varf_mb() or 0)
         _scrie_json(iesire / "progres.json", progres)
 
-    with sursa.open("rb") as f:
+    with sursa.open("rb") as f0:
+        f: Any = f0
+        if portiuni is not None:
+            from unelte.fara_portiuni import FaraPortiuni
+            f = FaraPortiuni(f0, portiuni, sursa.stat().st_size)
         f.seek(progres["octeti_facuti"])
         for bucata, lipite in blocuri(f, speciale, bloc_octeti):
             t0 = time.perf_counter()
@@ -412,6 +425,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--minim-liber-gb", type=float, default=15.0)
     s.add_argument("--limita-ore", type=float, default=None)
     s.add_argument("--opreste-dupa-blocuri", type=int, default=None)
+    s.add_argument("--sari", type=Path, default=None)
     s = sub.add_parser("identitate")
     s.add_argument("--dosar", required=True, type=Path)
     s.add_argument("--referinta", required=True, type=Path)
@@ -425,7 +439,7 @@ def main(argv: list[str] | None = None) -> int:
         rez = masoara(a.sursa, a.tokenizer, a.octeti, a.bloc_octeti)
     elif a.comanda == "scrie":
         rez = scrie(a.sursa, a.tokenizer, a.iesire, a.marime, a.bloc_octeti, a.minim_liber_gb, a.limita_ore,
-                    a.opreste_dupa_blocuri)
+                    a.opreste_dupa_blocuri, a.sari)
         cod = 0 if rez["terminat"] else (2 if rez["pe_disc"] else 3)
     else:
         rez = identitate(a.dosar, a.referinta)

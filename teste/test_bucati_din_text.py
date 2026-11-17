@@ -262,3 +262,55 @@ def test_comenzile_cap_coada(tmp_path, tok_cale, capsys):
     assert json.loads((tmp_path / "i.json").read_text(encoding="utf-8"))["verdict"] == "DA"
     assert np.array_equal(_sir(tmp_path / "b"), _asteptat(tok_cale, text))
     capsys.readouterr()
+
+
+@pytest.mark.parametrize("bloc", [7, 120, 10_000_000], ids=lambda b: f"bloc{b}")
+def test_sari_portiuni_da_textul_fara_ele_si_se_reia(tmp_path, tok_cale, bloc):
+    """S119: cu --sari, simbolurile sunt exact ale textului fără porțiunile din listă (fără copie pe disc), și la
+    reluarea după oprire."""
+    texte = [POVESTI[i % len(POVESTI)] + f" ({i})" + SF for i in range(20)]
+    octeti = [t.encode("utf-8") for t in texte]
+    sursa = _scrie_text(tmp_path, "".join(texte))
+    sarite = {0, 3, 4, 11, 19}  # primul, două lipite, unul la mijloc, ultimul
+    portiuni, poz = [], 0
+    for i, o in enumerate(octeti):
+        if i in sarite:
+            portiuni.append([poz, poz + len(o)])
+        poz += len(o)
+    lista = tmp_path / "scoase.json"
+    lista.write_text(json.dumps({"portiuni": portiuni}), encoding="utf-8")
+    comanda = ["scrie", "--sursa", str(sursa), "--tokenizer", str(tok_cale), "--iesire", str(tmp_path / "b"),
+               "--marime", "53", "--bloc-octeti", str(bloc), "--minim-liber-gb", "0", "--sari", str(lista)]
+    if bt.main(comanda + ["--opreste-dupa-blocuri", "1"]) == 3:
+        assert bt.main(comanda) == 0
+    fara = "".join(t for i, t in enumerate(texte) if i not in sarite)
+    assert np.array_equal(_sir(tmp_path / "b"), _asteptat(tok_cale, fara))
+    index = json.loads((tmp_path / "b" / "index.json").read_text(encoding="utf-8"))
+    assert index["sursa"]["octeti"] == len(fara.encode("utf-8"))
+    assert index["sursa"]["sarite"]["portiuni"] == 5
+    assert db.main(["verifica", "--dosar", str(tmp_path / "b")]) == 0
+
+
+def test_fara_portiuni_citeste_ca_fisierul_fara_ele(tmp_path):
+    from unelte.fara_portiuni import FaraPortiuni
+
+    date = bytes(range(256)) * 4
+    portiuni = [(0, 10), (10, 25), (100, 101), (500, 600), (1000, 1024)]
+    asteptat = bytearray(date)
+    for a, b in reversed(portiuni):
+        del asteptat[a:b]
+    cale = tmp_path / "d.bin"
+    cale.write_bytes(date)
+    with cale.open("rb") as f:
+        g = FaraPortiuni(f, portiuni, len(date))
+        assert g.marime == len(asteptat)
+        for n in (1, 3, 77, 5000):
+            g.seek(0)
+            citit = b""
+            while bucata := g.read(n):
+                citit += bucata
+            assert citit == bytes(asteptat)
+        g.seek(123)
+        assert g.read(50) == bytes(asteptat[123:173])
+        with pytest.raises(ValueError):
+            FaraPortiuni(f, [(5, 20), (10, 30)], len(date))

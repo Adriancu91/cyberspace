@@ -16,10 +16,15 @@ Pașii (`tot` îi face pe toți; fiecare pas sare dacă e deja făcut):
    - 1 % din textele rămase (după amprentă, ca la curățarea veche) merge în `validare.txt`.
    Scrie `date/ws/s119/antrenare.txt`, `validare.txt`, `info.json`. Se oprește la --limita-gb octeți scriși sau dacă
    C: ar coborî sub pragul de disc (cu loc pentru simboluri).
-2. `verifica`: a doua căutare de scurgeri pe `antrenare.txt` scris (cu `trece` din `unelte/hrana_fineweb_rest.py`):
-   trebuie 0 texte cu bucăți comune și același SHA-256.
-3. `tokenizeaza`: `unelte/bucati_din_text.py scrie` cu tokenizer-ul vechi (`date/ws/bpe_16384.json`), în
-   `date/ws/bucati_s119/`.
+2. `scoate` (S119 varianta 1, 17 nov 2026): o trecere prin `antrenare.txt` scris cu AMBELE căutări — prima (fiecare
+   text singur, cu rând nou în față și `<|endoftext|>` + rând nou la capăt) și a doua (`cauta_in_bloc`, ca `trece`,
+   blocuri întregi) — și lista textelor prinse de oricare, ca porțiuni de octeți, în `date/ws/s119/scoase.json`.
+   Fișierul de text NU se rescrie: textele din listă se sar (`unelte/fara_portiuni.py`) la a doua verificare și la
+   tokenizare (aceeași listă).
+3. `verifica`: a doua căutare de scurgeri pe `antrenare.txt` scris (cu `trece` din `unelte/hrana_fineweb_rest.py`),
+   fără textele din `scoase.json`: trebuie 0 texte cu bucăți comune și același SHA-256.
+4. `tokenizeaza`: `unelte/bucati_din_text.py scrie --sari scoase.json` cu tokenizer-ul vechi
+   (`date/ws/bpe_16384.json`), în `date/ws/bucati_s119/`.
 
     python unelte/text_s119.py tot [--limita-gb 8] [--procese 8] [--minim-liber-gb 30]
 """
@@ -47,8 +52,8 @@ if str(RADACINA) not in sys.path:
     sys.path.insert(0, str(RADACINA))
 
 from unelte.curata_date_ws import SEPARATOR, amprenta, e_stricat, normalizeaza  # noqa: E402  (doar folosite)
-from unelte.hrana_fineweb_rest import (amprente_de_ferit, ram_varf_mb, sha256_fisier, texte_de_ferit,  # noqa: E402
-                                       trece)
+from unelte.hrana_fineweb_rest import (CAPAT, amprente_de_ferit, blocuri, cauta_in_bloc, ram_varf_mb,  # noqa: E402
+                                       sha256_fisier, texte_de_ferit, trece)
 from unelte.scurgeri_examen import amprente, coduri  # noqa: E402
 
 LUNGIME = 50
@@ -100,6 +105,118 @@ def esantion(text: str) -> np.ndarray:
     return np.unique(h[h % np.uint64(PAS_ESANTION) == 0])
 
 
+def cum_il_vede_trece(text: str) -> str:
+    """Textul cum îl vede a doua căutare (`trece`): cu rândul nou dinainte și cu `<|endoftext|>` + rând nou la capăt
+    (așa e scris în fișier: text, rând nou, <|endoftext|>, rând nou). S119, 17 nov 2026: înainte, prima căutare nu
+    vedea separatorul, iar 162 de texte cu sfârșit comun cu o validare (+ separator) au scăpat de ea."""
+    return "\n" + text + "\n" + SEPARATOR + "\n"
+
+
+def _porneste_ferit(ferit: str, ferit_sursa: str) -> None:
+    global _FERIT, _FERIT_SURSA
+    _FERIT = np.load(ferit, mmap_mode="r")
+    _FERIT_SURSA = np.load(ferit_sursa, mmap_mode="r")
+
+
+def scoate_din_bloc(bloc: bytes, inceput: int, ferit: np.ndarray, ferit_sursa: np.ndarray) -> list[dict[str, Any]]:
+    """Textele dintr-un bloc (care începe la octetul `inceput` al fișierului, după un <|endoftext|> + rând nou) prinse
+    de prima căutare (fiecare text singur, `cum_il_vede_trece`) sau de a doua (`cauta_in_bloc`, ca `trece`)."""
+    a_doua = cauta_in_bloc(bloc, LUNGIME, ferit, ferit_sursa)
+    surse_a_doua = dict(zip(a_doua["indici_scoase"], a_doua["scoase"]))
+    bucati = bloc.split(CAPAT)
+    if not bucati[-1]:
+        bucati.pop()
+    rez, poz = [], inceput
+    for i, b in enumerate(bucati):
+        dupa = poz - inceput + len(b)
+        capat = poz + len(b) + (len(CAPAT) if bloc[dupa: dupa + len(CAPAT)] == CAPAT else 0)
+        p = b.decode("utf-8", errors="replace")
+        text = p[:-1] if p.endswith("\n") else p
+        cautat = cum_il_vede_trece(text)
+        h = amprente(coduri(cautat), LUNGIME)
+        scurs = _in(ferit, h)
+        if scurs.any() or i in surse_a_doua:
+            surse_prima = sorted({int(s) for s in np.asarray(ferit_sursa[np.searchsorted(ferit, h[scurs])])})
+            rez.append({"inceput": poz, "sfarsit": capat, "prima": bool(scurs.any()), "a_doua": i in surse_a_doua,
+                        "surse": sorted(set(surse_prima) | set(surse_a_doua.get(i, []))),
+                        "bucata": cautat[int(np.argmax(scurs)): int(np.argmax(scurs)) + LUNGIME] if scurs.any() else None,
+                        "inceput_text": text[:160], "sfarsit_text": text[-160:]})
+        poz = capat
+    return rez
+
+
+def _scoate_in_proces(sarcina: tuple[bytes, int]) -> list[dict[str, Any]]:
+    assert _FERIT is not None and _FERIT_SURSA is not None
+    return scoate_din_bloc(sarcina[0], sarcina[1], _FERIT, _FERIT_SURSA)
+
+
+def scoate(iesire: Path = IESIRE, procese: int = 8, de_ferit: dict[str, list[str]] | None = None,
+           lucru: Path = LUCRU, octeti_pe_bloc: int = 32_000_000, spune: Any = print) -> dict[str, Any]:
+    """Lista textelor din `antrenare.txt` prinse de oricare dintre cele două căutări, în `scoase.json`. Nu rescrie și
+    nu șterge nimic din text."""
+    cale = iesire / "scoase.json"
+    if cale.exists():
+        raise FileExistsError(f"{cale} există deja: nu scriu peste el")
+    start = time.monotonic()
+    tinta = iesire / "antrenare.txt"
+    texte = texte_de_ferit(DE_FERIT_TEXT, DE_FERIT_JSON) if de_ferit is None else de_ferit
+    nume = list(texte)
+    ferit, ferit_sursa, _ = amprente_de_ferit(texte, LUNGIME)
+    spune(f"De ferit: {len(ferit):,} bucăți, {time.monotonic() - start:.0f} s.", flush=True)
+    gasite: list[dict[str, Any]] = []
+    lucru.mkdir(parents=True, exist_ok=True)
+    fisiere = lucru / "scoate_ferit.npy", lucru / "scoate_ferit_sursa.npy"
+    np.save(fisiere[0], ferit)
+    np.save(fisiere[1], ferit_sursa)
+    pozitie = 0
+    try:
+        with ProcessPoolExecutor(max(1, procese), initializer=_porneste_ferit,
+                                 initargs=tuple(str(f) for f in fisiere)) as grup:
+            in_lucru: deque[Any] = deque()
+            facute = 0
+            for bloc in blocuri(tinta, 0, octeti_pe_bloc):
+                in_lucru.append(grup.submit(_scoate_in_proces, (bloc, pozitie)))
+                pozitie += len(bloc)
+                if len(in_lucru) >= 2 * max(1, procese):
+                    gasite.extend(in_lucru.popleft().result())
+                    facute += 1
+                    if facute % 10 == 0:
+                        spune(f"  {facute} blocuri, {pozitie / 1e9:.2f} GB citiți, {len(gasite)} texte prinse, "
+                              f"{time.monotonic() - start:.0f} s", flush=True)
+            while in_lucru:
+                gasite.extend(in_lucru.popleft().result())
+    finally:
+        for f in fisiere:  # fișierele temporare ale uneltei (nu date)
+            f.unlink(missing_ok=True)
+    if pozitie != tinta.stat().st_size:
+        raise RuntimeError(f"am citit {pozitie} octeți, fișierul are {tinta.stat().st_size}")
+    for g in gasite:
+        g["surse"] = [nume[k] for k in g["surse"]]
+    pe_sursa: Counter[str] = Counter(" + ".join(g["surse"]) for g in gasite)
+    rezultat = {"facut": datetime.now().isoformat(timespec="seconds"),
+                "unealta": "unelte/text_s119.py scoate (S119 varianta 1)", "fisier": tinta.as_posix(),
+                "sha256_fisier": sha256_fisier(tinta), "octeti_fisier": tinta.stat().st_size,
+                "texte": len(gasite), "prima_cautare": sum(g["prima"] for g in gasite),
+                "a_doua_cautare": sum(g["a_doua"] for g in gasite),
+                "amandoua": sum(g["prima"] and g["a_doua"] for g in gasite),
+                "doar_prima": sum(g["prima"] and not g["a_doua"] for g in gasite),
+                "doar_a_doua": sum(g["a_doua"] and not g["prima"] for g in gasite),
+                "pe_sursa": dict(pe_sursa.most_common()),
+                "octeti_sariti": sum(g["sfarsit"] - g["inceput"] for g in gasite),
+                "secunde": round(time.monotonic() - start, 1),
+                "portiuni": [[g["inceput"], g["sfarsit"]] for g in gasite], "detalii": gasite}
+    cale.write_text(json.dumps(rezultat, ensure_ascii=False, indent=1), encoding="utf-8")
+    return rezultat
+
+
+def lista_sarite(iesire: Path) -> tuple[list[tuple[int, int]] | None, str | None]:
+    """Porțiunile de sărit din `scoase.json` (dacă există) și SHA-256-ul listei."""
+    cale = iesire / "scoase.json"
+    if not cale.exists():
+        return None, None
+    d = json.loads(cale.read_text(encoding="utf-8"))
+    return [(int(a), int(b)) for a, b in d["portiuni"]], sha256_fisier(cale)
+
 def _porneste(ferit: str, ferit_sursa: str, vechi: str) -> None:
     global _FERIT, _FERIT_SURSA, _VECHI
     _FERIT = np.load(ferit, mmap_mode="r")
@@ -128,12 +245,14 @@ def judeca_texte(texte: list[tuple[str, int]], ferit: np.ndarray, ferit_sursa: n
         if e_stricat(text, "proza"):
             rezultat.append({"cade": "stricate"})
             continue
-        h = amprente(coduri("\n" + text), LUNGIME)
+        cautat = cum_il_vede_trece(text)
+        h = amprente(coduri(cautat), LUNGIME)
         scurs = _in(ferit, h)
         surse = sorted({int(s) for s in np.asarray(ferit_sursa[np.searchsorted(ferit, h[scurs])])}) if scurs.any() else []
-        es = np.unique(h[h % np.uint64(PAS_ESANTION) == 0])
+        h_text = h[: max(0, len(text) + 2 - LUNGIME)]  # eșantionul: doar bucățile din rândul nou + text, ca înainte
+        es = np.unique(h_text[h_text % np.uint64(PAS_ESANTION) == 0])
         rezultat.append({"text": text, "sedile": sedile, "cheie": amprenta(text), "scurgeri": surse,
-                         "bucata_scursa": ("\n" + text)[int(np.argmax(scurs)): int(np.argmax(scurs)) + LUNGIME]
+                         "bucata_scursa": cautat[int(np.argmax(scurs)): int(np.argmax(scurs)) + LUNGIME]
                          if surse else None,
                          "esantion": es, "in_vechi": int(_in(vechi, es).sum())})
     return rezultat
@@ -418,14 +537,19 @@ def verifica(iesire: Path = IESIRE, procese: int = 8, de_ferit: dict[str, list[s
     texte = texte_de_ferit(DE_FERIT_TEXT, DE_FERIT_JSON) if de_ferit is None else de_ferit
     ferit, ferit_sursa, _ = amprente_de_ferit(texte, LUNGIME)
     tinta = iesire / "antrenare.txt"
-    texte_scrise = sum(n["texte_antrenare"] for n in info["surse"].values())
-    r = trece(tinta, 0, LUNGIME, ferit, ferit_sursa, list(texte), procese, 32_000_000, lucru, spune=spune)
+    sari, sha_lista = lista_sarite(iesire)
+    texte_scrise = sum(n["texte_antrenare"] for n in info["surse"].values()) - len(sari or [])
+    r = trece(tinta, 0, LUNGIME, ferit, ferit_sursa, list(texte), procese, 32_000_000, lucru, spune=spune, sari=sari)
     sha = sha256_fisier(tinta)
     v = {"facuta": datetime.now().isoformat(timespec="seconds"), "texte": r["texte"],
-         "texte_cu_bucati_comune": r["texte_scoase"], "pe_motiv": r["scoase_pe_motiv"], "sha256": sha,
+         "texte_cu_bucati_comune": r["texte_scoase"], "pe_motiv": r["scoase_pe_motiv"],
+         "exemple": r["exemple_scoase"], "sha256": sha,
          "sha256_ca_in_info": sha == info["sha256_antrenare"], "texte_ca_in_info": r["texte"] == texte_scrise,
+         "texte_sarite": len(sari or []), "lista_sarite_sha256": sha_lista, "octeti_cititi": r["octeti_cititi"],
          "secunde": r["secunde"]}
     v["curat"] = v["texte_cu_bucati_comune"] == 0 and v["sha256_ca_in_info"] and v["texte_ca_in_info"]
+    if "verificare" in info:
+        info.setdefault("verificari_vechi", []).append(info["verificare"])
     info["verificare"] = v
     cale_info.write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding="utf-8")
     return v
@@ -435,6 +559,8 @@ def tokenizeaza(iesire: Path = IESIRE, bucati: Path = BUCATI, minim_liber_gb: fl
     comanda = [sys.executable, "-X", "utf8", str(RADACINA / "unelte" / "bucati_din_text.py"), "scrie",
                "--sursa", str(iesire / "antrenare.txt"), "--tokenizer", str(TOKENIZER), "--iesire", str(bucati),
                "--minim-liber-gb", str(minim_liber_gb)]
+    if (iesire / "scoase.json").exists():
+        comanda += ["--sari", str(iesire / "scoase.json")]
     print("Tokenizarea:", " ".join(comanda), flush=True)
     return subprocess.call(comanda)
 
@@ -445,7 +571,7 @@ def main(argv: list[str] | None = None) -> int:
     except (AttributeError, ValueError):
         pass
     p = argparse.ArgumentParser(description="S119: textul românesc nou — curățare, dubluri, scurgeri, simboluri.")
-    p.add_argument("comanda", choices=["curata", "verifica", "tokenizeaza", "tot"])
+    p.add_argument("comanda", choices=["curata", "scoate", "verifica", "tokenizeaza", "tot"])
     p.add_argument("--iesire", type=Path, default=IESIRE)
     p.add_argument("--bucati", type=Path, default=BUCATI)
     p.add_argument("--procese", type=int, default=8)
@@ -457,9 +583,15 @@ def main(argv: list[str] | None = None) -> int:
         print("Curățarea gata:", json.dumps({k: info[k] for k in ("oprit", "octeti_antrenare", "parte_scoasa_scurgeri",
                                                                     "c_liber_dupa_gb", "secunde")}, ensure_ascii=False),
               flush=True)
+    if a.comanda in ("scoate", "tot") and not (a.iesire / "scoase.json").exists():
+        s = scoate(a.iesire, a.procese)
+        print("Lista de sărit:", json.dumps({k: v for k, v in s.items() if k not in ("portiuni", "detalii")},
+                                            ensure_ascii=False), flush=True)
     if a.comanda in ("verifica", "tot"):
         info = json.loads((a.iesire / "info.json").read_text(encoding="utf-8"))
-        if "verificare" not in info or a.comanda == "verifica":
+        _, sha_lista = lista_sarite(a.iesire)
+        if ("verificare" not in info or a.comanda == "verifica"
+                or info["verificare"].get("lista_sarite_sha256") != sha_lista):
             v = verifica(a.iesire, a.procese)
             print("A doua verificare:", json.dumps(v, ensure_ascii=False), flush=True)
             if not v["curat"]:
