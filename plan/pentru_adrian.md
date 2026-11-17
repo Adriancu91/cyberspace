@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 17 noiembrie 2026, 08:15 — Antrenarea cu calcule s-a terminat; examenele rulează
+
+- **S121:** cele 4 ore de învățat (chat + calcule, din #651) s-au încheiat la 07:07 fără erori (modelele #677–#680; româna la ora 4: 1,0901, pragul e ≤ 1,0978). **Examenele pe #651 și #680 au pornit la 07:31** — gata pe la ~09:00. Verdictul îl verific eu la trecerea de 11:15, după pragurile scrise dinainte (calcule ≥ 61 din 200, chat ≥ 30 etc.).
+- Raportul de dimineață e la locul lui (`2026-11-17_0648_raport_dimineata.md`): noaptea a mers curat, testele trec (1.488, 0 pică).
+- **Apoi:** S119 (descărcarea textului românesc, fără placă) → interfața repornită cu câștigătorul → S118. Nimic nou pus în coadă; nicio comandă nouă în hub.
+- **Aștept de la tine:** nimic.
+
 ## 17 noiembrie 2026, 05:15 — Testul de memorare e gata; calculele se învață acum
 
 - **E0 (S123) verificat de mine:** la saluturi, „cine ești”, „ce poți” etc., modelul răspunde perfect la formulările văzute în antrenare (**100 %**) și mult mai slab la formulări noi (**62,5 %**) → **+37,5 pp = semnal puternic de memorare** după regula ta (prag 30). Pe total +14,7 pp = neconcludent. La fapte nu reține nici ce a văzut (13 %).
@@ -123,12 +130,3 @@
 - **De urmărit — discul:** S113 (ștergerea probelor, ~8,6 GB, „da”-ul tău C-121) tot nu e făcută: executantul se oprește la fiecare trecere fiindcă placa e ocupată. La finalul S110 rămân ~19 GB, iar S111 (7 h) ar coborî sub 15 GB pe la ora 6 și s-ar opri curat. Am scris sus în coadă: S113 oricând, **cel târziu între S110 și S111**.
 - **Rulează acum:** S110 până luni ~03:10; apoi S113, verdictul S110, S111, S112.
 - **Aștept de la tine:** nimic acum. Dacă executantul nu are voie să apese el ștergerea, îți lasă comenzile în raportul S113 (le rulezi când ajungi).
-
-## 14 noiembrie 2026, 23:15 — Modelul mare a trecut și de controlul de la ora 24; e deja mai bun decât modelul în uz
-
-- **S110 a trecut punctul de 24 de ore — am refăcut singur calculul:** româna la ora 24 e **1,1792** (mai mic = mai bine); media orelor 22–24 (1,1822) e cu 0,059 sub media orelor 10–12 (1,2410), trebuia doar 0,02. Nicio oră n-a urcat.
-- **Semn bun:** modelul în uz (#513) are 1,2060, deci cel nou e deja sub el (verdictul oficial vine la final, luni ~03:00). Placa max 6.315 MB / 65 °C; 1.462 teste trec.
-- **Rulează acum:** S110 până la ora 52. Apoi S111 (conversația) și S112 (interfața), gata luni.
-- **S113 (ștergerea probelor):** executantul face verificările la trecerea următoare; probabil îți scrie comenzile de ștergere. Discul C: 39 GB acum, ~18–19 GB la final — fără grabă.
-- **Pus în coadă:** doar note (24 h verificat; S113 la trecerea următoare). Nicio comandă nouă în hub.
-- **Aștept de la tine:** nimic.
