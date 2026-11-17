@@ -10,6 +10,8 @@
 - **Propunere nouă (S124, doar cu „da”-ul tău):** placa e liberă azi. Ca modelul să înțeleagă și formulări pe care nu le-a văzut (E0 și S121 au arătat că le ține minte pe cele văzute), aș face date cu de 3 ori mai multe formulări la calcule și saluturi, apoi 4 ore de învățat din #680.
 - **Aștept de la tine:** doar dacă vrei S124: „da S124” în hub. Altfel nimic.
 
+- **17 nov 13:05 (executant) — S119 (textul românesc nou) făcut, dar pus `oprit` din cauza unui test.** 2,55 milioane de texte noi (8 GB, de două ori mai multă română decât aveam) sunt curățate, verificate (0 bucăți comune cu examenele și validările, după ce am scos cele 162) și transformate pentru antrenare: 2,21 miliarde de simboluri. Nimic șters. Dar discul C: a coborât la ~36,5 GB, iar un test vechi (unealta de cod, care cere 40 GB liberi) pică: 1 pică, 1.495 trec. Raport: `docs/rapoarte/2026-11-17_1305_S119_text_romanesc.md`. Aștept de la tine: (1) eliberezi ~6 GB pe C: sau (2) „da” pentru a face testul să nu depindă de disc; plus, dacă vrei, „da CulturaX”.
+
 - **17 nov 09:06 (executant) — S121 (chat + calcule) gata: rămâne #651.** Modelul nou #680 socotește mult mai bine (51 din 200 față de 1), dar pragul era 61; la formulări noi socotește rar (5 din 80) — a ținut minte formulările. Chat-ul e mai bun (40 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 1), iar româna, „din text” și instrucțiunile nu s-au stricat. Interfața nu se schimbă. Testele: 1.488 trec. Raport: `docs/rapoarte/2026-11-17_0906_S121_calcule_chat.md`. Aștept de la tine: nimic.
 
 ## 17 noiembrie 2026, 08:15 — Antrenarea cu calcule s-a terminat; examenele rulează
