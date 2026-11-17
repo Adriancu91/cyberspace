@@ -42,6 +42,12 @@ aside button.aleasa { border-color: var(--accent); }
 .mesaj p { margin: 0; }
 .mesaj .autor { font-size: 0.8rem; color: var(--stins); }
 .mesaj .text { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* S118: 👍 / 👎 și „răspunsul corect ar fi…” sub fiecare răspuns al lui Kronos */
+.apreciere { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; font-size: 0.85rem; }
+.apreciere button { border: 1px solid var(--linie); background: var(--hartie); border-radius: 8px; padding: 2px 8px; cursor: pointer; }
+.apreciere button.ales { border-color: currentColor; font-weight: bold; }
+.apreciere input { flex: 1 1 14rem; min-width: 10rem; padding: 2px 6px; }
+.apreciere .stare { color: var(--stins); }
 #anunt { min-height: 1.5em; margin: 4px 0; color: var(--rau); }
 form { display: grid; gap: 6px; max-width: 46rem; }
 label { font-size: 0.85rem; color: var(--stins); }

@@ -8,7 +8,10 @@ Ce răspunde:
     GET  /api/conversatii/<nr>    mesajele unei conversații
     POST /api/mesaj               {"text": "...", "conversatie": nr sau null} → întrebarea și răspunsul, scrise în bază
     POST /api/din-text            {"text": paragraf, "intrebare": "..."} → răspunsul modelului „din text” (fila
-                                  „Întreabă din text”, 20 octombrie 2026); nu se scrie în bază
+                                  „Întreabă din text”, 20 octombrie 2026); din S118 se păstrează în bază (cu „id”)
+    POST /api/apreciere           {"mesaj": nr, "nota": 1 / -1 / null, "corectura": "..."} → 👍 / 👎 / „răspunsul
+                                  corect ar fi…” la un răspuns din Chat (S118, 17 noiembrie 2026)
+    POST /api/apreciere-text      {"intrebare": nr, "nota": ..., "corectura": "..."} → la fel, în fila „din text”
 
 Fiecare cerere trece întâi prin verificarea adresei (retea.adresa_permisa): cine nu e de pe acest calculator sau din
 rețeaua Tailscale primește 403. Serverul nu pornește antrenări și nu atinge jurnalul Kronos.
@@ -45,6 +48,7 @@ LUNGIME_RASPUNS_IMPLICITA = 200   # cât cere interfața de la creier, dacă nu 
 LUNGIME_RASPUNS_MAXIMA = 2000
 OCTETI_MAXIMI_CERERE = 64 * 1024
 LUNGIME_MAXIMA_PARAGRAF = 20000   # caractere; oricum fereastra modelului e cea care hotărăște cât încape
+RUTE_POST = ("/api/mesaj", "/api/din-text", "/api/apreciere", "/api/apreciere-text")
 
 
 class EroareCerere(Exception):
@@ -139,8 +143,27 @@ class Aplicatie:
         except Exception as e:  # noqa: BLE001 - orice eroare a modelului se arată omului, nu oprește serverul
             return {"raspuns": None, "eticheta": eticheta, "prea_lung": False,
                     "eroare": f"{eticheta} n-a putut răspunde: {type(e).__name__}: {e}"}
+        secunde = round(time.perf_counter() - start, 3)
+        pastrata = self.catalog.adauga_intrebare_text(text, intrebare, raspuns, eticheta, secunde)
         return {"raspuns": raspuns, "eticheta": eticheta, "prea_lung": False, "eroare": None,
-                "secunde": round(time.perf_counter() - start, 3)}
+                "secunde": secunde, "id": pastrata["id"]}
+
+    def apreciere(self, cerere: Any, din_text: bool = False) -> dict[str, Any]:
+        """S118: 👍 / 👎 și „răspunsul corect ar fi…” la un răspuns (Chat sau, cu din_text, fila „din text”)."""
+        if not isinstance(cerere, dict):
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, "Cererea trebuie să fie un obiect JSON.")
+        cheie = "intrebare" if din_text else "mesaj"
+        numar = cerere.get(cheie)
+        if isinstance(numar, bool) or not isinstance(numar, int):
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, f"Lipsește numărul „{cheie}”.")
+        try:
+            if din_text:
+                return {"intrebare": self.catalog.apreciaza_text(numar, cerere.get("nota"), cerere.get("corectura"))}
+            return {"mesaj": self.catalog.apreciaza(numar, cerere.get("nota"), cerere.get("corectura"))}
+        except KeyError as e:
+            raise EroareCerere(HTTPStatus.NOT_FOUND, str(e.args[0])) from None
+        except ValueError as e:
+            raise EroareCerere(HTTPStatus.BAD_REQUEST, f"Aprecierea nu e bună: {e}.") from None
 
 
 class Cerere(BaseHTTPRequestHandler):
@@ -211,7 +234,7 @@ class Cerere(BaseHTTPRequestHandler):
             return
         try:
             cale = self.path.split("?", 1)[0]
-            if cale not in ("/api/mesaj", "/api/din-text"):
+            if cale not in RUTE_POST:
                 raise EroareCerere(HTTPStatus.NOT_FOUND, "Pagina nu există.")
             # Doar JSON: un formular de pe alt site, deschis în același browser, nu poate trimite așa ceva.
             if self.headers.get_content_type() != "application/json":
@@ -227,8 +250,13 @@ class Cerere(BaseHTTPRequestHandler):
             except (UnicodeDecodeError, json.JSONDecodeError):
                 raise EroareCerere(HTTPStatus.BAD_REQUEST, "Cererea nu e JSON corect.") from None
             aplicatie: Aplicatie = self.server.aplicatie
-            self._trimite_json(HTTPStatus.OK, aplicatie.mesaj_nou(cerere) if cale == "/api/mesaj"
-                               else aplicatie.din_text(cerere))
+            if cale == "/api/mesaj":
+                rezultat = aplicatie.mesaj_nou(cerere)
+            elif cale == "/api/din-text":
+                rezultat = aplicatie.din_text(cerere)
+            else:
+                rezultat = aplicatie.apreciere(cerere, din_text=cale == "/api/apreciere-text")
+            self._trimite_json(HTTPStatus.OK, rezultat)
         except EroareCerere as e:
             self._eroare(e.cod, e.mesaj)
 

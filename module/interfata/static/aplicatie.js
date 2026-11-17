@@ -34,12 +34,57 @@ function ora(text) {
   return isNaN(d) ? "" : d.toLocaleString("ro-RO", { dateStyle: "short", timeStyle: "short" });
 }
 
+// S118 (17 noiembrie 2026): sub fiecare răspuns al lui Kronos, 👍 / 👎 și „răspunsul corect ar fi…”.
+// `trimiteNota(nota, corectura)` trimite la server și întoarce obiectul salvat (cu .nota și .corectura).
+function zonaApreciere(notaInitiala, corecturaInitiala, trimiteNota) {
+  const zona = element("div", "apreciere");
+  const bun = element("button", "", "👍");
+  const rau = element("button", "", "👎");
+  bun.type = "button"; rau.type = "button";
+  bun.title = "Răspuns bun"; rau.title = "Răspuns greșit";
+  const corectura = element("input");
+  corectura.type = "text";
+  corectura.placeholder = "Răspunsul corect ar fi…";
+  corectura.maxLength = 2000;
+  corectura.value = corecturaInitiala || "";
+  const salveaza = element("button", "", "Salvează");
+  salveaza.type = "button";
+  const stare = element("span", "stare");
+  let nota = notaInitiala === undefined ? null : notaInitiala;
+  const deseneaza = () => {
+    bun.classList.toggle("ales", nota === 1);
+    rau.classList.toggle("ales", nota === -1);
+    bun.setAttribute("aria-pressed", String(nota === 1));
+    rau.setAttribute("aria-pressed", String(nota === -1));
+  };
+  const trimiteAcum = async (notaNoua) => {
+    try {
+      const salvat = await trimiteNota(notaNoua, corectura.value);
+      nota = salvat.nota === undefined ? null : salvat.nota;
+      corectura.value = salvat.corectura || "";
+      stare.textContent = "salvat";
+      deseneaza();
+    } catch (e) { stare.textContent = "nu s-a salvat: " + e.message; }
+  };
+  bun.addEventListener("click", () => trimiteAcum(nota === 1 ? null : 1));
+  rau.addEventListener("click", () => trimiteAcum(nota === -1 ? null : -1));
+  salveaza.addEventListener("click", () => trimiteAcum(nota));
+  corectura.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); trimiteAcum(nota); } });
+  zona.append(bun, rau, corectura, salveaza, stare);
+  deseneaza();
+  return zona;
+}
+
 function arataMesaj(m) {
   const cutie = element("article", "mesaj " + (m.rol === "om" ? "om" : "creier"));
   let antet = m.autor + " · " + ora(m.creat);
   if (typeof m.secunde === "number") antet += " · " + m.secunde.toLocaleString("ro-RO") + " s";
   cutie.appendChild(element("p", "autor", antet));
   cutie.appendChild(element("p", "text", m.text));
+  if (m.rol !== "om" && typeof m.id === "number") {
+    cutie.appendChild(zonaApreciere(m.nota, m.corectura, async (nota, corectura) =>
+      (await cere("/api/apreciere", { mesaj: m.id, nota: nota, corectura: corectura })).mesaj));
+  }
   el("mesaje").appendChild(cutie);
   cutie.scrollIntoView({ block: "end" });
 }
@@ -149,6 +194,12 @@ async function intreabaDinText(eveniment) {
     let jos = date.eticheta;
     if (typeof date.secunde === "number") jos += " · " + date.secunde.toLocaleString("ro-RO") + " s";
     el("raspuns-text-eticheta").textContent = jos;
+    const zona = el("apreciere-text");
+    zona.replaceChildren();
+    if (typeof date.id === "number") {
+      zona.appendChild(zonaApreciere(null, "", async (nota, corectura) =>
+        (await cere("/api/apreciere-text", { intrebare: date.id, nota: nota, corectura: corectura })).intrebare));
+    }
     el("raspuns-text").hidden = false;
     anuntaText("");
   } catch (e) {
