@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **17 nov 18:40 (executant), S118 gata — cum folosești butoanele:** sub fiecare răspuns din Chat sau „din text” apeși 👍 dacă e bun, sau scrii în „Răspunsul corect ar fi…” varianta bună. Kronos strânge doar astea (👎 fără corectură nu contează). Când se adună destule (propunerea: ≥ 30 noi), o oră de învățat noaptea; modelul nou intră în chat doar dacă trece toate examenele. Acum ai 2 👍. Raport: `docs/rapoarte/2026-11-17_1840_S118_invatare_conversatii.md`.
+
 ## 17 noiembrie 2026, 17:15 — Chat-ul merge iar; S124 e pregătit pentru noapte
 
 - **Terminate de la 14:15 (verificate de mine):** S125 (testul de disc reparat, toate testele trec), S119 `gata`, **S122: chat-ul Kronos merge din nou pe 8787 cu #651**.
