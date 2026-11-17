@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 17 noiembrie 2026, 14:15 — Textul românesc e gata; S124 pornește pe placă la noapte
+
+- **S119 verificat de mine: făcut.** 2,55 milioane de texte românești noi (de două ori mai multă română), 0 bucăți comune cu examenele, nimic șters. A rămas „oprit” doar pentru că un test vechi cere 40 GB liberi pe disc, iar C: are ~36,5 GB.
+- **Am aprobat eu S125** (15 minute): testul acela nu mai depinde de discul real; unealta își păstrează paza de 40 GB. Apoi S119 devine „gata” și interfața pornește iar pe 8787 cu #651.
+- **„Da S124” (C-132) e în coadă:** testul tău cu os-303 s-a terminat la 14:09. Acum, pe procesor: examenul nou cu formulări nevăzute, apoi datele cu de 3 ori mai multe formulări. **Pe placă la noapte, de la 19:00** (4 h din #680 + examenele), cu pragurile propuse. Dacă discul nu ajunge peste 30 GB, se oprește și te întreabă (nu șterge nimic).
+- Discul C: e strâns (~36,5 GB). Nu e urgent, dar dacă vrei loc pentru antrenări mai mari, poți spune în hub ce date vechi se pot șterge.
+- **Aștept de la tine:** nimic.
+
 ## 17 noiembrie 2026, 11:15 — S121 verificat (rămâne #651); textul românesc merge mai departe
 
 - **S121 verificat de mine: rămâne #651, corect.** #680 a urcat la calcule de la 1 la 51 din 200, dar pragul scris dinainte era 61; chat-ul (40 față de 25) și restul au trecut. Interfața nu se schimbă.
@@ -121,17 +129,3 @@
 
 - După 52 de ore, română curat **1,0891** față de **1,2060** la #513 (mai mic = mai bine; pragul cerea doar 1,2010). Și pe textele noi, nevăzute de nimeni: 1,0125 față de 1,1265. Codul și poveștile englezești puțin mai slabe (cum se aștepta). Atenție: s-au schimbat și mărimea, și datele.
 - Testele: 1461 trec, 1 pică (cel știut, discul sub 40 GB). Discul: 19 GB; S111 (7 h) îl poate coborî la ~14 GB → comenzile S113 (~9 GB) ar ajuta. Raportul: `docs/rapoarte/2026-11-16_0348_S110_24z2_final.md`. Urmează S111.
-
-## 15 noiembrie 2026, 17:15 — Verificările pentru ștergere sunt corecte; modelul mare e la ora 41 și tot scade
-
-- **S113 verificat de mine:** executantul a citit lista și se potrivește exact (`proba_24z2` 6,07 GB + 4 modele × 0,73 GB = **~9,0 GB**; #586–#589 sunt chiar cele 4 probe, nimic altceva nu le folosește). N-a șters nimic (n-are voie) — e normal, nu e o problemă.
-- **S110 merge:** ora 41 din 52, româna **1,1363** (ora 31: 1,1603; modelul în uz #513: 1,2060). Placa 5.653 MB / 62 °C. Gata luni pe la 02:00–03:00.
-- **Discul, socoteala refăcută:** C: 28,3 GB acum (scade ~0,57 GB/oră) → ~22 GB la finalul S110 → ~18 GB după S111. Peste pragul de oprire (15 GB), deci S111 poate porni și fără ștergere; marja e mică, dar nu urgentă.
-- **Pus în coadă:** doar o notă (S113 verificat; S111 pornește oricum). Nicio comandă nouă în hub.
-- **Aștept de la tine:** când ajungi la workstation (luni seara e bine), cele 7 comenzi PowerShell din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md` (~2 minute, câștigi ~9 GB).
-
-## 15 noiembrie 2026, 16:00 (executantul) — S113: am verificat lista de ștergere; comenzile te așteaptă
-
-- Totul din listă se potrivește: **~9,0 GB** (dosarele `proba_24z` și `proba_24z2` + modelele #586–#589, doar probele de rată). Nimic nu le mai folosește.
-- **N-am șters nimic** (n-am voie). **Aștept de la tine:** cele 7 comenzi PowerShell din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md`, când ajungi. C: are acum 28,3 GB liberi; S110 merge (ora 41, româna 1,1363).
-
