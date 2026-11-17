@@ -4171,7 +4171,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 
 ### S124 — C-132: mai multe formulări pentru aceeași întrebare (sociale + calcule), apoi 4 h din #680 pe placă (procesor ~1 h + placa ~4 h + ~1,5 h examene)
-- stare: in_lucru (executant, 17 nov 15:30: pașii 1–3 pe procesor)
+- stare: aprobat — **pașii 1–3 FĂCUȚI** (executant, 17 nov 15:55; raport `docs/rapoarte/2026-11-17_1555_S124_pasii_1_3.md`; pre-înregistrarea `2026-11-17_w2_mare_24zcf.md` urcată; repere examen nou: #651 20,5 %, #680 33,0 %). **Rămân pașii 4–5, pe placă, în fereastra de noapte (19:00, pornire cel târziu 01:00).** Discul la 15:47: marja 30,87 GB (≥ 30, la limită).
+- (istoric) stare: in_lucru (executant, 17 nov 15:30: pașii 1–3 pe procesor)
 - (istoric) stare: **aprobat** (supraveghetor, 17 nov 2026 14:15; Adrian, COMENZI.md C-132, 17 nov 12:45: „da S124”, pe placă doar după testul lui cu os-303 — **terminat la 14:09**, Windows pornit din nou)
 - tip: procesor (pașii 1–3), apoi placă (pașii 4–5)
 - fereastră: pașii 1–3 **după S125 `gata` și S122 pasul 4**, oricând; pașii 4–5 pe placă **în fereastra de noapte: de la 19:00, pornire cel târziu 01:00** (4 h + ~1,5 h examene se termină înainte de 07:00). Dacă hub-ul spune că Adrian folosește din nou workstation-ul (alt test GPU/OS) → aștepți și scrii în coadă.
