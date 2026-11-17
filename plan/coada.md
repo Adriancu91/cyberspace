@@ -4064,7 +4064,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-130, 16 nov 2026 18:05); pașii copiați din C-130: supraveghetor, 16 nov 2026 20:15
 
 ### S118 — C-126 B: Kronos învață din conversațiile cu Adrian — 👍 / 👎 / „răspunsul corect ar fi…” + bucla automată care schimbă modelul DOAR dacă trece examenele (procesor; antrenarea doar în buclă)
-- stare: **aprobat** — **AȘTEAPTĂ: pornește după S122 pasul 4 ȘI după S124 pașii 1–3 (procesor); cât rulează S124 pe placă, bucla nu folosește placa** (supraveghetor 17 nov 14:15, după C-132). (istoric: C-129, supraveghetor 16 nov 20:15: pornește doar după ce S122 pasul 4 a repornit interfața) (adică după S117, S123, S121, S119). (istoric: aprobat de supraveghetor 16 nov 14:15, Adrian C-126 partea B — după S117 `gata`)
+- stare: in_lucru (executant, 17 nov 2026 16:00 — pe procesor; condițiile îndeplinite: S122 gata 15:08, S124 pașii 1–3 gata 15:55)
+- (istoric) stare: **aprobat** — **AȘTEAPTĂ: pornește după S122 pasul 4 ȘI după S124 pașii 1–3 (procesor); cât rulează S124 pe placă, bucla nu folosește placa** (supraveghetor 17 nov 14:15, după C-132). (istoric: C-129, supraveghetor 16 nov 20:15: pornește doar după ce S122 pasul 4 a repornit interfața) (adică după S117, S123, S121, S119). (istoric: aprobat de supraveghetor 16 nov 14:15, Adrian C-126 partea B — după S117 `gata`)
 - tip: procesor (interfață + unelte + teste); prima rulare reală a buclei — doar când există lecții (vezi pasul 4)
 - fereastră: după S117, oricând (fără placă)
 - durată maximă: 4 h
