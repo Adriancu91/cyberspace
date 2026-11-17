@@ -4116,7 +4116,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-128, 16 nov 2026 17:13 — „calculele intră în următoarea antrenare de chat, cu pre-înregistrare”); pașii și pragurile: supraveghetor, 16 nov 2026 17:15
 
 ### S119 — C-127: mai mult text românesc scris de oameni — descărcare, licențe, curățare, scurgeri, tokenizare (procesor + rețea, fără antrenare)
-- stare: oprit (executant, 17 nov 2026 13:05)
+- stare: gata (executant, 17 nov 2026 14:37 — după S125 `gata`: 1497 teste trec, 1 sărit, 0 pică; cum cerea nota supraveghetorului)
+- (istoric) stare: oprit (executant, 17 nov 2026 13:05)
 - **verificat de supraveghetor 17 nov 2026 14:15:** tot ce cerea sarcina e făcut și cifrele se potrivesc cu regulile (a doua verificare **0**; prima căutare 12,5 % > 5 % → analiza „șabloane de site” făcută, toate scoase; tokenizer neschimbat; C: ≥ 30 GB; nimic șters). Devine **`gata` imediat după S125 `gata`** (testul de disc reparat, toate testele trec) — executantul scrie `gata` aici și un rând în `plan/pentru_adrian.md`.
 - motiv: testele pică (1 din 1.497): `test_kronos_cod_tokenizer.py::test_unealta_cap_coada_…` — unealta de cod S55 cere ≥ 40 GB liberi, C: are acum ~36,5 GB (34 GiB) după tokenizarea S119; nimic reparat; restul sarcinii e făcut — trecerea 4 încheiată la 12:42:19, cod 0: ambele căutări prind aceleași 162 de texte (0 doar într-una), a doua verificare după scoatere = **0** (2.550.272 de texte), tokenizarea: **2.211.495.945 de simboluri** în 45 de bucăți în `date/ws/bucati_s119/` (4,2 GB, SHA-256 f11fd6aa…7ee17b); C: 34 GB liberi; nimic șters
 - raport: docs/rapoarte/2026-11-17_1305_S119_text_romanesc.md
@@ -4149,7 +4150,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (COMENZI.md C-127, 16 nov 2026 16:53); pașii: supraveghetor, 16 nov 2026 17:15
 
 ### S125 — testul uneltei de cod nu mai depinde de discul real (reparație de test, procesor, ~15 min)
-- stare: in_lucru (executant, 17 nov 2026 14:30; placa liberă 447 MB / 30 °C, nimic altceva în lucru)
+- stare: gata (executant, 17 nov 2026 14:37 — doar testul schimbat: `monkeypatch` pune `SPATIU_MINIM_GB = 0` în testul cap-coadă + test nou `test_paza_de_disc_opreste_curat_tokenizarea` (prag 10⁹ GB → `terminat = False`, 0 blocuri, motivul „sub … GB liberi pe disc”); `tokenizer_cod.py` neschimbat; **1497 teste trec, 1 sărit, 0 pică**; C: 35,9 GB)
+- raport: docs/rapoarte/2026-11-17_1437_S125_test_disc.md
+- (istoric) stare: in_lucru (executant, 17 nov 2026 14:30; placa liberă 447 MB / 30 °C, nimic altceva în lucru)
 - (istoric) stare: **aprobat** (supraveghetor, 17 nov 2026 14:15; în granițe: reparație de test care a picat, nu atinge `kronos/`, examenele sau unealta) — **prima sarcină, ACUM**
 - tip: procesor (fără placă)
 - fereastră: oricând, de acum

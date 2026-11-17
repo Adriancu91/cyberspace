@@ -94,7 +94,9 @@ def test_partea_dupa_suma_si_excluderile():
     assert tc.parte(1, t, {1}, {5}) == "aproape_duplicat" and tc.parte(5, t, {1}, {5}) == "scurgere"
 
 
-def test_unealta_cap_coada_fara_excluse_si_fara_validare_la_antrenare(tmp_path):
+def test_unealta_cap_coada_fara_excluse_si_fara_validare_la_antrenare(tmp_path, monkeypatch):
+    # S125: testul verifică unealta, nu cât loc liber are calculatorul azi (pragul real de 40 GB rămâne în unealtă)
+    monkeypatch.setattr(tc, "SPATIU_MINIM_GB", 0)
     texte, cod, exclus = _date(tmp_path)
     tok_dir, simb_dir = tmp_path / "tok", tmp_path / "simb"
     rez = tc.antreneaza(cod, exclus, tok_dir, procese=2, marime=500, jurnal=lambda m: None)
@@ -130,3 +132,14 @@ def test_unealta_cap_coada_fara_excluse_si_fara_validare_la_antrenare(tmp_path):
     # reluarea: blocurile făcute nu se refac
     r2 = tc.tokenizeaza(cod, exclus, tok_dir, simb_dir, procese=2, marime=500, jurnal=lambda m: None)
     assert r2["terminat"] and r2["pe"] == r["pe"]
+
+
+def test_paza_de_disc_opreste_curat_tokenizarea(tmp_path, monkeypatch):
+    """S125: cu pragul de disc fixat foarte sus, tokenizarea se oprește curat, fără niciun bloc făcut."""
+    texte, cod, exclus = _date(tmp_path)
+    tok_dir, simb_dir = tmp_path / "tok", tmp_path / "simb"
+    tc.antreneaza(cod, exclus, tok_dir, procese=2, marime=500, jurnal=lambda m: None)
+    monkeypatch.setattr(tc, "SPATIU_MINIM_GB", 10**9)
+    r = tc.tokenizeaza(cod, exclus, tok_dir, simb_dir, procese=2, marime=500, jurnal=lambda m: None)
+    assert r["terminat"] is False and r["blocuri_facute"] == 0
+    assert r["oprit"] == f"sub {10**9} GB liberi pe disc"

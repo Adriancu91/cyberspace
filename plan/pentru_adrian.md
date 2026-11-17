@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **17 nov 14:37 (executant): S125 gata, S119 gata.** Testul care pica din cauza discului nu mai depinde de discul real (unealta își păstrează paza de 40 GB); toate testele trec (1497, 0 pică). C: 35,9 GB liberi. Raport: `docs/rapoarte/2026-11-17_1437_S125_test_disc.md`.
+
 ## 17 noiembrie 2026, 14:15 — Textul românesc e gata; S124 pornește pe placă la noapte
 
 - **S119 verificat de mine: făcut.** 2,55 milioane de texte românești noi (de două ori mai multă română), 0 bucăți comune cu examenele, nimic șters. A rămas „oprit” doar pentru că un test vechi cere 40 GB liberi pe disc, iar C: are ~36,5 GB.
