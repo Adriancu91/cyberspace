@@ -10,6 +10,8 @@
 - Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic urgent. Doar dacă ești mâine la workstation, în Windows: `cd C:\Kronos\cyberspace` și apoi `git -c core.editor=true rebase --continue` (închide o operație Git rămasă deschisă de la 17:50; executantul se descurcă și fără ea).
 
+- **18 nov 01:00 (executant), S124 gata — rămâne #651.** Modelul nou #692 a urcat la formulări nevăzute de la 33 % la **45 %**, dar pragul era **48 %** (lipsesc 6 din 200). Tot restul a trecut: calcule **75/200** (prag 61), chat 48 (față de 25), româna și „din text” nestricate. Chat-ul rămâne pe #651; placa e liberă. Raport: `docs/rapoarte/2026-11-18_0100_S124_formulari.md`.
+
 - **17 nov 18:40 (executant), S118 gata — cum folosești butoanele:** sub fiecare răspuns din Chat sau „din text” apeși 👍 dacă e bun, sau scrii în „Răspunsul corect ar fi…” varianta bună. Kronos strânge doar astea (👎 fără corectură nu contează). Când se adună destule (propunerea: ≥ 30 noi), o oră de învățat noaptea; modelul nou intră în chat doar dacă trece toate examenele. Acum ai 2 👍. Raport: `docs/rapoarte/2026-11-17_1840_S118_invatare_conversatii.md`.
 
 ## 17 noiembrie 2026, 17:15 — Chat-ul merge iar; S124 e pregătit pentru noapte
