@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **17 nov 09:06 (executant) — S121 (chat + calcule) gata: rămâne #651.** Modelul nou #680 socotește mult mai bine (51 din 200 față de 1), dar pragul era 61; la formulări noi socotește rar (5 din 80) — a ținut minte formulările. Chat-ul e mai bun (40 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 1), iar româna, „din text” și instrucțiunile nu s-au stricat. Interfața nu se schimbă. Testele: 1.488 trec. Raport: `docs/rapoarte/2026-11-17_0906_S121_calcule_chat.md`. Aștept de la tine: nimic.
+
 ## 17 noiembrie 2026, 08:15 — Antrenarea cu calcule s-a terminat; examenele rulează
 
 - **S121:** cele 4 ore de învățat (chat + calcule, din #651) s-au încheiat la 07:07 fără erori (modelele #677–#680; româna la ora 4: 1,0901, pragul e ≤ 1,0978). **Examenele pe #651 și #680 au pornit la 07:31** — gata pe la ~09:00. Verdictul îl verific eu la trecerea de 11:15, după pragurile scrise dinainte (calcule ≥ 61 din 200, chat ≥ 30 etc.).
