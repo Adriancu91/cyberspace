@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 17 noiembrie 2026, 05:15 — Testul de memorare e gata; calculele se învață acum
+
+- **E0 (S123) verificat de mine:** la saluturi, „cine ești”, „ce poți” etc., modelul răspunde perfect la formulările văzute în antrenare (**100 %**) și mult mai slab la formulări noi (**62,5 %**) → **+37,5 pp = semnal puternic de memorare** după regula ta (prag 30). Pe total +14,7 pp = neconcludent. La fapte nu reține nici ce a văzut (13 %).
+- **Rulează S121** (din 03:00): Kronos învață chat + calcule 4 ore din #651, apoi examenele — gata pe la ~08:45. Pragurile au fost scrise înainte (calcule ≥ 61 din 200 etc.).
+- **Apoi:** S119 (descărcarea textului românesc, fără placă) → interfața repornită cu câștigătorul → S118. N-am pus altă antrenare pe placă azi: după S121, placa e liberă (și pentru testele tale GPU, dacă vrei).
+- Ce înseamnă E0 pentru mai departe (doar o idee, nu e în coadă): datele de chat au prea puține formulări diferite pentru aceeași intenție. Dacă vrei, după S121 îți propun o sarcină cu mai multe formulări.
+- **Aștept de la tine:** nimic.
+
 ## 17 noiembrie 2026, 02:15 — Răspunsul tău la E0 e în coadă; lanțul pornește din nou
 
 - **S117 verificat de mine: rămâne #651.** #668 vorbește mai bine (chat 42 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 0), dar pragul fixat dinainte era 55. Româna, „din text” și instrucțiunile nu s-au stricat.
@@ -124,15 +132,3 @@
 - **S113 (ștergerea probelor):** executantul face verificările la trecerea următoare; probabil îți scrie comenzile de ștergere. Discul C: 39 GB acum, ~18–19 GB la final — fără grabă.
 - **Pus în coadă:** doar note (24 h verificat; S113 la trecerea următoare). Nicio comandă nouă în hub.
 - **Aștept de la tine:** nimic.
-
-## 14 noiembrie 2026, 23:06 — (executant) S110 a trecut punctul de 24 de ore: continuă
-
-- Româna la ora 24: **1,1792** (deja sub #513, 1,2060 — informativ; verdictul e la final). Media orelor 22–24 = 1,1822, cu 0,059 sub media 10–12 (trebuia 0,02). Placa max 6.315 MB / 65 °C; C: 39 GB; 1462 teste trec. Raport: `docs/rapoarte/2026-11-14_2306_S110_24z2_24h.md`. Nu aștept nimic de la tine.
-
-## 14 noiembrie 2026, 20:15 — Liniște: modelul mare merge spre controlul de la ora 24 (~22:30); nimic de făcut
-
-- **Nimic nou de la 14:15:** executantul n-a mai scris nimic din 11:37 (normal în timpul S110 — scrie doar la punctele de control). S110 e la ~ora 22 din 52; următorul semn al lui e raportul de 24 h, pe la **22:30** (media orelor 22–24 trebuie ≤ 1,2210).
-- **De urmărit (nu e problemă încă):** S113 (verificările pentru ștergerea probelor) nu e făcută, deși i-am scris la 14:15 că o poate face în paralel. Nu e grabă — contează abia luni dimineață, iar dacă discul ajunge la 15 GB, Kronos se oprește curat. Dacă la 23:15 lipsește și raportul de 24 h, îți scriu.
-- **Pus în coadă:** doar o notă la S113 (s-o facă după raportul de 24 h). Nicio comandă nouă în hub.
-- **Aștept de la tine:** nimic.
-
