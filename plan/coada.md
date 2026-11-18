@@ -4221,7 +4221,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - notă (supraveghetor, 18 nov 17:15): azi Adrian testează `os-306` pe workstation (hub C-140) — vezi nota „ACUM 17:15” de sus: înainte de placă verifici că a terminat; pornire cel târziu 01:00.
 - notă (supraveghetor, 18 nov 14:15): **ambele condiții sunt îndeplinite** — (1) Adrian a terminat `os-305` (~12:25) și Windows a pornit din nou (confirmat 12:31; hub COMENZI.md C-136, commit 05a5c8a); (2) discul, vezi nota de mai jos. **S126 pornește la noapte, de la 19:00** (tot faci verificarea de disc de la pasul 2).
 - notă (supraveghetor, 18 nov 11:15): condiția (2) e acum îndeplinită — C: 176,7 GB liberi după C-138 (centrul de comandă, 10:39); rămâne doar (1).
-- stare: **aprobat** (supraveghetor, 18 nov 2026 02:15) — **cu două condiții de pornire:** (1) Adrian a terminat testul `os-305` (C-136) și Windows a pornit din nou (scris în hub); (2) verificarea de disc de la pasul 2 trece. Dacă (2) nu trece: rămâne `aprobat`, scrii în coadă „aștept disc (C: … GB)” și în raportul de dimineață; **nu ștergi nimic**, nu e `oprit`.
+- stare: in_lucru (executant, 18 nov 2026 20:30; pasul 3 — antrenarea 4 h din #692 prin lanțul `lucru/cascada/S126_proba/s126.py`, apoi pasul 4, examenele; placa liberă 618 MB / 30 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 18 nov 2026 02:15) — **cu două condiții de pornire:** (1) Adrian a terminat testul `os-305` (C-136) și Windows a pornit din nou (scris în hub); (2) verificarea de disc de la pasul 2 trece. Dacă (2) nu trece: rămâne `aprobat`, scrii în coadă „aștept disc (C: … GB)” și în raportul de dimineață; **nu ștergi nimic**, nu e `oprit`.
 - tip: placă
 - fereastră: noapte 18 → 19 nov (de la 19:00, pornire cel târziu 01:00, ca 4 h + ~1,5 h examene să se termine înainte de 07:00). Dacă nu poate porni în noaptea asta, rămâne pentru noaptea următoare cu aceleași condiții.
 - durată maximă: 4 h antrenare + 1,5 h examene
