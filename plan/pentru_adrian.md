@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 18 noiembrie 2026, 02:15 — S124 verificat: rămâne #651 (la 3 puncte de prag); pentru următoarea antrenare trebuie loc pe disc
+
+- **S124 verificat de mine: rămâne #651, corect.** Modelul nou #692 a urcat la formulări nevăzute de la 33 % la **45 %** (90/200), dar pragul scris dinainte era **48 %**. Tot restul a trecut, și bine: calcule **75/200** (prag 61), chat **48/200** (#651: 25), româna și „din text” nestricate. Chat-ul rămâne pe #651.
+- **Azi ziua workstation-ul e al tău** pentru `os-305`; Kronos nu pune nimic pe placă până scrie centrul de comandă că ai terminat.
+- **Am pus în coadă S126** (aprobată de mine, în granițe): încă 4 ore de învățat din #692 pe aceleași date, noaptea 18 → 19 nov, cu aceleași praguri. **Dar pornește doar dacă e loc pe disc:** C: are acum ~30,5 GB, iar 4 ore de antrenare scriu ~5 GB → ar coborî sub pragul de 30 GB. Fără loc, S126 așteaptă (nu se șterge nimic singur).
+- **Aștept de la tine:** dacă vrei S126 la noapte, scrie în hub „**da, șterge modelele intermediare #665–#667, #677–#679, #689–#691**” (cam 11–12 GB; sunt orele 1–3 ale antrenărilor S117, S121, S124 — modelele finale #668, #680, #692 și #651 rămân). Altfel nimic urgent.
+
 ## 17 noiembrie 2026, 20:15 — Butoanele 👍/👎 sunt gata; S124 învață pe placă
 
 - **S118 verificat de mine: gata.** Butoanele merg, bucla de învățare e scrisă și testată (1.529 de teste trec); regula de schimbare a modelului e scrisă dinainte, cu pragurile exacte. Acum ai 2 👍 — bucla pornește abia la ≥ 30 de lecții noi (o pun eu în coadă pentru o noapte atunci).
@@ -140,16 +147,3 @@
 - **Testele:** 1.462 trec, 1 pică (cel știut, cere 40 GB liberi). La prima rulare de azi au picat 19, la a doua nu — probabil din cauza discului plin de atunci. Urmăresc dacă se repetă.
 - **Rulează acum:** S111 până pe la ~11:20, apoi examenele și alegerea câștigătorului; apoi S112 (câștigătorul în interfață + raportul final pentru diseară).
 - **Aștept de la tine:** nimic.
-
-## 16 noiembrie 2026, 05:15 — Modelul mare de la zero e MAI BUN (verificat de mine); acum învață conversația
-
-- **S110 verificat de mine: MAI BUN.** Româna curată a modelului nou **#641 = 1,0891**, a modelului în uz **#513 = 1,2060** (pragul pentru MAI BUN: ≤ 1,2010). Confirmat și pe textele noi, nevăzute: 1,0125 față de 1,1265. Codul și poveștile englezești ceva mai slabe (așteptat, informativ).
-- **Rulează acum S111** (din 04:10, ~7 h, gata pe la 11:20): modelul #641 învață conversația; apoi examenele pe #513, #577 și modelul nou, și alegerea câștigătorului. Placa 6.380 MB / 62 °C (limita 6.700).
-- **De știut — discul:** C: avea 19,4 GB la pornirea S111; fiecare oră ia ~0,73 GB, deci paza de 15 GB probabil oprește antrenarea curat după ora 6 (din 7). Nu strică nimic; i-am scris executantului să facă examenele pe ultimul model salvat și să meargă mai departe cu S112.
-- **Pus în coadă:** doar o notă (S110 verificat; ce face dacă se oprește la 15 GB). Nicio comandă nouă în hub.
-- **Aștept de la tine:** nimic acum. Când ajungi la workstation diseară: cele 7 comenzi din `docs/rapoarte/2026-11-15_1600_S113_stergere_probe.md` (~2 min, ~9 GB).
-
-## 16 noiembrie 2026, 03:48 (executantul) — S110 gata: modelul mare de la zero e MAI BUN decât #513
-
-- După 52 de ore, română curat **1,0891** față de **1,2060** la #513 (mai mic = mai bine; pragul cerea doar 1,2010). Și pe textele noi, nevăzute de nimeni: 1,0125 față de 1,1265. Codul și poveștile englezești puțin mai slabe (cum se aștepta). Atenție: s-au schimbat și mărimea, și datele.
-- Testele: 1461 trec, 1 pică (cel știut, discul sub 40 GB). Discul: 19 GB; S111 (7 h) îl poate coborî la ~14 GB → comenzile S113 (~9 GB) ar ajuta. Raportul: `docs/rapoarte/2026-11-16_0348_S110_24z2_final.md`. Urmează S111.
