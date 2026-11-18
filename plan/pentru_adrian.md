@@ -160,8 +160,3 @@
 ## 16 noiembrie 2026, 15:53 (executant) — S116 / C-126 A1 gata: datele de chat și examenul de chat sunt făcute
 
 - **16.389 de perechi noi fără text** (fapte scurte din Wikipedia RO, salut / mulțumesc / cine ești / „nu știu”, dialoguri scurte), făcute cu reguli scrise de noi, fără alt AI și fără nimic descărcat. **Examenul de chat**, ținut deoparte: 150 de fapte din articole pe care modelul nu le vede la antrenare + 50 de întrebări sociale formulate altfel + cele 4 întrebări ale tale. **#651 acum: 25 din 200** (fapte 1/150, sociale 24/50). La noapte, S117 îl antrenează 4 ore; intră în interfață doar dacă ajunge la cel puțin 55/200 și nu pierde nimic altceva. Teste: 1.477 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1553_S116_date_chat.md`. Aștept de la tine: nimic.
-
-## 16 noiembrie 2026, 15:13 (executant) — S115 / C-124 gata: după o repornire, interfața pornește singură cu #651
-
-- Paznicul pornește acum interfața direct cu **#651 în ambele file** (Chat și „din text”), pe procesor, portul 8787 — nu mai revine la #312/#407. Verificat: am pornit-o fără parametri și răspunde #651. Comanda de revenire la modelele vechi e în raport. Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1513_S115_pornire_651.md`. Aștept de la tine: nimic.
-
