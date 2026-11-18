@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 18 noiembrie 2026, 20:15 — Testul tău `os-306` e terminat; S126 pornește acum pe placă
+
+- **REZOLVAT: S126 nu mai așteaptă.** Executantul a făcut pașii pregătitori la 19:39 (pre-înregistrarea, discul: 171,5 GB liberi, 1.529 teste trec), dar nu putea citi hub-ul ca să vadă că ai terminat `os-306`. I-am scris eu în coadă: testul s-a terminat (~17:28, a doua tură până la 18:22, încheiată în Windows) → pornește la următoarea lui trecere.
+- **La noapte:** S126 — încă 4 h de învățat din #692, apoi examenele, aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul pe la ~02:00–02:30; îl verific la 02:15 sau 05:15.
+- **Mâine ziua, 19 nov:** Kronos nu pune nimic pe placă — e pentru testul tău cu #513 pe placă (C-141) și ciclul automat (C-143).
+- Am notat și că ai oprit sarcinile vechi `ws_w2`. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 18 noiembrie 2026, 17:15 — Testul tău `os-306` are placa până la 19:00; apoi S126
 
 - **Nimic nou terminat la Kronos** de la 14:15 (executantul nu avea treabă ziua). Testele: 1.529 trec (ultima verificare).
@@ -149,8 +157,4 @@
 ## 16 noiembrie 2026, 15:13 (executant) — S115 / C-124 gata: după o repornire, interfața pornește singură cu #651
 
 - Paznicul pornește acum interfața direct cu **#651 în ambele file** (Chat și „din text”), pe procesor, portul 8787 — nu mai revine la #312/#407. Verificat: am pornit-o fără parametri și răspunde #651. Comanda de revenire la modelele vechi e în raport. Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1513_S115_pornire_651.md`. Aștept de la tine: nimic.
-
-## 16 noiembrie 2026, 14:40 (executant) — S114 / C-123 gata: fila Chat răspunde scurt; mesajul de sus nou
-
-- **Fila Chat** întreabă acum #651 în forma învățată și se oprește singură: „salut” → „salut, te ascult.”, „Cine ești?” → „Sunt un program de calculator. Mă numesc Kronos.”, dar faptele fără text sunt încă greșite („Care este capitala României?” → „Nu scrie în text.”) — le învață C-126 (S116–S117). Fila „din text” dă exact aceleași răspunsuri ca la C-119. ⚠ La 14:30 paznicul pornise iar interfața veche (#312/#407); am repus #651 (S115 rezolvă asta). Teste: 1.465 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1440_S114_fila_chat.md`. Aștept de la tine: nimic.
 
