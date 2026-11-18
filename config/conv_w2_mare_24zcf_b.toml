@@ -1,0 +1,64 @@
+# S124 (C-132; Adrian C-132, 17 nov 2026 12:45; pașii scriși de supraveghetor 17 nov 14:15): mai multe formulări
+# pentru aceeași întrebare (sociale + calcule), 4 h din #680 (câștigătorul S121).
+# Copie a config/conv_w2_mare_24zcc.toml (S120/S121) cu DOAR:
+#   - `nume = "w2_mare_24zcf"`, `cale_stare = "lucru/w2_mare_24zcf/gpt.pt"`;
+#   - `conversatie = "lucru/conversatie_chat3/antrenare.jsonl"` (chat S116 fără sociale + sociale S124, calculele S124
+#     cu de cel puțin 3 ori mai multe șabloane, + perechile „din text” ale lui #651 fără scurgeri);
+#   - eticheta și acest antet. Restul (AdamW 1e-5, conversație 0,45, hrană 0,30, lot 6 × 16, scăderea 4 h) la fel.
+#   python unelte/antrenare_recalcul.py --config config/conv_w2_mare_24zcf.toml --ore 4 --porneste-din 680
+
+[platforma]
+# Linie nouă; pornește din #680 (ultimul „24zcc”, câștigătorul S121) cu --porneste-din 680 (S124).
+nume = "w2_mare_24zcf_b"
+director_lucru = "lucru"
+buget_antrenare_secunde = 3600
+experimente = 3
+prag_zgomot = -1.0
+
+[criterii]
+
+[paznic]
+timp_max_secunde = 4500
+timp_test_secunde = 600
+temperatura_gpu_max = 83
+memorie_gpu_max_mb = 7000
+pauza_racire_secunde = 120
+porturi_modificabile = ["model"]
+
+[porturi.model]
+modul = "module.model_gpt_cod:ModelGPTCod"
+setari = { n_straturi = 24, n_capete = 12, n_emb = 768, context = 512, lot = 6, rata_invatare = 0.00001, rata_care_scade = true, incalzire_pasi = 1000, fractie_rata_finala = 1.0, tokenizer = "bpe", cale_tokenizer = "date/ws/bpe_16384.json", cale_stare = "lucru/w2_mare_24zcf_b/gpt.pt", director_cache = "lucru/cache", samanta = 24, examene_suplimentare = [], validare_examene = "date/tinystories_r2/validare.txt", povesti_profesor = 40, hrana = "date/ws/hrana_fineweb_rest/antrenare.txt", fractie_hrana = 0.30, conversatie = "lucru/conversatie_chat3/antrenare.jsonl", fractie_conversatie = 0.45, durata_scaderii_secunde = 14400, adunare_loturi = 16, racire_finala = 0.25, optimizator = "adamw", rata_muon = 0.02, abatere_incorporari = 0.02 }
+
+[antrenare_lunga]
+eticheta = "S124: formulări multe (sociale + calcule) din #680, AdamW 1e-5, conversație 45 % (chat ~52 %, din care calcule ~12 %, + din text), hrană FineWeb-2 rest 30 %, 4 h (C-132)"
+
+[porturi.date]
+modul = "module.date_bucati:DateBucati"
+setari = { director = "lucru/bucati/w2_amestec_be12", cale_validare = "date/tinystories_r2/validare.txt", cale_tokenizer = "date/ws/bpe_16384.json" }
+
+[porturi.examen]
+modul = "module.examen_romana:ExamenRomana"
+setari = { caractere = 100000, cu_r1 = false }
+
+[porturi.cercetator]
+modul = "module.cercetator_local:CercetatorLocal"
+setari = { amesteca = false, strangere = false, spatiu = { model = { lot = [6] } } }
+
+[porturi.profesor]
+modul = "module.jucarii:ProfesorGol"
+
+[porturi.rulare]
+modul = "module.rulare_locala:RulareLocala"
+
+[porturi.stocare]
+modul = "module.stocare_disc:StocareDisc"
+setari = { director = "lucru/stocare" }
+
+[porturi.interfata]
+modul = "module.interfata_consola:InterfataConsola"
+
+[porturi.traducere]
+modul = "module.jucarii:TraducereIdentitate"
+
+[porturi.memorie]
+modul = "module.jucarii:MemorieGoala"

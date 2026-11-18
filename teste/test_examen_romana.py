@@ -148,7 +148,9 @@ def test_doar_in_configurarile_aprobate():
                    # S120/S121 (C-128, 16 nov 2026): chat + calcule din câștigătorul S117
                    "conv_w2_mare_24zcc.toml",
                    # S124 (C-132, 17 nov 2026): formulări multe din #680
-                   "conv_w2_mare_24zcf.toml"}
+                   "conv_w2_mare_24zcf.toml",
+                   # S126 (C-144, 18 nov 2026): copia 24zcf, linie nouă, din #692
+                   "conv_w2_mare_24zcf_b.toml"}
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------

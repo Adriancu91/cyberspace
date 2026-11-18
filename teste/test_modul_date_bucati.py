@@ -276,4 +276,6 @@ def test_modulul_nu_e_in_nicio_configurare_in_uz():
                          # S120/S121 (C-128, 16 nov 2026): chat + calcule din câștigătorul S117, tot pe bucăți
                          "conv_w2_mare_24zcc.toml",
                          # S124 (C-132, 17 nov 2026): formulări multe din #680, tot pe bucăți
-                         "conv_w2_mare_24zcf.toml"}
+                         "conv_w2_mare_24zcf.toml",
+                         # S126 (C-144, 18 nov 2026): copia 24zcf, linie nouă, din #692, tot pe bucăți
+                         "conv_w2_mare_24zcf_b.toml"}

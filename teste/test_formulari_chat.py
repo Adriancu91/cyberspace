@@ -124,3 +124,17 @@ def test_24zcf_difera_de_24zcc_doar_prin_ce_cere_sarcina():
             assert c["porturi"][port] == f["porturi"][port], port
     assert c["porturi"]["model"]["modul"] == f["porturi"]["model"]["modul"]
     assert set(c) == set(f)
+
+
+def test_24zcf_b_difera_de_24zcf_doar_prin_nume_si_cale_stare():
+    """S126 (C-144, 18 nov 2026): copie fidelă, cu doar `nume` și `cale_stare` schimbate."""
+    vechi = (RADACINA / "config" / "conv_w2_mare_24zcf.toml").read_text(encoding="utf-8").splitlines()
+    nou = (RADACINA / "config" / "conv_w2_mare_24zcf_b.toml").read_text(encoding="utf-8").splitlines()
+    assert len(vechi) == len(nou)
+    diferite = [(a, b) for a, b in zip(vechi, nou) if a != b]
+    assert len(diferite) == 2
+    assert diferite[0] == ('nume = "w2_mare_24zcf"', 'nume = "w2_mare_24zcf_b"')
+    assert diferite[1][0].replace('"lucru/w2_mare_24zcf/gpt.pt"', '"lucru/w2_mare_24zcf_b/gpt.pt"') == diferite[1][1]
+    b = _config("conv_w2_mare_24zcf_b.toml")
+    assert b["porturi"]["model"]["setari"]["cale_stare"] == "lucru/w2_mare_24zcf_b/gpt.pt"
+    assert b["platforma"]["nume"] == "w2_mare_24zcf_b"
