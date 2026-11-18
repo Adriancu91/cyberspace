@@ -4212,6 +4212,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobare: „da S124” în hub (COMENZI.md).
 
 ### S126 — încă 4 h din #692 pe aceleași date (linia „24zcf”), ca formulările nevăzute să treacă pragul (placa ~4 h + ~1,5 h examene)
+- notă (supraveghetor, 18 nov 14:15): **ambele condiții sunt îndeplinite** — (1) Adrian a terminat `os-305` (~12:25) și Windows a pornit din nou (confirmat 12:31; hub COMENZI.md C-136, commit 05a5c8a); (2) discul, vezi nota de mai jos. **S126 pornește la noapte, de la 19:00** (tot faci verificarea de disc de la pasul 2).
 - notă (supraveghetor, 18 nov 11:15): condiția (2) e acum îndeplinită — C: 176,7 GB liberi după C-138 (centrul de comandă, 10:39); rămâne doar (1).
 - stare: **aprobat** (supraveghetor, 18 nov 2026 02:15) — **cu două condiții de pornire:** (1) Adrian a terminat testul `os-305` (C-136) și Windows a pornit din nou (scris în hub); (2) verificarea de disc de la pasul 2 trece. Dacă (2) nu trece: rămâne `aprobat`, scrii în coadă „aștept disc (C: … GB)” și în raportul de dimineață; **nu ștergi nimic**, nu e `oprit`.
 - tip: placă

@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 18 noiembrie 2026, 14:15 — Testul tău `os-305` e gata; S126 pornește la noapte
+
+- **REZOLVAT: S126 nu mai așteaptă nimic.** Centrul de comandă a scris în hub că ai terminat testul `os-305` (~12:25) și ai pornit din nou Windows; discul are 176,7 GB liberi. Am notat în coadă.
+- **La noapte, de la 19:00:** S126 — încă 4 h de învățat din #692, apoi examenele, cu aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul pe la ~01:00; îl verific la 02:15.
+- **Acum:** nu rulează nimic pe placă. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic. (Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.)
+
 ## 18 noiembrie 2026, 11:15 — Discul e curat (176,7 GB liberi); S126 mai așteaptă doar testul tău `os-305`
 
 - **REZOLVAT: locul pe disc.** Curățenia ta (C-137 + C-138) a fost făcută de centrul de comandă la 10:39: 139,7 GB șterși, **C: are acum 176,7 GB liberi** (de la 37,0). Modelele bune (#651, #680, #692 și restul din lista „păstrează”) sunt la locul lor; executantul nu mai are nimic de făcut aici.
@@ -146,6 +153,3 @@
 - 4 ore, nu mai mult: pe C: sunt ~19 GB, iar paza de disc oprește la 15 GB.
 - **Aștept de la tine:** nimic. (Dacă vrei teste GPU pe workstation diseară, scrie în hub — Kronos lasă placa liberă.)
 
-## 16 noiembrie 2026, 13:09 (executant) — S112 / C-119 gata: #651 e în interfață (http://100.90.150.35:8787/)
-
-- **Interfața de pe 8787 rulează cu #651** (procesor). Fila „Întreabă din text”: 2/2 corecte, ~10 s. ⚠ Fila de chat fără text dă fraze fără sens (modelul știe doar „text + întrebare”). ⚠ După o repornire, paznicul pornește interfața veche (#312/#407) — comanda de revenire la #651 e în raport. Placa folosită din 72 h: ~67 h. Raport: `docs/rapoarte/2026-11-16_1309_C-119_final.md`. Aștept de la tine: „da”/„nu” pentru (1) #651 implicit în `interfata_ws.ps1`, (2) fila de chat în forma „Întrebare: … Răspuns:”.
