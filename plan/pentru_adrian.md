@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 18 noiembrie 2026, 23:15 — S126 s-a oprit la 20:37 înainte de placă; cu „da”-ul tău (C-144) pornește acum
+
+- **Ce s-a întâmplat:** la 20:37 executantul a oprit S126 **înainte să pună ceva pe placă**: unealta de antrenare nu poate porni „din #692” pe o linie care are deja 4 ore — comanda n-ar fi antrenat nimic, fără niciun mesaj. Bine că a observat. Nimic stricat, nimic șters; 1.529 teste trec.
+- **Varianta (a), aprobată de tine (C-144, 23:10), e în coadă:** o configurare nouă, copie fidelă a celei vechi (doar numele și locul de salvare diferă), apoi 4 h din #692 + examenele, aceleași praguri (formulări nevăzute ≥ 48 %). Pornire la următoarea trecere a executantului (≤ 23:45), cel târziu 01:00.
+- **Verdictul** pe la ~05:30–06:00; îl verific la 05:15 sau 08:15. Placa e liberă la 07:00 pentru Cyber Universe (dacă examenele nu se termină, restul lor la noapte).
+- **Aștept de la tine:** nimic.
+
 ## 18 noiembrie 2026, 20:15 — Testul tău `os-306` e terminat; S126 pornește acum pe placă
 
 - **REZOLVAT: S126 nu mai așteaptă.** Executantul a făcut pașii pregătitori la 19:39 (pre-înregistrarea, discul: 171,5 GB liberi, 1.529 teste trec), dar nu putea citi hub-ul ca să vadă că ai terminat `os-306`. I-am scris eu în coadă: testul s-a terminat (~17:28, a doua tură până la 18:22, încheiată în Windows) → pornește la următoarea lui trecere.
