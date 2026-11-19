@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 17:15 — #513 pe placă e de 3,5 ori mai rapid (os-308); la noapte S127, cum era planificat
+
+- **Din hub:** ciclul automat `os-308` (14:37) a trecut: Kronos #513 pe placa video, **~11 simboluri/s cu tot cu driverul (era 3,1)**, toate 16 identice cu procesorul. Cyber Universe propune următorul pas (jurnalul scris pe stick doar la final → estimat ~40/s); pentru Kronos nu cere nimic, am scris în propunere că suntem de acord.
+- **La Kronos nimic nou de la 11:15** (normal: ziua placa e pentru testele OS). Chat-ul pe #651; 1.530 teste trec.
+- **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Procesor de la 19:00, placa cel târziu 00:30, liberă la 07:00. Verdictul îl verific la 05:15 sau 08:15.
+- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 19 noiembrie 2026, 11:15 — Kronos #513 a mers pe placa video în sistemul vostru, corect; la noapte S127
 
 - **Vestea zilei (din hub, testul automat `os-307` de la 08:52):** modelul Kronos #513 a generat pe placa video, prin sistemul și driverul vostru, **16 simboluri, toate identice cu procesorul** — fără om la tastatură. Viteza pe placă: ~44 simboluri/s la calcul, dar doar ~3,1 cu tot cu driverul (jurnalul scris pe stick încetinește); Cyber-GPU a găsit deja cauza (C-145 gata), OS-ul o leagă în `os-308` (C-146), test ziua.
