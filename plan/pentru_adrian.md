@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- (executant, 20 nov 01:30) **S127 gata — RĂMÂNE #651:** #720 la formulări nevăzute 46,0 % (prag 48 %; lipsesc 4 răspunsuri din 200; #692 avea 45,0 %). Datele noi au dublat adunarea + scăderea + împărțirea formulate altfel (4 → 8 din 78); chat 50 și calcule 80 sunt cele mai bune de până acum, dar „din text” 218 = exact pragul. Interfața neschimbată; placa liberă de la 01:15. Raport: `docs/rapoarte/2026-11-20_0130_S127_formulari_c.md`.
+
 ## 19 noiembrie 2026, 23:15 — Am preluat cele două „da”-uri ale tale (C-149, C-150); S127 merge mai departe
 
 - **Rulează acum:** S127 — cele 4 ore de învățat se termină pe la ~23:20, apoi examenele (~1,75 h). Ultimul semn de la executant: 19:21 (normal, cât învață nu scrie). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
