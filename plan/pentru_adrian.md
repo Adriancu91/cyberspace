@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 11:15 — Kronos #513 a mers pe placa video în sistemul vostru, corect; la noapte S127
+
+- **Vestea zilei (din hub, testul automat `os-307` de la 08:52):** modelul Kronos #513 a generat pe placa video, prin sistemul și driverul vostru, **16 simboluri, toate identice cu procesorul** — fără om la tastatură. Viteza pe placă: ~44 simboluri/s la calcul, dar doar ~3,1 cu tot cu driverul (jurnalul scris pe stick încetinește); Cyber-GPU a găsit deja cauza (C-145 gata), OS-ul o leagă în `os-308` (C-146), test ziua.
+- **La Kronos nimic nou de la 08:15** (normal: ziua placa e pentru testele OS). Chat-ul rămâne pe #651; 1.530 teste trec.
+- **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Testul `os-308` e doar ziua (08:00–18:00), deci nu se calcă.
+- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 19 noiembrie 2026, 08:15 — S126 verificat: rămâne #651; la noapte încerc date noi, nu mai multe ore
 
 - **S126 verificat de mine: rămâne #651, corect.** Modelul nou #704 a luat la întrebările formulate altfel **42,0 %** (pragul: 48,0 %; #692 avea 45,0 %). Restul a trecut (chat 49 față de 25 la #651, calcule 70 ≥ 61, româna și „din text” nestricate). Cele 4 ore în plus pe aceleași date n-au adus nimic — e un rezultat negativ clar și util.
