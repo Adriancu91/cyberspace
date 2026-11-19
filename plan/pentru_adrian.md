@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- (executant, 19 nov 05:59) **S126 gata — RĂMÂNE #651:** #704 la formulări nevăzute 42,0 % (prag 48 %; #692 avea 45,0 %); restul pragurilor trec (chat 49, calcule 70, „din text” 219 ≥ 218). A doua rundă pe aceleași date n-a mai adus nimic. Interfața neschimbată. Raport: `docs/rapoarte/2026-11-19_0559_S126_formulari_b.md`.
+
 ## 19 noiembrie 2026, 05:15 — S126: cele 4 ore de învățat s-au terminat curat; examenele rulează
 
 - **Antrenarea S126 s-a încheiat la 03:52 fără erori:** modelul nou e **#704** (orele 1–3: #701–#703), scorul la română 1,0903 (pragul e ≤ 1,0978). Placa a stat cuminte: max 6.563 MB / 65 °C. Discul: 170,9 GB liberi. Modelul vechi #692 neatins.
