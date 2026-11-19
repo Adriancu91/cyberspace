@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 08:15 — S126 verificat: rămâne #651; la noapte încerc date noi, nu mai multe ore
+
+- **S126 verificat de mine: rămâne #651, corect.** Modelul nou #704 a luat la întrebările formulate altfel **42,0 %** (pragul: 48,0 %; #692 avea 45,0 %). Restul a trecut (chat 49 față de 25 la #651, calcule 70 ≥ 61, româna și „din text” nestricate). Cele 4 ore în plus pe aceleași date n-au adus nimic — e un rezultat negativ clar și util.
+- **Noaptea a mers curat:** fără erori, placa max 6.563 MB / 65 °C, raportul de dimineață e la locul lui, **1.530 teste trec**, discul are ~160–170 GB liberi.
+- **Azi ziua:** nimic de la Kronos pe placă — workstation-ul e pentru testul tău `os-307` (#513 pe placă) și ciclul automat.
+- **Am pus în coadă S127 (aprobată de mine, în granițe), la noapte:** date noi făcute de program pentru ce lipsește exact — adunarea, scăderea și împărțirea formulate altfel (#704 are doar 3 din 78 aici) — de cel puțin 3 ori mai multe feluri de a le formula, verificate să nu se suprapună cu examenul; apoi 4 h din #692 și examenele, cu aceleași praguri. Verdictul pe la ~03:00–05:00.
+- **Aștept de la tine:** nimic.
+
 - (executant, 19 nov 05:59) **S126 gata — RĂMÂNE #651:** #704 la formulări nevăzute 42,0 % (prag 48 %; #692 avea 45,0 %); restul pragurilor trec (chat 49, calcule 70, „din text” 219 ≥ 218). A doua rundă pe aceleași date n-a mai adus nimic. Interfața neschimbată. Raport: `docs/rapoarte/2026-11-19_0559_S126_formulari_b.md`.
 
 ## 19 noiembrie 2026, 05:15 — S126: cele 4 ore de învățat s-au terminat curat; examenele rulează
@@ -160,15 +168,3 @@
 ## 16 noiembrie 2026, 18:07 (executant) — S119 / C-127, prima trecere: licențele verificate, nimic descărcat încă
 
 - **Voie:** FineWeb-2 română (ODC-By), OpenAssistant oasst2 (Apache-2.0, doar mesajele în română), HPLT v2 (CC0, dar 167 GB — nu încape acum). **CulturaX cere să accepți condiții pe site și n-are licență scrisă → nu-l iau.** C: 64 GB liberi. Descărcarea vine după S117 (antrenarea de chat de la noapte are întâietate). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1807_S119_licente.md`. **Aștept de la tine:** „da CulturaX” (după ce accepți condițiile pe Hugging Face) sau nimic.
-
-## 16 noiembrie 2026, 18:05 (executant) — S120 / C-128 A gata: exercițiile de calcul și examenul de calcule sunt făcute
-
-- **Examen de calcule nou**, ținut deoparte (200 de întrebări: adunări, scăderi, înmulțiri până la 12 × 12, împărțiri; 40 % formulate altfel decât la antrenare). **#651 acum: 1 din 200** — la jumătate din întrebări spune „Nu scrie în text.”. **2.000 de exerciții de calcul** făcute de program („Cât face 3x7?” → „3 × 7 = 21.”), fără cod Python. În datele de chat fără text, „Nu scrie în text.” apare de **0** ori. Totul e pregătit pentru S121 (mâine, după S117). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1755_S120_calcule.md`. Aștept de la tine: nimic.
-
-## 16 noiembrie 2026, 17:15 — Datele de chat sunt verificate; am pus în coadă calculele și textul nou
-
-- **Verificat de mine: S114, S115, S116 sunt bune.** Fila Chat răspunde scurt, interfața pornește singură cu #651, iar datele de chat (16.389 de perechi, fără alt AI) și examenul de chat (#651 are acum doar 25 din 200) sunt făcute corect, fără scurgeri.
-- **La noapte (de la 19:00): S117** — Kronos învață chat-ul 4 ore; intră în interfață doar dacă ajunge la cel puțin 55/200 și nu strică nimic altceva.
-- **Comenzile tale noi:** **C-128** → **S120** (în seara asta, pe procesor: exerciții de calcul simple făcute de program + un examen de calcule ținut deoparte; „Nu scrie în text.” scos din răspunsurile fără text; fără cod Python, cum ai cerut) și **S121** (mâine ziua, 4 ore pe placă: Kronos învață și calculele; intră în interfață doar dacă trece examenele). **C-127** → **S119** (după S120: descărcăm text românesc scris de oameni — restul FineWeb-2, conversațiile oasst2 în română, HPLT doar dacă licența e deschisă; discul rămâne peste 30 GB; fără antrenare deocamdată).
-- Discul C: are ~64 GB liberi. Placa: liberă până la 19:00.
-- **Aștept de la tine:** nimic acum. (Dacă CulturaX cere să accepți condiții pe site, te întreb după S119.)
