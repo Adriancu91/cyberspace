@@ -164,23 +164,6 @@
 - **17 nov 01:40 (executant) — E0 (S123) OPRIT înainte de rulare; aștept o literă de la tine.** Verificările de dinainte au găsit, pe lângă „Cu cine vorbesc?”, încă o întrebare socială din examen care e în antrenare („Ce știi tu să faci?” ≈ „Ce știi să faci?”), plus potriviri doar de șablon și „Moctezuma” (alt text). Regula sarcinii cerea să mă opresc și să întreb. **(a)** scot cele 2 sociale, rulez pe 198 și pornește S121; **(b)** sar peste E0 și pornește S121. Până atunci lanțul (S121, S119, interfața) așteaptă. Raport: `docs/rapoarte/2026-11-17_0140_E0_memorare.md`.
 - **17 nov 01:00 (executant) — S117 (chat) gata: rămâne #651.** Modelul nou #668 răspunde mai bine la chat (42 din 200 față de 25; nu mai spune „Nu scrie în text.” pe nedrept), dar pragul era 55, deci **nu intră în interfață**. Româna, „din text” și instrucțiunile n-au stricat nimic. La fapte (ani, județe) #668 inventează. Urmează E0 (S123), apoi S121 din #651. Raport: `docs/rapoarte/2026-11-17_0100_S117_chat.md`. Aștept de la tine: nimic.
 
-## 16 noiembrie 2026, 23:15 — Totul merge; interfața e oprită, cum ai cerut
-
-- **S122 (C-129), verificat de mine:** interfața de pe 8787 e oprită de la 22:00 și paznicul nu o mai repornește (fișierul `lucru\STOP_INTERFATA`; dacă vrei chat-ul înapoi: îl ștergi). `kronos/` neatins, testele trec (1.488, 0 pică).
-- **Rulează S117:** la ora 2 din 4 româna era 1,0898; placa 6.563 MB / 63 °C (sub limite). Gata pe la ~23:40, apoi examenele, apoi E0 (S123) și S121 — toată noaptea.
-- Nimic nou pus în coadă (lanțul e deja plin până dimineață). Nicio comandă nouă în hub.
-- **Aștept de la tine:** nimic (CulturaX doar dacă vrei: „da CulturaX” în hub).
-
-- **16 nov 22:07 (executant) — S122:** interfața de pe 8787 e **oprită** de la 22:00 și nu mai pornește singură (comutatorul `lucru\STOP_INTERFATA`; ca s-o lași iar să pornească: ștergi fișierul). Pornește din nou cu câștigătorul după S119. S117 merge mai departe. Raport: `docs/rapoarte/2026-11-16_2207_S122_interfata_oprita.md`.
-
-## 16 noiembrie 2026, 20:15 — Antrenarea de chat rulează; am pus în coadă comenzile tale C-129 și C-130
-
-- **Verificat de mine: S120 e bun** (examenul de calcule scris înaintea datelor, 2.000 de exerciții, 0 scurgeri; #651 știe acum 1 calcul din 200). **S119:** licențele sunt verificate, nimic descărcat încă.
-- **Rulează acum S117** (din 19:30): Kronos învață chat-ul 4 ore, apoi examenele — gata pe la ~01:00.
-- **C-129 → S122:** executantul oprește acum interfața de pe 8787 și o ține oprită; ordinea, fără să mai aștepte ferestrele: **S117 → E0 → S121 (calculele, de la ~01:00, nu mâine la 08:00) → S119 (descărcarea textului)** → interfața pornește din nou cu câștigătorul → S118.
-- **C-130 → S123 (E0):** testul de memorare (~10 minute pe placă), imediat după S117, înainte de S121; regula ta de verdict (30 / 10 pp) e copiată exact.
-- **Aștept de la tine:** doar dacă vrei CulturaX: acceptă condițiile pe Hugging Face și scrie „da CulturaX” în hub. Altfel nimic.
-
 ## 16 noiembrie 2026, 18:07 (executant) — S119 / C-127, prima trecere: licențele verificate, nimic descărcat încă
 
 - **Voie:** FineWeb-2 română (ODC-By), OpenAssistant oasst2 (Apache-2.0, doar mesajele în română), HPLT v2 (CC0, dar 167 GB — nu încape acum). **CulturaX cere să accepți condiții pe site și n-are licență scrisă → nu-l iau.** C: 64 GB liberi. Descărcarea vine după S117 (antrenarea de chat de la noapte are întâietate). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1807_S119_licente.md`. **Aștept de la tine:** „da CulturaX” (după ce accepți condițiile pe Hugging Face) sau nimic.
