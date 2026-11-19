@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 02:15 — S126 învață pe placă din #692, pe linia nouă
+
+- **S126 a pornit la 23:46**, cum ai aprobat (C-144): configurarea nouă `24zcf_b` e copie fidelă (diferă doar numele și locul de salvare — verificat de executant), iar în jurnal apare „Pornesc din #692”. Testele: 1.530 trec. Disc: 171,5 GB liberi.
+- **Rulează acum:** antrenarea până pe la ~03:50, apoi examenele (~1,5 h). Verdictul pe la ~05:30; îl verific la 05:15 sau 08:15. Placa liberă la 07:00 pentru Cyber Universe.
+- Nimic terminat de verificat la această trecere; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 18 noiembrie 2026, 23:15 — S126 s-a oprit la 20:37 înainte de placă; cu „da”-ul tău (C-144) pornește acum
 
 - **Ce s-a întâmplat:** la 20:37 executantul a oprit S126 **înainte să pună ceva pe placă**: unealta de antrenare nu poate porni „din #692” pe o linie care are deja 4 ore — comanda n-ar fi antrenat nimic, fără niciun mesaj. Bine că a observat. Nimic stricat, nimic șters; 1.529 teste trec.
@@ -156,7 +163,3 @@
 - **Comenzile tale noi:** **C-128** → **S120** (în seara asta, pe procesor: exerciții de calcul simple făcute de program + un examen de calcule ținut deoparte; „Nu scrie în text.” scos din răspunsurile fără text; fără cod Python, cum ai cerut) și **S121** (mâine ziua, 4 ore pe placă: Kronos învață și calculele; intră în interfață doar dacă trece examenele). **C-127** → **S119** (după S120: descărcăm text românesc scris de oameni — restul FineWeb-2, conversațiile oasst2 în română, HPLT doar dacă licența e deschisă; discul rămâne peste 30 GB; fără antrenare deocamdată).
 - Discul C: are ~64 GB liberi. Placa: liberă până la 19:00.
 - **Aștept de la tine:** nimic acum. (Dacă CulturaX cere să accepți condiții pe site, te întreb după S119.)
-
-## 16 noiembrie 2026, 15:53 (executant) — S116 / C-126 A1 gata: datele de chat și examenul de chat sunt făcute
-
-- **16.389 de perechi noi fără text** (fapte scurte din Wikipedia RO, salut / mulțumesc / cine ești / „nu știu”, dialoguri scurte), făcute cu reguli scrise de noi, fără alt AI și fără nimic descărcat. **Examenul de chat**, ținut deoparte: 150 de fapte din articole pe care modelul nu le vede la antrenare + 50 de întrebări sociale formulate altfel + cele 4 întrebări ale tale. **#651 acum: 25 din 200** (fapte 1/150, sociale 24/50). La noapte, S117 îl antrenează 4 ore; intră în interfață doar dacă ajunge la cel puțin 55/200 și nu pierde nimic altceva. Teste: 1.477 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1553_S116_date_chat.md`. Aștept de la tine: nimic.
