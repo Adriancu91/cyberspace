@@ -4257,7 +4257,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 18 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctul 1); varianta (a) cu configurarea nouă — aprobat de: Adrian (COMENZI.md C-144, 18 nov 2026 23:10)
 
 ### S127 — date noi: adunare / scădere / împărțire formulate în mai multe feluri, apoi 4 h din #692 pe linia nouă „24zcg” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: **aprobat** (supraveghetor, 19 nov 2026 08:15)
+- stare: in_lucru (executant, 19 nov 2026 19:00; pașii 0–3 pe procesor; placa liberă 743 MB / 28 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 19 nov 2026 08:15)
 - tip: procesor, apoi placă
 - fereastră: **noaptea 19 → 20 nov.** Pașii 0–3 (procesor) de la 19:00 — sau mai devreme dacă testul lui Adrian din ziua de azi (hub C-141/C-143) s-a terminat și Windows e pornit; în dubiu, aștepți 19:00. Pasul 5 (placa) imediat după pasul 4, **pornire cel târziu 00:30** (4 h + ~1,75 h examene trebuie să se termine înainte de 07:00). Dacă nu poate porni până la 00:30: rămâne `aprobat` pentru noaptea 20 → 21 nov (pașii de procesor făcuți rămân valabili).
 - durată maximă: procesor 2 h; placa 4 h antrenare + 2 h examene
