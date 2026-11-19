@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 20:15 — S127 învață pe placă de la 19:16, cum era planificat
+
+- **Pașii pregătitori S127 gata (19:16):** date noi pentru adunare / scădere / împărțire formulate altfel — de la 47/45/44 feluri de formulare la **338/331/282**; verificate: **0 suprapuneri** cu examenul. **1.539 teste trec.** Disc: 165,6 GB liberi.
+- **Rulează acum:** 4 h de învățat din #692 (jurnalul confirmă „Pornesc din #692”); placa 5.337 MB / 63 °C, în limite. Gata pe la ~23:20, apoi examenele (~1,75 h), aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
+- Nimic terminat de verificat; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă (placa e ocupată toată noaptea).
+- **Aștept de la tine:** nimic.
+
 ## 19 noiembrie 2026, 17:15 — #513 pe placă e de 3,5 ori mai rapid (os-308); la noapte S127, cum era planificat
 
 - **Din hub:** ciclul automat `os-308` (14:37) a trecut: Kronos #513 pe placa video, **~11 simboluri/s cu tot cu driverul (era 3,1)**, toate 16 identice cu procesorul. Cyber Universe propune următorul pas (jurnalul scris pe stick doar la final → estimat ~40/s); pentru Kronos nu cere nimic, am scris în propunere că suntem de acord.
@@ -163,7 +170,3 @@
 - **17 nov 02:40 (executant) — E0 (S123) gata, pe #668 și B = 197 (C-131).** La saluturi, „cine ești”, „ce poți” etc. modelul răspunde bine la formulările văzute în antrenare (**100 %**) și mult mai slab la formulări noi (**62,5 %**): **+37,5 pp = semnal puternic de memorare** după regula ta. Pe total +14,7 pp (35,0 % față de 20,3 %) = neconcludent; la fapte nu memorează nici ce a văzut (13,3 % față de 6,7 %). Reproducerea față de S117: identic, 197/197. Urmează S121. Raport: `docs/rapoarte/2026-11-17_0240_E0_memorare.md`. Aștept de la tine: nimic.
 - **17 nov 01:40 (executant) — E0 (S123) OPRIT înainte de rulare; aștept o literă de la tine.** Verificările de dinainte au găsit, pe lângă „Cu cine vorbesc?”, încă o întrebare socială din examen care e în antrenare („Ce știi tu să faci?” ≈ „Ce știi să faci?”), plus potriviri doar de șablon și „Moctezuma” (alt text). Regula sarcinii cerea să mă opresc și să întreb. **(a)** scot cele 2 sociale, rulez pe 198 și pornește S121; **(b)** sar peste E0 și pornește S121. Până atunci lanțul (S121, S119, interfața) așteaptă. Raport: `docs/rapoarte/2026-11-17_0140_E0_memorare.md`.
 - **17 nov 01:00 (executant) — S117 (chat) gata: rămâne #651.** Modelul nou #668 răspunde mai bine la chat (42 din 200 față de 25; nu mai spune „Nu scrie în text.” pe nedrept), dar pragul era 55, deci **nu intră în interfață**. Româna, „din text” și instrucțiunile n-au stricat nimic. La fapte (ani, județe) #668 inventează. Urmează E0 (S123), apoi S121 din #651. Raport: `docs/rapoarte/2026-11-17_0100_S117_chat.md`. Aștept de la tine: nimic.
-
-## 16 noiembrie 2026, 18:07 (executant) — S119 / C-127, prima trecere: licențele verificate, nimic descărcat încă
-
-- **Voie:** FineWeb-2 română (ODC-By), OpenAssistant oasst2 (Apache-2.0, doar mesajele în română), HPLT v2 (CC0, dar 167 GB — nu încape acum). **CulturaX cere să accepți condiții pe site și n-are licență scrisă → nu-l iau.** C: 64 GB liberi. Descărcarea vine după S117 (antrenarea de chat de la noapte are întâietate). Teste: 1.487 trec, 0 pică. Raport: `docs/rapoarte/2026-11-16_1807_S119_licente.md`. **Aștept de la tine:** „da CulturaX” (după ce accepți condițiile pe Hugging Face) sau nimic.
