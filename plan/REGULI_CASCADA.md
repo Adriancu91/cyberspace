@@ -41,6 +41,7 @@ Sarcinile de felul ăsta intră în coadă cu starea `propus — necesită Adria
 - Toate testele trec înainte de „gata”. Commit în română după fiecare pas.
 - Rezultatele negative se raportează la fel ca cele pozitive.
 - Ferestrele plăcii: ziua 08:00–18:30, noaptea 19:00–07:00. Raportul de dimineață: 07:40.
+- **De la 19 nov 2026 22:33 (Adrian, hub C-149 / DECIZII):** ziua (08:00–18:00) placa workstation-ului e a testelor driver/OS (ciclul automat); Kronos nu pune sarcini de placă ziua. Noaptea (19:00–07:00) antrenările Kronos continuă; placa liberă la 07:00. O rezervare de noapte din hub (`RESURSE.md`) are întâietate.
 - CONTINUUM rămâne doar observator cât timp merge cascada (altfel s-ar bate pe placă cu executantul).
 
 ## Cyber Hub (adăugat cu aprobarea lui Adrian, 20 octombrie 2026)

@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 19 noiembrie 2026, 23:15 — Am preluat cele două „da”-uri ale tale (C-149, C-150); S127 merge mai departe
+
+- **Rulează acum:** S127 — cele 4 ore de învățat se termină pe la ~23:20, apoi examenele (~1,75 h). Ultimul semn de la executant: 19:21 (normal, cât învață nu scrie). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
+- **C-149 (prioritatea pe driver și OS):** am scris regula în coadă și în regulile cascadei — **ziua (08:00–18:00) Kronos nu mai pune nimic pe placă**, noaptea antrenează în continuare. Nimic altceva nu se schimbă la Kronos.
+- **C-150 (Kronos cel mare, #651, pentru placa video):** sarcina **S128** e în coadă, aprobată de tine — exportul lui #651 în formatul plăcii + fișa lui (`MODEL_651.md`), doar pe procesor, **mâine de la 07:00**, după S127. Chat-ul rămâne pe #651, fișa lui #513 rămâne neschimbată; fișa nouă o copiez eu în hub.
+- **Aștept de la tine:** nimic.
+
 ## 19 noiembrie 2026, 20:15 — S127 învață pe placă de la 19:16, cum era planificat
 
 - **Pașii pregătitori S127 gata (19:16):** date noi pentru adunare / scădere / împărțire formulate altfel — de la 47/45/44 feluri de formulare la **338/331/282**; verificate: **0 suprapuneri** cu examenul. **1.539 teste trec.** Disc: 165,6 GB liberi.
@@ -159,14 +166,3 @@
 - Ce înseamnă E0 pentru mai departe (doar o idee, nu e în coadă): datele de chat au prea puține formulări diferite pentru aceeași intenție. Dacă vrei, după S121 îți propun o sarcină cu mai multe formulări.
 - **Aștept de la tine:** nimic.
 
-## 17 noiembrie 2026, 02:15 — Răspunsul tău la E0 e în coadă; lanțul pornește din nou
-
-- **S117 verificat de mine: rămâne #651.** #668 vorbește mai bine (chat 42 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 0), dar pragul fixat dinainte era 55. Româna, „din text” și instrucțiunile nu s-au stricat.
-- **E0 (S123) e din nou aprobat**, cu răspunsul tău (C-131): scot din examenul ținut deoparte 3 întrebări care erau și în antrenare („Cu cine vorbesc?”, „Ce știi tu să faci?”, „Moctezuma”) → 197 de întrebări. Rulează acum (~10 min pe placă).
-- **Apoi, fără așteptare:** S121 (chat + calcule, 4 h pe placă) → S119 (descărcarea textului românesc) → interfața repornită cu câștigătorul → S118.
-- Testele: 1.488 trec, 0 pică. Placa: liberă (621 MB / 29 °C). Discul C: 60 GB liberi.
-- **Aștept de la tine:** nimic.
-
-- **17 nov 02:40 (executant) — E0 (S123) gata, pe #668 și B = 197 (C-131).** La saluturi, „cine ești”, „ce poți” etc. modelul răspunde bine la formulările văzute în antrenare (**100 %**) și mult mai slab la formulări noi (**62,5 %**): **+37,5 pp = semnal puternic de memorare** după regula ta. Pe total +14,7 pp (35,0 % față de 20,3 %) = neconcludent; la fapte nu memorează nici ce a văzut (13,3 % față de 6,7 %). Reproducerea față de S117: identic, 197/197. Urmează S121. Raport: `docs/rapoarte/2026-11-17_0240_E0_memorare.md`. Aștept de la tine: nimic.
-- **17 nov 01:40 (executant) — E0 (S123) OPRIT înainte de rulare; aștept o literă de la tine.** Verificările de dinainte au găsit, pe lângă „Cu cine vorbesc?”, încă o întrebare socială din examen care e în antrenare („Ce știi tu să faci?” ≈ „Ce știi să faci?”), plus potriviri doar de șablon și „Moctezuma” (alt text). Regula sarcinii cerea să mă opresc și să întreb. **(a)** scot cele 2 sociale, rulez pe 198 și pornește S121; **(b)** sar peste E0 și pornește S121. Până atunci lanțul (S121, S119, interfața) așteaptă. Raport: `docs/rapoarte/2026-11-17_0140_E0_memorare.md`.
-- **17 nov 01:00 (executant) — S117 (chat) gata: rămâne #651.** Modelul nou #668 răspunde mai bine la chat (42 din 200 față de 25; nu mai spune „Nu scrie în text.” pe nedrept), dar pragul era 55, deci **nu intră în interfață**. Româna, „din text” și instrucțiunile n-au stricat nimic. La fapte (ani, județe) #668 inventează. Urmează E0 (S123), apoi S121 din #651. Raport: `docs/rapoarte/2026-11-17_0100_S117_chat.md`. Aștept de la tine: nimic.
