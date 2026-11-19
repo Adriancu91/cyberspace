@@ -1031,6 +1031,283 @@ def pas_formulari(rad: Path, t0: float) -> int:
 
 
 # --------------------------------------------------------------------------------------------------------------------
+# S127 (supraveghetor, 19 nov 2026): pasul `formulari2` — la adunare, scădere și împărțire de cel puțin 3 ori mai multe
+# șabloane decât are pasul `formulari` (S124): cadre noi × expresii noi, plus formulări în cuvinte (numerele în altă
+# ordine, „cu cât e mai mare…”, „împarte … în … părți egale”), cu context mic de zi cu zi, cu întrebarea la sfârșit sau
+# la început. Scrise de program, fără alt AI. Înmulțirea și socialele: șabloanele S124 (+ cadrele noi la înmulțire).
+# Ieșirea în dosarul NOU lucru/conversatie_chat4/; pașii de mai sus și ieșirile lor rămân neschimbate.
+DOSAR4 = "lucru/conversatie_chat4"
+ANTRENARE4 = f"{DOSAR4}/antrenare.jsonl"
+SAMANTA_FORMULARI2 = 1127
+COTE_CALCULE4 = {"adunare": 800, "scadere": 800, "inmultire": 500, "impartire": 800}
+BUCATA_S127 = 6
+
+_CADRE_CALCUL2 = ["Calculează {E}.", "Calculează, te rog, {E}.", "Poți calcula {E}?", "Cât dă {E}?",
+                  "Ajută-mă cu {E}.", "Am nevoie de rezultatul pentru {E}.", "Zi-mi cât face {E}.",
+                  "Ce număr iese din {E}?", "Ce obții din {E}?", "Care e răspunsul la {E}?",
+                  "Întrebare de matematică: cât face {E}?", "O socoteală: {E}.", "Mă ajuți? {E} = ?",
+                  "Fă-mi socoteala: {E}.", "Nu-mi iese: {E}. Cât face?", "Verifică-mi: {E} cât face?",
+                  "Cât face oare {E}?", "Și {E}?", "Spune-mi rezultatul: {E}.", "Cât rezultă din {E}?",
+                  "Am de făcut {E}. Cât iese?", "Rezolvă {E}.", "Rezolvă, te rog: {E}.", "Cât înseamnă {E}?"]
+_EXPRESII_CALCUL2 = {"adunare": ["{a} + {b}", "{a} plus {b}", "{a} adunat cu {b}", "{a} și cu {b}"],
+                     "scadere": ["{a} - {b}", "{a} minus {b}", "{a} fără {b}", "{a} scăzut cu {b}"],
+                     "inmultire": ["{a} x {b}", "{a} ori {b}"],
+                     "impartire": ["{a} : {b}", "{a} împărțit la {b}", "{a} / {b}", "{a} supra {b}"]}
+_VERBALE_CALCUL2 = {
+    "adunare": [
+        "Adaugă {b} la {a}. Cât obții?", "La {a} adaug {b}. Cât am?", "Dacă pun {b} peste {a}, cât iese?",
+        "Cât fac împreună {a} și {b}?", "{a} și {b} cât fac la un loc?", "Cât iese dacă aduni {a} cu {b}?",
+        "Care este totalul pentru {a} și {b}?", "Totalul dintre {a} și {b}?", "Ce număr e cu {b} mai mare decât {a}?",
+        "Mărește {a} cu {b}. Ce număr obții?", "Un număr e {a}. Îl mărim cu {b}. Cât devine?",
+        "Ce sumă obții din {a} și {b}?", "Pune la un loc {a} și {b}. Cât face?",
+        "Am {a} mere în coș și mai pun {b}. Câte mere am în total?",
+        "În clasă sunt {a} elevi și mai vin {b}. Câți elevi sunt acum?",
+        "Mama a cumpărat {a} ouă, apoi încă {b}. Câte ouă a cumpărat?",
+        "Un autobuz are {a} pasageri. La stație urcă {b}. Câți pasageri sunt în autobuz?",
+        "Am strâns {a} lei, iar bunica îmi dă {b} lei. Câți lei am?",
+        "Luni am citit {a} pagini, marți {b} pagini. Câte pagini am citit în total?",
+        "Într-o parcare sunt {a} mașini și mai intră {b}. Câte mașini sunt?",
+        "Pe o creangă stau {a} vrăbii și mai vin {b}. Câte vrăbii sunt?",
+        "Am mers {a} km dimineața și {b} km seara. Câți km am mers?",
+        "Câte mere am, dacă aveam {a} și am mai primit {b}?",
+        "Câți lei am în total, dacă am {a} lei în buzunar și {b} lei în portofel?",
+        "Câți copii sunt în parc, dacă {a} se joacă pe tobogan și {b} pe leagăne?",
+        "Câte pagini are cartea, dacă prima parte are {a} pagini și a doua {b}?",
+        "Câte bomboane sunt în total, când într-o pungă sunt {a} și în alta {b}?",
+        "Cât cântăresc împreună un sac de {a} kg și unul de {b} kg?",
+        "Câte flori sunt în grădină, dacă sunt {a} trandafiri și {b} lalele?",
+        "Un fermier are {a} oi și cumpără încă {b}. Câte oi are acum?",
+        "Câți lei costă amândouă, dacă una costă {a} lei și cealaltă {b} lei?",
+        "Pe hartă, de la sat la oraș sunt {a} km, apoi încă {b} km până la munte. Câți km sunt în total?",
+    ],
+    "scadere": [
+        "Cu cât e mai mare {a} decât {b}?", "Cu cât este {b} mai mic decât {a}?",
+        "Cât îi lipsește lui {b} ca să ajungă la {a}?", "Cât trebuie să adaug la {b} ca să obțin {a}?",
+        "Ce rămâne din {a} dacă iau {b}?", "Scade din {a} pe {b}. Cât rămâne?", "Micșorează {a} cu {b}. Ce număr obții?",
+        "Ce număr e cu {b} mai mic decât {a}?", "Diferența dintre {a} și {b} cât este?",
+        "Cât rămâne dacă din {a} scot {b}?", "Care e diferența când scazi {b} din {a}?",
+        "Ia {b} de la {a}. Cât rămâne?", "De la {b} până la {a} câți pași sunt?",
+        "Am {a} lei și cumpăr o carte de {b} lei. Câți lei îmi rămân?",
+        "Într-un autobuz sunt {a} oameni. La stație coboară {b}. Câți rămân?",
+        "Un raft are {a} borcane. Vindem {b}. Câte borcane rămân pe raft?",
+        "Am avut {a} bomboane și am dat {b} prietenilor. Câte mi-au rămas?",
+        "O carte are {a} pagini. Am citit {b}. Câte pagini mai am de citit?",
+        "Un drum are {a} km. Am mers deja {b} km. Câți km mai sunt?",
+        "Ana are {a} lei, iar Dan are {b} lei. Cu câți lei are Ana mai mult?",
+        "Pe lac sunt {a} rațe și zboară {b}. Câte rațe rămân pe lac?",
+        "În sticlă erau {a} ml de apă și am băut {b} ml. Câți ml au rămas?",
+        "Câți lei îmi rămân, dacă aveam {a} și am cheltuit {b}?",
+        "Câte pagini mai am de citit, dacă din {a} pagini am citit {b}?",
+        "Câte mere rămân în coș, dacă erau {a} și am luat {b}?",
+        "Cu cât e mai lungă o sfoară de {a} cm decât una de {b} cm?",
+        "Cât mai am de mers, dacă drumul are {a} km și am făcut {b} km?",
+        "Câți elevi au lipsit, dacă sunt {a} în catalog și au venit {b}?",
+        "Un magazin avea {a} pâini și a vândut {b}. Câte pâini au mai rămas?",
+        "Cât rest primesc, dacă dau {a} lei pentru ceva care costă {b} lei?",
+        "Câte locuri libere sunt într-o sală cu {a} locuri, dacă s-au ocupat {b}?",
+    ],
+    "impartire": [
+        "Împarte {a} în {b} părți egale. Cât are fiecare parte?", "Dacă împart {a} la {b}, cât obțin?",
+        "De câte ori se cuprinde {b} în {a}?", "Câte grupe de câte {b} se fac din {a}?",
+        "Ce număr înmulțit cu {b} dă {a}?", "Cu ce trebuie să înmulțesc {b} ca să obțin {a}?",
+        "Care e câtul dintre {a} și {b}?", "Câtul împărțirii lui {a} la {b}?", "Fă împărțirea {a} la {b}.",
+        "Cât primește fiecare, dacă {a} se împarte egal la {b}?", "Ce parte îi revine fiecăruia din {a} împărțit la {b}?",
+        "Avem {a} bomboane și {b} copii. Fiecare primește la fel. Câte bomboane ia fiecare copil?",
+        "{a} lei se împart egal între {b} frați. Câți lei primește fiecare?",
+        "Am {a} ouă și le pun în cofraje de câte {b}. Câte cofraje umplu?",
+        "Un drum de {a} km se face în {b} zile, la fel în fiecare zi. Câți km pe zi?",
+        "La o masă sunt {a} prăjituri pentru {b} invitați, în părți egale. Câte prăjituri primește fiecare?",
+        "Profesorul împarte {a} caiete la {b} elevi, în mod egal. Câte caiete primește fiecare elev?",
+        "O panglică de {a} cm se taie în {b} bucăți egale. Cât de lungă e o bucată?",
+        "Am {a} flori și fac buchete de câte {b}. Câte buchete fac?",
+        "În {b} autobuze egale încap {a} copii. Câți copii sunt într-un autobuz?",
+        "Câte bomboane primește fiecare din cei {b} copii, dacă sunt {a} bomboane împărțite egal?",
+        "Câți lei primește fiecare, dacă {a} lei se împart la {b} oameni?",
+        "Câte cutii umplu, dacă am {a} creioane și pun câte {b} într-o cutie?",
+        "Câte zile îmi trebuie, dacă citesc {a} pagini, câte {b} pe zi?",
+        "Cât de lungă e fiecare bucată, dacă tai {a} m de sfoară în {b} bucăți egale?",
+        "Câte rânduri fac, dacă așez {a} scaune câte {b} pe rând?",
+        "Câți lei costă o bucată, dacă {b} bucăți costă {a} lei?",
+        "Un grădinar plantează {a} pomi în {b} rânduri egale. Câți pomi sunt pe un rând?",
+        "Câte echipe de câte {b} jucători se fac din {a} copii?",
+        "O pungă cu {a} nuci se împarte la {b} prieteni. Câte nuci ia fiecare?",
+    ],
+}
+_PREFIXE_VERBALE2 = ["", "Te rog, ", "Kronos, ", "O problemă: ", "Hai, "]
+_NUME_PROPRII = ("Ana ", "Ion ", "Maria ", "Dan ")
+
+
+def _cu_prefix(prefix: str, v: str) -> str:
+    if not prefix or v.startswith("{") or v.startswith(_NUME_PROPRII):
+        return prefix + v
+    return prefix + v[0].lower() + v[1:]
+
+
+def formulari_calcule_s127() -> dict[str, list[str]]:
+    """Șabloanele S127 pe operație: cele S124 + cadre (S124 și noi) × expresii noi + formulările noi în cuvinte (și cu
+    un prefix mic); unice după forma fără numere (`formulare_fara_numere`)."""
+    s124 = formulari_calcule_s124()
+    r = {}
+    for op in s124:
+        cadre = _CADRE_CALCUL + _CADRE_CALCUL2
+        lista = list(s124[op]) + [c.replace("{E}", e) for e in _EXPRESII_CALCUL2[op] for c in cadre]
+        for v in _VERBALE_CALCUL2.get(op, []):
+            lista += [_cu_prefix(p, v) for p in _PREFIXE_VERBALE2]
+        r[op] = _unice(lista, lambda s: formulare_fara_numere(s.format(a=3, b=7)))
+    return r
+
+
+def interzise_s127(interzise: set[tuple[int, int, str]]) -> set[tuple[int, int, str]]:
+    """La adunare și înmulțire ordinea numerelor nu schimbă rezultatul, iar șabloanele noi scriu uneori numerele în
+    altă ordine: se interzic și perechile întoarse."""
+    return interzise | {(b, a, op) for a, b, op in interzise if op in ("adunare", "inmultire")}
+
+
+def bucati_examene_s127(examene: list[list[dict[str, Any]]], n: int = BUCATA_S127) -> set[str]:
+    """Bucățile de `n` cuvinte din toate textele perechilor examenelor (întrebare, răspunsuri, text)."""
+    from unelte.genereaza_conversatie import bucati, texte_din_json
+
+    b: set[str] = set()
+    for ex in examene:
+        for p in ex:
+            for t in texte_din_json(p):
+                b |= bucati(t, n)
+    return b
+
+
+def indici_bucati_s127(perechi: list[dict[str, Any]], b_ex: set[str], n: int = BUCATA_S127) -> set[int]:
+    """Indicii perechilor cu o bucată de `n` cuvinte la rând comună cu examenele (în întrebare, răspuns sau text)."""
+    from unelte.genereaza_conversatie import bucati
+
+    r = set()
+    for i, p in enumerate(perechi):
+        if any(bucati(p.get(c, "") or "", n) & b_ex for c in ("intrebare", "raspuns", "text")):
+            r.add(i)
+    return r
+
+
+def pas_formulari2(rad: Path, t0: float) -> int:
+    from module.tokenizer_bpe import TokenizerBPE
+    from unelte.examen_calcule import interzise
+    from unelte.examen_formulari import interzise_examen
+
+    iesire = rad / ANTRENARE4
+    if (rad / DOSAR4).exists():
+        raise SystemExit(f"{rad / DOSAR4} există deja.")
+    ex_calc_tot = json.loads((rad / EXAMEN_CALCULE).read_text(encoding="utf-8"))
+    ex_calc = ex_calc_tot["perechi"]
+    ex_chat = json.loads((rad / EXAMEN).read_text(encoding="utf-8"))["perechi"]
+    ex_form_tot = json.loads((rad / EXAMEN_FORMULARI).read_text(encoding="utf-8"))
+    ex_form = ex_form_tot["perechi"]
+    rng = random.Random(SAMANTA_FORMULARI2)
+
+    # 1. șabloanele: S124 → S127, fără cele din examene
+    calc_124, soc_s = scoate_sabloane_examen(formulari_calcule_s124(), sociale_s124(), ex_form_tot)[:2]
+    calc_s, soc_s, scoase_sabloane = scoate_sabloane_examen(formulari_calcule_s127(), soc_s, ex_form_tot)
+
+    def nr_calc(fs: list[str]) -> int:
+        return len({formulare_fara_numere(s.format(a=3, b=7)) for s in fs})
+
+    numaratoare = {op: {"s120": nr_calc(FORMULARI_CALCULE[op]), "s124": nr_calc(calc_124[op]),
+                        "s124_inainte_de_scoatere": nr_calc(formulari_calcule_s124()[op]), "s127": nr_calc(calc_s[op])}
+                   for op in calc_s}
+    for op, v in numaratoare.items():
+        v["ori_fata_de_s124"] = round(v["s127"] / v["s124"], 2)
+        if op != "inmultire" and v["s127"] < 3 * max(v["s124"], v["s124_inainte_de_scoatere"]):
+            raise SystemExit(f"prea puține șabloane la {op}: {v}")
+
+    # 2. perechile noi: calcule (perechile ambelor examene interzise, și întoarse la adunare/înmulțire) și sociale S124
+    interz = interzise_s127(interzise(ex_calc_tot) | interzise_examen(ex_form_tot))
+    calc = perechi_calcule_s124(rng, interz, COTE_CALCULE4, calc_s)
+    sociale = perechi_sociale_s124(rng, soc_s)
+    s116 = citeste_jsonl(rad / PERECHI)
+    chat = [p for p in s116 if p["fel"] != "chat_social"] + sociale
+    for i, p in enumerate(calc):
+        p["id"] = f"calc4_{i:06d}"
+    for i, p in enumerate(sociale):
+        p["id"] = f"social4_{i:06d}"
+
+    # 3. scurgerile: regulile S124 + bucăți de 6 cuvinte față de toate cele trei examene; se scot (și din r2)
+    b6 = bucati_examene_s127([ex_form, ex_calc, ex_chat])
+    vechi_randuri = [r for r in (rad / R2).read_bytes().decode("utf-8").splitlines() if r.strip()]
+    vechi = [json.loads(r) for r in vechi_randuri]
+
+    def cu_scurgeri(perechi: list[dict[str, Any]]) -> set[int]:
+        s = scurgeri_formulari(perechi, ex_form)
+        return ({i for v in s.values() for i in v} | indici_scurgeri_calcule(perechi, ex_chat, ex_calc)
+                | indici_bucati_s127(perechi, b6))
+
+    scoase = {}
+    for nume, lista in (("chat", chat), ("calcule", calc)):
+        rau = cu_scurgeri(lista)
+        scoase[nume] = len(rau)
+        lista[:] = [p for i, p in enumerate(lista) if i not in rau]
+    rau_r2 = cu_scurgeri(vechi)
+    scoase["r2"] = len(rau_r2)
+    vechi_randuri = [r for i, r in enumerate(vechi_randuri) if i not in rau_r2]
+    vechi = [p for i, p in enumerate(vechi) if i not in rau_r2]
+    toate = chat + calc + vechi
+    sc_vechi = scurgeri_calcule(toate, ex_chat, ex_calc)
+    sc_form = {k: len(v) for k, v in scurgeri_formulari(toate, ex_form).items()}
+    sc_6 = len(indici_bucati_s127(toate, b6))
+    nu_scrie = sum(1 for p in chat + calc if are_nu_scrie(p))
+    if any(sc_vechi.values()) or any(sc_form.values()) or sc_6 or nu_scrie:
+        raise SystemExit(f"scurgeri: {sc_vechi} {sc_form} bucăți de 6: {sc_6}; „Nu scrie în text.” în chat: {nu_scrie}")
+    pe_op = Counter(p["tip"] for p in calc)
+    trei = pe_op["adunare"] + pe_op["scadere"] + pe_op["impartire"]
+    if 3 * trei < 2 * len(calc):
+        raise SystemExit(f"adunare + scădere + împărțire sub 2/3: {dict(pe_op)}")
+
+    # 4. amestecul, ca la S124: chat × ori_chat + calcule × ori_calcule + r2
+    tok = TokenizerBPE.incarca(rad / "date/ws/bpe_16384.json")
+    s_chat, s_calc, s_vechi = (numar_simboluri(x, tok) for x in (chat, calc, vechi))
+    ori_h, ori_c = ori_calcule(s_chat, s_calc, s_vechi)
+    randuri = (vechi_randuri + [json.dumps(p, ensure_ascii=False) for _ in range(ori_h) for p in chat]
+               + [json.dumps(p, ensure_ascii=False) for _ in range(ori_c) for p in calc])
+    rng.shuffle(randuri)
+    _scrie_jsonl(rad / DOSAR4 / "perechi_calcule.jsonl", calc)
+    _scrie_jsonl(rad / DOSAR4 / "perechi_sociale.jsonl", [p for p in chat if p["fel"] == "chat_social"])
+    iesire.write_bytes(("\n".join(randuri) + "\n").encode("utf-8"))
+    # verificarea finală, pe tot fișierul scris (fiecare rând citit înapoi)
+    scris = [json.loads(r) for r in iesire.read_bytes().decode("utf-8").splitlines() if r.strip()]
+    final = {"bucati_de_6": len(indici_bucati_s127(scris, b6)),
+             "examen_chat_si_calcule": scurgeri_calcule(scris, ex_chat, ex_calc),
+             "examen_formulari": {k: len(v) for k, v in scurgeri_formulari(scris, ex_form).items()},
+             "nu_scrie_in_text_in_chat": sum(1 for p in scris if p.get("fel", "").startswith("chat") and are_nu_scrie(p))}
+    total_chat = s_chat * ori_h + s_calc * ori_c
+    info = {
+        "nota": "S127: perechile de chat S116 fără cele sociale + sociale S124 (× ori_chat), calculele S127 "
+                "(× ori_calcule), perechile „din text” ale lui #651 (r2) fără scurgeri; random.Random(1127) pentru "
+                "tot (generare și amestec). Șabloanele: unelte/conversatie_chat.py (formulari_calcule_s127). "
+                "Scurgeri: regulile S124 + bucăți de 6 cuvinte față de examen_formulari, examen_calcule, examen_chat.",
+        "sabloane_s120_s124_s127": numaratoare, "sabloane_scoase_fiindca_sunt_in_examene": scoase_sabloane,
+        "sabloane_calcule": calc_s,
+        "perechi_chat": len(chat), "din_care_sociale": sum(p["fel"] == "chat_social" for p in chat),
+        "ori_chat": ori_h, "perechi_calcule": len(calc), "pe_operatie": dict(pe_op),
+        "fractie_adunare_scadere_impartire": round(trei / len(calc), 4),
+        "ori_calcule": ori_c, "perechi_din_text": len(vechi), "perechi_total": len(randuri),
+        "simboluri": {"chat_o_data": s_chat, "calcule_o_data": s_calc, "din_text": s_vechi, "chat_total": total_chat},
+        "fractie_calcule_din_chat": round(s_calc * ori_c / total_chat, 4),
+        "fractie_chat_din_tot": round(total_chat / (total_chat + s_vechi), 4),
+        "scoase_pentru_scurgeri": scoase, "verificare_finala_pe_tot_fisierul": final,
+        "exemple_random_1271": random.Random(1271).sample(calc, 20),
+        "sha256": {"antrenare": sha(iesire), "perechi_chat_s116": sha(rad / PERECHI), "r2": sha(rad / R2),
+                   "examen_chat": sha(rad / EXAMEN), "examen_calcule": sha(rad / EXAMEN_CALCULE),
+                   "examen_formulari": sha(rad / EXAMEN_FORMULARI)},
+        "secunde": round(time.time() - t0)}
+    _scrie_json(rad / DOSAR4 / "antrenare_info.json", info)
+    print(json.dumps({k: info[k] for k in ("sabloane_s120_s124_s127", "perechi_total", "pe_operatie", "ori_chat",
+                                           "ori_calcule", "fractie_calcule_din_chat", "fractie_chat_din_tot",
+                                           "scoase_pentru_scurgeri", "verificare_finala_pe_tot_fisierul")},
+                     ensure_ascii=False))
+    if final["bucati_de_6"] or any(final["examen_chat_si_calcule"].values()) or any(
+            final["examen_formulari"].values()) or final["nu_scrie_in_text_in_chat"]:
+        print("VERIFICAREA FINALĂ A GĂSIT SCURGERI", file=sys.stderr)
+        return 1
+    return 0
+
+
+# --------------------------------------------------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -1038,13 +1315,15 @@ def main(argv: list[str] | None = None) -> int:
         pass
     parser = argparse.ArgumentParser(description="S116: date de chat fără text alături + examenul de chat.")
     parser.add_argument("pas", choices=["candidati", "deoparte", "examen", "perechi", "amesteca", "calcule", "amesteca2",
-                                        "formulari"])
+                                        "formulari", "formulari2"])
     parser.add_argument("--radacina", default=str(RADACINA))
     a = parser.parse_args(argv)
     rad = Path(a.radacina)
     t0 = time.time()
     if a.pas == "formulari":
         return pas_formulari(rad, t0)
+    if a.pas == "formulari2":
+        return pas_formulari2(rad, t0)
     if a.pas == "calcule":
         return pas_calcule(rad, t0)
     if a.pas == "amesteca2":

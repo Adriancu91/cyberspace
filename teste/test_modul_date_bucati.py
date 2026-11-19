@@ -278,4 +278,6 @@ def test_modulul_nu_e_in_nicio_configurare_in_uz():
                          # S124 (C-132, 17 nov 2026): formulări multe din #680, tot pe bucăți
                          "conv_w2_mare_24zcf.toml",
                          # S126 (C-144, 18 nov 2026): copia 24zcf, linie nouă, din #692, tot pe bucăți
-                         "conv_w2_mare_24zcf_b.toml"}
+                         "conv_w2_mare_24zcf_b.toml",
+                         # S127 (supraveghetor, 19 nov 2026): date noi adunare/scădere/împărțire, din #692, pe bucăți
+                         "conv_w2_mare_24zcg.toml"}
