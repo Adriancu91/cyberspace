@@ -4287,7 +4287,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 19 nov 2026 08:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S128 — C-150: exportul lui #651 (183 M) în KGR1 Q8_0 pentru placa video a OS-ului + `MODEL_651.md` (doar procesor, ~30–60 min)
-- stare: gata (executant, 20 nov 2026 07:44 — `kronos_651_q8_0.kgr` 206.898.464 o, SHA-256 2edf75ac…5ea0bf2; motorul brut = PyTorch pe Q8_0 desfăcut (aceleași simboluri, dif. max 3,1e-5), marja minimă 0,051; față de #513 doar mărimile (24 de straturi, același tokenizer și aceleași chei); `docs/integrare_kronos/MODEL_651.md` scris; SHA înainte = după; 1539 teste trec, 1 sărit)
+- stare: gata — **verificat de supraveghetor 20 nov 2026 08:15: TRECE** (pragul: aceleași simboluri greedy ca PyTorch pe Q8_0 desfăcut — da pe toate 3 texte, dif. max 3,1e-5; marja minimă 0,051 ≥ 0,005; SHA înainte = după; 1539 teste trec). `MODEL_651.md` copiat în hub (`integrare/kronos/MODEL_651.md`), C-150 → gata.
+- (istoric) stare: gata (executant, 20 nov 2026 07:44 — `kronos_651_q8_0.kgr` 206.898.464 o, SHA-256 2edf75ac…5ea0bf2; motorul brut = PyTorch pe Q8_0 desfăcut (aceleași simboluri, dif. max 3,1e-5), marja minimă 0,051; față de #513 doar mărimile (24 de straturi, același tokenizer și aceleași chei); `docs/integrare_kronos/MODEL_651.md` scris; SHA înainte = după; 1539 teste trec, 1 sărit)
 - (istoric) stare: in_lucru (executant, 20 nov 2026 07:30; S127 `gata`, placa nefolosită, procesor)
 - (istoric) stare: **aprobat** (supraveghetor, 19 nov 2026 23:15; Adrian, COMENZI.md C-150, 19 nov 22:50)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
@@ -4308,7 +4309,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-20_0744_S128_export_651.md
 
 ### S129 — din #720, „din text” de 2 ori mai des + mai multe înmulțiri, pe linia nouă „24zch” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: in_lucru (executant, 20 nov 2026 08:00; pașii 0–3 pe procesor; S128 `gata`, placa nefolosită 746 MB / 27 °C; placa doar de la 19:00)
+- stare: oprit (executant, 20 nov 2026 08:40; pașii 0–2 FĂCUȚI: `formulari3` + teste, `lucru/conversatie_chat5/antrenare.jsonl` 141.070 rânduri, 0 scurgeri, 1545 teste trec; pasul 3 NEfăcut, placa nepornită)
+- motiv: numele liniei „24zch” e DEJA FOLOSIT de S117 (16 nov: `config/conv_w2_mare_24zch.toml` există, `lucru/w2_mare_24zch/` are gpt.pt, rezultat.json și ore în jurnal). Scrierea peste configurarea veche e interzisă („configurările vechi neatinse”), iar pe o linie cu ore în jurnal `antrenare_recalcul.py` ar sări peste `--porneste-din 720` (lecția S126). Propun numele „24zci” (liber: nici config, nici dosar): `config/conv_w2_mare_24zci.toml`, `nume = "w2_mare_24zci"`, `cale_stare = "lucru/w2_mare_24zci/gpt.pt"`, restul exact ca în pasul 3. Cu „da” (și `aprobat`) până la ~23:30 fac pasul 3 și pornesc placa la noapte, cel târziu 00:30.
+- raport: docs/rapoarte/2026-11-20_0840_S129_oprit_nume_linie.md
 - (istoric) stare: **aprobat** (supraveghetor, 20 nov 2026 02:15)
 - tip: procesor, apoi placă
 - fereastră: pașii 0–3 (procesor) **după ce S128 e `gata`** (ziua pe procesor e permisă — C-149; dacă ciclul de test repornește calculatorul, reiei, nu e `oprit`). Pasul 5 (placa) **doar noaptea 20 → 21 nov, de la 19:00, pornire cel târziu 00:30**; placa liberă la 07:00. Dacă în hub `RESURSE.md` → „Rezervări” apare o rezervare pentru noaptea asta, sari peste ea (îți scriu eu aici). Dacă nu poate porni până la 00:30: rămâne `aprobat` pentru noaptea 21 → 22 nov.
