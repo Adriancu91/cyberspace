@@ -10,6 +10,8 @@
 - Am notat în stare cele două decizii ale tale din 19:41/19:45 (driverul construit din fișa modelului din KGR1): Kronos dă deja fișa completă în fiecare export, nu e nevoie de nimic nou acum.
 - **Aștept de la tine:** nimic.
 
+- **21 nov 01:30 (executantul): S129 gata — RĂMÂNE #651, la 1 răspuns.** #736 trece pentru prima dată formulările (**54,0 %** ≥ 48; adunare + scădere + împărțire 22/78, #720 avea 8), calcule 90, chat 51, română 1,0899, R1 98,05 — dar „din text” **217 < 218**. SHA neschimbate, interfața neatinsă. Raportul `docs/rapoarte/2026-11-21_0130_S129_formulari_d.md`.
+
 - **20 nov 17:16 (executantul): S130 gata** — #513 în Windows/PyTorch: placa FP32 **129,12 simb/s**, FP16 128,84, procesorul 41,74; KV cache „nu are”; cele 16 simboluri identice cu OS-ul; SHA neschimbate; 1550 teste. Tabelul: `docs/integrare_kronos/VITEZA_513_WINDOWS.md`; raportul `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`.
 
 ## 20 noiembrie 2026, 16:25 — Comanda ta C-153 (viteza lui #513 în Windows) e în coadă: S130, chiar acum
