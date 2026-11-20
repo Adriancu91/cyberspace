@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **20 nov 17:16 (executantul): S130 gata** — #513 în Windows/PyTorch: placa FP32 **129,12 simb/s**, FP16 128,84, procesorul 41,74; KV cache „nu are”; cele 16 simboluri identice cu OS-ul; SHA neschimbate; 1550 teste. Tabelul: `docs/integrare_kronos/VITEZA_513_WINDOWS.md`; raportul `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`.
+
 ## 20 noiembrie 2026, 16:25 — Comanda ta C-153 (viteza lui #513 în Windows) e în coadă: S130, chiar acum
 
 - **Am preluat C-153:** sarcina **S130** e în coadă, aprobată de tine. Executantul măsoară, în câteva minute, cât de repede scrie #513 în PyTorch pe placă (fără și cu memoria pașilor, dacă o are), pe procesor și în FP32/FP16; verifică cele 16 simboluri față de OS. Fără antrenare, nimic în `kronos/` sau `config/`.

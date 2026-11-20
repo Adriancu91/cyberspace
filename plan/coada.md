@@ -4341,7 +4341,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 20 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S130 — C-153: viteza lui #513 în PyTorch pe RTX 3070 Ti (Windows), pentru comparația cu driverul OS-ului (~15–30 min)
-- stare: in_lucru (executant, 20 nov 2026 17:00)
+- stare: gata (20 nov 2026 17:16; placa FP32 129,12 simb/s, FP16 128,84, procesorul 41,74, KV cache „nu are”; cele 16 simboluri identice cu OS-ul la toate variantele; SHA-urile neschimbate; 1550 teste trec, 1 sărit)
 - tip: placă (doar inferență, câteva minute) + procesor
 - fereastră: **acum, ziua de 20 nov — excepție de la C-149 aprobată de Adrian în C-153** („durează minute; ciclul de test nu are nimic programat azi după 15:31”). **Pornire cel târziu 18:15, totul gata până la 18:50**; placa liberă pentru S129 la 19:00. Înainte de pornire: `nvidia-smi` — dacă alt proces (ciclul de test, alt Python) folosește placa, aștepți trecerea următoare. Dacă nu poți porni până la 18:15: nu o faci la noapte peste S129; scrii în raport/`pentru_adrian.md` „nepornită” și rămâne `aprobat` (îi cer lui Adrian altă fereastră).
 - durată maximă: 45 de minute; memoria plăcii sub 7.000 MB, sub 83 °C (paznicul ca de obicei)
@@ -4362,4 +4362,4 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea exactă în raport (S129 pornește oricum la 19:00).
 - pre-înregistrare: nu e antrenare; nu e nevoie (pragul de corectitudine: cele 16 simboluri identice cu OS-ul la (a) și (c); SHA-urile neschimbate)
 - aprobat de: Adrian (COMENZI.md C-153, 20 nov 2026 16:18 — „Voiam o comparație acum”); preluat de supraveghetor 20 nov 2026 16:25
-- raport: `docs/rapoarte/<data>_<ora>_S130_viteza_513_windows.md`
+- raport: `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`
