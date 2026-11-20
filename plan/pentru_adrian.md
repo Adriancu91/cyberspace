@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 02:15 — S127 verificat: rămâne #651 (46 % din 48 % necesari); la noapte S129
+
+- **S127 verificat de mine: rămâne #651, corect.** Modelul nou #720 a luat la întrebările formulate altfel **46,0 %** (pragul: 48,0 %; îi lipsesc 4 răspunsuri din 200). E cel mai bun de până acum la chat (50), calcule (80) și formulări, iar adunarea/scăderea/împărțirea formulate altfel s-au dublat (4 → 8 din 78). Dar „din text” a coborât exact la prag (218) și înmulțirea a scăzut (18 → 13 din 42).
+- **Noaptea a mers curat:** fără erori, placa max 6.690 MB / 64 °C, **1.539 teste trec**, discul 165 GB liberi, modelele vechi neatinse. Placa e liberă de la 01:15; nu mai pun nimic pe ea până la 07:00 (nu ajunge timpul).
+- **Azi de la 07:00:** S128 (C-150, exportul lui #651 pentru placa OS-ului, doar procesor), cum ai aprobat.
+- **Am pus în coadă S129 (aprobată de mine, în granițe), la noapte 20 → 21 nov:** încă o rundă din #720, cu „din text” de 2 ori mai des și mai multe înmulțiri în date — exact cele două lucruri care au scăzut —, aceleași praguri. Dacă nici așa nu trece, linia e pe platou și îți propun o decizie.
+- **Aștept de la tine:** nimic.
+
 - (executant, 20 nov 01:30) **S127 gata — RĂMÂNE #651:** #720 la formulări nevăzute 46,0 % (prag 48 %; lipsesc 4 răspunsuri din 200; #692 avea 45,0 %). Datele noi au dublat adunarea + scăderea + împărțirea formulate altfel (4 → 8 din 78); chat 50 și calcule 80 sunt cele mai bune de până acum, dar „din text” 218 = exact pragul. Interfața neschimbată; placa liberă de la 01:15. Raport: `docs/rapoarte/2026-11-20_0130_S127_formulari_c.md`.
 
 ## 19 noiembrie 2026, 23:15 — Am preluat cele două „da”-uri ale tale (C-149, C-150); S127 merge mai departe
@@ -159,12 +167,3 @@
 - Raportul de dimineață e la locul lui (`2026-11-17_0648_raport_dimineata.md`): noaptea a mers curat, testele trec (1.488, 0 pică).
 - **Apoi:** S119 (descărcarea textului românesc, fără placă) → interfața repornită cu câștigătorul → S118. Nimic nou pus în coadă; nicio comandă nouă în hub.
 - **Aștept de la tine:** nimic.
-
-## 17 noiembrie 2026, 05:15 — Testul de memorare e gata; calculele se învață acum
-
-- **E0 (S123) verificat de mine:** la saluturi, „cine ești”, „ce poți” etc., modelul răspunde perfect la formulările văzute în antrenare (**100 %**) și mult mai slab la formulări noi (**62,5 %**) → **+37,5 pp = semnal puternic de memorare** după regula ta (prag 30). Pe total +14,7 pp = neconcludent. La fapte nu reține nici ce a văzut (13 %).
-- **Rulează S121** (din 03:00): Kronos învață chat + calcule 4 ore din #651, apoi examenele — gata pe la ~08:45. Pragurile au fost scrise înainte (calcule ≥ 61 din 200 etc.).
-- **Apoi:** S119 (descărcarea textului românesc, fără placă) → interfața repornită cu câștigătorul → S118. N-am pus altă antrenare pe placă azi: după S121, placa e liberă (și pentru testele tale GPU, dacă vrei).
-- Ce înseamnă E0 pentru mai departe (doar o idee, nu e în coadă): datele de chat au prea puține formulări diferite pentru aceeași intenție. Dacă vrei, după S121 îți propun o sarcină cu mai multe formulări.
-- **Aștept de la tine:** nimic.
-
