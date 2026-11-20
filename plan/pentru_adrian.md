@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 16:25 — Comanda ta C-153 (viteza lui #513 în Windows) e în coadă: S130, chiar acum
+
+- **Am preluat C-153:** sarcina **S130** e în coadă, aprobată de tine. Executantul măsoară, în câteva minute, cât de repede scrie #513 în PyTorch pe placă (fără și cu memoria pașilor, dacă o are), pe procesor și în FP32/FP16; verifică cele 16 simboluri față de OS. Fără antrenare, nimic în `kronos/` sau `config/`.
+- **Când:** la prima trecere a executantului (excepția ta de la „nimic pe placă ziua”), pornire cel târziu 18:15, gata până la 18:50. Tabelul îl copiez în hub (`rezultate/2026-11-20-workstation-kronos513-windows-viteza/`) la trecerea următoare.
+- **La noapte, neschimbat:** S129 pe placă de la 19:00 (4 h din #720, apoi examenele); verdictul mâine dimineață.
+- Din hub: `os-322` a mers (placa singură 382 simb/s, cu driverul 94,8 > procesor 72,7); `os-323` are tabloul de bord al plăcii (doar în simulare).
+- **Aștept de la tine:** nimic.
+
 ## 20 noiembrie 2026, 14:15 — S129 gata de pornit la noapte; ziua liniștită
 
 - **Executantul a făcut pasul 3 din S129 la 11:39 (procesor):** configurarea liniei noi `24zci` (copie a celei vechi, schimbate doar numele, calea și datele), pre-înregistrarea cu aceleași praguri (formulări ≥ 48 %), un test nou. **1.546 teste trec.** Disc: 160 GB liberi după calcul (minimul cerut: 30). Nimic vechi atins.
@@ -154,15 +162,3 @@
 - **18 nov 01:00 (executant), S124 gata — rămâne #651.** Modelul nou #692 a urcat la formulări nevăzute de la 33 % la **45 %**, dar pragul era **48 %** (lipsesc 6 din 200). Tot restul a trecut: calcule **75/200** (prag 61), chat 48 (față de 25), româna și „din text” nestricate. Chat-ul rămâne pe #651; placa e liberă. Raport: `docs/rapoarte/2026-11-18_0100_S124_formulari.md`.
 
 - **17 nov 18:40 (executant), S118 gata — cum folosești butoanele:** sub fiecare răspuns din Chat sau „din text” apeși 👍 dacă e bun, sau scrii în „Răspunsul corect ar fi…” varianta bună. Kronos strânge doar astea (👎 fără corectură nu contează). Când se adună destule (propunerea: ≥ 30 noi), o oră de învățat noaptea; modelul nou intră în chat doar dacă trece toate examenele. Acum ai 2 👍. Raport: `docs/rapoarte/2026-11-17_1840_S118_invatare_conversatii.md`.
-
-## 17 noiembrie 2026, 17:15 — Chat-ul merge iar; S124 e pregătit pentru noapte
-
-- **Terminate de la 14:15 (verificate de mine):** S125 (testul de disc reparat, toate testele trec), S119 `gata`, **S122: chat-ul Kronos merge din nou pe 8787 cu #651**.
-- **S124, partea de procesor, gata și verificată:** examenul nou cu formulări nevăzute a fost scris înaintea datelor; datele au de 3–10 ori mai multe formulări, 0 scurgeri. Reperele: #651 = 20,5 %, #680 = 33,0 % → modelul nou trebuie ≥ **48 %**. Pragurile din pre-înregistrare sunt exact cele aprobate de tine. Testele: 1.512 trec.
-- **Pe placă de la 19:00:** 4 h de învățat din #680 + examenele, verdictul pe la ~01:00. Discul e la limită (marja 30,9 GB față de pragul 30): dacă scade, sarcina se oprește singură și te întreabă, fără să șteargă nimic.
-- **Rulează acum:** S118 (👍/👎 în chat), pe procesor. Nimic nou pus în coadă; nicio comandă nouă pentru Kronos în hub.
-- Dacă vrei să testezi `os-305` (C-135) pe workstation diseară, S124 te așteaptă (pornește cel târziu la 01:00).
-- **Aștept de la tine:** nimic.
-
-- **17 nov 15:08 (executant): S122 gata — chat-ul Kronos merge din nou** pe 8787 cu #651 (câștigătorul lanțului), local `http://127.0.0.1:8787/` și Tailscale `http://100.90.150.35:8787/`; repornirea automată e pusă la loc. Răspunsurile de verificare sunt identice cu cele de ieri; 1497 teste trec. Raport: `docs/rapoarte/2026-11-17_1508_S122_interfata_repornita.md`.
-- **17 nov 14:37 (executant): S125 gata, S119 gata.** Testul care pica din cauza discului nu mai depinde de discul real (unealta își păstrează paza de 40 GB); toate testele trec (1497, 0 pică). C: 35,9 GB liberi. Raport: `docs/rapoarte/2026-11-17_1437_S125_test_disc.md`.

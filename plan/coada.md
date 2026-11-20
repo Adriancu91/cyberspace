@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 20 nov 2026, 16:25 (supraveghetor): S130 NOUĂ, `aprobat` de Adrian (hub C-153, 16:18) — PORNEȘTI LA PRIMA TA TRECERE, înaintea lui S129.** Măsurătoare de câteva minute: viteza lui **#513** în PyTorch (placă fără/cu memoria pașilor, procesor, FP32/FP16), ca Adrian să compare cu Kronos pe placă în OS (`os-322`: 94,84 simb/s cu driverul). **Excepție aprobată de Adrian la regula „nimic pe placă ziua” (C-149), doar pentru S130.** Fără antrenare, nimic în `kronos/` sau `config/`. Trebuie să se termine **până la 18:50** (pornire cel târziu 18:15), ca S129 să pornească pe placă la 19:00 ca de obicei. S129 rămâne neschimbată. Vezi S130 jos.
+
 **⚠ ACUM — 20 nov 2026, 02:15 (supraveghetor): S127 = GATA, verificat — RĂMÂNE #651** (formulări #720 92/200 = 46,0 % < #680 33,0 % + 15 = 48,0 % → pică; restul trece: română 1,0906 ≤ 1,0878 + 0,01 = 1,0978 ✓, corecte 218 ≥ 228 − 10 = 218 ✓ (exact la prag), R1 97,82 ≥ 90 ✓, chat 50 ≥ 25 + 5 = 30 ✓, calcule 80 ≥ 61 ✓). Interfața rămâne pe #651. **Restul nopții (până la 07:00): nimic pe placă** (nu mai ajunge timp pentru 4 h + examene). **S128** (C-150, procesor) rămâne prima, **de la 07:00**. **S129 (nouă, aprobată de mine):** încă o rundă pe linia „24zc*”, din #720, cu „din text” de 2 ori mai des și mai multe înmulțiri — partea de procesor **după S128 `gata`** (ziua pe procesor e permisă; o repornire făcută de ciclul de test nu e `oprit`), **placa doar noaptea 20 → 21 nov, de la 19:00, pornire cel târziu 00:30**, placa liberă la 07:00. Vezi S129 jos.
 
 **⚠ ACUM — 20 nov 2026, 11:15 (supraveghetor): S129 reluată `aprobat`, cu linia redenumită „24zci”** (executantul a oprit corect la 08:40: „24zch” era al lui S117). Pașii 0–2 sunt făcuți (`conversatie_chat5`, 141.070 rânduri, 0 scurgeri, 1545 teste). Pasul 3 (configurarea + pre-înregistrarea, procesor) oricând; placa doar noaptea 20 → 21 nov, de la 19:00, pornire cel târziu 00:30.
@@ -4337,3 +4339,27 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nimic șters, nimic descărcat; textul S119 nu intră în antrenare; `kronos/`, examenele, uneltele de notare și datele vechi neatinse; #513, #577, #651, #680, #692, #704, #720 doar citite (SHA înainte = după); o singură sarcină pe placă; **nimic pe placă ziua (08:00–18:00, C-149)** și nimic peste S128.
 - pre-înregistrare: `docs/preinregistrari/2026-11-20_w2_mare_24zci.md`
 - aprobat de: supraveghetor, 20 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
+
+### S130 — C-153: viteza lui #513 în PyTorch pe RTX 3070 Ti (Windows), pentru comparația cu driverul OS-ului (~15–30 min)
+- stare: **aprobat**
+- tip: placă (doar inferență, câteva minute) + procesor
+- fereastră: **acum, ziua de 20 nov — excepție de la C-149 aprobată de Adrian în C-153** („durează minute; ciclul de test nu are nimic programat azi după 15:31”). **Pornire cel târziu 18:15, totul gata până la 18:50**; placa liberă pentru S129 la 19:00. Înainte de pornire: `nvidia-smi` — dacă alt proces (ciclul de test, alt Python) folosește placa, aștepți trecerea următoare. Dacă nu poți porni până la 18:15: nu o faci la noapte peste S129; scrii în raport/`pentru_adrian.md` „nepornită” și rămâne `aprobat` (îi cer lui Adrian altă fereastră).
+- durată maximă: 45 de minute; memoria plăcii sub 7.000 MB, sub 83 °C (paznicul ca de obicei)
+- de ce: Adrian: „Voiam o comparație acum” între Kronos pe placă în Windows și Kronos pe placă în Cyber Universe (os-322: cu driverul 94,84 simb/s, placa singură 381,98 simb/s).
+- ce faci:
+  0. `python -m pytest` verde; SHA-256 notate înainte pentru checkpoint-ul #513 (unde îl găsește `unelte/exporta_greutati.py --experiment 513`) și `lucru/export/kronos_513_q8_0.kgr` — la final identice. Nimic nu se scrie peste ele.
+  1. **Unealta nouă** `unelte/viteza_inferenta.py` (permis: unealtă nouă în `unelte/`, fără `kronos/` și fără examen) + un test mic în `teste/` (de ex. pe un model minuscul pe procesor: rulează, întoarce simbolurile și cifrele). Încarcă **#513 exact ca la exportul KGR1** (aceleași greutăți, același tokenizer), textul `Buna ziua`, **16 simboluri noi, greedy**.
+  2. Măsori, pentru fiecare variantă: **o rulare de încălzire, apoi 5 rulări, mediana** în simboluri/s și ms/simbol; `torch.cuda.synchronize()` înainte de fiecare oprire a ceasului (`time.perf_counter()`):
+     (a) PyTorch pe placă, **fără** memoria pașilor (fiecare simbol recalculează tot textul);
+     (b) **cu** memoria pașilor (KV cache) — doar dacă modelul o are deja; dacă nu, scrii „nu are” (NU o scrii acum în model);
+     (c) PyTorch pe procesor (`CUDA_VISIBLE_DEVICES=-1` sau `device="cpu"`), la fel ca (a);
+     (d) dacă merge repede: (a) în FP32 și în FP16 (`model.half()` pe o copie în memorie, nimic salvat). Dacă FP16 dă alte simboluri, o scrii, nu e o eroare.
+  3. **Verifici simbolurile** la fiecare variantă: trebuie să fie `[44, 10, 73, 2524, 10766, 1438, 1505, 1428, 1765, 99, 1547, 3644, 44, 10, 15879, 1505]` (ca în OS). Dacă diferă, scrii la ce poziție și ce a ieșit.
+  4. Notezi: versiunea PyTorch și CUDA, driverul NVIDIA, procesorul; în timpul variantei (a) rulezi o dată `nvidia-smi -q -d PERFORMANCE,CLOCK` (ieșirea întreagă în raport) și memoria maximă a plăcii (`torch.cuda.max_memory_allocated`).
+  5. **`docs/integrare_kronos/VITEZA_513_WINDOWS.md`** (fișier NOU): tabelul (variantă · dispozitiv · precizie · simb/s · ms/simbol · simboluri identice da/nu), comenzile exacte, versiunile, starea plăcii, și un rând de comparație cu `os-322` (94,84 simb/s cu driverul; 381,98 placa singură) — doar cifre, fără concluzii despre driver. Eu îl copiez în hub (`rezultate/2026-11-20-workstation-kronos513-windows-viteza/REZULTAT.md`).
+  6. `python -m pytest` verde. Commit + push: unealta, testul, `VITEZA_513_WINDOWS.md`, raportul. Coada → `gata`. Un rând sus în `plan/pentru_adrian.md`.
+- NU: nicio antrenare; nimic în `kronos/`, `config/`, `module/`, examen, paznic, jurnal; checkpoint-urile și fișierele `.kgr` doar citite (SHA înainte = după); interfața 8787 neatinsă; nimic descărcat, instalat sau șters; nu scrii în hub; nu atingi S129 (pregătirile ei rămân cum sunt).
+- Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea exactă în raport (S129 pornește oricum la 19:00).
+- pre-înregistrare: nu e antrenare; nu e nevoie (pragul de corectitudine: cele 16 simboluri identice cu OS-ul la (a) și (c); SHA-urile neschimbate)
+- aprobat de: Adrian (COMENZI.md C-153, 20 nov 2026 16:18 — „Voiam o comparație acum”); preluat de supraveghetor 20 nov 2026 16:25
+- raport: `docs/rapoarte/<data>_<ora>_S130_viteza_513_windows.md`
