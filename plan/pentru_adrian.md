@@ -166,11 +166,3 @@
 
 - **17 nov 15:08 (executant): S122 gata — chat-ul Kronos merge din nou** pe 8787 cu #651 (câștigătorul lanțului), local `http://127.0.0.1:8787/` și Tailscale `http://100.90.150.35:8787/`; repornirea automată e pusă la loc. Răspunsurile de verificare sunt identice cu cele de ieri; 1497 teste trec. Raport: `docs/rapoarte/2026-11-17_1508_S122_interfata_repornita.md`.
 - **17 nov 14:37 (executant): S125 gata, S119 gata.** Testul care pica din cauza discului nu mai depinde de discul real (unealta își păstrează paza de 40 GB); toate testele trec (1497, 0 pică). C: 35,9 GB liberi. Raport: `docs/rapoarte/2026-11-17_1437_S125_test_disc.md`.
-
-## 17 noiembrie 2026, 14:15 — Textul românesc e gata; S124 pornește pe placă la noapte
-
-- **S119 verificat de mine: făcut.** 2,55 milioane de texte românești noi (de două ori mai multă română), 0 bucăți comune cu examenele, nimic șters. A rămas „oprit” doar pentru că un test vechi cere 40 GB liberi pe disc, iar C: are ~36,5 GB.
-- **Am aprobat eu S125** (15 minute): testul acela nu mai depinde de discul real; unealta își păstrează paza de 40 GB. Apoi S119 devine „gata” și interfața pornește iar pe 8787 cu #651.
-- **„Da S124” (C-132) e în coadă:** testul tău cu os-303 s-a terminat la 14:09. Acum, pe procesor: examenul nou cu formulări nevăzute, apoi datele cu de 3 ori mai multe formulări. **Pe placă la noapte, de la 19:00** (4 h din #680 + examenele), cu pragurile propuse. Dacă discul nu ajunge peste 30 GB, se oprește și te întreabă (nu șterge nimic).
-- Discul C: e strâns (~36,5 GB). Nu e urgent, dar dacă vrei loc pentru antrenări mai mari, poți spune în hub ce date vechi se pot șterge.
-- **Aștept de la tine:** nimic.
