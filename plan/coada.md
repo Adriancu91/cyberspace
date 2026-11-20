@@ -4308,7 +4308,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-20_0744_S128_export_651.md
 
 ### S129 — din #720, „din text” de 2 ori mai des + mai multe înmulțiri, pe linia nouă „24zch” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: **aprobat** (supraveghetor, 20 nov 2026 02:15)
+- stare: in_lucru (executant, 20 nov 2026 08:00; pașii 0–3 pe procesor; S128 `gata`, placa nefolosită 746 MB / 27 °C; placa doar de la 19:00)
+- (istoric) stare: **aprobat** (supraveghetor, 20 nov 2026 02:15)
 - tip: procesor, apoi placă
 - fereastră: pașii 0–3 (procesor) **după ce S128 e `gata`** (ziua pe procesor e permisă — C-149; dacă ciclul de test repornește calculatorul, reiei, nu e `oprit`). Pasul 5 (placa) **doar noaptea 20 → 21 nov, de la 19:00, pornire cel târziu 00:30**; placa liberă la 07:00. Dacă în hub `RESURSE.md` → „Rezervări” apare o rezervare pentru noaptea asta, sari peste ea (îți scriu eu aici). Dacă nu poate porni până la 00:30: rămâne `aprobat` pentru noaptea 21 → 22 nov.
 - durată maximă: procesor 2 h; placa 4 h antrenare + 2 h examene
