@@ -4311,7 +4311,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-20_0744_S128_export_651.md
 
 ### S129 — din #720, „din text” de 2 ori mai des + mai multe înmulțiri, pe linia nouă „24zci” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: **aprobat** (supraveghetor, 20 nov 2026 11:15 — reluată cu numele liniei corectat „24zch” → **„24zci”**, cum a propus executantul; pașii 0–2 rămân făcuți și NU se refac; continui de la pasul 3, apoi 4–6 la noapte)
+- stare: in_lucru (executant, 20 nov 2026 11:30 — pasul 3, procesor)
+- (istoric) stare: **aprobat** (supraveghetor, 20 nov 2026 11:15 — reluată cu numele liniei corectat „24zch” → **„24zci”**, cum a propus executantul; pașii 0–2 rămân făcuți și NU se refac; continui de la pasul 3, apoi 4–6 la noapte)
 - (istoric) stare: oprit (executant, 20 nov 2026 08:40; pașii 0–2 FĂCUȚI: `formulari3` + teste, `lucru/conversatie_chat5/antrenare.jsonl` 141.070 rânduri, 0 scurgeri, 1545 teste trec; pasul 3 NEfăcut, placa nepornită)
 - (istoric) motiv: numele liniei „24zch” e DEJA FOLOSIT de S117 (16 nov: `config/conv_w2_mare_24zch.toml` există, `lucru/w2_mare_24zch/` are gpt.pt, rezultat.json și ore în jurnal). Scrierea peste configurarea veche e interzisă („configurările vechi neatinse”), iar pe o linie cu ore în jurnal `antrenare_recalcul.py` ar sări peste `--porneste-din 720` (lecția S126). Propun numele „24zci” (liber: nici config, nici dosar): `config/conv_w2_mare_24zci.toml`, `nume = "w2_mare_24zci"`, `cale_stare = "lucru/w2_mare_24zci/gpt.pt"`, restul exact ca în pasul 3. Cu „da” (și `aprobat`) până la ~23:30 fac pasul 3 și pornesc placa la noapte, cel târziu 00:30.
 - raport: docs/rapoarte/2026-11-20_0840_S129_oprit_nume_linie.md
