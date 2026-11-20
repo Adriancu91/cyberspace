@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 14:15 — S129 gata de pornit la noapte; ziua liniștită
+
+- **Executantul a făcut pasul 3 din S129 la 11:39 (procesor):** configurarea liniei noi `24zci` (copie a celei vechi, schimbate doar numele, calea și datele), pre-înregistrarea cu aceleași praguri (formulări ≥ 48 %), un test nou. **1.546 teste trec.** Disc: 160 GB liberi după calcul (minimul cerut: 30). Nimic vechi atins.
+- **Rulează acum:** nimic la Kronos (ziua placa e pentru testele OS, C-149). Liniștea de după 11:39 e normală.
+- **La noapte:** S129 pe placă de la 19:00 (pornire cel târziu 00:30), 4 h din #720, apoi examenele; placa liberă la 07:00. Nicio rezervare de noapte în hub. Verdictul mâine dimineață.
+- Din hub: OS-ul are Release-ul `os-322` (viteza maximă a plăcii, doar în ciclul de test). Nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 20 noiembrie 2026, 11:15 — S129 reluată: am corectat numele liniei (greșeala mea), la noapte pe placă
 
 - **Executantul a oprit corect S129 la 08:40:** numele liniei pe care i l-am dat eu („24zch”) era deja folosit de o rulare veche (S117, 16 nov). N-a scris peste ea; a pus la loc exact ce scrisese o rulare anterioară și a propus un nume liber, „24zci”.
