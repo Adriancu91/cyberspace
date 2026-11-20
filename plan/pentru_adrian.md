@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 11:15 — S129 reluată: am corectat numele liniei (greșeala mea), la noapte pe placă
+
+- **Executantul a oprit corect S129 la 08:40:** numele liniei pe care i l-am dat eu („24zch”) era deja folosit de o rulare veche (S117, 16 nov). N-a scris peste ea; a pus la loc exact ce scrisese o rulare anterioară și a propus un nume liber, „24zci”.
+- **Am corectat și am reaprobat S129 cu numele „24zci”.** Pregătirile sunt deja făcute și verificate: date noi (141.070 rânduri, „din text” de 2 ori, 800 de înmulțiri), **0 suprapuneri** cu examenele, **1.545 teste trec**, disc 166 GB liber. Nimic vechi atins.
+- **Urmează:** configurarea și pre-înregistrarea acum (procesor), apoi la noapte 4 h pe placă din #720 (de la 19:00, pornire cel târziu 00:30, liberă la 07:00), aceleași praguri (formulări ≥ 48 %). Verdictul mâine dimineață.
+- Din hub: Kronos #651 a fost pus pe stick de centrul de comandă (suma identică), încă nerulat în OS. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** nimic.
+
 ## 20 noiembrie 2026, 08:15 — S128 verificat: Kronos cel mare (#651) e gata pentru placa OS-ului; la noapte S129
 
 - **S128 (C-150) verificat de mine: trece.** #651 e exportat în formatul plăcii: `kronos_651_q8_0.kgr`, 206.898.464 octeți (~197 MB), SHA-256 `2edf75ac…5ea0bf2`, în `C:\Kronos\cyberspace\lucru\export\`. Dă aceleași simboluri ca PyTorch pe toate cele 3 texte de control; cea mai mică marjă 0,051 (de 10 ori peste limita de risc). Față de #513 diferă doar mărimea (24 de straturi în loc de 12). #651 știe capitala („orașul București.”).
@@ -158,15 +166,3 @@
 - **„Da S124” (C-132) e în coadă:** testul tău cu os-303 s-a terminat la 14:09. Acum, pe procesor: examenul nou cu formulări nevăzute, apoi datele cu de 3 ori mai multe formulări. **Pe placă la noapte, de la 19:00** (4 h din #680 + examenele), cu pragurile propuse. Dacă discul nu ajunge peste 30 GB, se oprește și te întreabă (nu șterge nimic).
 - Discul C: e strâns (~36,5 GB). Nu e urgent, dar dacă vrei loc pentru antrenări mai mari, poți spune în hub ce date vechi se pot șterge.
 - **Aștept de la tine:** nimic.
-
-## 17 noiembrie 2026, 11:15 — S121 verificat (rămâne #651); textul românesc merge mai departe
-
-- **S121 verificat de mine: rămâne #651, corect.** #680 a urcat la calcule de la 1 la 51 din 200, dar pragul scris dinainte era 61; chat-ul (40 față de 25) și restul au trecut. Interfața nu se schimbă.
-- **S119 (textul românesc nou):** curățarea a dat 2,55 milioane de texte (8 GB, de două ori mai multă română decât aveam), dar a doua verificare a găsit 162 de texte cu bucăți comune cu examenele, așa că executantul s-a oprit corect. **Am aprobat eu varianta 1** (repară căutarea, scoate cele 162, verifică iar = 0, apoi transformă textul pentru antrenare), fără să șteargă nimic și fără să coboare discul sub 30 GB. Merge pe procesor, acum.
-- **Apoi:** interfața repornită pe 8787 cu #651 → S118.
-- **Propunere nouă (S124, doar cu „da”-ul tău):** placa e liberă azi. Ca modelul să înțeleagă și formulări pe care nu le-a văzut (E0 și S121 au arătat că le ține minte pe cele văzute), aș face date cu de 3 ori mai multe formulări la calcule și saluturi, apoi 4 ore de învățat din #680.
-- **Aștept de la tine:** doar dacă vrei S124: „da S124” în hub. Altfel nimic.
-
-- **17 nov 13:05 (executant) — S119 (textul românesc nou) făcut, dar pus `oprit` din cauza unui test.** 2,55 milioane de texte noi (8 GB, de două ori mai multă română decât aveam) sunt curățate, verificate (0 bucăți comune cu examenele și validările, după ce am scos cele 162) și transformate pentru antrenare: 2,21 miliarde de simboluri. Nimic șters. Dar discul C: a coborât la ~36,5 GB, iar un test vechi (unealta de cod, care cere 40 GB liberi) pică: 1 pică, 1.495 trec. Raport: `docs/rapoarte/2026-11-17_1305_S119_text_romanesc.md`. Aștept de la tine: (1) eliberezi ~6 GB pe C: sau (2) „da” pentru a face testul să nu depindă de disc; plus, dacă vrei, „da CulturaX”.
-
-- **17 nov 09:06 (executant) — S121 (chat + calcule) gata: rămâne #651.** Modelul nou #680 socotește mult mai bine (51 din 200 față de 1), dar pragul era 61; la formulări noi socotește rar (5 din 80) — a ținut minte formulările. Chat-ul e mai bun (40 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 1), iar româna, „din text” și instrucțiunile nu s-au stricat. Interfața nu se schimbă. Testele: 1.488 trec. Raport: `docs/rapoarte/2026-11-17_0906_S121_calcule_chat.md`. Aștept de la tine: nimic.
