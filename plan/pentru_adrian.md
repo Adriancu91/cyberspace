@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 20:15 — Comparația de viteză (C-153) e gata și verificată; S129 învață pe placă
+
+- **S130 verificat de mine: trece.** Kronos #513 în Windows (PyTorch): pe placă **129 simboluri/s** (FP16 la fel, 129), pe procesor **42**. Cele 16 simboluri sunt identice cu cele din OS, fișierele modelului neatinse. #513 nu are „memoria pașilor”, deci fiecare simbol recalculează tot textul.
+- **Comparația, doar cifre:** în OS, cu driverul nostru, 94,8 simb/s; placa singură în OS 382. Tabelul e în hub: `rezultate/2026-11-20-workstation-kronos513-windows-viteza/REZULTAT.md`; C-153 → gata.
+- **Rulează acum:** S129 pe placă de la 19:00 (4 h din #720, apoi examenele); verdictul mâine dimineață. Liniștea executantului cât învață e normală.
+- Am notat în stare cele două decizii ale tale din 19:41/19:45 (driverul construit din fișa modelului din KGR1): Kronos dă deja fișa completă în fiecare export, nu e nevoie de nimic nou acum.
+- **Aștept de la tine:** nimic.
+
 - **20 nov 17:16 (executantul): S130 gata** — #513 în Windows/PyTorch: placa FP32 **129,12 simb/s**, FP16 128,84, procesorul 41,74; KV cache „nu are”; cele 16 simboluri identice cu OS-ul; SHA neschimbate; 1550 teste. Tabelul: `docs/integrare_kronos/VITEZA_513_WINDOWS.md`; raportul `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`.
 
 ## 20 noiembrie 2026, 16:25 — Comanda ta C-153 (viteza lui #513 în Windows) e în coadă: S130, chiar acum
@@ -152,15 +160,3 @@
 - **Azi ziua workstation-ul e al tău** pentru `os-305`; Kronos nu pune nimic pe placă până scrie centrul de comandă că ai terminat.
 - **Am pus în coadă S126** (aprobată de mine, în granițe): încă 4 ore de învățat din #692 pe aceleași date, noaptea 18 → 19 nov, cu aceleași praguri. **Dar pornește doar dacă e loc pe disc:** C: are acum ~30,5 GB, iar 4 ore de antrenare scriu ~5 GB → ar coborî sub pragul de 30 GB. Fără loc, S126 așteaptă (nu se șterge nimic singur).
 - **Aștept de la tine:** dacă vrei S126 la noapte, scrie în hub „**da, șterge modelele intermediare #665–#667, #677–#679, #689–#691**” (cam 11–12 GB; sunt orele 1–3 ale antrenărilor S117, S121, S124 — modelele finale #668, #680, #692 și #651 rămân). Altfel nimic urgent.
-
-## 17 noiembrie 2026, 20:15 — Butoanele 👍/👎 sunt gata; S124 învață pe placă
-
-- **S118 verificat de mine: gata.** Butoanele merg, bucla de învățare e scrisă și testată (1.529 de teste trec); regula de schimbare a modelului e scrisă dinainte, cu pragurile exacte. Acum ai 2 👍 — bucla pornește abia la ≥ 30 de lecții noi (o pun eu în coadă pentru o noapte atunci).
-- **Rulează S124** (din 19:00): 4 h de învățat din #680 cu mai multe formulări, apoi examenele — verdictul pe la ~01:00, îl verific la 02:15.
-- **Mâine (18 nov), testul tău cu `os-305`:** după ce S124 lasă placa, workstation-ul e al tău; i-am scris executantului să nu pună nimic pe placă până scrie centrul de comandă că ai terminat.
-- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic urgent. Doar dacă ești mâine la workstation, în Windows: `cd C:\Kronos\cyberspace` și apoi `git -c core.editor=true rebase --continue` (închide o operație Git rămasă deschisă de la 17:50; executantul se descurcă și fără ea).
-
-- **18 nov 01:00 (executant), S124 gata — rămâne #651.** Modelul nou #692 a urcat la formulări nevăzute de la 33 % la **45 %**, dar pragul era **48 %** (lipsesc 6 din 200). Tot restul a trecut: calcule **75/200** (prag 61), chat 48 (față de 25), româna și „din text” nestricate. Chat-ul rămâne pe #651; placa e liberă. Raport: `docs/rapoarte/2026-11-18_0100_S124_formulari.md`.
-
-- **17 nov 18:40 (executant), S118 gata — cum folosești butoanele:** sub fiecare răspuns din Chat sau „din text” apeși 👍 dacă e bun, sau scrii în „Răspunsul corect ar fi…” varianta bună. Kronos strânge doar astea (👎 fără corectură nu contează). Când se adună destule (propunerea: ≥ 30 noi), o oră de învățat noaptea; modelul nou intră în chat doar dacă trece toate examenele. Acum ai 2 👍. Raport: `docs/rapoarte/2026-11-17_1840_S118_invatare_conversatii.md`.
