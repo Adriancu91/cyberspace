@@ -1,4 +1,4 @@
-"""S129 (supraveghetor, 20 nov 2026): pasul `formulari3` din `conversatie_chat.py` (configurarea așteaptă un nume nou de linie: 24zch e al lui S117)."""
+"""S129 (supraveghetor, 20 nov 2026): pasul `formulari3` din `conversatie_chat.py` și configurarea liniei noi 24zci (24zch e al lui S117)."""
 
 from __future__ import annotations
 
@@ -70,3 +70,38 @@ def test_formulari3_refuza_daca_dosarul_exista(tmp_path):
     (tmp_path / cc.DOSAR5).mkdir(parents=True)
     with pytest.raises(SystemExit):
         cc.main(["formulari3", "--radacina", str(tmp_path)])
+
+
+# --- configurarea S129 (linia „24zci”; „24zch” e a lui S117) -------------------------------------------------------
+CONFIG_NOU = RADACINA / "config" / "conv_w2_mare_24zci.toml"
+
+
+@pytest.mark.skipif(not CONFIG_NOU.exists(), reason="configurarea 24zci nu e scrisă")
+def test_24zci_difera_de_24zcg_doar_prin_ce_cere_sarcina():
+    import tomllib
+
+    vechi = (RADACINA / "config" / "conv_w2_mare_24zcg.toml").read_text(encoding="utf-8").splitlines()
+    nou = CONFIG_NOU.read_text(encoding="utf-8").splitlines()
+    f = tomllib.loads("\n".join(vechi))
+    g = tomllib.loads("\n".join(nou))
+    assert g["platforma"]["nume"] == "w2_mare_24zci"
+    sf, sg = f["porturi"]["model"]["setari"], g["porturi"]["model"]["setari"]
+    assert {k for k in sf.keys() | sg.keys() if sf.get(k) != sg.get(k)} == {"cale_stare", "conversatie"}
+    assert sg["cale_stare"] == "lucru/w2_mare_24zci/gpt.pt"
+    assert sg["conversatie"] == "lucru/conversatie_chat5/antrenare.jsonl"
+    assert sg["fractie_conversatie"] == 0.45
+    fp, gp = dict(f["platforma"]), dict(g["platforma"])
+    fp.pop("nume"), gp.pop("nume")
+    assert fp == gp and f["paznic"] == g["paznic"] and f["criterii"] == g["criterii"]
+    assert f["antrenare_lunga"] == g["antrenare_lunga"]
+    for port in f["porturi"]:
+        if port != "model":
+            assert f["porturi"][port] == g["porturi"][port], port
+    # fără antet (rândurile de comentariu de la început), doar 2 rânduri diferă: `nume` și rândul `setari` al modelului
+    def corp(r):
+        return r[next(i for i, x in enumerate(r) if x == "[platforma]"):]
+    cv, cn = corp(vechi), corp(nou)
+    assert len(cv) == len(cn)
+    assert len([1 for a, b in zip(cv, cn) if a != b]) == 2
+    # linia veche a lui S117 rămâne neatinsă
+    assert "w2_mare_24zch" in (RADACINA / "config" / "conv_w2_mare_24zch.toml").read_text(encoding="utf-8")

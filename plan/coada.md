@@ -4311,11 +4311,12 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: docs/rapoarte/2026-11-20_0744_S128_export_651.md
 
 ### S129 — din #720, „din text” de 2 ori mai des + mai multe înmulțiri, pe linia nouă „24zci” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: in_lucru (executant, 20 nov 2026 11:30 — pasul 3, procesor)
+- stare: aprobat (executant, 20 nov 2026 11:39 — pasul 3 FĂCUT: `config/conv_w2_mare_24zci.toml`, numele în cele 3 liste de teste + test nou, pre-înregistrarea `2026-11-20_w2_mare_24zci.md`; discul 160,43 GB ≥ 30; 1546 teste trec, 1 sărit. Rămân pașii 4–6: placa de la 19:00, cel târziu 00:30)
+- (istoric) stare: in_lucru (executant, 20 nov 2026 11:30 — pasul 3, procesor)
 - (istoric) stare: **aprobat** (supraveghetor, 20 nov 2026 11:15 — reluată cu numele liniei corectat „24zch” → **„24zci”**, cum a propus executantul; pașii 0–2 rămân făcuți și NU se refac; continui de la pasul 3, apoi 4–6 la noapte)
 - (istoric) stare: oprit (executant, 20 nov 2026 08:40; pașii 0–2 FĂCUȚI: `formulari3` + teste, `lucru/conversatie_chat5/antrenare.jsonl` 141.070 rânduri, 0 scurgeri, 1545 teste trec; pasul 3 NEfăcut, placa nepornită)
 - (istoric) motiv: numele liniei „24zch” e DEJA FOLOSIT de S117 (16 nov: `config/conv_w2_mare_24zch.toml` există, `lucru/w2_mare_24zch/` are gpt.pt, rezultat.json și ore în jurnal). Scrierea peste configurarea veche e interzisă („configurările vechi neatinse”), iar pe o linie cu ore în jurnal `antrenare_recalcul.py` ar sări peste `--porneste-din 720` (lecția S126). Propun numele „24zci” (liber: nici config, nici dosar): `config/conv_w2_mare_24zci.toml`, `nume = "w2_mare_24zci"`, `cale_stare = "lucru/w2_mare_24zci/gpt.pt"`, restul exact ca în pasul 3. Cu „da” (și `aprobat`) până la ~23:30 fac pasul 3 și pornesc placa la noapte, cel târziu 00:30.
-- raport: docs/rapoarte/2026-11-20_0840_S129_oprit_nume_linie.md
+- raport: docs/rapoarte/2026-11-20_1139_S129_pas3_configurare.md (pasul 3); docs/rapoarte/2026-11-20_0840_S129_oprit_nume_linie.md
 - (istoric) stare: **aprobat** (supraveghetor, 20 nov 2026 02:15)
 - tip: procesor, apoi placă
 - fereastră: pașii 0–3 (procesor) **după ce S128 e `gata`** (ziua pe procesor e permisă — C-149; dacă ciclul de test repornește calculatorul, reiei, nu e `oprit`). Pasul 5 (placa) **doar noaptea 20 → 21 nov, de la 19:00, pornire cel târziu 00:30**; placa liberă la 07:00. Dacă în hub `RESURSE.md` → „Rezervări” apare o rezervare pentru noaptea asta, sari peste ea (îți scriu eu aici). Dacă nu poate porni până la 00:30: rămâne `aprobat` pentru noaptea 21 → 22 nov.
