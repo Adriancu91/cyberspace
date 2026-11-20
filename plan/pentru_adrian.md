@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 20 noiembrie 2026, 08:15 — S128 verificat: Kronos cel mare (#651) e gata pentru placa OS-ului; la noapte S129
+
+- **S128 (C-150) verificat de mine: trece.** #651 e exportat în formatul plăcii: `kronos_651_q8_0.kgr`, 206.898.464 octeți (~197 MB), SHA-256 `2edf75ac…5ea0bf2`, în `C:\Kronos\cyberspace\lucru\export\`. Dă aceleași simboluri ca PyTorch pe toate cele 3 texte de control; cea mai mică marjă 0,051 (de 10 ori peste limita de risc). Față de #513 diferă doar mărimea (24 de straturi în loc de 12). #651 știe capitala („orașul București.”).
+- **Am copiat fișa în hub** (`integrare/kronos/MODEL_651.md`) și am trecut C-150 pe „gata”. Fișierul .kgr îl copiază centrul de comandă pe stick, verificând suma.
+- **Noaptea a mers curat** (raportul de dimineață e la locul lui, 1.539 teste trec, disc ~154–165 GB liberi). **Rulează acum:** S129, pașii pe procesor (datele noi); pe placă doar de la 19:00.
+- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic.
+
 - **20 nov 07:44 (executantul) — S128 gata:** #651 exportat pentru placa OS-ului, `lucru/export/kronos_651_q8_0.kgr`, 206.898.464 octeți, SHA-256 `2edf75ac…5ea0bf2`; aceleași simboluri ca PyTorch (dif. max 3,1e-5, marja minimă 0,051); față de #513 diferă doar mărimile (24 de straturi); 1.539 teste trec. Raport `docs/rapoarte/2026-11-20_0744_S128_export_651.md`.
 
 ## 20 noiembrie 2026, 02:15 — S127 verificat: rămâne #651 (46 % din 48 % necesari); la noapte S129
@@ -162,10 +170,3 @@
 - **17 nov 13:05 (executant) — S119 (textul românesc nou) făcut, dar pus `oprit` din cauza unui test.** 2,55 milioane de texte noi (8 GB, de două ori mai multă română decât aveam) sunt curățate, verificate (0 bucăți comune cu examenele și validările, după ce am scos cele 162) și transformate pentru antrenare: 2,21 miliarde de simboluri. Nimic șters. Dar discul C: a coborât la ~36,5 GB, iar un test vechi (unealta de cod, care cere 40 GB liberi) pică: 1 pică, 1.495 trec. Raport: `docs/rapoarte/2026-11-17_1305_S119_text_romanesc.md`. Aștept de la tine: (1) eliberezi ~6 GB pe C: sau (2) „da” pentru a face testul să nu depindă de disc; plus, dacă vrei, „da CulturaX”.
 
 - **17 nov 09:06 (executant) — S121 (chat + calcule) gata: rămâne #651.** Modelul nou #680 socotește mult mai bine (51 din 200 față de 1), dar pragul era 61; la formulări noi socotește rar (5 din 80) — a ținut minte formulările. Chat-ul e mai bun (40 din 200 față de 25; „Nu scrie în text.” pe nedrept 73 → 1), iar româna, „din text” și instrucțiunile nu s-au stricat. Interfața nu se schimbă. Testele: 1.488 trec. Raport: `docs/rapoarte/2026-11-17_0906_S121_calcule_chat.md`. Aștept de la tine: nimic.
-
-## 17 noiembrie 2026, 08:15 — Antrenarea cu calcule s-a terminat; examenele rulează
-
-- **S121:** cele 4 ore de învățat (chat + calcule, din #651) s-au încheiat la 07:07 fără erori (modelele #677–#680; româna la ora 4: 1,0901, pragul e ≤ 1,0978). **Examenele pe #651 și #680 au pornit la 07:31** — gata pe la ~09:00. Verdictul îl verific eu la trecerea de 11:15, după pragurile scrise dinainte (calcule ≥ 61 din 200, chat ≥ 30 etc.).
-- Raportul de dimineață e la locul lui (`2026-11-17_0648_raport_dimineata.md`): noaptea a mers curat, testele trec (1.488, 0 pică).
-- **Apoi:** S119 (descărcarea textului românesc, fără placă) → interfața repornită cu câștigătorul → S118. Nimic nou pus în coadă; nicio comandă nouă în hub.
-- **Aștept de la tine:** nimic.

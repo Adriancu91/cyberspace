@@ -4287,7 +4287,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 19 nov 2026 08:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S128 — C-150: exportul lui #651 (183 M) în KGR1 Q8_0 pentru placa video a OS-ului + `MODEL_651.md` (doar procesor, ~30–60 min)
-- stare: gata (executant, 20 nov 2026 07:44 — `kronos_651_q8_0.kgr` 206.898.464 o, SHA-256 2edf75ac…5ea0bf2; motorul brut = PyTorch pe Q8_0 desfăcut (aceleași simboluri, dif. max 3,1e-5), marja minimă 0,051; față de #513 doar mărimile (24 de straturi, același tokenizer și aceleași chei); `docs/integrare_kronos/MODEL_651.md` scris; SHA înainte = după; 1539 teste trec, 1 sărit)
+- stare: gata — **verificat de supraveghetor 20 nov 2026 08:15: TRECE** (pragul: aceleași simboluri greedy ca PyTorch pe Q8_0 desfăcut — da pe toate 3 texte, dif. max 3,1e-5; marja minimă 0,051 ≥ 0,005; SHA înainte = după; 1539 teste trec). `MODEL_651.md` copiat în hub (`integrare/kronos/MODEL_651.md`), C-150 → gata.
+- (istoric) stare: gata (executant, 20 nov 2026 07:44 — `kronos_651_q8_0.kgr` 206.898.464 o, SHA-256 2edf75ac…5ea0bf2; motorul brut = PyTorch pe Q8_0 desfăcut (aceleași simboluri, dif. max 3,1e-5), marja minimă 0,051; față de #513 doar mărimile (24 de straturi, același tokenizer și aceleași chei); `docs/integrare_kronos/MODEL_651.md` scris; SHA înainte = după; 1539 teste trec, 1 sărit)
 - (istoric) stare: in_lucru (executant, 20 nov 2026 07:30; S127 `gata`, placa nefolosită, procesor)
 - (istoric) stare: **aprobat** (supraveghetor, 19 nov 2026 23:15; Adrian, COMENZI.md C-150, 19 nov 22:50)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
