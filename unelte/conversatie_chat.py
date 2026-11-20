@@ -1308,6 +1308,133 @@ def pas_formulari2(rad: Path, t0: float) -> int:
 
 
 # --------------------------------------------------------------------------------------------------------------------
+# S129 (supraveghetor, 20 nov 2026): pasul `formulari3` — pornește de la `formulari2` (aceleași șabloane S127 la toate
+# operațiile, aceleași sociale, aceleași interdicții de numere), cu DOAR două schimbări: (a) perechile de înmulțire
+# 500 → 800; (b) partea „din text” (r2 #651, fără scurgeri) pusă de 2 ori în compoziție: chat × 5 + calcule × 4 + r2 × 2
+# (la S127: r2 × 1). Ieșirea în dosarul NOU lucru/conversatie_chat5/; pașii de mai sus și ieșirile lor rămân neschimbate.
+DOSAR5 = "lucru/conversatie_chat5"
+ANTRENARE5 = f"{DOSAR5}/antrenare.jsonl"
+SAMANTA_FORMULARI3 = 1129
+COTE_CALCULE5 = {"adunare": 800, "scadere": 800, "inmultire": 800, "impartire": 800}
+ORI_CHAT5, ORI_CALCULE5, ORI_R2_5 = 5, 4, 2
+
+
+def randuri_amestec_s129(vechi_randuri: list[str], chat: list[dict[str, Any]], calc: list[dict[str, Any]],
+                         ori_h: int = ORI_CHAT5, ori_c: int = ORI_CALCULE5, ori_r2: int = ORI_R2_5) -> list[str]:
+    """Rândurile amestecului S129 (înainte de amestecare): r2 × ori_r2 + chat × ori_h + calcule × ori_c."""
+    return ([r for _ in range(ori_r2) for r in vechi_randuri]
+            + [json.dumps(p, ensure_ascii=False) for _ in range(ori_h) for p in chat]
+            + [json.dumps(p, ensure_ascii=False) for _ in range(ori_c) for p in calc])
+
+
+def pas_formulari3(rad: Path, t0: float) -> int:
+    from module.tokenizer_bpe import TokenizerBPE
+    from unelte.examen_calcule import interzise
+    from unelte.examen_formulari import interzise_examen
+
+    iesire = rad / ANTRENARE5
+    if (rad / DOSAR5).exists():
+        raise SystemExit(f"{rad / DOSAR5} există deja.")
+    ex_calc_tot = json.loads((rad / EXAMEN_CALCULE).read_text(encoding="utf-8"))
+    ex_calc = ex_calc_tot["perechi"]
+    ex_chat = json.loads((rad / EXAMEN).read_text(encoding="utf-8"))["perechi"]
+    ex_form_tot = json.loads((rad / EXAMEN_FORMULARI).read_text(encoding="utf-8"))
+    ex_form = ex_form_tot["perechi"]
+    rng = random.Random(SAMANTA_FORMULARI3)
+
+    # 1. șabloanele: aceleași ca la S127 (formulari2), fără cele din examene
+    soc_s = scoate_sabloane_examen(formulari_calcule_s124(), sociale_s124(), ex_form_tot)[1]
+    calc_s, soc_s, scoase_sabloane = scoate_sabloane_examen(formulari_calcule_s127(), soc_s, ex_form_tot)
+    numaratoare = {op: len({formulare_fara_numere(s.format(a=3, b=7)) for s in fs}) for op, fs in calc_s.items()}
+
+    # 2. perechile noi: calcule (înmulțirea 800) și sociale, ca la S127
+    interz = interzise_s127(interzise(ex_calc_tot) | interzise_examen(ex_form_tot))
+    calc = perechi_calcule_s124(rng, interz, COTE_CALCULE5, calc_s)
+    sociale = perechi_sociale_s124(rng, soc_s)
+    s116 = citeste_jsonl(rad / PERECHI)
+    chat = [p for p in s116 if p["fel"] != "chat_social"] + sociale
+    for i, p in enumerate(calc):
+        p["id"] = f"calc5_{i:06d}"
+    for i, p in enumerate(sociale):
+        p["id"] = f"social5_{i:06d}"
+
+    # 3. scurgerile: regulile S127 (S124 + bucăți de 6 cuvinte față de toate cele trei examene); se scot (și din r2)
+    b6 = bucati_examene_s127([ex_form, ex_calc, ex_chat])
+    b8 = bucati_examene_s127([ex_form, ex_calc, ex_chat], 8)
+    vechi_randuri = [r for r in (rad / R2).read_bytes().decode("utf-8").splitlines() if r.strip()]
+    vechi = [json.loads(r) for r in vechi_randuri]
+
+    def cu_scurgeri(perechi: list[dict[str, Any]]) -> set[int]:
+        s = scurgeri_formulari(perechi, ex_form)
+        return ({i for v in s.values() for i in v} | indici_scurgeri_calcule(perechi, ex_chat, ex_calc)
+                | indici_bucati_s127(perechi, b6))
+
+    scoase = {}
+    for nume, lista in (("chat", chat), ("calcule", calc)):
+        rau = cu_scurgeri(lista)
+        scoase[nume] = len(rau)
+        lista[:] = [p for i, p in enumerate(lista) if i not in rau]
+    rau_r2 = cu_scurgeri(vechi)
+    scoase["r2"] = len(rau_r2)
+    vechi_randuri = [r for i, r in enumerate(vechi_randuri) if i not in rau_r2]
+    vechi = [p for i, p in enumerate(vechi) if i not in rau_r2]
+    nu_scrie = sum(1 for p in chat + calc if are_nu_scrie(p))
+    if nu_scrie:
+        raise SystemExit(f"„Nu scrie în text.” în chat: {nu_scrie}")
+    pe_op = Counter(p["tip"] for p in calc)
+    trei = pe_op["adunare"] + pe_op["scadere"] + pe_op["impartire"]
+    if 3 * trei < 2 * len(calc):
+        raise SystemExit(f"adunare + scădere + împărțire sub 2/3: {dict(pe_op)}")
+
+    # 4. amestecul: chat × 5 + calcule × 4 + r2 × 2
+    tok = TokenizerBPE.incarca(rad / "date/ws/bpe_16384.json")
+    s_chat, s_calc, s_vechi = (numar_simboluri(x, tok) for x in (chat, calc, vechi))
+    randuri = randuri_amestec_s129(vechi_randuri, chat, calc)
+    rng.shuffle(randuri)
+    _scrie_jsonl(rad / DOSAR5 / "perechi_calcule.jsonl", calc)
+    _scrie_jsonl(rad / DOSAR5 / "perechi_sociale.jsonl", [p for p in chat if p["fel"] == "chat_social"])
+    iesire.write_bytes(("\n".join(randuri) + "\n").encode("utf-8"))
+    # verificarea finală, pe tot fișierul scris (fiecare rând citit înapoi)
+    scris = [json.loads(r) for r in iesire.read_bytes().decode("utf-8").splitlines() if r.strip()]
+    final = {"bucati_de_6": len(indici_bucati_s127(scris, b6)), "bucati_de_8": len(indici_bucati_s127(scris, b8, 8)),
+             "examen_chat_si_calcule": scurgeri_calcule(scris, ex_chat, ex_calc),
+             "examen_formulari": {k: len(v) for k, v in scurgeri_formulari(scris, ex_form).items()},
+             "nu_scrie_in_text_in_chat": sum(1 for p in scris if p.get("fel", "").startswith("chat") and are_nu_scrie(p))}
+    total_chat = s_chat * ORI_CHAT5 + s_calc * ORI_CALCULE5
+    total_text = s_vechi * ORI_R2_5
+    info = {
+        "nota": "S129: ca S127 (formulari2: aceleași șabloane, sociale, interdicții), cu înmulțirea 500 → 800 și "
+                "perechile „din text” ale lui #651 (r2, fără scurgeri) puse de 2 ori: chat × 5 + calcule × 4 + r2 × 2; "
+                "random.Random(1129) pentru tot (generare și amestec).",
+        "sabloane_pe_operatie": numaratoare, "sabloane_scoase_fiindca_sunt_in_examene": scoase_sabloane,
+        "perechi_chat": len(chat), "din_care_sociale": sum(p["fel"] == "chat_social" for p in chat),
+        "ori_chat": ORI_CHAT5, "perechi_calcule": len(calc), "pe_operatie": dict(pe_op),
+        "fractie_adunare_scadere_impartire": round(trei / len(calc), 4),
+        "ori_calcule": ORI_CALCULE5, "perechi_din_text": len(vechi), "ori_din_text": ORI_R2_5,
+        "perechi_total": len(randuri),
+        "simboluri": {"chat_o_data": s_chat, "calcule_o_data": s_calc, "din_text_o_data": s_vechi,
+                      "chat_total": total_chat, "din_text_total": total_text},
+        "fractie_calcule_din_chat": round(s_calc * ORI_CALCULE5 / total_chat, 4),
+        "fractie_chat_din_tot": round(total_chat / (total_chat + total_text), 4),
+        "scoase_pentru_scurgeri": scoase, "verificare_finala_pe_tot_fisierul": final,
+        "exemple_random_1291": random.Random(1291).sample(calc, 20),
+        "sha256": {"antrenare": sha(iesire), "perechi_chat_s116": sha(rad / PERECHI), "r2": sha(rad / R2),
+                   "examen_chat": sha(rad / EXAMEN), "examen_calcule": sha(rad / EXAMEN_CALCULE),
+                   "examen_formulari": sha(rad / EXAMEN_FORMULARI)},
+        "secunde": round(time.time() - t0)}
+    _scrie_json(rad / DOSAR5 / "antrenare_info.json", info)
+    print(json.dumps({k: info[k] for k in ("sabloane_pe_operatie", "perechi_total", "pe_operatie",
+                                           "fractie_adunare_scadere_impartire", "fractie_calcule_din_chat",
+                                           "fractie_chat_din_tot", "scoase_pentru_scurgeri",
+                                           "verificare_finala_pe_tot_fisierul")}, ensure_ascii=False))
+    if final["bucati_de_6"] or final["bucati_de_8"] or any(final["examen_chat_si_calcule"].values()) or any(
+            final["examen_formulari"].values()) or final["nu_scrie_in_text_in_chat"]:
+        print("VERIFICAREA FINALĂ A GĂSIT SCURGERI", file=sys.stderr)
+        return 1
+    return 0
+
+
+# --------------------------------------------------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -1315,7 +1442,7 @@ def main(argv: list[str] | None = None) -> int:
         pass
     parser = argparse.ArgumentParser(description="S116: date de chat fără text alături + examenul de chat.")
     parser.add_argument("pas", choices=["candidati", "deoparte", "examen", "perechi", "amesteca", "calcule", "amesteca2",
-                                        "formulari", "formulari2"])
+                                        "formulari", "formulari2", "formulari3"])
     parser.add_argument("--radacina", default=str(RADACINA))
     a = parser.parse_args(argv)
     rad = Path(a.radacina)
@@ -1324,6 +1451,8 @@ def main(argv: list[str] | None = None) -> int:
         return pas_formulari(rad, t0)
     if a.pas == "formulari2":
         return pas_formulari2(rad, t0)
+    if a.pas == "formulari3":
+        return pas_formulari3(rad, t0)
     if a.pas == "calcule":
         return pas_calcule(rad, t0)
     if a.pas == "amesteca2":
