@@ -4341,7 +4341,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 20 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S130 — C-153: viteza lui #513 în PyTorch pe RTX 3070 Ti (Windows), pentru comparația cu driverul OS-ului (~15–30 min)
-- stare: **aprobat**
+- stare: in_lucru (executant, 20 nov 2026 17:00)
 - tip: placă (doar inferență, câteva minute) + procesor
 - fereastră: **acum, ziua de 20 nov — excepție de la C-149 aprobată de Adrian în C-153** („durează minute; ciclul de test nu are nimic programat azi după 15:31”). **Pornire cel târziu 18:15, totul gata până la 18:50**; placa liberă pentru S129 la 19:00. Înainte de pornire: `nvidia-smi` — dacă alt proces (ciclul de test, alt Python) folosește placa, aștepți trecerea următoare. Dacă nu poți porni până la 18:15: nu o faci la noapte peste S129; scrii în raport/`pentru_adrian.md` „nepornită” și rămâne `aprobat` (îi cer lui Adrian altă fereastră).
 - durată maximă: 45 de minute; memoria plăcii sub 7.000 MB, sub 83 °C (paznicul ca de obicei)
