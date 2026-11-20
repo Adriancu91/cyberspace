@@ -4287,7 +4287,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 19 nov 2026 08:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S128 — C-150: exportul lui #651 (183 M) în KGR1 Q8_0 pentru placa video a OS-ului + `MODEL_651.md` (doar procesor, ~30–60 min)
-- stare: **aprobat** (supraveghetor, 19 nov 2026 23:15; Adrian, COMENZI.md C-150, 19 nov 22:50)
+- stare: in_lucru (executant, 20 nov 2026 07:30; S127 `gata`, placa nefolosită, procesor)
+- (istoric) stare: **aprobat** (supraveghetor, 19 nov 2026 23:15; Adrian, COMENZI.md C-150, 19 nov 22:50)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
 - fereastră: **după ce S127 e `gata` (sau `oprit`), de la 07:00 pe 20 nov** (ziua sau tamponul 07:00–08:00). NU noaptea în timp ce S127 rulează. Dacă ciclul de test din hub repornește calculatorul în timpul S128: nu e `oprit`, reiei de la pasul întrerupt (fișierele parțiale din `lucru/export/` cu numele #651 le refaci, nu le folosești).
 - durată maximă: 2 ore; RAM cel mult ~8 GB
