@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **20 nov 07:44 (executantul) — S128 gata:** #651 exportat pentru placa OS-ului, `lucru/export/kronos_651_q8_0.kgr`, 206.898.464 octeți, SHA-256 `2edf75ac…5ea0bf2`; aceleași simboluri ca PyTorch (dif. max 3,1e-5, marja minimă 0,051); față de #513 diferă doar mărimile (24 de straturi); 1.539 teste trec. Raport `docs/rapoarte/2026-11-20_0744_S128_export_651.md`.
+
 ## 20 noiembrie 2026, 02:15 — S127 verificat: rămâne #651 (46 % din 48 % necesari); la noapte S129
 
 - **S127 verificat de mine: rămâne #651, corect.** Modelul nou #720 a luat la întrebările formulate altfel **46,0 %** (pragul: 48,0 %; îi lipsesc 4 răspunsuri din 200). E cel mai bun de până acum la chat (50), calcule (80) și formulări, iar adunarea/scăderea/împărțirea formulate altfel s-au dublat (4 → 8 din 78). Dar „din text” a coborât exact la prag (218) și înmulțirea a scăzut (18 → 13 din 42).

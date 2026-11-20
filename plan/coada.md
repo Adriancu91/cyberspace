@@ -4287,7 +4287,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 19 nov 2026 08:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S128 — C-150: exportul lui #651 (183 M) în KGR1 Q8_0 pentru placa video a OS-ului + `MODEL_651.md` (doar procesor, ~30–60 min)
-- stare: in_lucru (executant, 20 nov 2026 07:30; S127 `gata`, placa nefolosită, procesor)
+- stare: gata (executant, 20 nov 2026 07:44 — `kronos_651_q8_0.kgr` 206.898.464 o, SHA-256 2edf75ac…5ea0bf2; motorul brut = PyTorch pe Q8_0 desfăcut (aceleași simboluri, dif. max 3,1e-5), marja minimă 0,051; față de #513 doar mărimile (24 de straturi, același tokenizer și aceleași chei); `docs/integrare_kronos/MODEL_651.md` scris; SHA înainte = după; 1539 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 20 nov 2026 07:30; S127 `gata`, placa nefolosită, procesor)
 - (istoric) stare: **aprobat** (supraveghetor, 19 nov 2026 23:15; Adrian, COMENZI.md C-150, 19 nov 22:50)
 - tip: procesor (fără placă: `CUDA_VISIBLE_DEVICES=-1` pentru toți pașii)
 - fereastră: **după ce S127 e `gata` (sau `oprit`), de la 07:00 pe 20 nov** (ziua sau tamponul 07:00–08:00). NU noaptea în timp ce S127 rulează. Dacă ciclul de test din hub repornește calculatorul în timpul S128: nu e `oprit`, reiei de la pasul întrerupt (fișierele parțiale din `lucru/export/` cu numele #651 le refaci, nu le folosești).
@@ -4304,7 +4305,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - Dacă un pas pică de 2 ori la rând cu aceeași eroare: `oprit`, eroarea în raport.
 - pre-înregistrare: nu e antrenare; nu e nevoie (pragul: aceleași simboluri greedy ca PyTorch pe Q8_0 desfăcut, sumele rezervelor și ale lui #651 neschimbate)
 - aprobat de: Adrian (COMENZI.md C-150, 19 nov 2026 22:50, „Da, aprob tot”)
-- raport: docs/rapoarte/…
+- raport: docs/rapoarte/2026-11-20_0744_S128_export_651.md
 
 ### S129 — din #720, „din text” de 2 ori mai des + mai multe înmulțiri, pe linia nouă „24zch” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
 - stare: **aprobat** (supraveghetor, 20 nov 2026 02:15)
