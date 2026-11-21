@@ -4404,6 +4404,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 21 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S132 — C-156: „pasul de aur” — un pas de antrenare exportat din PyTorch, ca motorul de antrenare din OS să aibă cu ce se compara (doar procesor, ~2–4 h, în bucăți)
+- verificat (supraveghetor, 21 nov 2026 11:15): trece — 198/198 fișiere ale setului mic cu SHA corect față de `reteta.json`; eroarea scade la ambele rețete; AdamW lr 5e-5 = `config/conv_w2_mare_24.toml`; copiat în hub `integrare/kronos/` (PAS_DE_AUR.md, pas_de_aur_mic/, pas_de_aur_513/reteta.json); C-156 → gata în hub, pauza rămâne.
 - stare: gata (executant, 21 nov 2026 09:01 — bucățile A, B, C făcute: `unelte/pas_de_aur.py` + 7 teste; setul mic `docs/integrare_kronos/pas_de_aur_mic/` 3,32 MB (repetat identic); #513 în `lucru/pas_de_aur/513/` 2,74 GB, în git `docs/integrare_kronos/pas_de_aur_513/reteta.json`; fișa `docs/integrare_kronos/PAS_DE_AUR.md`; diferențe finite ✓; SHA #513/#651/#736/kronos/examene înainte = după; **1563 teste trec, 1 sărit**; nimic nu pornește S131 automat — nimic dezactivat, `schtasks` refuzat de permisiuni)
 - (istoric) stare: in_lucru (executant, 21 nov 2026 08:50 — pașii 0–1 + bucata A, procesor; placa liberă 470 MB / 31 °C, nimic altceva în lucru)
 - (istoric) stare: aprobat

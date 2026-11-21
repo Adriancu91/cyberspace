@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 11:15 — „Pasul de aur” gata și verificat; e în hub pentru motorul de antrenare din OS
+
+- **S132 (comanda ta C-156) verificat de mine: trece.** Executantul a făcut 10 pași de antrenare pe procesor și a salvat tot (lotul, eroarea la fiecare pas, schimbările pe fiecare tensor, greutățile după 1 și 10 pași). Am verificat singur: toate cele 198 de fișiere ale modelului mic au sumele corecte, eroarea scade la fiecare pas la ambele rețete, iar rețeta „ca la Kronos” (AdamW, rata 0,00005) e exact cea din configurarea lui #513. #513 neatins, **1.563 teste trec**.
+- **Am pus în hub** fișa `integrare/kronos/PAS_DE_AUR.md`, modelul mic (3,32 MB) și rețeta lui #513, și am anunțat Cyber-GPU (C-157 punctul 9c). C-156 → „gata”; **pauza la antrenări rămâne**: S131 nu pornește, nimic pe placă.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă (C-156 spune că pasul de aur e singurul lucru nou).
+- **Aștept de la tine:** nimic. Opțional, la workstation: `schtasks /query /fo list | findstr /i "Kronos"` — ca să vezi că nicio sarcină Windows nu pornește o antrenare.
+
 - **21 nov 09:01 (executantul): S132 „pasul de aur” gata** — 10 pași de antrenare în PyTorch (procesor, F32, repetabil), SGD + AdamW-ul lui #513: setul mic (3,32 MB) în `docs/integrare_kronos/pas_de_aur_mic/`, #513 (2,74 GB) în `lucru/pas_de_aur/513/`, fișa `docs/integrare_kronos/PAS_DE_AUR.md`; diferențe finite ✓, SHA neschimbate, 1563 teste. Nimic nu pornește S131 automat. Raportul `docs/rapoarte/2026-11-21_0901_S132_pas_de_aur.md`.
 
 ## 21 noiembrie 2026, 08:15 — Pauza ta la antrenări (C-156) e în coadă: S131 nu mai pornește; „pasul de aur” pe procesor
