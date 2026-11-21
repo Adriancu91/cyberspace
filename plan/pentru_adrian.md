@@ -4,6 +4,7 @@
 
 ## 21 noiembrie 2026, 17:15 — Comanda ta C-162 (fișa de antrenare) e în coadă: S133, doar citire
 
+- **Executantul a terminat S133 la 17:45 (doar citit, nimic pe placă):** fișa `docs/integrare_kronos/FISA_ANTRENARE.md`. Cifra de bătut, din jurnal: linia #513 ~39.300 simboluri/s (0,80 pași/s), linia #651 ~15.500 simboluri/s (0,32 pași/s, cu recalculul activărilor), ambele bf16 pe placă. Lipsesc din jurnale (nemăsurate): viteza fără recalcul, timpul pe bucăți al unui pas, F32 curat. **1.563 teste trec.** Nimic vechi atins (sumele identice). Raport: `docs/rapoarte/2026-11-21_1736_S133_fisa_antrenare.md`.
 - **Am preluat C-162:** sarcina **S133** e în coadă, aprobată de tine. Executantul scrie, doar din ce există deja (cod, configurări, jurnale), fișa pentru motorul de antrenare din OS: cât de repede antrenează PyTorch pe placa ta (linia #513 și #651, cu rândul din jurnal ca dovadă), ce face pasul adevărat în plus față de „pasul de aur”, cum arată datele, ce se salvează și cum se rulează examenul. O copiez în hub (`integrare/kronos/FISA_ANTRENARE.md`) când e gata.
 - **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare; S131 nu pornește la 19:00. Dacă o cifră de viteză lipsește din jurnale, executantul scrie „nu e în jurnal” — nu o măsoară acum (asta ar cere „da”-ul tău).
 - **Rulează acum:** nimic la Kronos. Executantul a fost liniștit de la 09:02 — normal, n-a avut treabă. Din hub: OS-ul a dus #513 pe placă la 262 simb/s (de 2 ori peste PyTorch în Windows); Cyber-GPU și Cyber Universe încep motorul de antrenare (C-160, C-161).

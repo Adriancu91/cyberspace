@@ -4430,7 +4430,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-156, 21 nov 2026 08:01) — trecută în coadă de supraveghetor, 21 nov 2026 08:20
 
 ### S133 — C-162: fișa de antrenare pentru motorul propriu din OS (doar citire + document, procesor, ~1–2 h)
-- stare: in_lucru (executant, 21 nov 2026 17:30; placa liberă 454 MB / 37 °C, nimic altceva în lucru)
+- stare: gata (executant, 21 nov 2026 17:45; `docs/integrare_kronos/FISA_ANTRENARE.md` scrisă, doar citit; SHA înainte = după la 21 de fișiere; 1563 teste trec, 1 sărit)
+- (istoric) stare: in_lucru (executant, 21 nov 2026 17:30; placa liberă 454 MB / 37 °C, nimic altceva în lucru)
 - (istoric) stare: aprobat
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; **nimic pe placă**, nicio antrenare, nicio rulare de examen nouă)
 - fereastră: oricând, zi sau noapte. Un test pe placă al centrului de comandă poate reporni calculatorul: o repornire nu e `oprit`, reiei.
@@ -4446,5 +4447,5 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
   6. Scrii totul în **`docs/integrare_kronos/FISA_ANTRENARE.md`** (română simplă + tabele; fiecare cifră marcată MĂSURAT-în-jurnal / DEDUS / NU E ÎN JURNAL). Eu o copiez în hub la `integrare/kronos/FISA_ANTRENARE.md`.
   7. SHA după = înainte; `python -m pytest` verde.
 - **NU:** nimic pe placă; nicio antrenare, niciun benchmark nou de antrenare (cifra lipsă rămâne lipsă — o măsurătoare nouă cere „da”-ul lui Adrian); nimic șters, nimic descărcat; S131 rămâne „în așteptare (pauză, C-156)”.
-- raport: `docs/rapoarte/<data>_<ora>_S133_fisa_antrenare.md` (ce ai găsit, ce lipsește din jurnale, SHA înainte/după, testele); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- raport: `docs/rapoarte/2026-11-21_1736_S133_fisa_antrenare.md` — cerut: `docs/rapoarte/<data>_<ora>_S133_fisa_antrenare.md` (ce ai găsit, ce lipsește din jurnale, SHA înainte/după, testele); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
 - aprobat de: Adrian (hub `COMENZI.md` C-162, 21 nov 2026 16:18) — trecută în coadă de supraveghetor, 21 nov 2026 17:15
