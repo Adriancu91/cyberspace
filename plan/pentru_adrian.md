@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 02:15 — S129 verificat: rămâne #651, la un singur răspuns; o ultimă încercare la noapte, apoi decizi tu
+
+- **S129 verificat de mine: rămâne #651, corect după prag.** Modelul nou **#736** trece pentru prima dată examenul de întrebări formulate altfel (**54 %**, pragul 48 %) și e cel mai bun la calcule (90) și chat (51). Dar la „răspunsuri din text” are **217**, iar pragul e **218** — îi lipsește un singur răspuns din 320 (#651 are 228). Noaptea a mers curat: placa max 6.428 MB / 64 °C, 1.550 teste trec, modelele vechi neatinse.
+- **Am pus în coadă S131 (aprobată de mine, în granițe), la noapte 21 → 22 nov:** pornim din #736 (care are deja formulările) și îi dăm „din text” de 3 ori în loc de 2. Aceleași praguri. Ziua nimic pe placă.
+- **De ce o decizie a ta urmează oricum:** în 4 runde, „din text” a coborât de fiecare dată (222 → 219 → 218 → 217). S131 e **ultima** rundă pe linia asta pe care o aprob singur. Să știi și asta: cu cât încercăm de mai multe ori până trecem la limită, cu atât trecerea spune mai puțin (o diferență de 1 răspuns e în zona „zgomotului” notării).
+- **Dacă S131 nu trece, variantele tale:** (1) **#736 în chat**, decizia ta (mai bun la conversație și calcule, mai slab la „din text”: 217 față de 228); (2) **oprim linia** și lăsăm nopțile placa pentru driver/OS sau altă idee; (3) altceva spui tu.
+- **Aștept de la tine:** nimic obligatoriu. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
+
 ## 20 noiembrie 2026, 20:15 — Comparația de viteză (C-153) e gata și verificată; S129 învață pe placă
 
 - **S130 verificat de mine: trece.** Kronos #513 în Windows (PyTorch): pe placă **129 simboluri/s** (FP16 la fel, 129), pe procesor **42**. Cele 16 simboluri sunt identice cu cele din OS, fișierele modelului neatinse. #513 nu are „memoria pașilor”, deci fiecare simbol recalculează tot textul.
