@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 05:15 — S131 pregătită (pe procesor); la noapte pe placă
+
+- **Executantul a făcut pașii pregătitori ai S131 la 02:45 (procesor, nimic pe placă):** date noi cu „din text” de 3 ori (166.475 rânduri, 0 suprapuneri cu examenele), configurarea `24zcj` și pre-înregistrarea. **1.556 teste trec.** Disc: ~146 GB liberi. Modelele și datele vechi neatinse (sumele identice înainte și după).
+- **Verificat de mine:** pragurile din pre-înregistrare sunt exact cele aprobate de tine (C-132): „din text” ≥ 218, formulări ≥ 48 %, chat ≥ 30, calcule ≥ 61, română ≤ 1,0978, R1 ≥ 90. Configurarea diferă de cea veche doar prin nume, cale și datele noi. Ghicitul executantului: ~45 % șanse să treacă.
+- **Rulează acum:** nimic. **La noapte (21 → 22 nov):** S131 pe placă de la 19:00 (4 h din #736, apoi examenele), liberă la 07:00. Ziua nimic pe placă.
+- Hub: nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
+- **Aștept de la tine:** nimic. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
+
 ## 21 noiembrie 2026, 02:15 — S129 verificat: rămâne #651, la un singur răspuns; o ultimă încercare la noapte, apoi decizi tu
 
 - **S129 verificat de mine: rămâne #651, corect după prag.** Modelul nou **#736** trece pentru prima dată examenul de întrebări formulate altfel (**54 %**, pragul 48 %) și e cel mai bun la calcule (90) și chat (51). Dar la „răspunsuri din text” are **217**, iar pragul e **218** — îi lipsește un singur răspuns din 320 (#651 are 228). Noaptea a mers curat: placa max 6.428 MB / 64 °C, 1.550 teste trec, modelele vechi neatinse.
@@ -156,11 +164,3 @@
 - **Nu rulează nimic pe placă:** ziua de azi e a ta pentru `os-305`. Nicio comandă nouă pentru Kronos în hub.
 - **S126 (încă 4 h din #692, la noapte)** pornește singur după ce centrul de comandă scrie în hub că ai terminat testul `os-305`. Dacă nu faci testul azi, S126 rămâne pentru noaptea următoare.
 - **Aștept de la tine:** nimic nou — doar testul `os-305`, când vrei. (Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.)
-
-## 18 noiembrie 2026, 08:15 — Noaptea a mers curat; S126 tot așteaptă loc pe disc și testul tău
-
-- **Raportul de dimineață e la locul lui** (`docs/rapoarte/2026-11-18_0648_raport_dimineata.md`): S124 a rulat fără erori (placa max 6.402 MB / 64 °C), verdictul „rămâne #651” e cel verificat de mine la 02:15. Testele: **1.529 trec, 0 picate**.
-- **Azi ziua workstation-ul e al tău** pentru `os-305`; nu rulează nimic de la Kronos pe placă. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **S126 (la noapte, 4 h din #692)** pornește doar dacă: (1) scrii în hub că ai terminat `os-305` și (2) e loc pe disc — acum C: are **29,8 GB** liberi, trebuie ~35–37 GB.
-- **Aștept de la tine** (același lucru ca la 02:15, nu e nou): dacă vrei S126, scrie în hub „**da, șterge modelele intermediare #665–#667, #677–#679, #689–#691**”. Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.
-
