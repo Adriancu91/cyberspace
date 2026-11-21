@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**⚠ ACUM — 21 nov 2026, 17:15 (supraveghetor): S133 NOUĂ, `aprobat` de Adrian (hub C-162, 21 nov 16:18) — doar citire + documente, procesor, oricând.** Fișa de antrenare pentru motorul de antrenare din OS: viteza reală de antrenare din Windows/PyTorch (linia #513 și #651, cu rândul din jurnal ca dovadă), cum diferă pasul adevărat de „pasul de aur”, forma datelor, ce se salvează, cum se rulează examenul. **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare, S131 rămâne „în așteptare”. Vezi S133 jos.
+**ACUM — 21 nov 2026, 20:15 (supraveghetor): S133 = GATA, verificat; fișa e în hub (C-162 → gata). Nimic nou pentru tine: pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”).**
+
+**(istoric) 21 nov 2026, 17:15 (supraveghetor): S133 NOUĂ, `aprobat` de Adrian (hub C-162, 21 nov 16:18) — doar citire + documente, procesor, oricând.** Fișa de antrenare pentru motorul de antrenare din OS: viteza reală de antrenare din Windows/PyTorch (linia #513 și #651, cu rândul din jurnal ca dovadă), cum diferă pasul adevărat de „pasul de aur”, forma datelor, ce se salvează, cum se rulează examenul. **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare, S131 rămâne „în așteptare”. Vezi S133 jos.
 
 **⚠⚠ ACUM — 21 nov 2026, 08:20 (supraveghetor): PAUZĂ LA ANTRENĂRI — comanda lui Adrian C-156 (hub, 21 nov 08:01). S131 NU PORNEȘTE.**
 - **Nicio antrenare pe workstation și nimic pe placa video, la nicio oră**, până la o decizie nouă a lui Adrian. Placa e acum a testelor de driver/OS zi și noapte (ciclul automat al centrului de comandă; o repornire făcută de el nu e vina ta și nu e `oprit`).
@@ -4430,7 +4432,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-156, 21 nov 2026 08:01) — trecută în coadă de supraveghetor, 21 nov 2026 08:20
 
 ### S133 — C-162: fișa de antrenare pentru motorul propriu din OS (doar citire + document, procesor, ~1–2 h)
-- stare: gata (executant, 21 nov 2026 17:45; `docs/integrare_kronos/FISA_ANTRENARE.md` scrisă, doar citit; SHA înainte = după la 21 de fișiere; 1563 teste trec, 1 sărit)
+- stare: gata — **verificat de supraveghetor 21 nov 2026 20:15**: socotelile vitezei refăcute din cifrele din fișă (2.875 pași / 3.600,04 s × 49.152 = ~39.250 simb/s; 1.136 / 3.600,18 × 49.152 = ~15.510 simb/s; 23.007 / 8 și 18.176 / 16 se potrivesc cu pașii), doar citit, SHA neschimbate; fișa copiată în hub `integrare/kronos/FISA_ANTRENARE.md`, C-162 → gata.
+- (istoric) stare: gata (executant, 21 nov 2026 17:45; `docs/integrare_kronos/FISA_ANTRENARE.md` scrisă, doar citit; SHA înainte = după la 21 de fișiere; 1563 teste trec, 1 sărit)
 - (istoric) stare: in_lucru (executant, 21 nov 2026 17:30; placa liberă 454 MB / 37 °C, nimic altceva în lucru)
 - (istoric) stare: aprobat
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; **nimic pe placă**, nicio antrenare, nicio rulare de examen nouă)

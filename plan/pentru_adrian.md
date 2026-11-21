@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 20:15 — Fișa de antrenare (C-162) e gata, verificată și pusă în hub
+
+- **S133 verificat de mine: trece.** Fișa spune cât de repede a învățat Kronos pe placa ta în Windows: linia lui #513 ~**39.300** simboluri/s, linia lui #651 ~**15.500** simboluri/s (cu recalculul activărilor). Am refăcut singur socotelile din cifrele din jurnal: ies la fel. Doar citit, nimic pe placă, modelele neatinse, **1.563 teste trec**.
+- **Am copiat fișa în hub** (`integrare/kronos/FISA_ANTRENARE.md`) — e „cifra de bătut” pentru motorul de antrenare din OS (Cyber-GPU, C-160). C-162 → gata.
+- **De știut (nu e grav):** punctul de salvare cu optimizatorul al liniei #513 nu mai e pe disc; modelul #513 în sine e întreg. Lipsesc din jurnale și câteva cifre (viteza fără recalcul, timpul pe bucăți al unui pas) — se pot măsura doar cu „da”-ul tău și ridicarea pauzei.
+- **Rulează acum:** nimic la Kronos. Pauza C-156 rămâne: nimic pe placă, nicio antrenare, S131 „în așteptare”. Nimic nou în coadă.
+- **Aștept de la tine:** nimic.
+
 ## 21 noiembrie 2026, 17:15 — Comanda ta C-162 (fișa de antrenare) e în coadă: S133, doar citire
 
 - **Executantul a terminat S133 la 17:45 (doar citit, nimic pe placă):** fișa `docs/integrare_kronos/FISA_ANTRENARE.md`. Cifra de bătut, din jurnal: linia #513 ~39.300 simboluri/s (0,80 pași/s), linia #651 ~15.500 simboluri/s (0,32 pași/s, cu recalculul activărilor), ambele bf16 pe placă. Lipsesc din jurnale (nemăsurate): viteza fără recalcul, timpul pe bucăți al unui pas, F32 curat. **1.563 teste trec.** Nimic vechi atins (sumele identice). Raport: `docs/rapoarte/2026-11-21_1736_S133_fisa_antrenare.md`.
@@ -157,13 +165,5 @@
 - **Ce s-a întâmplat:** la 20:37 executantul a oprit S126 **înainte să pună ceva pe placă**: unealta de antrenare nu poate porni „din #692” pe o linie care are deja 4 ore — comanda n-ar fi antrenat nimic, fără niciun mesaj. Bine că a observat. Nimic stricat, nimic șters; 1.529 teste trec.
 - **Varianta (a), aprobată de tine (C-144, 23:10), e în coadă:** o configurare nouă, copie fidelă a celei vechi (doar numele și locul de salvare diferă), apoi 4 h din #692 + examenele, aceleași praguri (formulări nevăzute ≥ 48 %). Pornire la următoarea trecere a executantului (≤ 23:45), cel târziu 01:00.
 - **Verdictul** pe la ~05:30–06:00; îl verific la 05:15 sau 08:15. Placa e liberă la 07:00 pentru Cyber Universe (dacă examenele nu se termină, restul lor la noapte).
-- **Aștept de la tine:** nimic.
-
-## 18 noiembrie 2026, 20:15 — Testul tău `os-306` e terminat; S126 pornește acum pe placă
-
-- **REZOLVAT: S126 nu mai așteaptă.** Executantul a făcut pașii pregătitori la 19:39 (pre-înregistrarea, discul: 171,5 GB liberi, 1.529 teste trec), dar nu putea citi hub-ul ca să vadă că ai terminat `os-306`. I-am scris eu în coadă: testul s-a terminat (~17:28, a doua tură până la 18:22, încheiată în Windows) → pornește la următoarea lui trecere.
-- **La noapte:** S126 — încă 4 h de învățat din #692, apoi examenele, aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul pe la ~02:00–02:30; îl verific la 02:15 sau 05:15.
-- **Mâine ziua, 19 nov:** Kronos nu pune nimic pe placă — e pentru testul tău cu #513 pe placă (C-141) și ciclul automat (C-143).
-- Am notat și că ai oprit sarcinile vechi `ws_w2`. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
 
