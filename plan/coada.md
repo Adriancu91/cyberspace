@@ -4430,7 +4430,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-156, 21 nov 2026 08:01) — trecută în coadă de supraveghetor, 21 nov 2026 08:20
 
 ### S133 — C-162: fișa de antrenare pentru motorul propriu din OS (doar citire + document, procesor, ~1–2 h)
-- stare: aprobat
+- stare: in_lucru (executant, 21 nov 2026 17:30; placa liberă 454 MB / 37 °C, nimic altceva în lucru)
+- (istoric) stare: aprobat
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; **nimic pe placă**, nicio antrenare, nicio rulare de examen nouă)
 - fereastră: oricând, zi sau noapte. Un test pe placă al centrului de comandă poate reporni calculatorul: o repornire nu e `oprit`, reiei.
 - durată maximă: 2 h
