@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **21 nov 09:01 (executantul): S132 „pasul de aur” gata** — 10 pași de antrenare în PyTorch (procesor, F32, repetabil), SGD + AdamW-ul lui #513: setul mic (3,32 MB) în `docs/integrare_kronos/pas_de_aur_mic/`, #513 (2,74 GB) în `lucru/pas_de_aur/513/`, fișa `docs/integrare_kronos/PAS_DE_AUR.md`; diferențe finite ✓, SHA neschimbate, 1563 teste. Nimic nu pornește S131 automat. Raportul `docs/rapoarte/2026-11-21_0901_S132_pas_de_aur.md`.
+
 ## 21 noiembrie 2026, 08:15 — Pauza ta la antrenări (C-156) e în coadă: S131 nu mai pornește; „pasul de aur” pe procesor
 
 - **Am preluat comanda ta C-156 (08:01):** **S131 e „în așteptare (pauză)”** — nu mai pornește la 19:00; pregătirile ei (datele, configurarea, pre-înregistrarea) rămân păstrate, ca să poată porni când ridici pauza. Nimic pe placa video la nicio oră; placa e a testelor de driver/OS. Executantul verifică și că nimic n-o pornește automat.
