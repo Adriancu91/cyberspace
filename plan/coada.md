@@ -4374,7 +4374,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`
 
 ### S131 — din #736, „din text” de 3 ori (în loc de 2), pe linia nouă „24zcj” (procesor ~1 h + placa ~4 h + ~1,75 h examene)
-- stare: **aprobat** (supraveghetor, 21 nov 2026 02:15) — **Adrian o poate opri** cu o comandă în hub până la 19:00; dacă nu spune nimic, rulează.
+- stare: in_lucru (executant, 21 nov 2026 02:30 — pașii 0–3, procesor; placa liberă 484 MB / 31 °C, nimic altceva în lucru)
+- (istoric) stare: **aprobat** (supraveghetor, 21 nov 2026 02:15) — **Adrian o poate opri** cu o comandă în hub până la 19:00; dacă nu spune nimic, rulează.
 - tip: procesor, apoi placă
 - fereastră: pașii 0–3 (procesor) **oricând pe 21 nov** (ziua pe procesor e permisă — C-149; o repornire făcută de ciclul de test nu e `oprit`, reiei). Pasul 5 (placa) **doar noaptea 21 → 22 nov, de la 19:00, pornire cel târziu 00:30**; placa liberă la 07:00. Dacă în hub `RESURSE.md` → „Rezervări” apare o rezervare pentru noaptea asta, sari peste ea (îți scriu eu aici). Dacă nu poate porni până la 00:30: rămâne `aprobat` pentru noaptea următoare.
 - durată maximă: procesor 2 h; placa 4 h antrenare + 2 h examene
