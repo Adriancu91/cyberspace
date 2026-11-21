@@ -164,9 +164,3 @@
 - **S126 (la noapte, 4 h din #692)** pornește doar dacă: (1) scrii în hub că ai terminat `os-305` și (2) e loc pe disc — acum C: are **29,8 GB** liberi, trebuie ~35–37 GB.
 - **Aștept de la tine** (același lucru ca la 02:15, nu e nou): dacă vrei S126, scrie în hub „**da, șterge modelele intermediare #665–#667, #677–#679, #689–#691**”. Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.
 
-## 18 noiembrie 2026, 02:15 — S124 verificat: rămâne #651 (la 3 puncte de prag); pentru următoarea antrenare trebuie loc pe disc
-
-- **S124 verificat de mine: rămâne #651, corect.** Modelul nou #692 a urcat la formulări nevăzute de la 33 % la **45 %** (90/200), dar pragul scris dinainte era **48 %**. Tot restul a trecut, și bine: calcule **75/200** (prag 61), chat **48/200** (#651: 25), româna și „din text” nestricate. Chat-ul rămâne pe #651.
-- **Azi ziua workstation-ul e al tău** pentru `os-305`; Kronos nu pune nimic pe placă până scrie centrul de comandă că ai terminat.
-- **Am pus în coadă S126** (aprobată de mine, în granițe): încă 4 ore de învățat din #692 pe aceleași date, noaptea 18 → 19 nov, cu aceleași praguri. **Dar pornește doar dacă e loc pe disc:** C: are acum ~30,5 GB, iar 4 ore de antrenare scriu ~5 GB → ar coborî sub pragul de 30 GB. Fără loc, S126 așteaptă (nu se șterge nimic singur).
-- **Aștept de la tine:** dacă vrei S126 la noapte, scrie în hub „**da, șterge modelele intermediare #665–#667, #677–#679, #689–#691**” (cam 11–12 GB; sunt orele 1–3 ale antrenărilor S117, S121, S124 — modelele finale #668, #680, #692 și #651 rămân). Altfel nimic urgent.
