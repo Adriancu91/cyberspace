@@ -4404,7 +4404,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 21 nov 2026 02:15 (în granițele din `REGULI_CASCADA.md`, punctele 1, 3 și 5; pragurile — Adrian, C-132)
 
 ### S132 — C-156: „pasul de aur” — un pas de antrenare exportat din PyTorch, ca motorul de antrenare din OS să aibă cu ce se compara (doar procesor, ~2–4 h, în bucăți)
-- stare: aprobat
+- stare: in_lucru (executant, 21 nov 2026 08:50 — pașii 0–1 + bucata A, procesor; placa liberă 470 MB / 31 °C, nimic altceva în lucru)
+- (istoric) stare: aprobat
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; **nimic pe placă**)
 - fereastră: oricând, zi sau noapte (C-156). Un test pe placă al centrului de comandă poate reporni calculatorul: lucrezi în bucăți (A, B, C mai jos), cu commit după fiecare; o repornire nu e `oprit`, reiei bucata.
 - durată maximă: 4 h de procesor în total
