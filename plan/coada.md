@@ -19,6 +19,8 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
+**⚠ ACUM — 21 nov 2026, 17:15 (supraveghetor): S133 NOUĂ, `aprobat` de Adrian (hub C-162, 21 nov 16:18) — doar citire + documente, procesor, oricând.** Fișa de antrenare pentru motorul de antrenare din OS: viteza reală de antrenare din Windows/PyTorch (linia #513 și #651, cu rândul din jurnal ca dovadă), cum diferă pasul adevărat de „pasul de aur”, forma datelor, ce se salvează, cum se rulează examenul. **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare, S131 rămâne „în așteptare”. Vezi S133 jos.
+
 **⚠⚠ ACUM — 21 nov 2026, 08:20 (supraveghetor): PAUZĂ LA ANTRENĂRI — comanda lui Adrian C-156 (hub, 21 nov 08:01). S131 NU PORNEȘTE.**
 - **Nicio antrenare pe workstation și nimic pe placa video, la nicio oră**, până la o decizie nouă a lui Adrian. Placa e acum a testelor de driver/OS zi și noapte (ciclul automat al centrului de comandă; o repornire făcută de el nu e vina ta și nu e `oprit`).
 - **S131 → `în așteptare (pauză, C-156)`.** Pregătirile rămân exact cum sunt (datele `conversatie_chat6`, `config/conv_w2_mare_24zcj.toml`, pre-înregistrarea `2026-11-21_w2_mare_24zcj.md` — **nu le ștergi, nu le închizi**). La prima ta trecere verifici că nimic nu o pornește automat la 19:00 (lanțul `lucru/cascada/S131_proba/s131.py`, vreo sarcină Windows programată, CONTINUUM): dacă găsești ceva programat, îl dezactivezi (nu-l ștergi) și scrii în raportul S132 ce ai dezactivat.
@@ -4427,3 +4429,21 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport: `docs/rapoarte/2026-11-21_0901_S132_pas_de_aur.md` — cerut: `docs/rapoarte/<data>_<ora>_S132_pas_de_aur.md` (ce ai exportat, mărimile, eroarea pe cei 10 pași la ambele rețete pentru modelul mic și #513, rezultatul verificării numerice, SHA înainte/după, testele, ce ai dezactivat pentru pauza S131 dacă a fost cazul); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push după fiecare bucată.
 - aprobat de: Adrian (hub `COMENZI.md` C-156, 21 nov 2026 08:01) — trecută în coadă de supraveghetor, 21 nov 2026 08:20
 
+### S133 — C-162: fișa de antrenare pentru motorul propriu din OS (doar citire + document, procesor, ~1–2 h)
+- stare: aprobat
+- tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; **nimic pe placă**, nicio antrenare, nicio rulare de examen nouă)
+- fereastră: oricând, zi sau noapte. Un test pe placă al centrului de comandă poate reporni calculatorul: o repornire nu e `oprit`, reiei.
+- durată maximă: 2 h
+- de ce: Adrian (C-162, 21 nov 16:18) a făcut din motorul de antrenare propriu lucrul principal la Cyber-GPU (C-160) și Cyber Universe (C-161). Ei au nevoie de cifra de bătut (viteza de antrenare PyTorch pe aceeași placă) și de tot ce face pasul adevărat de antrenare în plus față de „pasul de aur” (S132).
+- ce faci (doar citești cod, configurări, jurnale, `lucru/` — **nu scrii nimic în `lucru/`, `kronos/`, `config/`, `module/`**):
+  0. `python -m pytest` verde; SHA-256 înainte la #513, #651, `kronos/`, `module/examen_bpb.py`.
+  1. **Viteza de antrenare în Windows/PyTorch pe RTX 3070 Ti**, pentru linia lui #513 (`config/conv_w2_romana_r1.toml`) și linia lui #651 (`w2_mare_24zc`, `config/conv_w2_mare_24zc.toml`): pași/s, simboluri/s, lot × context, adunarea gradientului, memoria plăcii folosită (MB), precizia (F32 / amestecată, bf16/fp16). **Fiecare cifră cu dovada**: rândul exact din jurnal/log (fișier + linie) și sesiunea/sarcina din care e. Dacă o cifră nu există în jurnale, scrii „NU E ÎN JURNAL” — nu o măsori acum (pauza C-156) și nu o ghicești; poți scrie separat un calcul „DEDUS” din cifre care există, marcat ca atare.
+  2. **Pasul adevărat față de „pasul de aur”:** adunarea gradientului, încălzirea ratei, programul ratei (formula + parametrii), pierderea mascată la conversații (ce simboluri contează), precizia, tăierea gradientului, dropout, orice altceva diferit — cu fișierul și funcția din cod unde se face.
+  3. **Datele:** forma fișierelor de antrenare (format, tip de număr, antet), cum se taie loturile (ordine, amestecare, sămânță), mărimile (rânduri, simboluri, octeți) pentru datele liniei #651.
+  4. **Ce se salvează** la un punct de control (greutăți, stările AdamW, pasul, sămânța/RNG, altceva) și cât ocupă (#513, #651).
+  5. **Examenul:** ce cifre dă (română bpb, corecte S15+S4+tipuri noi, R1, chat, calcule, formulări), comanda exactă cu care se rulează fiecare, ce fișiere citește (cu SHA-256), ca OS-ul să-l poată repeta întocmai. Fără nicio schimbare în `module/examen_bpb.py`.
+  6. Scrii totul în **`docs/integrare_kronos/FISA_ANTRENARE.md`** (română simplă + tabele; fiecare cifră marcată MĂSURAT-în-jurnal / DEDUS / NU E ÎN JURNAL). Eu o copiez în hub la `integrare/kronos/FISA_ANTRENARE.md`.
+  7. SHA după = înainte; `python -m pytest` verde.
+- **NU:** nimic pe placă; nicio antrenare, niciun benchmark nou de antrenare (cifra lipsă rămâne lipsă — o măsurătoare nouă cere „da”-ul lui Adrian); nimic șters, nimic descărcat; S131 rămâne „în așteptare (pauză, C-156)”.
+- raport: `docs/rapoarte/<data>_<ora>_S133_fisa_antrenare.md` (ce ai găsit, ce lipsește din jurnale, SHA înainte/după, testele); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push.
+- aprobat de: Adrian (hub `COMENZI.md` C-162, 21 nov 2026 16:18) — trecută în coadă de supraveghetor, 21 nov 2026 17:15

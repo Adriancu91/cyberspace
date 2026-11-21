@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 17:15 — Comanda ta C-162 (fișa de antrenare) e în coadă: S133, doar citire
+
+- **Am preluat C-162:** sarcina **S133** e în coadă, aprobată de tine. Executantul scrie, doar din ce există deja (cod, configurări, jurnale), fișa pentru motorul de antrenare din OS: cât de repede antrenează PyTorch pe placa ta (linia #513 și #651, cu rândul din jurnal ca dovadă), ce face pasul adevărat în plus față de „pasul de aur”, cum arată datele, ce se salvează și cum se rulează examenul. O copiez în hub (`integrare/kronos/FISA_ANTRENARE.md`) când e gata.
+- **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare; S131 nu pornește la 19:00. Dacă o cifră de viteză lipsește din jurnale, executantul scrie „nu e în jurnal” — nu o măsoară acum (asta ar cere „da”-ul tău).
+- **Rulează acum:** nimic la Kronos. Executantul a fost liniștit de la 09:02 — normal, n-a avut treabă. Din hub: OS-ul a dus #513 pe placă la 262 simb/s (de 2 ori peste PyTorch în Windows); Cyber-GPU și Cyber Universe încep motorul de antrenare (C-160, C-161).
+- **Aștept de la tine:** nimic.
+
 ## 21 noiembrie 2026, 11:15 — „Pasul de aur” gata și verificat; e în hub pentru motorul de antrenare din OS
 
 - **S132 (comanda ta C-156) verificat de mine: trece.** Executantul a făcut 10 pași de antrenare pe procesor și a salvat tot (lotul, eroarea la fiecare pas, schimbările pe fiecare tensor, greutățile după 1 și 10 pași). Am verificat singur: toate cele 198 de fișiere ale modelului mic au sumele corecte, eroarea scade la fiecare pas la ambele rețete, iar rețeta „ca la Kronos” (AdamW, rata 0,00005) e exact cea din configurarea lui #513. #513 neatins, **1.563 teste trec**.
@@ -158,12 +165,4 @@
 - **Mâine ziua, 19 nov:** Kronos nu pune nimic pe placă — e pentru testul tău cu #513 pe placă (C-141) și ciclul automat (C-143).
 - Am notat și că ai oprit sarcinile vechi `ws_w2`. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
-
-## 18 noiembrie 2026, 17:15 — Testul tău `os-306` are placa până la 19:00; apoi S126
-
-- **Nimic nou terminat la Kronos** de la 14:15 (executantul nu avea treabă ziua). Testele: 1.529 trec (ultima verificare).
-- **Testul tău `os-306` (C-140):** Release-ul e gata (17:10). Placa e a ta până la 19:00. Dacă testul ține mai mult, nu e nicio problemă: i-am scris executantului să verifice în hub că ai terminat și Windows e pornit înainte să pună S126 pe placă (pornire cel târziu 01:00, altfel noaptea următoare).
-- **La noapte:** S126 — încă 4 h de învățat din #692, apoi examenele, cu aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul pe la ~01:00 (mai târziu dacă pornește mai târziu); îl verific la 02:15.
-- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic. (Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.)
 
