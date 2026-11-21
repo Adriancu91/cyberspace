@@ -154,7 +154,9 @@ def test_doar_in_configurarile_aprobate():
                    # S127 (supraveghetor, 19 nov 2026): date noi adunare/scădere/împărțire, din #692
                    "conv_w2_mare_24zcg.toml",
                    # S129 (supraveghetor, 20 nov 2026): „din text” × 2 + înmulțiri 800, din #720
-                   "conv_w2_mare_24zci.toml"}
+                   "conv_w2_mare_24zci.toml",
+                   # S131 (supraveghetor, 21 nov 2026): „din text” × 3, din #736
+                   "conv_w2_mare_24zcj.toml"}
 
 
 # --- S93: portul `examen` = examen_romana prin orchestrator, paznicul, configurarea 24r ---------------------------

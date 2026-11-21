@@ -1328,19 +1328,53 @@ def randuri_amestec_s129(vechi_randuri: list[str], chat: list[dict[str, Any]], c
 
 
 def pas_formulari3(rad: Path, t0: float) -> int:
+    return _pas_amestec_s129(
+        rad, t0, dosar=DOSAR5, samanta=SAMANTA_FORMULARI3, ori_r2=ORI_R2_5, sufix_id="5", samanta_exemple=1291,
+        nota="S129: ca S127 (formulari2: aceleași șabloane, sociale, interdicții), cu înmulțirea 500 → 800 și "
+             "perechile „din text” ale lui #651 (r2, fără scurgeri) puse de 2 ori: chat × 5 + calcule × 4 + r2 × 2; "
+             "random.Random(1129) pentru tot (generare și amestec).")
+
+
+# --------------------------------------------------------------------------------------------------------------------
+# S131 (supraveghetor, 21 nov 2026): pasul `formulari4` = `formulari3` cu O SINGURĂ schimbare: r2 × 3 în compoziție
+# (chat × 5 + calcule × 4 + r2 × 3; la S129 r2 × 2). Aceleași șabloane, aceleași cote (800 la fiecare operație),
+# aceleași interdicții și scoateri pentru scurgeri; sămânța 1131. Ieșirea în dosarul NOU lucru/conversatie_chat6/.
+DOSAR6 = "lucru/conversatie_chat6"
+ANTRENARE6 = f"{DOSAR6}/antrenare.jsonl"
+SAMANTA_FORMULARI4 = 1131
+ORI_R2_6 = 3
+
+
+def randuri_amestec_s131(vechi_randuri: list[str], chat: list[dict[str, Any]],
+                         calc: list[dict[str, Any]]) -> list[str]:
+    """Rândurile amestecului S131 (înainte de amestecare): r2 × 3 + chat × 5 + calcule × 4."""
+    return randuri_amestec_s129(vechi_randuri, chat, calc, ori_r2=ORI_R2_6)
+
+
+def pas_formulari4(rad: Path, t0: float) -> int:
+    return _pas_amestec_s129(
+        rad, t0, dosar=DOSAR6, samanta=SAMANTA_FORMULARI4, ori_r2=ORI_R2_6, sufix_id="6", samanta_exemple=1311,
+        nota="S131: ca S129 (formulari3: aceleași șabloane, sociale, interdicții, înmulțirea 800), cu DOAR "
+             "perechile „din text” ale lui #651 (r2, fără scurgeri) puse de 3 ori: chat × 5 + calcule × 4 + r2 × 3; "
+             "random.Random(1131) pentru tot (generare și amestec).")
+
+
+def _pas_amestec_s129(rad: Path, t0: float, *, dosar: str, samanta: int, ori_r2: int, sufix_id: str,
+                      samanta_exemple: int, nota: str) -> int:
+    """Corpul comun al pașilor `formulari3` (S129) și `formulari4` (S131); diferă doar parametrii."""
     from module.tokenizer_bpe import TokenizerBPE
     from unelte.examen_calcule import interzise
     from unelte.examen_formulari import interzise_examen
 
-    iesire = rad / ANTRENARE5
-    if (rad / DOSAR5).exists():
-        raise SystemExit(f"{rad / DOSAR5} există deja.")
+    iesire = rad / dosar / "antrenare.jsonl"
+    if (rad / dosar).exists():
+        raise SystemExit(f"{rad / dosar} există deja.")
     ex_calc_tot = json.loads((rad / EXAMEN_CALCULE).read_text(encoding="utf-8"))
     ex_calc = ex_calc_tot["perechi"]
     ex_chat = json.loads((rad / EXAMEN).read_text(encoding="utf-8"))["perechi"]
     ex_form_tot = json.loads((rad / EXAMEN_FORMULARI).read_text(encoding="utf-8"))
     ex_form = ex_form_tot["perechi"]
-    rng = random.Random(SAMANTA_FORMULARI3)
+    rng = random.Random(samanta)
 
     # 1. șabloanele: aceleași ca la S127 (formulari2), fără cele din examene
     soc_s = scoate_sabloane_examen(formulari_calcule_s124(), sociale_s124(), ex_form_tot)[1]
@@ -1354,9 +1388,9 @@ def pas_formulari3(rad: Path, t0: float) -> int:
     s116 = citeste_jsonl(rad / PERECHI)
     chat = [p for p in s116 if p["fel"] != "chat_social"] + sociale
     for i, p in enumerate(calc):
-        p["id"] = f"calc5_{i:06d}"
+        p["id"] = f"calc{sufix_id}_{i:06d}"
     for i, p in enumerate(sociale):
-        p["id"] = f"social5_{i:06d}"
+        p["id"] = f"social{sufix_id}_{i:06d}"
 
     # 3. scurgerile: regulile S127 (S124 + bucăți de 6 cuvinte față de toate cele trei examene); se scot (și din r2)
     b6 = bucati_examene_s127([ex_form, ex_calc, ex_chat])
@@ -1386,13 +1420,13 @@ def pas_formulari3(rad: Path, t0: float) -> int:
     if 3 * trei < 2 * len(calc):
         raise SystemExit(f"adunare + scădere + împărțire sub 2/3: {dict(pe_op)}")
 
-    # 4. amestecul: chat × 5 + calcule × 4 + r2 × 2
+    # 4. amestecul: chat × 5 + calcule × 4 + r2 × ori_r2 (S129: 2, S131: 3)
     tok = TokenizerBPE.incarca(rad / "date/ws/bpe_16384.json")
     s_chat, s_calc, s_vechi = (numar_simboluri(x, tok) for x in (chat, calc, vechi))
-    randuri = randuri_amestec_s129(vechi_randuri, chat, calc)
+    randuri = randuri_amestec_s129(vechi_randuri, chat, calc, ori_r2=ori_r2)
     rng.shuffle(randuri)
-    _scrie_jsonl(rad / DOSAR5 / "perechi_calcule.jsonl", calc)
-    _scrie_jsonl(rad / DOSAR5 / "perechi_sociale.jsonl", [p for p in chat if p["fel"] == "chat_social"])
+    _scrie_jsonl(rad / dosar / "perechi_calcule.jsonl", calc)
+    _scrie_jsonl(rad / dosar / "perechi_sociale.jsonl", [p for p in chat if p["fel"] == "chat_social"])
     iesire.write_bytes(("\n".join(randuri) + "\n").encode("utf-8"))
     # verificarea finală, pe tot fișierul scris (fiecare rând citit înapoi)
     scris = [json.loads(r) for r in iesire.read_bytes().decode("utf-8").splitlines() if r.strip()]
@@ -1401,28 +1435,26 @@ def pas_formulari3(rad: Path, t0: float) -> int:
              "examen_formulari": {k: len(v) for k, v in scurgeri_formulari(scris, ex_form).items()},
              "nu_scrie_in_text_in_chat": sum(1 for p in scris if p.get("fel", "").startswith("chat") and are_nu_scrie(p))}
     total_chat = s_chat * ORI_CHAT5 + s_calc * ORI_CALCULE5
-    total_text = s_vechi * ORI_R2_5
+    total_text = s_vechi * ori_r2
     info = {
-        "nota": "S129: ca S127 (formulari2: aceleași șabloane, sociale, interdicții), cu înmulțirea 500 → 800 și "
-                "perechile „din text” ale lui #651 (r2, fără scurgeri) puse de 2 ori: chat × 5 + calcule × 4 + r2 × 2; "
-                "random.Random(1129) pentru tot (generare și amestec).",
+        "nota": nota,
         "sabloane_pe_operatie": numaratoare, "sabloane_scoase_fiindca_sunt_in_examene": scoase_sabloane,
         "perechi_chat": len(chat), "din_care_sociale": sum(p["fel"] == "chat_social" for p in chat),
         "ori_chat": ORI_CHAT5, "perechi_calcule": len(calc), "pe_operatie": dict(pe_op),
         "fractie_adunare_scadere_impartire": round(trei / len(calc), 4),
-        "ori_calcule": ORI_CALCULE5, "perechi_din_text": len(vechi), "ori_din_text": ORI_R2_5,
+        "ori_calcule": ORI_CALCULE5, "perechi_din_text": len(vechi), "ori_din_text": ori_r2,
         "perechi_total": len(randuri),
         "simboluri": {"chat_o_data": s_chat, "calcule_o_data": s_calc, "din_text_o_data": s_vechi,
                       "chat_total": total_chat, "din_text_total": total_text},
         "fractie_calcule_din_chat": round(s_calc * ORI_CALCULE5 / total_chat, 4),
         "fractie_chat_din_tot": round(total_chat / (total_chat + total_text), 4),
         "scoase_pentru_scurgeri": scoase, "verificare_finala_pe_tot_fisierul": final,
-        "exemple_random_1291": random.Random(1291).sample(calc, 20),
+        f"exemple_random_{samanta_exemple}": random.Random(samanta_exemple).sample(calc, 20),
         "sha256": {"antrenare": sha(iesire), "perechi_chat_s116": sha(rad / PERECHI), "r2": sha(rad / R2),
                    "examen_chat": sha(rad / EXAMEN), "examen_calcule": sha(rad / EXAMEN_CALCULE),
                    "examen_formulari": sha(rad / EXAMEN_FORMULARI)},
         "secunde": round(time.time() - t0)}
-    _scrie_json(rad / DOSAR5 / "antrenare_info.json", info)
+    _scrie_json(rad / dosar / "antrenare_info.json", info)
     print(json.dumps({k: info[k] for k in ("sabloane_pe_operatie", "perechi_total", "pe_operatie",
                                            "fractie_adunare_scadere_impartire", "fractie_calcule_din_chat",
                                            "fractie_chat_din_tot", "scoase_pentru_scurgeri",
@@ -1442,7 +1474,7 @@ def main(argv: list[str] | None = None) -> int:
         pass
     parser = argparse.ArgumentParser(description="S116: date de chat fără text alături + examenul de chat.")
     parser.add_argument("pas", choices=["candidati", "deoparte", "examen", "perechi", "amesteca", "calcule", "amesteca2",
-                                        "formulari", "formulari2", "formulari3"])
+                                        "formulari", "formulari2", "formulari3", "formulari4"])
     parser.add_argument("--radacina", default=str(RADACINA))
     a = parser.parse_args(argv)
     rad = Path(a.radacina)
@@ -1453,6 +1485,8 @@ def main(argv: list[str] | None = None) -> int:
         return pas_formulari2(rad, t0)
     if a.pas == "formulari3":
         return pas_formulari3(rad, t0)
+    if a.pas == "formulari4":
+        return pas_formulari4(rad, t0)
     if a.pas == "calcule":
         return pas_calcule(rad, t0)
     if a.pas == "amesteca2":

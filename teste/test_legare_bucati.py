@@ -157,7 +157,9 @@ def test_configurarile_in_uz_raman_pe_calea_veche():
                       # S127 (supraveghetor, 19 nov 2026): date noi adunare/scădere/împărțire, din #692, pe bucăți
                       "conv_w2_mare_24zcg.toml",
                       # S129 (supraveghetor, 20 nov 2026): „din text” × 2 + înmulțiri 800, din #720, pe bucăți
-                      "conv_w2_mare_24zci.toml"}
+                      "conv_w2_mare_24zci.toml",
+                      # S131 (supraveghetor, 21 nov 2026): „din text” × 3, din #736, pe bucăți
+                      "conv_w2_mare_24zcj.toml"}
     for nume in ("conv_w2_mare_24r.toml", "conv_w2_mare_24n.toml", "conv_w2.toml"):
         c = tomllib.loads((RADACINA / "config" / nume).read_text(encoding="utf-8"))
         assert c["porturi"]["date"]["modul"] == "module.date_amestec:DateAmestec"
