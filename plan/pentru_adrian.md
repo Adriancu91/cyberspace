@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 21 noiembrie 2026, 08:15 — Pauza ta la antrenări (C-156) e în coadă: S131 nu mai pornește; „pasul de aur” pe procesor
+
+- **Am preluat comanda ta C-156 (08:01):** **S131 e „în așteptare (pauză)”** — nu mai pornește la 19:00; pregătirile ei (datele, configurarea, pre-înregistrarea) rămân păstrate, ca să poată porni când ridici pauza. Nimic pe placa video la nicio oră; placa e a testelor de driver/OS. Executantul verifică și că nimic n-o pornește automat.
+- **Sarcina nouă S132 („pasul de aur”), aprobată de tine, doar procesor:** o unealtă care face 10 pași de antrenare în PyTorch și salvează tot (intrările, eroarea, schimbările pe fiecare tensor, greutățile după 1 și 10 pași, rețeta exactă) — întâi pentru un model mic de probă (2 straturi, 64), apoi pentru #513. Două rețete: una simplă (SGD), ca OS-ul să înceapă ușor, și cea cu care a învățat Kronos. Fișa o copiez în hub pentru Cyber-GPU.
+- **Raportul de dimineață e la locul lui și e bun:** noaptea fără erori, 1.556 teste trec, placa max 6.428 MB / 64 °C, verdictul S129 (rămâne #651, la 1 răspuns) confirmat. Modelul în uz rămâne #651, chat-ul pe 8787 neschimbat.
+- **Aștept de la tine:** nimic. Când vrei să reiei antrenările (S131 sau #736 în chat), scrie o comandă în hub.
+
 ## 21 noiembrie 2026, 05:15 — S131 pregătită (pe procesor); la noapte pe placă
 
 - **Executantul a făcut pașii pregătitori ai S131 la 02:45 (procesor, nimic pe placă):** date noi cu „din text” de 3 ori (166.475 rânduri, 0 suprapuneri cu examenele), configurarea `24zcj` și pre-înregistrarea. **1.556 teste trec.** Disc: ~146 GB liberi. Modelele și datele vechi neatinse (sumele identice înainte și după).
@@ -157,10 +164,3 @@
 - **La noapte, de la 19:00:** S126 — încă 4 h de învățat din #692, apoi examenele, cu aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul pe la ~01:00; îl verific la 02:15.
 - **Acum:** nu rulează nimic pe placă. Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic. (Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.)
-
-## 18 noiembrie 2026, 11:15 — Discul e curat (176,7 GB liberi); S126 mai așteaptă doar testul tău `os-305`
-
-- **REZOLVAT: locul pe disc.** Curățenia ta (C-137 + C-138) a fost făcută de centrul de comandă la 10:39: 139,7 GB șterși, **C: are acum 176,7 GB liberi** (de la 37,0). Modelele bune (#651, #680, #692 și restul din lista „păstrează”) sunt la locul lor; executantul nu mai are nimic de făcut aici.
-- **Nu rulează nimic pe placă:** ziua de azi e a ta pentru `os-305`. Nicio comandă nouă pentru Kronos în hub.
-- **S126 (încă 4 h din #692, la noapte)** pornește singur după ce centrul de comandă scrie în hub că ai terminat testul `os-305`. Dacă nu faci testul azi, S126 rămâne pentru noaptea următoare.
-- **Aștept de la tine:** nimic nou — doar testul `os-305`, când vrei. (Opțional, la workstation: `cd C:\Kronos\cyberspace` apoi `git -c core.editor=true rebase --continue`.)
