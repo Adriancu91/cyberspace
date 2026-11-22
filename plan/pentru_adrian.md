@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 22 noiembrie 2026, 08:15 — Noaptea liniștită (pauza ta); Kronos #651 a mers pentru prima dată pe placă în OS-ul nostru
+
+- **Raportul de dimineață e la locul lui și e bun:** noaptea n-a rulat nimic pe placă, exact cum ai cerut (pauza C-156); **1.563 teste trec**, 0 picate; placa rece și liberă (489 MB, 30 °C); disc C ~136 GB liberi. Nu e verdict azi — n-a fost nimic de judecat.
+- **Vestea din hub:** modelul tău în uz, **#651** (cel mare, 183 de milioane), a trecut primul test pe placa video **în OS-ul nostru** (os-343, 07:36): aceleași 16 cuvinte-bucăți ca pe procesor, **194 simboluri pe secundă**. Kronos n-a avut nimic de făcut pentru asta — fișierul lui era deja pe stick.
+- **Repornirile calculatorului** (11 ieri, 5 azi-noapte) vin cel mai probabil de la testele automate ale OS-ului pe placă (hub-ul arată rapoarte din OS la aceleași ore). La Kronos n-au stricat nimic; dacă nu sunt de la teste, spune-mi.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă — pauza rămâne până spui tu altfel.
+- **Aștept de la tine:** nimic urgent. Când ai un minut la workstation, în dosarul `C:\Kronos\cyberspace` rulează `git -c core.editor=true rebase --continue` — până atunci executantul nu poate aduce noutățile de pe GitHub (acum nu contează, fiindcă nu are treabă; va conta când reiei antrenările).
+
 ## 21 noiembrie 2026, 20:15 — Fișa de antrenare (C-162) e gata, verificată și pusă în hub
 
 - **S133 verificat de mine: trece.** Fișa spune cât de repede a învățat Kronos pe placa ta în Windows: linia lui #513 ~**39.300** simboluri/s, linia lui #651 ~**15.500** simboluri/s (cu recalculul activărilor). Am refăcut singur socotelile din cifrele din jurnal: ies la fel. Doar citit, nimic pe placă, modelele neatinse, **1.563 teste trec**.
@@ -159,11 +167,3 @@
 - **Rulează acum:** antrenarea până pe la ~03:50, apoi examenele (~1,5 h). Verdictul pe la ~05:30; îl verific la 05:15 sau 08:15. Placa liberă la 07:00 pentru Cyber Universe.
 - Nimic terminat de verificat la această trecere; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
-
-## 18 noiembrie 2026, 23:15 — S126 s-a oprit la 20:37 înainte de placă; cu „da”-ul tău (C-144) pornește acum
-
-- **Ce s-a întâmplat:** la 20:37 executantul a oprit S126 **înainte să pună ceva pe placă**: unealta de antrenare nu poate porni „din #692” pe o linie care are deja 4 ore — comanda n-ar fi antrenat nimic, fără niciun mesaj. Bine că a observat. Nimic stricat, nimic șters; 1.529 teste trec.
-- **Varianta (a), aprobată de tine (C-144, 23:10), e în coadă:** o configurare nouă, copie fidelă a celei vechi (doar numele și locul de salvare diferă), apoi 4 h din #692 + examenele, aceleași praguri (formulări nevăzute ≥ 48 %). Pornire la următoarea trecere a executantului (≤ 23:45), cel târziu 01:00.
-- **Verdictul** pe la ~05:30–06:00; îl verific la 05:15 sau 08:15. Placa e liberă la 07:00 pentru Cyber Universe (dacă examenele nu se termină, restul lor la noapte).
-- **Aștept de la tine:** nimic.
-

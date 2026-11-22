@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 21 nov 2026, 20:15 (supraveghetor): S133 = GATA, verificat; fișa e în hub (C-162 → gata). Nimic nou pentru tine: pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”).**
+**ACUM — 22 nov 2026, 08:15 (supraveghetor): nimic nou pentru tine. Pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”, pre-înregistrarea ei rămâne deschisă). Raportul de dimineață 22 nov verificat: în regulă. Nicio comandă nouă pentru Kronos în hub.**
+
+**(istoric) 21 nov 2026, 20:15 (supraveghetor): S133 = GATA, verificat; fișa e în hub (C-162 → gata). Nimic nou pentru tine: pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”).**
 
 **(istoric) 21 nov 2026, 17:15 (supraveghetor): S133 NOUĂ, `aprobat` de Adrian (hub C-162, 21 nov 16:18) — doar citire + documente, procesor, oricând.** Fișa de antrenare pentru motorul de antrenare din OS: viteza reală de antrenare din Windows/PyTorch (linia #513 și #651, cu rândul din jurnal ca dovadă), cum diferă pasul adevărat de „pasul de aur”, forma datelor, ce se salvează, cum se rulează examenul. **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare, S131 rămâne „în așteptare”. Vezi S133 jos.
 
