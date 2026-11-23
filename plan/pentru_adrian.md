@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+
+## 23 noiembrie 2026, 11:15 — Liniște la Kronos (pauza ta); în OS a rulat prima antrenare întreagă pe datele lui Kronos
+
+- **La Kronos nu s-a schimbat nimic** de la 08:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
+- **Din hub (doar de știut):** OS-ul a făcut **prima antrenare întreagă în sistemul nostru** (P6-157, pe procesor, model mic pe vocabularul lui Kronos, cu datele și loturile lui Kronos): eroarea a scăzut 5,56 → 3,95 în 30 de pași. Planul tău pentru „versiunea 1” (hardware-ul de acum la maxim, apoi Kronos antrenat cât se poate în sistemul nostru) e scris în `DECIZII.md`. Kronos n-are nimic de făcut acum.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** rămân cele de la 08:15 — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
+
 ## 23 noiembrie 2026, 08:15 — PROBLEMĂ: conectarea lui Claude Code pe workstation expiră între 29 nov și 2 dec
 
 - **Ce trebuie să faci (până pe 29 noiembrie):** când ești la workstation, într-o fereastră de comandă: `claude auth login` (sau, pentru rulările automate fără om de față, `claude setup-token`). Altfel, după data aceea executantul și raportul de dimineață de pe workstation nu mai pot rula. Avertismentul a apărut în toate rulările automate de azi-noapte (raportul de dimineață, 06:49).
@@ -158,13 +166,3 @@
 - **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Testul `os-308` e doar ziua (08:00–18:00), deci nu se calcă.
 - Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
-
-## 19 noiembrie 2026, 08:15 — S126 verificat: rămâne #651; la noapte încerc date noi, nu mai multe ore
-
-- **S126 verificat de mine: rămâne #651, corect.** Modelul nou #704 a luat la întrebările formulate altfel **42,0 %** (pragul: 48,0 %; #692 avea 45,0 %). Restul a trecut (chat 49 față de 25 la #651, calcule 70 ≥ 61, româna și „din text” nestricate). Cele 4 ore în plus pe aceleași date n-au adus nimic — e un rezultat negativ clar și util.
-- **Noaptea a mers curat:** fără erori, placa max 6.563 MB / 65 °C, raportul de dimineață e la locul lui, **1.530 teste trec**, discul are ~160–170 GB liberi.
-- **Azi ziua:** nimic de la Kronos pe placă — workstation-ul e pentru testul tău `os-307` (#513 pe placă) și ciclul automat.
-- **Am pus în coadă S127 (aprobată de mine, în granițe), la noapte:** date noi făcute de program pentru ce lipsește exact — adunarea, scăderea și împărțirea formulate altfel (#704 are doar 3 din 78 aici) — de cel puțin 3 ori mai multe feluri de a le formula, verificate să nu se suprapună cu examenul; apoi 4 h din #692 și examenele, cu aceleași praguri. Verdictul pe la ~03:00–05:00.
-- **Aștept de la tine:** nimic.
-
-- (executant, 19 nov 05:59) **S126 gata — RĂMÂNE #651:** #704 la formulări nevăzute 42,0 % (prag 48 %; #692 avea 45,0 %); restul pragurilor trec (chat 49, calcule 70, „din text” 219 ≥ 218). A doua rundă pe aceleași date n-a mai adus nimic. Interfața neschimbată. Raport: `docs/rapoarte/2026-11-19_0559_S126_formulari_b.md`.
