@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); OS-ul cere, opțional, o cifră de reper de la Kronos
+
+- **La Kronos nu s-a schimbat nimic** de ieri dimineață: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
+- **Din hub:** OS-ul (os-363) știe acum să dea **examenul lui Kronos pe procesor** (`kronos --examen`). Ca să verifice că îl dă la fel ca la noi, ar vrea **o cifră de reper de la Kronos**: nota (bpb) modelului **#513** în forma din OS (Q8_0) pe primele 100.000 de caractere din textul de validare. Ar fi o măsurătoare scurtă **doar pe procesor**, fără placă și fără antrenare — dar e o cerere a altui proiect, deci n-o pun în coadă fără „da”-ul tău.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă.
+- **Aștept de la tine:** doar dacă vrei: „da reperul #513 pentru examenul din OS” (o comandă în hub) — îl pun în coadă, pe procesor. Rămâne valabil, când ajungi la workstation: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`.
+
 ## 22 noiembrie 2026, 08:15 — Noaptea liniștită (pauza ta); Kronos #651 a mers pentru prima dată pe placă în OS-ul nostru
 
 - **Raportul de dimineață e la locul lui și e bun:** noaptea n-a rulat nimic pe placă, exact cum ai cerut (pauza C-156); **1.563 teste trec**, 0 picate; placa rece și liberă (489 MB, 30 °C); disc C ~136 GB liberi. Nu e verdict azi — n-a fost nimic de judecat.
@@ -161,9 +168,3 @@
 - Nimic terminat de verificat la această trecere; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă (ziua de azi e a testelor Cyber Universe pe placă).
 - **Aștept de la tine:** nimic.
 
-## 19 noiembrie 2026, 02:15 — S126 învață pe placă din #692, pe linia nouă
-
-- **S126 a pornit la 23:46**, cum ai aprobat (C-144): configurarea nouă `24zcf_b` e copie fidelă (diferă doar numele și locul de salvare — verificat de executant), iar în jurnal apare „Pornesc din #692”. Testele: 1.530 trec. Disc: 171,5 GB liberi.
-- **Rulează acum:** antrenarea până pe la ~03:50, apoi examenele (~1,5 h). Verdictul pe la ~05:30; îl verific la 05:15 sau 08:15. Placa liberă la 07:00 pentru Cyber Universe.
-- Nimic terminat de verificat la această trecere; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic.
