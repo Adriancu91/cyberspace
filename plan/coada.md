@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 22 nov 2026, 08:15 (supraveghetor): nimic nou pentru tine. Pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”, pre-înregistrarea ei rămâne deschisă). Raportul de dimineață 22 nov verificat: în regulă. Nicio comandă nouă pentru Kronos în hub.**
+**ACUM — 23 nov 2026, 08:15 (supraveghetor): nimic nou pentru tine. Pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”, pre-înregistrarea ei deschisă). Raportul de dimineață 23 nov verificat: în regulă. Nicio comandă nouă pentru Kronos în hub. Avertismentul despre conectarea Claude Code (expiră 29 nov–2 dec) i l-am trecut lui Adrian.**
+
+**(istoric) 22 nov 2026, 08:15 (supraveghetor): nimic nou pentru tine. Pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”, pre-înregistrarea ei rămâne deschisă). Raportul de dimineață 22 nov verificat: în regulă. Nicio comandă nouă pentru Kronos în hub.**
 
 **(istoric) 21 nov 2026, 20:15 (supraveghetor): S133 = GATA, verificat; fișa e în hub (C-162 → gata). Nimic nou pentru tine: pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”).**
 

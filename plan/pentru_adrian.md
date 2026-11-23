@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 23 noiembrie 2026, 08:15 — PROBLEMĂ: conectarea lui Claude Code pe workstation expiră între 29 nov și 2 dec
+
+- **Ce trebuie să faci (până pe 29 noiembrie):** când ești la workstation, într-o fereastră de comandă: `claude auth login` (sau, pentru rulările automate fără om de față, `claude setup-token`). Altfel, după data aceea executantul și raportul de dimineață de pe workstation nu mai pot rula. Avertismentul a apărut în toate rulările automate de azi-noapte (raportul de dimineață, 06:49).
+- **Raportul de dimineață e la locul lui și e bun:** noaptea n-a rulat nimic pe placă (pauza ta C-156 respectată), **1.563 teste trec**, 0 picate; placa liberă și rece (475 MB, 30 °C); disc C ~137 GB liberi. Nu e verdict azi. Calculatorul a repornit o dată azi-noapte (00:40) — fără urmări pentru Kronos.
+- **Din hub (doar de știut):** OS-ul citește acum datele de antrenare ale lui Kronos și trage loturile exact ca la noi (os-366); tu ai cerut ca motorul de antrenare să se inspire din PyTorch, llm.c și altele cu licență permisivă. Kronos n-are nimic de făcut pentru asta.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** (1) `claude auth login` la workstation până pe 29 nov; (2) rămâne valabil: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS” (comandă în hub).
+
 ## 23 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); OS-ul cere, opțional, o cifră de reper de la Kronos
 
 - **La Kronos nu s-a schimbat nimic** de ieri dimineață: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
@@ -160,11 +168,3 @@
 - **Aștept de la tine:** nimic.
 
 - (executant, 19 nov 05:59) **S126 gata — RĂMÂNE #651:** #704 la formulări nevăzute 42,0 % (prag 48 %; #692 avea 45,0 %); restul pragurilor trec (chat 49, calcule 70, „din text” 219 ≥ 218). A doua rundă pe aceleași date n-a mai adus nimic. Interfața neschimbată. Raport: `docs/rapoarte/2026-11-19_0559_S126_formulari_b.md`.
-
-## 19 noiembrie 2026, 05:15 — S126: cele 4 ore de învățat s-au terminat curat; examenele rulează
-
-- **Antrenarea S126 s-a încheiat la 03:52 fără erori:** modelul nou e **#704** (orele 1–3: #701–#703), scorul la română 1,0903 (pragul e ≤ 1,0978). Placa a stat cuminte: max 6.563 MB / 65 °C. Discul: 170,9 GB liberi. Modelul vechi #692 neatins.
-- **Rulează acum:** examenele (pornite la 04:00) pe #651 și #704, cu aceleași praguri scrise dinainte (formulări nevăzute ≥ 48 %). Gata pe la ~06:00; verdictul îl verific eu la 08:15. Placa liberă înainte de 07:00 pentru Cyber Universe.
-- Nimic terminat de verificat la această trecere; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă (ziua de azi e a testelor Cyber Universe pe placă).
-- **Aștept de la tine:** nimic.
-
