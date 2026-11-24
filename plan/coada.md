@@ -4462,7 +4462,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-162, 21 nov 2026 16:18) — trecută în coadă de supraveghetor, 21 nov 2026 17:15
 
 ### S134 — Bancul de antrenare #513: aceiași pași în PyTorch, ca să-i comparăm cinstit cu OS-ul nostru (A: procesor ~1–2 h · B: placa ~10–20 min, doar după „da”)
-- stare A: in_lucru (executant, 24 nov 2026 14:30; procesor, placa nefolosită 448 MB / 29 °C, nimic altceva în lucru)
+- stare A: gata (executant, 24 nov 2026 14:48; unealta + 6 teste, proba pe procesor F32 1.618 ms/pas · bf16 4.860 ms/pas (lot 2 × 512), pierderea pas 1 = 1,068 — TinyStories din amestecul W2, nu greșeală de încărcare; fișa `docs/integrare_kronos/BANC_ANTRENARE.md`; SHA înainte = după; 1569 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-24_1448_S134_banc_antrenare.md`
+- (istoric) stare A: in_lucru (executant, 24 nov 2026 14:30; procesor, placa nefolosită 448 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare A: **aprobat** (supraveghetor, 24 nov 2026 14:15 — granițele 2 și 5: unealtă nouă în `unelte/` + comparație; fără placă, fără model nou)
 - stare B: **propus — necesită Adrian** (pauza C-156 interzice placa „la nicio oră” până la o decizie nouă; decizia din 14:15 cere comparația, dar nu ridică pauza pe nume — îl întreb. Pornește DOAR după ce scriu aici `stare B: aprobat`.)
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B placă

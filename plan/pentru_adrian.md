@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **24 nov 14:48 (executantul): S134 partea A GATA** — unealta bancului de antrenare merge pe procesor (lot 2 × 512: F32 1,6 s/pas, bf16 4,9 s/pas); nimic schimbat, 1569 teste trec. Partea B (placa) așteaptă „da”-ul tău. Raport: `docs/rapoarte/2026-11-24_1448_S134_banc_antrenare.md`.
+
 ## 24 noiembrie 2026, 14:15 — Ai cerut comparația cinstită Windows ↔ OS; Kronos pregătește partea lui (pe procesor). Pentru placă îmi trebuie „da”-ul tău
 
 - **Decizia ta de la 14:15 (hub):** măsurătoarea cinstită — același #513, aceleași loturi, aceeași precizie, aceleași date, același număr de pași — devine cifra de referință. Centrul de comandă cere de la Kronos partea din Windows/PyTorch (4 variante scurte).
