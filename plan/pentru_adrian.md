@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 08:15 — Raportul de dimineață e bun; în OS, pasul de antrenare a devenit de ~89 de ori mai rapid
+
+- **Raportul de dimineață (06:49) e la locul lui și e bun:** noaptea n-a rulat nimic pe placă (pauza ta C-156 respectată), **1.563 teste trec**, 0 picate; placa liberă și rece (460 MB, 27 °C); disc C ~139 GB liberi. Nu e verdict azi. Calculatorul a repornit de 6 ori din ieri dimineață (ultima la 05:24), cel mai probabil din testele OS-ului pe placă — la Kronos n-a stricat nimic.
+- **Din hub (doar de știut):** OS-ul a tăiat pasul de antrenare al modelului mic de la ~370 ms la **4,15 ms** (os-390, 07:37 — ~15.400 simboluri/s, aceleași numere ca verificarea pe procesor). Comparația corectă cu Kronos din Windows (~39.300 simb/s) vine abia cu un pas al lui #513 pe placă. Kronos n-are nimic de făcut.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov** (mai sunt 5 zile); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace` (actualizarea automată a picat iar azi la 06:40 din cauza asta); (3) opțional: „da reperul #513 pentru examenul din OS”.
+
 ## 24 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); în OS, memoria antrenării stă acum pe placă
 
 - **La Kronos nu s-a schimbat nimic** de la 02:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
@@ -156,11 +163,4 @@
 - **Rulează acum:** S127 — cele 4 ore de învățat se termină pe la ~23:20, apoi examenele (~1,75 h). Ultimul semn de la executant: 19:21 (normal, cât învață nu scrie). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
 - **C-149 (prioritatea pe driver și OS):** am scris regula în coadă și în regulile cascadei — **ziua (08:00–18:00) Kronos nu mai pune nimic pe placă**, noaptea antrenează în continuare. Nimic altceva nu se schimbă la Kronos.
 - **C-150 (Kronos cel mare, #651, pentru placa video):** sarcina **S128** e în coadă, aprobată de tine — exportul lui #651 în formatul plăcii + fișa lui (`MODEL_651.md`), doar pe procesor, **mâine de la 07:00**, după S127. Chat-ul rămâne pe #651, fișa lui #513 rămâne neschimbată; fișa nouă o copiez eu în hub.
-- **Aștept de la tine:** nimic.
-
-## 19 noiembrie 2026, 20:15 — S127 învață pe placă de la 19:16, cum era planificat
-
-- **Pașii pregătitori S127 gata (19:16):** date noi pentru adunare / scădere / împărțire formulate altfel — de la 47/45/44 feluri de formulare la **338/331/282**; verificate: **0 suprapuneri** cu examenul. **1.539 teste trec.** Disc: 165,6 GB liberi.
-- **Rulează acum:** 4 h de învățat din #692 (jurnalul confirmă „Pornesc din #692”); placa 5.337 MB / 63 °C, în limite. Gata pe la ~23:20, apoi examenele (~1,75 h), aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
-- Nimic terminat de verificat; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă (placa e ocupată toată noaptea).
 - **Aștept de la tine:** nimic.
