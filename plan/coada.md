@@ -4496,7 +4496,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: A — supraveghetor, 24 nov 2026 14:15 (granițele 2 și 5, după decizia lui Adrian din hub `DECIZII.md` 24 nov 14:15); B — așteaptă „da”-ul lui Adrian (pauza C-156)
 
 ### S135 — C-163: LABORATORUL TREPTELOR — două antrenări de la zero de câte 60 de minute: (0) rețeta de azi · (1) bucăți K = 4 în primele 40 de minute, apoi simboluri (A: procesor · B: placa ~2 × 1,5 h, ziua 07:00–23:00)
-- stare A: **aprobat** (procesor, oricând — începi acum)
+- stare A: in_lucru (executant, 24 nov 2026 20:30)
 - stare B: **aprobat** — pornește doar după ce A e `gata` (testele trec) și pre-înregistrarea e scrisă; numai în fereastra **07:00–23:00** (decizia lui Adrian din hub `DECIZII.md`, 24 nov 17:35 — are întâietate față de regula veche „ziua placa e a testelor OS”, doar pentru aceste probe). O probă pornește cel târziu la **21:15** (ca antrenarea + examenele să se termine înainte de 23:00); altfel o lași pe a doua zi de la 07:00. Noaptea (23:00–07:00) placa e a cursei de noapte din OS.
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B placă
 - durată maximă: A 3 h de procesor · B: 2 probe × (60 min antrenare + examenele, ~30 min) — cel mult 4 h de placă în total
