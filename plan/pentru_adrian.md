@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 14:15 — Ai cerut comparația cinstită Windows ↔ OS; Kronos pregătește partea lui (pe procesor). Pentru placă îmi trebuie „da”-ul tău
+
+- **Decizia ta de la 14:15 (hub):** măsurătoarea cinstită — același #513, aceleași loturi, aceeași precizie, aceleași date, același număr de pași — devine cifra de referință. Centrul de comandă cere de la Kronos partea din Windows/PyTorch (4 variante scurte).
+- **Am pus în coadă S134 „bancul de antrenare”.** Partea A, **aprobată de mine** (doar procesor, fără placă, niciun model nou): executantul face unealta care rulează aceiași pași ca OS-ul, pe datele reale, și o probează pe procesor. Partea B (**placa, ~10–20 de minute în total**, 4 variante × 20 de pași, nimic salvat) **așteaptă „da”-ul tău**, pentru că pauza ta C-156 spune „nimic pe placă, la nicio oră” și decizia de azi nu o ridică pe nume.
+- **Din hub:** oracolul pe procesor l-a făcut Cyber-GPU (placa = oracolul în pașii 1–9 → pierderea care urca **nu era o greșeală de calcul**); am retras propunerea mea de la 11:15. Ai mutat placa în slotul x16: legătura RAM↔placă s-a dublat (12,4 / 13,5 GB/s).
+- **Rulează acum:** nimic la Kronos. Executantul ia S134 partea A la următoarea lui trecere.
+- **Aștept de la tine:** (1) dacă vrei cifrele din Windows: o comandă în hub „**da bancul Kronos pe placă (S134 B)**” — rulează doar când placa nu e în testele OS; (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`.
+
 ## 24 noiembrie 2026, 11:15 — Liniște la Kronos (pauza ta); în OS, #513 a făcut primii pași de antrenare pe placă
 
 - **La Kronos nu s-a schimbat nimic** de la 08:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
@@ -156,12 +164,3 @@
 
 - **20 nov 07:44 (executantul) — S128 gata:** #651 exportat pentru placa OS-ului, `lucru/export/kronos_651_q8_0.kgr`, 206.898.464 octeți, SHA-256 `2edf75ac…5ea0bf2`; aceleași simboluri ca PyTorch (dif. max 3,1e-5, marja minimă 0,051); față de #513 diferă doar mărimile (24 de straturi); 1.539 teste trec. Raport `docs/rapoarte/2026-11-20_0744_S128_export_651.md`.
 
-## 20 noiembrie 2026, 02:15 — S127 verificat: rămâne #651 (46 % din 48 % necesari); la noapte S129
-
-- **S127 verificat de mine: rămâne #651, corect.** Modelul nou #720 a luat la întrebările formulate altfel **46,0 %** (pragul: 48,0 %; îi lipsesc 4 răspunsuri din 200). E cel mai bun de până acum la chat (50), calcule (80) și formulări, iar adunarea/scăderea/împărțirea formulate altfel s-au dublat (4 → 8 din 78). Dar „din text” a coborât exact la prag (218) și înmulțirea a scăzut (18 → 13 din 42).
-- **Noaptea a mers curat:** fără erori, placa max 6.690 MB / 64 °C, **1.539 teste trec**, discul 165 GB liberi, modelele vechi neatinse. Placa e liberă de la 01:15; nu mai pun nimic pe ea până la 07:00 (nu ajunge timpul).
-- **Azi de la 07:00:** S128 (C-150, exportul lui #651 pentru placa OS-ului, doar procesor), cum ai aprobat.
-- **Am pus în coadă S129 (aprobată de mine, în granițe), la noapte 20 → 21 nov:** încă o rundă din #720, cu „din text” de 2 ori mai des și mai multe înmulțiri în date — exact cele două lucruri care au scăzut —, aceleași praguri. Dacă nici așa nu trece, linia e pe platou și îți propun o decizie.
-- **Aștept de la tine:** nimic.
-
-- (executant, 20 nov 01:30) **S127 gata — RĂMÂNE #651:** #720 la formulări nevăzute 46,0 % (prag 48 %; lipsesc 4 răspunsuri din 200; #692 avea 45,0 %). Datele noi au dublat adunarea + scăderea + împărțirea formulate altfel (4 → 8 din 78); chat 50 și calcule 80 sunt cele mai bune de până acum, dar „din text” 218 = exact pragul. Interfața neschimbată; placa liberă de la 01:15. Raport: `docs/rapoarte/2026-11-20_0130_S127_formulari_c.md`.
