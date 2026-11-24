@@ -2,6 +2,15 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 23:15 — Piesa „pe bucăți” și fișa Kronos v2 sunt gata (verificate); „harta textului” a intrat în coadă ca a treia probă
+
+- **S135 partea A — GATA, verificat:** piesa care antrenează „pe bucăți de 4” și unealta laboratorului merg pe procesor; **1.581 teste trec**, amprentele modelelor și ale examenului identice. **Mâine de la 07:00** executantul rulează pe placă cele două probe de câte o oră: (0) rețeta de azi și (1) pe bucăți.
+- **S136 — GATA, verificat:** fișa „calitate” pentru Kronos v2 — riscul e mic la toate piesele ieftine (ReLU², fără deplasări, RMS); o singură capcană (RMS fără γ cu capul nostru legat → γ păstrat la final). Am copiat coloanele în fișa comună din hub.
+- **„Da harta” de la 21:39 → S137 în coadă:** a treia probă de o oră, după cele două de mâine: modelul ia mai des bucățile de text din care mai are de învățat (scor = pierderea de acum minus cea a lui #513, ca să nu fugă după „zgomot”). Câștigă doar dacă nota de română e mai bună cu cel puțin 0,010 și martorul nu se strică.
+- **Propus, nu pornit (S138):** probele v2 din fișă — (0′) aceeași rețetă cu altă sămânță (ne spune cât e „zgomotul”), (2) piesele ieftine, (3) + fără γ; ~5 h de placă.
+- **Rulează acum:** nimic la Kronos; noaptea placa e a cursei OS-ului.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „**da (0′)**” sau „**da probele v2 (S138)**” în hub; „da bancul Kronos pe placă (S134 B)” rămâne opțional.
+
 - **24 nov 21:39 (executant) — S136 GATA:** fișa calității pentru „Kronos croit pe placă” (`docs/integrare_kronos/KRONOS_V2_CALITATE.md`). Riscul e mic la ReLU², fără deplasări și RMS; la „RMS fără γ” păstrăm γ la final (capul nostru e legat). Propun 3 probe de o oră după S135 (~5 h de placă), doar cu „da”-ul tău. 1.581 teste trec. Raport: `docs/rapoarte/2026-11-24_2139_S136_kronos_v2_calitate.md`.
 - **24 nov 21:24 (executant) — S135 A GATA:** piesa „pe bucăți de 4” și unealta laboratorului merg pe procesor; 1.581 teste trec, amprentele neschimbate. Cele două probe de o oră pe placă: mâine de la 07:00. Raport: `docs/rapoarte/2026-11-24_2124_S135_laborator_trepte.md`.
 
@@ -156,12 +165,4 @@
 - **Când:** la prima trecere a executantului (excepția ta de la „nimic pe placă ziua”), pornire cel târziu 18:15, gata până la 18:50. Tabelul îl copiez în hub (`rezultate/2026-11-20-workstation-kronos513-windows-viteza/`) la trecerea următoare.
 - **La noapte, neschimbat:** S129 pe placă de la 19:00 (4 h din #720, apoi examenele); verdictul mâine dimineață.
 - Din hub: `os-322` a mers (placa singură 382 simb/s, cu driverul 94,8 > procesor 72,7); `os-323` are tabloul de bord al plăcii (doar în simulare).
-- **Aștept de la tine:** nimic.
-
-## 20 noiembrie 2026, 14:15 — S129 gata de pornit la noapte; ziua liniștită
-
-- **Executantul a făcut pasul 3 din S129 la 11:39 (procesor):** configurarea liniei noi `24zci` (copie a celei vechi, schimbate doar numele, calea și datele), pre-înregistrarea cu aceleași praguri (formulări ≥ 48 %), un test nou. **1.546 teste trec.** Disc: 160 GB liberi după calcul (minimul cerut: 30). Nimic vechi atins.
-- **Rulează acum:** nimic la Kronos (ziua placa e pentru testele OS, C-149). Liniștea de după 11:39 e normală.
-- **La noapte:** S129 pe placă de la 19:00 (pornire cel târziu 00:30), 4 h din #720, apoi examenele; placa liberă la 07:00. Nicio rezervare de noapte în hub. Verdictul mâine dimineață.
-- Din hub: OS-ul are Release-ul `os-322` (viteza maximă a plăcii, doar în ciclul de test). Nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
