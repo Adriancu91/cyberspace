@@ -2,6 +2,7 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **24 nov 21:39 (executant) — S136 GATA:** fișa calității pentru „Kronos croit pe placă” (`docs/integrare_kronos/KRONOS_V2_CALITATE.md`). Riscul e mic la ReLU², fără deplasări și RMS; la „RMS fără γ” păstrăm γ la final (capul nostru e legat). Propun 3 probe de o oră după S135 (~5 h de placă), doar cu „da”-ul tău. 1.581 teste trec. Raport: `docs/rapoarte/2026-11-24_2139_S136_kronos_v2_calitate.md`.
 - **24 nov 21:24 (executant) — S135 A GATA:** piesa „pe bucăți de 4” și unealta laboratorului merg pe procesor; 1.581 teste trec, amprentele neschimbate. Cele două probe de o oră pe placă: mâine de la 07:00. Raport: `docs/rapoarte/2026-11-24_2124_S135_laborator_trepte.md`.
 
 ## 24 noiembrie 2026, 20:15 — „Da”-ul tău de la 17:35 a intrat în coadă: laboratorul treptelor (două probe de o oră) și fișa „Kronos croit pe placă”

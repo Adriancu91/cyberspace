@@ -4532,7 +4532,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-163, 24 nov 2026 17:35) — trecută în coadă de supraveghetor, 24 nov 2026 20:15
 
 ### S136 — C-164: coloanele „calitate” din fișa „Kronos croit pe placă” (doar citire + document, procesor, ~1–2 h)
-- stare: in_lucru (executant, 24 nov 2026 21:30; procesor, S135 A gata, S135 B nu poate porni după 21:15; placa liberă 465 MB / 29 °C)
+- stare: gata (executant, 24 nov 2026 21:39; fișa `docs/integrare_kronos/KRONOS_V2_CALITATE.md`; recomand probele (0′) zgomot, (2) piesele ieftine, (3) + fără γ (γ păstrat la final); 1581 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-24_2139_S136_kronos_v2_calitate.md`
+- (istoric) stare: in_lucru (executant, 24 nov 2026 21:30; procesor, S135 A gata, S135 B nu poate porni după 21:15; placa liberă 465 MB / 29 °C)
 - (istoric) stare: **aprobat** (procesor, oricând; după S135 A — S135 are întâietate)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; nimic pe placă, nicio antrenare)
 - durată maximă: 2 h
