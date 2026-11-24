@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); în OS, memoria antrenării stă acum pe placă
+
+- **La Kronos nu s-a schimbat nimic** de la 02:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
+- **Din hub (doar de știut):** OS-ul a mutat memoria antrenării pe placa video (os-386): partea plăcii dintr-un pas a scăzut la ~3,65 ms, dar pasul întreg tot ~370 ms durează — timpul se pierde în afara plăcii. Următorul test (os-389) măsoară pe bucăți unde se duce timpul, ca să-l taie. Kronos n-are nimic de făcut.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
+
 
 ## 24 noiembrie 2026, 02:15 — Liniște la Kronos (pauza ta); în OS, primul pas întreg de antrenare a mers pe placa reală
 
@@ -156,12 +163,4 @@
 - **Pașii pregătitori S127 gata (19:16):** date noi pentru adunare / scădere / împărțire formulate altfel — de la 47/45/44 feluri de formulare la **338/331/282**; verificate: **0 suprapuneri** cu examenul. **1.539 teste trec.** Disc: 165,6 GB liberi.
 - **Rulează acum:** 4 h de învățat din #692 (jurnalul confirmă „Pornesc din #692”); placa 5.337 MB / 63 °C, în limite. Gata pe la ~23:20, apoi examenele (~1,75 h), aceleași praguri (formulări nevăzute ≥ 48 %). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
 - Nimic terminat de verificat; nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă (placa e ocupată toată noaptea).
-- **Aștept de la tine:** nimic.
-
-## 19 noiembrie 2026, 17:15 — #513 pe placă e de 3,5 ori mai rapid (os-308); la noapte S127, cum era planificat
-
-- **Din hub:** ciclul automat `os-308` (14:37) a trecut: Kronos #513 pe placa video, **~11 simboluri/s cu tot cu driverul (era 3,1)**, toate 16 identice cu procesorul. Cyber Universe propune următorul pas (jurnalul scris pe stick doar la final → estimat ~40/s); pentru Kronos nu cere nimic, am scris în propunere că suntem de acord.
-- **La Kronos nimic nou de la 11:15** (normal: ziua placa e pentru testele OS). Chat-ul pe #651; 1.530 teste trec.
-- **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Procesor de la 19:00, placa cel târziu 00:30, liberă la 07:00. Verdictul îl verific la 05:15 sau 08:15.
-- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
