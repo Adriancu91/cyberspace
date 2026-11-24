@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 24 nov 2026, 14:15 (supraveghetor): S134 NOUĂ — „bancul de antrenare” pentru comparația cinstită Windows ↔ OS (decizia lui Adrian din hub `DECIZII.md`, 24 nov 14:15). DOAR partea A e `aprobat` (procesor, oricând, `CUDA_VISIBLE_DEVICES=-1`): unealta + proba pe procesor. Partea B (placa, câteva minute) e `propus — necesită Adrian`: pauza C-156 („nimic pe placă, la nicio oră”) rămâne până spune el explicit. S131 rămâne „în așteptare”. Vezi S134 jos.**
+**ACUM — 24 nov 2026, 17:15 (supraveghetor): S134 partea A = GATA, verificat (unealta + 6 teste, 1569 trec; bf16 vs F32 la pasul 1: 0,002 % ≤ 2 %; SHA înainte = după; pierderea 1,07 explicată — TinyStories, nu greșeală). Fișa `BANC_ANTRENARE.md` copiată de mine în hub. Partea B rămâne `propus — necesită Adrian` (pauza C-156): NU porni nimic pe placă. Nimic nou de făcut pentru tine.**
+
+**(istoric) 24 nov 2026, 14:15 (supraveghetor): S134 NOUĂ — „bancul de antrenare” pentru comparația cinstită Windows ↔ OS (decizia lui Adrian din hub `DECIZII.md`, 24 nov 14:15). DOAR partea A e `aprobat` (procesor, oricând, `CUDA_VISIBLE_DEVICES=-1`): unealta + proba pe procesor. Partea B (placa, câteva minute) e `propus — necesită Adrian`: pauza C-156 („nimic pe placă, la nicio oră”) rămâne până spune el explicit. S131 rămâne „în așteptare”. Vezi S134 jos.**
 
 **(istoric) 24 nov 2026, 08:15 (supraveghetor): nimic nou pentru tine. Pauza C-156 rămâne (nimic pe placă, nicio antrenare, S131 „în așteptare”, pre-înregistrarea ei deschisă). Raportul de dimineață 24 nov verificat: în regulă (1.563 teste). Nicio comandă nouă pentru Kronos în hub.**
 
@@ -4463,6 +4465,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S134 — Bancul de antrenare #513: aceiași pași în PyTorch, ca să-i comparăm cinstit cu OS-ul nostru (A: procesor ~1–2 h · B: placa ~10–20 min, doar după „da”)
 - stare A: gata (executant, 24 nov 2026 14:48; unealta + 6 teste, proba pe procesor F32 1.618 ms/pas · bf16 4.860 ms/pas (lot 2 × 512), pierderea pas 1 = 1,068 — TinyStories din amestecul W2, nu greșeală de încărcare; fișa `docs/integrare_kronos/BANC_ANTRENARE.md`; SHA înainte = după; 1569 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-24_1448_S134_banc_antrenare.md`
+- verificat (supraveghetor, 24 nov 2026 17:15): A trece — unealta + 6 teste, 1563 → 1569 trec; (b) bf16 vs F32 pas 1 = 0,002 % ≤ 2 %; (d) SHA 21 fișiere înainte = după; pierderea pas 1 = 1,068 ≠ ~9,7 (modelul încărcat bine), sub „3–4” pentru că ferestrele sunt TinyStories (medie pe 32 de ferestre 1,66) — acceptat, scris în fișă. Fișa copiată în hub: `integrare/kronos/BANC_ANTRENARE.md`.
 - (istoric) stare A: in_lucru (executant, 24 nov 2026 14:30; procesor, placa nefolosită 448 MB / 29 °C, nimic altceva în lucru)
 - (istoric) stare A: **aprobat** (supraveghetor, 24 nov 2026 14:15 — granițele 2 și 5: unealtă nouă în `unelte/` + comparație; fără placă, fără model nou)
 - stare B: **propus — necesită Adrian** (pauza C-156 interzice placa „la nicio oră” până la o decizie nouă; decizia din 14:15 cere comparația, dar nu ridică pauza pe nume — îl întreb. Pornește DOAR după ce scriu aici `stare B: aprobat`.)

@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 17:15 — Bancul de antrenare merge (partea pe procesor, verificată); centrul a propus două idei mari de viteză
+
+- **S134 partea A — GATA, verificat de mine:** unealta care face aceiași pași de antrenare ca OS-ul merge pe procesor; 1.569 teste trec, nimic din modele sau examen nu s-a schimbat (amprentele identice). Am copiat fișa ei în hub (`integrare/kronos/BANC_ANTRENARE.md`), ca OS-ul să tragă exact aceleași loturi.
+- **Din hub:** OS-ul a coborât pasul #513 pe placă de la 1.124 la **778 ms** (~1.315 simboluri/s; Windows ~39.300) și dă aceleași numere ca procesorul. Centrul a scris, la cererea ta, două propuneri: „trei piste peste Windows” și „antrenarea în trepte”. Am scris poziția Kronos în ambele (pe scurt: se pot încerca în Windows ca laborator, fără `kronos/` la prima; atenție, Muon a stricat deja o dată un model pornit din AdamW — S99).
+- **Rulează acum:** nimic la Kronos (pauza ta C-156). Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** (1) dacă vrei cifrele din Windows: în hub „**da bancul Kronos pe placă (S134 B)**” (~15 min, nimic salvat); (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional: „da” / „nu” la cele două propuneri ale centrului.
+
 - **24 nov 14:48 (executantul): S134 partea A GATA** — unealta bancului de antrenare merge pe procesor (lot 2 × 512: F32 1,6 s/pas, bf16 4,9 s/pas); nimic schimbat, 1569 teste trec. Partea B (placa) așteaptă „da”-ul tău. Raport: `docs/rapoarte/2026-11-24_1448_S134_banc_antrenare.md`.
 
 ## 24 noiembrie 2026, 14:15 — Ai cerut comparația cinstită Windows ↔ OS; Kronos pregătește partea lui (pe procesor). Pentru placă îmi trebuie „da”-ul tău
@@ -155,14 +162,3 @@
 - **Urmează:** configurarea și pre-înregistrarea acum (procesor), apoi la noapte 4 h pe placă din #720 (de la 19:00, pornire cel târziu 00:30, liberă la 07:00), aceleași praguri (formulări ≥ 48 %). Verdictul mâine dimineață.
 - Din hub: Kronos #651 a fost pus pe stick de centrul de comandă (suma identică), încă nerulat în OS. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
-
-## 20 noiembrie 2026, 08:15 — S128 verificat: Kronos cel mare (#651) e gata pentru placa OS-ului; la noapte S129
-
-- **S128 (C-150) verificat de mine: trece.** #651 e exportat în formatul plăcii: `kronos_651_q8_0.kgr`, 206.898.464 octeți (~197 MB), SHA-256 `2edf75ac…5ea0bf2`, în `C:\Kronos\cyberspace\lucru\export\`. Dă aceleași simboluri ca PyTorch pe toate cele 3 texte de control; cea mai mică marjă 0,051 (de 10 ori peste limita de risc). Față de #513 diferă doar mărimea (24 de straturi în loc de 12). #651 știe capitala („orașul București.”).
-- **Am copiat fișa în hub** (`integrare/kronos/MODEL_651.md`) și am trecut C-150 pe „gata”. Fișierul .kgr îl copiază centrul de comandă pe stick, verificând suma.
-- **Noaptea a mers curat** (raportul de dimineață e la locul lui, 1.539 teste trec, disc ~154–165 GB liberi). **Rulează acum:** S129, pașii pe procesor (datele noi); pe placă doar de la 19:00.
-- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic.
-
-- **20 nov 07:44 (executantul) — S128 gata:** #651 exportat pentru placa OS-ului, `lucru/export/kronos_651_q8_0.kgr`, 206.898.464 octeți, SHA-256 `2edf75ac…5ea0bf2`; aceleași simboluri ca PyTorch (dif. max 3,1e-5, marja minimă 0,051); față de #513 diferă doar mărimile (24 de straturi); 1.539 teste trec. Raport `docs/rapoarte/2026-11-20_0744_S128_export_651.md`.
-
