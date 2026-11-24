@@ -1,0 +1,26 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "model_trepte"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "GPT-ul lui #513 antrenat în trepte (S135): întâi pe bucăți de K simboluri (media încorporărilor, ținta = bucata următoare), apoi pe simboluri ca azi; rata după ceas"
+format = "modul-v0"
+
+[contract]
+port = "model"
+versiune_contract = "1"
+
+[depinde]
+"model_gpt" = ">=0.7.1"
+
+[ofera]
+"antreneaza" = "antrenează cel mult un buget de secunde și întoarce statistici"
+"biti_pentru" = "câți biți îi trebuie ca să ghicească un text (mai puțin = mai bine)"
+"genereaza" = "continuă un text cu exact atâtea caractere câte se cer"
+"salveaza" = "salvează modelul și întoarce calea fișierului"
+"incarca" = "readuce un model salvat"
+
+[rulare]
+limbaj = "python"
+intrare = "module.model_trepte:ModelTrepte"
+teste = "python -m pytest teste_contracte -k ModelTrepte"
