@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 11:15 — Liniște la Kronos (pauza ta); în OS, #513 a făcut primii pași de antrenare pe placă
+
+- **La Kronos nu s-a schimbat nimic** de la 08:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
+- **Din hub:** OS-ul a rulat **10 pași de antrenare ai lui #513 pe placa reală** (os-395, 10:58): fără erori de calcul, dar pierderea a urcat la final (9,85 → 10,18) și merge de ~**43 de ori mai încet** decât Kronos în Windows (911 față de ~39.300 simboluri/s). Nu se știe încă dacă urcarea e o greșeală, fiindcă lipsesc „cifrele corecte” de comparat. Ai dat și „da” la lotul prin RAM (P6-178).
+- **Am propus în hub** (`idei/2026-11-24-kronos-oracol-513-pytorch.md`): Kronos poate da acele cifre corecte — aceiași 10 pași #513 în PyTorch, **doar pe procesor**, câteva minute, fără placă și fără antrenare. Nu intră în coadă fără „da”-ul tău.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS” și/sau „da oracolul #513” (propunerea de azi).
+
 ## 24 noiembrie 2026, 08:15 — Raportul de dimineață e bun; în OS, pasul de antrenare a devenit de ~89 de ori mai rapid
 
 - **Raportul de dimineață (06:49) e la locul lui și e bun:** noaptea n-a rulat nimic pe placă (pauza ta C-156 respectată), **1.563 teste trec**, 0 picate; placa liberă și rece (460 MB, 27 °C); disc C ~139 GB liberi. Nu e verdict azi. Calculatorul a repornit de 6 ori din ieri dimineață (ultima la 05:24), cel mai probabil din testele OS-ului pe placă — la Kronos n-a stricat nimic.
@@ -157,10 +165,3 @@
 - **Aștept de la tine:** nimic.
 
 - (executant, 20 nov 01:30) **S127 gata — RĂMÂNE #651:** #720 la formulări nevăzute 46,0 % (prag 48 %; lipsesc 4 răspunsuri din 200; #692 avea 45,0 %). Datele noi au dublat adunarea + scăderea + împărțirea formulate altfel (4 → 8 din 78); chat 50 și calcule 80 sunt cele mai bune de până acum, dar „din text” 218 = exact pragul. Interfața neschimbată; placa liberă de la 01:15. Raport: `docs/rapoarte/2026-11-20_0130_S127_formulari_c.md`.
-
-## 19 noiembrie 2026, 23:15 — Am preluat cele două „da”-uri ale tale (C-149, C-150); S127 merge mai departe
-
-- **Rulează acum:** S127 — cele 4 ore de învățat se termină pe la ~23:20, apoi examenele (~1,75 h). Ultimul semn de la executant: 19:21 (normal, cât învață nu scrie). Verdictul îl verific la 02:15 sau 05:15. Placa liberă la 07:00.
-- **C-149 (prioritatea pe driver și OS):** am scris regula în coadă și în regulile cascadei — **ziua (08:00–18:00) Kronos nu mai pune nimic pe placă**, noaptea antrenează în continuare. Nimic altceva nu se schimbă la Kronos.
-- **C-150 (Kronos cel mare, #651, pentru placa video):** sarcina **S128** e în coadă, aprobată de tine — exportul lui #651 în formatul plăcii + fișa lui (`MODEL_651.md`), doar pe procesor, **mâine de la 07:00**, după S127. Chat-ul rămâne pe #651, fișa lui #513 rămâne neschimbată; fișa nouă o copiez eu în hub.
-- **Aștept de la tine:** nimic.
