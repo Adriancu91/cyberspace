@@ -4550,7 +4550,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-164, 24 nov 2026 17:35) — trecută în coadă de supraveghetor, 24 nov 2026 20:15
 
 ### S137 — LABORATORUL, a treia probă: „HARTA GREUTĂȚII TEXTULUI” — aceeași oră de la zero ca S135 (0), doar alegerea ferestrelor diferă (A: procesor · B: placa ~1 h 40 min, ziua 07:00–23:00, după S135 B)
-- stare A: **aprobat** — procesor, doar în fișiere noi; **nu în timp ce rulează o probă S135 pe placă** (înainte de 07:00 sau după S135 B `gata`)
+- stare A: in_lucru (executant, 24 nov 2026 23:30; procesor, înainte de 07:00; placa liberă 435 MB / 27 °C, niciun proces greu)
+- (istoric) stare A: **aprobat** — procesor, doar în fișiere noi; **nu în timp ce rulează o probă S135 pe placă** (înainte de 07:00 sau după S135 B `gata`)
 - stare B: **aprobat** — pornește doar după: S135 B `gata` (ambele probe), S135 (0) **validă** (română < 2,0), S137 A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15**
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B placă
 - durată maximă: A 3 h de procesor · B o probă: ~5 min harta de referință (dacă nu e făcută în A) + 60 min antrenare + ~30 min examene
