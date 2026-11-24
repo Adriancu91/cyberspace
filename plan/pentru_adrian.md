@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 24 noiembrie 2026, 20:15 — „Da”-ul tău de la 17:35 a intrat în coadă: laboratorul treptelor (două probe de o oră) și fișa „Kronos croit pe placă”
+
+- **S135 — laboratorul treptelor (C-163), aprobat de tine:** executantul face acum, pe procesor, piesa care antrenează „pe bucăți de 4 simboluri”, apoi — **ziua, 07:00–23:00, probabil mâine** — două antrenări **de la zero, de câte 60 de minute**: (0) rețeta de azi și (1) bucăți în primele 40 de minute, apoi simbol cu simbol. Același text, aceeași pornire, același examen. **Câștigă (1) doar dacă nota de română e mai bună cu cel puțin 0,010.** Înainte de fiecare probă pune semnul „laborator ocupat”, ca testele OS să nu-i repornească calculatorul. Nimic din laborator nu ajunge în chat sau în OS.
+- **De știut cinstit:** după doar o oră de la zero, pe text simplu, niciun model nu va trece „R1 ≥ 90” (n-a văzut nicio întrebare-răspuns) — îl măsurăm la amândouă, dar judecă nota de română, cum scrie în decizie.
+- **S136 — fișa „Kronos croit pe placă” (C-164):** Cyber-GPU și-a scris partea (piesele ieftine aduc azi cel mult ~5 % viteză pe placă); executantul scrie partea Kronos: ce risc are fiecare piesă pentru calitate și cu ce probă de o oră se verifică. Doar citire, fără antrenare.
+- **Rulează acum:** nimic pe placă la Kronos. Pauza C-156 rămâne pentru orice altă antrenare (S131, S134 B în așteptare). În noaptea asta placa e a „cursei de noapte” din OS.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da bancul Kronos pe placă (S134 B)”.
+
 ## 24 noiembrie 2026, 17:15 — Bancul de antrenare merge (partea pe procesor, verificată); centrul a propus două idei mari de viteză
 
 - **S134 partea A — GATA, verificat de mine:** unealta care face aceiași pași de antrenare ca OS-ul merge pe procesor; 1.569 teste trec, nimic din modele sau examen nu s-a schimbat (amprentele identice). Am copiat fișa ei în hub (`integrare/kronos/BANC_ANTRENARE.md`), ca OS-ul să tragă exact aceleași loturi.
@@ -153,12 +161,4 @@
 - **Rulează acum:** nimic la Kronos (ziua placa e pentru testele OS, C-149). Liniștea de după 11:39 e normală.
 - **La noapte:** S129 pe placă de la 19:00 (pornire cel târziu 00:30), 4 h din #720, apoi examenele; placa liberă la 07:00. Nicio rezervare de noapte în hub. Verdictul mâine dimineață.
 - Din hub: OS-ul are Release-ul `os-322` (viteza maximă a plăcii, doar în ciclul de test). Nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic.
-
-## 20 noiembrie 2026, 11:15 — S129 reluată: am corectat numele liniei (greșeala mea), la noapte pe placă
-
-- **Executantul a oprit corect S129 la 08:40:** numele liniei pe care i l-am dat eu („24zch”) era deja folosit de o rulare veche (S117, 16 nov). N-a scris peste ea; a pus la loc exact ce scrisese o rulare anterioară și a propus un nume liber, „24zci”.
-- **Am corectat și am reaprobat S129 cu numele „24zci”.** Pregătirile sunt deja făcute și verificate: date noi (141.070 rânduri, „din text” de 2 ori, 800 de înmulțiri), **0 suprapuneri** cu examenele, **1.545 teste trec**, disc 166 GB liber. Nimic vechi atins.
-- **Urmează:** configurarea și pre-înregistrarea acum (procesor), apoi la noapte 4 h pe placă din #720 (de la 19:00, pornire cel târziu 00:30, liberă la 07:00), aceleași praguri (formulări ≥ 48 %). Verdictul mâine dimineață.
-- Din hub: Kronos #651 a fost pus pe stick de centrul de comandă (suma identică), încă nerulat în OS. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** nimic.
