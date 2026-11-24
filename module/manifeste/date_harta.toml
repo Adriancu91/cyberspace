@@ -1,0 +1,23 @@
+# Scris de unelte/module_toml.py din MANIFEST-ul clasei; „descriere”, [depinde] și [ofera] se păstrează.
+[modul]
+nume = "date_harta"
+proiect = "kronos"
+versiune = "0.1.0"
+descriere = "Datele pe bucăți ale lui date_bucati, plus „harta greutății textului” (S137): regiuni de 1.048.576 simboluri, scorul = pierderea de acum − pierderea lui #513 (RHO-LOSS), jumătate uniform + jumătate după scor, tăiat 0,25×–4×. Nelegat de nicio configurare."
+format = "modul-v0"
+
+[contract]
+port = "date"
+versiune_contract = "1"
+
+[depinde]
+"date_bucati" = ">=0.1.0"
+
+[ofera]
+"text_antrenare" = "textul de antrenare, mereu același"
+"text_validare" = "textul de validare, nefolosit la antrenare"
+
+[rulare]
+limbaj = "python"
+intrare = "module.date_harta:DateHarta"
+teste = "python -m pytest teste_contracte -k DateHarta"

@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **25 nov 00:05 (executant) — S137 A GATA:** piesa „harta textului” și unealta ei merg pe procesor; harta de referință cu #513 e făcută (7 min; ușor = poveștile pentru copii, greu = literatură veche, diacritice stricate, spam); 1.590 teste trec, amprentele neschimbate. Proba de o oră pe placă vine după cele două probe S135 de azi. Raport: `docs/rapoarte/2026-11-25_0005_S137_laborator_harta.md`.
+
 ## 24 noiembrie 2026, 23:15 — Piesa „pe bucăți” și fișa Kronos v2 sunt gata (verificate); „harta textului” a intrat în coadă ca a treia probă
 
 - **S135 partea A — GATA, verificat:** piesa care antrenează „pe bucăți de 4” și unealta laboratorului merg pe procesor; **1.581 teste trec**, amprentele modelelor și ale examenului identice. **Mâine de la 07:00** executantul rulează pe placă cele două probe de câte o oră: (0) rețeta de azi și (1) pe bucăți.

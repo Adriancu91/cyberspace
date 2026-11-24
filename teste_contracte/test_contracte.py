@@ -104,6 +104,11 @@ MODULE = [
         "date", "module.date_bucati:DateBucati", {"director": "__bucati_mici__", "previzualizare": True},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
+    pytest.param(
+        "date", "module.date_harta:DateHarta", {"director": "__bucati_mici__", "previzualizare": True,
+                                                "marime_regiune": 64},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
     ("examen", "module.examen_bpb:ExamenBpb", {}),
     ("examen", "module.examen_cod_validare:ExamenCodValidare", {}),
     ("examen", "module.examen_romana:ExamenRomana", {"validari": "__romana_mica__"}),

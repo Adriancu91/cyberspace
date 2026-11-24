@@ -4550,7 +4550,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-164, 24 nov 2026 17:35) — trecută în coadă de supraveghetor, 24 nov 2026 20:15
 
 ### S137 — LABORATORUL, a treia probă: „HARTA GREUTĂȚII TEXTULUI” — aceeași oră de la zero ca S135 (0), doar alegerea ferestrelor diferă (A: procesor · B: placa ~1 h 40 min, ziua 07:00–23:00, după S135 B)
-- stare A: in_lucru (executant, 24 nov 2026 23:30; procesor, înainte de 07:00; placa liberă 435 MB / 27 °C, niciun proces greu)
+- stare A: gata (executant, 25 nov 2026 00:05; `module/date_harta.py` + `unelte/laborator_harta.py` + 7 teste + contract; harta de referință #513 făcută pe procesor în 7,3 min → `lucru/laborator/harta_ref_513.npy` (media 1,560); proba de 2 min pe procesor merge; SHA 21/21 identice; 1590 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-25_0005_S137_laborator_harta.md`
+- (istoric) stare A: in_lucru (executant, 24 nov 2026 23:30; procesor, înainte de 07:00; placa liberă 435 MB / 27 °C, niciun proces greu)
 - (istoric) stare A: **aprobat** — procesor, doar în fișiere noi; **nu în timp ce rulează o probă S135 pe placă** (înainte de 07:00 sau după S135 B `gata`)
 - stare B: **aprobat** — pornește doar după: S135 B `gata` (ambele probe), S135 (0) **validă** (română < 2,0), S137 A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15**
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B placă
