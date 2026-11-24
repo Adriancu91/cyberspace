@@ -3,6 +3,13 @@
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
 
+## 24 noiembrie 2026, 02:15 — Liniște la Kronos (pauza ta); în OS, primul pas întreg de antrenare a mers pe placa reală
+
+- **La Kronos nu s-a schimbat nimic** de ieri, 11:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
+- **Din hub (doar de știut):** OS-ul a făcut **primul pas întreg de antrenare pe placa video reală** (os-380, 23 nov 23:12): 10 pași pe un model mic cu vocabularul lui Kronos, aceleași numere ca pe procesor. Viteza încă nu se socotește. Urmează în OS: varianta mai rapidă (bf16), mutarea memoriei antrenării pe placă, apoi **un pas al lui #513 pe placă**, comparat cu cifra lui Kronos din Windows (~39.300 simboluri/s, din fișa S133). Ai hotărât și: mutarea datelor în RAM rămâne deoparte (placa e în slotul x8), iar hardware-ul nou se decide la jumătatea lui decembrie.
+- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
+- **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
+
 ## 23 noiembrie 2026, 11:15 — Liniște la Kronos (pauza ta); în OS a rulat prima antrenare întreagă pe datele lui Kronos
 
 - **La Kronos nu s-a schimbat nimic** de la 08:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
@@ -156,13 +163,5 @@
 - **Din hub:** ciclul automat `os-308` (14:37) a trecut: Kronos #513 pe placa video, **~11 simboluri/s cu tot cu driverul (era 3,1)**, toate 16 identice cu procesorul. Cyber Universe propune următorul pas (jurnalul scris pe stick doar la final → estimat ~40/s); pentru Kronos nu cere nimic, am scris în propunere că suntem de acord.
 - **La Kronos nimic nou de la 11:15** (normal: ziua placa e pentru testele OS). Chat-ul pe #651; 1.530 teste trec.
 - **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Procesor de la 19:00, placa cel târziu 00:30, liberă la 07:00. Verdictul îl verific la 05:15 sau 08:15.
-- Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic.
-
-## 19 noiembrie 2026, 11:15 — Kronos #513 a mers pe placa video în sistemul vostru, corect; la noapte S127
-
-- **Vestea zilei (din hub, testul automat `os-307` de la 08:52):** modelul Kronos #513 a generat pe placa video, prin sistemul și driverul vostru, **16 simboluri, toate identice cu procesorul** — fără om la tastatură. Viteza pe placă: ~44 simboluri/s la calcul, dar doar ~3,1 cu tot cu driverul (jurnalul scris pe stick încetinește); Cyber-GPU a găsit deja cauza (C-145 gata), OS-ul o leagă în `os-308` (C-146), test ziua.
-- **La Kronos nimic nou de la 08:15** (normal: ziua placa e pentru testele OS). Chat-ul rămâne pe #651; 1.530 teste trec.
-- **La noapte, neschimbat:** S127 — date noi pentru adunare/scădere/împărțire formulate altfel + 4 h din #692, aceleași praguri. Testul `os-308` e doar ziua (08:00–18:00), deci nu se calcă.
 - Nicio comandă nouă pentru Kronos în hub; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic.
