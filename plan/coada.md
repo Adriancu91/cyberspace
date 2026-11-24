@@ -4532,7 +4532,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-163, 24 nov 2026 17:35) — trecută în coadă de supraveghetor, 24 nov 2026 20:15
 
 ### S136 — C-164: coloanele „calitate” din fișa „Kronos croit pe placă” (doar citire + document, procesor, ~1–2 h)
-- stare: **aprobat** (procesor, oricând; după S135 A — S135 are întâietate)
+- stare: in_lucru (executant, 24 nov 2026 21:30; procesor, S135 A gata, S135 B nu poate porni după 21:15; placa liberă 465 MB / 29 °C)
+- (istoric) stare: **aprobat** (procesor, oricând; după S135 A — S135 are întâietate)
 - tip: procesor (`CUDA_VISIBLE_DEVICES=-1`; nimic pe placă, nicio antrenare)
 - durată maximă: 2 h
 - de ce: Adrian (hub C-164, 24 nov 17:35) vrea următorul Kronos, pornit de la zero, proiectat împreună cu motorul OS-ului. Cyber-GPU a completat partea „placă” a fișei comune `integrare/KRONOS_V2_FISA.md` (hub; copia ei de azi, 20:15, e în `plan/hub_KRONOS_V2_FISA.md` — doar de citit): candidații **ReLU² în loc de GELU**, **fără deplasări (bias)**, **normă RMS cu γ** / **RMS fără γ** în loc de LayerNorm, **lățimi ÷ 64** (#513 le are deja), **capul** (legat de încorporări ca azi; vocabular 8.192 ar tăia 6,5 % din înmulțiri, dar cere tokenizer nou). Câștigul pe placă e mic azi (≤ 5 %, DEDUS de Cyber-GPU), mai mare după ce înmulțirile se fac mai repede.
