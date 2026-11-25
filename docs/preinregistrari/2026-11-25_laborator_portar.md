@@ -112,3 +112,43 @@ nepotrivire față de antrenare. Încredere mică: o singură rulare.
   laborator_portar` + „Verdictul”, rândul (P) în al doilea tabel din `docs/integrare_kronos/BANC_ANTRENARE.md` (cu
   simboluri/s), un rând sus în `plan/pentru_adrian.md`, coada → `gata`.
 - Rezultatul negativ se scrie la fel de clar ca cel pozitiv.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-25 16:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+(Modelul din laborator nu intră în jurnal — cifrele sunt din `lucru/laborator/S139_P/rezultat.json`.)
+
+| | S135 (0) | (P) portarul | ghicirea mea |
+|---|---|---|---|
+| simboluri/s, minutele 5–45 | 39.114,9 | **41.527,1 (1,062×)** | ~43.000 (1,10×) |
+| simboluri văzute | 140.820.480 | 149.520.384 (+6,2 %) | ~153 mil. |
+| pași | 2.865 | 3.042 | ~3.110 |
+| **română curat** | 1,5343 | **1,5286** (−0,0057) | ~1,545 |
+| `examen_bpb` | 0,5394 | **0,5426** (+0,0032) | ~0,545 |
+| R1 instrucțiuni | 42,07 | 26,44 | ~38 (28–48) |
+| placa max | 5.952 MB / 65 °C | 5.997 MB / 65 °C | ~5.800 MB |
+| partea aleasă, cauzal, la română | — | 38,9 % | ~50 % (40–60 %) |
+| potrivirea cauzal ↔ top-k la sfârșit | — | 88,3 % (antrenare), 89,1 % (examen) | ~90 % |
+
+Informativ (top-k, NU decide): română 1,5229, `examen_bpb` 0,5370. Nota cauzală la română dată de a doua trecere =
+1,52856 = nota examenului (aceeași). SHA-256 înainte = după (21/21). Nicio NaN; cod 0.
+
+## Verdictul
+
+*Scris la 2026-11-25 16:29, strict după pragurile de mai sus.*
+
+- **Validitate:** partea aleasă în modul cauzal la română 38,9 % ∈ [35 %, 65 %]; placa 5.997 MB / 65 °C (sub 7.000 MB și
+  83 °C); SHA înainte = după; nicio NaN → **probă validă**.
+- română(P) 1,5286: nu e ≤ 1,5243 și nu e ≥ 1,5443 → **LA FEL**. (P) nu câștigă (și nu pierde).
+- **Viteza:** 41.527,1 / 39.114,9 = **1,062×** ≥ 1,05× → (P) e **„și mai rapid”** (prag 41.071). Viteza nu schimbă verdictul.
+- R1 instrucțiuni 26,44 față de 42,07 (−15,6) — se măsoară, nu decide, dar e o scădere mare.
+- Potrivirea cauzal ↔ top-k 88–89 % ≥ 75 % → selectorul a învățat să prezică top-k.
+- Ghicirile mele: verdictul LA FEL — corect (dar înclinarea spre PIERDE greșită: româna a ieșit puțin mai bună); viteza
+  1,06× în intervalul 1,00–1,20× (sub ghicirea 1,10×); memoria mai mare decât ghicisem; partea aleasă cauzal 38,9 %
+  sub intervalul ghicit 40–60 % (dar în pragul de validitate); R1 sub intervalul ghicit.
+- Zgomotul între două rulări identice nu e măsurat: −0,0057 la română poate fi și întâmplare.

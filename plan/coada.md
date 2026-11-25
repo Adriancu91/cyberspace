@@ -4614,7 +4614,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport A: `docs/rapoarte/2026-11-25_1448_S139_laborator_portar.md`
 - (istoric) stare A: in_lucru (executant, 25 nov 2026 14:30; procesor, placa nefolosită 458 MB / 35 °C, nimic altceva în lucru)
 - (istoric) stare A: **aprobat** — procesor (`CUDA_VISIBLE_DEVICES=-1`), de acum, doar în fișiere noi
-- stare B: in_lucru (executant, 25 nov 2026 15:00; placa 458 MB / 31 °C, fără `porneste-test.txt`; întâi proba de 3 min, apoi (P))
+- stare B: gata (executant, 25 nov 2026 16:29; (P) cod 0, probă validă; **LA FEL** — română 1,5286 vs 1,5343, `examen_bpb` 0,5426; viteza 1,062× → „și mai rapid”; SHA înainte = după 21/21; nu câștigă → fără `PORTAR_FISA.md`)
+- raport B: `docs/rapoarte/2026-11-25_1629_S139_laborator_portar_B.md`
+- (istoric) stare B: in_lucru (executant, 25 nov 2026 15:00; placa 458 MB / 31 °C, fără `porneste-test.txt`; întâi proba de 3 min, apoi (P))
 - (istoric) stare B: **aprobat** — pornește doar după A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15** (azi dacă A e gata la timp, altfel mâine de la 07:00)
 - tip: A procesor · B placă
 - durată maximă: A 4 h de procesor · B: proba de 3 min + 60 min antrenare + ~30 min examene
