@@ -68,3 +68,17 @@ Procesorul workstation-ului, PyTorch 2.14.1+cu132, 18 fire, `CUDA_VISIBLE_DEVICE
 - **Pierderea ~1,07, nu „3–4”:** modelul e încărcat bine (ar fi fost ~9,70 = ln 16.384 dacă nu), dar amestecul W2 are
   multe povești TinyStories în engleză, pe care #513 le știe foarte bine (ambele ferestre ale pasului 1 sunt TinyStories).
   Pe 32 de ferestre la sorți (sămânța 777, fără antrenare) pierderea medie e 1,66, între 0,75 și 3,29.
+
+## Al doilea tabel: laboratorul treptelor S135 (25 nov 2026, RTX 3070 Ti 8 GB, câte 60 de minute de la zero)
+
+Aceeași rețea ca #513 (98.032.128 parametri), sămânța 1163, doar textul W2 (`lucru/bucati/w2_amestec_be12`), lot 12 × 512 ×
+adunare 8 = 49.152 simboluri pe pas, AdamW, bf16, rata de vârf 6e-4 (încălzire 3 min, răcire minutele 45–60).
+Unealta: `unelte/laborator_trepte.py`; rezultatele în `lucru/laborator/S135_<rețetă>/rezultat.json`.
+
+| rețetă | minute bucăți / simboluri | simboluri văzute | pași | română curat | `examen_bpb` | R1 instrucțiuni | memoria maximă (nvidia-smi) | verdict |
+|---|---|---|---|---|---|---|---|---|
+| (0) rețeta de azi | 0 / 60 | 140.820.480 | 2.865 | **1,5343** | 0,5394 | 42,07 | 5.952 MB, 65 °C | baza (validă: < 2,0) |
+| (1) bucăți K = 4 | 40 / 20 | 338.903.040 | 6.895 (5.940 + 955) | **1,5538** | 0,5144 | 60,12 | 6.018 MB, 65 °C | **PIERDE** (+0,0195 ≥ +0,010) |
+
+- Judecătorul (româna curată) dă PIERDE; martorul `examen_bpb` și R1 sunt mai bune la (1) (−0,025, +18 puncte), dar nu
+  decid. Pre-înregistrarea: `docs/preinregistrari/2026-11-25_laborator_trepte_k4.md`.

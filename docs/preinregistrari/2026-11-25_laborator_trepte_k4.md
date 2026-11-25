@@ -77,3 +77,43 @@ măsura asta; nu e aprobată).
 - Șterg `laborator-ocupat.txt` după fiecare probă; între (0) și (1) aștept placa sub 50 °C.
 - Rezultatul negativ se scrie la fel de clar ca cel pozitiv; după verdict completez al doilea tabel din
   `docs/integrare_kronos/BANC_ANTRENARE.md` și un rând sus în `plan/pentru_adrian.md`.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-25 10:29, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+(Normal: modelele laboratorului nu intră în jurnal. Cifrele vin din `lucru/laborator/S135_0/rezultat.json` și
+`lucru/laborator/S135_1/rezultat.json`.)
+
+| | (0) rețeta de azi | (1) bucăți K = 4 | ghicit (0) / (1) |
+|---|---|---|---|
+| pași (bucăți + simboluri) | 2.865 (0 + 2.865) | 6.895 (5.940 + 955) | — |
+| simboluri văzute în 60 min | 140.820.480 | 338.903.040 (291,96 mil. pe bucăți + 46,94 mil. pe simboluri) | ~90 / ~250 mil. |
+| **română curat (`romana_bpb`)** | **1,5343** | **1,5538** | ~1,80 / ~1,76 |
+| — wikipedia / web / cărți | 1,3644 / 1,6337 / 1,6316 | 1,3701 / 1,6511 / 1,6712 | |
+| `examen_bpb` (`val_bpb`, martorul) | 0,5394 | 0,5144 | ~1,15 / ~1,12 |
+| R1 instrucțiuni (ascuns) | 42,07 (46,47) | 60,12 (60,87) | sub 5 / sub 5 |
+| pierderea finală (antrenare) | 2,0012 | 2,0761 | |
+| placa maximă (nvidia-smi) | 5.952 MB / 65 °C | 6.018 MB / 65 °C | ~5.500 MB |
+
+## Verdictul
+
+*Scris la 2026-11-25 10:30, strict după pragurile de mai sus.*
+
+- **Validitate: DA.** (0) română 1,5343 < 2,0; ambele sub 7.000 MB (5.952 / 6.018) și sub 83 °C (65 / 65);
+  SHA înainte = după (21/21 identice, `lucru/cascada/S135_proba/sha_inainte_B.json` vs `sha_dupa_B.json`).
+- **română(1) − română(0) = 1,5538 − 1,5343 = +0,0195 ≥ +0,010 → (1) PIERDE.**
+- Martorul merge în sens opus: `examen_bpb`(1) − `examen_bpb`(0) = −0,0251 (mai bun la (1)), iar R1 instrucțiuni
+  60,12 vs 42,07. Pragurile spun că judecătorul e româna curată, deci asta nu schimbă verdictul — o scriu doar ca să
+  se vadă.
+- Ghicirile mele: verdictul ghicit („CÂȘTIGĂ, la limită”) a fost **greșit**. Simbolurile văzute: ghicit corect în
+  sens (2,41× la (1)), dar ambele mai multe decât am ghicit (placa ~39k simb/s, nu 25k). Româna și `examen_bpb` au
+  ieșit mult mai bune decât am ghicit la ambele; R1 = 42 / 60, nu „aproape 0” (greșit; tot departe de 90, cum a spus
+  supraveghetorul).
+- (1) a văzut 2,41× mai multe simboluri (peste pragul de 2× din „ce ar infirma”), deci faza pe bucăți a mers repede;
+  doar că ultimele 20 de minute pe simboluri (955 de pași) n-au ajuns să recupereze româna.
+- Încredere: o singură pereche de rulări; zgomotul între două rulări identice nu e măsurat (ar fi S138 (0′)).

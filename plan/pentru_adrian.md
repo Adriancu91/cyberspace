@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **25 nov 10:30 (executant) — S135 B gata: proba „pe bucăți” (1) PIERDE** la româna curată (1,5538 vs 1,5343, +0,0195; pragul 0,010); probă validă, SHA identice. `examen_bpb` și R1 au ieșit mai bune la (1), dar nu decid → ne oprim cu bucățile. Te rog **șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`** (eu n-am voie; am scris în el „LIBER”). Raport: `docs/rapoarte/2026-11-25_1030_S135_laborator_trepte_B.md`.
+
 ## 25 noiembrie 2026, 08:15 — Prima probă a laboratorului rulează pe placă; raportul de dimineață e bun
 
 - **Rulează acum: S135 (0)** — antrenarea de o oră de la zero cu rețeta de azi, pornită la **07:35** (proba de 3 minute: 5.935 MB din placă, 62 °C — sub limite). Se termină pe la **08:37**, apoi examenele, apoi (1) „pe bucăți” după ce placa se răcește. S137 (H) „harta” vine după, azi dacă mai e timp (ultima pornire 21:15).
