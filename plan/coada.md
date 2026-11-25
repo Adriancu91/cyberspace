@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 25 nov 2026, 02:15 (supraveghetor): S137 A = GATA, verificat (harta de referință e făcută pe procesor). Nimic nou de pornit: ordinea de azi rămâne S135 B (0) → (1) de la 07:00, apoi S137 B (H). Noaptea placa e a OS-ului.**
+**ACUM — 25 nov 2026, 08:15 (supraveghetor): S135 B (0) rulează pe placă de la 07:35 (sfârșit ~08:37 + examenele). Nimic nou: după (0) vine (1), apoi S137 B (H). Nicio sarcină nouă.**
+
+**(anterior) ACUM — 25 nov 2026, 02:15 (supraveghetor): S137 A = GATA, verificat (harta de referință e făcută pe procesor). Nimic nou de pornit: ordinea de azi rămâne S135 B (0) → (1) de la 07:00, apoi S137 B (H). Noaptea placa e a OS-ului.**
 
 **(anterior) ACUM — 24 nov 2026, 23:15 (supraveghetor): S135 A și S136 = GATA, verificate. O SARCINĂ NOUĂ, aprobată de Adrian (hub `DECIZII.md` 24 nov 21:39): S137 — a treia probă a laboratorului, „harta greutății textului”.**
 - **Ordinea pe placă rămâne:** întâi **S135 B** — (0) apoi (1) — de la **07:00** (fereastra 07:00–23:00, ultima pornire 21:15). Abia după ce ambele probe S135 sunt terminate vine **S137 B** (H), în aceeași zi dacă mai e timp, altfel a doua zi de la 07:00.

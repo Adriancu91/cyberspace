@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 08:15 — Prima probă a laboratorului rulează pe placă; raportul de dimineață e bun
+
+- **Rulează acum: S135 (0)** — antrenarea de o oră de la zero cu rețeta de azi, pornită la **07:35** (proba de 3 minute: 5.935 MB din placă, 62 °C — sub limite). Se termină pe la **08:37**, apoi examenele, apoi (1) „pe bucăți” după ce placa se răcește. S137 (H) „harta” vine după, azi dacă mai e timp (ultima pornire 21:15).
+- **Raportul de dimineață (06:49) — verificat:** 1.590 teste trec, 0 picate; placa a fost liberă noaptea, cum era plănuit; nimic oprit de paznic.
+- **De urmărit:** calculatorul a repornit de **17 ori** într-o zi. Azi contează: o repornire în mijlocul unei probe o strică (ar trebui reluată). Semnul „laborator ocupat” e pus, deci testele OS n-ar trebui să repornească acum.
+- **Nimic nou în coadă**, nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) dacă știi de unde vin repornirile, oprește-le cât rulează probele (07:00–23:00); (4) opțional: „da probele v2 (S138)”.
+
 ## 25 noiembrie 2026, 02:15 — „Harta textului” e pregătită (verificat); azi de la 07:00 încep probele de o oră
 
 - **S137 partea A — GATA, verificat de mine:** piesa care alege bucățile de text după „cât mai are modelul de învățat” și unealta ei merg pe procesor; **1.590 teste trec**, amprentele modelelor și ale examenului identice; s-au adăugat doar fișiere noi. Harta de referință cu #513 e făcută (7 minute pe procesor): cel mai ușor = poveștile pentru copii, cel mai greu = literatura veche și textele stricate.
@@ -156,16 +164,3 @@
 - **De ce o decizie a ta urmează oricum:** în 4 runde, „din text” a coborât de fiecare dată (222 → 219 → 218 → 217). S131 e **ultima** rundă pe linia asta pe care o aprob singur. Să știi și asta: cu cât încercăm de mai multe ori până trecem la limită, cu atât trecerea spune mai puțin (o diferență de 1 răspuns e în zona „zgomotului” notării).
 - **Dacă S131 nu trece, variantele tale:** (1) **#736 în chat**, decizia ta (mai bun la conversație și calcule, mai slab la „din text”: 217 față de 228); (2) **oprim linia** și lăsăm nopțile placa pentru driver/OS sau altă idee; (3) altceva spui tu.
 - **Aștept de la tine:** nimic obligatoriu. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
-
-## 20 noiembrie 2026, 20:15 — Comparația de viteză (C-153) e gata și verificată; S129 învață pe placă
-
-- **S130 verificat de mine: trece.** Kronos #513 în Windows (PyTorch): pe placă **129 simboluri/s** (FP16 la fel, 129), pe procesor **42**. Cele 16 simboluri sunt identice cu cele din OS, fișierele modelului neatinse. #513 nu are „memoria pașilor”, deci fiecare simbol recalculează tot textul.
-- **Comparația, doar cifre:** în OS, cu driverul nostru, 94,8 simb/s; placa singură în OS 382. Tabelul e în hub: `rezultate/2026-11-20-workstation-kronos513-windows-viteza/REZULTAT.md`; C-153 → gata.
-- **Rulează acum:** S129 pe placă de la 19:00 (4 h din #720, apoi examenele); verdictul mâine dimineață. Liniștea executantului cât învață e normală.
-- Am notat în stare cele două decizii ale tale din 19:41/19:45 (driverul construit din fișa modelului din KGR1): Kronos dă deja fișa completă în fiecare export, nu e nevoie de nimic nou acum.
-- **Aștept de la tine:** nimic.
-
-- **21 nov 01:30 (executantul): S129 gata — RĂMÂNE #651, la 1 răspuns.** #736 trece pentru prima dată formulările (**54,0 %** ≥ 48; adunare + scădere + împărțire 22/78, #720 avea 8), calcule 90, chat 51, română 1,0899, R1 98,05 — dar „din text” **217 < 218**. SHA neschimbate, interfața neatinsă. Raportul `docs/rapoarte/2026-11-21_0130_S129_formulari_d.md`.
-
-- **20 nov 17:16 (executantul): S130 gata** — #513 în Windows/PyTorch: placa FP32 **129,12 simb/s**, FP16 128,84, procesorul 41,74; KV cache „nu are”; cele 16 simboluri identice cu OS-ul; SHA neschimbate; 1550 teste. Tabelul: `docs/integrare_kronos/VITEZA_513_WINDOWS.md`; raportul `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`.
-
