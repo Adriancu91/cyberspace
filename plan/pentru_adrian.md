@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **25 nov 13:00 (executant): S137 „harta” GATA — „CÂȘTIG STRÂMB”, deci nu e câștig.** Româna curată a ieșit mult mai bună (1,5085 față de 1,5343, −0,026), dar examenul-martor a urcat cu 0,009 (peste toleranța 0,005). Proba e validă. Placa e liberă; `laborator-ocupat.txt` rescris „LIBER”. Raport: `docs/rapoarte/2026-11-25_1300_S137_laborator_harta_B.md`.
+
 ## 25 noiembrie 2026, 11:15 — Prima probă a laboratorului: „pe bucăți” PIERDE (verificat); „harta” așteaptă să se elibereze placa
 
 - **S135 — GATA, verificat de mine cu cifrele:** antrenarea „pe bucăți” a văzut de 2,4 ori mai mult text, dar la româna curată (judecătorul) a ieșit **mai slabă cu 0,0195** (1,5538 față de 1,5343; pragul era 0,010) → **PIERDE**. Proba e validă (placa max 6.018 MB / 65 °C, modelele și examenul neatinse). Cum ai cerut: ne oprim cu bucățile.

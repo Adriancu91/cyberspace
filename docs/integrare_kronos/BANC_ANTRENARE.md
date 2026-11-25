@@ -79,6 +79,9 @@ Unealta: `unelte/laborator_trepte.py`; rezultatele în `lucru/laborator/S135_<re
 |---|---|---|---|---|---|---|---|---|
 | (0) rețeta de azi | 0 / 60 | 140.820.480 | 2.865 | **1,5343** | 0,5394 | 42,07 | 5.952 MB, 65 °C | baza (validă: < 2,0) |
 | (1) bucăți K = 4 | 40 / 20 | 338.903.040 | 6.895 (5.940 + 955) | **1,5538** | 0,5144 | 60,12 | 6.018 MB, 65 °C | **PIERDE** (+0,0195 ≥ +0,010) |
+| (H) harta (S137) | 0 / 60 (harta din min 5) | 139.542.528 | 2.839 (2.602 cu harta) | **1,5085** | 0,5485 | 43,33 | 6.005 MB, 65 °C | **CÂȘTIG STRÂMB** (română −0,0258, dar `examen_bpb` +0,0091 > +0,005) — nu e câștig |
 
 - Judecătorul (româna curată) dă PIERDE; martorul `examen_bpb` și R1 sunt mai bune la (1) (−0,025, +18 puncte), dar nu
   decid. Pre-înregistrarea: `docs/preinregistrari/2026-11-25_laborator_trepte_k4.md`.
+- (H) (S137, unealta `unelte/laborator_harta.py`, ieșirea `lucru/laborator/S137_H/`): ferestre trase pe sferturi după `ref`
+  #513 (ușor → greu) 22,7 / 23,8 / 25,7 / 27,7 %. Pre-înregistrarea: `docs/preinregistrari/2026-11-25_laborator_harta.md`.

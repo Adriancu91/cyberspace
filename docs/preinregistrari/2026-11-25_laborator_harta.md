@@ -88,3 +88,47 @@ A, sferturile au fost trase aproape egal (1.158 / 1.074 / 1.125 / 987). Încrede
   `--inchide laborator_harta` + „Verdictul”, rândul (H) în al doilea tabel din `docs/integrare_kronos/BANC_ANTRENARE.md`,
   cât s-a tras din fiecare sfert, un rând sus în `plan/pentru_adrian.md`, coada → `gata`.
 - Rezultatul negativ se scrie la fel de clar ca cel pozitiv.
+
+## Ce a ieșit
+
+*Adăugat la 2026-11-25 12:59, din jurnalul Kronos (lucru/jurnal/experimente.jsonl) și din jurnalul CONTINUUM pe bune. Verdictul se scrie dedesubt.*
+
+Niciun experiment Kronos în perioada asta.
+
+Niciun ciclu CONTINUUM pe bune în perioada asta.
+
+(Corect: modelul laboratorului nu intră în jurnal. Cifrele vin din `lucru/laborator/S137_H/rezultat.json`, scrise de executant.)
+
+(H) pornit prin cascadă 11:29:46 (procesul 15904), terminat 12:34:47, cod 0, fără oprire.
+
+| | S135 (0) | (H) | Δ (H) − (0) | ghicit |
+|---|---|---|---|---|
+| **română curat (`romana_bpb`)** | 1,5343 | **1,5085** | **−0,0258** | ~1,530 |
+| — Wikipedia / web / cărți | 1,3644 / 1,6337 / 1,6316 | 1,3343 / 1,6088 / 1,6102 | −0,030 / −0,025 / −0,021 | |
+| **`examen_bpb` (`val_bpb`)** | 0,5394 | **0,5485** | **+0,0091** | ~0,545 |
+| R1 instrucțiuni (nu decide) | 42,07 | 43,33 | +1,26 | ~40 |
+| R1 ascuns / vechi | 46,47 / 52,54 | 48,60 / 55,87 | +2,13 / +3,33 | |
+| simboluri văzute | 140.820.480 | 139.542.528 | −0,91 % | ~138 mil. |
+| pași (cu harta) | 2.865 | 2.839 (2.602) | −26 | ~2.810 |
+| pierderea la ultimul pas | 2,0012 | 1,9173 | | |
+| placa max | 5.952 MB / 65 °C | 6.005 MB / 65 °C | | ~5.960 MB |
+
+Ferestre trase pe sferturi (după `ref` #513; sfertul 1 = cel mai ușor), toată ora: 61.976 / 64.947 / 70.148 / 75.473
+(22,7 % / 23,8 % / 25,7 % / 27,7 %); cel mai greu / cel mai ușor = 1,22× (< 2×).
+
+## Verdictul
+
+Strict după pragurile de mai sus:
+- română(H) 1,5085 ≤ 1,5243 → română câștigă (−0,0258, de 2,6× pragul);
+- `examen_bpb`(H) 0,5485 > 0,5444 (urcă cu +0,0091 > +0,005) → condiția a doua a lui CÂȘTIGĂ **nu** e îndeplinită;
+- validitate: (0) validă; (H) 6.005 MB / 65 °C (sub 7.000 / 83); SHA înainte = după (21/21,
+  `lucru/cascada/S137_proba/sha_dupa_B.json`); simbolurile 139,54 mil. în 133,78–147,86 mil. → proba e **validă**.
+
+**Verdict: „CÂȘTIG STRÂMB” — nu e câștig.** Harta a coborât româna cu 0,026, dar martorul `examen_bpb` a urcat cu 0,009
+(peste toleranța 0,005): modelul a fost mutat spre o parte a textului.
+
+Ghicirile mele: „LA FEL” — **greșit** (româna a câștigat mult mai mult decât credeam); `examen_bpb` ~0,545 — aproape
+(0,5485, puțin mai rău, cum am ghicit); simbolurile și memoria — corecte. „Harta seamănă cu uniform” — **nu e infirmat**
+(1,22× < 2×), dar direcția e inversă față de proba de procesor din A: în ora de pe placă harta a tras **mai des sfertul
+greu** (27,7 %) și mai rar pe cel ușor (22,7 %). Încredere mică: o singură rulare; zgomotul între două rulări identice
+nu e măsurat ((0′), neaprobată).
