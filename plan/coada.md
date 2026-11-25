@@ -4610,7 +4610,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **nu pornește fără „da”-ul lui Adrian** (de exemplu în hub: „da probele v2 (S138)” sau doar „da (0′)”).
 
 ### S139 — C-167: LABORATORUL, a patra probă: „PORTARUL” (amestecul de adâncimi) — o oră de la zero, (P) față de S135 (0) (A: procesor · B: placa ~1 h 40 min, ziua 07:00–23:00)
-- stare A: **aprobat** — procesor (`CUDA_VISIBLE_DEVICES=-1`), de acum, doar în fișiere noi
+- stare A: in_lucru (executant, 25 nov 2026 14:30; procesor, placa nefolosită 458 MB / 35 °C, nimic altceva în lucru)
+- (istoric) stare A: **aprobat** — procesor (`CUDA_VISIBLE_DEVICES=-1`), de acum, doar în fișiere noi
 - stare B: **aprobat** — pornește doar după A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15** (azi dacă A e gata la timp, altfel mâine de la 07:00)
 - tip: A procesor · B placă
 - durată maximă: A 4 h de procesor · B: proba de 3 min + 60 min antrenare + ~30 min examene
