@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 14:15 — „Harta” = câștig strâmb (verificat); „portarul” (C-167) a intrat în coadă
+
+- **S137 „harta” — GATA, verificat de mine cu cifrele:** româna curată a ieșit mult mai bună (**1,5085** față de 1,5343), dar examenul-martor s-a stricat cu **+0,0091** (toleranța era 0,005) → **„câștig strâmb”, nu e câștig**. Proba e validă. Cum ai cerut: ne oprim cu harta.
+- **De știut cinstit:** la ambele probe de azi româna și martorul au mers în direcții opuse, iar diferențele sunt de 0,01–0,03. Nu știm încă cât diferă două rulări identice — asta ar spune proba (0′).
+- **Comanda ta C-167 „portarul” → S139, aprobată:** executantul face acum, pe procesor, piesa în care la jumătate din straturi un selector mic trimite prin strat doar ~jumătate din simboluri; apoi o oră pe placă, comparată cu aceeași bază (S135 (0)). Câștigă doar dacă româna e mai bună cu ≥ 0,010 și martorul nu se strică; măsurăm și viteza (cum ai cerut). La examen selectorul alege fără să „vadă viitorul”, altfel nota n-ar fi cinstită.
+- **Rulează acum:** nimic pe placă la Kronos. Proba de o oră pornește azi dacă piesa e gata până la 21:15, altfel mâine de la 07:00 (niciodată peste un test OS).
+- **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt` (scrie „LIBER”); (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional: „da (0′)” — o oră, ne spune cât e zgomotul.
+
 - **25 nov 13:00 (executant): S137 „harta” GATA — „CÂȘTIG STRÂMB”, deci nu e câștig.** Româna curată a ieșit mult mai bună (1,5085 față de 1,5343, −0,026), dar examenul-martor a urcat cu 0,009 (peste toleranța 0,005). Proba e validă. Placa e liberă; `laborator-ocupat.txt` rescris „LIBER”. Raport: `docs/rapoarte/2026-11-25_1300_S137_laborator_harta_B.md`.
 
 ## 25 noiembrie 2026, 11:15 — Prima probă a laboratorului: „pe bucăți” PIERDE (verificat); „harta” așteaptă să se elibereze placa
@@ -160,11 +168,3 @@
 - **Sarcina nouă S132 („pasul de aur”), aprobată de tine, doar procesor:** o unealtă care face 10 pași de antrenare în PyTorch și salvează tot (intrările, eroarea, schimbările pe fiecare tensor, greutățile după 1 și 10 pași, rețeta exactă) — întâi pentru un model mic de probă (2 straturi, 64), apoi pentru #513. Două rețete: una simplă (SGD), ca OS-ul să înceapă ușor, și cea cu care a învățat Kronos. Fișa o copiez în hub pentru Cyber-GPU.
 - **Raportul de dimineață e la locul lui și e bun:** noaptea fără erori, 1.556 teste trec, placa max 6.428 MB / 64 °C, verdictul S129 (rămâne #651, la 1 răspuns) confirmat. Modelul în uz rămâne #651, chat-ul pe 8787 neschimbat.
 - **Aștept de la tine:** nimic. Când vrei să reiei antrenările (S131 sau #736 în chat), scrie o comandă în hub.
-
-## 21 noiembrie 2026, 05:15 — S131 pregătită (pe procesor); la noapte pe placă
-
-- **Executantul a făcut pașii pregătitori ai S131 la 02:45 (procesor, nimic pe placă):** date noi cu „din text” de 3 ori (166.475 rânduri, 0 suprapuneri cu examenele), configurarea `24zcj` și pre-înregistrarea. **1.556 teste trec.** Disc: ~146 GB liberi. Modelele și datele vechi neatinse (sumele identice înainte și după).
-- **Verificat de mine:** pragurile din pre-înregistrare sunt exact cele aprobate de tine (C-132): „din text” ≥ 218, formulări ≥ 48 %, chat ≥ 30, calcule ≥ 61, română ≤ 1,0978, R1 ≥ 90. Configurarea diferă de cea veche doar prin nume, cale și datele noi. Ghicitul executantului: ~45 % șanse să treacă.
-- **Rulează acum:** nimic. **La noapte (21 → 22 nov):** S131 pe placă de la 19:00 (4 h din #736, apoi examenele), liberă la 07:00. Ziua nimic pe placă.
-- Hub: nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
-- **Aștept de la tine:** nimic. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
