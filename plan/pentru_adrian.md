@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 11:15 — Prima probă a laboratorului: „pe bucăți” PIERDE (verificat); „harta” așteaptă să se elibereze placa
+
+- **S135 — GATA, verificat de mine cu cifrele:** antrenarea „pe bucăți” a văzut de 2,4 ori mai mult text, dar la româna curată (judecătorul) a ieșit **mai slabă cu 0,0195** (1,5538 față de 1,5343; pragul era 0,010) → **PIERDE**. Proba e validă (placa max 6.018 MB / 65 °C, modelele și examenul neatinse). Cum ai cerut: ne oprim cu bucățile.
+- **De știut cinstit:** examenul-martor și R1 au ieșit *mai bune* la „pe bucăți”. Nu schimbă verdictul (judecă româna), dar arată că nu știm cât „zgomot” e între două rulări — asta ar spune proba (0′) din S138.
+- **Rulează acum:** nimic la Kronos. S137 „harta” trebuia să pornească la 11:09, dar centrul de comandă a pus atunci testul OS os-423 pe placă; executantul o pornește la prima trecere după ce testul se termină (azi până la 21:15).
+- **Nimic nou în coadă**, nicio comandă nouă pentru Kronos în hub. Am copiat tabelul în hub.
+- **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt` (executantul n-are voie; scrie „LIBER” în el); (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional: „da (0′)” sau „da probele v2 (S138)”.
+
 - **25 nov 10:30 (executant) — S135 B gata: proba „pe bucăți” (1) PIERDE** la româna curată (1,5538 vs 1,5343, +0,0195; pragul 0,010); probă validă, SHA identice. `examen_bpb` și R1 au ieșit mai bune la (1), dar nu decid → ne oprim cu bucățile. Te rog **șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`** (eu n-am voie; am scris în el „LIBER”). Raport: `docs/rapoarte/2026-11-25_1030_S135_laborator_trepte_B.md`.
 
 ## 25 noiembrie 2026, 08:15 — Prima probă a laboratorului rulează pe placă; raportul de dimineață e bun
@@ -158,11 +166,3 @@
 - **Rulează acum:** nimic. **La noapte (21 → 22 nov):** S131 pe placă de la 19:00 (4 h din #736, apoi examenele), liberă la 07:00. Ziua nimic pe placă.
 - Hub: nicio comandă nouă pentru Kronos; nimic nou pus în coadă.
 - **Aștept de la tine:** nimic. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
-
-## 21 noiembrie 2026, 02:15 — S129 verificat: rămâne #651, la un singur răspuns; o ultimă încercare la noapte, apoi decizi tu
-
-- **S129 verificat de mine: rămâne #651, corect după prag.** Modelul nou **#736** trece pentru prima dată examenul de întrebări formulate altfel (**54 %**, pragul 48 %) și e cel mai bun la calcule (90) și chat (51). Dar la „răspunsuri din text” are **217**, iar pragul e **218** — îi lipsește un singur răspuns din 320 (#651 are 228). Noaptea a mers curat: placa max 6.428 MB / 64 °C, 1.550 teste trec, modelele vechi neatinse.
-- **Am pus în coadă S131 (aprobată de mine, în granițe), la noapte 21 → 22 nov:** pornim din #736 (care are deja formulările) și îi dăm „din text” de 3 ori în loc de 2. Aceleași praguri. Ziua nimic pe placă.
-- **De ce o decizie a ta urmează oricum:** în 4 runde, „din text” a coborât de fiecare dată (222 → 219 → 218 → 217). S131 e **ultima** rundă pe linia asta pe care o aprob singur. Să știi și asta: cu cât încercăm de mai multe ori până trecem la limită, cu atât trecerea spune mai puțin (o diferență de 1 răspuns e în zona „zgomotului” notării).
-- **Dacă S131 nu trece, variantele tale:** (1) **#736 în chat**, decizia ta (mai bun la conversație și calcule, mai slab la „din text”: 217 față de 228); (2) **oprim linia** și lăsăm nopțile placa pentru driver/OS sau altă idee; (3) altceva spui tu.
-- **Aștept de la tine:** nimic obligatoriu. Dacă vrei să NU ruleze S131, scrie o comandă în hub până la 19:00.
