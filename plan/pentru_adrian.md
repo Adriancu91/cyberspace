@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 02:15 — „Harta textului” e pregătită (verificat); azi de la 07:00 încep probele de o oră
+
+- **S137 partea A — GATA, verificat de mine:** piesa care alege bucățile de text după „cât mai are modelul de învățat” și unealta ei merg pe procesor; **1.590 teste trec**, amprentele modelelor și ale examenului identice; s-au adăugat doar fișiere noi. Harta de referință cu #513 e făcută (7 minute pe procesor): cel mai ușor = poveștile pentru copii, cel mai greu = literatura veche și textele stricate.
+- **De știut cinstit:** la început harta alege puțin *mai des* textul ușor (un model de la zero e departe de #513 tocmai unde #513 e aproape perfect). E exact formula aprobată; nu schimb nimic — proba de o oră arată dacă ajută.
+- **Azi, de la 07:00 (pe placă):** S135 (0) rețeta de azi, apoi (1) pe bucăți, apoi S137 (H) harta dacă mai e timp (ultima pornire 21:15), altfel mâine. Rulează acum: nimic la Kronos; noaptea placa e a OS-ului.
+- **Nimic nou în coadă**, nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da probele v2 (S138)”.
+
 - **25 nov 00:05 (executant) — S137 A GATA:** piesa „harta textului” și unealta ei merg pe procesor; harta de referință cu #513 e făcută (7 min; ușor = poveștile pentru copii, greu = literatură veche, diacritice stricate, spam); 1.590 teste trec, amprentele neschimbate. Proba de o oră pe placă vine după cele două probe S135 de azi. Raport: `docs/rapoarte/2026-11-25_0005_S137_laborator_harta.md`.
 
 ## 24 noiembrie 2026, 23:15 — Piesa „pe bucăți” și fișa Kronos v2 sunt gata (verificate); „harta textului” a intrat în coadă ca a treia probă
@@ -161,10 +169,3 @@
 
 - **20 nov 17:16 (executantul): S130 gata** — #513 în Windows/PyTorch: placa FP32 **129,12 simb/s**, FP16 128,84, procesorul 41,74; KV cache „nu are”; cele 16 simboluri identice cu OS-ul; SHA neschimbate; 1550 teste. Tabelul: `docs/integrare_kronos/VITEZA_513_WINDOWS.md`; raportul `docs/rapoarte/2026-11-20_1716_S130_viteza_513_windows.md`.
 
-## 20 noiembrie 2026, 16:25 — Comanda ta C-153 (viteza lui #513 în Windows) e în coadă: S130, chiar acum
-
-- **Am preluat C-153:** sarcina **S130** e în coadă, aprobată de tine. Executantul măsoară, în câteva minute, cât de repede scrie #513 în PyTorch pe placă (fără și cu memoria pașilor, dacă o are), pe procesor și în FP32/FP16; verifică cele 16 simboluri față de OS. Fără antrenare, nimic în `kronos/` sau `config/`.
-- **Când:** la prima trecere a executantului (excepția ta de la „nimic pe placă ziua”), pornire cel târziu 18:15, gata până la 18:50. Tabelul îl copiez în hub (`rezultate/2026-11-20-workstation-kronos513-windows-viteza/`) la trecerea următoare.
-- **La noapte, neschimbat:** S129 pe placă de la 19:00 (4 h din #720, apoi examenele); verdictul mâine dimineață.
-- Din hub: `os-322` a mers (placa singură 382 simb/s, cu driverul 94,8 > procesor 72,7); `os-323` are tabloul de bord al plăcii (doar în simulare).
-- **Aștept de la tine:** nimic.

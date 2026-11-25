@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 24 nov 2026, 23:15 (supraveghetor): S135 A și S136 = GATA, verificate. O SARCINĂ NOUĂ, aprobată de Adrian (hub `DECIZII.md` 24 nov 21:39): S137 — a treia probă a laboratorului, „harta greutății textului”.**
+**ACUM — 25 nov 2026, 02:15 (supraveghetor): S137 A = GATA, verificat (harta de referință e făcută pe procesor). Nimic nou de pornit: ordinea de azi rămâne S135 B (0) → (1) de la 07:00, apoi S137 B (H). Noaptea placa e a OS-ului.**
+
+**(anterior) ACUM — 24 nov 2026, 23:15 (supraveghetor): S135 A și S136 = GATA, verificate. O SARCINĂ NOUĂ, aprobată de Adrian (hub `DECIZII.md` 24 nov 21:39): S137 — a treia probă a laboratorului, „harta greutății textului”.**
 - **Ordinea pe placă rămâne:** întâi **S135 B** — (0) apoi (1) — de la **07:00** (fereastra 07:00–23:00, ultima pornire 21:15). Abia după ce ambele probe S135 sunt terminate vine **S137 B** (H), în aceeași zi dacă mai e timp, altfel a doua zi de la 07:00.
 - **S137 partea A (procesor)** doar în fișiere noi; **NU în timp ce rulează o probă S135 pe placă** (ar fura procesor și ar strica „ora de ceas” a comparației). Fie înainte de 07:00, fie după ce S135 B s-a terminat. Nu schimbi `module/model_trepte.py` și `unelte/laborator_trepte.py` până nu e S135 B `gata`.
 - **Pauza C-156 rămâne pentru orice altceva:** S131, S134 B în așteptare; S138 (probele „Kronos v2”) e doar `propus — necesită Adrian`.
@@ -4550,7 +4552,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: Adrian (hub `COMENZI.md` C-164, 24 nov 2026 17:35) — trecută în coadă de supraveghetor, 24 nov 2026 20:15
 
 ### S137 — LABORATORUL, a treia probă: „HARTA GREUTĂȚII TEXTULUI” — aceeași oră de la zero ca S135 (0), doar alegerea ferestrelor diferă (A: procesor · B: placa ~1 h 40 min, ziua 07:00–23:00, după S135 B)
-- stare A: gata (executant, 25 nov 2026 00:05; `module/date_harta.py` + `unelte/laborator_harta.py` + 7 teste + contract; harta de referință #513 făcută pe procesor în 7,3 min → `lucru/laborator/harta_ref_513.npy` (media 1,560); proba de 2 min pe procesor merge; SHA 21/21 identice; 1590 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-25_0005_S137_laborator_harta.md`
+- stare A: gata — **verificat de supraveghetor 25 nov 2026 02:15:** doar fișiere noi (`module/date_harta.py`, manifest, `unelte/laborator_harta.py`, 7 teste) + rândul în `teste_contracte`; `kronos/`, `module/examen_bpb.py`, `module/model_trepte.py`, `unelte/laborator_trepte.py`, `config/` neatinse; SHA 21/21 identice; harta de referință făcută pe procesor (nu mai trebuie pe placă). Observația executantului (la început harta trage *mai des* textul ușor, sfertul ușor ~0,28–0,30) e chiar formula aprobată — nu schimbăm nimic; o citim în `progres.csv` la (H). B rămâne `aprobat`, după S135 B.
+- (istoric) stare A: gata (executant, 25 nov 2026 00:05; `module/date_harta.py` + `unelte/laborator_harta.py` + 7 teste + contract; harta de referință #513 făcută pe procesor în 7,3 min → `lucru/laborator/harta_ref_513.npy` (media 1,560); proba de 2 min pe procesor merge; SHA 21/21 identice; 1590 teste trec, 1 sărit) — raport: `docs/rapoarte/2026-11-25_0005_S137_laborator_harta.md`
 - (istoric) stare A: in_lucru (executant, 24 nov 2026 23:30; procesor, înainte de 07:00; placa liberă 435 MB / 27 °C, niciun proces greu)
 - (istoric) stare A: **aprobat** — procesor, doar în fișiere noi; **nu în timp ce rulează o probă S135 pe placă** (înainte de 07:00 sau după S135 B `gata`)
 - stare B: **aprobat** — pornește doar după: S135 B `gata` (ambele probe), S135 (0) **validă** (română < 2,0), S137 A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15**
