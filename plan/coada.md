@@ -4614,7 +4614,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - raport A: `docs/rapoarte/2026-11-25_1448_S139_laborator_portar.md`
 - (istoric) stare A: in_lucru (executant, 25 nov 2026 14:30; procesor, placa nefolosită 458 MB / 35 °C, nimic altceva în lucru)
 - (istoric) stare A: **aprobat** — procesor (`CUDA_VISIBLE_DEVICES=-1`), de acum, doar în fișiere noi
-- stare B: **aprobat** — pornește doar după A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15** (azi dacă A e gata la timp, altfel mâine de la 07:00)
+- stare B: in_lucru (executant, 25 nov 2026 15:00; placa 458 MB / 31 °C, fără `porneste-test.txt`; întâi proba de 3 min, apoi (P))
+- (istoric) stare B: **aprobat** — pornește doar după A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15** (azi dacă A e gata la timp, altfel mâine de la 07:00)
 - tip: A procesor · B placă
 - durată maximă: A 4 h de procesor · B: proba de 3 min + 60 min antrenare + ~30 min examene
 - de ce: Adrian a spus „da” (hub `COMENZI.md` C-167 și `DECIZII.md`, 25 nov 2026 11:41). Ideea (lucrarea „Mixture-of-Depths”, Raposo et al., 2024, arXiv 2404.02258 — doar ideea, codul îl scrii tu): la jumătate din straturi un selector liniar mic alege ~50 % din simboluri; doar ele trec prin stratul întreg, restul merg pe legătura directă. Mai puțin calcul pe pas → mai mulți pași în aceeași oră. Harta (S137) a ieșit „câștig strâmb”, bucățile (S135) au pierdut — asta e o probă separată, **fără** harta și fără bucăți.
