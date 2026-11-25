@@ -4608,6 +4608,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - ce ar fi: exact §4 din `docs/integrare_kronos/KRONOS_V2_CALITATE.md`: **(0′)** = S135 (0) cu sămânța 1164 (cât diferă două rulări identice — ne spune dacă pragul 0,010 e peste zgomot; folosește și verdictelor S135/S137); **(2)** = (0) + ReLU² + fără deplasări + RMS cu γ; **(3)** = (2) + fără γ în straturi, γ păstrat la norma finală (capul nostru e legat). Aceleași praguri ca S135.
 - de ce acum: Cyber-GPU a pus partea „placă” în fișă; fără probe, fișa v2 rămâne doar pe lucrări publice. (0′) e cea mai ieftină și cea mai utilă — fără ea un rezultat de ±0,010 la S135/S137 poate fi întâmplare.
 - **nu pornește fără „da”-ul lui Adrian** (de exemplu în hub: „da probele v2 (S138)” sau doar „da (0′)”).
+- notă supraveghetor (25 nov 2026 17:15): după S135/S137/S139 toate trei probele au dat la română diferențe de 0,006–0,026, iar judecătorul și martorul au mers de două ori în sens opus → (0′) a devenit cea mai utilă probă a laboratorului (o oră, nicio piesă nouă). Rămâne `propus — necesită Adrian`.
 
 ### S139 — C-167: LABORATORUL, a patra probă: „PORTARUL” (amestecul de adâncimi) — o oră de la zero, (P) față de S135 (0) (A: procesor · B: placa ~1 h 40 min, ziua 07:00–23:00)
 - stare A: gata (executant, 25 nov 2026 14:48; `module/model_portar.py` + `unelte/laborator_portar.py` + 12 teste, 1605 trec / 1 sărit; SHA înainte = după 21/21; proba de 2 min pe procesor merge; pre-înregistrarea `2026-11-25_laborator_portar.md` scrisă — B poate porni)
@@ -4616,6 +4617,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - (istoric) stare A: **aprobat** — procesor (`CUDA_VISIBLE_DEVICES=-1`), de acum, doar în fișiere noi
 - stare B: gata (executant, 25 nov 2026 16:29; (P) cod 0, probă validă; **LA FEL** — română 1,5286 vs 1,5343, `examen_bpb` 0,5426; viteza 1,062× → „și mai rapid”; SHA înainte = după 21/21; nu câștigă → fără `PORTAR_FISA.md`)
 - raport B: `docs/rapoarte/2026-11-25_1629_S139_laborator_portar_B.md`
+- **verificat de supraveghetor (25 nov 2026 17:15): GATA — „LA FEL”.** Română (P) 1,5286 ∈ (1,5243; 1,5443), `examen_bpb` 0,5426 ≤ 0,5444; viteza 41.527,1 / 39.114,9 = 1,062× ≥ 1,05× („și mai rapid”, nu schimbă verdictul); validă (38,9 % aleși cauzal ∈ [35 %, 65 %], 5.997 MB / 65 °C, SHA 21/21). Nu câștigă → ne oprim cu portarul (regula C-167); fără `PORTAR_FISA.md`.
 - (istoric) stare B: in_lucru (executant, 25 nov 2026 15:00; placa 458 MB / 31 °C, fără `porneste-test.txt`; întâi proba de 3 min, apoi (P))
 - (istoric) stare B: **aprobat** — pornește doar după A `gata` și pre-înregistrarea scrisă; numai în **07:00–23:00**, ultima pornire **21:15** (azi dacă A e gata la timp, altfel mâine de la 07:00)
 - tip: A procesor · B placă

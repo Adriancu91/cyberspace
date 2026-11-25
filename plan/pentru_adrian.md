@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 17:15 — „Portarul” = LA FEL (verificat): puțin mai bun și cu 6 % mai rapid, dar sub prag
+
+- **S139 „portarul” — GATA, verificat de mine cu cifrele:** româna curată **1,5286** față de 1,5343 (mai bună cu 0,006; pentru „câștigă” trebuia 0,010), martorul 0,5426 (în toleranță) → **„LA FEL”**. E cu **6 % mai rapid** (41.527 vs 39.115 simboluri/s → peste pragul de 5 %). Proba e validă. Cum ai cerut: ne oprim cu portarul (fără fișa pentru Cyber-GPU).
+- **De știut cinstit:** la examen selectorul a lăsat să treacă doar ~39 % din simboluri (la antrenare 50 %), iar R1 a scăzut mult (26 vs 42; nu decide). Toate trei probele de azi au diferențe de 0,006–0,026 — fără (0′) nu știm cât din ele e întâmplare.
+- **Rulează acum:** nimic pe placă la Kronos. **Nimic nou în coadă:** laboratorul și-a terminat probele aprobate, iar orice antrenare nouă cere „da”-ul tău (pauza C-156). Nicio comandă nouă pentru Kronos în hub; am închis C-167 în hub.
+- **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt` (scrie „LIBER”); (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional, recomandat: „**da (0′)**” — o oră pe placă, ne spune cât e zgomotul.
+
 ## 25 noiembrie 2026, 14:15 — „Harta” = câștig strâmb (verificat); „portarul” (C-167) a intrat în coadă
 
 - **S137 „harta” — GATA, verificat de mine cu cifrele:** româna curată a ieșit mult mai bună (**1,5085** față de 1,5343), dar examenul-martor s-a stricat cu **+0,0091** (toleranța era 0,005) → **„câștig strâmb”, nu e câștig**. Proba e validă. Cum ai cerut: ne oprim cu harta.
@@ -166,9 +173,3 @@
 
 - **21 nov 09:01 (executantul): S132 „pasul de aur” gata** — 10 pași de antrenare în PyTorch (procesor, F32, repetabil), SGD + AdamW-ul lui #513: setul mic (3,32 MB) în `docs/integrare_kronos/pas_de_aur_mic/`, #513 (2,74 GB) în `lucru/pas_de_aur/513/`, fișa `docs/integrare_kronos/PAS_DE_AUR.md`; diferențe finite ✓, SHA neschimbate, 1563 teste. Nimic nu pornește S131 automat. Raportul `docs/rapoarte/2026-11-21_0901_S132_pas_de_aur.md`.
 
-## 21 noiembrie 2026, 08:15 — Pauza ta la antrenări (C-156) e în coadă: S131 nu mai pornește; „pasul de aur” pe procesor
-
-- **Am preluat comanda ta C-156 (08:01):** **S131 e „în așteptare (pauză)”** — nu mai pornește la 19:00; pregătirile ei (datele, configurarea, pre-înregistrarea) rămân păstrate, ca să poată porni când ridici pauza. Nimic pe placa video la nicio oră; placa e a testelor de driver/OS. Executantul verifică și că nimic n-o pornește automat.
-- **Sarcina nouă S132 („pasul de aur”), aprobată de tine, doar procesor:** o unealtă care face 10 pași de antrenare în PyTorch și salvează tot (intrările, eroarea, schimbările pe fiecare tensor, greutățile după 1 și 10 pași, rețeta exactă) — întâi pentru un model mic de probă (2 straturi, 64), apoi pentru #513. Două rețete: una simplă (SGD), ca OS-ul să înceapă ușor, și cea cu care a învățat Kronos. Fișa o copiez în hub pentru Cyber-GPU.
-- **Raportul de dimineață e la locul lui și e bun:** noaptea fără erori, 1.556 teste trec, placa max 6.428 MB / 64 °C, verdictul S129 (rămâne #651, la 1 răspuns) confirmat. Modelul în uz rămâne #651, chat-ul pe 8787 neschimbat.
-- **Aștept de la tine:** nimic. Când vrei să reiei antrenările (S131 sau #736 în chat), scrie o comandă în hub.
