@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 25 noiembrie 2026, 23:15 — O comparație scurtă pe procesor pentru OS (S140); altfel liniște
+
+- **Nimic nou de la executant** de la 17:15 (n-avea sarcini; placa liberă la Kronos). Nimic oprit, nicio problemă.
+- **În OS, pasul de antrenare „rapid” al lui #513 merge de 2,28× mai repede** (os-445), dar diferă puțin de varianta exactă. Centrul a cerut „OS + Kronos”: cât e normal să difere pe text real.
+- **Am pus în coadă S140, aprobat de mine (doar procesor, ~40 min, nimic salvat, placa neatinsă):** cu unealta noastră de bancă, aceleași 300 de pași pe text real, o dată exact și o dată „mixt” (ca la antrenarea lui Kronos). Diferența dintre ele = banda de toleranță pe care OS-ul o poate folosi. Îl poți opri cu un rând în hub.
+- Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional, recomandat: „**da (0′)**”.
+
 ## 25 noiembrie 2026, 17:15 — „Portarul” = LA FEL (verificat): puțin mai bun și cu 6 % mai rapid, dar sub prag
 
 - **S139 „portarul” — GATA, verificat de mine cu cifrele:** româna curată **1,5286** față de 1,5343 (mai bună cu 0,006; pentru „câștigă” trebuia 0,010), martorul 0,5426 (în toleranță) → **„LA FEL”**. E cu **6 % mai rapid** (41.527 vs 39.115 simboluri/s → peste pragul de 5 %). Proba e validă. Cum ai cerut: ne oprim cu portarul (fără fișa pentru Cyber-GPU).
@@ -163,13 +171,4 @@
 - **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare; S131 nu pornește la 19:00. Dacă o cifră de viteză lipsește din jurnale, executantul scrie „nu e în jurnal” — nu o măsoară acum (asta ar cere „da”-ul tău).
 - **Rulează acum:** nimic la Kronos. Executantul a fost liniștit de la 09:02 — normal, n-a avut treabă. Din hub: OS-ul a dus #513 pe placă la 262 simb/s (de 2 ori peste PyTorch în Windows); Cyber-GPU și Cyber Universe încep motorul de antrenare (C-160, C-161).
 - **Aștept de la tine:** nimic.
-
-## 21 noiembrie 2026, 11:15 — „Pasul de aur” gata și verificat; e în hub pentru motorul de antrenare din OS
-
-- **S132 (comanda ta C-156) verificat de mine: trece.** Executantul a făcut 10 pași de antrenare pe procesor și a salvat tot (lotul, eroarea la fiecare pas, schimbările pe fiecare tensor, greutățile după 1 și 10 pași). Am verificat singur: toate cele 198 de fișiere ale modelului mic au sumele corecte, eroarea scade la fiecare pas la ambele rețete, iar rețeta „ca la Kronos” (AdamW, rata 0,00005) e exact cea din configurarea lui #513. #513 neatins, **1.563 teste trec**.
-- **Am pus în hub** fișa `integrare/kronos/PAS_DE_AUR.md`, modelul mic (3,32 MB) și rețeta lui #513, și am anunțat Cyber-GPU (C-157 punctul 9c). C-156 → „gata”; **pauza la antrenări rămâne**: S131 nu pornește, nimic pe placă.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă (C-156 spune că pasul de aur e singurul lucru nou).
-- **Aștept de la tine:** nimic. Opțional, la workstation: `schtasks /query /fo list | findstr /i "Kronos"` — ca să vezi că nicio sarcină Windows nu pornește o antrenare.
-
-- **21 nov 09:01 (executantul): S132 „pasul de aur” gata** — 10 pași de antrenare în PyTorch (procesor, F32, repetabil), SGD + AdamW-ul lui #513: setul mic (3,32 MB) în `docs/integrare_kronos/pas_de_aur_mic/`, #513 (2,74 GB) în `lucru/pas_de_aur/513/`, fișa `docs/integrare_kronos/PAS_DE_AUR.md`; diferențe finite ✓, SHA neschimbate, 1563 teste. Nimic nu pornește S131 automat. Raportul `docs/rapoarte/2026-11-21_0901_S132_pas_de_aur.md`.
 

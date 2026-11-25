@@ -4646,3 +4646,25 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **după:** dacă (P) **câștigă** → scrii (procesor, doar document) fișa `docs/integrare_kronos/PORTAR_FISA.md` pentru Cyber-GPU: formele exacte (cât din lot trece la fiecare strat, gather + scatter = 2 programe mici, ce intră în atenție), cu fișier:rând; eu o copiez în hub. Dacă nu câștigă → scrii clar și ne oprim acolo.
 - raport: `docs/rapoarte/<data>_<ora>_S139_laborator_portar.md` (A), apoi `…_S139_laborator_portar_B.md` (B): ce ai construit, testele, tabelul (0) vs (P) cu verdictul față de praguri, viteza, partea aleasă în modul cauzal și potrivirea cu top-k, cifrele informative top-k, SHA înainte/după; un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push după fiecare parte.
 - aprobat de: Adrian (hub `COMENZI.md` C-167, 25 nov 2026 11:41) — trecută în coadă de supraveghetor, 25 nov 2026 14:15
+
+### S140 — Cererea centrului (nota 25 nov 22:15, C-157/C-158): „F32 față de mixt pe text real” — partea Kronos, pe PROCESOR, cu bancul S134 (~35–45 min de procesor, fără placă)
+- stare: **aprobat** (supraveghetor, 25 nov 2026 23:15 — granițele 2 și 5: o comparație pe procesor cu unealta existentă `unelte/banc_antrenare.py`; fără placă, fără model nou salvat, nimic în `kronos/`/`module/`/`config/`. Pauza C-156 privește antrenările și placa; aici nu se salvează nimic și nu se folosește placa. **Adrian o poate opri** cu un rând în hub.)
+- tip: procesor (`CUDA_VISIBLE_DEVICES=-1`) · fereastră: oricând (și cât rulează testele OS pe placă; placa NU se atinge)
+- durată maximă: 1 h 15 min de procesor în total; dacă o variantă trece de 45 min, o oprești și raportezi câți pași a făcut
+- de ce: în OS, pasul mixt rapid pe #513 (os-445) diferă de oracolul F32 cu 7,2e-3 la pierdere (toleranța F32 e 1e-3). Centrul cere „OS + Kronos: comparație pe text real F32 vs mixt (aceiași pași, aceeași sămânță) → toleranța pasului mixt” (`rezultate/2026-11-25-workstation-os445-mixt-rapid/REZULTAT.md` în hub). Partea noastră = **cât diferă F32 de bf16 în PyTorch pe aceleași loturi reale**, adică o bandă de toleranță cinstită pentru OS. bf16 are mai puțină precizie decât f16 (folosit de OS), deci banda e mai degrabă largă.
+- ce faci:
+  0. `python -m pytest` verde; SHA-256 înainte (aceeași listă ca la S134: `experiment_513.pt`, #651, #736, `kronos/`, `module/examen_bpb.py`, `docs/conversatie/examen*.json`).
+  1. Pre-înregistrarea `docs/preinregistrari/2026-11-25_banc_f32_vs_bf16_300.md` (cu `python unelte/preinregistrare.py`) **înainte de rulări**, cu pragurile de mai jos și ghicirea ta (cât crezi că diferă la pașii 10 / 100 / 300).
+  2. Două rulări, una după alta, **fără nicio schimbare în unealtă**:
+     `python unelte/banc_antrenare.py --dispozitiv cpu --lot 2 512 --pasi 300 --precizie f32 --samanta 1134 --iesire lucru/banc/S140_f32`
+     `python unelte/banc_antrenare.py --dispozitiv cpu --lot 2 512 --pasi 300 --precizie bf16 --samanta 1134 --iesire lucru/banc/S140_bf16`
+     Verifici că `loturi.i64` sunt identice (SHA) între cele două — altfel comparația nu e validă.
+  3. Tabelul (în raport și în `docs/integrare_kronos/BANC_ANTRENARE.md`, secțiune nouă „S140 — F32 vs bf16, 300 de pași”): pierderea F32, pierderea bf16, diferența absolută și relativă la pașii 1, 10, 50, 100, 200, 300; **diferența maximă** pe pașii 1–300 (și la ce pas); media diferenței pe 1–50, 101–150, 251–300; media pierderii pe 251–300 la fiecare; norma gradientului la aceiași pași; ms/pas.
+- praguri (pre-înregistrate):
+  (a) **valid** doar dacă loturile sunt identice și pasul 1 F32 = S134 A (1,068, diferență ≤ 1e-3);
+  (b) **„bf16 nu strică învățarea pe 300 de pași”** dacă media pierderii pe pașii 251–300 la bf16 e în ±1 % din cea F32; altfel „bf16 se depărtează” (rezultat la fel de util);
+  (c) **banda propusă pentru OS** = diferența absolută maximă PyTorch bf16 − F32 la fiecare dintre pașii 1/10/50/100/200/300 (o scrii ca listă de 6 numere). Citire: dacă pasul mixt din OS stă față de F32-ul lui sub banda asta la aceiași pași, abaterea e doar rotunjire.
+  (d) SHA înainte = după.
+- **NU:** niciun model salvat (unealta nu salvează); nimic în `kronos/`, examen, paznic, jurnal, `config/`, `module/`; nu schimbi unealta (dacă ceva nu merge, te oprești și scrii de ce); placa nu se atinge; S131 și S134 B rămân cum sunt.
+- raport: `docs/rapoarte/<data>_<ora>_S140_banc_f32_vs_bf16.md` (tabelul, verdictul față de praguri, banda, SHA, testele); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push. Eu copiez secțiunea în hub (`integrare/kronos/BANC_ANTRENARE.md`) și o semnalez OS-ului.
+- aprobat de: supraveghetor, 25 nov 2026 23:15 (granițele 2 și 5; la cererea centrului de comandă din nota 22:15 la C-157/C-158)
