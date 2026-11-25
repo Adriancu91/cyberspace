@@ -87,6 +87,16 @@ MODULE = [
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
     ),
     pytest.param(
+        "model", "module.model_portar:ModelPortar", {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__"},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
+    pytest.param(
+        "model", "module.model_portar:ModelPortar",
+        {**GPT_MIC, "tokenizer": "bpe", "cale_tokenizer": "__tokenizer_mic__", "portar": True, "straturi_portar": [1],
+         "adunare_loturi": 2, "abatere_incorporari": 0.02, "incalzire_secunde": 0.5, "racire_secunde": 0.5},
+        marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),
+    ),
+    pytest.param(
         "model", "module.model_plasa_mare:ModelPlasaMare",
         {**GPT_MIC, "n_ascuns_nod": 16, "cale_tokenizer": "__tokenizer_mic__"},
         marks=pytest.mark.skipif(not ARE_TORCH, reason="PyTorch nu e instalat"),

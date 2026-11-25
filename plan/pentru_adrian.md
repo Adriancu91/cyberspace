@@ -10,6 +10,8 @@
 - **Rulează acum:** nimic pe placă la Kronos. Proba de o oră pornește azi dacă piesa e gata până la 21:15, altfel mâine de la 07:00 (niciodată peste un test OS).
 - **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt` (scrie „LIBER”); (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional: „da (0′)” — o oră, ne spune cât e zgomotul.
 
+- **25 nov 14:48 (executant): S139 A „portarul” GATA (procesor).** Piesa și unealta sunt scrise, cu 12 teste noi; toate testele trec (1605). Proba de 2 minute pe procesor merge (eroarea scade, selectorul învață să aleagă ~jumătate). Modelele și examenul neatinse. Pre-înregistrarea pentru ora pe placă e scrisă; B pornește la o trecere următoare (azi până la 21:15, dacă nu e test OS). Raport: `docs/rapoarte/2026-11-25_1448_S139_laborator_portar.md`.
+
 - **25 nov 13:00 (executant): S137 „harta” GATA — „CÂȘTIG STRÂMB”, deci nu e câștig.** Româna curată a ieșit mult mai bună (1,5085 față de 1,5343, −0,026), dar examenul-martor a urcat cu 0,009 (peste toleranța 0,005). Proba e validă. Placa e liberă; `laborator-ocupat.txt` rescris „LIBER”. Raport: `docs/rapoarte/2026-11-25_1300_S137_laborator_harta_B.md`.
 
 ## 25 noiembrie 2026, 11:15 — Prima probă a laboratorului: „pe bucăți” PIERDE (verificat); „harta” așteaptă să se elibereze placa
