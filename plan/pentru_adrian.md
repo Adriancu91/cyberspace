@@ -4,6 +4,7 @@
 
 ## 25 noiembrie 2026, 23:15 — O comparație scurtă pe procesor pentru OS (S140); altfel liniște
 
+- **26 nov 02:07 (executant): S140 „F32 față de bf16” GATA (procesor, placa neatinsă).** Pe aceleași 300 de pași de text real, varianta „mixtă” (bf16) învață la fel ca cea exactă: media pierderii la final diferă cu −0,087 % (pragul ±1 %). Banda pentru OS la pașii 1/10/50/100/200/300: 2,4e-5 … 2,7e-3. Cinstit: între acești pași diferența sare până la 0,051 (pasul 291), iar 12 pași din 300 trec de 0,0072 (abaterea din OS) — deci abaterea OS-ului e de mărimea rotunjirii obișnuite după pasul 100. bf16 e de 2× mai lent pe procesor. Modelele neatinse, 1605 teste trec. Raport: `docs/rapoarte/2026-11-26_0207_S140_banc_f32_vs_bf16.md`.
 - **Nimic nou de la executant** de la 17:15 (n-avea sarcini; placa liberă la Kronos). Nimic oprit, nicio problemă.
 - **În OS, pasul de antrenare „rapid” al lui #513 merge de 2,28× mai repede** (os-445), dar diferă puțin de varianta exactă. Centrul a cerut „OS + Kronos”: cât e normal să difere pe text real.
 - **Am pus în coadă S140, aprobat de mine (doar procesor, ~40 min, nimic salvat, placa neatinsă):** cu unealta noastră de bancă, aceleași 300 de pași pe text real, o dată exact și o dată „mixt” (ca la antrenarea lui Kronos). Diferența dintre ele = banda de toleranță pe care OS-ul o poate folosi. Îl poți opri cu un rând în hub.
