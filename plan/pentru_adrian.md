@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 noiembrie 2026, 02:15 — Comparația pentru OS (S140) e gata și verificată: modul „mixt” nu strică învățarea
+
+- **S140 — GATA, verificat de mine cu cifrele:** pe aceleași 300 de pași de text real, varianta „mixtă” (bf16) a ieșit la final cu doar **−0,087 %** față de cea exactă (pragul ±1 %) → „nu strică învățarea”. Proba e validă (aceleași loturi, modelele neatinse, 1605 teste trec). Placa nu s-a folosit.
+- **De știut cinstit:** la cei 6 pași ceruți diferența e mică (cel mult 0,0027), dar între ei sare până la 0,051; abaterea găsită în OS (0,0072) e deci de mărimea rotunjirii obișnuite după pasul 100. O singură pereche de rulări.
+- **Am dus tabelul în hub** (`integrare/kronos/BANC_ANTRENARE.md`) și l-am semnalat OS-ului ca bandă de toleranță.
+- **Rulează acum:** nimic la Kronos; noaptea placa e a OS-ului. **Nimic nou în coadă** (orice antrenare nouă cere „da”-ul tău, pauza C-156). Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (2) `claude auth login` la workstation **până pe 29 nov**; (3) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (4) opțional, recomandat: „**da (0′)**”.
+
 ## 25 noiembrie 2026, 23:15 — O comparație scurtă pe procesor pentru OS (S140); altfel liniște
 
 - **26 nov 02:07 (executant): S140 „F32 față de bf16” GATA (procesor, placa neatinsă).** Pe aceleași 300 de pași de text real, varianta „mixtă” (bf16) învață la fel ca cea exactă: media pierderii la final diferă cu −0,087 % (pragul ±1 %). Banda pentru OS la pașii 1/10/50/100/200/300: 2,4e-5 … 2,7e-3. Cinstit: între acești pași diferența sare până la 0,051 (pasul 291), iar 12 pași din 300 trec de 0,0072 (abaterea din OS) — deci abaterea OS-ului e de mărimea rotunjirii obișnuite după pasul 100. bf16 e de 2× mai lent pe procesor. Modelele neatinse, 1605 teste trec. Raport: `docs/rapoarte/2026-11-26_0207_S140_banc_f32_vs_bf16.md`.
@@ -163,13 +171,5 @@
 - **Am copiat fișa în hub** (`integrare/kronos/FISA_ANTRENARE.md`) — e „cifra de bătut” pentru motorul de antrenare din OS (Cyber-GPU, C-160). C-162 → gata.
 - **De știut (nu e grav):** punctul de salvare cu optimizatorul al liniei #513 nu mai e pe disc; modelul #513 în sine e întreg. Lipsesc din jurnale și câteva cifre (viteza fără recalcul, timpul pe bucăți al unui pas) — se pot măsura doar cu „da”-ul tău și ridicarea pauzei.
 - **Rulează acum:** nimic la Kronos. Pauza C-156 rămâne: nimic pe placă, nicio antrenare, S131 „în așteptare”. Nimic nou în coadă.
-- **Aștept de la tine:** nimic.
-
-## 21 noiembrie 2026, 17:15 — Comanda ta C-162 (fișa de antrenare) e în coadă: S133, doar citire
-
-- **Executantul a terminat S133 la 17:45 (doar citit, nimic pe placă):** fișa `docs/integrare_kronos/FISA_ANTRENARE.md`. Cifra de bătut, din jurnal: linia #513 ~39.300 simboluri/s (0,80 pași/s), linia #651 ~15.500 simboluri/s (0,32 pași/s, cu recalculul activărilor), ambele bf16 pe placă. Lipsesc din jurnale (nemăsurate): viteza fără recalcul, timpul pe bucăți al unui pas, F32 curat. **1.563 teste trec.** Nimic vechi atins (sumele identice). Raport: `docs/rapoarte/2026-11-21_1736_S133_fisa_antrenare.md`.
-- **Am preluat C-162:** sarcina **S133** e în coadă, aprobată de tine. Executantul scrie, doar din ce există deja (cod, configurări, jurnale), fișa pentru motorul de antrenare din OS: cât de repede antrenează PyTorch pe placa ta (linia #513 și #651, cu rândul din jurnal ca dovadă), ce face pasul adevărat în plus față de „pasul de aur”, cum arată datele, ce se salvează și cum se rulează examenul. O copiez în hub (`integrare/kronos/FISA_ANTRENARE.md`) când e gata.
-- **Pauza C-156 rămâne:** nimic pe placă, nicio antrenare; S131 nu pornește la 19:00. Dacă o cifră de viteză lipsește din jurnale, executantul scrie „nu e în jurnal” — nu o măsoară acum (asta ar cere „da”-ul tău).
-- **Rulează acum:** nimic la Kronos. Executantul a fost liniștit de la 09:02 — normal, n-a avut treabă. Din hub: OS-ul a dus #513 pe placă la 262 simb/s (de 2 ori peste PyTorch în Windows); Cyber-GPU și Cyber Universe încep motorul de antrenare (C-160, C-161).
 - **Aștept de la tine:** nimic.
 
