@@ -2,6 +2,12 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 26 noiembrie 2026, 08:15 — Raportul de dimineață e bun; noaptea a fost liniște
+
+- **Raportul de dimineață (06:49) — verificat:** 1.605 teste trec, 0 picate; placa liberă (484 MB, 29 °C); nimic oprit de paznic; noaptea calculatorul n-a mai repornit. Singura treabă a nopții a fost S140 (pe procesor), deja verificată de mine la 02:15.
+- **Rulează acum:** nimic la Kronos; ziua placa e a testelor OS. **Nimic nou în coadă:** orice antrenare nouă cere „da”-ul tău (pauza C-156). Nicio comandă nouă pentru Kronos în hub; OS-ul (os-456) n-a cerut nimic de la noi.
+- **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov** (peste 3 zile se opresc toate rulările automate); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 26 noiembrie 2026, 02:15 — Comparația pentru OS (S140) e gata și verificată: modul „mixt” nu strică învățarea
 
 - **S140 — GATA, verificat de mine cu cifrele:** pe aceleași 300 de pași de text real, varianta „mixtă” (bf16) a ieșit la final cu doar **−0,087 %** față de cea exactă (pragul ±1 %) → „nu strică învățarea”. Proba e validă (aceleași loturi, modelele neatinse, 1605 teste trec). Placa nu s-a folosit.
@@ -164,12 +170,3 @@
 - **Repornirile calculatorului** (11 ieri, 5 azi-noapte) vin cel mai probabil de la testele automate ale OS-ului pe placă (hub-ul arată rapoarte din OS la aceleași ore). La Kronos n-au stricat nimic; dacă nu sunt de la teste, spune-mi.
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă — pauza rămâne până spui tu altfel.
 - **Aștept de la tine:** nimic urgent. Când ai un minut la workstation, în dosarul `C:\Kronos\cyberspace` rulează `git -c core.editor=true rebase --continue` — până atunci executantul nu poate aduce noutățile de pe GitHub (acum nu contează, fiindcă nu are treabă; va conta când reiei antrenările).
-
-## 21 noiembrie 2026, 20:15 — Fișa de antrenare (C-162) e gata, verificată și pusă în hub
-
-- **S133 verificat de mine: trece.** Fișa spune cât de repede a învățat Kronos pe placa ta în Windows: linia lui #513 ~**39.300** simboluri/s, linia lui #651 ~**15.500** simboluri/s (cu recalculul activărilor). Am refăcut singur socotelile din cifrele din jurnal: ies la fel. Doar citit, nimic pe placă, modelele neatinse, **1.563 teste trec**.
-- **Am copiat fișa în hub** (`integrare/kronos/FISA_ANTRENARE.md`) — e „cifra de bătut” pentru motorul de antrenare din OS (Cyber-GPU, C-160). C-162 → gata.
-- **De știut (nu e grav):** punctul de salvare cu optimizatorul al liniei #513 nu mai e pe disc; modelul #513 în sine e întreg. Lipsesc din jurnale și câteva cifre (viteza fără recalcul, timpul pe bucăți al unui pas) — se pot măsura doar cu „da”-ul tău și ridicarea pauzei.
-- **Rulează acum:** nimic la Kronos. Pauza C-156 rămâne: nimic pe placă, nicio antrenare, S131 „în așteptare”. Nimic nou în coadă.
-- **Aștept de la tine:** nimic.
-
