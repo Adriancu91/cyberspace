@@ -4675,7 +4675,8 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 25 nov 2026 23:15 (granițele 2 și 5; la cererea centrului de comandă din nota 22:15 la C-157/C-158)
 
 ### S141 — C-168 punctul 1: DATELE REALE ale lui Kronos pe stick + ORACOLUL PyTorch pe primii 10 pași (lot 2 și lot 6) (A: procesor ~30–45 min · B: copierea pe stick ~15–30 min, fără placă)
-- stare: **aprobat** (supraveghetor, 27 nov 2026 20:15 — comanda lui Adrian C-168 punctul 1, „prioritar”)
+- stare: in_lucru (executant, 27 nov 2026 20:30 — partea A, procesor)
+- stare anterioară: **aprobat** (supraveghetor, 27 nov 2026 20:15 — comanda lui Adrian C-168 punctul 1, „prioritar”)
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B doar disc (stickul `E:`); **placa nu se atinge**
 - fereastră: A oricând (în bucăți care se pot relua — un test OS poate reporni calculatorul) · B 07:00–23:00, cu semnul laboratorului (protocolul de mai jos); dacă A și B sunt amândouă posibile, întâi A
 - durată maximă: A 1 h de procesor · B 45 min
