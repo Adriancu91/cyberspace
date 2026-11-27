@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 noiembrie 2026, 08:15 — Raportul de dimineață e bun; **mai sunt 2 zile până expiră conectarea**
+
+- **Raportul de dimineață (06:50) — verificat:** 1.605 teste trec, 0 picate; placa liberă (458 MB, 30 °C); nimic oprit de paznic; noaptea n-a rulat nimic la Kronos (nu era nimic aprobat), deci nu e niciun model nou de judecat.
+- **Repornirile au o explicație:** cele 14 reporniri de ieri vin toate de la testele OS de pe stick (os-456 … os-476), nu de la o defecțiune. Nu ne-au încurcat, pentru că placa era liberă. Dacă dai „da” unei probe lungi (S138), ar trebui să nu se suprapună cu testele OS — semnul „laborator ocupat” face asta.
+- **Rulează acum:** nimic la Kronos; ziua placa e a testelor OS. **Nimic nou în coadă** (orice antrenare nouă cere „da”-ul tău, pauza C-156). Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, cel târziu pe 28 nov** (expiră cel mai devreme pe 29 nov; după aceea se opresc executantul, supraveghetorul și raportul de dimineață); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 26 noiembrie 2026, 08:15 — Raportul de dimineață e bun; noaptea a fost liniște
 
 - **Raportul de dimineață (06:49) — verificat:** 1.605 teste trec, 0 picate; placa liberă (484 MB, 29 °C); nimic oprit de paznic; noaptea calculatorul n-a mai repornit. Singura treabă a nopții a fost S140 (pe procesor), deja verificată de mine la 02:15.
@@ -162,11 +169,3 @@
 - **Din hub:** OS-ul (os-363) știe acum să dea **examenul lui Kronos pe procesor** (`kronos --examen`). Ca să verifice că îl dă la fel ca la noi, ar vrea **o cifră de reper de la Kronos**: nota (bpb) modelului **#513** în forma din OS (Q8_0) pe primele 100.000 de caractere din textul de validare. Ar fi o măsurătoare scurtă **doar pe procesor**, fără placă și fără antrenare — dar e o cerere a altui proiect, deci n-o pun în coadă fără „da”-ul tău.
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă.
 - **Aștept de la tine:** doar dacă vrei: „da reperul #513 pentru examenul din OS” (o comandă în hub) — îl pun în coadă, pe procesor. Rămâne valabil, când ajungi la workstation: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`.
-
-## 22 noiembrie 2026, 08:15 — Noaptea liniștită (pauza ta); Kronos #651 a mers pentru prima dată pe placă în OS-ul nostru
-
-- **Raportul de dimineață e la locul lui și e bun:** noaptea n-a rulat nimic pe placă, exact cum ai cerut (pauza C-156); **1.563 teste trec**, 0 picate; placa rece și liberă (489 MB, 30 °C); disc C ~136 GB liberi. Nu e verdict azi — n-a fost nimic de judecat.
-- **Vestea din hub:** modelul tău în uz, **#651** (cel mare, 183 de milioane), a trecut primul test pe placa video **în OS-ul nostru** (os-343, 07:36): aceleași 16 cuvinte-bucăți ca pe procesor, **194 simboluri pe secundă**. Kronos n-a avut nimic de făcut pentru asta — fișierul lui era deja pe stick.
-- **Repornirile calculatorului** (11 ieri, 5 azi-noapte) vin cel mai probabil de la testele automate ale OS-ului pe placă (hub-ul arată rapoarte din OS la aceleași ore). La Kronos n-au stricat nimic; dacă nu sunt de la teste, spune-mi.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă — pauza rămâne până spui tu altfel.
-- **Aștept de la tine:** nimic urgent. Când ai un minut la workstation, în dosarul `C:\Kronos\cyberspace` rulează `git -c core.editor=true rebase --continue` — până atunci executantul nu poate aduce noutățile de pe GitHub (acum nu contează, fiindcă nu are treabă; va conta când reiei antrenările).
