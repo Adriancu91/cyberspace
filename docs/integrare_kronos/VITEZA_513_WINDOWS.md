@@ -129,3 +129,56 @@ Rezultatul complet: `lucru/s130/s130.json` (doar local). Durata totală: 6,5 s.
 
 - `lucru/stocare/modele/experiment_513.pt`: `605c4084f0a5db125b1e6c2c037b8e3d96abd17c1d62ec76efe439ecaba58b2c` (neschimbat)
 - `lucru/export/kronos_513_q8_0.kgr`: `66f734b3136206d1be8825b1188b1a90f0c5b00c2e19746547f327f9b95c5859` (neschimbat)
+
+---
+
+# S142 — cu memoria de context (KV cache) și FP16/bf16 (C-168 punctul 7, 27 nov 2026 22:01)
+
+Același model #513, același text `Buna ziua` (intrarea `[66, 2612, 7464]`), greedy. Unealta nouă
+`unelte/viteza_scris_kv.py` (memoria de context scrisă în unealtă, aceleași greutăți; pe procesor, cu memorie = fără
+memorie, logit-urile diferă cel mult 1,8e-5). Pentru fiecare variantă: 1 rulare de încălzire, 5 rulări, **mediana**,
+`torch.cuda.synchronize()` înainte de fiecare oprire a ceasului; fiecare variantă într-un proces nou.
+FP16/bf16 = o copie a modelului în memorie (nimic salvat).
+
+## Tabelul S142
+
+| Variantă | Precizie | Memoria de context | 16 simb.: simb/s | ms/simbol | 256 simb.: simb/s | ms/simbol | Memoria max (16 / 256) | Primele 16 simboluri = cele așteptate |
+|---|---|---|---:|---:|---:|---:|---|---|
+| (a) martorul (= S130) | FP32 | nu | **132,55** | 7,544 | 128,42 | 7,787 | 389,6 / 418,5 MB | da |
+| (b) | FP32 | da | 159,65 | 6,264 | 151,23 | 6,612 | 388,2 / 421,9 MB | da |
+| (c) | FP16 | da | 159,43 | 6,272 | 158,44 | 6,312 | 209,1 / 226,0 MB | da |
+| (d) | bf16 | da | **160,05** | 6,248 | 159,44 | 6,272 | 209,1 / 226,0 MB | da |
+
+Cele 5 rulări (secunde), 16 simboluri: (a) 0,1258 · 0,1235 · 0,1205 · 0,1207 · 0,1198; (b) 0,0999 · 0,1002 · 0,1004 ·
+0,0997 · 0,1002; (c) 0,1004 · 0,1013 · 0,1004 · 0,0998 · 0,0996; (d) 0,0996 · 0,0996 · 0,1003 · 0,1000 · 0,1026.
+256 simboluri: (a) 1,985 · 1,994 · 2,082 · 2,010 · 1,986; (b) 1,693 · 1,697 · 1,686 · 1,686 · 1,760;
+(c) 1,621 · 1,616 · 1,617 · 1,599 · 1,598; (d) 1,610 · 1,607 · 1,606 · 1,589 · 1,593.
+
+Simbolurile la 16 (toate cele 4 variante): `[44, 10, 73, 2524, 10766, 1438, 1505, 1428, 1765, 99, 1547, 3644, 44, 10, 15879, 1505]`.
+Textul la 256 de simboluri începe cu `",\nImi doresc sa ma intorc la mine,\nSa ma intorc la mine,\nSa ma intorc la mine,…"`.
+
+**Cea mai bună rețetă Windows** (pragul pre-înregistrat: cele mai multe simb/s la 16 simboluri dintre (b)–(d)):
+**(d) bf16 cu memoria de context, 160,05 simb/s.** (b), (c), (d) sunt la 0,4 % una de alta.
+
+## Comparația cu OS-ul (doar cifre)
+
+| Unde | simb/s (16 simboluri) |
+|---|---:|
+| Cyber Universe OS (cifra din analiza din 27 nov) | 351 |
+| Windows, PyTorch, placa, bf16 cu memoria de context (S142 d) | 160,05 |
+| raportul OS / Windows | **×2,19** |
+
+## Versiunile (S142)
+
+Python 3.12.10; PyTorch 2.14.1+cu132 (CUDA 13.2 în torch); cuDNN 92400; driverul NVIDIA 616.56; RTX 3070 Ti 8.192 MiB;
+Windows-11-10.0.26300-SP0. Fără `torch.compile`, nimic instalat.
+
+## Comenzile S142
+
+```
+.venv/Scripts/python -X utf8 unelte/viteza_scris_kv.py --dispozitiv cuda --precizie f32  --cache nu --simboluri 16  --text "Buna ziua" --kgr lucru/export/kronos_513_q8_0.kgr --iesire lucru/s142/B_a_16
+.venv/Scripts/python -X utf8 unelte/viteza_scris_kv.py --dispozitiv cuda --precizie f32  --cache da --simboluri 16  --text "Buna ziua" --kgr lucru/export/kronos_513_q8_0.kgr --iesire lucru/s142/B_b_16
+.venv/Scripts/python -X utf8 unelte/viteza_scris_kv.py --dispozitiv cuda --precizie f16  --cache da --simboluri 16  --text "Buna ziua" --kgr lucru/export/kronos_513_q8_0.kgr --iesire lucru/s142/B_c_16
+.venv/Scripts/python -X utf8 unelte/viteza_scris_kv.py --dispozitiv cuda --precizie bf16 --cache da --simboluri 16  --text "Buna ziua" --kgr lucru/export/kronos_513_q8_0.kgr --iesire lucru/s142/B_d_16
+```
+la fel cu `--simboluri 256` (ieșirile `B_<a|b|c|d>_256`). SHA-256 înainte = după la toate 8 (aceleași ca mai sus).
