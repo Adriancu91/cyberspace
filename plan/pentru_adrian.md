@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 noiembrie 2026, 20:15 — Am preluat planul de reparație (C-168): datele reale pe stick + comparația cinstită la scris
+
+- **Comanda ta C-168 (17:57 + 20:00) — preluată pentru partea Kronos (punctele 1 și 7), amândouă `aprobat`:**
+  - **S141 (prioritar):** executantul face întâi „oracolul” pe procesor — primii 10 pași de antrenare ai lui #513 pe textul real, la lot 2 și lot 6, ca OS-ul să aibă cu ce se compara; apoi copiază bucățile #651 (~2,7 GB) pe stick în `E:\antrenare\date\` **doar dacă are loc** (nu șterge nimic de pe stick; dacă nu ajunge, scrie câți MB lipsesc). Copierea se face între 07:00 și 23:00, cu semnul „laborator ocupat”, ca un test să nu repornească în stick în timpul ei. Nimic din date nu ajunge în vreun repo.
+  - **S142:** comparația la scris cu Windows pe cea mai bună rețetă (memoria de context + bf16/f16), întâi pe procesor, apoi ~20 min pe placă după S141. Ea înlocuiește cifra „×2,7”, dacă iese altfel.
+- **Rulează acum:** nimic la Kronos. Executantul n-a avut de lucru de la raportul de dimineață; nicio problemă (nimic oprit, testele treceau la 06:50).
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, cel târziu mâine, 28 nov** (fără el, S141/S142 nu se mai fac după 29 nov); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 27 noiembrie 2026, 08:15 — Raportul de dimineață e bun; **mai sunt 2 zile până expiră conectarea**
 
 - **Raportul de dimineață (06:50) — verificat:** 1.605 teste trec, 0 picate; placa liberă (458 MB, 30 °C); nimic oprit de paznic; noaptea n-a rulat nimic la Kronos (nu era nimic aprobat), deci nu e niciun model nou de judecat.
@@ -162,10 +170,3 @@
 - **Din hub (doar de știut):** OS-ul citește acum datele de antrenare ale lui Kronos și trage loturile exact ca la noi (os-366); tu ai cerut ca motorul de antrenare să se inspire din PyTorch, llm.c și altele cu licență permisivă. Kronos n-are nimic de făcut pentru asta.
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** (1) `claude auth login` la workstation până pe 29 nov; (2) rămâne valabil: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS” (comandă în hub).
-
-## 23 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); OS-ul cere, opțional, o cifră de reper de la Kronos
-
-- **La Kronos nu s-a schimbat nimic** de ieri dimineață: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
-- **Din hub:** OS-ul (os-363) știe acum să dea **examenul lui Kronos pe procesor** (`kronos --examen`). Ca să verifice că îl dă la fel ca la noi, ar vrea **o cifră de reper de la Kronos**: nota (bpb) modelului **#513** în forma din OS (Q8_0) pe primele 100.000 de caractere din textul de validare. Ar fi o măsurătoare scurtă **doar pe procesor**, fără placă și fără antrenare — dar e o cerere a altui proiect, deci n-o pun în coadă fără „da”-ul tău.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă.
-- **Aștept de la tine:** doar dacă vrei: „da reperul #513 pentru examenul din OS” (o comandă în hub) — îl pun în coadă, pe procesor. Rămâne valabil, când ajungi la workstation: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`.
