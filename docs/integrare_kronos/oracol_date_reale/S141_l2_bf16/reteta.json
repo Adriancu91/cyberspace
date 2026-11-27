@@ -1,0 +1,86 @@
+{
+ "ce_este": "S134 bancul de antrenare: pașii lui #513 în PyTorch, pentru comparația cinstită cu OS-ul",
+ "model": {
+  "experiment": 513,
+  "linie": "w2_romana_r1",
+  "fisier": "lucru/stocare/modele/experiment_513.pt",
+  "sha256": "605c4084f0a5db125b1e6c2c037b8e3d96abd17c1d62ec76efe439ecaba58b2c",
+  "clasa": "module.model_muon:ModelGPTConversatieMuon",
+  "parametri": 98032128
+ },
+ "date": {
+  "amprenta": "2b2492ec78569c2b",
+  "sha256_tot": "560863a976b8d36ab1515ce5121868f994f2e2959591525d0060c9e14fb5d4af",
+  "tokenizer": {
+   "fisier": "date/ws/bpe_16384.json",
+   "sha256": "2fcb9937a02ae3fb23723399d8fb2fdbecad96b697e0c626109d53232974b546"
+  },
+  "simboluri": 1341190791,
+  "tip": "int16",
+  "bucati": 27,
+  "marime_bucata": 50000000,
+  "sursa": {
+   "fisier": "lucru/cache/simboluri_be12c6d88276d79d.pt",
+   "octeti": 2682383363
+  },
+  "director": "lucru/bucati/w2_amestec_be12",
+  "nota": "textul (amestecul W2) al liniei #513 — la antrenarea reală lotul avea și 45 % conversație și 5 % hrană (FISA_ANTRENARE.md §2); aici doar textul, ca OS-ul să tragă aceleași ferestre"
+ },
+ "loturi": {
+  "cum": "g = torch.Generator().manual_seed(samanta); la fiecare pas pozitii = torch.randint(len(sir) − context − 1, (lot,), generator=g) (= DateBucati.lot); fereastra de la p: intrare = sir[p : p+context], ținta = sir[p+1 : p+context+1]",
+  "samanta": 1134,
+  "lot": 2,
+  "context": 512,
+  "pasi": 10,
+  "lungime_sir": 1341190791
+ },
+ "pas": {
+  "optimizator": "AdamW",
+  "lr": 5e-05,
+  "betas": [
+   0.9,
+   0.999
+  ],
+  "eps": 1e-08,
+  "weight_decay": 0.1,
+  "amsgrad": false,
+  "taiere_gradient": 1.0,
+  "adunare_loturi": 1,
+  "rata": "constantă, fără încălzire",
+  "precizie": "bf16",
+  "bf16": "torch.autocast(bfloat16) în jurul trecerii înainte și al pierderii (ca ModelGPT._autocast); greutățile, gradientele și AdamW în F32",
+  "ordinea": "zero_grad → înainte → cross_entropy(logits.float(), media pe toate pozițiile) → înapoi → clip_grad_norm_(1,0) (norma raportată = înainte de tăiere) → AdamW.step()",
+  "timp": "de la zero_grad până după step, cu torch.cuda.synchronize() la ambele capete pe placă; loturile sunt deja pe dispozitiv (tragerea lor nu intră în timp)",
+  "dropout": 0.0,
+  "optimizator_citit_din_model": {
+   "clasa": "AdamW",
+   "lr": 5e-05,
+   "betas": [
+    0.9,
+    0.999
+   ],
+   "eps": 1e-08,
+   "weight_decay": 0.1,
+   "amsgrad": false,
+   "optimizator_ales": "adamw"
+  }
+ },
+ "versiuni": {
+  "python": "3.12.10",
+  "pytorch": "2.14.1+cu132",
+  "numpy": "2.5.2",
+  "cuda_pytorch": "13.2",
+  "procesor": "Intel64 Family 6 Model 85 Stepping 7, GenuineIntel",
+  "sistem": "Windows-11-10.0.26300-SP0",
+  "fire_pytorch": 18
+ },
+ "salvat": "niciun model; nimic în jurnalul de experimente",
+ "loturi.i64": {
+  "sha256": "688fe9e9da0bfd073071a843df51c14027b527d54c782a0f5fedee2b037878ed",
+  "octeti": 160,
+  "forma": [
+   10,
+   2
+  ]
+ }
+}

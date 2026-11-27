@@ -4,6 +4,7 @@
 
 ## 27 noiembrie 2026, 20:15 — Am preluat planul de reparație (C-168): datele reale pe stick + comparația cinstită la scris
 
+- **27 nov 20:52 (executant): S141 partea A „oracolul” GATA (procesor, placa neatinsă).** Primii 10 pași de antrenare ai lui #513 pe textul real, la lot 2 și lot 6, exact (F32) și mixt (bf16): toate cele 4 verificări trec (lot 2 identic cu S140, pasul 1 = 1,067867, lot 6 pornește de la 1,01, nicio valoare stricată). Fișierul pentru OS (23 KB, cu pozițiile ferestrelor): `docs/integrare_kronos/oracol_date_reale/`. Modelele neatinse, 1605 teste trec. Copierea pe stick (partea B) urmează la o trecere următoare. Raport: `docs/rapoarte/2026-11-27_2052_S141_date_reale_oracol.md`.
 - **Comanda ta C-168 (17:57 + 20:00) — preluată pentru partea Kronos (punctele 1 și 7), amândouă `aprobat`:**
   - **S141 (prioritar):** executantul face întâi „oracolul” pe procesor — primii 10 pași de antrenare ai lui #513 pe textul real, la lot 2 și lot 6, ca OS-ul să aibă cu ce se compara; apoi copiază bucățile #651 (~2,7 GB) pe stick în `E:\antrenare\date\` **doar dacă are loc** (nu șterge nimic de pe stick; dacă nu ajunge, scrie câți MB lipsesc). Copierea se face între 07:00 și 23:00, cu semnul „laborator ocupat”, ca un test să nu repornească în stick în timpul ei. Nimic din date nu ajunge în vreun repo.
   - **S142:** comparația la scris cu Windows pe cea mai bună rețetă (memoria de context + bf16/f16), întâi pe procesor, apoi ~20 min pe placă după S141. Ea înlocuiește cifra „×2,7”, dacă iese altfel.
