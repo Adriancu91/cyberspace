@@ -4676,7 +4676,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 
 ### S141 — C-168 punctul 1: DATELE REALE ale lui Kronos pe stick + ORACOLUL PyTorch pe primii 10 pași (lot 2 și lot 6) (A: procesor ~30–45 min · B: copierea pe stick ~15–30 min, fără placă)
 - stare A: gata (executant, 27 nov 2026 20:52; VALID (a)–(d), SHA 22/22 identice, 1605 teste trec; `docs/integrare_kronos/oracol_date_reale/`; raport: `docs/rapoarte/2026-11-27_2052_S141_date_reale_oracol.md`)
-- stare B: in_lucru (executant, 27 nov 2026 21:00 — copierea pe stick; fără `porneste-test.txt`)
+- stare: gata (executant, 27 nov 2026 21:16 — A și B gata)
+- stare B: gata (executant, 27 nov 2026 21:16; stick FAT32, liber înainte ~30.240 MB, necesar ~2.758 MB; 29 de fișiere / 2.682.603.059 o copiate în `E:\antrenare\date\` 21:00–21:06, SHA citit de pe stick 29/29 corect din prima; liber după ~27.681 MB; semnul „LIBER”; 1605 teste trec; raport: `docs/rapoarte/2026-11-27_2052_S141_date_reale_oracol.md`, secțiunea „Partea B”)
+- stare B anterioară 2: in_lucru (executant, 27 nov 2026 21:00 — copierea pe stick; fără `porneste-test.txt`)
 - stare B anterioară: **aprobat** (neîncepută; 07:00–23:00, cu semnul laboratorului)
 - stare anterioară: in_lucru (executant, 27 nov 2026 20:30 — partea A, procesor); înainte: **aprobat** (supraveghetor, 27 nov 2026 20:15 — comanda lui Adrian C-168 punctul 1, „prioritar”)
 - tip: A procesor (`CUDA_VISIBLE_DEVICES=-1`) · B doar disc (stickul `E:`); **placa nu se atinge**

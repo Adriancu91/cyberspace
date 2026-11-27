@@ -1,7 +1,7 @@
 # S141 — Datele reale ale lui Kronos + oracolul PyTorch pe primii 10 pași (lot 2 și lot 6)
 
-*Raport scris de executant, 27 nov 2026, 20:52. Partea A (procesor) e GATA. Partea B (copierea pe stick) încă nu e
-făcută: o încep la o trecere următoare, între 07:00 și 23:00, cu semnul laboratorului.*
+*Raport scris de executant, 27 nov 2026, 20:52 (partea A). Completat la 21:16 cu partea B (copierea pe stick), tot GATA:
+vezi secțiunea „Partea B” de la sfârșit.*
 
 ## Pe scurt
 
@@ -100,10 +100,77 @@ iar fiecare rulare a verificat că #513 e neschimbat după ea.
 
 ## Ce urmează
 
-- **S141 partea B** (copierea pe stick): la o trecere următoare, între 07:00 și 23:00, dacă nu există
-  `porneste-test.txt`. Rezultatul (locul pe `E:`, ce s-a copiat, verificarea SHA) îl adaug în acest raport.
+- ~~S141 partea B~~ — făcută la 21:00–21:06, vezi mai jos.
 - Apoi S142 A (procesor), S142 B (placa) — în ordinea din coadă.
 
 ## Ce aștept de la Adrian
 
 Nimic nou pentru S141. (Rămân cele din `plan/pentru_adrian.md`, mai ales `claude auth login` până pe 28 nov.)
+
+---
+
+## Partea B — datele reale pe stick (executant, 27 nov 2026, 21:16) — GATA
+
+**Pe scurt: stickul avea loc din belșug; cele 27 de bucăți, `index.json` și tokenizerul sunt acum în
+`E:\antrenare\date\`, neschimbate, și fiecare a fost citită înapoi de pe stick cu SHA-256 corect, din prima.
+Nimic din ce era deja pe stick n-a fost atins. Placa n-a fost folosită.**
+
+### Protocolul laboratorului
+
+- La 20:59 **nu exista** `C:\Kronos\cyber-test\porneste-test.txt` (ultimul test OS folosit: `porneste-test-folosit-20261127-194153.txt`).
+- 20:59: semnul `laborator-ocupat.txt` = „OCUPAT — S141 copiere pe stick”, început 20:59, sfârșit estimat 21:44.
+- 21:07: semnul rescris „LIBER” (copierea încheiată la 21:06).
+
+### Stickul și locul (pasul B.2–B.3)
+
+- `E:` e stickul OS-ului: există `E:\EFI\BOOT\` și `E:\BOOT\LIMINE\limine.conf` (doar citite).
+- Sistemul de fișiere: **FAT32** (fiecare fișier de copiat are cel mult 100 MB, deci limita FAT32 de 4 GB nu contează).
+- Mărimea stickului: 32.195.477.504 o (~32,2 GB); folosit înainte 486.490.112 o.
+- **Liber înainte: 31.708.987.392 o (~30.240 MB).**
+- **Necesar: 2.892.318.259 o (~2.758 MB)** = 27 bucăți 2.682.381.582 o + `index.json` 5.436 o + `bpe_16384.json`
+  216.041 o + rezerva 200 MB. → **ajunge** (lipsesc 0 MB).
+- `E:\antrenare\date\` nu exista înainte (l-am creat eu).
+
+### Ce s-a copiat (pasul B.4)
+
+- Unealta: un script mic al meu, `lucru/cascada/S141_proba/stick.py` (Python `shutil.copyfile`; refuză dacă ținta există
+  deja sau dacă nu ajunge locul; nu scrie peste nimic), pornit prin cascadă (`cascada.py porneste S141`, procesul 21100,
+  jurnal `lucru/cascada/S141.log`, rezultatul pe fișier în `lucru/cascada/S141_proba/stick_copiere.json`).
+- Interval: **21:00:01 → 21:06:32 (6 min 31 s)**, cod 0.
+- Copiate: **29 de fișiere, 2.682.603.059 o (~2,68 GB)**: `bucata_00000.bin` … `bucata_00026.bin`, `index.json`,
+  `bpe_16384.json`. Câte ~13–22 s pe bucată de 100 MB.
+
+### Verificarea de pe stick
+
+- După fiecare copiere, scriptul a citit fișierul **înapoi de pe `E:`** și i-a calculat SHA-256:
+  - cele 27 de bucăți față de `sha256` din `index.json`: **27/27 corecte**;
+  - `index.json` față de originalul de pe C: (`792e69dd…62be29`): corect;
+  - `bpe_16384.json` față de `2fcb9937…b546`: corect.
+- **Nicio a doua încercare** n-a fost nevoie (niciun fișier greșit, nimic șters).
+- O precizare cinstită: Windows poate servi citirea înapoi din memoria lui (cache), nu neapărat de pe cipul stickului.
+  Verificarea finală adevărată o face OS-ul când citește bucățile de pe stick și compară cu `index.json`.
+
+### Spațiul rămas (pasul B.5)
+
+- **Liber după: 29.026.107.392 o (~27.681 MB).** Diferența față de înainte: 2.682.880.000 o (fișierele + rotunjirea la clustere FAT32).
+
+### Testele (după B)
+
+`CUDA_VISIBLE_DEVICES=-1 python -m pytest`: **1605 trec, 1 sărit** (8 min 4 s).
+
+### Ce n-am făcut (granițele B)
+
+- Nimic din date în vreun repo (nici aici, nici în hub); nimic mutat, modificat sau șters de pe stick din ce era deja acolo.
+- Placa, `kronos/`, examenul, paznicul, jurnalul, `config/`, `module/` — neatinse; unealta `banc_antrenare.py` neschimbată;
+  nimic descărcat sau instalat. S131 rămâne pe pauză (C-156).
+
+### Ce urmează
+
+- **S141 e `gata` (A și B).** Pentru OS: datele sunt în `E:\antrenare\date\` (aceeași structură ca
+  `lucru/bucati/w2_amestec_be12/`, cu `index.json` lângă bucăți, plus tokenizerul); oracolul în
+  `docs/integrare_kronos/oracol_date_reale/`.
+- Următoarea din coadă: **S142 A** (procesor, unealta `viteza_scris_kv.py`), apoi S142 B (placa, 07:00–23:00, cu pre-înregistrarea).
+
+### Ce aștept de la Adrian
+
+Nimic nou pentru S141 B. Rămân cele din `plan/pentru_adrian.md` (mai ales `claude auth login` până pe 28 nov).
