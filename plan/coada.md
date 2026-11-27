@@ -4705,7 +4705,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: **Adrian (COMENZI.md C-168 punctul 1, 27 nov 2026 17:57 + 20:00)**; preluat de supraveghetor 27 nov 2026 20:15
 
 ### S142 — C-168 punctul 7: COMPARAȚIA CINSTITĂ LA SCRIS — #513 în Windows cu memoria de context (KV cache) și bf16/f16 (A: procesor ~1–2 h · B: placa ~20 min, după S141 B)
-- stare: in_lucru (executant, 27 nov 2026 21:35 — partea A, procesor; placa liberă 458 MB / 30 °C, nimic altceva în lucru)
+- stare: **aprobat** — rămâne doar partea B (executant, 27 nov 2026 21:45; B pe placă 07:00–23:00, cu semnul laboratorului; pre-înregistrarea `docs/preinregistrari/2026-11-27_scris_kv_513.md` SCRISĂ și urcată; comenzile B în ea)
+- stare A: gata (executant, 27 nov 2026 21:45; unealta `unelte/viteza_scris_kv.py` + 6 teste; cu memorie = fără, logit-uri dif. max 1,8e-5, cele 16 simboluri ✓; proba procesor F32 16 simb.: fără 39,37, cu memorie 64,23 simb/s; SHA neschimbate; 1611 teste trec, 1 sărit; raport: `docs/rapoarte/2026-11-27_2145_S142_scris_kv.md`)
+- stare anterioară 2: in_lucru (executant, 27 nov 2026 21:35 — partea A, procesor; placa liberă 458 MB / 30 °C, nimic altceva în lucru)
 - stare anterioară: **aprobat** (supraveghetor, 27 nov 2026 20:15 — comanda lui Adrian C-168 punctul 7; A de acum, B doar după S141 `gata` și cu pre-înregistrarea scrisă)
 - tip: A procesor · B placă (doar inferență, nimic antrenat sau salvat)
 - fereastră: A oricând (după S141 A) · B 07:00–23:00, cu semnul laboratorului, după S141 B
