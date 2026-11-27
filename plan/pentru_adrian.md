@@ -2,6 +2,14 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 27 noiembrie 2026, 23:15 — Partea lui Kronos din planul de reparație (C-168) e gata: datele reale pe stick + cifra cinstită la scris
+
+- **S141 — GATA, verificat de mine:** „oracolul” (primii 10 pași de antrenare pe textul real, lot 2 și lot 6) e **valid** la toate cele 4 verificări (lot 2 identic cu S140, pasul 1 = 1,067867). Datele reale ale lui Kronos sunt pe stick în `E:\antrenare\date\`, toate 29 de fișiere verificate citind înapoi de pe stick. Acum OS-ul poate antrena pe text adevărat și se poate compara cu noi.
+- **S142 — GATA, verificat de mine:** proba e validă (martorul 132,55 simboluri/s, aproape de vechiul 129,12). Cea mai bună rețetă în Windows scrie **160 de simboluri/s**, deci OS-ul (351) e de **×2,19** mai rapid, nu ×2,7. Cinstit: cele trei variante cu „memoria de context” sunt la 0,4 % una de alta — câștigul vine din memorie, nu din bf16.
+- **Am dus în hub** oracolul (`integrare/kronos/ORACOL_DATE_REALE/`) și tabelul vitezei (`integrare/kronos/VITEZA_513_WINDOWS.md`) și am închis partea Kronos din C-168. Urmează OS-ul (punctele 2 și 7 la ei).
+- **Rulează acum:** nimic la Kronos. **Nimic nou în coadă:** orice antrenare nouă cere „da”-ul tău (pauza C-156).
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, mâine, 28 nov** (de pe 29 nov se pot opri executantul, supraveghetorul și raportul de dimineață); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 27 noiembrie 2026, 20:15 — Am preluat planul de reparație (C-168): datele reale pe stick + comparația cinstită la scris
 
 - **27 nov 22:05 (executant): S142 GATA — cifra cinstită la scris în Windows: 160 simboluri/s (bf16 cu memoria de context), deci OS-ul (351) e de ×2,19, nu ×2,7.** Pe placă, 2 minute, 8 rulări: martorul FP32 fără memorie 132,55 (ca S130, valid), FP32 cu memorie 159,65, FP16 cu memorie 159,43, bf16 cu memorie 160,05 — practic la egalitate. Toate scriu aceleași 16 simboluri ca OS-ul. Modelul neatins, semnul laboratorului iar „LIBER”. Raport: `docs/rapoarte/2026-11-27_2145_S142_scris_kv.md` (secțiunea „Partea B”).
@@ -166,11 +174,3 @@
 - **Din hub (doar de știut):** OS-ul a făcut **prima antrenare întreagă în sistemul nostru** (P6-157, pe procesor, model mic pe vocabularul lui Kronos, cu datele și loturile lui Kronos): eroarea a scăzut 5,56 → 3,95 în 30 de pași. Planul tău pentru „versiunea 1” (hardware-ul de acum la maxim, apoi Kronos antrenat cât se poate în sistemul nostru) e scris în `DECIZII.md`. Kronos n-are nimic de făcut acum.
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** rămân cele de la 08:15 — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
-
-## 23 noiembrie 2026, 08:15 — PROBLEMĂ: conectarea lui Claude Code pe workstation expiră între 29 nov și 2 dec
-
-- **Ce trebuie să faci (până pe 29 noiembrie):** când ești la workstation, într-o fereastră de comandă: `claude auth login` (sau, pentru rulările automate fără om de față, `claude setup-token`). Altfel, după data aceea executantul și raportul de dimineață de pe workstation nu mai pot rula. Avertismentul a apărut în toate rulările automate de azi-noapte (raportul de dimineață, 06:49).
-- **Raportul de dimineață e la locul lui și e bun:** noaptea n-a rulat nimic pe placă (pauza ta C-156 respectată), **1.563 teste trec**, 0 picate; placa liberă și rece (475 MB, 30 °C); disc C ~137 GB liberi. Nu e verdict azi. Calculatorul a repornit o dată azi-noapte (00:40) — fără urmări pentru Kronos.
-- **Din hub (doar de știut):** OS-ul citește acum datele de antrenare ale lui Kronos și trage loturile exact ca la noi (os-366); tu ai cerut ca motorul de antrenare să se inspire din PyTorch, llm.c și altele cu licență permisivă. Kronos n-are nimic de făcut pentru asta.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** (1) `claude auth login` la workstation până pe 29 nov; (2) rămâne valabil: `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS” (comandă în hub).

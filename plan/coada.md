@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 27 nov 2026, 20:15 (supraveghetor): DOUĂ SARCINI NOI, aprobate de Adrian (hub C-168, planul de reparație): **S141** (prioritar) — oracolul PyTorch pe 10 pași cu loturile reale, lot 2 și lot 6 (procesor, oricând), apoi copierea bucăților #651 pe stick în `E:\antrenare\date\` doar dacă are loc (07:00–23:00, cu semnul laboratorului); **S142** — comparația cinstită la scris cu memoria de context (A procesor, B placa ~20 min după S141 B). Ordinea: S141 A → S141 B → S142 A → S142 B.**
+**ACUM — 27 nov 2026, 23:15 (supraveghetor): S141 și S142 = GATA, verificate cu cifrele.** S141: oracolul VALID (a)–(d) (lot 2 F32 identic cu S140, pasul 1 = 1,067867, lot 6 pasul 1 = 1,0107, fără NaN), datele #651 pe stick (29/29 SHA citite de pe stick). S142: VALID — martorul (a) 132,55 simb/s (banda 116,2–142,0), aceleași 16 simboluri la toate; cea mai bună rețetă Windows = (d) bf16 cu memoria de context **160,05 simb/s** → OS 351 / 160,05 = **×2,19**; SHA înainte = după. Cinstit: (b), (c), (d) sunt la 0,4 % una de alta, deci „bf16” nu e câștigătorul clar — câștigul vine din memoria de context. Oracolul și tabelul copiate în hub. **Nimic nou în coadă:** partea Kronos din C-168 e făcută; orice antrenare nouă cere „da”-ul lui Adrian (pauza C-156).
+
+**(anterior) ACUM — 27 nov 2026, 20:15 (supraveghetor): DOUĂ SARCINI NOI, aprobate de Adrian (hub C-168, planul de reparație): **S141** (prioritar) — oracolul PyTorch pe 10 pași cu loturile reale, lot 2 și lot 6 (procesor, oricând), apoi copierea bucăților #651 pe stick în `E:\antrenare\date\` doar dacă are loc (07:00–23:00, cu semnul laboratorului); **S142** — comparația cinstită la scris cu memoria de context (A procesor, B placa ~20 min după S141 B). Ordinea: S141 A → S141 B → S142 A → S142 B.**
 
 **(anterior) ACUM — 25 nov 2026, 14:15 (supraveghetor): S137 B = GATA, verificat — (H) harta = „CÂȘTIG STRÂMB”, nu e câștig (română 1,5085 ≤ 1,5243, dar `examen_bpb` 0,5485 > 0,5444; probă validă). Ne oprim cu harta. SARCINĂ NOUĂ, aprobată de Adrian (hub C-167, 25 nov 11:41): **S139 — „portarul”**. Partea A (procesor) `aprobat`, de acum; partea B (placa, o oră) după A, în 07:00–23:00, ultima pornire 21:15 — azi dacă A e gata la timp, altfel mâine. Pauza C-156 rămâne pentru orice altceva (S131, S134 B); S138 rămâne `propus — necesită Adrian`.**
 
@@ -4675,6 +4677,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: supraveghetor, 25 nov 2026 23:15 (granițele 2 și 5; la cererea centrului de comandă din nota 22:15 la C-157/C-158)
 
 ### S141 — C-168 punctul 1: DATELE REALE ale lui Kronos pe stick + ORACOLUL PyTorch pe primii 10 pași (lot 2 și lot 6) (A: procesor ~30–45 min · B: copierea pe stick ~15–30 min, fără placă)
+- verificat de supraveghetor (27 nov 2026 23:15): **gata** — oracolul VALID (a)–(d) față de pragurile din coadă; stickul 29/29 SHA corecte; oracolul copiat în hub, `integrare/kronos/ORACOL_DATE_REALE/`.
 - stare A: gata (executant, 27 nov 2026 20:52; VALID (a)–(d), SHA 22/22 identice, 1605 teste trec; `docs/integrare_kronos/oracol_date_reale/`; raport: `docs/rapoarte/2026-11-27_2052_S141_date_reale_oracol.md`)
 - stare: gata (executant, 27 nov 2026 21:16 — A și B gata)
 - stare B: gata (executant, 27 nov 2026 21:16; stick FAT32, liber înainte ~30.240 MB, necesar ~2.758 MB; 29 de fișiere / 2.682.603.059 o copiate în `E:\antrenare\date\` 21:00–21:06, SHA citit de pe stick 29/29 corect din prima; liber după ~27.681 MB; semnul „LIBER”; 1605 teste trec; raport: `docs/rapoarte/2026-11-27_2052_S141_date_reale_oracol.md`, secțiunea „Partea B”)
@@ -4705,6 +4708,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: **Adrian (COMENZI.md C-168 punctul 1, 27 nov 2026 17:57 + 20:00)**; preluat de supraveghetor 27 nov 2026 20:15
 
 ### S142 — C-168 punctul 7: COMPARAȚIA CINSTITĂ LA SCRIS — #513 în Windows cu memoria de context (KV cache) și bf16/f16 (A: procesor ~1–2 h · B: placa ~20 min, după S141 B)
+- verificat de supraveghetor (27 nov 2026 23:15): **gata, valid** — (a) 132,55 în ±10 % din 129,12, simbolurile (a), (b) corecte; cea mai bună (b)–(d) la 16 simboluri = (d) bf16 cu memorie 160,05 simb/s → OS 351 / 160,05 = ×2,19; SHA înainte = după. Tabelul copiat în hub, `integrare/kronos/VITEZA_513_WINDOWS.md`.
 - stare: gata (executant, 27 nov 2026 22:35; B cod 0, 8 rulări 21:59–22:01; **valid** — (a) 132,55 simb/s; cea mai bună = (d) bf16 cu memorie **160,05 simb/s**, OS 351 / ea = **×2,19**; (b) 159,65, (c) 159,43; aceleași 16 simboluri la toate; SHA înainte = după; placa max ~1.127 MB / 39 °C; semnul „LIBER”; pre-înregistrarea închisă cu verdictul; secțiune în `docs/integrare_kronos/VITEZA_513_WINDOWS.md`)
 - stare anterioară 4: in_lucru (executant, 27 nov 2026 22:00 — partea B, placa; placa liberă 470 MB / 29 °C, fără `porneste-test.txt`)
 - stare anterioară 3: **aprobat** — rămâne doar partea B (executant, 27 nov 2026 21:45; B pe placă 07:00–23:00, cu semnul laboratorului; pre-înregistrarea `docs/preinregistrari/2026-11-27_scris_kv_513.md` SCRISĂ și urcată; comenzile B în ea)
