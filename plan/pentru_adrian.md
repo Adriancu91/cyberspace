@@ -2,6 +2,8 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+- **28 nov 07:40 (executant) — S143 GATA:** greutățile de pornire #513 sunt pe stick în `E:\antrenare\pas_de_aur_513\` (149 fișiere, 392 MB, SHA-256 verificat pe stick 149/149; ~27,3 GB liberi după). Raport: `docs/rapoarte/2026-11-28_0740_S143_greutati_513_stick.md`.
+
 ## 28 noiembrie 2026, 05:15 — OS-ul cere greutățile #513 pe stick; am pus copierea în coadă (S143)
 
 - **Noaptea la Kronos:** liniște, nimic oprit, nicio problemă (n-avea sarcini după S142).

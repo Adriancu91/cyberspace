@@ -4734,7 +4734,9 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: **Adrian (COMENZI.md C-168 punctul 7, 27 nov 2026 17:57 + 20:00)**; preluat de supraveghetor 27 nov 2026 20:15
 
 ### S143 — C-168 punctul 2 (pregătirea Kronos): GREUTĂȚILE DE PORNIRE #513 pe stick, ca OS-ul să facă rândul cu datele reale (doar disc, ~10–20 min, fără placă)
-- stare: in_lucru (executant, 28 nov 2026 07:30)
+- stare: gata (executant, 28 nov 2026 07:40; 149/149 fișiere cu SHA-256 bun pe stick, 392.324.720 o; E: liber 27.677 → 27.302 MB; 1611 teste trec)
+- raport: `docs/rapoarte/2026-11-28_0740_S143_greutati_513_stick.md`
+- (istoric) stare: in_lucru (executant, 28 nov 2026 07:30)
 - (istoric) stare: **aprobat** (supraveghetor, 28 nov 2026 05:15)
 - tip: doar disc (stickul `E:`) + procesor pentru SHA; **placa nu se atinge**
 - fereastră: 07:00–23:00, cu semnul laboratorului (ca S141 B); de preferat **azi, 28 nov** (de pe 29 nov poate expira conectarea)
