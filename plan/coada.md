@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 27 nov 2026, 23:15 (supraveghetor): S141 și S142 = GATA, verificate cu cifrele.** S141: oracolul VALID (a)–(d) (lot 2 F32 identic cu S140, pasul 1 = 1,067867, lot 6 pasul 1 = 1,0107, fără NaN), datele #651 pe stick (29/29 SHA citite de pe stick). S142: VALID — martorul (a) 132,55 simb/s (banda 116,2–142,0), aceleași 16 simboluri la toate; cea mai bună rețetă Windows = (d) bf16 cu memoria de context **160,05 simb/s** → OS 351 / 160,05 = **×2,19**; SHA înainte = după. Cinstit: (b), (c), (d) sunt la 0,4 % una de alta, deci „bf16” nu e câștigătorul clar — câștigul vine din memoria de context. Oracolul și tabelul copiate în hub. **Nimic nou în coadă:** partea Kronos din C-168 e făcută; orice antrenare nouă cere „da”-ul lui Adrian (pauza C-156).
+**ACUM — 28 nov 2026, 05:15 (supraveghetor): SARCINĂ NOUĂ S143 `aprobat` (pas pregătitor din comanda lui Adrian C-168 punctul 2):** copiezi pe stick, în `E:\antrenare\pas_de_aur_513\`, `reteta.json` + `initiale\` din `lucru/pas_de_aur/513/` (greutățile de pornire #513, cerute de OS pentru rândul cu datele reale), cu verificarea SHA înainte și de pe stick. Doar disc, fără placă, 07:00–23:00, cu semnul laboratorului — **de preferat azi**. Vezi S143 jos.
+
+**(anterior) ACUM — 27 nov 2026, 23:15 (supraveghetor): S141 și S142 = GATA, verificate cu cifrele.** S141: oracolul VALID (a)–(d) (lot 2 F32 identic cu S140, pasul 1 = 1,067867, lot 6 pasul 1 = 1,0107, fără NaN), datele #651 pe stick (29/29 SHA citite de pe stick). S142: VALID — martorul (a) 132,55 simb/s (banda 116,2–142,0), aceleași 16 simboluri la toate; cea mai bună rețetă Windows = (d) bf16 cu memoria de context **160,05 simb/s** → OS 351 / 160,05 = **×2,19**; SHA înainte = după. Cinstit: (b), (c), (d) sunt la 0,4 % una de alta, deci „bf16” nu e câștigătorul clar — câștigul vine din memoria de context. Oracolul și tabelul copiate în hub. **Nimic nou în coadă:** partea Kronos din C-168 e făcută; orice antrenare nouă cere „da”-ul lui Adrian (pauza C-156).
 
 **(anterior) ACUM — 27 nov 2026, 20:15 (supraveghetor): DOUĂ SARCINI NOI, aprobate de Adrian (hub C-168, planul de reparație): **S141** (prioritar) — oracolul PyTorch pe 10 pași cu loturile reale, lot 2 și lot 6 (procesor, oricând), apoi copierea bucăților #651 pe stick în `E:\antrenare\date\` doar dacă are loc (07:00–23:00, cu semnul laboratorului); **S142** — comparația cinstită la scris cu memoria de context (A procesor, B placa ~20 min după S141 B). Ordinea: S141 A → S141 B → S142 A → S142 B.**
 
@@ -4730,3 +4732,22 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - **NU:** nicio antrenare, niciun model salvat; nimic în `kronos/`, `module/`, `config/`, examen, paznic, jurnal; nimic descărcat, instalat sau șters; interfața 8787 neatinsă; S131 rămâne pe pauză.
 - raport: `docs/rapoarte/2026-11-27_2145_S142_scris_kv.md` (A + secțiunea „Partea B”) — cerut: `docs/rapoarte/<data>_<ora>_S142_scris_kv.md` + secțiune nouă în `docs/integrare_kronos/VITEZA_513_WINDOWS.md` (tabelul, comenzile, versiunile); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push. Eu copiez tabelul în hub.
 - aprobat de: **Adrian (COMENZI.md C-168 punctul 7, 27 nov 2026 17:57 + 20:00)**; preluat de supraveghetor 27 nov 2026 20:15
+
+### S143 — C-168 punctul 2 (pregătirea Kronos): GREUTĂȚILE DE PORNIRE #513 pe stick, ca OS-ul să facă rândul cu datele reale (doar disc, ~10–20 min, fără placă)
+- stare: **aprobat** (supraveghetor, 28 nov 2026 05:15)
+- tip: doar disc (stickul `E:`) + procesor pentru SHA; **placa nu se atinge**
+- fereastră: 07:00–23:00, cu semnul laboratorului (ca S141 B); de preferat **azi, 28 nov** (de pe 29 nov poate expira conectarea)
+- durată maximă: 30 min
+- de ce: comanda lui Adrian C-168 punctul 2 (aprobată): OS-ul face „pasul #513 pe loturile reale” și îl compară cu oracolul S141. Oracolul S141 pornește din **#513 adevărat**; OS-ul are datele (S141 B), dar nu are greutățile de pornire în formatul pe care îl citește. Cererea OS-ului: hub `idei/2026-11-28-os-greutati-513-pe-stick.md` (P6-261). E aceeași fel de copiere ca S141 B (fișiere deja existente, nimic descărcat, nimic șters, nimic în repo), deci o socotesc parte din C-168 p.1–2.
+- ce faci:
+  1. Dacă există `C:\Kronos\cyber-test\porneste-test.txt` → nu începi (încerci la trecerea următoare). Altfel scrii în `C:\Kronos\cyber-test\laborator-ocupat.txt` „OCUPAT — S143 copiere pe stick”, ora de început și sfârșitul estimat (început + 30 min).
+  2. Verifici că `E:` e stickul OS-ului (există `E:\antrenare\date\index.json` de la S141 și fișierele lui de pornire; doar le citești). Dacă nu → nu copiezi nimic, semnul „LIBER”, scrii ce ai văzut.
+  3. Sursa: `lucru/pas_de_aur/513/reteta.json` + dosarul `lucru/pas_de_aur/513/initiale/` (toate fișierele `.f32`). Verifici întâi **pe disc** SHA-256 al fiecărui fișier din `initiale/` față de `reteta.json` → `fisiere`, și SHA-256 al lui `reteta.json` față de cel din `docs/integrare_kronos/PAS_DE_AUR.md`. Orice nepotrivire → nu copiezi, `oprit`, scrii care fișier.
+  4. Locul: liberul pe `E:` față de mărimea lui `initiale/` + `reteta.json` + 200 MB rezervă. Nu ajunge → nu copiezi și nu ștergi nimic; scrii câți MB lipsesc.
+  5. Ajunge → creezi `E:\antrenare\pas_de_aur_513\` și copiezi acolo, **neschimbate**, `reteta.json` și `initiale\` (Python `shutil.copyfile` sau `robocopy` fără `/MIR`, `/PURGE`, `/MOV`). **Nu copiezi** `sgd\`, `adamw_513\` și nici `experiment_513.pt`. Apoi citești înapoi de pe stick și verifici SHA-256 al fiecărui fișier față de `reteta.json`. Diferență → ștergi doar fișierul greșit scris de tine și îl copiezi încă o dată; a doua oară greșit → `oprit`.
+  6. Semnul „LIBER” (ca la S141 B). Notezi spațiul liber rămas pe `E:`.
+  7. `python -m pytest` verde (nu schimbi cod).
+- **NU:** nimic din greutăți în vreun repo (nici cyberspace, nici hub); nu atingi ce era pe stick (nici `E:\antrenare\date\`); nu atingi placa, `kronos/`, `module/`, examenul, paznicul, jurnalul, `config/`, `experiment_513.pt`; nimic descărcat, instalat sau șters din `lucru/`; S131 rămâne „în așteptare (pauză, C-156)”.
+- pre-înregistrare: nu e antrenare (nu se salvează niciun model); pragurile de validitate sunt SHA de la pașii 3 și 5.
+- raport: `docs/rapoarte/<data>_<ora>_S143_greutati_513_stick.md` (câte fișiere, câți octeți, SHA-256 al lui `reteta.json`, verificarea SHA de pe stick N/N, spațiul înainte/după, ora); un rând sus în `plan/pentru_adrian.md`; coada → `gata`; commit + push. Eu scriu în hub „PREDARE → cyber-universe”.
+- aprobat de: supraveghetor, 28 nov 2026 05:15, ca pas pregătitor al comenzii lui **Adrian C-168 punctul 2** (27 nov 17:57 + 20:00). Adrian o poate opri cu un rând în hub.

@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 noiembrie 2026, 05:15 — OS-ul cere greutățile #513 pe stick; am pus copierea în coadă (S143)
+
+- **Noaptea la Kronos:** liniște, nimic oprit, nicio problemă (n-avea sarcini după S142).
+- **Cererea OS-ului (hub, 04:30):** pentru punctul 2 din planul tău de reparație (C-168), OS-ul trebuie să pornească antrenarea din **modelul #513 adevărat**, ca să se compare pas cu pas cu oracolul nostru. Datele sunt deja pe stick; lipsesc doar greutățile de pornire (~392 MB).
+- **Am pus în coadă S143, aprobat de mine ca pas pregătitor al C-168:** executantul copiază pe stick, în `E:\antrenare\pas_de_aur_513\`, greutățile de pornire #513 (fișiere deja existente), cu verificarea SHA înainte și după, fără placă, 07:00–23:00, cu semnul laboratorului — de preferat azi. Nimic șters, nimic în vreun repo. Dacă nu vrei, o oprești cu un rând în hub.
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, AZI, 28 nov** (de mâine se pot opri executantul, supraveghetorul și raportul de dimineață); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 27 noiembrie 2026, 23:15 — Partea lui Kronos din planul de reparație (C-168) e gata: datele reale pe stick + cifra cinstită la scris
 
 - **S141 — GATA, verificat de mine:** „oracolul” (primii 10 pași de antrenare pe textul real, lot 2 și lot 6) e **valid** la toate cele 4 verificări (lot 2 identic cu S140, pasul 1 = 1,067867). Datele reale ale lui Kronos sunt pe stick în `E:\antrenare\date\`, toate 29 de fișiere verificate citind înapoi de pe stick. Acum OS-ul poate antrena pe text adevărat și se poate compara cu noi.
@@ -168,9 +175,3 @@
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
 
-## 23 noiembrie 2026, 11:15 — Liniște la Kronos (pauza ta); în OS a rulat prima antrenare întreagă pe datele lui Kronos
-
-- **La Kronos nu s-a schimbat nimic** de la 08:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
-- **Din hub (doar de știut):** OS-ul a făcut **prima antrenare întreagă în sistemul nostru** (P6-157, pe procesor, model mic pe vocabularul lui Kronos, cu datele și loturile lui Kronos): eroarea a scăzut 5,56 → 3,95 în 30 de pași. Planul tău pentru „versiunea 1” (hardware-ul de acum la maxim, apoi Kronos antrenat cât se poate în sistemul nostru) e scris în `DECIZII.md`. Kronos n-are nimic de făcut acum.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** rămân cele de la 08:15 — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
