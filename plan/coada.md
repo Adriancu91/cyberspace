@@ -19,7 +19,9 @@ Formatul unei sarcini:
 - raport: docs/rapoarte/…
 ```
 
-**ACUM — 28 nov 2026, 05:15 (supraveghetor): SARCINĂ NOUĂ S143 `aprobat` (pas pregătitor din comanda lui Adrian C-168 punctul 2):** copiezi pe stick, în `E:\antrenare\pas_de_aur_513\`, `reteta.json` + `initiale\` din `lucru/pas_de_aur/513/` (greutățile de pornire #513, cerute de OS pentru rândul cu datele reale), cu verificarea SHA înainte și de pe stick. Doar disc, fără placă, 07:00–23:00, cu semnul laboratorului — **de preferat azi**. Vezi S143 jos.
+**ACUM — 28 nov 2026, 08:15 (supraveghetor): S143 = GATA, verificat** — 149/149 fișiere pe stick în `E:\antrenare\pas_de_aur_513\`, SHA-256 `reteta.json` = `ce4150b8…` (= `PAS_DE_AUR.md`), 149/149 SHA citite de pe stick, 0 reîncercări, placa neatinsă, 1611 teste. Partea Kronos din C-168 e toată făcută. **Nimic nou în coadă:** orice antrenare nouă cere „da”-ul lui Adrian (pauza C-156).
+
+**(anterior) ACUM — 28 nov 2026, 05:15 (supraveghetor): SARCINĂ NOUĂ S143 `aprobat` (pas pregătitor din comanda lui Adrian C-168 punctul 2):** copiezi pe stick, în `E:\antrenare\pas_de_aur_513\`, `reteta.json` + `initiale\` din `lucru/pas_de_aur/513/` (greutățile de pornire #513, cerute de OS pentru rândul cu datele reale), cu verificarea SHA înainte și de pe stick. Doar disc, fără placă, 07:00–23:00, cu semnul laboratorului — **de preferat azi**. Vezi S143 jos.
 
 **(anterior) ACUM — 27 nov 2026, 23:15 (supraveghetor): S141 și S142 = GATA, verificate cu cifrele.** S141: oracolul VALID (a)–(d) (lot 2 F32 identic cu S140, pasul 1 = 1,067867, lot 6 pasul 1 = 1,0107, fără NaN), datele #651 pe stick (29/29 SHA citite de pe stick). S142: VALID — martorul (a) 132,55 simb/s (banda 116,2–142,0), aceleași 16 simboluri la toate; cea mai bună rețetă Windows = (d) bf16 cu memoria de context **160,05 simb/s** → OS 351 / 160,05 = **×2,19**; SHA înainte = după. Cinstit: (b), (c), (d) sunt la 0,4 % una de alta, deci „bf16” nu e câștigătorul clar — câștigul vine din memoria de context. Oracolul și tabelul copiate în hub. **Nimic nou în coadă:** partea Kronos din C-168 e făcută; orice antrenare nouă cere „da”-ul lui Adrian (pauza C-156).
 
@@ -4734,6 +4736,7 @@ până la „da”-ul lui Adrian la S66 (nicio sarcină de placă în granițele
 - aprobat de: **Adrian (COMENZI.md C-168 punctul 7, 27 nov 2026 17:57 + 20:00)**; preluat de supraveghetor 27 nov 2026 20:15
 
 ### S143 — C-168 punctul 2 (pregătirea Kronos): GREUTĂȚILE DE PORNIRE #513 pe stick, ca OS-ul să facă rândul cu datele reale (doar disc, ~10–20 min, fără placă)
+- verdict supraveghetor (28 nov 2026 08:15): **valid** — SHA `reteta.json` potrivit, 149/149 de pe stick, nimic în plus copiat (fără `sgd\`, `adamw_513\`, `.pt`), 1611 teste trec.
 - stare: gata (executant, 28 nov 2026 07:40; 149/149 fișiere cu SHA-256 bun pe stick, 392.324.720 o; E: liber 27.677 → 27.302 MB; 1611 teste trec)
 - raport: `docs/rapoarte/2026-11-28_0740_S143_greutati_513_stick.md`
 - (istoric) stare: in_lucru (executant, 28 nov 2026 07:30)

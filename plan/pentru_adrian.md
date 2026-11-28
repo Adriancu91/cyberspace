@@ -2,7 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 noiembrie 2026, 08:15 — Greutățile #513 sunt pe stick (S143, verificat); OS-ul e gata să antreneze pe textul real
+
 - **28 nov 07:40 (executant) — S143 GATA:** greutățile de pornire #513 sunt pe stick în `E:\antrenare\pas_de_aur_513\` (149 fișiere, 392 MB, SHA-256 verificat pe stick 149/149; ~27,3 GB liberi după). Raport: `docs/rapoarte/2026-11-28_0740_S143_greutati_513_stick.md`.
+- **S143 — GATA, verificat de mine:** toate cele 149 de fișiere (`reteta.json` + 148 de greutăți, 392 MB) sunt pe stick în `E:\antrenare\pas_de_aur_513\`; SHA-256 al `reteta.json` = cel din `PAS_DE_AUR.md`, iar toate 149/149 citite înapoi de pe stick sunt corecte, din prima. Placa n-a fost atinsă, nimic șters, nimic în repo, 1.611 teste trec. Am anunțat OS-ul în hub (C-168 p.2, partea Kronos = gata); OS-ul are deja codul care le citește (P6-261).
+- **Raportul de dimineață (06:49) — verificat:** noaptea fără antrenare Kronos, 1.611 teste trec, 0 picate, placa liberă (468 MB, 29 °C), nimic oprit de paznic. Repornirile vin tot de la testele OS de pe stick.
+- **Rulează acum:** nimic la Kronos; ziua placa e a testelor OS. **Nimic nou în coadă:** partea Kronos din C-168 e toată făcută; orice antrenare nouă cere „da”-ul tău (pauza C-156). Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, AZI** (de mâine, 29 nov, se pot opri executantul, supraveghetorul și raportul de dimineață); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
 
 ## 28 noiembrie 2026, 05:15 — OS-ul cere greutățile #513 pe stick; am pus copierea în coadă (S143)
 
@@ -168,12 +174,3 @@
 - **Din hub (doar de știut):** OS-ul a mutat memoria antrenării pe placa video (os-386): partea plăcii dintr-un pas a scăzut la ~3,65 ms, dar pasul întreg tot ~370 ms durează — timpul se pierde în afara plăcii. Următorul test (os-389) măsoară pe bucăți unde se duce timpul, ca să-l taie. Kronos n-are nimic de făcut.
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
-
-
-## 24 noiembrie 2026, 02:15 — Liniște la Kronos (pauza ta); în OS, primul pas întreg de antrenare a mers pe placa reală
-
-- **La Kronos nu s-a schimbat nimic** de ieri, 11:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
-- **Din hub (doar de știut):** OS-ul a făcut **primul pas întreg de antrenare pe placa video reală** (os-380, 23 nov 23:12): 10 pași pe un model mic cu vocabularul lui Kronos, aceleași numere ca pe procesor. Viteza încă nu se socotește. Urmează în OS: varianta mai rapidă (bf16), mutarea memoriei antrenării pe placă, apoi **un pas al lui #513 pe placă**, comparat cu cifra lui Kronos din Windows (~39.300 simboluri/s, din fișa S133). Ai hotărât și: mutarea datelor în RAM rămâne deoparte (placa e în slotul x8), iar hardware-ul nou se decide la jumătatea lui decembrie.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
-
