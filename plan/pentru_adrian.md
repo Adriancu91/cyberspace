@@ -2,6 +2,13 @@
 
 *Scris de supraveghetor. Cel mai nou rezumat e sus.*
 
+## 28 noiembrie 2026, 14:15 — OS-ul a antrenat Kronos pe datele lui adevărate și a ieșit EXACT ca la noi
+
+- **Rezultatul OS-ului (os-507, 28 nov ~11:15), verificat de mine cu cifrele:** pornit din greutățile #513 copiate de Kronos pe stick (S143) și pe loturile reale (S141), OS-ul a dat **aceleași numere** ca „oracolul” nostru PyTorch la primii 10 pași: lot 2 pasul 1 = 1,067859 (la noi 1,067867), lot 6 = 1,010690 (la noi 1,010662); abaterea cea mai mare 5,2e-5, mult sub pragul 1e-3. Deci partea Kronos din planul de reparație (C-168) și-a făcut treaba. Sursa: hub `rezultate/2026-11-28-workstation-os507-date-reale-si-atentia-in-pas/REZULTAT.md`.
+- **Tot de la OS (doar de știut):** antrenarea în OS a ajuns la 25.865 simboluri/s (os-508), cam 65 % din viteza din Windows.
+- **La Kronos:** executantul n-a avut nimic de făcut de la 07:40 (S143) — normal, nicio problemă; nimic oprit de paznic. **Nimic nou în coadă:** orice antrenare nouă cere „da”-ul tău (pauza C-156). Nicio comandă nouă pentru Kronos în hub.
+- **Aștept de la tine:** (1) **`claude auth login` la workstation, AZI** (de mâine, 29 nov, se pot opri executantul, supraveghetorul și raportul de dimineață); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) șterge de mână `C:\Kronos\cyber-test\laborator-ocupat.txt`; (4) opțional: „**da (0′)**” sau „da probele v2 (S138)”.
+
 ## 28 noiembrie 2026, 08:15 — Greutățile #513 sunt pe stick (S143, verificat); OS-ul e gata să antreneze pe textul real
 
 - **28 nov 07:40 (executant) — S143 GATA:** greutățile de pornire #513 sunt pe stick în `E:\antrenare\pas_de_aur_513\` (149 fișiere, 392 MB, SHA-256 verificat pe stick 149/149; ~27,3 GB liberi după). Raport: `docs/rapoarte/2026-11-28_0740_S143_greutati_513_stick.md`.
@@ -168,9 +175,3 @@
 - **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
 - **Aștept de la tine:** (1) `claude auth login` la workstation **până pe 29 nov** (mai sunt 5 zile); (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace` (actualizarea automată a picat iar azi la 06:40 din cauza asta); (3) opțional: „da reperul #513 pentru examenul din OS”.
 
-## 24 noiembrie 2026, 05:15 — Liniște la Kronos (pauza ta); în OS, memoria antrenării stă acum pe placă
-
-- **La Kronos nu s-a schimbat nimic** de la 02:15: nimic pe placă, nicio antrenare (pauza C-156), executantul n-a avut treabă — normal. Ultima numărătoare: **1.563 teste trec**.
-- **Din hub (doar de știut):** OS-ul a mutat memoria antrenării pe placa video (os-386): partea plăcii dintr-un pas a scăzut la ~3,65 ms, dar pasul întreg tot ~370 ms durează — timpul se pierde în afara plăcii. Următorul test (os-389) măsoară pe bucăți unde se duce timpul, ca să-l taie. Kronos n-are nimic de făcut.
-- **Rulează acum:** nimic la Kronos. Nimic nou în coadă. Nicio comandă nouă pentru Kronos.
-- **Aștept de la tine:** rămân cele de ieri — (1) `claude auth login` la workstation **până pe 29 nov**; (2) `git -c core.editor=true rebase --continue` în `C:\Kronos\cyberspace`; (3) opțional: „da reperul #513 pentru examenul din OS”.
